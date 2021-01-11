@@ -8,13 +8,14 @@ namespace RiptideNetworking
     public class Server : RudpSocket
     {
         public Dictionary<IPEndPoint, ServerClient> Clients { get; private set; }
+        public ushort Port { get; private set; }
+        public ushort MaxClientCount { get; private set; }
+        public int ClientCount { get => Clients.Count; }
 
         public delegate void MessageHandler(ServerClient fromClient, Message message);
+
         private Dictionary<ushort, MessageHandler> messageHandlers;
-
         private ActionQueue receiveActionQueue;
-
-        private ushort maxClientCount;
         private List<ushort> availableClientIds;
 
         /// <summary>Handles initial setup.</summary>
@@ -23,8 +24,9 @@ namespace RiptideNetworking
 
         public void Start(ushort port, ushort maxClientCount, Dictionary<ushort, MessageHandler> messageHandlers, ActionQueue receiveActionQueue = null)
         {
-            this.maxClientCount = maxClientCount;
-            Clients = new Dictionary<IPEndPoint, ServerClient>(this.maxClientCount);
+            Port = port;
+            MaxClientCount = maxClientCount;
+            Clients = new Dictionary<IPEndPoint, ServerClient>(this.MaxClientCount);
 
             this.messageHandlers = messageHandlers;
             InitializeClientIds();
@@ -55,7 +57,7 @@ namespace RiptideNetworking
                 if ((HeaderType)firstByte != HeaderType.connect)
                     return true;
             }
-            else if (Clients.Count < maxClientCount)
+            else if (Clients.Count < MaxClientCount)
             {
                 if ((HeaderType)firstByte == HeaderType.connect)
                     Clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
@@ -127,8 +129,8 @@ namespace RiptideNetworking
 
         private void InitializeClientIds()
         {
-            availableClientIds = new List<ushort>(maxClientCount);
-            for (ushort i = 1; i <= maxClientCount; i++)
+            availableClientIds = new List<ushort>(MaxClientCount);
+            for (ushort i = 1; i <= MaxClientCount; i++)
             {
                 availableClientIds.Add(i);
             }
