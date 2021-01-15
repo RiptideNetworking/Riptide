@@ -16,7 +16,7 @@ namespace RiptideNetworking
         internal SendLockables SendLockables { get; private set; }
         internal ReceiveLockables ReceiveLockables { get; private set; }
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
-        protected readonly float retryTimeMultiplier = 1.05f;
+        protected readonly float retryTimeMultiplier = 1.2f;
 
         internal delegate void Send(byte[] data, IPEndPoint toEndPoint);
         private Send send;
@@ -169,7 +169,7 @@ namespace RiptideNetworking
                 sendAttemtpts++;
 
                 //retryTimer.Change(0, (int)Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
-                retryTimer.Interval = Math.Max(50, rudp.SmoothRTT * rudp.retryTimeMultiplier);
+                retryTimer.Interval = Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
                 retryTimer.Start();
             }
 

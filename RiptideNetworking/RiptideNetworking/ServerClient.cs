@@ -31,7 +31,6 @@ namespace RiptideNetworking
         internal void Disconnect()
         {
             connectionState = ConnectionState.notConnected;
-            
         }
 
         #region Messages

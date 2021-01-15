@@ -209,6 +209,8 @@ namespace RiptideNetworking
 
                 RiptideLogger.Log($"Kicked {clientEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
+
+                availableClientIds.Add(client.Id);
             }
             else
             {
@@ -242,6 +244,8 @@ namespace RiptideNetworking
                 client.Disconnect();
                 Clients.Remove(fromEndPoint);
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
+
+                availableClientIds.Add(client.Id);
             }
         }
 
