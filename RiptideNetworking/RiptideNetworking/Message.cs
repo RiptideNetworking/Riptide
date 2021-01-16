@@ -21,19 +21,19 @@ namespace RiptideNetworking
     public class Message // TODO: endianness
     {
         /// <summary>The length in bytes of the message's contents.</summary>
-        public int Length { get => buffer.Count; }
+        public int Length { get => bytes.Count; }
 
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength { get => Length - readPos; }
 
-        private List<byte> buffer;
-        private byte[] readableBuffer;
+        private List<byte> bytes;
+        private byte[] readableBytes;
         private ushort readPos = 0;
 
         /// <summary>Creates a new empty message (without an ID).</summary>
         internal Message(ushort messageLength = 0)
         {
-            buffer = new List<byte>(messageLength + 3); // +3 for message header
+            bytes = new List<byte>(messageLength + 3); // +3 for message header
         }
 
         /// <summary>Creates a new message with a given ID.</summary>
@@ -41,7 +41,7 @@ namespace RiptideNetworking
         /// <param name="messageLength">The length in bytes of the message's contents.</param>
         public Message(ushort id, ushort messageLength = 0)
         {
-            buffer = new List<byte>(messageLength + 5); // +5 for message header
+            bytes = new List<byte>(messageLength + 5); // +5 for message header
             Add(id);
         }
 
@@ -49,7 +49,7 @@ namespace RiptideNetworking
         /// <param name="data">The bytes to add to the message.</param>
         internal Message(byte[] data)
         {
-            buffer = new List<byte>(data.Length);
+            bytes = new List<byte>(data.Length);
 
             SetBytes(data);
         }
@@ -60,7 +60,7 @@ namespace RiptideNetworking
         internal void SetBytes(byte[] data)
         {
             Add(data);
-            readableBuffer = buffer.ToArray();
+            readableBytes = bytes.ToArray();
         }
 
         /// <summary>Prepares the message for sending.</summary>
@@ -69,25 +69,26 @@ namespace RiptideNetworking
             InsertByte((byte)headerType); // Header type
         }
 
-        /// <summary>Inserts the given bytes at the start of the message.</summary>
+        /// <summary>Inserts the given bytes into the message at the given position.</summary>
         /// <param name="bytes">The bytes to insert.</param>
-        internal void InsertBytes(byte[] bytes)
+        /// <param name="position">The position at which to insert the bytes into the message.</param>
+        internal void InsertBytes(byte[] bytes, int position = 0)
         {
-            buffer.InsertRange(0, bytes);
+            this.bytes.InsertRange(position, bytes);
         }
 
         /// <summary>Inserts the given byte at the start of the message.</summary>
         /// <param name="singleByte">The byte to insert.</param>
         private void InsertByte(byte singleByte)
         {
-            buffer.Insert(0, singleByte);
+            bytes.Insert(0, singleByte);
         }
 
         /// <summary>Gets the message's content in array form.</summary>
         internal byte[] ToArray()
         {
-            readableBuffer = buffer.ToArray();
-            return readableBuffer;
+            readableBytes = bytes.ToArray();
+            return readableBytes;
         }
         #endregion
 
@@ -97,23 +98,23 @@ namespace RiptideNetworking
         /// <param name="value">The byte to add.</param>
         public void Add(byte value)
         {
-            buffer.Add(value);
+            bytes.Add(value);
         }
 
         /// <summary>Adds an array of bytes to the message.</summary>
         /// <param name="value">The byte array to add.</param>
         public void Add(byte[] value)
         {
-            buffer.AddRange(value);
+            bytes.AddRange(value);
         }
 
         /// <summary>Reads a byte from the message.</summary>
         public byte GetByte()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                byte value = readableBuffer[readPos]; // Get the byte at readPos' position
+                byte value = readableBytes[readPos]; // Get the byte at readPos' position
                 readPos += 1;
                 return value;
             }
@@ -127,10 +128,10 @@ namespace RiptideNetworking
         /// <param name="length">The length of the byte array.</param>
         public byte[] GetBytes(int length)
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                byte[] value = buffer.GetRange(readPos, length).ToArray(); // Get the bytes at readPos' position with a range of length
+                byte[] value = bytes.GetRange(readPos, length).ToArray(); // Get the bytes at readPos' position with a range of length
                 readPos += (ushort)length;
                 return value;
             }
@@ -146,16 +147,16 @@ namespace RiptideNetworking
         /// <param name="value">The bool to add.</param>
         public void Add(bool value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a bool from the message.</summary>
         public bool GetBool()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                bool value = BitConverter.ToBoolean(readableBuffer, readPos); // Convert the bytes at readPos' position to a bool
+                bool value = BitConverter.ToBoolean(readableBytes, readPos); // Convert the bytes at readPos' position to a bool
                 readPos += 1;
                 return value;
             }
@@ -199,16 +200,16 @@ namespace RiptideNetworking
         /// <param name="value">The short to add.</param>
         public void Add(short value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a short from the message.</summary>
         public short GetShort()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                short value = BitConverter.ToInt16(readableBuffer, readPos); // Convert the bytes at readPos' position to a short
+                short value = BitConverter.ToInt16(readableBytes, readPos); // Convert the bytes at readPos' position to a short
                 readPos += 2;
                 return value;
             }
@@ -252,16 +253,16 @@ namespace RiptideNetworking
         /// <param name="value">The ushort to add.</param>
         public void Add(ushort value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a ushort from the message.</summary>
         public ushort GetUShort()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                ushort value = BitConverter.ToUInt16(readableBuffer, readPos); // Convert the bytes at readPos' position to a ushort
+                ushort value = BitConverter.ToUInt16(readableBytes, readPos); // Convert the bytes at readPos' position to a ushort
                 readPos += 2;
                 return value;
             }
@@ -305,16 +306,16 @@ namespace RiptideNetworking
         /// <param name="value">The int to add.</param>
         public void Add(int value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads an int from the message.</summary>
         public int GetInt()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                int value = BitConverter.ToInt32(readableBuffer, readPos); // Convert the bytes at readPos' position to an int
+                int value = BitConverter.ToInt32(readableBytes, readPos); // Convert the bytes at readPos' position to an int
                 readPos += 4;
                 return value;
             }
@@ -358,16 +359,16 @@ namespace RiptideNetworking
         /// <param name="value">The uint to add.</param>
         public void Add(uint value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a uint from the message.</summary>
         public uint GetUInt()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                uint value = BitConverter.ToUInt32(readableBuffer, readPos); // Convert the bytes at readPos' position to an uint
+                uint value = BitConverter.ToUInt32(readableBytes, readPos); // Convert the bytes at readPos' position to an uint
                 readPos += 4;
                 return value;
             }
@@ -411,16 +412,16 @@ namespace RiptideNetworking
         /// <param name="value">The long to add.</param>
         public void Add(long value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a long from the message.</summary>
         public long GetLong()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                long value = BitConverter.ToInt64(readableBuffer, readPos); // Convert the bytes at readPos' position to a long
+                long value = BitConverter.ToInt64(readableBytes, readPos); // Convert the bytes at readPos' position to a long
                 readPos += 8;
                 return value;
             }
@@ -464,16 +465,16 @@ namespace RiptideNetworking
         /// <param name="value">The ulong to add.</param>
         public void Add(ulong value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a ulong from the message.</summary>
         public ulong GetULong()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                ulong value = BitConverter.ToUInt64(readableBuffer, readPos); // Convert the bytes at readPos' position to a ulong
+                ulong value = BitConverter.ToUInt64(readableBytes, readPos); // Convert the bytes at readPos' position to a ulong
                 readPos += 8;
                 return value;
             }
@@ -517,16 +518,16 @@ namespace RiptideNetworking
         /// <param name="value">The float to add.</param>
         public void Add(float value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a float from the message.</summary>
         public float GetFloat()
         {
-            if (buffer.Count > readPos)
+            if (bytes.Count > readPos)
             {
                 // If there are unread bytes
-                float value = BitConverter.ToSingle(readableBuffer, readPos); // Convert the bytes at readPos' position to a float
+                float value = BitConverter.ToSingle(readableBytes, readPos); // Convert the bytes at readPos' position to a float
                 readPos += 4;
                 return value;
             }
@@ -570,16 +571,16 @@ namespace RiptideNetworking
         /// <param name="value">The double to add.</param>
         public void Add(double value)
         {
-            buffer.AddRange(BitConverter.GetBytes(value));
+            bytes.AddRange(BitConverter.GetBytes(value));
         }
 
         /// <summary>Reads a double from the message.</summary>
         public double GetDouble()
         {
-            if (buffer.Count > readPos + 8)
+            if (bytes.Count > readPos + 8)
             {
                 // If there are unread bytes
-                double value = BitConverter.ToDouble(readableBuffer, readPos); // Convert the bytes at readPos' position to a double
+                double value = BitConverter.ToDouble(readableBytes, readPos); // Convert the bytes at readPos' position to a double
                 readPos += 8;
                 return value;
             }
@@ -632,9 +633,9 @@ namespace RiptideNetworking
         public string GetString()
         {
             ushort length = GetUShort(); // Get the length of the string
-            if (buffer.Count >= readPos + length)
+            if (bytes.Count >= readPos + length)
             {
-                string value = Encoding.UTF8.GetString(readableBuffer, readPos, length); // Convert the bytes at readPos' position to a string
+                string value = Encoding.UTF8.GetString(readableBytes, readPos, length); // Convert the bytes at readPos' position to a string
                 readPos += length;
                 return value;
             }
