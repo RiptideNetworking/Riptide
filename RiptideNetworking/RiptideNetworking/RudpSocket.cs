@@ -129,13 +129,26 @@ namespace RiptideNetworking
                 if (sequenceGap > 0)
                 {
                     lockables.AcksBitfield <<= sequenceGap; // Shift the bits left to make room for the latest remote sequence ID
-                    lockables.AcksBitfield |= (ushort)(1 << sequenceGap - 1); // Set the bit corresponding to the sequence ID to 1 because we received that ID
-                    lockables.LastReceivedSeqId = sequenceId;
+                    ushort seqIdBit = (ushort)(1 << sequenceGap - 1);
+                    if ((lockables.AcksBitfield & seqIdBit) == 0)
+                    {
+                        // If we haven't received this packet before
+                        lockables.AcksBitfield |= (ushort)(1 << sequenceGap - 1); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        lockables.LastReceivedSeqId = sequenceId;
+                    }
+                    else
+                    {
+                        return; // Packet was a duplicate
+                    }
                 }
                 else if (sequenceGap < 0)
                 {
                     sequenceGap = -sequenceGap - 1; // Because bit shifting is 0-based
-                    lockables.AcksBitfield |= (ushort)(1 << sequenceGap); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                    ushort seqIdBit = (ushort)(1 << sequenceGap - 1);
+                    if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
+                        lockables.AcksBitfield |= (ushort)(1 << sequenceGap); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                    else
+                        return; // Packet was a duplicate
                 }
                 else
                 {
@@ -153,7 +166,17 @@ namespace RiptideNetworking
         internal void Send(byte[] data, IPEndPoint toEndPoint)
         {
             if (socket != null)
+            {
+#if DETAILED_LOGGING
+                if ((HeaderType)data[0] == HeaderType.reliable)
+                    RiptideLogger.Log(logName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
+                else if ((HeaderType)data[0] == HeaderType.unreliable)
+                    RiptideLogger.Log(logName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
+                else
+                    RiptideLogger.Log(logName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
+#endif
                 socket.SendTo(data, toEndPoint);
+            }
         }
 
         internal void SendReliable(Message message, IPEndPoint toEndPoint, Rudp rudp, byte maxSendAttempts, HeaderType headerType = HeaderType.reliable)

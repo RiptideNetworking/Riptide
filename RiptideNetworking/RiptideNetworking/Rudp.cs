@@ -106,22 +106,21 @@ namespace RiptideNetworking
         {
             private Rudp rudp;
             private IPEndPoint remoteEndPoint;
-            private List<ushort> sequenceIds;
+            private ushort sequenceId;
             private byte[] data;
             private byte maxSendAttempts;
-            private byte sendAttemtpts;
+            private byte sendAttempts;
             private Timer retryTimer;
             private bool wasCleared;
 
             internal PendingMessage(Rudp rudp, ushort sequenceId, byte[] data, IPEndPoint toEndPoint, byte maxSendAttempts)
             {
                 this.rudp = rudp;
-                sequenceIds = new List<ushort>();
-                sequenceIds.Add(sequenceId);
+                this.sequenceId = sequenceId;
                 this.data = data;
                 remoteEndPoint = toEndPoint;
                 this.maxSendAttempts = maxSendAttempts;
-                sendAttemtpts = 0;
+                sendAttempts = 0;
 
                 retryTimer = new Timer();
                 retryTimer.Elapsed += (s, e) => RetrySend();
@@ -129,35 +128,22 @@ namespace RiptideNetworking
                 //retryTimer = new System.Threading.Timer(RetrySend, null, Timeout.Infinite, Timeout.Infinite);
             }
 
-            private void RetrySend(object state)
-            {
-                RetrySend();
-            }
+            //private void RetrySend(object state)
+            //{
+            //    RetrySend();
+            //}
             internal void RetrySend()
             {
-                lock (rudp.SendLockables) lock (rudp.PendingMessages)
-                {
-                    if (data != null)
-                    {
-                        //rudp.PendingMessages.Remove(sequenceIds);
-
-                        ushort sequenceId = rudp.NextSequenceId;
-                        Array.Copy(BitConverter.GetBytes(sequenceId), 0, data, 1, 2); // Overwrite the sequence ID
-                        //Array.Copy(BitConverter.GetBytes(rudpSocket.lockables.lastReceivedSeqId), 0, data, 5, 2); // Overwrite the last remote sequence ID
-                        //Array.Copy(BitConverter.GetBytes(rudpSocket.lockables.acksBitfield), 0, data, 7, 2); // Overwrite the acks
-                        rudp.PendingMessages.Add(sequenceId, this);
-                        sequenceIds.Add(sequenceId);
-                        TrySend();
-                    }
-                }
+                if (data != null)
+                    TrySend();
             }
 
             static Random randomLoss = new Random();
             internal void TrySend()
             {
-                if (sendAttemtpts >= maxSendAttempts)
+                if (sendAttempts >= maxSendAttempts)
                 {
-                    RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message after {sendAttemtpts} attempt(s)!");
+                    RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message after {sendAttempts} attempt(s)!");
                     Clear();
                     return;
                 }
@@ -166,7 +152,7 @@ namespace RiptideNetworking
                 if (lossChance > 0.1f)
                     rudp.send(data, remoteEndPoint);
 
-                sendAttemtpts++;
+                sendAttempts++;
 
                 //retryTimer.Change(0, (int)Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
                 retryTimer.Interval = Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
@@ -179,8 +165,7 @@ namespace RiptideNetworking
                 {
                     if (!wasCleared)
                     {
-                        foreach (ushort sequenceId in sequenceIds)
-                            rudp.PendingMessages.Remove(sequenceId);
+                        rudp.PendingMessages.Remove(sequenceId);
 
                         data = null;
                         retryTimer.Stop();

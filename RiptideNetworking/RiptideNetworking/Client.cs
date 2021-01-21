@@ -57,6 +57,11 @@ namespace RiptideNetworking
 
         internal override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
         {
+#if DETAILED_LOGGING
+            if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
+                RiptideLogger.Log(logName, $"Received {headerType} message from {fromEndPoint}.");
+#endif
+
             switch (headerType)
             {
                 case HeaderType.unreliable:
@@ -65,6 +70,12 @@ namespace RiptideNetworking
                     if (receiveActionQueue == null)
                     {
                         ushort messageId = message.GetUShort();
+#if DETAILED_LOGGING
+                        if (headerType == HeaderType.reliable)
+                            RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                        else if (headerType == HeaderType.unreliable)
+                            RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+#endif
                         messageHandlers[messageId](message);
                     }
                     else
@@ -72,6 +83,12 @@ namespace RiptideNetworking
                         receiveActionQueue.Add(() =>
                         {
                             ushort messageId = message.GetUShort();
+#if DETAILED_LOGGING
+                            if (headerType == HeaderType.reliable)
+                                RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                            else if (headerType == HeaderType.unreliable)
+                                RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+#endif
                             messageHandlers[messageId](message);
                         });
                     }
@@ -207,6 +224,7 @@ namespace RiptideNetworking
                 return;
 
             Id = message.GetUShort();
+            connectionState = ConnectionState.connected;
 
             SendWelcomeReceived();
             OnConnected(new EventArgs());

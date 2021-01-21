@@ -67,6 +67,10 @@ namespace RiptideNetworking
 
         internal override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
         {
+#if DETAILED_LOGGING
+            if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
+                RiptideLogger.Log(logName, $"Received {headerType} message from {fromEndPoint}."); 
+#endif
             switch (headerType)
             {
                 case HeaderType.unreliable:
@@ -74,6 +78,12 @@ namespace RiptideNetworking
                     if (receiveActionQueue == null)
                     {
                         ushort messageId = message.GetUShort();
+#if DETAILED_LOGGING
+                        if (headerType == HeaderType.reliable)
+                            RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                        else if (headerType == HeaderType.unreliable)
+                            RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+#endif
                         messageHandlers[messageId](Clients[fromEndPoint], message);
                     }
                     else
@@ -81,6 +91,12 @@ namespace RiptideNetworking
                         receiveActionQueue.Add(() =>
                         {
                             ushort messageId = message.GetUShort();
+#if DETAILED_LOGGING
+                            if (headerType == HeaderType.reliable)
+                                RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                            else if (headerType == HeaderType.unreliable)
+                                RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+#endif
                             messageHandlers[messageId](Clients[fromEndPoint], message);
                         });
                     }
@@ -231,7 +247,7 @@ namespace RiptideNetworking
             RiptideLogger.Log(logName, "Server stopped.");
         }
 
-        #region Messages
+#region Messages
         private void SendDisconnect(ServerClient client)
         {
             SendReliable(new Message(), client.remoteEndPoint, client.Rudp, 5, HeaderType.disconnect);
@@ -271,9 +287,9 @@ namespace RiptideNetworking
                 SendReliable(message, client.remoteEndPoint, client.Rudp, 5, HeaderType.clientDisconnected);
             }
         }
-        #endregion
+#endregion
 
-        #region Events
+#region Events
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
         {
@@ -298,6 +314,6 @@ namespace RiptideNetworking
             
             SendClientDisconnected(e.Id);
         }
-        #endregion
+#endregion
     }
 }
