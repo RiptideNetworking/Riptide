@@ -147,6 +147,7 @@ namespace RiptideNetworking
 
             SendDisconnect();
             StopListening();
+            connectionState = ConnectionState.notConnected;
             RiptideLogger.Log(logName, "Disconnected.");
         }
 
@@ -220,7 +221,7 @@ namespace RiptideNetworking
 
         private void HandleWelcome(Message message)
         {
-            if (Id != 0)
+            if (connectionState == ConnectionState.connected)
                 return;
 
             Id = message.GetUShort();
@@ -258,6 +259,7 @@ namespace RiptideNetworking
         private void HandleDisconnect(Message message)
         {
             StopListening();
+            connectionState = ConnectionState.notConnected;
             OnDisconnected(new EventArgs());
         }
         #endregion
