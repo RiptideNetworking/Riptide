@@ -18,6 +18,7 @@ namespace RiptideNetworking
         clientDisconnected,
     }
 
+    /// <summary>Represents a packet.</summary>
     public class Message // TODO: endianness
     {
         /// <summary>The length in bytes of the message's contents.</summary>

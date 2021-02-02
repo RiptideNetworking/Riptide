@@ -15,8 +15,10 @@ namespace RiptideNetworking
         connected,
     }
 
+    /// <summary>Base class for all RUDP connections.</summary>
     public abstract class RudpSocket
     {
+        /// <summary>The name of this server/client instance. Used when logging messages.</summary>
         public readonly string logName;
 
         private const int ReceivePollingTime = 500000; // 0.5 seconds
@@ -25,11 +27,15 @@ namespace RiptideNetworking
         private bool isListening = false;
         private ushort maxPacketSize = 4096;
 
+        /// <summary>Handles initial setup.</summary>
+        /// <param name="logName">The name of this server/client instance. Used when logging messages.</param>
         protected RudpSocket(string logName)
         {
             this.logName = logName;
         }
 
+        /// <summary>Starts listening for incoming packets.</summary>
+        /// <param name="port">The local port to listen on.</param>
         protected void StartListening(ushort port = 0)
         {
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
@@ -39,6 +45,7 @@ namespace RiptideNetworking
             new Thread(new ThreadStart(Receive)).Start();
         }
 
+        /// <summary>Stops listening for incoming packets.</summary>
         protected void StopListening()
         {
             isListening = false;
@@ -112,6 +119,9 @@ namespace RiptideNetworking
                 Handle(message, remoteEndPoint, headerType);
         }
 
+        /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+        /// <param name="endPoint">The endpoint from which the message was sent.</param>
+        /// <param name="firstByte">The first byte of the message.</param>
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte);
 
         internal abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType);
@@ -200,6 +210,9 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
+        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
+        /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected abstract void SendAck(ushort forSeqId, IPEndPoint toEndPoint);
     }
 }

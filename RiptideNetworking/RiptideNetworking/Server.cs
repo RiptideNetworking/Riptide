@@ -5,13 +5,21 @@ using System.Threading;
 
 namespace RiptideNetworking
 {
+    /// <summary>Represents a server which can accept connections from clients.</summary>
     public class Server : RudpSocket
     {
+        /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
         public Dictionary<IPEndPoint, ServerClient> Clients { get; private set; }
+        /// <summary>The local port that the server is running on.</summary>
         public ushort Port { get; private set; }
+        /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount { get; private set; }
+        /// <summary>The number of currently connected clients.</summary>
         public int ClientCount { get => Clients.Count; }
 
+        /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
+        /// <param name="fromClient">The client from whom the message was received.</param>
+        /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ServerClient fromClient, Message message);
 
         private Dictionary<ushort, MessageHandler> messageHandlers;
@@ -22,6 +30,11 @@ namespace RiptideNetworking
         /// <param name="logName">The name of this server instance. Used when logging messages.</param>
         public Server(string logName = "SERVER") : base(logName) { }
 
+        /// <summary>Starts the server.</summary>
+        /// <param name="port">The local port on which to start the server.</param>
+        /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
+        /// <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
+        /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
         public void Start(ushort port, ushort maxClientCount, Dictionary<ushort, MessageHandler> messageHandlers, ActionQueue receiveActionQueue = null)
         {
             Port = port;
@@ -50,6 +63,9 @@ namespace RiptideNetworking
         //    }
         //}
 
+        /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+        /// <param name="endPoint">The endpoint from which the message was sent.</param>
+        /// <param name="firstByte">The first byte of the message.</param>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             if (Clients.ContainsKey(endPoint))
@@ -138,6 +154,9 @@ namespace RiptideNetworking
             Send(message.ToArray(), toEndPoint);
         }
 
+        /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
+        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
+        /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
             Clients[toEndPoint].SendAck(forSeqId);
@@ -167,11 +186,16 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Sends a message to a specific client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The client to send the message to.</param>
         public void Send(Message message, ServerClient toClient)
         {
             Send(message, toClient.remoteEndPoint);
         }
 
+        /// <summary>Sends a message to all conected clients.</summary>
+        /// <param name="message">The message to send.</param>
         public void SendToAll(Message message)
         {
             message.PrepareToSend(HeaderType.unreliable);
@@ -182,6 +206,9 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Sends a message to all connected clients except one.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="exceptToClient">The client NOT to send the message to.</param>
         public void SendToAll(Message message, ServerClient exceptToClient)
         {
             message.PrepareToSend(HeaderType.unreliable);
@@ -193,11 +220,18 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Reliably sends a message to a specific client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The client to send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         public void SendReliable(Message message, ServerClient toClient, byte maxSendAttempts = 3)
         {
             SendReliable(message, toClient.remoteEndPoint, toClient.Rudp, maxSendAttempts);
         }
 
+        /// <summary>Sends a message to all conected clients.</summary>
+        /// <param name="message"></param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         public void SendReliableToAll(Message message, byte maxSendAttempts = 3)
         {
             foreach (ServerClient client in Clients.Values)
@@ -206,6 +240,10 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Sends a message to all connected clients except one.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="exceptToClient">The client NOT to send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         public void SendReliableToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 3)
         {
             foreach (ServerClient client in Clients.Values)
@@ -215,25 +253,28 @@ namespace RiptideNetworking
             }
         }
 
-        public void DisconnectClient(IPEndPoint clientEndPoint)
+        /// <summary>Kicks a specific client.</summary>
+        /// <param name="client">The client to kick.</param>
+        public void DisconnectClient(ServerClient client)
         {
-            if (Clients.TryGetValue(clientEndPoint, out ServerClient client))
+            if (Clients.ContainsKey(client.remoteEndPoint))
             {
                 SendDisconnect(client);
                 client.Disconnect();
-                Clients.Remove(clientEndPoint);
+                Clients.Remove(client.remoteEndPoint);
 
-                RiptideLogger.Log($"Kicked {clientEndPoint}.");
+                RiptideLogger.Log(logName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
             }
             else
             {
-                RiptideLogger.Log($"Failed to kick {clientEndPoint} because they weren't connected.");
+                RiptideLogger.Log(logName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
             }
         }
         
+        /// <summary>Stops the server.</summary>
         public void Stop()
         {
             byte[] disconnectBytes = { (byte)HeaderType.disconnect };
@@ -290,6 +331,7 @@ namespace RiptideNetworking
 #endregion
 
 #region Events
+        /// <summary>Invoked when a new client connects.</summary>
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
         {
@@ -302,6 +344,7 @@ namespace RiptideNetworking
 
             SendClientConnected(e.Client.remoteEndPoint, e.Client.Id);
         }
+        /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         internal void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {

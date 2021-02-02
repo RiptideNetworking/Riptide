@@ -5,12 +5,18 @@ using System.Threading;
 
 namespace RiptideNetworking
 {
+    /// <summary>Represents a client connection.</summary>
     public class Client : RudpSocket
     {
+        /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
+        /// <summary>The round trip time of the connection.</summary>
         public ushort RTT { get => rudp.RTT; }
+        /// <summary>The smoothed round trip time of the connection.</summary>
         public ushort SmoothRTT { get => rudp.SmoothRTT; }
 
+        /// <summary>Encapsulates a method that handles a message from the server.</summary>
+        /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);
 
         private Dictionary<ushort, MessageHandler> messageHandlers;
@@ -28,6 +34,11 @@ namespace RiptideNetworking
         /// <param name="logName">The name of this client instance. Used when logging messages.</param>
         public Client(string logName = "CLIENT") : base(logName) { }
 
+        /// <summary>Attempts to connect to an IP and port.</summary>
+        /// <param name="ip">The IP to connect to.</param>
+        /// <param name="port">The remote port to connect to.</param>
+        /// <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
+        /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
         public void Connect(string ip, ushort port, Dictionary<ushort, MessageHandler> messageHandlers, ActionQueue receiveActionQueue = null)
         {
             this.messageHandlers = messageHandlers;
@@ -50,6 +61,9 @@ namespace RiptideNetworking
                 SendHeartbeat();
         }
 
+        /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+        /// <param name="endPoint">The endpoint from which the message was sent.</param>
+        /// <param name="firstByte">The first byte of the message.</param>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             return endPoint.Equals(remoteEndPoint);
@@ -130,16 +144,22 @@ namespace RiptideNetworking
             Send(message.ToArray(), remoteEndPoint);
         }
 
+        /// <summary>Sends a message to the server.</summary>
+        /// <param name="message">The message to send.</param>
         public void Send(Message message)
         {
             Send(message, HeaderType.unreliable);
         }
 
+        /// <summary>Reliably sends a message to the server.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         public void SendReliable(Message message, byte maxSendAttempts = 3)
         {
             SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
         }
 
+        /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
         {
             if (connectionState == ConnectionState.notConnected)
@@ -159,6 +179,9 @@ namespace RiptideNetworking
             Send(message, HeaderType.connect);
         }
 
+        /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
+        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
+        /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
             Message message = new Message();
@@ -265,6 +288,7 @@ namespace RiptideNetworking
         #endregion
 
         #region Events
+        /// <summary>Invoked when a connection to the server is established.</summary>
         public event EventHandler Connected;
         private void OnConnected(EventArgs e)
         {
@@ -275,6 +299,7 @@ namespace RiptideNetworking
             else
                 receiveActionQueue.Add(() => Connected?.Invoke(this, e));
         }
+        /// <summary>Invoked when disconnected by the server.</summary>
         public event EventHandler Disconnected;
         private void OnDisconnected(EventArgs e)
         {
@@ -286,6 +311,7 @@ namespace RiptideNetworking
                 receiveActionQueue.Add(() => Disconnected?.Invoke(this, e));
         }
 
+        /// <summary>Invoked when a new client connects.</summary>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
@@ -296,6 +322,7 @@ namespace RiptideNetworking
             else
                 receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
         }
+        /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
@@ -307,6 +334,7 @@ namespace RiptideNetworking
                 receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
         }
 
+        /// <summary>Invoked when ping is updated.</summary>
         public event EventHandler<PingUpdatedEventArgs> PingUpdated;
         private void OnPingUpdated(PingUpdatedEventArgs e)
         {

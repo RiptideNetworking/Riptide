@@ -3,11 +3,14 @@ using System.Net;
 
 namespace RiptideNetworking
 {
+    /// <summary>Represents a server's connection to a client.</summary>
     public class ServerClient
     {
+        /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
 
         private readonly Server server;
+        /// <summary>The remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
         internal Rudp Rudp { get; private set; }
         internal SendLockables SendLockables { get => Rudp.SendLockables; }

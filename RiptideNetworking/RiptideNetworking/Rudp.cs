@@ -7,7 +7,7 @@ using Timer = System.Timers.Timer;
 
 namespace RiptideNetworking
 {
-    class Rudp
+    internal class Rudp
     {
         private int lastSequenceId;
         internal ushort NextSequenceId { get => (ushort)Interlocked.Increment(ref lastSequenceId); }

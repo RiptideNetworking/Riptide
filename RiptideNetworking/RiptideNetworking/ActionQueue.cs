@@ -4,8 +4,10 @@ using System.Text;
 
 namespace RiptideNetworking
 {
+    /// <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
     public class ActionQueue
     {
+        /// <summary>The name of this action queue instance. Used when logging messages.</summary>
         public readonly string logName;
         private readonly List<Action> executionQueue = new List<Action>();
         private readonly List<Action> executionQueueCopy = new List<Action>();
