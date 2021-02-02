@@ -17,7 +17,7 @@ namespace ConsoleServer
 
             Dictionary<ushort, Server.MessageHandler> messageHandlers = new Dictionary<ushort, Server.MessageHandler>()
             {
-                { (ushort)MessageIDs.reliableTest, HandleReliableTest }
+                { (ushort)MessageId.reliableTest, HandleReliableTest }
             };
 
             server.Start(7777, 10, messageHandlers);
@@ -34,7 +34,7 @@ namespace ConsoleServer
 
         private static void SendReliableTest(ServerClient fromClient, int reliableTestId)
         {
-            Message message = new Message((ushort)MessageIDs.reliableTest);
+            Message message = new Message((ushort)MessageId.reliableTest);
             message.Add(reliableTestId);
 
             server.SendReliable(message, fromClient);
@@ -48,7 +48,7 @@ namespace ConsoleServer
         }
     }
 
-    public enum MessageIDs : ushort
+    public enum MessageId : ushort
     {
         reliableTest = 1
     }

@@ -188,7 +188,7 @@ namespace RiptideNetworking
 
             foreach (IPEndPoint clientEndPoint in Clients.Keys)
             {
-                if (!clientEndPoint.Equals(exceptToClient))
+                if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
                     Send(message.ToArray(), clientEndPoint);
             }
         }
@@ -210,7 +210,7 @@ namespace RiptideNetworking
         {
             foreach (ServerClient client in Clients.Values)
             {
-                if (!client.remoteEndPoint.Equals(exceptToClient))
+                if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
                     SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
             }
         }
