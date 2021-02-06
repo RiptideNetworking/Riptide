@@ -143,7 +143,7 @@ namespace RiptideNetworking
             {
                 if (sendAttempts >= maxSendAttempts)
                 {
-                    RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message (ID: {BitConverter.ToInt16(data, 3)}) after {sendAttempts} attempt(s)!");
+                    RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message (ID: {(data.Length >= 5 ? BitConverter.ToInt16(data, 3).ToString() : "N/A")}) after {sendAttempts} attempt(s)!");
                     Clear();
                     return;
                 }
