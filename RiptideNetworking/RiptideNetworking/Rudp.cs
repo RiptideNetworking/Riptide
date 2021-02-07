@@ -148,9 +148,11 @@ namespace RiptideNetworking
                     return;
                 }
 
+#if SIMULATE_LOSS
                 float lossChance = randomLoss.Next(100) / 100f;
                 if (lossChance > 0.1f)
                     rudp.send(data, remoteEndPoint);
+#endif
 
                 sendAttempts++;
 
