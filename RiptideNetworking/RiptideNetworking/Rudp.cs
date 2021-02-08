@@ -138,7 +138,9 @@ namespace RiptideNetworking
                     TrySend();
             }
 
+#if SIMULATE_LOSS
             static Random randomLoss = new Random();
+#endif
             internal void TrySend()
             {
                 if (sendAttempts >= maxSendAttempts)
@@ -152,6 +154,8 @@ namespace RiptideNetworking
                 float lossChance = randomLoss.Next(100) / 100f;
                 if (lossChance > 0.1f)
                     rudp.send(data, remoteEndPoint);
+#else
+                rudp.send(data, remoteEndPoint);
 #endif
 
                 sendAttempts++;
