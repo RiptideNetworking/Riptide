@@ -167,7 +167,7 @@ namespace RiptideNetworking
 
             internal void Clear()
             {
-                lock (data)
+                lock (this)
                 {
                     if (!wasCleared)
                     {

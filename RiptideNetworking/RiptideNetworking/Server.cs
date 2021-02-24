@@ -113,7 +113,13 @@ namespace RiptideNetworking
                             else if (headerType == HeaderType.unreliable)
                                 RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                            messageHandlers[messageId](Clients[fromEndPoint], message);
+
+                            if (Clients.TryGetValue(fromEndPoint, out ServerClient client))
+                                messageHandlers[messageId](client, message);
+#if DETAILED_LOGGING
+                            else
+                                RiptideLogger.Log(logName, $"Aborted handling of message (ID: {messageId}) because client is no longer connected.");
+#endif
                         });
                     }
                     break;

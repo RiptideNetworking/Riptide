@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -9,5 +10,9 @@
     <DocumentationFile>bin\Debug\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
     <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
   </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.dll D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Server\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.xml D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Server\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.dll D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Client\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.xml D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Client\Assets\Scripts\Multiplayer\. /Y" />
+  </Target>
 
 </Project>
