@@ -98,6 +98,10 @@ namespace RiptideNetworking
                 {
                     return;
                 }
+                catch (NullReferenceException)
+                {
+                    return;
+                }
 
                 Receive(receiveBuffer, byteCount, 0, (IPEndPoint)bufferEndPoint);
             }
