@@ -17,12 +17,6 @@ namespace RiptideNetworking
         /// <summary>The number of currently connected clients.</summary>
         public int ClientCount { get => Clients.Count; }
 
-        /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
-        /// <param name="fromClient">The client from whom the message was received.</param>
-        /// <param name="message">The message that was received.</param>
-        public delegate void MessageHandler(ServerClient fromClient, Message message);
-
-        private Dictionary<ushort, MessageHandler> messageHandlers;
         private ActionQueue receiveActionQueue;
         private List<ushort> availableClientIds;
 
@@ -33,15 +27,13 @@ namespace RiptideNetworking
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
-        /// <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
         /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-        public void Start(ushort port, ushort maxClientCount, Dictionary<ushort, MessageHandler> messageHandlers, ActionQueue receiveActionQueue = null)
+        public void Start(ushort port, ushort maxClientCount, ActionQueue receiveActionQueue = null)
         {
             Port = port;
             MaxClientCount = maxClientCount;
             Clients = new Dictionary<IPEndPoint, ServerClient>(this.MaxClientCount);
 
-            this.messageHandlers = messageHandlers;
             InitializeClientIds();
 
             this.receiveActionQueue = receiveActionQueue;
@@ -93,29 +85,28 @@ namespace RiptideNetworking
                 case HeaderType.reliable:
                     if (receiveActionQueue == null)
                     {
-                        ushort messageId = message.GetUShort();
 #if DETAILED_LOGGING
+                        ushort messageId = message.PeekUShort();
                         if (headerType == HeaderType.reliable)
                             RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                         else if (headerType == HeaderType.unreliable)
                             RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                        messageHandlers[messageId](Clients[fromEndPoint], message);
+                        OnMessageReceived(new ServerMessageReceivedEventArgs(Clients[fromEndPoint], message));
                     }
                     else
                     {
                         receiveActionQueue.Add(() =>
                         {
-                            ushort messageId = message.GetUShort();
 #if DETAILED_LOGGING
+                            ushort messageId = message.PeekUShort();
                             if (headerType == HeaderType.reliable)
                                 RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                             else if (headerType == HeaderType.unreliable)
                                 RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-
                             if (Clients.TryGetValue(fromEndPoint, out ServerClient client))
-                                messageHandlers[messageId](client, message);
+                                OnMessageReceived(new ServerMessageReceivedEventArgs(client, message));
 #if DETAILED_LOGGING
                             else
                                 RiptideLogger.Log(logName, $"Aborted handling of message (ID: {messageId}) because client is no longer connected.");
@@ -349,6 +340,12 @@ namespace RiptideNetworking
                 receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
 
             SendClientConnected(e.Client.remoteEndPoint, e.Client.Id);
+        }
+        /// <summary>Invoked when a message is received from a client.</summary>
+        public event EventHandler<ServerMessageReceivedEventArgs> MessageReceived;
+        internal void OnMessageReceived(ServerMessageReceivedEventArgs e)
+        {
+            MessageReceived?.Invoke(this, e);
         }
         /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;

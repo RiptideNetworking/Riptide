@@ -18,6 +18,24 @@ namespace RiptideNetworking
         }
     }
 
+    /// <summary>Contains event data for when the server receives a message from a client.</summary>
+    public class ServerMessageReceivedEventArgs : EventArgs
+    {
+        /// <summary>The client that the message was received from.</summary>
+        public ServerClient FromClient { get; private set; }
+        /// <summary>The message that was received.</summary>
+        public Message Message { get; private set; }
+
+        /// <summary>Initializes event data.</summary>
+        /// <param name="fromClient">The client that the message was received from.</param>
+        /// <param name="message">The message that was received.</param>
+        public ServerMessageReceivedEventArgs(ServerClient fromClient, Message message)
+        {
+            FromClient = fromClient;
+            Message = message;
+        }
+    }
+
     /// <summary>Contains event data for when a new client connects.</summary>
     public class ClientConnectedEventArgs : EventArgs
     {
@@ -29,6 +47,20 @@ namespace RiptideNetworking
         public ClientConnectedEventArgs(ushort id)
         {
             Id = id;
+        }
+    }
+
+    /// <summary>Contains event data for when the client receives a message from the server.</summary>
+    public class ClientMessageReceivedEventArgs : EventArgs
+    {
+        /// <summary>The message that was received.</summary>
+        public Message Message { get; private set; }
+
+        /// <summary>Initializes event data.</summary>
+        /// <param name="message">The message that was received.</param>
+        public ClientMessageReceivedEventArgs(Message message)
+        {
+            Message = message;
         }
     }
 

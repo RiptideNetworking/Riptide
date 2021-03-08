@@ -9,20 +9,27 @@ namespace ConsoleServer
         private static Server server = new Server();
         private static Dictionary<ushort, Player> players = new Dictionary<ushort, Player>();
 
+        /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
+        /// <param name="fromClient">The client from whom the message was received.</param>
+        /// <param name="message">The message that was received.</param>
+        public delegate void MessageHandler(ServerClient fromClient, Message message);
+        private static Dictionary<ushort, MessageHandler> messageHandlers;
+
         private static void Main(string[] args)
         {
             Console.Title = "Server";
             
             RiptideLogger.Initialize(Console.WriteLine, true);
 
-            Dictionary<ushort, Server.MessageHandler> messageHandlers = new Dictionary<ushort, Server.MessageHandler>()
+            messageHandlers = new Dictionary<ushort, MessageHandler>()
             {
                 { (ushort)MessageId.reliableTest, HandleReliableTest }
             };
 
-            server.Start(7777, 10, messageHandlers);
+            server.Start(7777, 10);
 
             server.ClientConnected += (s, e) => players.Add(e.Client.Id, new Player(e.Client));
+            server.MessageReceived += (s, e) => messageHandlers[e.Message.GetUShort()](e.FromClient, e.Message);
             server.ClientDisconnected += (s, e) => players.Remove(e.Id);
 
             Console.ReadKey();

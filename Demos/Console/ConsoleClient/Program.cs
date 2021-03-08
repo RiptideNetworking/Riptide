@@ -8,6 +8,12 @@ namespace ConsoleClient
     class Program
     {
         private static Client client = new Client();
+
+        /// <summary>Encapsulates a method that handles a message from the server.</summary>
+        /// <param name="message">The message that was received.</param>
+        public delegate void MessageHandler(Message message);
+        private static Dictionary<ushort, MessageHandler> messageHandlers;
+
         private static void Main(string[] args)
         {
             Console.Title = "Client";
@@ -17,14 +23,15 @@ namespace ConsoleClient
 
             RiptideLogger.Initialize(Console.WriteLine, true);
 
-            Dictionary<ushort, Client.MessageHandler> messageHandlers = new Dictionary<ushort, Client.MessageHandler>()
+            messageHandlers = new Dictionary<ushort, MessageHandler>()
             {
                 { (ushort)MessageId.reliableTest, HandleReliableTest }
             };
 
-            client.Connected += (e, s) => StartReliableTest();
-            client.Disconnected += (e, s) => StopReliableTest();
-            client.Connect("127.0.0.1", 7777, messageHandlers);
+            client.Connected += (s, e) => StartReliableTest();
+            client.MessageReceived += (s, e) => messageHandlers[e.Message.GetUShort()](e.Message);
+            client.Disconnected += (s, e) => StopReliableTest();
+            client.Connect("127.0.0.1", 7777);
 
             Console.ReadKey();
 

@@ -33,19 +33,14 @@
         <member name="P:RiptideNetworking.Client.SmoothRTT">
             <summary>The smoothed round trip time of the connection.</summary>
         </member>
-        <member name="T:RiptideNetworking.Client.MessageHandler">
-            <summary>Encapsulates a method that handles a message from the server.</summary>
-            <param name="message">The message that was received.</param>
-        </member>
         <member name="M:RiptideNetworking.Client.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name of this client instance. Used when logging messages.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,System.Collections.Generic.Dictionary{System.UInt16,RiptideNetworking.Client.MessageHandler},RiptideNetworking.ActionQueue)">
+        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue)">
             <summary>Attempts to connect to an IP and port.</summary>
             <param name="ip">The IP to connect to.</param>
             <param name="port">The remote port to connect to.</param>
-            <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
             <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
         </member>
         <member name="M:RiptideNetworking.Client.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
@@ -73,6 +68,9 @@
         <member name="E:RiptideNetworking.Client.Connected">
             <summary>Invoked when a connection to the server is established.</summary>
         </member>
+        <member name="E:RiptideNetworking.Client.MessageReceived">
+            <summary>Invoked when a message is received from the server.</summary>
+        </member>
         <member name="E:RiptideNetworking.Client.Disconnected">
             <summary>Invoked when disconnected by the server.</summary>
         </member>
@@ -95,6 +93,20 @@
             <summary>Initializes event data.</summary>
             <param name="client">The newly connected server client.</param>
         </member>
+        <member name="T:RiptideNetworking.ServerMessageReceivedEventArgs">
+            <summary>Contains event data for when the server receives a message from a client.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ServerMessageReceivedEventArgs.FromClient">
+            <summary>The client that the message was received from.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ServerMessageReceivedEventArgs.Message">
+            <summary>The message that was received.</summary>
+        </member>
+        <member name="M:RiptideNetworking.ServerMessageReceivedEventArgs.#ctor(RiptideNetworking.ServerClient,RiptideNetworking.Message)">
+            <summary>Initializes event data.</summary>
+            <param name="fromClient">The client that the message was received from.</param>
+            <param name="message">The message that was received.</param>
+        </member>
         <member name="T:RiptideNetworking.ClientConnectedEventArgs">
             <summary>Contains event data for when a new client connects.</summary>
         </member>
@@ -104,6 +116,16 @@
         <member name="M:RiptideNetworking.ClientConnectedEventArgs.#ctor(System.UInt16)">
             <summary>Initializes event data.</summary>
             <param name="id">The numeric ID of the newly connected client.</param>
+        </member>
+        <member name="T:RiptideNetworking.ClientMessageReceivedEventArgs">
+            <summary>Contains event data for when the client receives a message from the server.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ClientMessageReceivedEventArgs.Message">
+            <summary>The message that was received.</summary>
+        </member>
+        <member name="M:RiptideNetworking.ClientMessageReceivedEventArgs.#ctor(RiptideNetworking.Message)">
+            <summary>Initializes event data.</summary>
+            <param name="message">The message that was received.</param>
         </member>
         <member name="T:RiptideNetworking.ClientDisconnectedEventArgs">
             <summary>Contains event data for when a client disconnects from the server.</summary>
@@ -240,6 +262,9 @@
         </member>
         <member name="M:RiptideNetworking.Message.GetUShort">
             <summary>Reads a ushort from the message.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Message.PeekUShort">
+            <summary>Reads a ushort from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
             <summary>Adds an array of ushorts to the message.</summary>
@@ -450,20 +475,14 @@
         <member name="P:RiptideNetworking.Server.ClientCount">
             <summary>The number of currently connected clients.</summary>
         </member>
-        <member name="T:RiptideNetworking.Server.MessageHandler">
-            <summary>Encapsulates a method that handles a message from a certain client.</summary>
-            <param name="fromClient">The client from whom the message was received.</param>
-            <param name="message">The message that was received.</param>
-        </member>
         <member name="M:RiptideNetworking.Server.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name of this server instance. Used when logging messages.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Collections.Generic.Dictionary{System.UInt16,RiptideNetworking.Server.MessageHandler},RiptideNetworking.ActionQueue)">
+        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,RiptideNetworking.ActionQueue)">
             <summary>Starts the server.</summary>
             <param name="port">The local port on which to start the server.</param>
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
-            <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
             <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
         </member>
         <member name="M:RiptideNetworking.Server.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
@@ -516,6 +535,9 @@
         </member>
         <member name="E:RiptideNetworking.Server.ClientConnected">
             <summary>Invoked when a new client connects.</summary>
+        </member>
+        <member name="E:RiptideNetworking.Server.MessageReceived">
+            <summary>Invoked when a message is received from a client.</summary>
         </member>
         <member name="E:RiptideNetworking.Server.ClientDisconnected">
             <summary>Invoked when a client disconnects.</summary>

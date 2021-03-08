@@ -35,9 +35,6 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    public Client Client { get; private set; }
-    private ActionQueue actionQueue;
-
     [SerializeField] private string ip;
     [SerializeField] private ushort port;
 
@@ -46,6 +43,13 @@ public class NetworkManager : MonoBehaviour
 
     public GameObject LocalPlayerPrefab { get => localPlayerPrefab; }
     public GameObject PlayerPrefab { get => playerPrefab; }
+    public Client Client { get; private set; }
+    private ActionQueue actionQueue;
+
+    /// <summary>Encapsulates a method that handles a message from the server.</summary>
+    /// <param name="message">The message that was received.</param>
+    public delegate void MessageHandler(Message message);
+    private Dictionary<ushort, MessageHandler> messageHandlers;
 
     private void Awake()
     {
@@ -60,6 +64,7 @@ public class NetworkManager : MonoBehaviour
 
         Client = new Client();
         Client.Connected += DidConnect;
+        Client.MessageReceived += MessageReceived;
         Client.ClientDisconnected += PlayerLeft;
     }
 
@@ -75,17 +80,22 @@ public class NetworkManager : MonoBehaviour
 
     public void Connect()
     {
-        Dictionary<ushort, Client.MessageHandler> messageHandlers = new Dictionary<ushort, Client.MessageHandler>()
+        messageHandlers = new Dictionary<ushort, MessageHandler>()
         {
             { (ushort)ServerToClientId.spawnPlayer, ClientHandle.SpawnPlayer },
             { (ushort)ServerToClientId.playerMovement, ClientHandle.PlayerMovement },
         };
-        Client.Connect(ip, port, messageHandlers, actionQueue);
+        Client.Connect(ip, port, actionQueue);
     }
 
     private void DidConnect(object sender, EventArgs e)
     {
         UIManager.Singleton.SendName();
+    }
+
+    private void MessageReceived(object sender, ClientMessageReceivedEventArgs e)
+    {
+        messageHandlers[e.Message.GetUShort()](e.Message);
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)

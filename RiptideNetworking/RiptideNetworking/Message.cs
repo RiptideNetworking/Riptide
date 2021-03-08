@@ -273,6 +273,15 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Reads a ushort from the message without moving the read position, allowing the same bytes to be read again.</summary>
+        internal ushort PeekUShort()
+        {
+            if (bytes.Count > readPos) // If there are unread bytes
+                return BitConverter.ToUInt16(readableBytes, readPos); // Convert the bytes at readPos' position to a ushort
+            else
+                throw new Exception("Message contains insufficient bytes to read type 'ushort'!");
+        }
+
         /// <summary>Adds an array of ushorts to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>

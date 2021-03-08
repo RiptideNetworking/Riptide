@@ -15,11 +15,6 @@ namespace RiptideNetworking
         /// <summary>The smoothed round trip time of the connection.</summary>
         public ushort SmoothRTT { get => rudp.SmoothRTT; }
 
-        /// <summary>Encapsulates a method that handles a message from the server.</summary>
-        /// <param name="message">The message that was received.</param>
-        public delegate void MessageHandler(Message message);
-
-        private Dictionary<ushort, MessageHandler> messageHandlers;
         private ActionQueue receiveActionQueue;
         private IPEndPoint remoteEndPoint;
         private Rudp rudp;
@@ -37,11 +32,9 @@ namespace RiptideNetworking
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
-        /// <param name="messageHandlers">The message IDs and corresponding handler methods to use when handling messages.</param>
         /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-        public void Connect(string ip, ushort port, Dictionary<ushort, MessageHandler> messageHandlers, ActionQueue receiveActionQueue = null)
+        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null)
         {
-            this.messageHandlers = messageHandlers;
             this.receiveActionQueue = receiveActionQueue;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             rudp = new Rudp(Send, logName);
@@ -83,27 +76,27 @@ namespace RiptideNetworking
                     
                     if (receiveActionQueue == null)
                     {
-                        ushort messageId = message.GetUShort();
 #if DETAILED_LOGGING
+                        ushort messageId = message.PeekUShort();
                         if (headerType == HeaderType.reliable)
                             RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                         else if (headerType == HeaderType.unreliable)
                             RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                        messageHandlers[messageId](message);
+                        OnMessageReceived(new ClientMessageReceivedEventArgs(message));
                     }
                     else
                     {
                         receiveActionQueue.Add(() =>
                         {
-                            ushort messageId = message.GetUShort();
 #if DETAILED_LOGGING
+                            ushort messageId = message.PeekUShort();
                             if (headerType == HeaderType.reliable)
                                 RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                             else if (headerType == HeaderType.unreliable)
                                 RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                            messageHandlers[messageId](message);
+                            OnMessageReceived(new ClientMessageReceivedEventArgs(message));
                         });
                     }
                     break;
@@ -298,6 +291,12 @@ namespace RiptideNetworking
                 Connected?.Invoke(this, e);
             else
                 receiveActionQueue.Add(() => Connected?.Invoke(this, e));
+        }
+        /// <summary>Invoked when a message is received from the server.</summary>
+        public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
+        internal void OnMessageReceived(ClientMessageReceivedEventArgs e)
+        {
+            MessageReceived?.Invoke(this, e);
         }
         /// <summary>Invoked when disconnected by the server.</summary>
         public event EventHandler Disconnected;

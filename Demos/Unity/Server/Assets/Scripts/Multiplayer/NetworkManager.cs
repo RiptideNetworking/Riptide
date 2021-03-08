@@ -43,6 +43,12 @@ public class NetworkManager : MonoBehaviour
     public Server Server { get; private set; }
     private ActionQueue actionQueue;
 
+    /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
+    /// <param name="fromClient">The client from whom the message was received.</param>
+    /// <param name="message">The message that was received.</param>
+    public delegate void MessageHandler(ServerClient fromClient, Message message);
+    private Dictionary<ushort, MessageHandler> messageHandlers;
+
     private void Awake()
     {
         Singleton = this;
@@ -62,7 +68,7 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, true);
 #endif
 
-        Dictionary<ushort, Server.MessageHandler> messageHandlers = new Dictionary<ushort, Server.MessageHandler>()
+        messageHandlers = new Dictionary<ushort, MessageHandler>()
         {
             { (ushort)ClientToServerId.playerName, ServerHandle.PlayerName },
             { (ushort)ClientToServerId.playerInput, ServerHandle.PlayerInput },
@@ -72,9 +78,10 @@ public class NetworkManager : MonoBehaviour
 
         Server = new Server();
         Server.ClientConnected += NewPlayerConnected;
+        Server.MessageReceived += MessageReceived;
         Server.ClientDisconnected += PlayerLeft;
 
-        Server.Start(port, maxClientCount, messageHandlers, actionQueue);
+        Server.Start(port, maxClientCount, actionQueue);
     }
 
     private void FixedUpdate()
@@ -96,6 +103,11 @@ public class NetworkManager : MonoBehaviour
                 player.SendSpawn(e.Client);
             }
         }
+    }
+
+    private void MessageReceived(object sender, ServerMessageReceivedEventArgs e)
+    {
+        messageHandlers[e.Message.GetUShort()](e.FromClient, e.Message);
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
