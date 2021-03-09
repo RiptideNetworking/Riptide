@@ -52,7 +52,7 @@ public class PlayerController : MonoBehaviour
     #region Messages
     private void SendInput()
     {
-        Message message = new Message((ushort)ClientToServerId.playerInput);
+        Message message = new Message(MessageSendMode.unreliable, (ushort)ClientToServerId.playerInput);
         message.Add(inputs, false);
         message.Add(camTransform.forward);
         NetworkManager.Singleton.Client.Send(message);

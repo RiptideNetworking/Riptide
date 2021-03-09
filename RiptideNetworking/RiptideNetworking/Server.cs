@@ -145,12 +145,6 @@ namespace RiptideNetworking
             ReliableHandle(message, fromEndPoint, headerType, Clients[fromEndPoint].SendLockables);
         }
 
-        internal void Send(Message message, IPEndPoint toEndPoint, HeaderType headerType = HeaderType.unreliable)
-        {
-            message.PrepareToSend(headerType);
-            Send(message.ToArray(), toEndPoint);
-        }
-
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
@@ -186,67 +180,49 @@ namespace RiptideNetworking
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
-        public void Send(Message message, ServerClient toClient)
+        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        public void Send(Message message, ServerClient toClient, byte maxSendAttempts = 3)
         {
-            Send(message, toClient.remoteEndPoint);
+            if (message.SendMode == MessageSendMode.unreliable)
+                Send(message.ToArray(), toClient.remoteEndPoint);
+            else
+                SendReliable(message, toClient.remoteEndPoint, toClient.Rudp, maxSendAttempts);
         }
 
         /// <summary>Sends a message to all conected clients.</summary>
         /// <param name="message">The message to send.</param>
-        public void SendToAll(Message message)
+        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        public void SendToAll(Message message, byte maxSendAttempts = 3)
         {
-            message.PrepareToSend(HeaderType.unreliable);
-
-            foreach (IPEndPoint clientEndPoint in Clients.Keys)
+            if (message.SendMode == MessageSendMode.unreliable)
             {
-                Send(message.ToArray(), clientEndPoint);
-            }
-        }
-
-        /// <summary>Sends a message to all connected clients except one.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="exceptToClient">The client NOT to send the message to.</param>
-        public void SendToAll(Message message, ServerClient exceptToClient)
-        {
-            message.PrepareToSend(HeaderType.unreliable);
-
-            foreach (IPEndPoint clientEndPoint in Clients.Keys)
-            {
-                if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
+                foreach (IPEndPoint clientEndPoint in Clients.Keys)
                     Send(message.ToArray(), clientEndPoint);
             }
-        }
-
-        /// <summary>Reliably sends a message to a specific client.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="toClient">The client to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        public void SendReliable(Message message, ServerClient toClient, byte maxSendAttempts = 3)
-        {
-            SendReliable(message, toClient.remoteEndPoint, toClient.Rudp, maxSendAttempts);
-        }
-
-        /// <summary>Sends a message to all conected clients.</summary>
-        /// <param name="message"></param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        public void SendReliableToAll(Message message, byte maxSendAttempts = 3)
-        {
-            foreach (ServerClient client in Clients.Values)
+            else
             {
-                SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                foreach (ServerClient client in Clients.Values)
+                    SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
             }
         }
 
         /// <summary>Sends a message to all connected clients except one.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClient">The client NOT to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        public void SendReliableToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 3)
+        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        public void SendToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 3)
         {
-            foreach (ServerClient client in Clients.Values)
+            if (message.SendMode == MessageSendMode.unreliable)
             {
-                if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
-                    SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                foreach (IPEndPoint clientEndPoint in Clients.Keys)
+                    if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
+                        Send(message.ToArray(), clientEndPoint);
+            }
+            else
+            {
+                foreach (ServerClient client in Clients.Values)
+                    if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
+                        SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
             }
         }
 
@@ -285,10 +261,10 @@ namespace RiptideNetworking
             RiptideLogger.Log(logName, "Server stopped.");
         }
 
-#region Messages
+        #region Messages
         private void SendDisconnect(ServerClient client)
         {
-            SendReliable(new Message(), client.remoteEndPoint, client.Rudp, 5, HeaderType.disconnect);
+            Send(new Message(HeaderType.disconnect), client, 5);
         }
 
         private void HandleDisconnect(IPEndPoint fromEndPoint)
@@ -305,29 +281,29 @@ namespace RiptideNetworking
 
         private void SendClientConnected(IPEndPoint endPoint, ushort id)
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.clientConnected, 2);
             message.Add(id);
 
             foreach (ServerClient client in Clients.Values)
             {
                 if (!client.remoteEndPoint.Equals(endPoint))
-                    SendReliable(message, client.remoteEndPoint, client.Rudp, 5, HeaderType.clientConnected);
+                    Send(message, client, 5);
             }
         }
 
         private void SendClientDisconnected(ushort id)
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.clientDisconnected, 2);
             message.Add(id);
 
             foreach (ServerClient client in Clients.Values)
             {
-                SendReliable(message, client.remoteEndPoint, client.Rudp, 5, HeaderType.clientDisconnected);
+                Send(message, client, 5);
             }
         }
-#endregion
+        #endregion
 
-#region Events
+        #region Events
         /// <summary>Invoked when a new client connects.</summary>
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
@@ -360,6 +336,6 @@ namespace RiptideNetworking
             
             SendClientDisconnected(e.Id);
         }
-#endregion
+        #endregion
     }
 }

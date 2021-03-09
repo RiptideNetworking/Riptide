@@ -43,6 +43,7 @@ public class NetworkManager : MonoBehaviour
 
     public GameObject LocalPlayerPrefab { get => localPlayerPrefab; }
     public GameObject PlayerPrefab { get => playerPrefab; }
+
     public Client Client { get; private set; }
     private ActionQueue actionQueue;
 

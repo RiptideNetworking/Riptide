@@ -90,10 +90,10 @@ namespace ConsoleClient
 
         private static void SendReliableTest(int reliableTestId)
         {
-            Message message = new Message((ushort)MessageId.reliableTest);
+            Message message = new Message(MessageSendMode.reliable, (ushort)MessageId.reliableTest, 4);
             message.Add(reliableTestId);
 
-            client.SendReliable(message);
+            client.Send(message);
         }
 
         private static void HandleReliableTest(Message message)

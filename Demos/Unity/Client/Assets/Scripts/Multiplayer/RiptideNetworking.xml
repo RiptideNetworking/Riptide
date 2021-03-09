@@ -48,14 +48,10 @@
             <param name="endPoint">The endpoint from which the message was sent.</param>
             <param name="firstByte">The first byte of the message.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.Send(RiptideNetworking.Message)">
+        <member name="M:RiptideNetworking.Client.Send(RiptideNetworking.Message,System.Byte)">
             <summary>Sends a message to the server.</summary>
             <param name="message">The message to send.</param>
-        </member>
-        <member name="M:RiptideNetworking.Client.SendReliable(RiptideNetworking.Message,System.Byte)">
-            <summary>Reliably sends a message to the server.</summary>
-            <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
@@ -163,6 +159,15 @@
         <member name="F:RiptideNetworking.ReceiveLockables.AckedMessagesBitfield">
             <summary>Messages that we sent which have been acknoweledged.</summary>
         </member>
+        <member name="T:RiptideNetworking.MessageSendMode">
+            <summary>The send mode for a message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.MessageSendMode.unreliable">
+            <summary>Unreliable send mode.</summary>
+        </member>
+        <member name="F:RiptideNetworking.MessageSendMode.reliable">
+            <summary>Reliable send mode.</summary>
+        </member>
         <member name="T:RiptideNetworking.Message">
             <summary>Represents a packet.</summary>
         </member>
@@ -190,11 +195,14 @@
         <member name="P:RiptideNetworking.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.HeaderType,System.UInt16)">
             <summary>Creates a new empty message (without an ID).</summary>
+            <param name="headerType">The header type for the message.</param>
+            <param name="messageLength">The length in bytes of the message's contents.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(System.UInt16,System.UInt16)">
+        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.MessageSendMode,System.UInt16,System.UInt16)">
             <summary>Creates a new message with a given ID.</summary>
+            <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
             <param name="messageLength">The length in bytes of the message's contents.</param>
         </member>
@@ -206,8 +214,9 @@
             <summary>Sets the message's content and prepares it to be read.</summary>
             <param name="data">The bytes to add to the message.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.PrepareToSend(RiptideNetworking.HeaderType)">
-            <summary>Prepares the message for sending.</summary>
+        <member name="M:RiptideNetworking.Message.SetSequenceIdBytes(System.UInt16)">
+            <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
+            <param name="seqId">The sequence ID to insert.</param>
         </member>
         <member name="M:RiptideNetworking.Message.InsertBytes(System.Byte[],System.Int32)">
             <summary>Inserts the given bytes into the message at the given position.</summary>
@@ -521,36 +530,22 @@
             <param name="forSeqId">The sequence ID to acknowledge.</param>
             <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.Send(RiptideNetworking.Message,RiptideNetworking.ServerClient)">
+        <member name="M:RiptideNetworking.Server.Send(RiptideNetworking.Message,RiptideNetworking.ServerClient,System.Byte)">
             <summary>Sends a message to a specific client.</summary>
             <param name="message">The message to send.</param>
             <param name="toClient">The client to send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message)">
+        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.Byte)">
             <summary>Sends a message to all conected clients.</summary>
             <param name="message">The message to send.</param>
+            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,RiptideNetworking.ServerClient)">
+        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,RiptideNetworking.ServerClient,System.Byte)">
             <summary>Sends a message to all connected clients except one.</summary>
             <param name="message">The message to send.</param>
             <param name="exceptToClient">The client NOT to send the message to.</param>
-        </member>
-        <member name="M:RiptideNetworking.Server.SendReliable(RiptideNetworking.Message,RiptideNetworking.ServerClient,System.Byte)">
-            <summary>Reliably sends a message to a specific client.</summary>
-            <param name="message">The message to send.</param>
-            <param name="toClient">The client to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        </member>
-        <member name="M:RiptideNetworking.Server.SendReliableToAll(RiptideNetworking.Message,System.Byte)">
-            <summary>Sends a message to all conected clients.</summary>
-            <param name="message"></param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        </member>
-        <member name="M:RiptideNetworking.Server.SendReliableToAll(RiptideNetworking.Message,RiptideNetworking.ServerClient,System.Byte)">
-            <summary>Sends a message to all connected clients except one.</summary>
-            <param name="message">The message to send.</param>
-            <param name="exceptToClient">The client NOT to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Server.DisconnectClient(RiptideNetworking.ServerClient)">
             <summary>Kicks a specific client.</summary>

@@ -131,25 +131,15 @@ namespace RiptideNetworking
             ReliableHandle(message, fromEndPoint, headerType, rudp.SendLockables);
         }
 
-        private void Send(Message message, HeaderType headerType)
-        {
-            message.PrepareToSend(headerType);
-            Send(message.ToArray(), remoteEndPoint);
-        }
-
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
-        public void Send(Message message)
+        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        public void Send(Message message, byte maxSendAttempts = 3)
         {
-            Send(message, HeaderType.unreliable);
-        }
-
-        /// <summary>Reliably sends a message to the server.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        public void SendReliable(Message message, byte maxSendAttempts = 3)
-        {
-            SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
+            if (message.SendMode == MessageSendMode.unreliable)
+                Send(message.ToArray(), remoteEndPoint);
+            else
+                SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
         }
 
         /// <summary>Disconnects from the server.</summary>
@@ -167,9 +157,7 @@ namespace RiptideNetworking
         #region Messages
         private void SendConnect()
         {
-            Message message = new Message();
-
-            Send(message, HeaderType.connect);
+            Send(new Message(HeaderType.connect));
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
@@ -177,18 +165,21 @@ namespace RiptideNetworking
         /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
-            Message message = new Message();
+            Message message;
+            if (forSeqId == rudp.SendLockables.LastReceivedSeqId)
+                message = new Message(HeaderType.ack, 4);
+            else
+                message = new Message(HeaderType.ackExtra, 6);
+
             message.Add(rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(rudp.SendLockables.AcksBitfield); // Acks
 
-            if (forSeqId != rudp.SendLockables.LastReceivedSeqId)
-            {
-                message.Add(forSeqId);
-                Send(message, HeaderType.ackExtra);
-            }
+            if (forSeqId == rudp.SendLockables.LastReceivedSeqId)
+                Send(message);
             else
             {
-                Send(message, HeaderType.ack);
+                message.Add(forSeqId);
+                Send(message);
             }
         }
 
@@ -215,11 +206,11 @@ namespace RiptideNetworking
         {
             pendingPing = (lastPingId++, DateTime.UtcNow);
 
-            Message message = new Message();
+            Message message = new Message(HeaderType.heartbeat, 3);
             message.Add(pendingPing.id);
             message.Add(rudp.RTT);
 
-            Send(message, HeaderType.heartbeat);
+            Send(message);
         }
 
         private void HandleHeartbeat(Message message)
@@ -249,10 +240,10 @@ namespace RiptideNetworking
 
         internal void SendWelcomeReceived()
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.welcome, 2);
             message.Add(Id);
 
-            SendReliable(message, remoteEndPoint, rudp, 5, HeaderType.welcome);
+            Send(message, 5);
         }
 
         private void HandleClientConnected(Message message)
@@ -267,9 +258,9 @@ namespace RiptideNetworking
 
         private void SendDisconnect()
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.disconnect);
 
-            Send(message, HeaderType.disconnect);
+            Send(message);
         }
 
         private void HandleDisconnect(Message message)

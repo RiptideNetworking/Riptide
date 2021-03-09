@@ -43,9 +43,9 @@ public class UIManager : MonoBehaviour
     #region Messages
     public void SendName()
     {
-        Message message = new Message((ushort)ClientToServerId.playerName);
+        Message message = new Message(MessageSendMode.reliable, (ushort)ClientToServerId.playerName);
         message.Add(usernameField.text);
-        NetworkManager.Singleton.Client.SendReliable(message);
+        NetworkManager.Singleton.Client.Send(message);
     }
     #endregion
 }

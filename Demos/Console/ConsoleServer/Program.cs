@@ -41,10 +41,10 @@ namespace ConsoleServer
 
         private static void SendReliableTest(ServerClient fromClient, int reliableTestId)
         {
-            Message message = new Message((ushort)MessageId.reliableTest);
+            Message message = new Message(MessageSendMode.reliable, (ushort)MessageId.reliableTest, 4);
             message.Add(reliableTestId);
 
-            server.SendReliable(message, fromClient);
+            server.Send(message, fromClient);
         }
 
         private static void HandleReliableTest(ServerClient fromClient, Message message)

@@ -4,6 +4,15 @@ using System.Text;
 
 namespace RiptideNetworking
 {
+    /// <summary>The send mode for a message.</summary>
+    public enum MessageSendMode : byte
+    {
+        /// <summary>Unreliable send mode.</summary>
+        unreliable = HeaderType.unreliable,
+        /// <summary>Reliable send mode.</summary>
+        reliable = HeaderType.reliable,
+    }
+
     internal enum HeaderType : byte
     {
         unreliable,
@@ -19,7 +28,7 @@ namespace RiptideNetworking
     }
 
     /// <summary>Represents a packet.</summary>
-    public class Message // TODO: endianness
+    public class Message
     {
         /// <summary>How many bytes a bool is represented by.</summary>
         public const byte boolLength = sizeof(bool);
@@ -40,22 +49,41 @@ namespace RiptideNetworking
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength { get => Length - readPos; }
 
+        internal MessageSendMode SendMode { get; private set; }
+
         private List<byte> bytes;
         private byte[] readableBytes;
         private ushort readPos = 0;
 
         /// <summary>Creates a new empty message (without an ID).</summary>
-        internal Message(ushort messageLength = 0)
+        /// <param name="headerType">The header type for the message.</param>
+        /// <param name="messageLength">The length in bytes of the message's contents.</param>
+        internal Message(HeaderType headerType, ushort messageLength = 0)
         {
-            bytes = new List<byte>(messageLength + 3); // +3 for message header
+            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            bytes = new List<byte>(messageLength + 3) // +3 for message header
+            {
+                (byte)headerType
+            };
+
+            if (SendMode == MessageSendMode.reliable)
+                Add((ushort)0); // Add 2 bytes to the list to overwrite later with the sequence ID
         }
 
         /// <summary>Creates a new message with a given ID.</summary>
+        /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <param name="messageLength">The length in bytes of the message's contents.</param>
-        public Message(ushort id, ushort messageLength = 0)
+        public Message(MessageSendMode sendMode, ushort id, ushort messageLength = 0)
         {
-            bytes = new List<byte>(messageLength + 5); // +5 for message header
+            SendMode = sendMode;
+            bytes = new List<byte>(messageLength + 5) // +5 for message header
+            {
+                (byte)sendMode
+            };
+
+            if (SendMode == MessageSendMode.reliable)
+                Add((ushort)0); // Add 2 bytes to the list to overwrite later with the sequence ID
             Add(id);
         }
 
@@ -77,10 +105,13 @@ namespace RiptideNetworking
             readableBytes = bytes.ToArray();
         }
 
-        /// <summary>Prepares the message for sending.</summary>
-        internal void PrepareToSend(HeaderType headerType)
+        /// <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
+        /// <param name="seqId">The sequence ID to insert.</param>
+        internal void SetSequenceIdBytes(ushort seqId)
         {
-            InsertByte((byte)headerType); // Header type
+            byte[] sequenceIdBytes = StandardizeEndianness(BitConverter.GetBytes(seqId));
+            bytes[1] = sequenceIdBytes[0];
+            bytes[2] = sequenceIdBytes[1];
         }
 
         /// <summary>Inserts the given bytes into the message at the given position.</summary>

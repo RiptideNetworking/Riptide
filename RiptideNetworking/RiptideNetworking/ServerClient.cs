@@ -39,18 +39,21 @@ namespace RiptideNetworking
         #region Messages
         internal void SendAck(ushort forSeqId)
         {
-            Message message = new Message();
+            Message message;
+            if (forSeqId == Rudp.SendLockables.LastReceivedSeqId)
+                message = new Message(HeaderType.ack, 4);
+            else
+                message = new Message(HeaderType.ackExtra, 6);
+
             message.Add(Rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(Rudp.SendLockables.AcksBitfield); // Acks
 
-            if (forSeqId != Rudp.SendLockables.LastReceivedSeqId)
-            {
-                message.Add(forSeqId);
-                server.Send(message, remoteEndPoint, HeaderType.ackExtra);
-            }
+            if (forSeqId == Rudp.SendLockables.LastReceivedSeqId)
+                server.Send(message, this);
             else
             {
-                server.Send(message, remoteEndPoint, HeaderType.ack);
+                message.Add(forSeqId);
+                server.Send(message, this);
             }
         }
 
@@ -75,10 +78,10 @@ namespace RiptideNetworking
 
         internal void SendHeartbeat(byte pingId)
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.heartbeat, 1);
             message.Add(pingId);
 
-            server.Send(message, remoteEndPoint, HeaderType.heartbeat);
+            server.Send(message, this);
         }
 
         internal void HandleHeartbeat(Message message)
@@ -91,10 +94,10 @@ namespace RiptideNetworking
 
         internal void SendWelcome()
         {
-            Message message = new Message();
+            Message message = new Message(HeaderType.welcome, 2);
             message.Add(Id);
 
-            server.SendReliable(message, remoteEndPoint, Rudp, 5, HeaderType.welcome);
+            server.Send(message, this, 5);
         }
 
         internal void HandleWelcomeReceived(Message message)

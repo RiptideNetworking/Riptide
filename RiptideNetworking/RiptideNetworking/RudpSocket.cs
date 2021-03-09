@@ -193,7 +193,7 @@ namespace RiptideNetworking
             }
         }
 
-        internal void SendReliable(Message message, IPEndPoint toEndPoint, Rudp rudp, byte maxSendAttempts, HeaderType headerType = HeaderType.reliable)
+        internal void SendReliable(Message message, IPEndPoint toEndPoint, Rudp rudp, byte maxSendAttempts)
         {
             if (socket == null)
                 return;
@@ -201,12 +201,14 @@ namespace RiptideNetworking
             ushort sequenceId = rudp.NextSequenceId;
 
             // Sequence ID differs for each client, so we don't want to add it to the message itself, as that would carry over to any other clients being sent the same message
-            byte[] bytearr = new byte[message.Length + 3];
-            bytearr[0] = (byte)headerType;
-            Array.Copy(Message.StandardizeEndianness(BitConverter.GetBytes(sequenceId)), 0, bytearr, 1, Message.shortLength);
-            Array.Copy(message.ToArray(), 0, bytearr, 3, message.Length);
+            //byte[] bytearr = new byte[message.Length + 3];
+            //bytearr[0] = (byte)headerType;
+            //Array.Copy(Message.StandardizeEndianness(BitConverter.GetBytes(sequenceId)), 0, bytearr, 1, Message.shortLength);
+            //Array.Copy(message.ToArray(), 0, bytearr, 3, message.Length);
 
-            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, bytearr, toEndPoint, maxSendAttempts);
+            message.SetSequenceIdBytes(sequenceId);
+
+            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message.ToArray(), toEndPoint, maxSendAttempts);
             lock (rudp.PendingMessages)
             {
                 rudp.PendingMessages.Add(sequenceId, pendingMessage);
