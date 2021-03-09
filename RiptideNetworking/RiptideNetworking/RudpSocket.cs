@@ -203,7 +203,7 @@ namespace RiptideNetworking
             // Sequence ID differs for each client, so we don't want to add it to the message itself, as that would carry over to any other clients being sent the same message
             byte[] bytearr = new byte[message.Length + 3];
             bytearr[0] = (byte)headerType;
-            Array.Copy(BitConverter.GetBytes(sequenceId), 0, bytearr, 1, 2);
+            Array.Copy(Message.StandardizeEndianness(BitConverter.GetBytes(sequenceId)), 0, bytearr, 1, Message.shortLength);
             Array.Copy(message.ToArray(), 0, bytearr, 3, message.Length);
 
             Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, bytearr, toEndPoint, maxSendAttempts);

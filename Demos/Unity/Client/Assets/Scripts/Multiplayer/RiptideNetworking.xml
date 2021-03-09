@@ -166,6 +166,24 @@
         <member name="T:RiptideNetworking.Message">
             <summary>Represents a packet.</summary>
         </member>
+        <member name="F:RiptideNetworking.Message.boolLength">
+            <summary>How many bytes a bool is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.shortLength">
+            <summary>How many bytes a short is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.intLength">
+            <summary>How many bytes an int is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.longLength">
+            <summary>How many bytes a long is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.floatLength">
+            <summary>How many bytes a float is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.doubleLength">
+            <summary>How many bytes a double is represented by.</summary>
+        </member>
         <member name="P:RiptideNetworking.Message.Length">
             <summary>The length in bytes of the message's contents.</summary>
         </member>
@@ -202,6 +220,14 @@
         </member>
         <member name="M:RiptideNetworking.Message.ToArray">
             <summary>Gets the message's content in array form.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Byte[])">
+            <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
+            <param name="value">The bytes whose order to standardize.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Int32)">
+            <summary>Standardizes byte order across big and little endian systems by reversing byteAmount bytes at the message's current read position on big endian systems.</summary>
+            <param name="byteAmount">The number of bytes whose order to standardize, starting at the message's current read position.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
             <summary>Adds a byte to the message.</summary>
