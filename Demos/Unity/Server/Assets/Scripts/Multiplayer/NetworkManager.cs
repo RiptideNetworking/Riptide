@@ -62,7 +62,7 @@ public class NetworkManager : MonoBehaviour
 #if UNITY_EDITOR
         RiptideLogger.Initialize(Debug.Log, false);
 #else
-        Console.Title = "Pirate Game Server";
+        Console.Title = "Server";
         Console.Clear();
         Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
         RiptideLogger.Initialize(Debug.Log, true);
