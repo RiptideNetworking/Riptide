@@ -195,9 +195,7 @@ namespace RiptideNetworking
                 return value;
             }
             else
-            {
                 throw new Exception("Message contains insufficient bytes to read type 'byte[]'!");
-            }
         }
         #endregion
 

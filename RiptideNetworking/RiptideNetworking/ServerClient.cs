@@ -8,16 +8,20 @@ namespace RiptideNetworking
     {
         /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
-
-        private readonly Server server;
+        /// <summary>The round trip time of the connection.</summary>
+        public ushort RTT { get => Rudp.RTT; }
+        /// <summary>The smoothed round trip time of the connection.</summary>
+        public ushort SmoothRTT { get => Rudp.SmoothRTT; }
         /// <summary>The remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
+
         internal Rudp Rudp { get; private set; }
         internal SendLockables SendLockables { get => Rudp.SendLockables; }
 
         // Ping and RTT
         internal DateTime lastHeartbeat;
 
+        private readonly Server server;
         private ConnectionState connectionState = ConnectionState.notConnected;
 
         internal ServerClient(Server server, IPEndPoint endPoint, ushort id)
