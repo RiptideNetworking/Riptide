@@ -569,6 +569,12 @@
         <member name="P:RiptideNetworking.ServerClient.Id">
             <summary>The numeric ID.</summary>
         </member>
+        <member name="P:RiptideNetworking.ServerClient.RTT">
+            <summary>The round trip time of the connection.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ServerClient.SmoothRTT">
+            <summary>The smoothed round trip time of the connection.</summary>
+        </member>
         <member name="F:RiptideNetworking.ServerClient.remoteEndPoint">
             <summary>The remote endpoint.</summary>
         </member>
