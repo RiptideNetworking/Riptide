@@ -22,7 +22,7 @@ namespace RiptideNetworking
         private Send send;
         private readonly string logName;
 
-        private ushort _rtt = 1;
+        private ushort _rtt = 1000;
         internal ushort RTT
         {
             get => _rtt;
@@ -32,7 +32,7 @@ namespace RiptideNetworking
                 SmoothRTT = (ushort)Math.Max(1f, SmoothRTT * 0.7f + value * 0.3f);
             }
         }
-        internal ushort SmoothRTT { get; set; } = 1;
+        internal ushort SmoothRTT { get; set; } = 1000;
 
         internal Rudp(Send send, string logName)
         {
@@ -110,6 +110,7 @@ namespace RiptideNetworking
             private byte[] data;
             private byte maxSendAttempts;
             private byte sendAttempts;
+            private DateTime lastSendTime;
             private Timer retryTimer;
             private bool wasCleared;
 
@@ -134,7 +135,7 @@ namespace RiptideNetworking
             //}
             internal void RetrySend()
             {
-                if (data != null)
+                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT * 0.75f) <= DateTime.Now)
                     TrySend();
             }
 
@@ -145,14 +146,15 @@ namespace RiptideNetworking
             {
                 if (sendAttempts >= maxSendAttempts)
                 {
-                    if (data.Length >= 5)
+                    HeaderType headerType = (HeaderType)data[0];
+                    if (headerType == HeaderType.reliable)
                     {
                         byte[] idBytes = new byte[Message.shortLength];
                         Array.Copy(data, 3, idBytes, 0, Message.shortLength);
-                        RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message (ID: {BitConverter.ToInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s)!");
+                        RiptideLogger.Log(rudp.logName, $"Failed to deliver {headerType} message (ID: {BitConverter.ToInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s)!");
                     }
                     else
-                        RiptideLogger.Log(rudp.logName, $"Failed to deliver {(HeaderType)data[0]} message (ID: N/A) after {sendAttempts} attempt(s)!");
+                        RiptideLogger.Log(rudp.logName, $"Failed to deliver internal {headerType} message after {sendAttempts} attempt(s)!");
 
                     Clear();
                     return;
@@ -166,6 +168,7 @@ namespace RiptideNetworking
                 rudp.send(data, remoteEndPoint);
 #endif
 
+                lastSendTime = DateTime.Now;
                 sendAttempts++;
 
                 //retryTimer.Change(0, (int)Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
