@@ -17,10 +17,9 @@ namespace RiptideNetworking
 
         internal Rudp Rudp { get; private set; }
         internal SendLockables SendLockables { get => Rudp.SendLockables; }
+        internal bool HasTimedOut { get => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime; }
 
-        // Ping and RTT
-        internal DateTime lastHeartbeat;
-
+        private DateTime lastHeartbeat;
         private readonly Server server;
         private ConnectionState connectionState = ConnectionState.notConnected;
 
@@ -30,6 +29,7 @@ namespace RiptideNetworking
             remoteEndPoint = endPoint;
             Id = id;
             Rudp = new Rudp(server.Send, this.server.logName);
+            lastHeartbeat = DateTime.UtcNow;
 
             connectionState = ConnectionState.connecting;
             SendWelcome();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 
@@ -8,17 +9,34 @@ namespace RiptideNetworking
     /// <summary>Represents a server which can accept connections from clients.</summary>
     public class Server : RudpSocket
     {
-        /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
-        public Dictionary<IPEndPoint, ServerClient> Clients { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port { get; private set; }
+        /// <summary>An array of all the currently connected clients.</summary>
+        public ServerClient[] Clients { get => clients.Values.ToArray(); }
         /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount { get; private set; }
         /// <summary>The number of currently connected clients.</summary>
-        public int ClientCount { get => Clients.Count; }
+        public int ClientCount { get => clients.Count; }
+        /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
+        public ushort ClientTimeoutTime { get; set; } = 5000;
+        private ushort _clientHeartbeatInterval;
+        /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+        public ushort ClientHeartbeatInterval
+        {
+            get => _clientHeartbeatInterval;
+            set
+            {
+                _clientHeartbeatInterval = value;
+                if (heartbeatTimer != null)
+                    heartbeatTimer.Change(0, value);
+            }
+        }
 
+        /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
+        private Dictionary<IPEndPoint, ServerClient> clients;
         private ActionQueue receiveActionQueue;
         private List<ushort> availableClientIds;
+        private Timer heartbeatTimer;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name of this server instance. Used when logging messages.</param>
@@ -28,47 +46,50 @@ namespace RiptideNetworking
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-        public void Start(ushort port, ushort maxClientCount, ActionQueue receiveActionQueue = null)
+        /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
+        public void Start(ushort port, ushort maxClientCount, ActionQueue receiveActionQueue = null, ushort clientHeartbeatInterval = 1000)
         {
             Port = port;
             MaxClientCount = maxClientCount;
-            Clients = new Dictionary<IPEndPoint, ServerClient>(this.MaxClientCount);
+            clients = new Dictionary<IPEndPoint, ServerClient>(MaxClientCount);
 
             InitializeClientIds();
 
             this.receiveActionQueue = receiveActionQueue;
+            _clientHeartbeatInterval = clientHeartbeatInterval;
 
             StartListening(port);
 
             RiptideLogger.Log(logName, $"Started on port {port}.");
-            //Timer tickTimer = new Timer(Tick, null, 0, 1000);
+            heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
         }
 
-        //private void Tick(object state)
-        //{
-        //    lock (Clients)
-        //    {
-        //        foreach (ServerClient client in Clients.Values)
-        //        {
-        //            client.SendHeartbeat();
-        //        }
-        //    }
-        //}
+        private void Heartbeat(object state)
+        {
+            lock (clients)
+            {
+                foreach (ServerClient client in clients.Values)
+                {
+                    if (client.HasTimedOut)
+                        HandleDisconnect(client.remoteEndPoint); // Disconnect the client
+                }
+            }
+        }
 
         /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
         /// <param name="firstByte">The first byte of the message.</param>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
-            if (Clients.ContainsKey(endPoint))
+            if (clients.ContainsKey(endPoint))
             {
                 if ((HeaderType)firstByte != HeaderType.connect)
                     return true;
             }
-            else if (Clients.Count < MaxClientCount)
+            else if (clients.Count < MaxClientCount)
             {
                 if ((HeaderType)firstByte == HeaderType.connect)
-                    Clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
+                    clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
             }
             return false;
         }
@@ -92,7 +113,7 @@ namespace RiptideNetworking
                         else if (headerType == HeaderType.unreliable)
                             RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                        OnMessageReceived(new ServerMessageReceivedEventArgs(Clients[fromEndPoint], message));
+                        OnMessageReceived(new ServerMessageReceivedEventArgs(clients[fromEndPoint], message));
                     }
                     else
                     {
@@ -105,7 +126,7 @@ namespace RiptideNetworking
                             else if (headerType == HeaderType.unreliable)
                                 RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
-                            if (Clients.TryGetValue(fromEndPoint, out ServerClient client))
+                            if (clients.TryGetValue(fromEndPoint, out ServerClient client))
                                 OnMessageReceived(new ServerMessageReceivedEventArgs(client, message));
 #if DETAILED_LOGGING
                             else
@@ -115,19 +136,19 @@ namespace RiptideNetworking
                     }
                     break;
                 case HeaderType.ack:
-                    Clients[fromEndPoint].HandleAck(message);
+                    clients[fromEndPoint].HandleAck(message);
                     break;
                 case HeaderType.ackExtra:
-                    Clients[fromEndPoint].HandleAckExtra(message);
+                    clients[fromEndPoint].HandleAckExtra(message);
                     break;
                 case HeaderType.connect:
                     // Handled in ShouldHandleMessageFrom method
                     break;
                 case HeaderType.heartbeat:
-                    Clients[fromEndPoint].HandleHeartbeat(message);
+                    clients[fromEndPoint].HandleHeartbeat(message);
                     break;
                 case HeaderType.welcome:
-                    Clients[fromEndPoint].HandleWelcomeReceived(message);
+                    clients[fromEndPoint].HandleWelcomeReceived(message);
                     break;
                 case HeaderType.clientConnected:
                 case HeaderType.clientDisconnected:
@@ -142,7 +163,7 @@ namespace RiptideNetworking
 
         internal override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
         {
-            ReliableHandle(message, fromEndPoint, headerType, Clients[fromEndPoint].SendLockables);
+            ReliableHandle(message, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
@@ -150,7 +171,7 @@ namespace RiptideNetworking
         /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
-            Clients[toEndPoint].SendAck(forSeqId);
+            clients[toEndPoint].SendAck(forSeqId);
         }
 
         private void InitializeClientIds()
@@ -196,12 +217,12 @@ namespace RiptideNetworking
         {
             if (message.SendMode == MessageSendMode.unreliable)
             {
-                foreach (IPEndPoint clientEndPoint in Clients.Keys)
+                foreach (IPEndPoint clientEndPoint in clients.Keys)
                     Send(message.ToArray(), clientEndPoint);
             }
             else
             {
-                foreach (ServerClient client in Clients.Values)
+                foreach (ServerClient client in clients.Values)
                     SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
             }
         }
@@ -214,13 +235,13 @@ namespace RiptideNetworking
         {
             if (message.SendMode == MessageSendMode.unreliable)
             {
-                foreach (IPEndPoint clientEndPoint in Clients.Keys)
+                foreach (IPEndPoint clientEndPoint in clients.Keys)
                     if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
                         Send(message.ToArray(), clientEndPoint);
             }
             else
             {
-                foreach (ServerClient client in Clients.Values)
+                foreach (ServerClient client in clients.Values)
                     if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
                         SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
             }
@@ -230,11 +251,11 @@ namespace RiptideNetworking
         /// <param name="client">The client to kick.</param>
         public void DisconnectClient(ServerClient client)
         {
-            if (Clients.ContainsKey(client.remoteEndPoint))
+            if (clients.ContainsKey(client.remoteEndPoint))
             {
                 SendDisconnect(client);
                 client.Disconnect();
-                Clients.Remove(client.remoteEndPoint);
+                clients.Remove(client.remoteEndPoint);
 
                 RiptideLogger.Log(logName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
@@ -251,13 +272,15 @@ namespace RiptideNetworking
         public void Stop()
         {
             byte[] disconnectBytes = { (byte)HeaderType.disconnect };
-            foreach (IPEndPoint clientEndPoint in Clients.Keys)
+            foreach (IPEndPoint clientEndPoint in clients.Keys)
             {
                 Send(disconnectBytes, clientEndPoint);
             }
 
             StopListening();
-            Clients.Clear();
+            heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            heartbeatTimer.Dispose();
+            clients.Clear();
             RiptideLogger.Log(logName, "Server stopped.");
         }
 
@@ -269,10 +292,10 @@ namespace RiptideNetworking
 
         private void HandleDisconnect(IPEndPoint fromEndPoint)
         {
-            if (Clients.TryGetValue(fromEndPoint, out ServerClient client))
+            if (clients.TryGetValue(fromEndPoint, out ServerClient client))
             {
                 client.Disconnect();
-                Clients.Remove(fromEndPoint);
+                clients.Remove(fromEndPoint);
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
@@ -284,7 +307,7 @@ namespace RiptideNetworking
             Message message = new Message(HeaderType.clientConnected, 2);
             message.Add(id);
 
-            foreach (ServerClient client in Clients.Values)
+            foreach (ServerClient client in clients.Values)
             {
                 if (!client.remoteEndPoint.Equals(endPoint))
                     Send(message, client, 5);
@@ -296,7 +319,7 @@ namespace RiptideNetworking
             Message message = new Message(HeaderType.clientDisconnected, 2);
             message.Add(id);
 
-            foreach (ServerClient client in Clients.Values)
+            foreach (ServerClient client in clients.Values)
             {
                 Send(message, client, 5);
             }

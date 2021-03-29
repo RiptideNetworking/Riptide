@@ -14,14 +14,29 @@ namespace RiptideNetworking
         public ushort RTT { get => rudp.RTT; }
         /// <summary>The smoothed round trip time of the connection.</summary>
         public ushort SmoothRTT { get => rudp.SmoothRTT; }
+        /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
+        public ushort TimeoutTime { get; set; } = 5000;
+        private ushort _heartbeatInterval;
+        /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+        public ushort HeartbeatInterval
+        {
+            get => _heartbeatInterval;
+            set
+            {
+                _heartbeatInterval = value;
+                if (heartbeatTimer != null)
+                    heartbeatTimer.Change(0, value);
+            }
+        }
 
         private ActionQueue receiveActionQueue;
         private IPEndPoint remoteEndPoint;
         private Rudp rudp;
         private ConnectionState connectionState = ConnectionState.notConnected;
 
-        // Ping and RTT
-        internal DateTime LastHeartbeat { get; private set; }
+        private bool HasTimedOut { get => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime; }
+        private Timer heartbeatTimer;
+        private DateTime lastHeartbeat;
         private byte lastPingId = 0;
         private (byte id, DateTime sendTime) pendingPing;
 
@@ -33,9 +48,11 @@ namespace RiptideNetworking
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
         /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null)
+        /// /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null, ushort heartbeatInterval = 1000)
         {
             this.receiveActionQueue = receiveActionQueue;
+            _heartbeatInterval = heartbeatInterval;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             rudp = new Rudp(Send, logName);
 
@@ -43,15 +60,23 @@ namespace RiptideNetworking
             StartListening();
             connectionState = ConnectionState.connecting;
 
-            Timer tickTimer = new Timer(Tick, null, 0, 1000);
+            heartbeatTimer = new Timer(Heartbeat, null, 0, HeartbeatInterval);
         }
 
-        private void Tick(object state)
+        private void Heartbeat(object state)
         {
             if (connectionState == ConnectionState.connecting)
                 SendConnect();
             else if (connectionState == ConnectionState.connected)
+            {
+                if (HasTimedOut)
+                {
+                    HandleDisconnect();
+                    return;
+                }
+
                 SendHeartbeat();
+            }
         }
 
         /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
@@ -119,7 +144,7 @@ namespace RiptideNetworking
                     HandleClientDisconnected(message);
                     break;
                 case HeaderType.disconnect:
-                    HandleDisconnect(message);
+                    HandleDisconnect();
                     break;
                 default:
                     throw new Exception($"Unknown message header type: {headerType}");
@@ -149,6 +174,8 @@ namespace RiptideNetworking
                 return;
 
             SendDisconnect();
+            heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            heartbeatTimer.Dispose();
             StopListening();
             connectionState = ConnectionState.notConnected;
             RiptideLogger.Log(logName, "Disconnected.");
@@ -223,7 +250,7 @@ namespace RiptideNetworking
                 OnPingUpdated(new PingUpdatedEventArgs(rudp.RTT, rudp.SmoothRTT));
             }
 
-            LastHeartbeat = DateTime.UtcNow;
+            lastHeartbeat = DateTime.UtcNow;
         }
 
         private void HandleWelcome(Message message)
@@ -233,6 +260,7 @@ namespace RiptideNetworking
 
             Id = message.GetUShort();
             connectionState = ConnectionState.connected;
+            lastHeartbeat = DateTime.UtcNow;
 
             SendWelcomeReceived();
             OnConnected(new EventArgs());
@@ -263,7 +291,7 @@ namespace RiptideNetworking
             Send(message);
         }
 
-        private void HandleDisconnect(Message message)
+        private void HandleDisconnect()
         {
             StopListening();
             connectionState = ConnectionState.notConnected;

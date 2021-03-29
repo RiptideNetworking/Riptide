@@ -22,7 +22,7 @@ namespace RiptideNetworking
         private Send send;
         private readonly string logName;
 
-        private ushort _rtt = 1000;
+        private ushort _rtt = 500;
         internal ushort RTT
         {
             get => _rtt;
@@ -32,7 +32,7 @@ namespace RiptideNetworking
                 SmoothRTT = (ushort)Math.Max(1f, SmoothRTT * 0.7f + value * 0.3f);
             }
         }
-        internal ushort SmoothRTT { get; set; } = 1000;
+        internal ushort SmoothRTT { get; set; } = 500;
 
         internal Rudp(Send send, string logName)
         {
@@ -135,7 +135,7 @@ namespace RiptideNetworking
             //}
             internal void RetrySend()
             {
-                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT * 0.75f) <= DateTime.Now)
+                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT * 0.75f) <= DateTime.UtcNow)
                     TrySend();
             }
 
@@ -168,7 +168,7 @@ namespace RiptideNetworking
                 rudp.send(data, remoteEndPoint);
 #endif
 
-                lastSendTime = DateTime.Now;
+                lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
 
                 //retryTimer.Change(0, (int)Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));

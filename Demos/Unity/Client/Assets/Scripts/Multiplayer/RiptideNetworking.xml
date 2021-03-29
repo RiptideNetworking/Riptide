@@ -33,15 +33,22 @@
         <member name="P:RiptideNetworking.Client.SmoothRTT">
             <summary>The smoothed round trip time of the connection.</summary>
         </member>
+        <member name="P:RiptideNetworking.Client.TimeoutTime">
+            <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Client.HeartbeatInterval">
+            <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+        </member>
         <member name="M:RiptideNetworking.Client.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name of this client instance. Used when logging messages.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue)">
+        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16)">
             <summary>Attempts to connect to an IP and port.</summary>
             <param name="ip">The IP to connect to.</param>
             <param name="port">The remote port to connect to.</param>
             <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+            /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         </member>
         <member name="M:RiptideNetworking.Client.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
             <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
@@ -498,11 +505,11 @@
         <member name="T:RiptideNetworking.Server">
             <summary>Represents a server which can accept connections from clients.</summary>
         </member>
-        <member name="P:RiptideNetworking.Server.Clients">
-            <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
-        </member>
         <member name="P:RiptideNetworking.Server.Port">
             <summary>The local port that the server is running on.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Server.Clients">
+            <summary>An array of all the currently connected clients.</summary>
         </member>
         <member name="P:RiptideNetworking.Server.MaxClientCount">
             <summary>The maximum number of clients that can be connected at any time.</summary>
@@ -510,15 +517,25 @@
         <member name="P:RiptideNetworking.Server.ClientCount">
             <summary>The number of currently connected clients.</summary>
         </member>
+        <member name="P:RiptideNetworking.Server.ClientTimeoutTime">
+            <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Server.ClientHeartbeatInterval">
+            <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Server.clients">
+            <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
+        </member>
         <member name="M:RiptideNetworking.Server.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name of this server instance. Used when logging messages.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,RiptideNetworking.ActionQueue)">
+        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16)">
             <summary>Starts the server.</summary>
             <param name="port">The local port on which to start the server.</param>
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
             <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+            <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         </member>
         <member name="M:RiptideNetworking.Server.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
             <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
