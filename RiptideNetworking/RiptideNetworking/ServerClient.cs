@@ -12,6 +12,10 @@ namespace RiptideNetworking
         public ushort RTT { get => Rudp.RTT; }
         /// <summary>The smoothed round trip time of the connection.</summary>
         public ushort SmoothRTT { get => Rudp.SmoothRTT; }
+        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
+        public bool IsConnecting { get => connectionState == ConnectionState.connecting; }
+        /// <summary>Whether or not the client is currently connected.</summary>
+        public bool IsConnected { get => connectionState == ConnectionState.connected; }
         /// <summary>The remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 

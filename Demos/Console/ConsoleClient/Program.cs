@@ -57,6 +57,9 @@ namespace ConsoleClient
 
         private static void StopReliableTest()
         {
+            if (reliableTestTimer == null)
+                return;
+
             reliableTestTimer.Stop();
             Console.WriteLine("Cancelled reliability test due to disconnection.");
         }

@@ -65,6 +65,7 @@ public class NetworkManager : MonoBehaviour
 
         Client = new Client();
         Client.Connected += DidConnect;
+        Client.ConnectionFailed += FailedToConnect;
         Client.MessageReceived += MessageReceived;
         Client.ClientDisconnected += PlayerLeft;
     }
@@ -92,6 +93,11 @@ public class NetworkManager : MonoBehaviour
     private void DidConnect(object sender, EventArgs e)
     {
         UIManager.Singleton.SendName();
+    }
+
+    private void FailedToConnect(object sender, EventArgs e)
+    {
+        UIManager.Singleton.BackToMain();
     }
 
     private void MessageReceived(object sender, ClientMessageReceivedEventArgs e)

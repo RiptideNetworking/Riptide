@@ -14,6 +14,10 @@ namespace RiptideNetworking
         public ushort RTT { get => rudp.RTT; }
         /// <summary>The smoothed round trip time of the connection.</summary>
         public ushort SmoothRTT { get => rudp.SmoothRTT; }
+        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
+        public bool IsConnecting { get => connectionState == ConnectionState.connecting; }
+        /// <summary>Whether or not the client is currently connected.</summary>
+        public bool IsConnected { get => connectionState == ConnectionState.connected; }
         /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
         private ushort _heartbeatInterval;
@@ -33,6 +37,8 @@ namespace RiptideNetworking
         private IPEndPoint remoteEndPoint;
         private Rudp rudp;
         private ConnectionState connectionState = ConnectionState.notConnected;
+        private byte connectionAttempts;
+        private byte maxConnectionAttempts;
 
         private bool HasTimedOut { get => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime; }
         private Timer heartbeatTimer;
@@ -48,15 +54,18 @@ namespace RiptideNetworking
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
         /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-        /// /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
-        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null, ushort heartbeatInterval = 1000)
+        /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+        /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
+        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
         {
             this.receiveActionQueue = receiveActionQueue;
             _heartbeatInterval = heartbeatInterval;
+            this.maxConnectionAttempts = maxConnectionAttempts;
+            connectionAttempts = 0;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             rudp = new Rudp(Send, logName);
 
-            RiptideLogger.Log(logName, $"Connecting to {remoteEndPoint}.");
+            RiptideLogger.Log(logName, $"Connecting to {remoteEndPoint}...");
             StartListening();
             connectionState = ConnectionState.connecting;
 
@@ -66,7 +75,18 @@ namespace RiptideNetworking
         private void Heartbeat(object state)
         {
             if (connectionState == ConnectionState.connecting)
-                SendConnect();
+            {
+                if (connectionAttempts < maxConnectionAttempts)
+                {
+                    SendConnect();
+                    connectionAttempts++;
+                }
+                else
+                {
+                    LocalDisconnect();
+                    OnConnectionFailed(new EventArgs());
+                }    
+            }
             else if (connectionState == ConnectionState.connected)
             {
                 if (HasTimedOut)
@@ -174,11 +194,16 @@ namespace RiptideNetworking
                 return;
 
             SendDisconnect();
+            LocalDisconnect();
+            RiptideLogger.Log(logName, "Disconnected.");
+        }
+
+        private void LocalDisconnect()
+        {
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
             StopListening();
             connectionState = ConnectionState.notConnected;
-            RiptideLogger.Log(logName, "Disconnected.");
         }
 
         #region Messages
@@ -293,8 +318,7 @@ namespace RiptideNetworking
 
         private void HandleDisconnect()
         {
-            StopListening();
-            connectionState = ConnectionState.notConnected;
+            LocalDisconnect();
             OnDisconnected(new EventArgs());
         }
         #endregion
@@ -310,6 +334,17 @@ namespace RiptideNetworking
                 Connected?.Invoke(this, e);
             else
                 receiveActionQueue.Add(() => Connected?.Invoke(this, e));
+        }
+        /// <summary>Invoked when a connection to the server fails to be established.</summary>
+        public event EventHandler ConnectionFailed;
+        private void OnConnectionFailed(EventArgs e)
+        {
+            RiptideLogger.Log(logName, "Connection to server failed!");
+
+            if (receiveActionQueue == null)
+                ConnectionFailed?.Invoke(this, e);
+            else
+                receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, e));
         }
         /// <summary>Invoked when a message is received from the server.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;

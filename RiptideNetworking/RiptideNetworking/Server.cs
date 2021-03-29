@@ -9,6 +9,8 @@ namespace RiptideNetworking
     /// <summary>Represents a server which can accept connections from clients.</summary>
     public class Server : RudpSocket
     {
+        /// <summary>Whether or not the server is currently running.</summary>
+        public bool IsRunning { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port { get; private set; }
         /// <summary>An array of all the currently connected clients.</summary>
@@ -62,6 +64,7 @@ namespace RiptideNetworking
 
             RiptideLogger.Log(logName, $"Started on port {port}.");
             heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
+            IsRunning = true;
         }
 
         private void Heartbeat(object state)
@@ -277,9 +280,10 @@ namespace RiptideNetworking
                 Send(disconnectBytes, clientEndPoint);
             }
 
-            StopListening();
+            IsRunning = false;
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
+            StopListening();
             clients.Clear();
             RiptideLogger.Log(logName, "Server stopped.");
         }

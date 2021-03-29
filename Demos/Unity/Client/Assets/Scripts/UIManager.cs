@@ -40,6 +40,12 @@ public class UIManager : MonoBehaviour
         NetworkManager.Singleton.Connect();
     }
 
+    public void BackToMain()
+    {
+        usernameField.interactable = true;
+        connectScreen.SetActive(true);
+    }
+
     #region Messages
     public void SendName()
     {

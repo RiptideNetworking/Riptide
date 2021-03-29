@@ -75,7 +75,6 @@ namespace RiptideNetworking
                 }
                 catch (SocketException ex)
                 {
-                    Console.WriteLine(ex);
                     switch (ex.SocketErrorCode)
                     {
 #if UNITY_IOS && !UNITY_EDITOR

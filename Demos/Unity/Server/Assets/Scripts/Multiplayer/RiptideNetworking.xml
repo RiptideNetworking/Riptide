@@ -33,6 +33,12 @@
         <member name="P:RiptideNetworking.Client.SmoothRTT">
             <summary>The smoothed round trip time of the connection.</summary>
         </member>
+        <member name="P:RiptideNetworking.Client.IsConnecting">
+            <summary>Whether or not the client is currently in the process of connecting.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Client.IsConnected">
+            <summary>Whether or not the client is currently connected.</summary>
+        </member>
         <member name="P:RiptideNetworking.Client.TimeoutTime">
             <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         </member>
@@ -43,12 +49,13 @@
             <summary>Handles initial setup.</summary>
             <param name="logName">The name of this client instance. Used when logging messages.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16)">
+        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16,System.Byte)">
             <summary>Attempts to connect to an IP and port.</summary>
             <param name="ip">The IP to connect to.</param>
             <param name="port">The remote port to connect to.</param>
             <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
-            /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+            <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+            <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Client.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
             <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
@@ -70,6 +77,9 @@
         </member>
         <member name="E:RiptideNetworking.Client.Connected">
             <summary>Invoked when a connection to the server is established.</summary>
+        </member>
+        <member name="E:RiptideNetworking.Client.ConnectionFailed">
+            <summary>Invoked when a connection to the server fails to be established.</summary>
         </member>
         <member name="E:RiptideNetworking.Client.MessageReceived">
             <summary>Invoked when a message is received from the server.</summary>
@@ -505,6 +515,9 @@
         <member name="T:RiptideNetworking.Server">
             <summary>Represents a server which can accept connections from clients.</summary>
         </member>
+        <member name="P:RiptideNetworking.Server.IsRunning">
+            <summary>Whether or not the server is currently running.</summary>
+        </member>
         <member name="P:RiptideNetworking.Server.Port">
             <summary>The local port that the server is running on.</summary>
         </member>
@@ -591,6 +604,12 @@
         </member>
         <member name="P:RiptideNetworking.ServerClient.SmoothRTT">
             <summary>The smoothed round trip time of the connection.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ServerClient.IsConnecting">
+            <summary>Whether or not the client is currently in the process of connecting.</summary>
+        </member>
+        <member name="P:RiptideNetworking.ServerClient.IsConnected">
+            <summary>Whether or not the client is currently connected.</summary>
         </member>
         <member name="F:RiptideNetworking.ServerClient.remoteEndPoint">
             <summary>The remote endpoint.</summary>
