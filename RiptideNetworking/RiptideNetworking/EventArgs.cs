@@ -82,14 +82,14 @@ namespace RiptideNetworking
     public class PingUpdatedEventArgs : EventArgs
     {
         /// <summary>The round trip time of the latest ping.</summary>
-        public ushort RTT { get; private set; }
+        public short RTT { get; private set; }
         /// <summary>The smoothed round trip time of the latest ping.</summary>
-        public ushort SmoothRTT { get; private set; }
+        public short SmoothRTT { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="RTT">The round trip time of the latest ping.</param>
         /// <param name="smoothRTT">The smoothed round trip time of the latest ping.</param>
-        public PingUpdatedEventArgs(ushort RTT, ushort smoothRTT)
+        public PingUpdatedEventArgs(short RTT, short smoothRTT)
         {
             this.RTT = RTT;
             SmoothRTT = smoothRTT;

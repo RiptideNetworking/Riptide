@@ -22,17 +22,19 @@ namespace RiptideNetworking
         private Send send;
         private readonly string logName;
 
-        private ushort _rtt = 500;
-        internal ushort RTT
+        private short _rtt = -1;
+        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
+        internal short RTT
         {
             get => _rtt;
             set
             {
+                SmoothRTT = _rtt == -1 ? value : (short)Math.Max(1f, SmoothRTT * 0.7f + value * 0.3f);
                 _rtt = value;
-                SmoothRTT = (ushort)Math.Max(1f, SmoothRTT * 0.7f + value * 0.3f);
             }
         }
-        internal ushort SmoothRTT { get; set; } = 500;
+        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        internal short SmoothRTT { get; set; } = -1;
 
         internal Rudp(Send send, string logName)
         {

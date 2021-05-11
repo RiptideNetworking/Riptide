@@ -291,7 +291,7 @@ namespace RiptideNetworking
         #region Messages
         private void SendDisconnect(ServerClient client)
         {
-            Send(new Message(HeaderType.disconnect), client, 5);
+            Send(new Message(HeaderType.disconnect), client);
         }
 
         private void HandleDisconnect(IPEndPoint fromEndPoint)

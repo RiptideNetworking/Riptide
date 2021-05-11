@@ -28,10 +28,10 @@
             <summary>The numeric ID.</summary>
         </member>
         <member name="P:RiptideNetworking.Client.RTT">
-            <summary>The round trip time of the connection.</summary>
+            <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
         <member name="P:RiptideNetworking.Client.SmoothRTT">
-            <summary>The smoothed round trip time of the connection.</summary>
+            <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
         <member name="P:RiptideNetworking.Client.IsConnecting">
             <summary>Whether or not the client is currently in the process of connecting.</summary>
@@ -159,7 +159,7 @@
         <member name="P:RiptideNetworking.PingUpdatedEventArgs.SmoothRTT">
             <summary>The smoothed round trip time of the latest ping.</summary>
         </member>
-        <member name="M:RiptideNetworking.PingUpdatedEventArgs.#ctor(System.UInt16,System.UInt16)">
+        <member name="M:RiptideNetworking.PingUpdatedEventArgs.#ctor(System.Int16,System.Int16)">
             <summary>Initializes event data.</summary>
             <param name="RTT">The round trip time of the latest ping.</param>
             <param name="smoothRTT">The smoothed round trip time of the latest ping.</param>
@@ -485,6 +485,12 @@
             <param name="logName">Who is logging this message.</param>
             <param name="message">The message to log to the console.</param>
         </member>
+        <member name="P:RiptideNetworking.Rudp.RTT">
+            <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Rudp.SmoothRTT">
+            <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        </member>
         <member name="T:RiptideNetworking.RudpSocket">
             <summary>Base class for all RUDP connections.</summary>
         </member>
@@ -600,10 +606,10 @@
             <summary>The numeric ID.</summary>
         </member>
         <member name="P:RiptideNetworking.ServerClient.RTT">
-            <summary>The round trip time of the connection.</summary>
+            <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
         <member name="P:RiptideNetworking.ServerClient.SmoothRTT">
-            <summary>The smoothed round trip time of the connection.</summary>
+            <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
         <member name="P:RiptideNetworking.ServerClient.IsConnecting">
             <summary>Whether or not the client is currently in the process of connecting.</summary>

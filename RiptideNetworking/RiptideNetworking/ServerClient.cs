@@ -8,10 +8,10 @@ namespace RiptideNetworking
     {
         /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
-        /// <summary>The round trip time of the connection.</summary>
-        public ushort RTT { get => Rudp.RTT; }
-        /// <summary>The smoothed round trip time of the connection.</summary>
-        public ushort SmoothRTT { get => Rudp.SmoothRTT; }
+        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
+        public short RTT { get => Rudp.RTT; }
+        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        public short SmoothRTT { get => Rudp.SmoothRTT; }
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
         public bool IsConnecting { get => connectionState == ConnectionState.connecting; }
         /// <summary>Whether or not the client is currently connected.</summary>
@@ -96,7 +96,7 @@ namespace RiptideNetworking
         {
             SendHeartbeat(message.GetByte());
 
-            Rudp.RTT = message.GetUShort();
+            Rudp.RTT = message.GetShort();
             lastHeartbeat = DateTime.UtcNow;
         }
 
