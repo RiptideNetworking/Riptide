@@ -150,25 +150,20 @@ namespace RiptideNetworking
                         lockables.LastReceivedSeqId = sequenceId;
                     }
                     else
-                    {
                         return; // Packet was a duplicate
-                    }
                 }
                 else if (sequenceGap < 0)
                 {
-                    sequenceGap = -sequenceGap - 1; // Because bit shifting is 0-based
+                    RiptideLogger.Log(logName, $"Sequence ID {sequenceId} Sequence gap: {sequenceGap}");
+                    sequenceGap = -sequenceGap; // Make sequenceGap positive
                     ushort seqIdBit = (ushort)(1 << sequenceGap - 1);
                     if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
-                        lockables.AcksBitfield |= (ushort)(1 << sequenceGap); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
                     else
                         return; // Packet was a duplicate
                 }
                 else
-                {
                     return; // Packet was a duplicate
-                }
-
-                SendAck(sequenceId, fromEndPoint);
             }
 
             Handle(message, fromEndPoint, headerType);
