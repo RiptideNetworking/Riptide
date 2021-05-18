@@ -491,6 +491,12 @@
         <member name="P:RiptideNetworking.Rudp.SmoothRTT">
             <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
+        <member name="M:RiptideNetworking.Rudp.GetSequenceGap(System.UInt16,System.UInt16)">
+            <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
+            <param name="seqId">The new sequence ID.</param>
+            <param name="lastReceivedSeqId">The </param>
+            <returns>The (signed) gap between the two given sequence IDs.</returns>
+        </member>
         <member name="T:RiptideNetworking.RudpSocket">
             <summary>Base class for all RUDP connections.</summary>
         </member>

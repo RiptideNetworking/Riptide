@@ -49,24 +49,24 @@ namespace RiptideNetworking
             lock (ReceiveLockables) lock (PendingMessages)
             {
                 // Update which messages we've received acks for
-                int ackedSequenceGap = remoteLastReceivedSeqId - ReceiveLockables.LastAckedSeqId; // TODO: account for wrapping
-                if (ackedSequenceGap > 0)
+                int sequenceGap = GetSequenceGap(remoteLastReceivedSeqId, ReceiveLockables.LastAckedSeqId);
+                if (sequenceGap > 0)
                 {
-                    for (int i = 1; i < ackedSequenceGap; i++)
+                    for (int i = 1; i < sequenceGap; i++)
                     {
                         ReceiveLockables.AckedMessagesBitfield <<= 1;
                         CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16 + i), LeftBit);
                     }
                     ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for the latest ack
-                    ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << ackedSequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
+                    ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << sequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
                     ReceiveLockables.LastAckedSeqId = remoteLastReceivedSeqId;
 
                     CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit);
                 }
-                else if (ackedSequenceGap < 0)
+                else if (sequenceGap < 0)
                 {
-                    ackedSequenceGap = (ushort)(-ackedSequenceGap - 1); // Because bit shifting is 0-based
-                    ushort ackedBit = (ushort)(1 << ackedSequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
+                    sequenceGap = (ushort)(-sequenceGap - 1); // Because bit shifting is 0-based
+                    ushort ackedBit = (ushort)(1 << sequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
                     ReceiveLockables.AckedMessagesBitfield |= ackedBit; // Set the bit corresponding to the sequence ID
                     if (PendingMessages.TryGetValue(remoteLastReceivedSeqId, out PendingMessage pendingMessage))
                         pendingMessage.Clear();
@@ -77,6 +77,19 @@ namespace RiptideNetworking
                     CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit);
                 }
             }
+        }
+
+        /// <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
+        /// <param name="seqId">The new sequence ID.</param>
+        /// <param name="lastReceivedSeqId">The </param>
+        /// <returns>The (signed) gap between the two given sequence IDs.</returns>
+        internal static int GetSequenceGap(ushort seqId, ushort lastReceivedSeqId)
+        {
+            int gap = seqId - lastReceivedSeqId;
+            if (Math.Abs(gap) <= 32768) // Difference is small, meaning sequence IDs are close together
+                return gap;
+            else // Difference is big, meaning sequence IDs are far apart
+                return (seqId <= 32768 ? ushort.MaxValue + 1 + seqId : seqId) - (lastReceivedSeqId <= 32768 ? ushort.MaxValue + 1 + lastReceivedSeqId : lastReceivedSeqId);
         }
 
         private void CheckMessageAckStatus(ushort sequenceId, ushort bit)

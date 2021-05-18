@@ -132,13 +132,11 @@ namespace RiptideNetworking
         internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
         {
             ushort sequenceId = message.GetUShort();
-            //ushort remoteLastReceivedSeqId = message.ReadUShort();
-            //ushort remoteAcksBitField = message.ReadUShort();
 
             lock (lockables)
             {
                 // Update acks
-                int sequenceGap = sequenceId - lockables.LastReceivedSeqId; // TODO: account for wrapping
+                int sequenceGap = Rudp.GetSequenceGap(sequenceId, lockables.LastReceivedSeqId);
                 if (sequenceGap > 0)
                 {
                     lockables.AcksBitfield <<= sequenceGap; // Shift the bits left to make room for the latest remote sequence ID
