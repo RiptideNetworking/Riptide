@@ -11,8 +11,13 @@
     <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
+    <OutputPath>bin\Release\netstandard2.0\</OutputPath>
+  </PropertyGroup>
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.dll D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Server\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.xml D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Server\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.dll D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Client\Assets\Scripts\Multiplayer\. /Y&#xD;&#xA;xcopy D:\tomdw\Documents\Programming\Networking\RiptideNetworking\RiptideNetworking\RiptideNetworking\bin\Debug\netstandard2.0\netstandard2.0\RiptideNetworking.xml D:\tomdw\Documents\Programming\Networking\RiptideNetworking\Demos\Unity\Client\Assets\Scripts\Multiplayer\. /Y" />
+    <Exec Command="if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y" />
   </Target>
 
 </Project>
