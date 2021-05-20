@@ -141,13 +141,8 @@ namespace RiptideNetworking
                 retryTimer = new Timer();
                 retryTimer.Elapsed += (s, e) => RetrySend();
                 retryTimer.AutoReset = false;
-                //retryTimer = new System.Threading.Timer(RetrySend, null, Timeout.Infinite, Timeout.Infinite);
             }
 
-            //private void RetrySend(object state)
-            //{
-            //    RetrySend();
-            //}
             internal void RetrySend()
             {
                 if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT * 0.75f) <= DateTime.UtcNow)
@@ -155,7 +150,7 @@ namespace RiptideNetworking
             }
 
 #if SIMULATE_LOSS
-            static Random randomLoss = new Random();
+            private static Random randomLoss = new Random();
 #endif
             internal void TrySend()
             {
@@ -166,10 +161,10 @@ namespace RiptideNetworking
                     {
                         byte[] idBytes = new byte[Message.shortLength];
                         Array.Copy(data, 3, idBytes, 0, Message.shortLength);
-                        RiptideLogger.Log(rudp.logName, $"Failed to deliver {headerType} message (ID: {BitConverter.ToInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s)!");
+                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {BitConverter.ToInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s), delivery may have failed!");
                     }
                     else
-                        RiptideLogger.Log(rudp.logName, $"Failed to deliver internal {headerType} message after {sendAttempts} attempt(s)!");
+                        RiptideLogger.Log(rudp.logName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
 
                     Clear();
                     return;
@@ -186,7 +181,7 @@ namespace RiptideNetworking
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
 
-                //retryTimer.Change(0, (int)Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
+                retryTimer.Stop();
                 retryTimer.Interval = Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
                 retryTimer.Start();
             }
