@@ -161,7 +161,7 @@ namespace RiptideNetworking
                     {
                         byte[] idBytes = new byte[Message.shortLength];
                         Array.Copy(data, 3, idBytes, 0, Message.shortLength);
-                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {BitConverter.ToInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {BitConverter.ToUInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s), delivery may have failed!");
                     }
                     else
                         RiptideLogger.Log(rudp.logName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
