@@ -47,12 +47,7 @@ namespace RiptideNetworking
         #region Messages
         internal void SendAck(ushort forSeqId)
         {
-            Message message;
-            if (forSeqId == Rudp.SendLockables.LastReceivedSeqId)
-                message = new Message(HeaderType.ack, 4);
-            else
-                message = new Message(HeaderType.ackExtra, 6);
-
+            Message message = Message.CreateInternal(forSeqId == Rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
             message.Add(Rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(Rudp.SendLockables.AcksBitfield); // Acks
 
@@ -86,7 +81,7 @@ namespace RiptideNetworking
 
         internal void SendHeartbeat(byte pingId)
         {
-            Message message = new Message(HeaderType.heartbeat, 1);
+            Message message = Message.CreateInternal(HeaderType.heartbeat);
             message.Add(pingId);
 
             server.Send(message, this);
@@ -102,7 +97,7 @@ namespace RiptideNetworking
 
         internal void SendWelcome()
         {
-            Message message = new Message(HeaderType.welcome, 2);
+            Message message = Message.CreateInternal(HeaderType.welcome);
             message.Add(Id);
 
             server.Send(message, this, 5);

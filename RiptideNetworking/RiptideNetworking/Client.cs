@@ -84,7 +84,7 @@ namespace RiptideNetworking
                 else
                 {
                     LocalDisconnect();
-                    OnConnectionFailed(new EventArgs());
+                    OnConnectionFailed(EventArgs.Empty);
                 }    
             }
             else if (connectionState == ConnectionState.connected)
@@ -107,7 +107,7 @@ namespace RiptideNetworking
             return endPoint.Equals(remoteEndPoint);
         }
 
-        internal override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
+        internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
 #if DETAILED_LOGGING
             if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
@@ -121,6 +121,7 @@ namespace RiptideNetworking
                     
                     if (receiveActionQueue == null)
                     {
+                        Message message = Message.Create(headerType, data);
 #if DETAILED_LOGGING
                         ushort messageId = message.PeekUShort();
                         if (headerType == HeaderType.reliable)
@@ -134,6 +135,7 @@ namespace RiptideNetworking
                     {
                         receiveActionQueue.Add(() =>
                         {
+                            Message message = Message.Create(headerType, data);
 #if DETAILED_LOGGING
                             ushort messageId = message.PeekUShort();
                             if (headerType == HeaderType.reliable)
@@ -146,22 +148,22 @@ namespace RiptideNetworking
                     }
                     break;
                 case HeaderType.ack:
-                    HandleAck(message);
+                    HandleAck(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.ackExtra:
-                    HandleAckExtra(message);
+                    HandleAckExtra(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.heartbeat:
-                    HandleHeartbeat(message);
+                    HandleHeartbeat(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.welcome:
-                    HandleWelcome(message);
+                    HandleWelcome(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.clientConnected:
-                    HandleClientConnected(message);
+                    HandleClientConnected(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.clientDisconnected:
-                    HandleClientDisconnected(message);
+                    HandleClientDisconnected(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.disconnect:
                     HandleDisconnect();
@@ -171,9 +173,9 @@ namespace RiptideNetworking
             }
         }
 
-        internal override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
+        internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
-            ReliableHandle(message, fromEndPoint, headerType, rudp.SendLockables);
+            ReliableHandle(data, fromEndPoint, headerType, rudp.SendLockables);
         }
 
         /// <summary>Sends a message to the server.</summary>
@@ -182,7 +184,7 @@ namespace RiptideNetworking
         public void Send(Message message, byte maxSendAttempts = 3)
         {
             if (message.SendMode == MessageSendMode.unreliable)
-                Send(message.ToArray(), remoteEndPoint);
+                Send(message.Bytes, remoteEndPoint);
             else
                 SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
         }
@@ -209,7 +211,7 @@ namespace RiptideNetworking
         #region Messages
         private void SendConnect()
         {
-            Send(new Message(HeaderType.connect));
+            Send(Message.CreateInternal(HeaderType.connect));
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
@@ -217,12 +219,7 @@ namespace RiptideNetworking
         /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
-            Message message;
-            if (forSeqId == rudp.SendLockables.LastReceivedSeqId)
-                message = new Message(HeaderType.ack, 4);
-            else
-                message = new Message(HeaderType.ackExtra, 6);
-
+            Message message = Message.CreateInternal(forSeqId == rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
             message.Add(rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(rudp.SendLockables.AcksBitfield); // Acks
 
@@ -258,7 +255,7 @@ namespace RiptideNetworking
         {
             pendingPing = (lastPingId++, DateTime.UtcNow);
 
-            Message message = new Message(HeaderType.heartbeat, 3);
+            Message message = Message.CreateInternal(HeaderType.heartbeat);
             message.Add(pendingPing.id);
             message.Add(rudp.RTT);
 
@@ -288,12 +285,12 @@ namespace RiptideNetworking
             lastHeartbeat = DateTime.UtcNow;
 
             SendWelcomeReceived();
-            OnConnected(new EventArgs());
+            OnConnected(EventArgs.Empty);
         }
 
         internal void SendWelcomeReceived()
         {
-            Message message = new Message(HeaderType.welcome, 2);
+            Message message = Message.CreateInternal(HeaderType.welcome);
             message.Add(Id);
 
             Send(message, 5);
@@ -311,15 +308,13 @@ namespace RiptideNetworking
 
         private void SendDisconnect()
         {
-            Message message = new Message(HeaderType.disconnect);
-
-            Send(message);
+            Send(Message.CreateInternal(HeaderType.disconnect));
         }
 
         private void HandleDisconnect()
         {
             LocalDisconnect();
-            OnDisconnected(new EventArgs());
+            OnDisconnected(EventArgs.Empty);
         }
         #endregion
 

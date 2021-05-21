@@ -93,7 +93,7 @@ namespace ConsoleClient
 
         private static void SendReliableTest(int reliableTestId)
         {
-            Message message = new Message(MessageSendMode.reliable, (ushort)MessageId.reliableTest, 4);
+            Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.reliableTest);
             message.Add(reliableTestId);
 
             client.Send(message);

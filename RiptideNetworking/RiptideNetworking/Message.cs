@@ -30,6 +30,11 @@ namespace RiptideNetworking
     /// <summary>Represents a packet.</summary>
     public class Message
     {
+        private static Message send = new Message();
+        private static Message sendInternal = new Message();
+        private static Message handle = new Message();
+        private static Message handleInternal = new Message();
+
         /// <summary>How many bytes a bool is represented by.</summary>
         public const byte boolLength = sizeof(bool);
         /// <summary>How many bytes a short is represented by.</summary>
@@ -44,96 +49,100 @@ namespace RiptideNetworking
         public const byte doubleLength = sizeof(double);
 
         /// <summary>The length in bytes of the message's contents.</summary>
-        public int Length { get => bytes.Count; }
-
+        public int Length { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength { get => Length - readPos; }
-
         internal MessageSendMode SendMode { get; private set; }
+        internal byte[] Bytes { get; private set; }
 
-        private List<byte> bytes;
-        private byte[] readableBytes;
+        private ushort writePos = 0;
         private ushort readPos = 0;
 
-        /// <summary>Creates a new empty message (without an ID).</summary>
-        /// <param name="headerType">The header type for the message.</param>
-        /// <param name="messageLength">The length in bytes of the message's contents.</param>
-        internal Message(HeaderType headerType, ushort messageLength = 0)
+        private Message(ushort maxSize = 1500)
         {
-            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            bytes = new List<byte>(messageLength + 3) // +3 for message header
-            {
-                (byte)headerType
-            };
-
-            if (SendMode == MessageSendMode.reliable)
-                Add((ushort)0); // Add 2 bytes to the list to overwrite later with the sequence ID
+            Bytes = new byte[maxSize];
         }
 
-        /// <summary>Creates a new message with a given ID.</summary>
+        /// <summary>Initializes the Message instance used for sending with new values.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
-        /// <param name="messageLength">The length in bytes of the message's contents.</param>
-        public Message(MessageSendMode sendMode, ushort id, ushort messageLength = 0)
+        public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            SendMode = sendMode;
-            bytes = new List<byte>(messageLength + 5) // +5 for message header
-            {
-                (byte)sendMode
-            };
-
-            if (SendMode == MessageSendMode.reliable)
-                Add((ushort)0); // Add 2 bytes to the list to overwrite later with the sequence ID
-            Add(id);
+            Create(send, (HeaderType)sendMode);
+            send.Add(id);
+            return send;
         }
 
-        /// <summary>Creates a message from which data can be read. Used for receiving.</summary>
-        /// <param name="data">The bytes to add to the message.</param>
-        internal Message(byte[] data)
+        /// <summary>Initializes the Message instance used for handling with new values.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        /// <param name="data">The bytes contained in the message.</param>
+        internal static Message Create(HeaderType headerType, byte[] data)
         {
-            bytes = new List<byte>(data.Length);
+            Create(handle, headerType, data);
+            return handle;
+        }
 
-            SetBytes(data);
+        /// <summary>Initializes the Message instance used for sending internal messages with new values.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        internal static Message CreateInternal(HeaderType headerType)
+        {
+            Create(sendInternal, headerType);
+            return sendInternal;
+        }
+
+        /// <summary>Initializes the Message instance used for handling internal messages with new values.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        /// <param name="data">The bytes contained in the message.</param>
+        internal static Message CreateInternal(HeaderType headerType, byte[] data)
+        {
+            Create(handleInternal, headerType, data);
+            return handleInternal;
+        }
+
+        /// <summary>Initializes a Message instance for sending with new values.</summary>
+        /// <param name="message">The message to initialize.</param>
+        /// <param name="headerType">The message's header type.</param>
+        private static void Create(Message message, HeaderType headerType)
+        {
+            message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            message.writePos = 0;
+            message.readPos = 0;
+            message.Add((byte)headerType);
+            if (message.SendMode == MessageSendMode.reliable)
+                message.writePos += shortLength;
+        }
+
+        /// <summary>Initializes a Message instance for handling with new values.</summary>
+        /// <param name="message">The message to initialize.</param>
+        /// <param name="headerType">The message's header type.</param>
+        /// <param name="data">The bytes contained in the message.</param>
+        private static void Create(Message message, HeaderType headerType, byte[] data)
+        {
+            message.SendMode = (MessageSendMode)headerType;
+            message.writePos = 0;
+            message.readPos = (ushort)(message.SendMode == MessageSendMode.reliable ? 3 : 1);
+
+            if (data.Length > message.Bytes.Length)
+            {
+                RiptideLogger.Log($"Can't fully handle {data.Length} bytes because it exceeds the maximum of {message.Bytes.Length}, message will contain incomplete data!");
+                Array.Copy(data, 0, message.Bytes, 0, message.Bytes.Length);
+                message.Length = message.Bytes.Length;
+            }
+            else
+            {
+                Array.Copy(data, 0, message.Bytes, 0, data.Length);
+                message.Length = data.Length;
+            }
         }
 
         #region Functions
-        /// <summary>Sets the message's content and prepares it to be read.</summary>
-        /// <param name="data">The bytes to add to the message.</param>
-        internal void SetBytes(byte[] data)
-        {
-            Add(data);
-            readableBytes = bytes.ToArray();
-        }
-
         /// <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
         /// <param name="seqId">The sequence ID to insert.</param>
         internal void SetSequenceIdBytes(ushort seqId)
         {
             byte[] sequenceIdBytes = StandardizeEndianness(BitConverter.GetBytes(seqId));
-            bytes[1] = sequenceIdBytes[0];
-            bytes[2] = sequenceIdBytes[1];
-        }
-
-        /// <summary>Inserts the given bytes into the message at the given position.</summary>
-        /// <param name="bytes">The bytes to insert.</param>
-        /// <param name="position">The position at which to insert the bytes into the message.</param>
-        internal void InsertBytes(byte[] bytes, int position = 0)
-        {
-            this.bytes.InsertRange(position, bytes);
-        }
-
-        /// <summary>Inserts the given byte at the start of the message.</summary>
-        /// <param name="singleByte">The byte to insert.</param>
-        private void InsertByte(byte singleByte)
-        {
-            bytes.Insert(0, singleByte);
-        }
-
-        /// <summary>Gets the message's content in array form.</summary>
-        internal byte[] ToArray()
-        {
-            readableBytes = bytes.ToArray();
-            return readableBytes;
+            Bytes[1] = sequenceIdBytes[0];
+            Bytes[2] = sequenceIdBytes[1];
         }
 
         /// <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
@@ -149,7 +158,7 @@ namespace RiptideNetworking
         internal void StandardizeEndianness(int byteAmount)
         {
             if (!BitConverter.IsLittleEndian)
-                Array.Reverse(readableBytes, readPos, byteAmount);
+                Array.Reverse(Bytes, readPos, byteAmount);
         }
         #endregion
 
@@ -159,43 +168,41 @@ namespace RiptideNetworking
         /// <param name="value">The byte to add.</param>
         public void Add(byte value)
         {
-            bytes.Add(value);
+            Bytes[writePos++] = value;
         }
 
         /// <summary>Adds an array of bytes to the message.</summary>
         /// <param name="value">The byte array to add.</param>
         public void Add(byte[] value)
         {
-            bytes.AddRange(value);
+            Array.Copy(value, 0, Bytes, writePos, value.Length);
+            writePos += (ushort)value.Length;
         }
 
         /// <summary>Reads a byte from the message.</summary>
         public byte GetByte()
         {
-            if (bytes.Count > readPos)
-            {
-                // If there are unread bytes
-                byte value = readableBytes[readPos]; // Get the byte at readPos' position
-                readPos += 1;
-                return value;
-            }
-            else
+            if (UnreadLength < 1)
                 throw new Exception("Message contains insufficient bytes to read type 'byte'!");
+            
+            // If there are enough unread bytes
+            byte value = Bytes[readPos]; // Get the byte at readPos' position
+            readPos += 1;
+            return value;
         }
 
         /// <summary>Reads an array of bytes from the message.</summary>
         /// <param name="length">The length of the byte array.</param>
         public byte[] GetBytes(int length)
         {
-            if (bytes.Count > readPos)
-            {
-                // If there are unread bytes
-                byte[] value = bytes.GetRange(readPos, length).ToArray(); // Get the bytes at readPos' position with a range of length
-                readPos += (ushort)length;
-                return value;
-            }
-            else
+            if (UnreadLength < length)
                 throw new Exception("Message contains insufficient bytes to read type 'byte[]'!");
+
+            // If there are enough unread bytes
+            byte[] value = new byte[length];
+            Array.Copy(Bytes, readPos, value, 0, length); // Copy the bytes at readPos' position to the array that will be returned
+            readPos += (ushort)length;
+            return value;
         }
         #endregion
 
@@ -204,21 +211,19 @@ namespace RiptideNetworking
         /// <param name="value">The bool to add.</param>
         public void Add(bool value)
         {
-            bytes.AddRange(BitConverter.GetBytes(value));
+            Bytes[writePos++] = BitConverter.GetBytes(value)[0];
         }
 
         /// <summary>Reads a bool from the message.</summary>
         public bool GetBool()
         {
-            if (bytes.Count >= readPos + boolLength)
-            {
-                // If there are unread bytes
-                bool value = BitConverter.ToBoolean(readableBytes, readPos); // Convert the bytes at readPos' position to a bool
-                readPos += boolLength;
-                return value;
-            }
-            else
+            if (UnreadLength < boolLength)
                 throw new Exception("Message contains insufficient bytes to read type 'bool'!");
+            
+            // If there are enough unread bytes
+            bool value = BitConverter.ToBoolean(Bytes, readPos); // Convert the bytes at readPos' position to a bool
+            readPos += boolLength;
+            return value;
         }
 
         /// <summary>Adds an array of bools to the message.</summary>
@@ -255,22 +260,22 @@ namespace RiptideNetworking
         /// <param name="value">The short to add.</param>
         public void Add(short value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
         }
 
         /// <summary>Reads a short from the message.</summary>
         public short GetShort()
         {
-            if (bytes.Count >= readPos + shortLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(shortLength);
-                short value = BitConverter.ToInt16(readableBytes, readPos); // Convert the bytes at readPos' position to a short
-                readPos += shortLength;
-                return value;
-            }
-            else
+            if (UnreadLength < shortLength)
                 throw new Exception("Message contains insufficient bytes to read type 'short'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(shortLength);
+            short value = BitConverter.ToInt16(Bytes, readPos); // Convert the bytes at readPos' position to a short
+            readPos += shortLength;
+            return value;
         }
 
         /// <summary>Adds an array of shorts to the message.</summary>
@@ -307,36 +312,34 @@ namespace RiptideNetworking
         /// <param name="value">The ushort to add.</param>
         public void Add(ushort value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
         }
 
         /// <summary>Reads a ushort from the message.</summary>
         public ushort GetUShort()
         {
-            if (bytes.Count >= readPos + shortLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(shortLength);
-                ushort value = BitConverter.ToUInt16(readableBytes, readPos); // Convert the bytes at readPos' position to a ushort
-                readPos += shortLength;
-                return value;
-            }
-            else
+            if (UnreadLength < shortLength)
                 throw new Exception("Message contains insufficient bytes to read type 'ushort'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(shortLength);
+            ushort value = BitConverter.ToUInt16(Bytes, readPos); // Convert the bytes at readPos' position to a ushort
+            readPos += shortLength;
+            return value;
         }
 
         /// <summary>Reads a ushort from the message without moving the read position, allowing the same bytes to be read again.</summary>
         internal ushort PeekUShort()
         {
-            if (bytes.Count > readPos)
-            {
-                // If there are unread bytes
-                byte[] bytesToConvert = new byte[shortLength];
-                Array.Copy(readableBytes, readPos, bytesToConvert, 0, shortLength);
-                return BitConverter.ToUInt16(StandardizeEndianness(bytesToConvert), 0); // Convert the bytes at readPos' position to a ushort
-            }
-            else
-                throw new Exception("Message contains insufficient bytes to read type 'ushort'!");
+            if (UnreadLength < shortLength)
+                throw new Exception("Message contains insufficient bytes to peek type 'ushort'!");
+            
+            // If there are enough unread bytes
+            byte[] bytesToConvert = new byte[shortLength];
+            Array.Copy(Bytes, readPos, bytesToConvert, 0, shortLength);
+            return BitConverter.ToUInt16(StandardizeEndianness(bytesToConvert), 0); // Convert the bytes at readPos' position to a ushort
         }
 
         /// <summary>Adds an array of ushorts to the message.</summary>
@@ -373,22 +376,24 @@ namespace RiptideNetworking
         /// <param name="value">The int to add.</param>
         public void Add(int value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
         }
 
         /// <summary>Reads an int from the message.</summary>
         public int GetInt()
         {
-            if (bytes.Count >= readPos + intLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(intLength);
-                int value = BitConverter.ToInt32(readableBytes, readPos); // Convert the bytes at readPos' position to an int
-                readPos += intLength;
-                return value;
-            }
-            else
+            if (UnreadLength < intLength)
                 throw new Exception("Message contains insufficient bytes to read type 'int'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(intLength);
+            int value = BitConverter.ToInt32(Bytes, readPos); // Convert the bytes at readPos' position to an int
+            readPos += intLength;
+            return value;
         }
 
         /// <summary>Adds an array of ints to the message.</summary>
@@ -425,22 +430,24 @@ namespace RiptideNetworking
         /// <param name="value">The uint to add.</param>
         public void Add(uint value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
         }
 
         /// <summary>Reads a uint from the message.</summary>
         public uint GetUInt()
         {
-            if (bytes.Count >= readPos + intLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(intLength);
-                uint value = BitConverter.ToUInt32(readableBytes, readPos); // Convert the bytes at readPos' position to an uint
-                readPos += intLength;
-                return value;
-            }
-            else
+            if (UnreadLength < intLength)
                 throw new Exception("Message contains insufficient bytes to read type 'uint'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(intLength);
+            uint value = BitConverter.ToUInt32(Bytes, readPos); // Convert the bytes at readPos' position to an uint
+            readPos += intLength;
+            return value;
         }
 
         /// <summary>Adds an array of uints to the message.</summary>
@@ -477,22 +484,28 @@ namespace RiptideNetworking
         /// <param name="value">The long to add.</param>
         public void Add(long value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
+            Bytes[writePos++] = valueBytes[4];
+            Bytes[writePos++] = valueBytes[5];
+            Bytes[writePos++] = valueBytes[6];
+            Bytes[writePos++] = valueBytes[7];
         }
 
         /// <summary>Reads a long from the message.</summary>
         public long GetLong()
         {
-            if (bytes.Count >= readPos + longLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(longLength);
-                long value = BitConverter.ToInt64(readableBytes, readPos); // Convert the bytes at readPos' position to a long
-                readPos += longLength;
-                return value;
-            }
-            else
+            if (UnreadLength < longLength)
                 throw new Exception("Message contains insufficient bytes to read type 'long'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(longLength);
+            long value = BitConverter.ToInt64(Bytes, readPos); // Convert the bytes at readPos' position to a long;
+            readPos += longLength;
+            return value;
         }
 
         /// <summary>Adds an array of longs to the message.</summary>
@@ -529,22 +542,28 @@ namespace RiptideNetworking
         /// <param name="value">The ulong to add.</param>
         public void Add(ulong value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
+            Bytes[writePos++] = valueBytes[4];
+            Bytes[writePos++] = valueBytes[5];
+            Bytes[writePos++] = valueBytes[6];
+            Bytes[writePos++] = valueBytes[7];
         }
 
         /// <summary>Reads a ulong from the message.</summary>
         public ulong GetULong()
         {
-            if (bytes.Count >= readPos + longLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(longLength);
-                ulong value = BitConverter.ToUInt64(readableBytes, readPos); // Convert the bytes at readPos' position to a ulong
-                readPos += longLength;
-                return value;
-            }
-            else
+            if (UnreadLength < longLength)
                 throw new Exception("Message contains insufficient bytes to read type 'ulong'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(longLength);
+            ulong value = BitConverter.ToUInt64(Bytes, readPos); // Convert the bytes at readPos' position to a ulong
+            readPos += longLength;
+            return value;
         }
 
         /// <summary>Adds an array of ulongs to the message.</summary>
@@ -581,22 +600,24 @@ namespace RiptideNetworking
         /// <param name="value">The float to add.</param>
         public void Add(float value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
         }
 
         /// <summary>Reads a float from the message.</summary>
         public float GetFloat()
         {
-            if (bytes.Count >= readPos + floatLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(floatLength);
-                float value = BitConverter.ToSingle(readableBytes, readPos); // Convert the bytes at readPos' position to a float
-                readPos += floatLength;
-                return value;
-            }
-            else
+            if (UnreadLength < floatLength)
                 throw new Exception("Message contains insufficient bytes to read type 'float'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(floatLength);
+            float value = BitConverter.ToSingle(Bytes, readPos); // Convert the bytes at readPos' position to a float
+            readPos += floatLength;
+            return value;
         }
 
         /// <summary>Adds an array of floats to the message.</summary>
@@ -633,22 +654,28 @@ namespace RiptideNetworking
         /// <param name="value">The double to add.</param>
         public void Add(double value)
         {
-            bytes.AddRange(StandardizeEndianness(BitConverter.GetBytes(value)));
+            byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+            Bytes[writePos++] = valueBytes[0];
+            Bytes[writePos++] = valueBytes[1];
+            Bytes[writePos++] = valueBytes[2];
+            Bytes[writePos++] = valueBytes[3];
+            Bytes[writePos++] = valueBytes[4];
+            Bytes[writePos++] = valueBytes[5];
+            Bytes[writePos++] = valueBytes[6];
+            Bytes[writePos++] = valueBytes[7];
         }
 
         /// <summary>Reads a double from the message.</summary>
         public double GetDouble()
         {
-            if (bytes.Count >= readPos + doubleLength)
-            {
-                // If there are unread bytes
-                StandardizeEndianness(doubleLength);
-                double value = BitConverter.ToDouble(readableBytes, readPos); // Convert the bytes at readPos' position to a double
-                readPos += doubleLength;
-                return value;
-            }
-            else
+            if (UnreadLength < doubleLength)
                 throw new Exception("Message contains insufficient bytes to read type 'double'!");
+            
+            // If there are enough unread bytes
+            StandardizeEndianness(doubleLength);
+            double value = BitConverter.ToDouble(Bytes, readPos); // Convert the bytes at readPos' position to a double
+            readPos += doubleLength;
+            return value;
         }
 
         /// <summary>Adds an array of doubles to the message.</summary>
@@ -694,14 +721,12 @@ namespace RiptideNetworking
         public string GetString()
         {
             ushort length = GetUShort(); // Get the length of the string
-            if (bytes.Count >= readPos + length)
-            {
-                string value = Encoding.UTF8.GetString(readableBytes, readPos, length); // Convert the bytes at readPos' position to a string
-                readPos += length;
-                return value;
-            }
-            else
+            if (UnreadLength < length)
                 throw new Exception("Message contains insufficient bytes to read type 'string'!");
+            
+            string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
+            readPos += length;
+            return value;
         }
 
         /// <summary>Adds an array of strings to the message.</summary>

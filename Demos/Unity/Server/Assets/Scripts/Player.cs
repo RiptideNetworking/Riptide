@@ -106,12 +106,12 @@ public class Player : MonoBehaviour
     /// <param name="toClient">The client to send the message to.</param>
     public void SendSpawn(ServerClient toClient)
     {
-        NetworkManager.Singleton.Server.Send(GetSpawnData(new Message(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)), toClient);
+        NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)), toClient);
     }
     /// <summary>Sends a player's info to all clients.</summary>
     private void SendSpawn()
     {
-        NetworkManager.Singleton.Server.SendToAll(GetSpawnData(new Message(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)));
+        NetworkManager.Singleton.Server.SendToAll(GetSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)));
     }
 
     private Message GetSpawnData(Message message)
@@ -124,7 +124,7 @@ public class Player : MonoBehaviour
 
     private void SendMovement()
     {
-        Message message = new Message(MessageSendMode.unreliable, (ushort)ServerToClientId.playerMovement);
+        Message message = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerMovement);
         message.Add(Id);
         message.Add(transform.position);
         message.Add(transform.forward);

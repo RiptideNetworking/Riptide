@@ -114,12 +114,11 @@ namespace RiptideNetworking
             byte[] messageData = new byte[length];
             Array.Copy(data, messageData, length);
 
-            Message message = new Message(messageData);
-            HeaderType headerType = (HeaderType)message.GetByte();
+            HeaderType headerType = (HeaderType)messageData[0];
             if (headerType >= HeaderType.reliable)
-                ReliableHandle(message, remoteEndPoint, headerType);
+                ReliableHandle(messageData, remoteEndPoint, headerType);
             else
-                Handle(message, remoteEndPoint, headerType);
+                Handle(messageData, remoteEndPoint, headerType);
         }
 
         /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
@@ -127,11 +126,13 @@ namespace RiptideNetworking
         /// <param name="firstByte">The first byte of the message.</param>
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte);
 
-        internal abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType);
+        internal abstract void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
         
-        internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
+        internal void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
         {
-            ushort sequenceId = message.GetUShort();
+            byte[] idBytes = new byte[Message.shortLength];
+            Array.Copy(data, 1, idBytes, 0, Message.shortLength);
+            ushort sequenceId = BitConverter.ToUInt16(Message.StandardizeEndianness(idBytes), 0);
 
             lock (lockables)
             {
@@ -165,10 +166,10 @@ namespace RiptideNetworking
                 SendAck(sequenceId, fromEndPoint);
             }
 
-            Handle(message, fromEndPoint, headerType);
+            Handle(data, fromEndPoint, headerType);
         }
 
-        internal abstract void Handle(Message message, IPEndPoint fromEndPoint, HeaderType headerType);
+        internal abstract void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
 
         internal void Send(byte[] data, IPEndPoint toEndPoint)
         {
@@ -201,7 +202,7 @@ namespace RiptideNetworking
 
             message.SetSequenceIdBytes(sequenceId);
 
-            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message.ToArray(), toEndPoint, maxSendAttempts);
+            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message.Bytes, toEndPoint, maxSendAttempts);
             lock (rudp.PendingMessages)
             {
                 rudp.PendingMessages.Add(sequenceId, pendingMessage);

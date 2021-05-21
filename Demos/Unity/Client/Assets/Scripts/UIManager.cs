@@ -49,7 +49,7 @@ public class UIManager : MonoBehaviour
     #region Messages
     public void SendName()
     {
-        Message message = new Message(MessageSendMode.reliable, (ushort)ClientToServerId.playerName);
+        Message message = Message.Create(MessageSendMode.reliable, (ushort)ClientToServerId.playerName);
         message.Add(usernameField.text);
         NetworkManager.Singleton.Client.Send(message);
     }

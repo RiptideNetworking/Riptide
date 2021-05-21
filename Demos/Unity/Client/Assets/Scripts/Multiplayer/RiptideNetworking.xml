@@ -212,40 +212,39 @@
         <member name="P:RiptideNetworking.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.HeaderType,System.UInt16)">
-            <summary>Creates a new empty message (without an ID).</summary>
-            <param name="headerType">The header type for the message.</param>
-            <param name="messageLength">The length in bytes of the message's contents.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.MessageSendMode,System.UInt16,System.UInt16)">
-            <summary>Creates a new message with a given ID.</summary>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16)">
+            <summary>Initializes the Message instance used for sending with new values.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
-            <param name="messageLength">The length in bytes of the message's contents.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(System.Byte[])">
-            <summary>Creates a message from which data can be read. Used for receiving.</summary>
-            <param name="data">The bytes to add to the message.</param>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType,System.Byte[])">
+            <summary>Initializes the Message instance used for handling with new values.</summary>
+            <param name="headerType">The message's header type.</param>
+            <param name="data">The bytes contained in the message.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.SetBytes(System.Byte[])">
-            <summary>Sets the message's content and prepares it to be read.</summary>
-            <param name="data">The bytes to add to the message.</param>
+        <member name="M:RiptideNetworking.Message.CreateInternal(RiptideNetworking.HeaderType)">
+            <summary>Initializes the Message instance used for sending internal messages with new values.</summary>
+            <param name="headerType">The message's header type.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.CreateInternal(RiptideNetworking.HeaderType,System.Byte[])">
+            <summary>Initializes the Message instance used for handling internal messages with new values.</summary>
+            <param name="headerType">The message's header type.</param>
+            <param name="data">The bytes contained in the message.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.Message,RiptideNetworking.HeaderType)">
+            <summary>Initializes a Message instance for sending with new values.</summary>
+            <param name="message">The message to initialize.</param>
+            <param name="headerType">The message's header type.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.Message,RiptideNetworking.HeaderType,System.Byte[])">
+            <summary>Initializes a Message instance for handling with new values.</summary>
+            <param name="message">The message to initialize.</param>
+            <param name="headerType">The message's header type.</param>
+            <param name="data">The bytes contained in the message.</param>
         </member>
         <member name="M:RiptideNetworking.Message.SetSequenceIdBytes(System.UInt16)">
             <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
             <param name="seqId">The sequence ID to insert.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.InsertBytes(System.Byte[],System.Int32)">
-            <summary>Inserts the given bytes into the message at the given position.</summary>
-            <param name="bytes">The bytes to insert.</param>
-            <param name="position">The position at which to insert the bytes into the message.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.InsertByte(System.Byte)">
-            <summary>Inserts the given byte at the start of the message.</summary>
-            <param name="singleByte">The byte to insert.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.ToArray">
-            <summary>Gets the message's content in array form.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Byte[])">
             <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>

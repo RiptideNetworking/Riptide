@@ -97,7 +97,7 @@ namespace RiptideNetworking
             return false;
         }
 
-        internal override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
+        internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
 #if DETAILED_LOGGING
             if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
@@ -109,6 +109,7 @@ namespace RiptideNetworking
                 case HeaderType.reliable:
                     if (receiveActionQueue == null)
                     {
+                        Message message = Message.Create(headerType, data);
 #if DETAILED_LOGGING
                         ushort messageId = message.PeekUShort();
                         if (headerType == HeaderType.reliable)
@@ -122,6 +123,7 @@ namespace RiptideNetworking
                     {
                         receiveActionQueue.Add(() =>
                         {
+                            Message message = Message.Create(headerType, data);
 #if DETAILED_LOGGING
                             ushort messageId = message.PeekUShort();
                             if (headerType == HeaderType.reliable)
@@ -139,19 +141,19 @@ namespace RiptideNetworking
                     }
                     break;
                 case HeaderType.ack:
-                    clients[fromEndPoint].HandleAck(message);
+                    clients[fromEndPoint].HandleAck(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.ackExtra:
-                    clients[fromEndPoint].HandleAckExtra(message);
+                    clients[fromEndPoint].HandleAckExtra(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.connect:
                     // Handled in ShouldHandleMessageFrom method
                     break;
                 case HeaderType.heartbeat:
-                    clients[fromEndPoint].HandleHeartbeat(message);
+                    clients[fromEndPoint].HandleHeartbeat(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.welcome:
-                    clients[fromEndPoint].HandleWelcomeReceived(message);
+                    clients[fromEndPoint].HandleWelcomeReceived(Message.CreateInternal(headerType, data));
                     break;
                 case HeaderType.clientConnected:
                 case HeaderType.clientDisconnected:
@@ -164,9 +166,9 @@ namespace RiptideNetworking
             }
         }
 
-        internal override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType headerType)
+        internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
-            ReliableHandle(message, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
+            ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
@@ -208,7 +210,7 @@ namespace RiptideNetworking
         public void Send(Message message, ServerClient toClient, byte maxSendAttempts = 3)
         {
             if (message.SendMode == MessageSendMode.unreliable)
-                Send(message.ToArray(), toClient.remoteEndPoint);
+                Send(message.Bytes, toClient.remoteEndPoint);
             else
                 SendReliable(message, toClient.remoteEndPoint, toClient.Rudp, maxSendAttempts);
         }
@@ -221,7 +223,7 @@ namespace RiptideNetworking
             if (message.SendMode == MessageSendMode.unreliable)
             {
                 foreach (IPEndPoint clientEndPoint in clients.Keys)
-                    Send(message.ToArray(), clientEndPoint);
+                    Send(message.Bytes, clientEndPoint);
             }
             else
             {
@@ -240,7 +242,7 @@ namespace RiptideNetworking
             {
                 foreach (IPEndPoint clientEndPoint in clients.Keys)
                     if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
-                        Send(message.ToArray(), clientEndPoint);
+                        Send(message.Bytes, clientEndPoint);
             }
             else
             {
@@ -291,7 +293,7 @@ namespace RiptideNetworking
         #region Messages
         private void SendDisconnect(ServerClient client)
         {
-            Send(new Message(HeaderType.disconnect), client);
+            Send(Message.CreateInternal(HeaderType.disconnect), client);
         }
 
         private void HandleDisconnect(IPEndPoint fromEndPoint)
@@ -308,7 +310,7 @@ namespace RiptideNetworking
 
         private void SendClientConnected(IPEndPoint endPoint, ushort id)
         {
-            Message message = new Message(HeaderType.clientConnected, 2);
+            Message message = Message.CreateInternal(HeaderType.clientConnected);
             message.Add(id);
 
             foreach (ServerClient client in clients.Values)
@@ -320,7 +322,7 @@ namespace RiptideNetworking
 
         private void SendClientDisconnected(ushort id)
         {
-            Message message = new Message(HeaderType.clientDisconnected, 2);
+            Message message = Message.CreateInternal(HeaderType.clientDisconnected);
             message.Add(id);
 
             foreach (ServerClient client in clients.Values)
