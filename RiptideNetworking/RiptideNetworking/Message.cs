@@ -118,7 +118,7 @@ namespace RiptideNetworking
         /// <param name="data">The bytes contained in the message.</param>
         private static void Create(Message message, HeaderType headerType, byte[] data)
         {
-            message.SendMode = (MessageSendMode)headerType;
+            message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             message.writePos = 0;
             message.readPos = (ushort)(message.SendMode == MessageSendMode.reliable ? 3 : 1);
 
