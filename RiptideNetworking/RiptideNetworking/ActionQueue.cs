@@ -8,7 +8,7 @@ namespace RiptideNetworking
     public class ActionQueue
     {
         /// <summary>The name of this action queue instance. Used when logging messages.</summary>
-        public readonly string logName;
+        public readonly string LogName;
         private readonly List<Action> executionQueue = new List<Action>();
         private readonly List<Action> executionQueueCopy = new List<Action>();
         private bool hasActionToExecute = false;
@@ -17,7 +17,7 @@ namespace RiptideNetworking
         /// <param name="logName">The name of this action queue instance. Used when logging messages.</param>
         public ActionQueue(string logName = "ACTION QUEUE")
         {
-            this.logName = logName;
+            LogName = logName;
         }
 
         /// <summary>Adds an action to the queue.</summary>
@@ -26,7 +26,7 @@ namespace RiptideNetworking
         {
             if (action == null)
             {
-                RiptideLogger.Log(logName, "No action to execute!");
+                RiptideLogger.Log(LogName, "No action to execute!");
                 return;
             }
 
@@ -53,9 +53,7 @@ namespace RiptideNetworking
 
                 // Execute all actions from the copied queue
                 for (int i = 0; i < executionQueueCopy.Count; i++)
-                {
                     executionQueueCopy[i]();
-                }
             }
         }
     }

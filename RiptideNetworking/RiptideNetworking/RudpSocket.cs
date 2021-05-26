@@ -19,7 +19,7 @@ namespace RiptideNetworking
     public abstract class RudpSocket
     {
         /// <summary>The name of this server/client instance. Used when logging messages.</summary>
-        public readonly string logName;
+        public readonly string LogName;
 
         private const int ReceivePollingTime = 500000; // 0.5 seconds
 
@@ -31,7 +31,7 @@ namespace RiptideNetworking
         /// <param name="logName">The name of this server/client instance. Used when logging messages.</param>
         protected RudpSocket(string logName)
         {
-            this.logName = logName;
+            LogName = logName;
         }
 
         /// <summary>Starts listening for incoming packets.</summary>
@@ -77,9 +77,6 @@ namespace RiptideNetworking
                 {
                     switch (ex.SocketErrorCode)
                     {
-#if UNITY_IOS && !UNITY_EDITOR
-                        case SocketError.NotConnected:
-#endif
                         case SocketError.Interrupted:
                         case SocketError.NotSocket:
                             return;
@@ -88,7 +85,7 @@ namespace RiptideNetworking
                         case SocketError.TimedOut:
                             break;
                         default:
-                            //Receive(null, 0, ex.SocketErrorCode, (IPEndPoint)bufferEndPoint);
+                            Receive(null, 0, (IPEndPoint)bufferEndPoint);
                             break;
                     }
                     continue;
@@ -102,13 +99,13 @@ namespace RiptideNetworking
                     return;
                 }
 
-                Receive(receiveBuffer, byteCount, 0, (IPEndPoint)bufferEndPoint);
+                Receive(receiveBuffer, byteCount, (IPEndPoint)bufferEndPoint);
             }
         }
 
-        private void Receive(byte[] data, int length, SocketError errorCode, IPEndPoint remoteEndPoint)
+        private void Receive(byte[] data, int length, IPEndPoint remoteEndPoint)
         {
-            if (data.Length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
+            if (data == null || data.Length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
                 return;
 
             byte[] messageData = new byte[length];
@@ -193,13 +190,6 @@ namespace RiptideNetworking
                 return;
 
             ushort sequenceId = rudp.NextSequenceId;
-
-            // Sequence ID differs for each client, so we don't want to add it to the message itself, as that would carry over to any other clients being sent the same message
-            //byte[] bytearr = new byte[message.Length + 3];
-            //bytearr[0] = (byte)headerType;
-            //Array.Copy(Message.StandardizeEndianness(BitConverter.GetBytes(sequenceId)), 0, bytearr, 1, Message.shortLength);
-            //Array.Copy(message.ToArray(), 0, bytearr, 3, message.Length);
-
             message.SetSequenceIdBytes(sequenceId);
 
             Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message.Bytes, toEndPoint, maxSendAttempts);

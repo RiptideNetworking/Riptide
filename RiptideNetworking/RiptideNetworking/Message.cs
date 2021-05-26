@@ -30,10 +30,10 @@ namespace RiptideNetworking
     /// <summary>Represents a packet.</summary>
     public class Message
     {
-        private static Message send = new Message();
-        private static Message sendInternal = new Message();
-        private static Message handle = new Message();
-        private static Message handleInternal = new Message();
+        private static readonly Message send = new Message();
+        private static readonly Message sendInternal = new Message();
+        private static readonly Message handle = new Message();
+        private static readonly Message handleInternal = new Message();
 
         /// <summary>How many bytes a bool is represented by.</summary>
         public const byte boolLength = sizeof(bool);
@@ -51,7 +51,7 @@ namespace RiptideNetworking
         /// <summary>The length in bytes of the message's contents.</summary>
         public int Length { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
-        public int UnreadLength { get => Length - readPos; }
+        public int UnreadLength => Length - readPos;
         internal MessageSendMode SendMode { get; private set; }
         internal byte[] Bytes { get; private set; }
 

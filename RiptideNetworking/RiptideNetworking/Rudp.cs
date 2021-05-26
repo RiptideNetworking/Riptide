@@ -10,7 +10,7 @@ namespace RiptideNetworking
     internal class Rudp
     {
         private int lastSequenceId;
-        internal ushort NextSequenceId { get => (ushort)Interlocked.Increment(ref lastSequenceId); }
+        internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
         protected const ushort LeftBit = 1 << 15;
 
         internal SendLockables SendLockables { get; private set; }

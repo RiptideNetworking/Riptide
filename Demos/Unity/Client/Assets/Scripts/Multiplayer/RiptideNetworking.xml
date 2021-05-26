@@ -7,7 +7,7 @@
         <member name="T:RiptideNetworking.ActionQueue">
             <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
         </member>
-        <member name="F:RiptideNetworking.ActionQueue.logName">
+        <member name="F:RiptideNetworking.ActionQueue.LogName">
             <summary>The name of this action queue instance. Used when logging messages.</summary>
         </member>
         <member name="M:RiptideNetworking.ActionQueue.#ctor(System.String)">
@@ -499,7 +499,7 @@
         <member name="T:RiptideNetworking.RudpSocket">
             <summary>Base class for all RUDP connections.</summary>
         </member>
-        <member name="F:RiptideNetworking.RudpSocket.logName">
+        <member name="F:RiptideNetworking.RudpSocket.LogName">
             <summary>The name of this server/client instance. Used when logging messages.</summary>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.#ctor(System.String)">

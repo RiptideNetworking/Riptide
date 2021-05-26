@@ -14,11 +14,11 @@ namespace RiptideNetworking
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port { get; private set; }
         /// <summary>An array of all the currently connected clients.</summary>
-        public ServerClient[] Clients { get => clients.Values.ToArray(); }
+        public ServerClient[] Clients => clients.Values.ToArray();
         /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount { get; private set; }
         /// <summary>The number of currently connected clients.</summary>
-        public int ClientCount { get => clients.Count; }
+        public int ClientCount => clients.Count;
         /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
         public ushort ClientTimeoutTime { get; set; } = 5000;
         private ushort _clientHeartbeatInterval;
@@ -62,7 +62,7 @@ namespace RiptideNetworking
 
             StartListening(port);
 
-            RiptideLogger.Log(logName, $"Started on port {port}.");
+            RiptideLogger.Log(LogName, $"Started on port {port}.");
             heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
             IsRunning = true;
         }
@@ -183,9 +183,7 @@ namespace RiptideNetworking
         {
             availableClientIds = new List<ushort>(MaxClientCount);
             for (ushort i = 1; i <= MaxClientCount; i++)
-            {
                 availableClientIds.Add(i);
-            }
         }
 
         private ushort GetAvailableClientId()
@@ -198,7 +196,7 @@ namespace RiptideNetworking
             }
             else
             {
-                RiptideLogger.Log(logName, "No available client IDs! Assigned 0.");
+                RiptideLogger.Log(LogName, "No available client IDs! Assigned 0.");
                 return 0;
             }
         }
@@ -262,15 +260,13 @@ namespace RiptideNetworking
                 client.Disconnect();
                 clients.Remove(client.remoteEndPoint);
 
-                RiptideLogger.Log(logName, $"Kicked {client.remoteEndPoint}.");
+                RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
             }
             else
-            {
-                RiptideLogger.Log(logName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
-            }
+                RiptideLogger.Log(LogName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
         }
         
         /// <summary>Stops the server.</summary>
@@ -278,16 +274,14 @@ namespace RiptideNetworking
         {
             byte[] disconnectBytes = { (byte)HeaderType.disconnect };
             foreach (IPEndPoint clientEndPoint in clients.Keys)
-            {
                 Send(disconnectBytes, clientEndPoint);
-            }
 
             IsRunning = false;
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
             StopListening();
             clients.Clear();
-            RiptideLogger.Log(logName, "Server stopped.");
+            RiptideLogger.Log(LogName, "Server stopped.");
         }
 
         #region Messages
@@ -314,10 +308,8 @@ namespace RiptideNetworking
             message.Add(id);
 
             foreach (ServerClient client in clients.Values)
-            {
                 if (!client.remoteEndPoint.Equals(endPoint))
                     Send(message, client, 5);
-            }
         }
 
         private void SendClientDisconnected(ushort id)
@@ -326,9 +318,7 @@ namespace RiptideNetworking
             message.Add(id);
 
             foreach (ServerClient client in clients.Values)
-            {
                 Send(message, client, 5);
-            }
         }
         #endregion
 
@@ -337,7 +327,7 @@ namespace RiptideNetworking
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(logName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
+            RiptideLogger.Log(LogName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
 
             if (receiveActionQueue == null)
                 ClientConnected?.Invoke(this, e);
@@ -356,7 +346,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         internal void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(logName, $"Client {e.Id} has disconnected.");
+            RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
 
             if (receiveActionQueue == null)
                 ClientDisconnected?.Invoke(this, e);

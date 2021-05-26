@@ -9,19 +9,19 @@ namespace RiptideNetworking
         /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
-        public short RTT { get => Rudp.RTT; }
+        public short RTT => Rudp.RTT;
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
-        public short SmoothRTT { get => Rudp.SmoothRTT; }
+        public short SmoothRTT => Rudp.SmoothRTT;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
-        public bool IsConnecting { get => connectionState == ConnectionState.connecting; }
+        public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <summary>Whether or not the client is currently connected.</summary>
-        public bool IsConnected { get => connectionState == ConnectionState.connected; }
+        public bool IsConnected => connectionState == ConnectionState.connected;
         /// <summary>The remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 
         internal Rudp Rudp { get; private set; }
-        internal SendLockables SendLockables { get => Rudp.SendLockables; }
-        internal bool HasTimedOut { get => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime; }
+        internal SendLockables SendLockables => Rudp.SendLockables;
+        internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime;
 
         private DateTime lastHeartbeat;
         private readonly Server server;
@@ -32,7 +32,7 @@ namespace RiptideNetworking
             this.server = server;
             remoteEndPoint = endPoint;
             Id = id;
-            Rudp = new Rudp(server.Send, this.server.logName);
+            Rudp = new Rudp(server.Send, this.server.LogName);
             lastHeartbeat = DateTime.UtcNow;
 
             connectionState = ConnectionState.connecting;
@@ -111,7 +111,7 @@ namespace RiptideNetworking
             ushort id = message.GetUShort();
 
             if (Id != id)
-                RiptideLogger.Log(server.logName, $"Client has assumed incorrect ID: {id}");
+                RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 
             connectionState = ConnectionState.connected;
             server.OnClientConnected(new ServerClientConnectedEventArgs(this));

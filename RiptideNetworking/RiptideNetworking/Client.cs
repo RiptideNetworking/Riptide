@@ -11,13 +11,13 @@ namespace RiptideNetworking
         /// <summary>The numeric ID.</summary>
         public ushort Id { get; private set; }
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
-        public short RTT { get => rudp.RTT; }
+        public short RTT => rudp.RTT;
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
-        public short SmoothRTT { get => rudp.SmoothRTT; }
+        public short SmoothRTT => rudp.SmoothRTT;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
-        public bool IsConnecting { get => connectionState == ConnectionState.connecting; }
+        public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <summary>Whether or not the client is currently connected.</summary>
-        public bool IsConnected { get => connectionState == ConnectionState.connected; }
+        public bool IsConnected => connectionState == ConnectionState.connected;
         /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
         private ushort _heartbeatInterval;
@@ -40,7 +40,7 @@ namespace RiptideNetworking
         private byte connectionAttempts;
         private byte maxConnectionAttempts;
 
-        private bool HasTimedOut { get => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime; }
+        private bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime;
         private Timer heartbeatTimer;
         private DateTime lastHeartbeat;
         private byte lastPingId = 0;
@@ -63,9 +63,9 @@ namespace RiptideNetworking
             this.maxConnectionAttempts = maxConnectionAttempts;
             connectionAttempts = 0;
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
-            rudp = new Rudp(Send, logName);
+            rudp = new Rudp(Send, LogName);
 
-            RiptideLogger.Log(logName, $"Connecting to {remoteEndPoint}...");
+            RiptideLogger.Log(LogName, $"Connecting to {remoteEndPoint}...");
             StartListening();
             connectionState = ConnectionState.connecting;
 
@@ -118,7 +118,6 @@ namespace RiptideNetworking
             {
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
-                    
                     if (receiveActionQueue == null)
                     {
                         Message message = Message.Create(headerType, data);
@@ -197,7 +196,7 @@ namespace RiptideNetworking
 
             SendDisconnect();
             LocalDisconnect();
-            RiptideLogger.Log(logName, "Disconnected.");
+            RiptideLogger.Log(LogName, "Disconnected.");
         }
 
         private void LocalDisconnect()
@@ -323,7 +322,7 @@ namespace RiptideNetworking
         public event EventHandler Connected;
         private void OnConnected(EventArgs e)
         {
-            RiptideLogger.Log(logName, "Connected successfully!");
+            RiptideLogger.Log(LogName, "Connected successfully!");
 
             if (receiveActionQueue == null)
                 Connected?.Invoke(this, e);
@@ -334,7 +333,7 @@ namespace RiptideNetworking
         public event EventHandler ConnectionFailed;
         private void OnConnectionFailed(EventArgs e)
         {
-            RiptideLogger.Log(logName, "Connection to server failed!");
+            RiptideLogger.Log(LogName, "Connection to server failed!");
 
             if (receiveActionQueue == null)
                 ConnectionFailed?.Invoke(this, e);
@@ -351,7 +350,7 @@ namespace RiptideNetworking
         public event EventHandler Disconnected;
         private void OnDisconnected(EventArgs e)
         {
-            RiptideLogger.Log(logName, "Disconnected from server.");
+            RiptideLogger.Log(LogName, "Disconnected from server.");
 
             if (receiveActionQueue == null)
                 Disconnected?.Invoke(this, e);
@@ -363,7 +362,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(logName, $"Client {e.Id} connected.");
+            RiptideLogger.Log(LogName, $"Client {e.Id} connected.");
 
             if (receiveActionQueue == null)
                 ClientConnected?.Invoke(this, e);
@@ -374,7 +373,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(logName, $"Client {e.Id} disconnected.");
+            RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
 
             if (receiveActionQueue == null)
                 ClientDisconnected?.Invoke(this, e);
