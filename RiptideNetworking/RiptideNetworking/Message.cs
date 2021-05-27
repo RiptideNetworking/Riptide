@@ -37,11 +37,11 @@ namespace RiptideNetworking
 
         /// <summary>How many bytes a bool is represented by.</summary>
         public const byte boolLength = sizeof(bool);
-        /// <summary>How many bytes a short is represented by.</summary>
+        /// <summary>How many bytes a short (or ushort) is represented by.</summary>
         public const byte shortLength = sizeof(short);
-        /// <summary>How many bytes an int is represented by.</summary>
+        /// <summary>How many bytes an int (or uint) is represented by.</summary>
         public const byte intLength = sizeof(int);
-        /// <summary>How many bytes a long is represented by.</summary>
+        /// <summary>How many bytes a long (or ulong) is represented by.</summary>
         public const byte longLength = sizeof(long);
         /// <summary>How many bytes a float is represented by.</summary>
         public const byte floatLength = sizeof(float);
@@ -52,6 +52,7 @@ namespace RiptideNetworking
         public int Length { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => Length - readPos;
+        internal int UnwrittenLength => Length - writePos;
         internal MessageSendMode SendMode { get; private set; }
         internal byte[] Bytes { get; private set; }
 
@@ -168,6 +169,9 @@ namespace RiptideNetworking
         /// <param name="value">The byte to add.</param>
         public void Add(byte value)
         {
+            if (UnwrittenLength < 1)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte'!");
+
             Bytes[writePos++] = value;
         }
 
@@ -175,6 +179,9 @@ namespace RiptideNetworking
         /// <param name="value">The byte array to add.</param>
         public void Add(byte[] value)
         {
+            if (UnwrittenLength < value.Length)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte[]'!");
+
             Array.Copy(value, 0, Bytes, writePos, value.Length);
             writePos += (ushort)value.Length;
         }
@@ -183,7 +190,7 @@ namespace RiptideNetworking
         public byte GetByte()
         {
             if (UnreadLength < 1)
-                throw new Exception("Message contains insufficient bytes to read type 'byte'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte'!");
             
             // If there are enough unread bytes
             byte value = Bytes[readPos]; // Get the byte at readPos' position
@@ -196,7 +203,7 @@ namespace RiptideNetworking
         public byte[] GetBytes(int length)
         {
             if (UnreadLength < length)
-                throw new Exception("Message contains insufficient bytes to read type 'byte[]'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]'!");
 
             // If there are enough unread bytes
             byte[] value = new byte[length];
@@ -211,6 +218,9 @@ namespace RiptideNetworking
         /// <param name="value">The bool to add.</param>
         public void Add(bool value)
         {
+            if (UnwrittenLength < boolLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'bool'!");
+
             Bytes[writePos++] = BitConverter.GetBytes(value)[0];
         }
 
@@ -218,7 +228,7 @@ namespace RiptideNetworking
         public bool GetBool()
         {
             if (UnreadLength < boolLength)
-                throw new Exception("Message contains insufficient bytes to read type 'bool'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool'!");
             
             // If there are enough unread bytes
             bool value = BitConverter.ToBoolean(Bytes, readPos); // Convert the bytes at readPos' position to a bool
@@ -260,6 +270,9 @@ namespace RiptideNetworking
         /// <param name="value">The short to add.</param>
         public void Add(short value)
         {
+            if (UnwrittenLength < shortLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'short'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -269,7 +282,7 @@ namespace RiptideNetworking
         public short GetShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception("Message contains insufficient bytes to read type 'short'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(shortLength);
@@ -312,6 +325,9 @@ namespace RiptideNetworking
         /// <param name="value">The ushort to add.</param>
         public void Add(ushort value)
         {
+            if (UnwrittenLength < shortLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ushort'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -321,7 +337,7 @@ namespace RiptideNetworking
         public ushort GetUShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception("Message contains insufficient bytes to read type 'ushort'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(shortLength);
@@ -334,7 +350,7 @@ namespace RiptideNetworking
         internal ushort PeekUShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception("Message contains insufficient bytes to peek type 'ushort'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort'!");
             
             // If there are enough unread bytes
             byte[] bytesToConvert = new byte[shortLength];
@@ -376,6 +392,9 @@ namespace RiptideNetworking
         /// <param name="value">The int to add.</param>
         public void Add(int value)
         {
+            if (UnwrittenLength < intLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'int'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -387,7 +406,7 @@ namespace RiptideNetworking
         public int GetInt()
         {
             if (UnreadLength < intLength)
-                throw new Exception("Message contains insufficient bytes to read type 'int'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(intLength);
@@ -430,6 +449,9 @@ namespace RiptideNetworking
         /// <param name="value">The uint to add.</param>
         public void Add(uint value)
         {
+            if (UnwrittenLength < intLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'uint'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -441,7 +463,7 @@ namespace RiptideNetworking
         public uint GetUInt()
         {
             if (UnreadLength < intLength)
-                throw new Exception("Message contains insufficient bytes to read type 'uint'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(intLength);
@@ -484,6 +506,9 @@ namespace RiptideNetworking
         /// <param name="value">The long to add.</param>
         public void Add(long value)
         {
+            if (UnwrittenLength < longLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'long'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -499,7 +524,7 @@ namespace RiptideNetworking
         public long GetLong()
         {
             if (UnreadLength < longLength)
-                throw new Exception("Message contains insufficient bytes to read type 'long'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(longLength);
@@ -542,6 +567,9 @@ namespace RiptideNetworking
         /// <param name="value">The ulong to add.</param>
         public void Add(ulong value)
         {
+            if (UnwrittenLength < longLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ulong'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -557,7 +585,7 @@ namespace RiptideNetworking
         public ulong GetULong()
         {
             if (UnreadLength < longLength)
-                throw new Exception("Message contains insufficient bytes to read type 'ulong'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(longLength);
@@ -600,6 +628,9 @@ namespace RiptideNetworking
         /// <param name="value">The float to add.</param>
         public void Add(float value)
         {
+            if (UnwrittenLength < floatLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'float'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -611,7 +642,7 @@ namespace RiptideNetworking
         public float GetFloat()
         {
             if (UnreadLength < floatLength)
-                throw new Exception("Message contains insufficient bytes to read type 'float'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(floatLength);
@@ -654,6 +685,9 @@ namespace RiptideNetworking
         /// <param name="value">The double to add.</param>
         public void Add(double value)
         {
+            if (UnwrittenLength < doubleLength)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'double'!");
+
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
@@ -669,7 +703,7 @@ namespace RiptideNetworking
         public double GetDouble()
         {
             if (UnreadLength < doubleLength)
-                throw new Exception("Message contains insufficient bytes to read type 'double'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double'!");
             
             // If there are enough unread bytes
             StandardizeEndianness(doubleLength);
@@ -701,9 +735,8 @@ namespace RiptideNetworking
         {
             double[] array = new double[length];
             for (int i = 0; i < array.Length; i++)
-            {
                 array[i] = GetDouble();
-            }
+
             return array;
         }
         #endregion
@@ -713,16 +746,21 @@ namespace RiptideNetworking
         /// <param name="value">The string to add.</param>
         public void Add(string value)
         {
-            Add((ushort)value.Length); // Add the length of the string to the message
-            Add(Encoding.UTF8.GetBytes(value)); // Add the string itself
+            byte[] stringBytes = Encoding.UTF8.GetBytes(value);
+            Add((ushort)stringBytes.Length); // Add the length of the string (in bytes) to the message
+
+            if (UnwrittenLength < stringBytes.Length)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'string'!");
+
+            Add(stringBytes); // Add the string itself
         }
 
         /// <summary>Reads a string from the message.</summary>
         public string GetString()
         {
-            ushort length = GetUShort(); // Get the length of the string
+            ushort length = GetUShort(); // Get the length of the string (in bytes)
             if (UnreadLength < length)
-                throw new Exception("Message contains insufficient bytes to read type 'string'!");
+                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string'!");
             
             string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
             readPos += length;
