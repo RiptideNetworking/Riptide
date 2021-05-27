@@ -13,9 +13,7 @@ public class UIManager : MonoBehaviour
         private set
         {
             if (_singleton == null)
-            {
                 _singleton = value;
-            }
             else if (_singleton != value)
             {
                 Debug.Log($"{nameof(UIManager)} instance already exists, destroying object!");

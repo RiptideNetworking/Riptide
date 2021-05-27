@@ -24,9 +24,7 @@ public class NetworkManager : MonoBehaviour
         private set
         {
             if (_singleton == null)
-            {
                 _singleton = value;
-            }
             else if (_singleton != value)
             {
                 Debug.Log($"{nameof(NetworkManager)} instance already exists, destroying object!");
@@ -41,8 +39,8 @@ public class NetworkManager : MonoBehaviour
     [SerializeField] private GameObject localPlayerPrefab;
     [SerializeField] private GameObject playerPrefab;
 
-    public GameObject LocalPlayerPrefab { get => localPlayerPrefab; }
-    public GameObject PlayerPrefab { get => playerPrefab; }
+    public GameObject LocalPlayerPrefab => localPlayerPrefab;
+    public GameObject PlayerPrefab => playerPrefab;
 
     public Client Client { get; private set; }
     private ActionQueue actionQueue;
@@ -68,6 +66,7 @@ public class NetworkManager : MonoBehaviour
         Client.ConnectionFailed += FailedToConnect;
         Client.MessageReceived += MessageReceived;
         Client.ClientDisconnected += PlayerLeft;
+        Client.Disconnected += DidDisconnect;
     }
 
     private void FixedUpdate()
@@ -78,6 +77,12 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         Client.Disconnect();
+
+        Client.Connected -= DidConnect;
+        Client.ConnectionFailed -= FailedToConnect;
+        Client.MessageReceived -= MessageReceived;
+        Client.ClientDisconnected -= PlayerLeft;
+        Client.Disconnected -= DidDisconnect;
     }
 
     public void Connect()
@@ -108,5 +113,10 @@ public class NetworkManager : MonoBehaviour
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
     {
         Destroy(Player.list[e.Id].gameObject);
+    }
+
+    private void DidDisconnect(object sender, EventArgs e)
+    {
+        UIManager.Singleton.BackToMain();
     }
 }

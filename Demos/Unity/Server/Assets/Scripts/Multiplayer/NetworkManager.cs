@@ -23,9 +23,7 @@ public class NetworkManager : MonoBehaviour
         private set
         {
             if (_singleton == null)
-            {
                 _singleton = value;
-            }
             else if (_singleton != value)
             {
                 Debug.Log($"{nameof(NetworkManager)} instance already exists, destroying object!");
@@ -38,7 +36,7 @@ public class NetworkManager : MonoBehaviour
     [SerializeField] private ushort maxClientCount;
     [SerializeField] private GameObject playerPrefab;
 
-    public GameObject PlayerPrefab { get => playerPrefab; }
+    public GameObject PlayerPrefab => playerPrefab;
 
     public Server Server { get; private set; }
     private ActionQueue actionQueue;
@@ -92,6 +90,10 @@ public class NetworkManager : MonoBehaviour
     private void OnApplicationQuit()
     {
         Server.Stop();
+
+        Server.ClientConnected -= NewPlayerConnected;
+        Server.MessageReceived -= MessageReceived;
+        Server.ClientDisconnected -= PlayerLeft;
     }
 
     private void NewPlayerConnected(object sender, ServerClientConnectedEventArgs e)
@@ -99,9 +101,7 @@ public class NetworkManager : MonoBehaviour
         foreach (Player player in Player.List.Values)
         {
             if (player.Id != e.Client.Id)
-            {
                 player.SendSpawn(e.Client);
-            }
         }
     }
 

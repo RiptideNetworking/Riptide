@@ -14,11 +14,8 @@ public class Player : MonoBehaviour
     {
         transform.position = newPosition;
 
-        if (id != NetworkManager.Singleton.Client.Id)
-        {
-            // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
+        if (id != NetworkManager.Singleton.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
             transform.forward = forward;
-        }
     }
 
     private void OnDestroy()
@@ -30,13 +27,9 @@ public class Player : MonoBehaviour
     {
         Player player;
         if (id == NetworkManager.Singleton.Client.Id)
-        {
             player = Instantiate(NetworkManager.Singleton.LocalPlayerPrefab, position, Quaternion.identity).GetComponent<Player>();
-        }
         else
-        {
             player = Instantiate(NetworkManager.Singleton.PlayerPrefab, position, Quaternion.identity).GetComponent<Player>();
-        }
 
         player.name = $"Player {id} ({username})";
         player.id = id;

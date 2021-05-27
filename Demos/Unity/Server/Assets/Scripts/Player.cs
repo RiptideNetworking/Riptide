@@ -38,22 +38,17 @@ public class Player : MonoBehaviour
     {
         Vector2 inputDirection = Vector2.zero;
         if (inputs[0])
-        {
             inputDirection.y += 1;
-        }
-        if (inputs[1])
-        {
-            inputDirection.y -= 1;
-        }
-        if (inputs[2])
-        {
-            inputDirection.x -= 1;
-        }
-        if (inputs[3])
-        {
-            inputDirection.x += 1;
-        }
 
+        if (inputs[1])
+            inputDirection.y -= 1;
+
+        if (inputs[2])
+            inputDirection.x -= 1;
+
+        if (inputs[3])
+            inputDirection.x += 1;
+        
         Move(inputDirection);
     }
 
@@ -66,9 +61,7 @@ public class Player : MonoBehaviour
         {
             yVelocity = 0f;
             if (inputs[4])
-            {
                 yVelocity = jumpSpeed;
-            }
         }
         yVelocity += gravity;
 
