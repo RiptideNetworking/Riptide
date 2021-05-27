@@ -168,23 +168,25 @@ namespace RiptideNetworking
         #region Byte
         /// <summary>Adds a byte to the message.</summary>
         /// <param name="value">The byte to add.</param>
-        public void Add(byte value)
+        public Message Add(byte value)
         {
             if (UnwrittenLength < 1)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte'!");
 
             Bytes[writePos++] = value;
+            return this;
         }
 
         /// <summary>Adds an array of bytes to the message.</summary>
         /// <param name="value">The byte array to add.</param>
-        public void Add(byte[] value)
+        public Message Add(byte[] value)
         {
             if (UnwrittenLength < value.Length)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte[]'!");
 
             Array.Copy(value, 0, Bytes, writePos, value.Length);
             writePos += (ushort)value.Length;
+            return this;
         }
 
         /// <summary>Reads a byte from the message.</summary>
@@ -201,7 +203,7 @@ namespace RiptideNetworking
 
         /// <summary>Reads an array of bytes from the message.</summary>
         /// <param name="length">The length of the byte array.</param>
-        public byte[] GetBytes(int length)
+        public byte[] GetByteArray(int length)
         {
             if (UnreadLength < length)
                 throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]'!");
@@ -217,12 +219,13 @@ namespace RiptideNetworking
         #region Bool
         /// <summary>Adds a bool to the message.</summary>
         /// <param name="value">The bool to add.</param>
-        public void Add(bool value)
+        public Message Add(bool value)
         {
             if (UnwrittenLength < boolLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'bool'!");
 
             Bytes[writePos++] = BitConverter.GetBytes(value)[0];
+            return this;
         }
 
         /// <summary>Reads a bool from the message.</summary>
@@ -240,7 +243,7 @@ namespace RiptideNetworking
         /// <summary>Adds an array of bools to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(bool[] array, bool includeLength = true)
+        public Message Add(bool[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
@@ -249,6 +252,7 @@ namespace RiptideNetworking
             byte[] bytes = new byte[array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1)];
             bits.CopyTo(bytes, 0);
             Add(bytes);
+            return this;
         }
 
         /// <summary>Reads an array of bools from the message.</summary>
@@ -260,7 +264,7 @@ namespace RiptideNetworking
         /// <param name="length">The length of the array.</param>
         public bool[] GetBoolArray(ushort length)
         {
-            byte[] bytes = GetBytes(length / 8 + (length % 8 == 0 ? 0 : 1));
+            byte[] bytes = GetByteArray(length / 8 + (length % 8 == 0 ? 0 : 1));
             BitArray bits = new BitArray(bytes);
             bool[] array = new bool[length];
             for (int i = 0; i < array.Length; i++)
@@ -273,7 +277,7 @@ namespace RiptideNetworking
         #region Short
         /// <summary>Adds a short to the message.</summary>
         /// <param name="value">The short to add.</param>
-        public void Add(short value)
+        public Message Add(short value)
         {
             if (UnwrittenLength < shortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'short'!");
@@ -281,6 +285,7 @@ namespace RiptideNetworking
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
+            return this;
         }
 
         /// <summary>Reads a short from the message.</summary>
@@ -299,13 +304,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of shorts to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(short[] array, bool includeLength = true)
+        public Message Add(short[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of shorts from the message.</summary>
@@ -328,7 +335,7 @@ namespace RiptideNetworking
         #region UShort
         /// <summary>Adds a ushort to the message.</summary>
         /// <param name="value">The ushort to add.</param>
-        public void Add(ushort value)
+        public Message Add(ushort value)
         {
             if (UnwrittenLength < shortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ushort'!");
@@ -336,6 +343,7 @@ namespace RiptideNetworking
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
+            return this;
         }
 
         /// <summary>Reads a ushort from the message.</summary>
@@ -366,13 +374,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of ushorts to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(ushort[] array, bool includeLength = true)
+        public Message Add(ushort[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of ushorts from the message.</summary>
@@ -395,7 +405,7 @@ namespace RiptideNetworking
         #region Int
         /// <summary>Adds an int to the message.</summary>
         /// <param name="value">The int to add.</param>
-        public void Add(int value)
+        public Message Add(int value)
         {
             if (UnwrittenLength < intLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'int'!");
@@ -405,6 +415,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
             Bytes[writePos++] = valueBytes[3];
+            return this;
         }
 
         /// <summary>Reads an int from the message.</summary>
@@ -423,13 +434,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of ints to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(int[] array, bool includeLength = true)
+        public Message Add(int[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of ints from the message.</summary>
@@ -452,7 +465,7 @@ namespace RiptideNetworking
         #region UInt
         /// <summary>Adds a uint to the message.</summary>
         /// <param name="value">The uint to add.</param>
-        public void Add(uint value)
+        public Message Add(uint value)
         {
             if (UnwrittenLength < intLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'uint'!");
@@ -462,6 +475,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
             Bytes[writePos++] = valueBytes[3];
+            return this;
         }
 
         /// <summary>Reads a uint from the message.</summary>
@@ -480,13 +494,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of uints to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(uint[] array, bool includeLength = true)
+        public Message Add(uint[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of uints from the message.</summary>
@@ -509,7 +525,7 @@ namespace RiptideNetworking
         #region Long
         /// <summary>Adds a long to the message.</summary>
         /// <param name="value">The long to add.</param>
-        public void Add(long value)
+        public Message Add(long value)
         {
             if (UnwrittenLength < longLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'long'!");
@@ -523,6 +539,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[5];
             Bytes[writePos++] = valueBytes[6];
             Bytes[writePos++] = valueBytes[7];
+            return this;
         }
 
         /// <summary>Reads a long from the message.</summary>
@@ -541,13 +558,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of longs to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(long[] array, bool includeLength = true)
+        public Message Add(long[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of longs from the message.</summary>
@@ -570,7 +589,7 @@ namespace RiptideNetworking
         #region ULong
         /// <summary>Adds a ulong to the message.</summary>
         /// <param name="value">The ulong to add.</param>
-        public void Add(ulong value)
+        public Message Add(ulong value)
         {
             if (UnwrittenLength < longLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ulong'!");
@@ -584,6 +603,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[5];
             Bytes[writePos++] = valueBytes[6];
             Bytes[writePos++] = valueBytes[7];
+            return this;
         }
 
         /// <summary>Reads a ulong from the message.</summary>
@@ -602,13 +622,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of ulongs to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(ulong[] array, bool includeLength = true)
+        public Message Add(ulong[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of ulongs from the message.</summary>
@@ -631,7 +653,7 @@ namespace RiptideNetworking
         #region Float
         /// <summary>Adds a float to the message.</summary>
         /// <param name="value">The float to add.</param>
-        public void Add(float value)
+        public Message Add(float value)
         {
             if (UnwrittenLength < floatLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'float'!");
@@ -641,6 +663,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
             Bytes[writePos++] = valueBytes[3];
+            return this;
         }
 
         /// <summary>Reads a float from the message.</summary>
@@ -659,13 +682,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of floats to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(float[] array, bool includeLength = true)
+        public Message Add(float[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of floats from the message.</summary>
@@ -688,7 +713,7 @@ namespace RiptideNetworking
         #region Double
         /// <summary>Adds a double to the message.</summary>
         /// <param name="value">The double to add.</param>
-        public void Add(double value)
+        public Message Add(double value)
         {
             if (UnwrittenLength < doubleLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'double'!");
@@ -702,6 +727,7 @@ namespace RiptideNetworking
             Bytes[writePos++] = valueBytes[5];
             Bytes[writePos++] = valueBytes[6];
             Bytes[writePos++] = valueBytes[7];
+            return this;
         }
 
         /// <summary>Reads a double from the message.</summary>
@@ -720,13 +746,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of doubles to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(double[] array, bool includeLength = true)
+        public Message Add(double[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of doubles from the message.</summary>
@@ -749,7 +777,7 @@ namespace RiptideNetworking
         #region String
         /// <summary>Adds a string to the message.</summary>
         /// <param name="value">The string to add.</param>
-        public void Add(string value)
+        public Message Add(string value)
         {
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
             Add((ushort)stringBytes.Length); // Add the length of the string (in bytes) to the message
@@ -758,6 +786,7 @@ namespace RiptideNetworking
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'string'!");
 
             Add(stringBytes); // Add the string itself
+            return this;
         }
 
         /// <summary>Reads a string from the message.</summary>
@@ -775,13 +804,15 @@ namespace RiptideNetworking
         /// <summary>Adds an array of strings to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
-        public void Add(string[] array, bool includeLength = true)
+        public Message Add(string[] array, bool includeLength = true)
         {
             if (includeLength)
                 Add((ushort)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 Add(array[i]);
+
+            return this;
         }
 
         /// <summary>Reads an array of strings from the message.</summary>
