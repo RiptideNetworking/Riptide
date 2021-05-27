@@ -192,13 +192,13 @@
             <summary>How many bytes a bool is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.shortLength">
-            <summary>How many bytes a short is represented by.</summary>
+            <summary>How many bytes a short (or ushort) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.intLength">
-            <summary>How many bytes an int is represented by.</summary>
+            <summary>How many bytes an int (or uint) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.longLength">
-            <summary>How many bytes a long is represented by.</summary>
+            <summary>How many bytes a long (or ulong) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.floatLength">
             <summary>How many bytes a float is represented by.</summary>

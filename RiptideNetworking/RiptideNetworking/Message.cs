@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
@@ -52,7 +53,7 @@ namespace RiptideNetworking
         public int Length { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => Length - readPos;
-        internal int UnwrittenLength => Length - writePos;
+        internal int UnwrittenLength => Bytes.Length - writePos;
         internal MessageSendMode SendMode { get; private set; }
         internal byte[] Bytes { get; private set; }
 
@@ -244,8 +245,10 @@ namespace RiptideNetworking
             if (includeLength)
                 Add((ushort)array.Length);
 
-            for (int i = 0; i < array.Length; i++)
-                Add(array[i]);
+            BitArray bits = new BitArray(array);
+            byte[] bytes = new byte[array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1)];
+            bits.CopyTo(bytes, 0);
+            Add(bytes);
         }
 
         /// <summary>Reads an array of bools from the message.</summary>
@@ -257,9 +260,11 @@ namespace RiptideNetworking
         /// <param name="length">The length of the array.</param>
         public bool[] GetBoolArray(ushort length)
         {
+            byte[] bytes = GetBytes(length / 8 + (length % 8 == 0 ? 0 : 1));
+            BitArray bits = new BitArray(bytes);
             bool[] array = new bool[length];
             for (int i = 0; i < array.Length; i++)
-                array[i] = GetBool();
+                array[i] = bits.Get(i);
 
             return array;
         }
