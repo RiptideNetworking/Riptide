@@ -45,6 +45,9 @@ namespace RiptideNetworking
                 logMethod($"({logName}): {message}");
         }
 
+        /// <summary>Converts a DateTime object to a formatted timestamp string.</summary>
+        /// <param name="time">The time to format.</param>
+        /// <returns>The formatted timestamp.</returns>
         private static string GetTimestamp(DateTime time)
         {
             return time.ToString(timestampFormat);

@@ -36,12 +36,15 @@ namespace RiptideNetworking
 
         /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
         private Dictionary<IPEndPoint, ServerClient> clients;
+        /// <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
         private ActionQueue receiveActionQueue;
+        /// <summary>All currently unused client IDs.</summary>
         private List<ushort> availableClientIds;
+        /// <summary>The timer responsible for sending regular heartbeats.</summary>
         private Timer heartbeatTimer;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name of this server instance. Used when logging messages.</param>
+        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
         public Server(string logName = "SERVER") : base(logName) { }
 
         /// <summary>Starts the server.</summary>
@@ -67,6 +70,7 @@ namespace RiptideNetworking
             IsRunning = true;
         }
 
+        /// <summary>Checks if clients have timed out. Called by the heartbeat timer.</summary>
         private void Heartbeat(object state)
         {
             lock (clients)
@@ -79,24 +83,30 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+        /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
         /// <param name="firstByte">The first byte of the message.</param>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             if (clients.ContainsKey(endPoint))
             {
-                if ((HeaderType)firstByte != HeaderType.connect)
+                // Client is already connected
+                if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
                     return true;
             }
             else if (clients.Count < MaxClientCount)
             {
-                if ((HeaderType)firstByte == HeaderType.connect)
+                // Client is not yet connected and the server has capacity
+                if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
                     clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
             }
             return false;
         }
 
+        /// <summary>Handles the given data.</summary>
+        /// <param name="data">The data to handle.</param>
+        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        /// <param name="headerType">The header type of the data.</param>
         internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
 #if DETAILED_LOGGING
@@ -105,6 +115,7 @@ namespace RiptideNetworking
 #endif
             switch (headerType)
             {
+                // User messages
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
                     if (receiveActionQueue == null)
@@ -140,6 +151,8 @@ namespace RiptideNetworking
                         });
                     }
                     break;
+
+                // Internal messages
                 case HeaderType.ack:
                     clients[fromEndPoint].HandleAck(Message.CreateInternal(headerType, data));
                     break;
@@ -162,10 +175,14 @@ namespace RiptideNetworking
                     HandleDisconnect(fromEndPoint);
                     break;
                 default:
-                    throw new Exception($"Unknown message header type: {headerType}");
+                    throw new Exception($"Unknown message header type '{headerType}'!");
             }
         }
 
+        /// <summary>Handles the given reliably sent data.</summary>
+        /// <param name="data">The reliably sent data.</param>
+        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        /// <param name="headerType">The header type of the data.</param>
         internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
@@ -179,6 +196,7 @@ namespace RiptideNetworking
             clients[toEndPoint].SendAck(forSeqId);
         }
 
+        /// <summary>Initializes available client IDs.</summary>
         private void InitializeClientIds()
         {
             availableClientIds = new List<ushort>(MaxClientCount);
@@ -186,6 +204,8 @@ namespace RiptideNetworking
                 availableClientIds.Add(i);
         }
 
+        /// <summary>Retrieves an available client ID.</summary>
+        /// <returns>The client ID. 0 if none available.</returns>
         private ushort GetAvailableClientId()
         {
             if (availableClientIds.Count > 0)
@@ -285,11 +305,15 @@ namespace RiptideNetworking
         }
 
         #region Messages
+        /// <summary>Sends a disconnect message.</summary>
+        /// <param name="client">The client to send the disconnect message to.</param>
         private void SendDisconnect(ServerClient client)
         {
             Send(Message.CreateInternal(HeaderType.disconnect), client);
         }
 
+        /// <summary>Handles a disconnect message.</summary>
+        /// <param name="fromEndPoint">The endpoint from which the disconnect message was received.</param>
         private void HandleDisconnect(IPEndPoint fromEndPoint)
         {
             if (clients.TryGetValue(fromEndPoint, out ServerClient client))
@@ -302,6 +326,9 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Sends a client connected message.</summary>
+        /// <param name="endPoint">The endpoint of the newly connected client.</param>
+        /// <param name="id">The ID of the newly connected client.</param>
         private void SendClientConnected(IPEndPoint endPoint, ushort id)
         {
             Message message = Message.CreateInternal(HeaderType.clientConnected);
@@ -312,6 +339,8 @@ namespace RiptideNetworking
                     Send(message, client, 5);
         }
 
+        /// <summary>Sends a client disconnected message.</summary>
+        /// <param name="id">The ID of the client that disconnected.</param>
         private void SendClientDisconnected(ushort id)
         {
             Message message = Message.CreateInternal(HeaderType.clientDisconnected);

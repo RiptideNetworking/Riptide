@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RiptideNetworking
 {
-    /// <summary>The send mode for a message.</summary>
+    /// <summary>The send mode of a message.</summary>
     public enum MessageSendMode : byte
     {
         /// <summary>Unreliable send mode.</summary>
@@ -14,26 +14,41 @@ namespace RiptideNetworking
         reliable = HeaderType.reliable,
     }
 
+    /// <summary>The header type of a message.</summary>
     internal enum HeaderType : byte
     {
+        /// <summary>For unreliable user messages.</summary>
         unreliable,
+        /// <summary>For unreliable internal ack messages.</summary>
         ack,
+        /// <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
         ackExtra,
+        /// <summary>For unreliable internal connect messages.</summary>
         connect,
+        /// <summary>For unreliable internal heartbeat messages.</summary>
         heartbeat,
+        /// <summary>For unreliable internal disconnect messages.</summary>
         disconnect,
+        /// <summary>For reliable user messages.</summary>
         reliable,
+        /// <summary>For reliable internal welcome messages.</summary>
         welcome,
+        /// <summary>For reliable internal client connected messages.</summary>
         clientConnected,
+        /// <summary>For reliable internal client disconnected messages.</summary>
         clientDisconnected,
     }
 
     /// <summary>Represents a packet.</summary>
     public class Message
     {
+        /// <summary>The message instance used for sending user messages.</summary>
         private static readonly Message send = new Message();
+        /// <summary>The message instance used for sending internal messages.</summary>
         private static readonly Message sendInternal = new Message();
+        /// <summary>The message instance used for handling user messages.</summary>
         private static readonly Message handle = new Message();
+        /// <summary>The message instance used for handling internal messages.</summary>
         private static readonly Message handleInternal = new Message();
 
         /// <summary>How many bytes a bool is represented by.</summary>
@@ -53,13 +68,20 @@ namespace RiptideNetworking
         public int Length { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => Length - readPos;
+        /// <summary>How many more bytes can be written into the packet.</summary>
         internal int UnwrittenLength => Bytes.Length - writePos;
+        /// <summary>The message's send mode.</summary>
         internal MessageSendMode SendMode { get; private set; }
+        /// <summary>The message's data.</summary>
         internal byte[] Bytes { get; private set; }
 
+        /// <summary>The position in the byte array that the next bytes will be written to.</summary>
         private ushort writePos = 0;
+        /// <summary>The position in the byte array that the next bytes will be read from.</summary>
         private ushort readPos = 0;
 
+        /// <summary>Initializes a reusable Message instance.</summary>
+        /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         private Message(ushort maxSize = 1500)
         {
             Bytes = new byte[maxSize];

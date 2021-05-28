@@ -16,17 +16,27 @@ namespace RiptideNetworking
         public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => connectionState == ConnectionState.connected;
-        /// <summary>The remote endpoint.</summary>
+        /// <summary>The connetion's remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 
+        /// <summary>The client's Rudp instance.</summary>
         internal Rudp Rudp { get; private set; }
+        /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
         internal SendLockables SendLockables => Rudp.SendLockables;
+        /// <summary>Whether or not the client has timed out.</summary>
         internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime;
 
+        /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
+        /// <summary>The server instance the client is associated with.</summary>
         private readonly Server server;
+        /// <summary>The client's current connection state.</summary>
         private ConnectionState connectionState = ConnectionState.notConnected;
 
+        /// <summary>Initializes a ServerClient instance.</summary>
+        /// <param name="server">The server this client is associated with.</param>
+        /// <param name="endPoint">The remote endpoint of the client.</param>
+        /// <param name="id">The ID of the client.</param>
         internal ServerClient(Server server, IPEndPoint endPoint, ushort id)
         {
             this.server = server;
@@ -39,12 +49,15 @@ namespace RiptideNetworking
             SendWelcome();
         }
 
+        /// <summary>Cleans up local objects on disconnection.</summary>
         internal void Disconnect()
         {
             connectionState = ConnectionState.notConnected;
         }
 
         #region Messages
+        /// <summary>Sends an ack message for a sequence ID to a specific endpoint.</summary>
+        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         internal void SendAck(ushort forSeqId)
         {
             Message message = Message.CreateInternal(forSeqId == Rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
@@ -60,25 +73,30 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Handles an ack message.</summary>
+        /// <param name="message">The ack message to handle.</param>
         internal void HandleAck(Message message)
         {
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
 
-            Rudp.AckMessage(remoteLastReceivedSeqId);
+            Rudp.AckMessage(remoteLastReceivedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
             Rudp.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
+        /// <summary>Handles an ack message for a sequence ID other than the last received one.</summary>
+        /// <param name="message">The ack message to handle.</param>
         internal void HandleAckExtra(Message message)
         {
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
             ushort ackedSeqId = message.GetUShort();
 
-            Rudp.AckMessage(ackedSeqId);
+            Rudp.AckMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
             Rudp.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
+        /// <summary>Sends a heartbeat message.</summary>
         internal void SendHeartbeat(byte pingId)
         {
             Message message = Message.CreateInternal(HeaderType.heartbeat);
@@ -87,6 +105,8 @@ namespace RiptideNetworking
             server.Send(message, this);
         }
 
+        /// <summary>Handles a heartbeat message.</summary>
+        /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeat(Message message)
         {
             SendHeartbeat(message.GetByte());
@@ -95,6 +115,7 @@ namespace RiptideNetworking
             lastHeartbeat = DateTime.UtcNow;
         }
 
+        /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
             Message message = Message.CreateInternal(HeaderType.welcome);
@@ -103,6 +124,8 @@ namespace RiptideNetworking
             server.Send(message, this, 5);
         }
 
+        /// <summary>Handles a welcome message.</summary>
+        /// <param name="message">The welcome message to handle.</param>
         internal void HandleWelcomeReceived(Message message)
         {
             if (connectionState == ConnectionState.connected)
