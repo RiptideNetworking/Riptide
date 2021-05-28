@@ -204,11 +204,11 @@ namespace RiptideNetworking
             {
 #if DETAILED_LOGGING
                 if ((HeaderType)data[0] == HeaderType.reliable)
-                    RiptideLogger.Log(logName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
                 else if ((HeaderType)data[0] == HeaderType.unreliable)
-                    RiptideLogger.Log(logName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
                 else
-                    RiptideLogger.Log(logName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
 #endif
                 socket.SendTo(data, toEndPoint);
             }

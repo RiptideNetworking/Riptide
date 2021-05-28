@@ -50,7 +50,11 @@ namespace RiptideNetworking
         /// <returns>The formatted timestamp.</returns>
         private static string GetTimestamp(DateTime time)
         {
+#if DETAILED_LOGGING
+            return time.ToString("HH:mm:ss:fff");
+#else
             return time.ToString(timestampFormat);
+#endif
         }
     }
 }

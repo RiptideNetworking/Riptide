@@ -129,7 +129,7 @@ namespace RiptideNetworking
         {
 #if DETAILED_LOGGING
             if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
-                RiptideLogger.Log(logName, $"Received {headerType} message from {fromEndPoint}.");
+                RiptideLogger.Log(LogName, $"Received {headerType} message from {fromEndPoint}.");
 #endif
 
             switch (headerType)
@@ -143,9 +143,9 @@ namespace RiptideNetworking
 #if DETAILED_LOGGING
                         ushort messageId = message.PeekUShort();
                         if (headerType == HeaderType.reliable)
-                            RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                            RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                         else if (headerType == HeaderType.unreliable)
-                            RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+                            RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
                         OnMessageReceived(new ClientMessageReceivedEventArgs(message));
                     }
@@ -157,9 +157,9 @@ namespace RiptideNetworking
 #if DETAILED_LOGGING
                             ushort messageId = message.PeekUShort();
                             if (headerType == HeaderType.reliable)
-                                RiptideLogger.Log(logName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+                                RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
                             else if (headerType == HeaderType.unreliable)
-                                RiptideLogger.Log(logName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+                                RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
                             OnMessageReceived(new ClientMessageReceivedEventArgs(message));
                         });
