@@ -187,7 +187,7 @@ namespace RiptideNetworking
             /// <summary>Resends the message.</summary>
             internal void RetrySend()
             {
-                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * 0.5f)) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
                     TrySend();
             }
 
@@ -226,7 +226,7 @@ namespace RiptideNetworking
                 sendAttempts++;
 
                 retryTimer.Stop();
-                retryTimer.Interval = Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
+                retryTimer.Interval = rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
                 retryTimer.Start();
             }
 
