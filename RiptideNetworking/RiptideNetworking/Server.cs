@@ -88,19 +88,22 @@ namespace RiptideNetworking
         /// <param name="firstByte">The first byte of the message.</param>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
-            if (clients.ContainsKey(endPoint))
+            lock (clients)
             {
-                // Client is already connected
-                if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
-                    return true;
+                if (clients.ContainsKey(endPoint))
+                {
+                    // Client is already connected
+                    if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
+                        return true;
+                }
+                else if (clients.Count < MaxClientCount)
+                {
+                    // Client is not yet connected and the server has capacity
+                    if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
+                        clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
+                }
+                return false;
             }
-            else if (clients.Count < MaxClientCount)
-            {
-                // Client is not yet connected and the server has capacity
-                if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
-                    clients.Add(endPoint, new ServerClient(this, endPoint, GetAvailableClientId()));
-            }
-            return false;
         }
 
         /// <summary>Handles the given data.</summary>
@@ -238,15 +241,18 @@ namespace RiptideNetworking
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         public void SendToAll(Message message, byte maxSendAttempts = 3)
         {
-            if (message.SendMode == MessageSendMode.unreliable)
+            lock (clients)
             {
-                foreach (IPEndPoint clientEndPoint in clients.Keys)
-                    Send(message.Bytes, message.WrittenLength, clientEndPoint);
-            }
-            else
-            {
-                foreach (ServerClient client in clients.Values)
-                    SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                if (message.SendMode == MessageSendMode.unreliable)
+                {
+                    foreach (IPEndPoint clientEndPoint in clients.Keys)
+                        Send(message.Bytes, message.WrittenLength, clientEndPoint);
+                }
+                else
+                {
+                    foreach (ServerClient client in clients.Values)
+                        SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                }
             }
         }
 
@@ -256,17 +262,20 @@ namespace RiptideNetworking
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
         public void SendToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 3)
         {
-            if (message.SendMode == MessageSendMode.unreliable)
+            lock (clients)
             {
-                foreach (IPEndPoint clientEndPoint in clients.Keys)
-                    if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
-                        Send(message.Bytes, message.WrittenLength, clientEndPoint);
-            }
-            else
-            {
-                foreach (ServerClient client in clients.Values)
-                    if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
-                        SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                if (message.SendMode == MessageSendMode.unreliable)
+                {
+                    foreach (IPEndPoint clientEndPoint in clients.Keys)
+                        if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
+                            Send(message.Bytes, message.WrittenLength, clientEndPoint);
+                }
+                else
+                {
+                    foreach (ServerClient client in clients.Values)
+                        if (!client.remoteEndPoint.Equals(exceptToClient.remoteEndPoint))
+                            SendReliable(message, client.remoteEndPoint, client.Rudp, maxSendAttempts);
+                }
             }
         }
 
@@ -278,7 +287,8 @@ namespace RiptideNetworking
             {
                 SendDisconnect(client);
                 client.Disconnect();
-                clients.Remove(client.remoteEndPoint);
+                lock (clients)
+                    clients.Remove(client.remoteEndPoint);
 
                 RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
@@ -293,14 +303,17 @@ namespace RiptideNetworking
         public void Stop()
         {
             byte[] disconnectBytes = { (byte)HeaderType.disconnect };
-            foreach (IPEndPoint clientEndPoint in clients.Keys)
-                Send(disconnectBytes, clientEndPoint);
+            lock (clients)
+            {
+                foreach (IPEndPoint clientEndPoint in clients.Keys)
+                    Send(disconnectBytes, clientEndPoint);
+                clients.Clear();
+            }
 
             IsRunning = false;
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
             StopListening();
-            clients.Clear();
             RiptideLogger.Log(LogName, "Server stopped.");
         }
 
@@ -319,7 +332,8 @@ namespace RiptideNetworking
             if (clients.TryGetValue(fromEndPoint, out ServerClient client))
             {
                 client.Disconnect();
-                clients.Remove(fromEndPoint);
+                lock (clients)
+                    clients.Remove(fromEndPoint);
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
@@ -334,9 +348,10 @@ namespace RiptideNetworking
             Message message = Message.CreateInternal(HeaderType.clientConnected);
             message.Add(id);
 
-            foreach (ServerClient client in clients.Values)
-                if (!client.remoteEndPoint.Equals(endPoint))
-                    Send(message, client, 5);
+            lock (clients)
+                foreach (ServerClient client in clients.Values)
+                    if (!client.remoteEndPoint.Equals(endPoint))
+                        Send(message, client, 5);
         }
 
         /// <summary>Sends a client disconnected message.</summary>
@@ -346,8 +361,9 @@ namespace RiptideNetworking
             Message message = Message.CreateInternal(HeaderType.clientDisconnected);
             message.Add(id);
 
-            foreach (ServerClient client in clients.Values)
-                Send(message, client, 5);
+            lock (clients)
+                foreach (ServerClient client in clients.Values)
+                    Send(message, client, 5);
         }
         #endregion
 
