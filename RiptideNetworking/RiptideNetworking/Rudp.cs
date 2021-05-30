@@ -167,14 +167,15 @@ namespace RiptideNetworking
             /// <summary>Initializes a PendingMessage instance.</summary>
             /// <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
             /// <param name="sequenceId">The sequence ID of the message.</param>
-            /// <param name="data">The contents of the message.</param>
+            /// <param name="message">The message that is being sent reliably.</param>
             /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
             /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            internal PendingMessage(Rudp rudp, ushort sequenceId, byte[] data, IPEndPoint toEndPoint, byte maxSendAttempts)
+            internal PendingMessage(Rudp rudp, ushort sequenceId, Message message, IPEndPoint toEndPoint, byte maxSendAttempts)
             {
                 this.rudp = rudp;
                 this.sequenceId = sequenceId;
-                this.data = data;
+                data = new byte[message.WrittenLength];
+                Array.Copy(message.Bytes, data, data.Length);
                 remoteEndPoint = toEndPoint;
                 this.maxSendAttempts = maxSendAttempts;
                 sendAttempts = 0;

@@ -213,6 +213,25 @@ namespace RiptideNetworking
                 socket.SendTo(data, toEndPoint);
             }
         }
+        /// <summary>Sends data.</summary>
+        /// <param name="data">The data to send.</param>
+        /// <param name="numBytes">The number of bytes to send from the given data.</param>
+        /// <param name="toEndPoint">The endpoint to send the data to.</param>
+        internal void Send(byte[] data, int numBytes, IPEndPoint toEndPoint)
+        {
+            if (socket != null)
+            {
+#if DETAILED_LOGGING
+                if ((HeaderType)data[0] == HeaderType.reliable)
+                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
+                else if ((HeaderType)data[0] == HeaderType.unreliable)
+                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
+                else
+                    RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
+#endif
+                socket.SendTo(data, numBytes, SocketFlags.None, toEndPoint);
+            }
+        }
 
         /// <summary>Reliably sends the given message.</summary>
         /// <param name="message">The message to send reliably.</param>
@@ -227,7 +246,7 @@ namespace RiptideNetworking
             ushort sequenceId = rudp.NextSequenceId; // Get the next sequence ID
             message.SetSequenceIdBytes(sequenceId); // Set the message's sequence ID bytes
 
-            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message.Bytes, toEndPoint, maxSendAttempts);
+            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message, toEndPoint, maxSendAttempts);
             lock (rudp.PendingMessages)
             {
                 rudp.PendingMessages.Add(sequenceId, pendingMessage);

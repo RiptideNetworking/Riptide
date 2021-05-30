@@ -228,7 +228,7 @@ namespace RiptideNetworking
         public void Send(Message message, ServerClient toClient, byte maxSendAttempts = 3)
         {
             if (message.SendMode == MessageSendMode.unreliable)
-                Send(message.Bytes, toClient.remoteEndPoint);
+                Send(message.Bytes, message.WrittenLength, toClient.remoteEndPoint);
             else
                 SendReliable(message, toClient.remoteEndPoint, toClient.Rudp, maxSendAttempts);
         }
@@ -241,7 +241,7 @@ namespace RiptideNetworking
             if (message.SendMode == MessageSendMode.unreliable)
             {
                 foreach (IPEndPoint clientEndPoint in clients.Keys)
-                    Send(message.Bytes, clientEndPoint);
+                    Send(message.Bytes, message.WrittenLength, clientEndPoint);
             }
             else
             {
@@ -260,7 +260,7 @@ namespace RiptideNetworking
             {
                 foreach (IPEndPoint clientEndPoint in clients.Keys)
                     if (!clientEndPoint.Equals(exceptToClient.remoteEndPoint))
-                        Send(message.Bytes, clientEndPoint);
+                        Send(message.Bytes, message.WrittenLength, clientEndPoint);
             }
             else
             {

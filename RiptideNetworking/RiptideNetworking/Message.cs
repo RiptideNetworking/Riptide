@@ -64,10 +64,12 @@ namespace RiptideNetworking
         /// <summary>How many bytes a double is represented by.</summary>
         public const byte doubleLength = sizeof(double);
 
-        /// <summary>The length in bytes of the message's contents.</summary>
-        public int Length { get; private set; }
+        /// <summary>The length in bytes of the data that can be read from the message.</summary>
+        public int ReadableLength { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
-        public int UnreadLength => Length - readPos;
+        public int UnreadLength => ReadableLength - readPos;
+        /// <summary>The length in bytes of the data that has been written to the message.</summary>
+        public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
         internal int UnwrittenLength => Bytes.Length - writePos;
         /// <summary>The message's send mode.</summary>
@@ -150,12 +152,12 @@ namespace RiptideNetworking
             {
                 RiptideLogger.Log($"Can't fully handle {data.Length} bytes because it exceeds the maximum of {message.Bytes.Length}, message will contain incomplete data!");
                 Array.Copy(data, 0, message.Bytes, 0, message.Bytes.Length);
-                message.Length = message.Bytes.Length;
+                message.ReadableLength = message.Bytes.Length;
             }
             else
             {
                 Array.Copy(data, 0, message.Bytes, 0, data.Length);
-                message.Length = data.Length;
+                message.ReadableLength = data.Length;
             }
         }
 

@@ -208,7 +208,7 @@ namespace RiptideNetworking
         public void Send(Message message, byte maxSendAttempts = 3)
         {
             if (message.SendMode == MessageSendMode.unreliable)
-                Send(message.Bytes, remoteEndPoint);
+                Send(message.Bytes, message.WrittenLength, remoteEndPoint);
             else
                 SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
         }

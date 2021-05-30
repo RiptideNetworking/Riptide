@@ -347,11 +347,14 @@
         <member name="F:RiptideNetworking.Message.doubleLength">
             <summary>How many bytes a double is represented by.</summary>
         </member>
-        <member name="P:RiptideNetworking.Message.Length">
-            <summary>The length in bytes of the message's contents.</summary>
+        <member name="P:RiptideNetworking.Message.ReadableLength">
+            <summary>The length in bytes of the data that can be read from the message.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Message.WrittenLength">
+            <summary>The length in bytes of the data that has been written to the message.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.UnwrittenLength">
             <summary>How many more bytes can be written into the packet.</summary>
@@ -742,11 +745,11 @@
         <member name="F:RiptideNetworking.Rudp.PendingMessage.wasCleared">
             <summary>Whether the pending message has been cleared or not.</summary>
         </member>
-        <member name="M:RiptideNetworking.Rudp.PendingMessage.#ctor(RiptideNetworking.Rudp,System.UInt16,System.Byte[],System.Net.IPEndPoint,System.Byte)">
+        <member name="M:RiptideNetworking.Rudp.PendingMessage.#ctor(RiptideNetworking.Rudp,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,System.Byte)">
             <summary>Initializes a PendingMessage instance.</summary>
             <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
-            <param name="data">The contents of the message.</param>
+            <param name="message">The message that is being sent reliably.</param>
             <param name="toEndPoint">The intended destination endpoint of the message.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         </member>
@@ -836,6 +839,12 @@
         <member name="M:RiptideNetworking.RudpSocket.Send(System.Byte[],System.Net.IPEndPoint)">
             <summary>Sends data.</summary>
             <param name="data">The data to send.</param>
+            <param name="toEndPoint">The endpoint to send the data to.</param>
+        </member>
+        <member name="M:RiptideNetworking.RudpSocket.Send(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <summary>Sends data.</summary>
+            <param name="data">The data to send.</param>
+            <param name="numBytes">The number of bytes to send from the given data.</param>
             <param name="toEndPoint">The endpoint to send the data to.</param>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.SendReliable(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Rudp,System.Byte)">
