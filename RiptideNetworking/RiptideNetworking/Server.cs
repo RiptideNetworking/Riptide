@@ -178,7 +178,8 @@ namespace RiptideNetworking
                     HandleDisconnect(fromEndPoint);
                     break;
                 default:
-                    throw new Exception($"Unknown message header type '{headerType}'!");
+                    RiptideLogger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                    return;
             }
         }
 
