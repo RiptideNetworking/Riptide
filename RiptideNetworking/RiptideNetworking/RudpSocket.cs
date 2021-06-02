@@ -117,7 +117,7 @@ namespace RiptideNetworking
         /// <param name="remoteEndPoint">The endpoint from w hich the packet was received.</param>
         private void PrepareToHandle(byte[] data, int length, IPEndPoint remoteEndPoint)
         {
-            if (data == null || data.Length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
+            if (data == null || length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
                 return;
 
             byte[] messageData = new byte[length];

@@ -145,7 +145,7 @@ namespace RiptideNetworking
         private static void Create(Message message, HeaderType headerType, byte[] data)
         {
             message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            message.writePos = 0;
+            message.writePos = (ushort)data.Length;
             message.readPos = (ushort)(message.SendMode == MessageSendMode.reliable ? 3 : 1);
 
             if (data.Length > message.Bytes.Length)
