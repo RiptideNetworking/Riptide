@@ -36,6 +36,8 @@ namespace RiptideNetworking
 
         /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
         private Dictionary<IPEndPoint, ServerClient> clients;
+        /// <summary>Endpoints of clients that have timed out and need to be removed from the clients dictionary.</summary>
+        private List<IPEndPoint> timedOutClients;
         /// <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
         private ActionQueue receiveActionQueue;
         /// <summary>All currently unused client IDs.</summary>
@@ -57,6 +59,7 @@ namespace RiptideNetworking
             Port = port;
             MaxClientCount = maxClientCount;
             clients = new Dictionary<IPEndPoint, ServerClient>(MaxClientCount);
+            timedOutClients = new List<IPEndPoint>(MaxClientCount);
 
             InitializeClientIds();
 
@@ -78,8 +81,13 @@ namespace RiptideNetworking
                 foreach (ServerClient client in clients.Values)
                 {
                     if (client.HasTimedOut)
-                        HandleDisconnect(client.remoteEndPoint); // Disconnect the client
+                        timedOutClients.Add(client.remoteEndPoint);
                 }
+                
+                foreach (IPEndPoint clientEndPoint in timedOutClients)
+                    HandleDisconnect(clientEndPoint); // Disconnect the client
+
+                timedOutClients.Clear();
             }
         }
 

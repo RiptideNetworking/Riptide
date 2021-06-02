@@ -886,6 +886,9 @@
         <member name="F:RiptideNetworking.Server.clients">
             <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
         </member>
+        <member name="F:RiptideNetworking.Server.timedOutClients">
+            <summary>Endpoints of clients that have timed out and need to be removed from the clients dictionary.</summary>
+        </member>
         <member name="F:RiptideNetworking.Server.receiveActionQueue">
             <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
         </member>
