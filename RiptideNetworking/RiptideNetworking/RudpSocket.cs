@@ -125,7 +125,10 @@ namespace RiptideNetworking
 
             HeaderType headerType = (HeaderType)messageData[0];
             if (headerType >= HeaderType.reliable)
-                ReliableHandle(messageData, remoteEndPoint, headerType);
+            {
+                if (messageData.Length >= 3) // Reliable messages have a 3 byte header, so don't handle anything with less than that
+                    ReliableHandle(messageData, remoteEndPoint, headerType);
+            }
             else
                 Handle(messageData, remoteEndPoint, headerType);
         }
