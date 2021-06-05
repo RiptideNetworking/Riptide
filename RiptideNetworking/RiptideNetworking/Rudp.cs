@@ -188,13 +188,11 @@ namespace RiptideNetworking
             /// <summary>Resends the message.</summary>
             internal void RetrySend()
             {
-                if (data != null && lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * 0.5f)) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                    TrySend();
+                lock (this) // Make sure we don't try resending the message while another thread is clearing it because it was delivered
+                    if (!wasCleared && lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * 0.5f)) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                        TrySend();
             }
 
-#if SIMULATE_LOSS
-            private static Random randomLoss = new Random();
-#endif
             /// <summary>Attempts to send the message.</summary>
             internal void TrySend()
             {
@@ -215,14 +213,8 @@ namespace RiptideNetworking
                     return;
                 }
 
-#if SIMULATE_LOSS
-                float lossChance = randomLoss.Next(100) / 100f;
-                if (lossChance > 0.1f)
-                    rudp.send(data, remoteEndPoint);
-#else
                 rudp.send(data, remoteEndPoint);
-#endif
-
+                
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
 
