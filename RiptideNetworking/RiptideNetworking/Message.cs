@@ -162,7 +162,7 @@ namespace RiptideNetworking
 
             if (data.Length > message.Bytes.Length)
             {
-                RiptideLogger.Log($"Can't fully handle {data.Length} bytes because it exceeds the maximum of {message.Bytes.Length}, message will contain incomplete data!");
+                RiptideLogger.Log("ERROR", $"Can't fully handle {data.Length} bytes because it exceeds the maximum of {message.Bytes.Length}, message will contain incomplete data!");
                 Array.Copy(data, 0, message.Bytes, 0, message.Bytes.Length);
                 message.ReadableLength = message.Bytes.Length;
             }
@@ -236,7 +236,10 @@ namespace RiptideNetworking
         public byte GetByte()
         {
             if (UnreadLength < 1)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             byte value = Bytes[readPos]; // Get the byte at readPos' position
@@ -249,7 +252,7 @@ namespace RiptideNetworking
         public byte[] GetByteArray(int length)
         {
             if (UnreadLength < length)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]'!");
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
 
             // If there are enough unread bytes
             byte[] value = new byte[length];
@@ -275,7 +278,10 @@ namespace RiptideNetworking
         public bool GetBool()
         {
             if (UnreadLength < boolLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
+                return false;
+            }
             
             // If there are enough unread bytes
             bool value = BitConverter.ToBoolean(Bytes, readPos); // Convert the bytes at readPos' position to a bool
@@ -335,7 +341,10 @@ namespace RiptideNetworking
         public short GetShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(shortLength);
@@ -368,7 +377,14 @@ namespace RiptideNetworking
         public short[] GetShortArray(ushort length)
         {
             short[] array = new short[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * shortLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / shortLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetShort();
 
             return array;
@@ -393,7 +409,10 @@ namespace RiptideNetworking
         public ushort GetUShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(shortLength);
@@ -406,7 +425,10 @@ namespace RiptideNetworking
         internal ushort PeekUShort()
         {
             if (UnreadLength < shortLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             byte[] bytesToConvert = new byte[shortLength];
@@ -438,7 +460,14 @@ namespace RiptideNetworking
         public ushort[] GetUShortArray(ushort length)
         {
             ushort[] array = new ushort[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * shortLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / shortLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetUShort();
             
             return array;
@@ -465,7 +494,10 @@ namespace RiptideNetworking
         public int GetInt()
         {
             if (UnreadLength < intLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(intLength);
@@ -498,7 +530,14 @@ namespace RiptideNetworking
         public int[] GetIntArray(ushort length)
         {
             int[] array = new int[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * intLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / intLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetInt();
 
             return array;
@@ -525,7 +564,10 @@ namespace RiptideNetworking
         public uint GetUInt()
         {
             if (UnreadLength < intLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(intLength);
@@ -558,7 +600,14 @@ namespace RiptideNetworking
         public uint[] GetUIntArray(ushort length)
         {
             uint[] array = new uint[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * intLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / intLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetUInt();
 
             return array;
@@ -589,7 +638,10 @@ namespace RiptideNetworking
         public long GetLong()
         {
             if (UnreadLength < longLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(longLength);
@@ -622,7 +674,14 @@ namespace RiptideNetworking
         public long[] GetLongArray(ushort length)
         {
             long[] array = new long[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * longLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / longLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetLong();
 
             return array;
@@ -653,7 +712,10 @@ namespace RiptideNetworking
         public ulong GetULong()
         {
             if (UnreadLength < longLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(longLength);
@@ -686,7 +748,14 @@ namespace RiptideNetworking
         public ulong[] GetULongArray(ushort length)
         {
             ulong[] array = new ulong[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * longLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / longLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetULong();
 
             return array;
@@ -713,7 +782,10 @@ namespace RiptideNetworking
         public float GetFloat()
         {
             if (UnreadLength < floatLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(floatLength);
@@ -746,7 +818,14 @@ namespace RiptideNetworking
         public float[] GetFloatArray(ushort length)
         {
             float[] array = new float[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * floatLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / floatLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetFloat();
 
             return array;
@@ -777,7 +856,10 @@ namespace RiptideNetworking
         public double GetDouble()
         {
             if (UnreadLength < doubleLength)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
+                return 0;
+            }
             
             // If there are enough unread bytes
             StandardizeEndianness(doubleLength);
@@ -810,7 +892,14 @@ namespace RiptideNetworking
         public double[] GetDoubleArray(ushort length)
         {
             double[] array = new double[length];
-            for (int i = 0; i < array.Length; i++)
+
+            if (UnreadLength < length * doubleLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
+                length = (ushort)(UnreadLength / doubleLength);
+            }
+
+            for (int i = 0; i < length; i++)
                 array[i] = GetDouble();
 
             return array;
@@ -835,9 +924,12 @@ namespace RiptideNetworking
         /// <summary>Reads a string from the message.</summary>
         public string GetString()
         {
-            ushort length = GetUShort(); // Get the length of the string (in bytes)
+            ushort length = GetUShort(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadLength < length)
-                throw new Exception($"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string'!");
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
+                length = (ushort)UnreadLength;
+            }
             
             string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
             readPos += length;
