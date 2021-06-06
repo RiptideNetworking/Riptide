@@ -7,11 +7,11 @@ namespace RiptideNetworking
     /// <summary>Contains event data for when a client connects to the server.</summary>
     public class ServerClientConnectedEventArgs : EventArgs
     {
-        /// <summary>The newly connected server client.</summary>
+        /// <summary>The newly connected client.</summary>
         public ServerClient Client { get; private set; }
 
         /// <summary>Initializes event data.</summary>
-        /// <param name="client">The newly connected server client.</param>
+        /// <param name="client">The newly connected client.</param>
         public ServerClientConnectedEventArgs(ServerClient client)
         {
             Client = client;

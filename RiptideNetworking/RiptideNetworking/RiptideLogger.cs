@@ -10,11 +10,14 @@ namespace RiptideNetworking
         /// <summary>Encapsulates a method used to log messages.</summary>
         /// <param name="log">The message to log.</param>
         public delegate void LogMethod(string log);
+        /// <summary>The method to use when logging messages.</summary>
         private static LogMethod logMethod;
+        /// <summary>Whether or not to include timestamps when logging messages.</summary>
         private static bool includeTimestamps;
+        /// <summary>The format to use for timestamps.</summary>
         private static string timestampFormat;
 
-        /// <summary>Initializes the logger.</summary>
+        /// <summary>Handles initial setup.</summary>
         /// <param name="logMethod">The method to use when logging messages.</param>
         /// <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
         /// <param name="timestampFormat">The format to use for timestamps.</param>
@@ -45,7 +48,7 @@ namespace RiptideNetworking
                 logMethod($"({logName}): {message}");
         }
 
-        /// <summary>Converts a DateTime object to a formatted timestamp string.</summary>
+        /// <summary>Converts a <see cref="DateTime"/> object to a formatted timestamp string.</summary>
         /// <param name="time">The time to format.</param>
         /// <returns>The formatted timestamp.</returns>
         private static string GetTimestamp(DateTime time)

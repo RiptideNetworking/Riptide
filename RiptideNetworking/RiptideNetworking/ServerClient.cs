@@ -28,12 +28,12 @@ namespace RiptideNetworking
 
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
-        /// <summary>The server instance the client is associated with.</summary>
+        /// <summary>The server that the client is associated with.</summary>
         private readonly Server server;
         /// <summary>The client's current connection state.</summary>
         private ConnectionState connectionState = ConnectionState.notConnected;
 
-        /// <summary>Initializes a ServerClient instance.</summary>
+        /// <summary>Handles initial setup.</summary>
         /// <param name="server">The server this client is associated with.</param>
         /// <param name="endPoint">The remote endpoint of the client.</param>
         /// <param name="id">The ID of the client.</param>

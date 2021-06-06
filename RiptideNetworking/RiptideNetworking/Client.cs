@@ -33,7 +33,7 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
+        /// <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         private ActionQueue receiveActionQueue;
         /// <summary>The connection's remote endpoint.</summary>
         private IPEndPoint remoteEndPoint;
@@ -52,7 +52,7 @@ namespace RiptideNetworking
         private Timer heartbeatTimer;
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
-        /// <summary>Unique reusable <see cref="Message"/> instance for sending heartbeats to avoid threading issues.</summary>
+        /// <summary>A unique reusable message for sending heartbeats to avoid threading issues.</summary>
         Message heartbeatMessage = new Message(HeaderType.heartbeat, 4);
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
@@ -60,13 +60,13 @@ namespace RiptideNetworking
         private (byte id, DateTime sendTime) pendingPing;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Client(string logName = "CLIENT") : base(logName) { }
 
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
-        /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+        /// <param name="receiveActionQueue">The action queue to add messages to. Passing <see langword="null"/> will cause messages to be handled immediately on the same thread on which they were received.</param>
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
@@ -85,7 +85,7 @@ namespace RiptideNetworking
             heartbeatTimer = new Timer(Heartbeat, null, 0, HeartbeatInterval);
         }
 
-        /// <summary>Sends a connnect or heartbeat message. Called by the heartbeat timer.</summary>
+        /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat(object state)
         {
             if (connectionState == ConnectionState.connecting)
@@ -118,6 +118,7 @@ namespace RiptideNetworking
         /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
         /// <param name="firstByte">The first byte of the message.</param>
+        /// <returns><see langword="true"/> if the message should be handled.</returns>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             return endPoint.Equals(remoteEndPoint);

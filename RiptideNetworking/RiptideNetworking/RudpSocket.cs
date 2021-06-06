@@ -22,7 +22,7 @@ namespace RiptideNetworking
     /// <summary>Base class for all RUDP connections.</summary>
     public abstract class RudpSocket
     {
-        /// <summary>The name to use when logging messages via RiptideLogger</summary>
+        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/></summary>
         public readonly string LogName;
 
         /// <summary>How long to wait for a response, in microseconds.</summary>
@@ -34,8 +34,8 @@ namespace RiptideNetworking
         /// <summary>The maximum amount of data that can be received at once.</summary>
         private ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
 
-        /// <summary>Initializes an RudpSocket instance.</summary>
-        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+        /// <summary>Handles initial setup.</summary>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         protected RudpSocket(string logName)
         {
             LogName = logName;
@@ -114,7 +114,7 @@ namespace RiptideNetworking
         /// <summary>Takes received data and prepares it to be handled.</summary>
         /// <param name="data">The contents of the packet.</param>
         /// <param name="length">The length of the contents of the packet.</param>
-        /// <param name="remoteEndPoint">The endpoint from w hich the packet was received.</param>
+        /// <param name="remoteEndPoint">The endpoint from which the packet was received.</param>
         private void PrepareToHandle(byte[] data, int length, IPEndPoint remoteEndPoint)
         {
             if (data == null || length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
@@ -133,9 +133,10 @@ namespace RiptideNetworking
                 Handle(messageData, remoteEndPoint, headerType);
         }
 
-        /// <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+        /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
         /// <param name="firstByte">The first byte of the message.</param>
+        /// <returns><see langword="true"/> if the message should be handled.</returns>
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte);
 
         /// <summary>Handles the given reliably sent data.</summary>

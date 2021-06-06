@@ -13,7 +13,7 @@ namespace RiptideNetworking
         private int lastSequenceId;
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
-        /// <summary>A ushort with the left-most bit set to 1.</summary>
+        /// <summary>A <see langword="ushort"/> with the left-most bit set to 1.</summary>
         protected const ushort LeftBit = 1 << 15;
 
         /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
@@ -31,7 +31,7 @@ namespace RiptideNetworking
         internal delegate void Send(byte[] data, IPEndPoint toEndPoint);
         /// <summary>The method to use when sending data.</summary>
         private Send send;
-        /// <summary>The name to use when logging messages via RiptideLogger.</summary>
+        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         private readonly string logName;
 
         private short _rtt = -1;
@@ -48,9 +48,9 @@ namespace RiptideNetworking
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         internal short SmoothRTT { get; set; } = -1;
 
-        /// <summary>Initializes an Rudp instance.</summary>
+        /// <summary>Handles initial setup.</summary>
         /// <param name="send">The method to use when sending data.</param>
-        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         internal Rudp(Send send, string logName)
         {
             this.send = send;
@@ -100,16 +100,16 @@ namespace RiptideNetworking
         }
 
         /// <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
-        /// <param name="seqId">The new sequence ID.</param>
-        /// <param name="lastReceivedSeqId">The </param>
+        /// <param name="seqId1">The new sequence ID.</param>
+        /// <param name="seqId2">The previous sequence ID.</param>
         /// <returns>The (signed) gap between the two given sequence IDs.</returns>
-        internal static int GetSequenceGap(ushort seqId, ushort lastReceivedSeqId)
+        internal static int GetSequenceGap(ushort seqId1, ushort seqId2)
         {
-            int gap = seqId - lastReceivedSeqId;
+            int gap = seqId1 - seqId2;
             if (Math.Abs(gap) <= 32768) // Difference is small, meaning sequence IDs are close together
                 return gap;
             else // Difference is big, meaning sequence IDs are far apart
-                return (seqId <= 32768 ? ushort.MaxValue + 1 + seqId : seqId) - (lastReceivedSeqId <= 32768 ? ushort.MaxValue + 1 + lastReceivedSeqId : lastReceivedSeqId);
+                return (seqId1 <= 32768 ? ushort.MaxValue + 1 + seqId1 : seqId1) - (seqId2 <= 32768 ? ushort.MaxValue + 1 + seqId2 : seqId2);
         }
 
         /// <summary>Check the ack status of the given sequence ID.</summary>
@@ -131,7 +131,7 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Immediately marks the message of a given sequence ID as delivered.</summary>
+        /// <summary>Immediately marks the <see cref="PendingMessage"/> of a given sequence ID as delivered.</summary>
         /// <param name="seqId">The sequence ID that was acknowledged.</param>
         internal void AckMessage(ushort seqId)
         {
@@ -164,7 +164,7 @@ namespace RiptideNetworking
             /// <summary>Whether the pending message has been cleared or not.</summary>
             private bool wasCleared;
 
-            /// <summary>Initializes a PendingMessage instance.</summary>
+            /// <summary>Handles initial setup.</summary>
             /// <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
             /// <param name="sequenceId">The sequence ID of the message.</param>
             /// <param name="message">The message that is being sent reliably.</param>

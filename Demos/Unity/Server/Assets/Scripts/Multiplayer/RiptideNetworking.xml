@@ -8,11 +8,11 @@
             <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
         </member>
         <member name="F:RiptideNetworking.ActionQueue.LogName">
-            <summary>The name of this action queue instance. Used when logging messages.</summary>
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
         </member>
         <member name="M:RiptideNetworking.ActionQueue.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name of this action queue instance. Used when logging messages.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.ActionQueue.Add(System.Action)">
             <summary>Adds an action to the queue.</summary>
@@ -46,7 +46,7 @@
             <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.receiveActionQueue">
-            <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
+            <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.remoteEndPoint">
             <summary>The connection's remote endpoint.</summary>
@@ -73,7 +73,7 @@
             <summary>The time at which the last heartbeat was received from the client.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.heartbeatMessage">
-            <summary>Unique reusable <see cref="T:RiptideNetworking.Message"/> instance for sending heartbeats to avoid threading issues.</summary>
+            <summary>A unique reusable message for sending heartbeats to avoid threading issues.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.lastPingId">
             <summary>ID of the last ping that was sent.</summary>
@@ -83,23 +83,24 @@
         </member>
         <member name="M:RiptideNetworking.Client.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16,System.Byte)">
             <summary>Attempts to connect to an IP and port.</summary>
             <param name="ip">The IP to connect to.</param>
             <param name="port">The remote port to connect to.</param>
-            <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+            <param name="receiveActionQueue">The action queue to add messages to. Passing <see langword="null"/> will cause messages to be handled immediately on the same thread on which they were received.</param>
             <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Heartbeat(System.Object)">
-            <summary>Sends a connnect or heartbeat message. Called by the heartbeat timer.</summary>
+            <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Client.heartbeatTimer"/>.</summary>
         </member>
         <member name="M:RiptideNetworking.Client.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
             <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
             <param name="endPoint">The endpoint from which the message was sent.</param>
             <param name="firstByte">The first byte of the message.</param>
+            <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
         <member name="M:RiptideNetworking.Client.Handle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <summary>Handles the given data.</summary>
@@ -193,11 +194,11 @@
             <summary>Contains event data for when a client connects to the server.</summary>
         </member>
         <member name="P:RiptideNetworking.ServerClientConnectedEventArgs.Client">
-            <summary>The newly connected server client.</summary>
+            <summary>The newly connected client.</summary>
         </member>
         <member name="M:RiptideNetworking.ServerClientConnectedEventArgs.#ctor(RiptideNetworking.ServerClient)">
             <summary>Initializes event data.</summary>
-            <param name="client">The newly connected server client.</param>
+            <param name="client">The newly connected client.</param>
         </member>
         <member name="T:RiptideNetworking.ServerMessageReceivedEventArgs">
             <summary>Contains event data for when the server receives a message from a client.</summary>
@@ -276,7 +277,7 @@
             <summary>Messages that we sent which have been acknoweledged.</summary>
         </member>
         <member name="T:RiptideNetworking.MessageSendMode">
-            <summary>The send mode of a message.</summary>
+            <summary>The send mode of a <see cref="T:RiptideNetworking.Message"/>.</summary>
         </member>
         <member name="F:RiptideNetworking.MessageSendMode.unreliable">
             <summary>Unreliable send mode.</summary>
@@ -285,7 +286,7 @@
             <summary>Reliable send mode.</summary>
         </member>
         <member name="T:RiptideNetworking.HeaderType">
-            <summary>The header type of a message.</summary>
+            <summary>The header type of a <see cref="T:RiptideNetworking.Message"/>.</summary>
         </member>
         <member name="F:RiptideNetworking.HeaderType.unreliable">
             <summary>For unreliable user messages.</summary>
@@ -333,22 +334,22 @@
             <summary>The message instance used for handling internal messages.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.boolLength">
-            <summary>How many bytes a bool is represented by.</summary>
+            <summary>How many bytes a <see langword="bool"/> is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.shortLength">
-            <summary>How many bytes a short (or ushort) is represented by.</summary>
+            <summary>How many bytes a <see langword="short"/> (or <see langword="ushort"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.intLength">
-            <summary>How many bytes an int (or uint) is represented by.</summary>
+            <summary>How many bytes an <see langword="int"/> (or <see langword="uint"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.longLength">
-            <summary>How many bytes a long (or ulong) is represented by.</summary>
+            <summary>How many bytes a <see langword="long"/> (or <see langword="ulong"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.floatLength">
-            <summary>How many bytes a float is represented by.</summary>
+            <summary>How many bytes a <see langword="float"/> is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.doubleLength">
-            <summary>How many bytes a double is represented by.</summary>
+            <summary>How many bytes a <see langword="double"/> is represented by.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.ReadableLength">
             <summary>The length in bytes of the data that can be read from the message.</summary>
@@ -379,36 +380,40 @@
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
         <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.HeaderType,System.UInt16)">
-            <summary>Initializes a reusable <see cref="T:RiptideNetworking.Message"/> instance with a given <see cref="T:RiptideNetworking.HeaderType"/>.</summary>
+            <summary>Initializes a reusable Message instance with a pre-defined header type.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-            <param name="headerType">The <see cref="T:RiptideNetworking.HeaderType"/> to initialize the message with.</param>
+            <param name="headerType">The header type to initialize the message with.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16)">
-            <summary>Initializes the Message instance used for sending with new values.</summary>
+            <summary>Reinitializes the Message instance used for sending.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
+            <returns>A message instance ready to be used for sending.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType,System.Byte[])">
-            <summary>Initializes the Message instance used for handling with new values.</summary>
+            <summary>Reinitializes the Message instance used for handling.</summary>
             <param name="headerType">The message's header type.</param>
             <param name="data">The bytes contained in the message.</param>
+            <returns>A message instance ready to be used for handling.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.CreateInternal(RiptideNetworking.HeaderType)">
-            <summary>Initializes the Message instance used for sending internal messages with new values.</summary>
+            <summary>Reinitializes the Message instance used for sending internal messages.</summary>
             <param name="headerType">The message's header type.</param>
+            <returns>A message instance ready to be used for sending.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.CreateInternal(RiptideNetworking.HeaderType,System.Byte[])">
-            <summary>Initializes the Message instance used for handling internal messages with new values.</summary>
+            <summary>Reinitializes the Message instance used for handling internal messages.</summary>
             <param name="headerType">The message's header type.</param>
             <param name="data">The bytes contained in the message.</param>
+            <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.Message,RiptideNetworking.HeaderType)">
-            <summary>Initializes a Message instance for sending with new values.</summary>
+        <member name="M:RiptideNetworking.Message.Reinitialize(RiptideNetworking.Message,RiptideNetworking.HeaderType)">
+            <summary>Reinitializes a message for sending.</summary>
             <param name="message">The message to initialize.</param>
             <param name="headerType">The message's header type.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.Message,RiptideNetworking.HeaderType,System.Byte[])">
-            <summary>Initializes a Message instance for handling with new values.</summary>
+        <member name="M:RiptideNetworking.Message.Reinitialize(RiptideNetworking.Message,RiptideNetworking.HeaderType,System.Byte[])">
+            <summary>Reinitializes a message for handling.</summary>
             <param name="message">The message to initialize.</param>
             <param name="headerType">The message's header type.</param>
             <param name="data">The bytes contained in the message.</param>
@@ -418,7 +423,7 @@
             <param name="seqId">The sequence ID to insert.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Reuse">
-            <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be overwritten.</summary>
+            <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Byte[])">
             <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
@@ -429,212 +434,266 @@
             <param name="byteAmount">The number of bytes whose order to standardize, starting at the message's current read position.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
-            <summary>Adds a byte to the message.</summary>
-            <param name="value">The byte to add.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Byte[])">
-            <summary>Adds an array of bytes to the message.</summary>
-            <param name="value">The byte array to add.</param>
+            <summary>Adds a single <see langword="byte"/> to the message.</summary>
+            <param name="value">The <see langword="byte"/> to add.</param>
+            <returns>The Message instance that the <see langword="byte"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetByte">
-            <summary>Reads a byte from the message.</summary>
+            <summary>Retrieves a <see langword="byte"/> from the message.</summary>
+            <returns>The <see langword="byte"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Byte[])">
+            <summary>Adds a <see langword="byte"/> array to the message.</summary>
+            <param name="value">The <see langword="byte"/> array to add.</param>
+            <returns>The Message instance that the <see langword="byte"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetByteArray(System.Int32)">
-            <summary>Reads an array of bytes from the message.</summary>
-            <param name="length">The length of the byte array.</param>
+            <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
+            <param name="length">The length of the <see langword="byte"/> array.</param>
+            <returns>The <see langword="byte"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
-            <summary>Adds a bool to the message.</summary>
-            <param name="value">The bool to add.</param>
+            <summary>Adds a <see langword="bool"/> to the message.</summary>
+            <param name="value">The <see langword="bool"/> to add.</param>
+            <returns>The Message instance that the <see langword="bool"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBool">
-            <summary>Reads a bool from the message.</summary>
+            <summary>Retrieves a <see langword="bool"/> from the message.</summary>
+            <returns>The <see langword="bool"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)">
-            <summary>Adds an array of bools to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="bool"/> array to the message.</summary>
+            <param name="array">The <see langword="bool"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="bool"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBoolArray">
-            <summary>Reads an array of bools from the message.</summary>
+            <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
+            <returns>The <see langword="bool"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBoolArray(System.UInt16)">
-            <summary>Reads an array of bools from the message.</summary>
+            <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="bool"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16)">
-            <summary>Adds a short to the message.</summary>
-            <param name="value">The short to add.</param>
+            <summary>Adds a <see langword="short"/> to the message.</summary>
+            <param name="value">The <see langword="short"/> to add.</param>
+            <returns>The Message instance that the <see langword="short"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShort">
-            <summary>Reads a short from the message.</summary>
+            <summary>Retrieves a <see langword="short"/> from the message.</summary>
+            <returns>The <see langword="short"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
-            <summary>Adds an array of shorts to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="short"/> array to the message.</summary>
+            <param name="array">The <see langword="short"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="short"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShortArray">
-            <summary>Reads an array of shorts from the message.</summary>
+            <summary>Retrieves a <see langword="short"/> array from the message.</summary>
+            <returns>The <see langword="short"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShortArray(System.UInt16)">
-            <summary>Reads an array of shorts from the message.</summary>
+            <summary>Retrieves a <see langword="short"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="short"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
-            <summary>Adds a ushort to the message.</summary>
-            <param name="value">The ushort to add.</param>
+            <summary>Adds a <see langword="ushort"/> to the message.</summary>
+            <param name="value">The <see langword="ushort"/> to add.</param>
+            <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShort">
-            <summary>Reads a ushort from the message.</summary>
+            <summary>Retrieves a <see langword="ushort"/> from the message.</summary>
+            <returns>The <see langword="ushort"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.PeekUShort">
-            <summary>Reads a ushort from the message without moving the read position, allowing the same bytes to be read again.</summary>
+            <summary>Retrieves a <see langword="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
-            <summary>Adds an array of ushorts to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="ushort"/> array to the message.</summary>
+            <param name="array">The <see langword="ushort"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="ushort"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShortArray">
-            <summary>Reads an array of ushorts from the message.</summary>
+            <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
+            <returns>The <see langword="ushort"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShortArray(System.UInt16)">
-            <summary>Reads an array of ushorts from the message.</summary>
+            <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="ushort"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32)">
-            <summary>Adds an int to the message.</summary>
-            <param name="value">The int to add.</param>
+            <summary>Adds an <see langword="int"/> to the message.</summary>
+            <param name="value">The <see langword="int"/> to add.</param>
+            <returns>The Message instance that the <see langword="int"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetInt">
-            <summary>Reads an int from the message.</summary>
+            <summary>Retrieves an <see langword="int"/> from the message.</summary>
+            <returns>The <see langword="int"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
-            <summary>Adds an array of ints to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds an <see langword="int"/> array message.</summary>
+            <param name="array">The <see langword="int"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="int"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetIntArray">
-            <summary>Reads an array of ints from the message.</summary>
+            <summary>Retrieves an <see langword="int"/> array from the message.</summary>
+            <returns>The <see langword="int"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetIntArray(System.UInt16)">
-            <summary>Reads an array of ints from the message.</summary>
+            <summary>Retrieves an <see langword="int"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="int"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
-            <summary>Adds a uint to the message.</summary>
-            <param name="value">The uint to add.</param>
+            <summary>Adds a <see langword="uint"/> to the message.</summary>
+            <param name="value">The <see langword="uint"/> to add.</param>
+            <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUInt">
-            <summary>Reads a uint from the message.</summary>
+            <summary>Retrieves a <see langword="uint"/> from the message.</summary>
+            <returns>The <see langword="uint"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
-            <summary>Adds an array of uints to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="uint"/> array to the message.</summary>
+            <param name="array">The <see langword="uint"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="uint"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUIntArray">
-            <summary>Reads an array of uints from the message.</summary>
+            <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
+            <returns>The <see langword="uint"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUIntArray(System.UInt16)">
-            <summary>Reads an array of uints from the message.</summary>
+            <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="uint"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64)">
-            <summary>Adds a long to the message.</summary>
-            <param name="value">The long to add.</param>
+            <summary>Adds a <see langword="long"/> to the message.</summary>
+            <param name="value">The <see langword="long"/> to add.</param>
+            <returns>The Message instance that the <see langword="long"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLong">
-            <summary>Reads a long from the message.</summary>
+            <summary>Retrieves a <see langword="long"/> from the message.</summary>
+            <returns>The <see langword="long"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
-            <summary>Adds an array of longs to the message.</summary>
+            <summary>Adds a <see langword="long"/> array to the message.</summary>
             <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="long"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLongArray">
-            <summary>Reads an array of longs from the message.</summary>
+            <summary>Retrieves a <see langword="long"/> array from the message.</summary>
+            <returns>The <see langword="long"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLongArray(System.UInt16)">
-            <summary>Reads an array of longs from the message.</summary>
+            <summary>Retrieves a <see langword="long"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="long"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
-            <summary>Adds a ulong to the message.</summary>
-            <param name="value">The ulong to add.</param>
+            <summary>Adds a <see langword="ulong"/> to the message.</summary>
+            <param name="value">The <see langword="ulong"/> to add.</param>
+            <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULong">
-            <summary>Reads a ulong from the message.</summary>
+            <summary>Retrieves a <see langword="ulong"/> from the message.</summary>
+            <returns>The <see langword="ulong"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
-            <summary>Adds an array of ulongs to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="ulong"/> array to the message.</summary>
+            <param name="array">The <see langword="ulong"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="ulong"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULongArray">
-            <summary>Reads an array of ulongs from the message.</summary>
+            <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
+            <returns>The <see langword="ulong"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULongArray(System.UInt16)">
-            <summary>Reads an array of ulongs from the message.</summary>
+            <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="ulong"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single)">
-            <summary>Adds a float to the message.</summary>
-            <param name="value">The float to add.</param>
+            <summary>Adds a <see langword="float"/> to the message.</summary>
+            <param name="value">The <see langword="float"/> to add.</param>
+            <returns>The Message instance that the <see langword="float"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloat">
-            <summary>Reads a float from the message.</summary>
+            <summary>Retrieves a <see langword="float"/> from the message.</summary>
+            <returns>The <see langword="float"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)">
-            <summary>Adds an array of floats to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="float"/> array to the message.</summary>
+            <param name="array">The <see langword="float"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="float"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloatArray">
-            <summary>Reads an array of floats from the message.</summary>
+            <summary>Retrieves a <see langword="float"/> array from the message.</summary>
+            <returns>The <see langword="float"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloatArray(System.UInt16)">
-            <summary>Reads an array of floats from the message.</summary>
+            <summary>Retrieves a <see langword="float"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="float"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double)">
-            <summary>Adds a double to the message.</summary>
-            <param name="value">The double to add.</param>
+            <summary>Adds a <see langword="double"/> to the message.</summary>
+            <param name="value">The <see langword="double"/> to add.</param>
+            <returns>The Message instance that the <see langword="double"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDouble">
-            <summary>Reads a double from the message.</summary>
+            <summary>Retrieves a <see langword="double"/> from the message.</summary>
+            <returns>The <see langword="double"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)">
-            <summary>Adds an array of doubles to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="double"/> array to the message.</summary>
+            <param name="array">The <see langword="double"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="double"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDoubleArray">
-            <summary>Reads an array of doubles from the message.</summary>
+            <summary>Retrieves a<see langword="double"/> array from the message.</summary>
+            <returns>The <see langword="double"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDoubleArray(System.UInt16)">
-            <summary>Reads an array of doubles from the message.</summary>
+            <summary>Retrieves a<see langword="double"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="double"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.String)">
-            <summary>Adds a string to the message.</summary>
-            <param name="value">The string to add.</param>
+            <summary>Adds a <see langword="string"/> to the message.</summary>
+            <param name="value">The <see langword="string"/> to add.</param>
+            <returns>The Message instance that the <see langword="string"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetString">
-            <summary>Reads a string from the message.</summary>
+            <summary>Retrieves a <see langword="string"/> from the message.</summary>
+            <returns>The <see langword="string"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
-            <summary>Adds an array of strings to the message.</summary>
-            <param name="array">The array to add.</param>
-            <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+            <summary>Adds a <see langword="string"/> array to the message.</summary>
+            <param name="array">The <see langword="string"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="string"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetStringArray">
-            <summary>Reads an array of strings from the message.</summary>
+            <summary>Retrieves a <see langword="string"/> array from the message.</summary>
+            <returns>The <see langword="string"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetStringArray(System.UInt16)">
-            <summary>Reads an array of strings from the message.</summary>
+            <summary>Retrieves a <see langword="string"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
+            <returns>The <see langword="string"/> array that was retrieved.</returns>
         </member>
         <member name="T:RiptideNetworking.RiptideLogger">
             <summary>Provides functionality for logging messages.</summary>
@@ -643,8 +702,17 @@
             <summary>Encapsulates a method used to log messages.</summary>
             <param name="log">The message to log.</param>
         </member>
+        <member name="F:RiptideNetworking.RiptideLogger.logMethod">
+            <summary>The method to use when logging messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.RiptideLogger.includeTimestamps">
+            <summary>Whether or not to include timestamps when logging messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.RiptideLogger.timestampFormat">
+            <summary>The format to use for timestamps.</summary>
+        </member>
         <member name="M:RiptideNetworking.RiptideLogger.Initialize(RiptideNetworking.RiptideLogger.LogMethod,System.Boolean,System.String)">
-            <summary>Initializes the logger.</summary>
+            <summary>Handles initial setup.</summary>
             <param name="logMethod">The method to use when logging messages.</param>
             <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
             <param name="timestampFormat">The format to use for timestamps.</param>
@@ -659,7 +727,7 @@
             <param name="message">The message to log to the console.</param>
         </member>
         <member name="M:RiptideNetworking.RiptideLogger.GetTimestamp(System.DateTime)">
-            <summary>Converts a DateTime object to a formatted timestamp string.</summary>
+            <summary>Converts a <see cref="T:System.DateTime"/> object to a formatted timestamp string.</summary>
             <param name="time">The time to format.</param>
             <returns>The formatted timestamp.</returns>
         </member>
@@ -670,7 +738,7 @@
             <summary>The next sequence ID to use.</summary>
         </member>
         <member name="F:RiptideNetworking.Rudp.LeftBit">
-            <summary>A ushort with the left-most bit set to 1.</summary>
+            <summary>A <see langword="ushort"/> with the left-most bit set to 1.</summary>
         </member>
         <member name="P:RiptideNetworking.Rudp.SendLockables">
             <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
@@ -693,7 +761,7 @@
             <summary>The method to use when sending data.</summary>
         </member>
         <member name="F:RiptideNetworking.Rudp.logName">
-            <summary>The name to use when logging messages via RiptideLogger.</summary>
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
         </member>
         <member name="P:RiptideNetworking.Rudp.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -702,9 +770,9 @@
             <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
         <member name="M:RiptideNetworking.Rudp.#ctor(RiptideNetworking.Rudp.Send,System.String)">
-            <summary>Initializes an Rudp instance.</summary>
+            <summary>Handles initial setup.</summary>
             <param name="send">The method to use when sending data.</param>
-            <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Rudp.UpdateReceivedAcks(System.UInt16,System.UInt16)">
             <summary>Updates which messages we've received acks for.</summary>
@@ -713,8 +781,8 @@
         </member>
         <member name="M:RiptideNetworking.Rudp.GetSequenceGap(System.UInt16,System.UInt16)">
             <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
-            <param name="seqId">The new sequence ID.</param>
-            <param name="lastReceivedSeqId">The </param>
+            <param name="seqId1">The new sequence ID.</param>
+            <param name="seqId2">The previous sequence ID.</param>
             <returns>The (signed) gap between the two given sequence IDs.</returns>
         </member>
         <member name="M:RiptideNetworking.Rudp.CheckMessageAckStatus(System.UInt16,System.UInt16)">
@@ -723,7 +791,7 @@
             <param name="bit">The bit corresponding to the sequence ID's position in the bit field.</param>
         </member>
         <member name="M:RiptideNetworking.Rudp.AckMessage(System.UInt16)">
-            <summary>Immediately marks the message of a given sequence ID as delivered.</summary>
+            <summary>Immediately marks the <see cref="T:RiptideNetworking.Rudp.PendingMessage"/> of a given sequence ID as delivered.</summary>
             <param name="seqId">The sequence ID that was acknowledged.</param>
         </member>
         <member name="T:RiptideNetworking.Rudp.PendingMessage">
@@ -757,7 +825,7 @@
             <summary>Whether the pending message has been cleared or not.</summary>
         </member>
         <member name="M:RiptideNetworking.Rudp.PendingMessage.#ctor(RiptideNetworking.Rudp,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,System.Byte)">
-            <summary>Initializes a PendingMessage instance.</summary>
+            <summary>Handles initial setup.</summary>
             <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that is being sent reliably.</param>
@@ -789,7 +857,7 @@
             <summary>Base class for all RUDP connections.</summary>
         </member>
         <member name="F:RiptideNetworking.RudpSocket.LogName">
-            <summary>The name to use when logging messages via RiptideLogger</summary>
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/></summary>
         </member>
         <member name="F:RiptideNetworking.RudpSocket.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
@@ -804,8 +872,8 @@
             <summary>The maximum amount of data that can be received at once.</summary>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.#ctor(System.String)">
-            <summary>Initializes an RudpSocket instance.</summary>
-            <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+            <summary>Handles initial setup.</summary>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.StartListening(System.UInt16)">
             <summary>Starts listening for incoming packets.</summary>
@@ -821,12 +889,13 @@
             <summary>Takes received data and prepares it to be handled.</summary>
             <param name="data">The contents of the packet.</param>
             <param name="length">The length of the contents of the packet.</param>
-            <param name="remoteEndPoint">The endpoint from w hich the packet was received.</param>
+            <param name="remoteEndPoint">The endpoint from which the packet was received.</param>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
-            <summary>Whether or not to handle a message from a specific remote endpoint.</summary>
+            <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
             <param name="endPoint">The endpoint from which the message was sent.</param>
             <param name="firstByte">The first byte of the message.</param>
+            <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <summary>Handles the given reliably sent data.</summary>
@@ -881,6 +950,7 @@
         </member>
         <member name="P:RiptideNetworking.Server.Clients">
             <summary>An array of all the currently connected clients.</summary>
+            <remarks>The position of each <see cref="T:RiptideNetworking.ServerClient"/> instance in the array does NOT correspond to that client's numeric ID.</remarks>
         </member>
         <member name="P:RiptideNetworking.Server.MaxClientCount">
             <summary>The maximum number of clients that can be connected at any time.</summary>
@@ -895,13 +965,13 @@
             <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         </member>
         <member name="F:RiptideNetworking.Server.clients">
-            <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
+            <summary>Currently connected clients, accessible by their endpoints.</summary>
         </member>
         <member name="F:RiptideNetworking.Server.timedOutClients">
-            <summary>Endpoints of clients that have timed out and need to be removed from the clients dictionary.</summary>
+            <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="F:RiptideNetworking.Server.clients"/> dictionary.</summary>
         </member>
         <member name="F:RiptideNetworking.Server.receiveActionQueue">
-            <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
+            <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         </member>
         <member name="F:RiptideNetworking.Server.availableClientIds">
             <summary>All currently unused client IDs.</summary>
@@ -911,22 +981,23 @@
         </member>
         <member name="M:RiptideNetworking.Server.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,RiptideNetworking.ActionQueue,System.UInt16)">
             <summary>Starts the server.</summary>
             <param name="port">The local port on which to start the server.</param>
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
-            <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+            <param name="receiveActionQueue">The action queue to add messages to. Passing <see langword="null"/> will cause messages to be handled immediately on the same thread on which they were received.</param>
             <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         </member>
         <member name="M:RiptideNetworking.Server.Heartbeat(System.Object)">
-            <summary>Checks if clients have timed out. Called by the heartbeat timer.</summary>
+            <summary>Checks if clients have timed out. Called by <see cref="F:RiptideNetworking.Server.heartbeatTimer"/>.</summary>
         </member>
         <member name="M:RiptideNetworking.Server.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
             <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
             <param name="endPoint">The endpoint from which the message was sent.</param>
             <param name="firstByte">The first byte of the message.</param>
+            <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
         <member name="M:RiptideNetworking.Server.Handle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <summary>Handles the given data.</summary>
@@ -1036,13 +1107,13 @@
             <summary>The time at which the last heartbeat was received from the client.</summary>
         </member>
         <member name="F:RiptideNetworking.ServerClient.server">
-            <summary>The server instance the client is associated with.</summary>
+            <summary>The server that the client is associated with.</summary>
         </member>
         <member name="F:RiptideNetworking.ServerClient.connectionState">
             <summary>The client's current connection state.</summary>
         </member>
         <member name="M:RiptideNetworking.ServerClient.#ctor(RiptideNetworking.Server,System.Net.IPEndPoint,System.UInt16)">
-            <summary>Initializes a ServerClient instance.</summary>
+            <summary>Handles initial setup.</summary>
             <param name="server">The server this client is associated with.</param>
             <param name="endPoint">The remote endpoint of the client.</param>
             <param name="id">The ID of the client.</param>

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RiptideNetworking
 {
-    /// <summary>The send mode of a message.</summary>
+    /// <summary>The send mode of a <see cref="Message"/>.</summary>
     public enum MessageSendMode : byte
     {
         /// <summary>Unreliable send mode.</summary>
@@ -14,7 +14,7 @@ namespace RiptideNetworking
         reliable = HeaderType.reliable,
     }
 
-    /// <summary>The header type of a message.</summary>
+    /// <summary>The header type of a <see cref="Message"/>.</summary>
     internal enum HeaderType : byte
     {
         /// <summary>For unreliable user messages.</summary>
@@ -51,17 +51,17 @@ namespace RiptideNetworking
         /// <summary>The message instance used for handling internal messages.</summary>
         private static readonly Message handleInternal = new Message(25);
 
-        /// <summary>How many bytes a bool is represented by.</summary>
+        /// <summary>How many bytes a <see langword="bool"/> is represented by.</summary>
         public const byte boolLength = sizeof(bool);
-        /// <summary>How many bytes a short (or ushort) is represented by.</summary>
+        /// <summary>How many bytes a <see langword="short"/> (or <see langword="ushort"/>) is represented by.</summary>
         public const byte shortLength = sizeof(short);
-        /// <summary>How many bytes an int (or uint) is represented by.</summary>
+        /// <summary>How many bytes an <see langword="int"/> (or <see langword="uint"/>) is represented by.</summary>
         public const byte intLength = sizeof(int);
-        /// <summary>How many bytes a long (or ulong) is represented by.</summary>
+        /// <summary>How many bytes a <see langword="long"/> (or <see langword="ulong"/>) is represented by.</summary>
         public const byte longLength = sizeof(long);
-        /// <summary>How many bytes a float is represented by.</summary>
+        /// <summary>How many bytes a <see langword="float"/> is represented by.</summary>
         public const byte floatLength = sizeof(float);
-        /// <summary>How many bytes a double is represented by.</summary>
+        /// <summary>How many bytes a <see langword="double"/> is represented by.</summary>
         public const byte doubleLength = sizeof(double);
 
         /// <summary>The length in bytes of the data that can be read from the message.</summary>
@@ -89,9 +89,9 @@ namespace RiptideNetworking
             Bytes = new byte[maxSize];
         }
 
-        /// <summary>Initializes a reusable <see cref="Message"/> instance with a given <see cref="HeaderType"/>.</summary>
+        /// <summary>Initializes a reusable Message instance with a pre-defined header type.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        /// <param name="headerType">The <see cref="HeaderType"/> to initialize the message with.</param>
+        /// <param name="headerType">The header type to initialize the message with.</param>
         internal Message(HeaderType headerType, ushort maxSize = 1500)
         {
             Bytes = new byte[maxSize];
@@ -101,46 +101,50 @@ namespace RiptideNetworking
                 writePos += shortLength;
         }
 
-        /// <summary>Initializes the Message instance used for sending with new values.</summary>
+        /// <summary>Reinitializes the Message instance used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            Create(send, (HeaderType)sendMode);
+            Reinitialize(send, (HeaderType)sendMode);
             send.Add(id);
             return send;
         }
 
-        /// <summary>Initializes the Message instance used for handling with new values.</summary>
+        /// <summary>Reinitializes the Message instance used for handling.</summary>
         /// <param name="headerType">The message's header type.</param>
         /// <param name="data">The bytes contained in the message.</param>
+        /// <returns>A message instance ready to be used for handling.</returns>
         internal static Message Create(HeaderType headerType, byte[] data)
         {
-            Create(handle, headerType, data);
+            Reinitialize(handle, headerType, data);
             return handle;
         }
 
-        /// <summary>Initializes the Message instance used for sending internal messages with new values.</summary>
+        /// <summary>Reinitializes the Message instance used for sending internal messages.</summary>
         /// <param name="headerType">The message's header type.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
         internal static Message CreateInternal(HeaderType headerType)
         {
-            Create(sendInternal, headerType);
+            Reinitialize(sendInternal, headerType);
             return sendInternal;
         }
 
-        /// <summary>Initializes the Message instance used for handling internal messages with new values.</summary>
+        /// <summary>Reinitializes the Message instance used for handling internal messages.</summary>
         /// <param name="headerType">The message's header type.</param>
         /// <param name="data">The bytes contained in the message.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
         internal static Message CreateInternal(HeaderType headerType, byte[] data)
         {
-            Create(handleInternal, headerType, data);
+            Reinitialize(handleInternal, headerType, data);
             return handleInternal;
         }
 
-        /// <summary>Initializes a Message instance for sending with new values.</summary>
+        /// <summary>Reinitializes a message for sending.</summary>
         /// <param name="message">The message to initialize.</param>
         /// <param name="headerType">The message's header type.</param>
-        private static void Create(Message message, HeaderType headerType)
+        private static void Reinitialize(Message message, HeaderType headerType)
         {
             message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             message.writePos = 0;
@@ -150,11 +154,11 @@ namespace RiptideNetworking
                 message.writePos += shortLength;
         }
 
-        /// <summary>Initializes a Message instance for handling with new values.</summary>
+        /// <summary>Reinitializes a message for handling.</summary>
         /// <param name="message">The message to initialize.</param>
         /// <param name="headerType">The message's header type.</param>
         /// <param name="data">The bytes contained in the message.</param>
-        private static void Create(Message message, HeaderType headerType, byte[] data)
+        private static void Reinitialize(Message message, HeaderType headerType, byte[] data)
         {
             message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             message.writePos = (ushort)data.Length;
@@ -183,7 +187,7 @@ namespace RiptideNetworking
             Bytes[2] = sequenceIdBytes[1];
         }
 
-        /// <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be overwritten.</summary>
+        /// <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
         internal void Reuse()
         {
             writePos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
@@ -207,10 +211,11 @@ namespace RiptideNetworking
         }
         #endregion
 
-        #region Write & Read Data
+        #region Add & Retrieve Data
         #region Byte
-        /// <summary>Adds a byte to the message.</summary>
-        /// <param name="value">The byte to add.</param>
+        /// <summary>Adds a single <see langword="byte"/> to the message.</summary>
+        /// <param name="value">The <see langword="byte"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="byte"/> was added to.</returns>
         public Message Add(byte value)
         {
             if (UnwrittenLength < 1)
@@ -220,19 +225,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Adds an array of bytes to the message.</summary>
-        /// <param name="value">The byte array to add.</param>
-        public Message Add(byte[] value)
-        {
-            if (UnwrittenLength < value.Length)
-                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte[]'!");
-
-            Array.Copy(value, 0, Bytes, writePos, value.Length);
-            writePos += (ushort)value.Length;
-            return this;
-        }
-
-        /// <summary>Reads a byte from the message.</summary>
+        /// <summary>Retrieves a <see langword="byte"/> from the message.</summary>
+        /// <returns>The <see langword="byte"/> that was retrieved.</returns>
         public byte GetByte()
         {
             if (UnreadLength < 1)
@@ -247,8 +241,22 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Reads an array of bytes from the message.</summary>
-        /// <param name="length">The length of the byte array.</param>
+        /// <summary>Adds a <see langword="byte"/> array to the message.</summary>
+        /// <param name="value">The <see langword="byte"/> array to add.</param>
+        /// <returns>The Message instance that the <see langword="byte"/> array was added to.</returns>
+        public Message Add(byte[] value)
+        {
+            if (UnwrittenLength < value.Length)
+                throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte[]'!");
+
+            Array.Copy(value, 0, Bytes, writePos, value.Length);
+            writePos += (ushort)value.Length;
+            return this;
+        }
+
+        /// <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
+        /// <param name="length">The length of the <see langword="byte"/> array.</param>
+        /// <returns>The <see langword="byte"/> array that was retrieved.</returns>
         public byte[] GetByteArray(int length)
         {
             if (UnreadLength < length)
@@ -263,8 +271,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Bool
-        /// <summary>Adds a bool to the message.</summary>
-        /// <param name="value">The bool to add.</param>
+        /// <summary>Adds a <see langword="bool"/> to the message.</summary>
+        /// <param name="value">The <see langword="bool"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="bool"/> was added to.</returns>
         public Message Add(bool value)
         {
             if (UnwrittenLength < boolLength)
@@ -274,7 +283,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a bool from the message.</summary>
+        /// <summary>Retrieves a <see langword="bool"/> from the message.</summary>
+        /// <returns>The <see langword="bool"/> that was retrieved.</returns>
         public bool GetBool()
         {
             if (UnreadLength < boolLength)
@@ -289,9 +299,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of bools to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="bool"/> array to the message.</summary>
+        /// <param name="array">The <see langword="bool"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="bool"/> array was added to.</returns>
         public Message Add(bool[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -304,13 +315,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of bools from the message.</summary>
+        /// <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
+        /// <returns>The <see langword="bool"/> array that was retrieved.</returns>
         public bool[] GetBoolArray()
         {
             return GetBoolArray(GetUShort());
         }
-        /// <summary>Reads an array of bools from the message.</summary>
+        /// <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="bool"/> array that was retrieved.</returns>
         public bool[] GetBoolArray(ushort length)
         {
             byte[] bytes = GetByteArray(length / 8 + (length % 8 == 0 ? 0 : 1));
@@ -324,8 +337,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Short
-        /// <summary>Adds a short to the message.</summary>
-        /// <param name="value">The short to add.</param>
+        /// <summary>Adds a <see langword="short"/> to the message.</summary>
+        /// <param name="value">The <see langword="short"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="short"/> was added to.</returns>
         public Message Add(short value)
         {
             if (UnwrittenLength < shortLength)
@@ -337,7 +351,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a short from the message.</summary>
+        /// <summary>Retrieves a <see langword="short"/> from the message.</summary>
+        /// <returns>The <see langword="short"/> that was retrieved.</returns>
         public short GetShort()
         {
             if (UnreadLength < shortLength)
@@ -353,9 +368,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of shorts to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="short"/> array to the message.</summary>
+        /// <param name="array">The <see langword="short"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="short"/> array was added to.</returns>
         public Message Add(short[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -367,13 +383,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of shorts from the message.</summary>
+        /// <summary>Retrieves a <see langword="short"/> array from the message.</summary>
+        /// <returns>The <see langword="short"/> array that was retrieved.</returns>
         public short[] GetShortArray()
         {
             return GetShortArray(GetUShort());
         }
-        /// <summary>Reads an array of shorts from the message.</summary>
+        /// <summary>Retrieves a <see langword="short"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="short"/> array that was retrieved.</returns>
         public short[] GetShortArray(ushort length)
         {
             short[] array = new short[length];
@@ -392,8 +410,9 @@ namespace RiptideNetworking
         #endregion
 
         #region UShort
-        /// <summary>Adds a ushort to the message.</summary>
-        /// <param name="value">The ushort to add.</param>
+        /// <summary>Adds a <see langword="ushort"/> to the message.</summary>
+        /// <param name="value">The <see langword="ushort"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
         public Message Add(ushort value)
         {
             if (UnwrittenLength < shortLength)
@@ -405,7 +424,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a ushort from the message.</summary>
+        /// <summary>Retrieves a <see langword="ushort"/> from the message.</summary>
+        /// <returns>The <see langword="ushort"/> that was retrieved.</returns>
         public ushort GetUShort()
         {
             if (UnreadLength < shortLength)
@@ -421,7 +441,7 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Reads a ushort from the message without moving the read position, allowing the same bytes to be read again.</summary>
+        /// <summary>Retrieves a <see langword="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         internal ushort PeekUShort()
         {
             if (UnreadLength < shortLength)
@@ -436,9 +456,10 @@ namespace RiptideNetworking
             return BitConverter.ToUInt16(StandardizeEndianness(bytesToConvert), 0); // Convert the bytes at readPos' position to a ushort
         }
 
-        /// <summary>Adds an array of ushorts to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="ushort"/> array to the message.</summary>
+        /// <param name="array">The <see langword="ushort"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="ushort"/> array was added to.</returns>
         public Message Add(ushort[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -450,13 +471,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of ushorts from the message.</summary>
+        /// <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
+        /// <returns>The <see langword="ushort"/> array that was retrieved.</returns>
         public ushort[] GetUShortArray()
         {
             return GetUShortArray(GetUShort());
         }
-        /// <summary>Reads an array of ushorts from the message.</summary>
+        /// <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="ushort"/> array that was retrieved.</returns>
         public ushort[] GetUShortArray(ushort length)
         {
             ushort[] array = new ushort[length];
@@ -475,8 +498,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Int
-        /// <summary>Adds an int to the message.</summary>
-        /// <param name="value">The int to add.</param>
+        /// <summary>Adds an <see langword="int"/> to the message.</summary>
+        /// <param name="value">The <see langword="int"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="int"/> was added to.</returns>
         public Message Add(int value)
         {
             if (UnwrittenLength < intLength)
@@ -490,7 +514,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an int from the message.</summary>
+        /// <summary>Retrieves an <see langword="int"/> from the message.</summary>
+        /// <returns>The <see langword="int"/> that was retrieved.</returns>
         public int GetInt()
         {
             if (UnreadLength < intLength)
@@ -506,9 +531,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of ints to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds an <see langword="int"/> array message.</summary>
+        /// <param name="array">The <see langword="int"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="int"/> array was added to.</returns>
         public Message Add(int[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -520,13 +546,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of ints from the message.</summary>
+        /// <summary>Retrieves an <see langword="int"/> array from the message.</summary>
+        /// <returns>The <see langword="int"/> array that was retrieved.</returns>
         public int[] GetIntArray()
         {
             return GetIntArray(GetUShort());
         }
-        /// <summary>Reads an array of ints from the message.</summary>
+        /// <summary>Retrieves an <see langword="int"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="int"/> array that was retrieved.</returns>
         public int[] GetIntArray(ushort length)
         {
             int[] array = new int[length];
@@ -545,8 +573,9 @@ namespace RiptideNetworking
         #endregion
 
         #region UInt
-        /// <summary>Adds a uint to the message.</summary>
-        /// <param name="value">The uint to add.</param>
+        /// <summary>Adds a <see langword="uint"/> to the message.</summary>
+        /// <param name="value">The <see langword="uint"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
         public Message Add(uint value)
         {
             if (UnwrittenLength < intLength)
@@ -560,7 +589,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a uint from the message.</summary>
+        /// <summary>Retrieves a <see langword="uint"/> from the message.</summary>
+        /// <returns>The <see langword="uint"/> that was retrieved.</returns>
         public uint GetUInt()
         {
             if (UnreadLength < intLength)
@@ -576,9 +606,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of uints to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="uint"/> array to the message.</summary>
+        /// <param name="array">The <see langword="uint"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="uint"/> array was added to.</returns>
         public Message Add(uint[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -590,13 +621,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of uints from the message.</summary>
+        /// <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
+        /// <returns>The <see langword="uint"/> array that was retrieved.</returns>
         public uint[] GetUIntArray()
         {
             return GetUIntArray(GetUShort());
         }
-        /// <summary>Reads an array of uints from the message.</summary>
+        /// <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="uint"/> array that was retrieved.</returns>
         public uint[] GetUIntArray(ushort length)
         {
             uint[] array = new uint[length];
@@ -615,8 +648,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Long
-        /// <summary>Adds a long to the message.</summary>
-        /// <param name="value">The long to add.</param>
+        /// <summary>Adds a <see langword="long"/> to the message.</summary>
+        /// <param name="value">The <see langword="long"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="long"/> was added to.</returns>
         public Message Add(long value)
         {
             if (UnwrittenLength < longLength)
@@ -634,7 +668,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a long from the message.</summary>
+        /// <summary>Retrieves a <see langword="long"/> from the message.</summary>
+        /// <returns>The <see langword="long"/> that was retrieved.</returns>
         public long GetLong()
         {
             if (UnreadLength < longLength)
@@ -650,9 +685,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of longs to the message.</summary>
+        /// <summary>Adds a <see langword="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="long"/> array was added to.</returns>
         public Message Add(long[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -664,13 +700,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of longs from the message.</summary>
+        /// <summary>Retrieves a <see langword="long"/> array from the message.</summary>
+        /// <returns>The <see langword="long"/> array that was retrieved.</returns>
         public long[] GetLongArray()
         {
             return GetLongArray(GetUShort());
         }
-        /// <summary>Reads an array of longs from the message.</summary>
+        /// <summary>Retrieves a <see langword="long"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="long"/> array that was retrieved.</returns>
         public long[] GetLongArray(ushort length)
         {
             long[] array = new long[length];
@@ -689,8 +727,9 @@ namespace RiptideNetworking
         #endregion
 
         #region ULong
-        /// <summary>Adds a ulong to the message.</summary>
-        /// <param name="value">The ulong to add.</param>
+        /// <summary>Adds a <see langword="ulong"/> to the message.</summary>
+        /// <param name="value">The <see langword="ulong"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
         public Message Add(ulong value)
         {
             if (UnwrittenLength < longLength)
@@ -708,7 +747,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a ulong from the message.</summary>
+        /// <summary>Retrieves a <see langword="ulong"/> from the message.</summary>
+        /// <returns>The <see langword="ulong"/> that was retrieved.</returns>
         public ulong GetULong()
         {
             if (UnreadLength < longLength)
@@ -724,9 +764,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of ulongs to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="ulong"/> array to the message.</summary>
+        /// <param name="array">The <see langword="ulong"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="ulong"/> array was added to.</returns>
         public Message Add(ulong[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -738,13 +779,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of ulongs from the message.</summary>
+        /// <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
+        /// <returns>The <see langword="ulong"/> array that was retrieved.</returns>
         public ulong[] GetULongArray()
         {
             return GetULongArray(GetUShort());
         }
-        /// <summary>Reads an array of ulongs from the message.</summary>
+        /// <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="ulong"/> array that was retrieved.</returns>
         public ulong[] GetULongArray(ushort length)
         {
             ulong[] array = new ulong[length];
@@ -763,8 +806,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Float
-        /// <summary>Adds a float to the message.</summary>
-        /// <param name="value">The float to add.</param>
+        /// <summary>Adds a <see langword="float"/> to the message.</summary>
+        /// <param name="value">The <see langword="float"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="float"/> was added to.</returns>
         public Message Add(float value)
         {
             if (UnwrittenLength < floatLength)
@@ -778,7 +822,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a float from the message.</summary>
+        /// <summary>Retrieves a <see langword="float"/> from the message.</summary>
+        /// <returns>The <see langword="float"/> that was retrieved.</returns>
         public float GetFloat()
         {
             if (UnreadLength < floatLength)
@@ -794,9 +839,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of floats to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="float"/> array to the message.</summary>
+        /// <param name="array">The <see langword="float"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="float"/> array was added to.</returns>
         public Message Add(float[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -808,13 +854,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of floats from the message.</summary>
+        /// <summary>Retrieves a <see langword="float"/> array from the message.</summary>
+        /// <returns>The <see langword="float"/> array that was retrieved.</returns>
         public float[] GetFloatArray()
         {
             return GetFloatArray(GetUShort());
         }
-        /// <summary>Reads an array of floats from the message.</summary>
+        /// <summary>Retrieves a <see langword="float"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="float"/> array that was retrieved.</returns>
         public float[] GetFloatArray(ushort length)
         {
             float[] array = new float[length];
@@ -833,8 +881,9 @@ namespace RiptideNetworking
         #endregion
 
         #region Double
-        /// <summary>Adds a double to the message.</summary>
-        /// <param name="value">The double to add.</param>
+        /// <summary>Adds a <see langword="double"/> to the message.</summary>
+        /// <param name="value">The <see langword="double"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="double"/> was added to.</returns>
         public Message Add(double value)
         {
             if (UnwrittenLength < doubleLength)
@@ -852,7 +901,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a double from the message.</summary>
+        /// <summary>Retrieves a <see langword="double"/> from the message.</summary>
+        /// <returns>The <see langword="double"/> that was retrieved.</returns>
         public double GetDouble()
         {
             if (UnreadLength < doubleLength)
@@ -868,9 +918,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of doubles to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="double"/> array to the message.</summary>
+        /// <param name="array">The <see langword="double"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="double"/> array was added to.</returns>
         public Message Add(double[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -882,13 +933,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of doubles from the message.</summary>
+        /// <summary>Retrieves a<see langword="double"/> array from the message.</summary>
+        /// <returns>The <see langword="double"/> array that was retrieved.</returns>
         public double[] GetDoubleArray()
         {
             return GetDoubleArray(GetUShort());
         }
-        /// <summary>Reads an array of doubles from the message.</summary>
+        /// <summary>Retrieves a<see langword="double"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="double"/> array that was retrieved.</returns>
         public double[] GetDoubleArray(ushort length)
         {
             double[] array = new double[length];
@@ -907,8 +960,9 @@ namespace RiptideNetworking
         #endregion
 
         #region String
-        /// <summary>Adds a string to the message.</summary>
-        /// <param name="value">The string to add.</param>
+        /// <summary>Adds a <see langword="string"/> to the message.</summary>
+        /// <param name="value">The <see langword="string"/> to add.</param>
+        /// <returns>The Message instance that the <see langword="string"/> was added to.</returns>
         public Message Add(string value)
         {
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
@@ -921,7 +975,8 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads a string from the message.</summary>
+        /// <summary>Retrieves a <see langword="string"/> from the message.</summary>
+        /// <returns>The <see langword="string"/> that was retrieved.</returns>
         public string GetString()
         {
             ushort length = GetUShort(); // Get the length of the string (in bytes, NOT characters)
@@ -936,9 +991,10 @@ namespace RiptideNetworking
             return value;
         }
 
-        /// <summary>Adds an array of strings to the message.</summary>
-        /// <param name="array">The array to add.</param>
-        /// <param name="includeLength">Whether or not to add the length of the array to the message.</param>
+        /// <summary>Adds a <see langword="string"/> array to the message.</summary>
+        /// <param name="array">The <see langword="string"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The Message instance that the <see langword="string"/> array was added to.</returns>
         public Message Add(string[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -950,13 +1006,15 @@ namespace RiptideNetworking
             return this;
         }
 
-        /// <summary>Reads an array of strings from the message.</summary>
+        /// <summary>Retrieves a <see langword="string"/> array from the message.</summary>
+        /// <returns>The <see langword="string"/> array that was retrieved.</returns>
         public string[] GetStringArray()
         {
             return GetStringArray(GetUShort());
         }
-        /// <summary>Reads an array of strings from the message.</summary>
+        /// <summary>Retrieves a <see langword="string"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
+        /// <returns>The <see langword="string"/> array that was retrieved.</returns>
         public string[] GetStringArray(ushort length)
         {
             string[] array = new string[length];

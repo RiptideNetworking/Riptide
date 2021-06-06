@@ -14,6 +14,7 @@ namespace RiptideNetworking
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port { get; private set; }
         /// <summary>An array of all the currently connected clients.</summary>
+        /// <remarks>The position of each <see cref="ServerClient"/> instance in the array does NOT correspond to that client's numeric ID.</remarks>
         public ServerClient[] Clients => clients.Values.ToArray();
         /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount { get; private set; }
@@ -34,11 +35,11 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Currently connected clients, accessible by their IPEndPoint.</summary>
+        /// <summary>Currently connected clients, accessible by their endpoints.</summary>
         private Dictionary<IPEndPoint, ServerClient> clients;
-        /// <summary>Endpoints of clients that have timed out and need to be removed from the clients dictionary.</summary>
+        /// <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="clients"/> dictionary.</summary>
         private List<IPEndPoint> timedOutClients;
-        /// <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
+        /// <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         private ActionQueue receiveActionQueue;
         /// <summary>All currently unused client IDs.</summary>
         private List<ushort> availableClientIds;
@@ -46,13 +47,13 @@ namespace RiptideNetworking
         private Timer heartbeatTimer;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Server(string logName = "SERVER") : base(logName) { }
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
-        /// <param name="receiveActionQueue">The action queue to add messages to. Passing null will cause messages to be handled immediately on the same thread on which they were received.</param>
+        /// <param name="receiveActionQueue">The action queue to add messages to. Passing <see langword="null"/> will cause messages to be handled immediately on the same thread on which they were received.</param>
         /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         public void Start(ushort port, ushort maxClientCount, ActionQueue receiveActionQueue = null, ushort clientHeartbeatInterval = 1000)
         {
@@ -73,7 +74,7 @@ namespace RiptideNetworking
             IsRunning = true;
         }
 
-        /// <summary>Checks if clients have timed out. Called by the heartbeat timer.</summary>
+        /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat(object state)
         {
             lock (clients)
@@ -94,6 +95,7 @@ namespace RiptideNetworking
         /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
         /// <param name="firstByte">The first byte of the message.</param>
+        /// <returns><see langword="true"/> if the message should be handled.</returns>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             lock (clients)
@@ -228,7 +230,7 @@ namespace RiptideNetworking
             }
             else
             {
-                RiptideLogger.Log(LogName, "No available client IDs! Assigned 0.");
+                RiptideLogger.Log(LogName, "No available client IDs, assigned 0!");
                 return 0;
             }
         }
