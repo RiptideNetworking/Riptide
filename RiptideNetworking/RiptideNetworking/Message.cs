@@ -182,7 +182,11 @@ namespace RiptideNetworking
         /// <param name="seqId">The sequence ID to insert.</param>
         internal void SetSequenceIdBytes(ushort seqId)
         {
+#if BIG_ENDIAN
             byte[] sequenceIdBytes = StandardizeEndianness(BitConverter.GetBytes(seqId));
+#else
+            byte[] sequenceIdBytes = BitConverter.GetBytes(seqId);
+#endif
             Bytes[1] = sequenceIdBytes[0];
             Bytes[2] = sequenceIdBytes[1];
         }
@@ -194,25 +198,25 @@ namespace RiptideNetworking
             readPos = 0;
         }
 
+#if BIG_ENDIAN
         /// <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
         /// <param name="value">The bytes whose order to standardize.</param>
         internal static byte[] StandardizeEndianness(byte[] value)
         {
-            if (!BitConverter.IsLittleEndian)
-                Array.Reverse(value);
+            Array.Reverse(value);
             return value;
         }
         /// <summary>Standardizes byte order across big and little endian systems by reversing byteAmount bytes at the message's current read position on big endian systems.</summary>
         /// <param name="byteAmount">The number of bytes whose order to standardize, starting at the message's current read position.</param>
         internal void StandardizeEndianness(int byteAmount)
         {
-            if (!BitConverter.IsLittleEndian)
-                Array.Reverse(Bytes, readPos, byteAmount);
+            Array.Reverse(Bytes, readPos, byteAmount);
         }
-        #endregion
+#endif
+#endregion
 
-        #region Add & Retrieve Data
-        #region Byte
+#region Add & Retrieve Data
+#region Byte
         /// <summary>Adds a single <see langword="byte"/> to the message.</summary>
         /// <param name="value">The <see langword="byte"/> to add.</param>
         /// <returns>The Message instance that the <see langword="byte"/> was added to.</returns>
@@ -268,9 +272,9 @@ namespace RiptideNetworking
             readPos += (ushort)length;
             return value;
         }
-        #endregion
+#endregion
 
-        #region Bool
+#region Bool
         /// <summary>Adds a <see langword="bool"/> to the message.</summary>
         /// <param name="value">The <see langword="bool"/> to add.</param>
         /// <returns>The Message instance that the <see langword="bool"/> was added to.</returns>
@@ -334,9 +338,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region Short
+#region Short
         /// <summary>Adds a <see langword="short"/> to the message.</summary>
         /// <param name="value">The <see langword="short"/> to add.</param>
         /// <returns>The Message instance that the <see langword="short"/> was added to.</returns>
@@ -345,7 +349,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < shortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'short'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             return this;
@@ -360,9 +368,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(shortLength);
+#endif
             short value = BitConverter.ToInt16(Bytes, readPos); // Convert the bytes at readPos' position to a short
             readPos += shortLength;
             return value;
@@ -407,9 +417,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region UShort
+#region UShort
         /// <summary>Adds a <see langword="ushort"/> to the message.</summary>
         /// <param name="value">The <see langword="ushort"/> to add.</param>
         /// <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
@@ -418,7 +428,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < shortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ushort'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             return this;
@@ -433,9 +447,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(shortLength);
+#endif
             ushort value = BitConverter.ToUInt16(Bytes, readPos); // Convert the bytes at readPos' position to a ushort
             readPos += shortLength;
             return value;
@@ -453,7 +469,11 @@ namespace RiptideNetworking
             // If there are enough unread bytes
             byte[] bytesToConvert = new byte[shortLength];
             Array.Copy(Bytes, readPos, bytesToConvert, 0, shortLength);
-            return BitConverter.ToUInt16(StandardizeEndianness(bytesToConvert), 0); // Convert the bytes at readPos' position to a ushort
+#if BIG_ENDIAN
+            return BitConverter.ToUInt16(StandardizeEndianness(bytesToConvert), 0); // Convert the bytes to a ushort
+#else
+            return BitConverter.ToUInt16(bytesToConvert, 0); // Convert the bytes to a ushort
+#endif
         }
 
         /// <summary>Adds a <see langword="ushort"/> array to the message.</summary>
@@ -495,9 +515,9 @@ namespace RiptideNetworking
             
             return array;
         }
-        #endregion
+#endregion
 
-        #region Int
+#region Int
         /// <summary>Adds an <see langword="int"/> to the message.</summary>
         /// <param name="value">The <see langword="int"/> to add.</param>
         /// <returns>The Message instance that the <see langword="int"/> was added to.</returns>
@@ -506,7 +526,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < intLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'int'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -523,9 +547,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(intLength);
+#endif
             int value = BitConverter.ToInt32(Bytes, readPos); // Convert the bytes at readPos' position to an int
             readPos += intLength;
             return value;
@@ -570,9 +596,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region UInt
+#region UInt
         /// <summary>Adds a <see langword="uint"/> to the message.</summary>
         /// <param name="value">The <see langword="uint"/> to add.</param>
         /// <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
@@ -581,7 +607,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < intLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'uint'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -598,9 +628,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(intLength);
+#endif
             uint value = BitConverter.ToUInt32(Bytes, readPos); // Convert the bytes at readPos' position to an uint
             readPos += intLength;
             return value;
@@ -645,9 +677,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region Long
+#region Long
         /// <summary>Adds a <see langword="long"/> to the message.</summary>
         /// <param name="value">The <see langword="long"/> to add.</param>
         /// <returns>The Message instance that the <see langword="long"/> was added to.</returns>
@@ -656,7 +688,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < longLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'long'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -677,9 +713,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(longLength);
+#endif
             long value = BitConverter.ToInt64(Bytes, readPos); // Convert the bytes at readPos' position to a long;
             readPos += longLength;
             return value;
@@ -724,9 +762,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region ULong
+#region ULong
         /// <summary>Adds a <see langword="ulong"/> to the message.</summary>
         /// <param name="value">The <see langword="ulong"/> to add.</param>
         /// <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
@@ -735,7 +773,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < longLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ulong'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -756,9 +798,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(longLength);
+#endif
             ulong value = BitConverter.ToUInt64(Bytes, readPos); // Convert the bytes at readPos' position to a ulong
             readPos += longLength;
             return value;
@@ -803,9 +847,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region Float
+#region Float
         /// <summary>Adds a <see langword="float"/> to the message.</summary>
         /// <param name="value">The <see langword="float"/> to add.</param>
         /// <returns>The Message instance that the <see langword="float"/> was added to.</returns>
@@ -814,7 +858,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < floatLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'float'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -831,9 +879,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(floatLength);
+#endif
             float value = BitConverter.ToSingle(Bytes, readPos); // Convert the bytes at readPos' position to a float
             readPos += floatLength;
             return value;
@@ -878,9 +928,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region Double
+#region Double
         /// <summary>Adds a <see langword="double"/> to the message.</summary>
         /// <param name="value">The <see langword="double"/> to add.</param>
         /// <returns>The Message instance that the <see langword="double"/> was added to.</returns>
@@ -889,7 +939,11 @@ namespace RiptideNetworking
             if (UnwrittenLength < doubleLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'double'!");
 
+#if BIG_ENDIAN
             byte[] valueBytes = StandardizeEndianness(BitConverter.GetBytes(value));
+#else
+            byte[] valueBytes = BitConverter.GetBytes(value);
+#endif
             Bytes[writePos++] = valueBytes[0];
             Bytes[writePos++] = valueBytes[1];
             Bytes[writePos++] = valueBytes[2];
@@ -910,9 +964,11 @@ namespace RiptideNetworking
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
                 return 0;
             }
-            
+
             // If there are enough unread bytes
+#if BIG_ENDIAN
             StandardizeEndianness(doubleLength);
+#endif
             double value = BitConverter.ToDouble(Bytes, readPos); // Convert the bytes at readPos' position to a double
             readPos += doubleLength;
             return value;
@@ -957,9 +1013,9 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
+#endregion
 
-        #region String
+#region String
         /// <summary>Adds a <see langword="string"/> to the message.</summary>
         /// <param name="value">The <see langword="string"/> to add.</param>
         /// <returns>The Message instance that the <see langword="string"/> was added to.</returns>
@@ -1023,7 +1079,7 @@ namespace RiptideNetworking
 
             return array;
         }
-        #endregion
-        #endregion
+#endregion
+#endregion
     }
 }

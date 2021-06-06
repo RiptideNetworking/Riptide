@@ -425,14 +425,6 @@
         <member name="M:RiptideNetworking.Message.Reuse">
             <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Byte[])">
-            <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
-            <param name="value">The bytes whose order to standardize.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Int32)">
-            <summary>Standardizes byte order across big and little endian systems by reversing byteAmount bytes at the message's current read position on big endian systems.</summary>
-            <param name="byteAmount">The number of bytes whose order to standardize, starting at the message's current read position.</param>
-        </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
             <summary>Adds a single <see langword="byte"/> to the message.</summary>
             <param name="value">The <see langword="byte"/> to add.</param>

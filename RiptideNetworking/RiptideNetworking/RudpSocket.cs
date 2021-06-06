@@ -152,9 +152,13 @@ namespace RiptideNetworking
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
         internal void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
         {
+#if BIG_ENDIAN
             byte[] idBytes = new byte[Message.shortLength];
             Array.Copy(data, 1, idBytes, 0, Message.shortLength);
             ushort sequenceId = BitConverter.ToUInt16(Message.StandardizeEndianness(idBytes), 0);
+#else
+            ushort sequenceId = BitConverter.ToUInt16(data, 1);
+#endif
 
             lock (lockables)
             {
