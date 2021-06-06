@@ -16,7 +16,7 @@ namespace RiptideNetworking
         public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => connectionState == ConnectionState.connected;
-        /// <summary>The connetion's remote endpoint.</summary>
+        /// <summary>The connection's remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 
         /// <summary>The client's Rudp instance.</summary>

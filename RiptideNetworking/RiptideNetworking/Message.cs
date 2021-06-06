@@ -45,11 +45,11 @@ namespace RiptideNetworking
         /// <summary>The message instance used for sending user messages.</summary>
         private static readonly Message send = new Message();
         /// <summary>The message instance used for sending internal messages.</summary>
-        private static readonly Message sendInternal = new Message();
+        private static readonly Message sendInternal = new Message(25);
         /// <summary>The message instance used for handling user messages.</summary>
         private static readonly Message handle = new Message();
         /// <summary>The message instance used for handling internal messages.</summary>
-        private static readonly Message handleInternal = new Message();
+        private static readonly Message handleInternal = new Message(25);
 
         /// <summary>How many bytes a bool is represented by.</summary>
         public const byte boolLength = sizeof(bool);
@@ -84,9 +84,21 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable Message instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        private Message(ushort maxSize = 1500)
+        internal Message(ushort maxSize = 1500)
         {
             Bytes = new byte[maxSize];
+        }
+
+        /// <summary>Initializes a reusable <see cref="Message"/> instance with a given <see cref="HeaderType"/>.</summary>
+        /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
+        /// <param name="headerType">The <see cref="HeaderType"/> to initialize the message with.</param>
+        internal Message(HeaderType headerType, ushort maxSize = 1500)
+        {
+            Bytes = new byte[maxSize];
+
+            Add((byte)headerType);
+            if (SendMode == MessageSendMode.reliable)
+                writePos += shortLength;
         }
 
         /// <summary>Initializes the Message instance used for sending with new values.</summary>
@@ -169,6 +181,13 @@ namespace RiptideNetworking
             byte[] sequenceIdBytes = StandardizeEndianness(BitConverter.GetBytes(seqId));
             Bytes[1] = sequenceIdBytes[0];
             Bytes[2] = sequenceIdBytes[1];
+        }
+
+        /// <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be overwritten.</summary>
+        internal void Reuse()
+        {
+            writePos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
+            readPos = 0;
         }
 
         /// <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>

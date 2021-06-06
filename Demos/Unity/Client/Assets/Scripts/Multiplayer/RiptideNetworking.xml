@@ -49,7 +49,7 @@
             <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.remoteEndPoint">
-            <summary>The connetion's remote endpoint.</summary>
+            <summary>The connection's remote endpoint.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.rudp">
             <summary>The client's Rudp instance.</summary>
@@ -71,6 +71,9 @@
         </member>
         <member name="F:RiptideNetworking.Client.lastHeartbeat">
             <summary>The time at which the last heartbeat was received from the client.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Client.heartbeatMessage">
+            <summary>Unique reusable <see cref="T:RiptideNetworking.Message"/> instance for sending heartbeats to avoid threading issues.</summary>
         </member>
         <member name="F:RiptideNetworking.Client.lastPingId">
             <summary>ID of the last ping that was sent.</summary>
@@ -375,6 +378,11 @@
             <summary>Initializes a reusable Message instance.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
+        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.HeaderType,System.UInt16)">
+            <summary>Initializes a reusable <see cref="T:RiptideNetworking.Message"/> instance with a given <see cref="T:RiptideNetworking.HeaderType"/>.</summary>
+            <param name="maxSize">The maximum amount of bytes the message can contain.</param>
+            <param name="headerType">The <see cref="T:RiptideNetworking.HeaderType"/> to initialize the message with.</param>
+        </member>
         <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16)">
             <summary>Initializes the Message instance used for sending with new values.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
@@ -408,6 +416,9 @@
         <member name="M:RiptideNetworking.Message.SetSequenceIdBytes(System.UInt16)">
             <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
             <param name="seqId">The sequence ID to insert.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.Reuse">
+            <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be overwritten.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.StandardizeEndianness(System.Byte[])">
             <summary>Standardizes byte order across big and little endian systems by reversing the given bytes on big endian systems.</summary>
@@ -1010,7 +1021,7 @@
             <summary>Whether or not the client is currently connected.</summary>
         </member>
         <member name="F:RiptideNetworking.ServerClient.remoteEndPoint">
-            <summary>The connetion's remote endpoint.</summary>
+            <summary>The connection's remote endpoint.</summary>
         </member>
         <member name="P:RiptideNetworking.ServerClient.Rudp">
             <summary>The client's Rudp instance.</summary>

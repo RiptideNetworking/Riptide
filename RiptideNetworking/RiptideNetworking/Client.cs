@@ -35,7 +35,7 @@ namespace RiptideNetworking
 
         /// <summary>The action queue to use when triggering events. Null if events should be triggered immediately.</summary>
         private ActionQueue receiveActionQueue;
-        /// <summary>The connetion's remote endpoint.</summary>
+        /// <summary>The connection's remote endpoint.</summary>
         private IPEndPoint remoteEndPoint;
         /// <summary>The client's Rudp instance.</summary>
         private Rudp rudp;
@@ -52,6 +52,8 @@ namespace RiptideNetworking
         private Timer heartbeatTimer;
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
+        /// <summary>Unique reusable <see cref="Message"/> instance for sending heartbeats to avoid threading issues.</summary>
+        Message heartbeatMessage = new Message(HeaderType.heartbeat, 4);
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
         /// <summary>The currently pending ping.</summary>
@@ -281,17 +283,17 @@ namespace RiptideNetworking
             rudp.AckMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
             rudp.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
-
+        
         /// <summary>Sends a heartbeat message.</summary>
         private void SendHeartbeat()
         {
             pendingPing = (lastPingId++, DateTime.UtcNow);
 
-            Message message = Message.CreateInternal(HeaderType.heartbeat);
-            message.Add(pendingPing.id);
-            message.Add(rudp.RTT);
+            heartbeatMessage.Reuse();
+            heartbeatMessage.Add(pendingPing.id);
+            heartbeatMessage.Add(rudp.RTT);
 
-            Send(message);
+            Send(heartbeatMessage);
         }
 
         /// <summary>Handles a heartbeat message.</summary>
