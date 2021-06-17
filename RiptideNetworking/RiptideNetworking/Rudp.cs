@@ -83,6 +83,7 @@ namespace RiptideNetworking
                 }
                 else if (sequenceGap < 0)
                 {
+                    // TODO: remove? I don't think this case ever executes
                     // The latest sequence ID that the other end has received is older than the previous one (out of order ack)
                     sequenceGap = (ushort)(-sequenceGap - 1); // Because bit shifting is 0-based
                     ushort ackedBit = (ushort)(1 << sequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
@@ -189,8 +190,18 @@ namespace RiptideNetworking
             internal void RetrySend()
             {
                 lock (this) // Make sure we don't try resending the message while another thread is clearing it because it was delivered
-                    if (!wasCleared && lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * 0.5f)) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                        TrySend();
+                {
+                    if (!wasCleared)
+                    {
+                        if (lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 25 : rudp.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                            TrySend();
+                        else
+                        {
+                            retryTimer.Start();
+                            retryTimer.Interval = (rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
+                        }
+                    }
+                }
             }
 
             /// <summary>Attempts to send the message.</summary>
@@ -222,9 +233,8 @@ namespace RiptideNetworking
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
 
-                retryTimer.Stop();
-                retryTimer.Interval = rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
                 retryTimer.Start();
+                retryTimer.Interval = rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
             }
 
             /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
@@ -234,7 +244,8 @@ namespace RiptideNetworking
                 {
                     if (!wasCleared)
                     {
-                        rudp.PendingMessages.Remove(sequenceId);
+                        lock (rudp.PendingMessages)
+                            rudp.PendingMessages.Remove(sequenceId);
 
                         data = null;
                         retryTimer.Stop();

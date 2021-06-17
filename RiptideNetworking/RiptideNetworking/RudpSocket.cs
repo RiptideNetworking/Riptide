@@ -174,24 +174,40 @@ namespace RiptideNetworking
                         // If we haven't received this packet before
                         lockables.AcksBitfield |= (ushort)(1 << sequenceGap - 1); // Set the bit corresponding to the sequence ID to 1 because we received that ID
                         lockables.LastReceivedSeqId = sequenceId;
+                        SendAck(sequenceId, fromEndPoint);
                     }
                     else
-                        return; // Message was a duplicate
+                    {
+                        SendAck(sequenceId, fromEndPoint);
+                        return; // Message was a duplicate, don't handle it
+                    }
                 }
                 else if (sequenceGap < 0)
                 {
                     // The received sequence ID is older than the previous one (out of order message)
                     sequenceGap = -sequenceGap; // Make sequenceGap positive
-                    ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-                    if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
-                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                    if (sequenceGap > 16) // If it's an old packet and its sequence ID doesn't fall within the bitfield's value range anymore
+                        SendAck(sequenceId, fromEndPoint); // TODO: store a larger bitfield locally to do a better job of filtering out old duplicates
                     else
-                        return; // Message was a duplicate
+                    {
+                        ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
+                        if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
+                        {
+                            lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                            SendAck(sequenceId, fromEndPoint);
+                        }
+                        else
+                        {
+                            SendAck(sequenceId, fromEndPoint);
+                            return; // Message was a duplicate, don't handle it
+                        }
+                    }
                 }
                 else // The received sequence ID is the same as the previous one (duplicate message)
-                    return; // Message was a duplicate
-
-                SendAck(sequenceId, fromEndPoint);
+                {
+                    SendAck(sequenceId, fromEndPoint);
+                    return; // Message was a duplicate, don't handle it
+                }
             }
 
             Handle(data, fromEndPoint, headerType);
