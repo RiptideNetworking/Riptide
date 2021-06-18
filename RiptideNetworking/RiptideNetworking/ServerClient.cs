@@ -134,7 +134,7 @@ namespace RiptideNetworking
             ushort id = message.GetUShort();
 
             if (Id != id)
-                RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
+                server.logger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 
             connectionState = ConnectionState.connected;
             server.OnClientConnected(new ServerClientConnectedEventArgs(this));

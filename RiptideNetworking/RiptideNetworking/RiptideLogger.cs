@@ -5,57 +5,66 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for logging messages.</summary>
     public class RiptideLogger
     {
+
+        #region Variables and Delegates
+        /// <summary>The method to use when logging messages.</summary>
+        private LogMethod _logMethod;
+        /// <summary>Whether or not to include timestamps when logging messages.</summary>
+        private bool _includeTimestamps;
+        /// <summary>The format to use for timestamps.</summary>
+        private string _timestampFormat;
+
         /// <summary>Encapsulates a method used to log messages.</summary>
         /// <param name="log">The message to log.</param>
         public delegate void LogMethod(string log);
-        /// <summary>The method to use when logging messages.</summary>
-        private static LogMethod logMethod;
-        /// <summary>Whether or not to include timestamps when logging messages.</summary>
-        private static bool includeTimestamps;
-        /// <summary>The format to use for timestamps.</summary>
-        private static string timestampFormat;
+        #endregion
 
-        /// <summary>Handles initial setup.</summary>
+        #region Constructor
+        /// <summary>Creates a new instance of the RiptideLogger.</summary>
         /// <param name="logMethod">The method to use when logging messages.</param>
         /// <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
         /// <param name="timestampFormat">The format to use for timestamps.</param>
-        public static void Initialize(LogMethod logMethod, bool includeTimestamps, string timestampFormat = "HH:mm:ss")
+        public RiptideLogger(LogMethod logMethod, bool includeTimestamps, string timestampFormat = "HH:mm:ss")
         {
-            RiptideLogger.logMethod = logMethod;
-            RiptideLogger.includeTimestamps = includeTimestamps;
-            RiptideLogger.timestampFormat = timestampFormat;
+            _logMethod = logMethod;
+            _includeTimestamps = includeTimestamps;
+            _timestampFormat = timestampFormat;
         }
+        #endregion
 
+        #region Methods and Functions
         /// <summary>Logs a message.</summary>
         /// <param name="message">The message to log to the console.</param>
-        public static void Log(string message)
+        public void Log(string message)
         {
-            if (includeTimestamps)
-                logMethod($"[{GetTimestamp(DateTime.Now)}]: {message}");
+            if (_includeTimestamps)
+                _logMethod($"[{GetTimestamp(DateTime.Now)}]: {message}");
             else
-                logMethod(message);
+                _logMethod(message);
         }
         /// <summary>Logs a message.</summary>
         /// <param name="logName">Who is logging this message.</param>
         /// <param name="message">The message to log to the console.</param>
-        public static void Log(string logName, string message)
+        public void Log(string logName, string message)
         {
-            if (includeTimestamps)
-                logMethod($"[{GetTimestamp(DateTime.Now)}] ({logName}): {message}");
+            if (_includeTimestamps)
+                _logMethod($"[{GetTimestamp(DateTime.Now)}] ({logName}): {message}");
             else
-                logMethod($"({logName}): {message}");
+                _logMethod($"({logName}): {message}");
         }
 
         /// <summary>Converts a <see cref="DateTime"/> object to a formatted timestamp string.</summary>
         /// <param name="time">The time to format.</param>
         /// <returns>The formatted timestamp.</returns>
-        private static string GetTimestamp(DateTime time)
+        private string GetTimestamp(DateTime time)
         {
 #if DETAILED_LOGGING
             return time.ToString("HH:mm:ss:fff");
 #else
-            return time.ToString(timestampFormat);
+            return time.ToString(_timestampFormat);
 #endif
         }
+        #endregion
+
     }
 }

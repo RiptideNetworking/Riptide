@@ -46,9 +46,12 @@ namespace RiptideNetworking
         /// <summary>The timer responsible for sending regular heartbeats.</summary>
         private Timer heartbeatTimer;
 
+        #region Constructor
+        // TODO: Add missing comments.
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(string logName = "SERVER") : base(logName) { }
+        /// <param name="logName">The name to use when logging messages via RiptideLogger.</param>
+        public Server(RiptideLogger.LogMethod logMethod, bool includeTimestamps, string logName = "SERVER", string timestampFormat = "HH:mm:ss") : base(logMethod, includeTimestamps, logName, timestampFormat) { }
+        #endregion
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
@@ -69,7 +72,7 @@ namespace RiptideNetworking
 
             StartListening(port);
 
-            RiptideLogger.Log(LogName, $"Started on port {port}.");
+            logger.Log(LogName, $"Started on port {port}.");
             heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
             IsRunning = true;
         }
@@ -188,7 +191,7 @@ namespace RiptideNetworking
                     HandleDisconnect(fromEndPoint);
                     break;
                 default:
-                    RiptideLogger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                    logger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
         }
@@ -230,7 +233,7 @@ namespace RiptideNetworking
             }
             else
             {
-                RiptideLogger.Log(LogName, "No available client IDs, assigned 0!");
+                logger.Log(LogName, "No available client IDs, assigned 0!");
                 return 0;
             }
         }
@@ -301,13 +304,13 @@ namespace RiptideNetworking
                 lock (clients)
                     clients.Remove(client.remoteEndPoint);
 
-                RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
+                logger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
             }
             else
-                RiptideLogger.Log(LogName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
+                logger.Log(LogName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
         }
         
         /// <summary>Stops the server.</summary>
@@ -325,7 +328,7 @@ namespace RiptideNetworking
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
             StopListening();
-            RiptideLogger.Log(LogName, "Server stopped.");
+            logger.Log(LogName, "Server stopped.");
         }
 
         #region Messages
@@ -383,7 +386,7 @@ namespace RiptideNetworking
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
+            logger.Log(LogName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
 
             if (receiveActionQueue == null)
                 ClientConnected?.Invoke(this, e);
@@ -402,7 +405,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         internal void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
+            logger.Log(LogName, $"Client {e.Id} has disconnected.");
 
             if (receiveActionQueue == null)
                 ClientDisconnected?.Invoke(this, e);

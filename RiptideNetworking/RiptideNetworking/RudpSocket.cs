@@ -19,8 +19,11 @@ namespace RiptideNetworking
     /// <summary>Base class for all RUDP connections.</summary>
     public abstract class RudpSocket
     {
-        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/></summary>
+        /// <summary>The name to use when logging messages.</summary>
         public readonly string LogName;
+
+        /// <summary>The Riptide logger for this instance.</summary>
+        public RiptideLogger logger;
 
         /// <summary>How long to wait for a response, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
@@ -31,12 +34,16 @@ namespace RiptideNetworking
         /// <summary>The maximum amount of data that can be received at once.</summary>
         private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
 
+        #region Constructor
+        // TODO: Add better comments.
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        protected RudpSocket(string logName)
+        /// <param name="logName">The name to use when logging messages.</param>
+        protected RudpSocket(RiptideLogger.LogMethod logMethod, bool includeTimestamps, string logName = "CLIENT", string timestampFormat = "HH:mm:ss")
         {
+            logger = new RiptideLogger(logMethod, includeTimestamps, timestampFormat);
             LogName = logName;
         }
+        #endregion
 
         /// <summary>Starts listening for incoming packets.</summary>
         /// <param name="port">The local port to listen on.</param>

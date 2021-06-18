@@ -25,7 +25,7 @@ namespace RiptideNetworking
         {
             if (action == null)
             {
-                RiptideLogger.Log(LogName, "No action to execute!");
+                Console.WriteLine("({0}) No action to execute!"); // TODO: Might need to be rethinked
                 return;
             }
 

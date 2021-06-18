@@ -58,9 +58,12 @@ namespace RiptideNetworking
         /// <summary>The currently pending ping.</summary>
         private (byte id, DateTime sendTime) pendingPing;
 
+        #region Constructor
+        // TODO: Add missing comments.
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(string logName = "CLIENT") : base(logName) { }
+        public Client(RiptideLogger.LogMethod logMethod, bool includeTimestamps, string logName = "CLIENT", string timestampFormat = "HH:mm:ss") : base(logMethod, includeTimestamps, logName, timestampFormat) { }
+        #endregion
 
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
@@ -77,7 +80,7 @@ namespace RiptideNetworking
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             rudp = new Rudp(Send, LogName);
 
-            RiptideLogger.Log(LogName, $"Connecting to {remoteEndPoint}...");
+            logger.Log(LogName, $"Connecting to {remoteEndPoint}...");
             StartListening();
             connectionState = ConnectionState.connecting;
 
@@ -191,7 +194,7 @@ namespace RiptideNetworking
                     HandleDisconnect();
                     break;
                 default:
-                    RiptideLogger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                    logger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
         }
@@ -224,7 +227,7 @@ namespace RiptideNetworking
 
             SendDisconnect();
             LocalDisconnect();
-            RiptideLogger.Log(LogName, "Disconnected.");
+            logger.Log(LogName, "Disconnected.");
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
@@ -368,7 +371,7 @@ namespace RiptideNetworking
         public event EventHandler Connected;
         private void OnConnected(EventArgs e)
         {
-            RiptideLogger.Log(LogName, "Connected successfully!");
+            logger.Log(LogName, "Connected successfully!");
 
             if (receiveActionQueue == null)
                 Connected?.Invoke(this, e);
@@ -379,7 +382,7 @@ namespace RiptideNetworking
         public event EventHandler ConnectionFailed;
         private void OnConnectionFailed(EventArgs e)
         {
-            RiptideLogger.Log(LogName, "Connection to server failed!");
+            logger.Log(LogName, "Connection to server failed!");
 
             if (receiveActionQueue == null)
                 ConnectionFailed?.Invoke(this, e);
@@ -396,7 +399,7 @@ namespace RiptideNetworking
         public event EventHandler Disconnected;
         private void OnDisconnected(EventArgs e)
         {
-            RiptideLogger.Log(LogName, "Disconnected from server.");
+            logger.Log(LogName, "Disconnected from server.");
 
             if (receiveActionQueue == null)
                 Disconnected?.Invoke(this, e);
@@ -408,7 +411,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"Client {e.Id} connected.");
+            logger.Log(LogName, $"Client {e.Id} connected.");
 
             if (receiveActionQueue == null)
                 ClientConnected?.Invoke(this, e);
@@ -419,7 +422,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
+            logger.Log(LogName, $"Client {e.Id} disconnected.");
 
             if (receiveActionQueue == null)
                 ClientDisconnected?.Invoke(this, e);
