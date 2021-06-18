@@ -7,8 +7,8 @@ namespace ConsoleServer
 {
     class Program
     {
-        private static Server server = new Server();
-        private static Dictionary<ushort, Player> players = new Dictionary<ushort, Player>();
+        private static readonly Server server = new Server();
+        private static readonly Dictionary<ushort, Player> players = new Dictionary<ushort, Player>();
 
         /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
         /// <param name="fromClient">The client from whom the message was received.</param>
@@ -21,7 +21,7 @@ namespace ConsoleServer
         private static List<int> remainingTestIds;
         private static Timer testEndWaitTimer;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             Console.Title = "Server";
             

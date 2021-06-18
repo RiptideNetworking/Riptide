@@ -9,7 +9,7 @@ namespace ConsoleClient
 {
     class Program
     {
-        private static Client client = new Client();
+        private static readonly Client client = new Client();
 
         /// <summary>Encapsulates a method that handles a message from the server.</summary>
         /// <param name="message">The message that was received.</param>
@@ -23,7 +23,7 @@ namespace ConsoleClient
         private static List<int> remainingTestIds;
         private static Timer testEndWaitTimer;
 
-        private static void Main(string[] args)
+        private static void Main()
         {
             Console.Title = "Client";
 

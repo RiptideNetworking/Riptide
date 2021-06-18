@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
@@ -30,7 +29,7 @@ namespace RiptideNetworking
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
         internal delegate void Send(byte[] data, IPEndPoint toEndPoint);
         /// <summary>The method to use when sending data.</summary>
-        private Send send;
+        private readonly Send send;
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         private readonly string logName;
 
@@ -147,21 +146,21 @@ namespace RiptideNetworking
         internal class PendingMessage
         {
             /// <summary>The Rudp instance to use to send (and resend) the pending message.</summary>
-            private Rudp rudp;
+            private readonly Rudp rudp;
             /// <summary>The intended destination endpoint of the message.</summary>
-            private IPEndPoint remoteEndPoint;
+            private readonly IPEndPoint remoteEndPoint;
             /// <summary>The sequence ID of the message.</summary>
-            private ushort sequenceId;
+            private readonly ushort sequenceId;
             /// <summary>The contents of the message.</summary>
-            private byte[] data;
+            private readonly byte[] data;
             /// <summary>How often to try sending the message before giving up.</summary>
-            private byte maxSendAttempts;
+            private readonly byte maxSendAttempts;
             /// <summary>How many send attempts have been made.</summary>
             private byte sendAttempts;
             /// <summary>The time of the latest send attempt.</summary>
             private DateTime lastSendTime;
             /// <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
-            private Timer retryTimer;
+            private readonly Timer retryTimer;
             /// <summary>Whether the pending message has been cleared or not.</summary>
             private bool wasCleared;
 
@@ -246,8 +245,7 @@ namespace RiptideNetworking
                     {
                         lock (rudp.PendingMessages)
                             rudp.PendingMessages.Remove(sequenceId);
-
-                        data = null;
+                        
                         retryTimer.Stop();
                         retryTimer.Dispose();
                         wasCleared = true;

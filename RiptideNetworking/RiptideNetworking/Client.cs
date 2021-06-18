@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 
@@ -53,7 +52,7 @@ namespace RiptideNetworking
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
         /// <summary>A unique reusable message for sending heartbeats to avoid threading issues.</summary>
-        Message heartbeatMessage = new Message(HeaderType.heartbeat, 4);
+        private readonly Message heartbeatMessage = new Message(HeaderType.heartbeat, 4);
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
         /// <summary>The currently pending ping.</summary>

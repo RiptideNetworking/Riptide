@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Timers;
-using Timer = System.Timers.Timer;
 
 namespace RiptideNetworking
 {
@@ -32,7 +29,7 @@ namespace RiptideNetworking
         /// <summary>Whether or not we are listening for incoming data.</summary>
         private bool isListening = false;
         /// <summary>The maximum amount of data that can be received at once.</summary>
-        private ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
+        private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
