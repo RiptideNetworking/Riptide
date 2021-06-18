@@ -239,7 +239,7 @@ namespace RiptideNetworking
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
-        public void Send(Message message, ServerClient toClient, byte maxSendAttempts = 3)
+        public void Send(Message message, ServerClient toClient, byte maxSendAttempts = 15)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, toClient.remoteEndPoint);
@@ -250,7 +250,7 @@ namespace RiptideNetworking
         /// <summary>Sends a message to all conected clients.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
-        public void SendToAll(Message message, byte maxSendAttempts = 3)
+        public void SendToAll(Message message, byte maxSendAttempts = 15)
         {
             lock (clients)
             {
@@ -271,7 +271,7 @@ namespace RiptideNetworking
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClient">The client NOT to send the message to.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
-        public void SendToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 3)
+        public void SendToAll(Message message, ServerClient exceptToClient, byte maxSendAttempts = 15)
         {
             lock (clients)
             {
@@ -362,7 +362,7 @@ namespace RiptideNetworking
             lock (clients)
                 foreach (ServerClient client in clients.Values)
                     if (!client.remoteEndPoint.Equals(endPoint))
-                        Send(message, client, 5);
+                        Send(message, client, 25);
         }
 
         /// <summary>Sends a client disconnected message.</summary>
@@ -374,7 +374,7 @@ namespace RiptideNetworking
 
             lock (clients)
                 foreach (ServerClient client in clients.Values)
-                    Send(message, client, 5);
+                    Send(message, client, 25);
         }
         #endregion
 

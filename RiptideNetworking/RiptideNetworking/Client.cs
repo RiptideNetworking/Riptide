@@ -208,7 +208,7 @@ namespace RiptideNetworking
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
-        public void Send(Message message, byte maxSendAttempts = 3)
+        public void Send(Message message, byte maxSendAttempts = 15)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, remoteEndPoint);
@@ -332,7 +332,7 @@ namespace RiptideNetworking
             Message message = Message.CreateInternal(HeaderType.welcome);
             message.Add(Id);
 
-            Send(message, 5);
+            Send(message, 25);
         }
 
         /// <summary>Handles a client connected message.</summary>

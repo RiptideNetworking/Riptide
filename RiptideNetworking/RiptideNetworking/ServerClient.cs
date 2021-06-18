@@ -121,7 +121,7 @@ namespace RiptideNetworking
             Message message = Message.CreateInternal(HeaderType.welcome);
             message.Add(Id);
 
-            server.Send(message, this, 5);
+            server.Send(message, this, 25);
         }
 
         /// <summary>Handles a welcome message.</summary>
