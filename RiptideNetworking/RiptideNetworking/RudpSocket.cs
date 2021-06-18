@@ -35,7 +35,7 @@ namespace RiptideNetworking
         private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
 
         #region Constructor
-        // TODO: Add better comments.
+        // TODO: Add missing comments.
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages.</param>
         protected RudpSocket(RiptideLogger.LogMethod logMethod, bool includeTimestamps, string logName = "CLIENT", string timestampFormat = "HH:mm:ss")
