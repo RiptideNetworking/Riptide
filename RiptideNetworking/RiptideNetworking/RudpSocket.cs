@@ -225,9 +225,9 @@ namespace RiptideNetworking
             {
 #if DETAILED_LOGGING
                 if ((HeaderType)data[0] == HeaderType.reliable)
-                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToUInt16(data, 3)}) to {toEndPoint}.");
                 else if ((HeaderType)data[0] == HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToUInt16(data, 1)}) to {toEndPoint}.");
                 else
                     RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
 #endif
@@ -244,9 +244,9 @@ namespace RiptideNetworking
             {
 #if DETAILED_LOGGING
                 if ((HeaderType)data[0] == HeaderType.reliable)
-                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToInt16(data, 3)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending reliable message (ID: {BitConverter.ToUInt16(data, 3)}) to {toEndPoint}.");
                 else if ((HeaderType)data[0] == HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToInt16(data, 1)}) to {toEndPoint}.");
+                    RiptideLogger.Log(LogName, $"Sending message (ID: {BitConverter.ToUInt16(data, 1)}) to {toEndPoint}.");
                 else
                     RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
 #endif
