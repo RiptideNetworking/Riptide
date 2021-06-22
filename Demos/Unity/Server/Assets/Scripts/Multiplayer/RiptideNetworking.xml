@@ -473,15 +473,41 @@
             <param name="value">The <see langword="short"/> to add.</param>
             <returns>The Message instance that the <see langword="short"/> was added to.</returns>
         </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
+            <summary>Adds a <see langword="ushort"/> to the message.</summary>
+            <param name="value">The <see langword="ushort"/> to add.</param>
+            <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Write(System.UInt16)">
+            <summary>Converts a given <see langword="ushort"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see langword="ushort"/> to convert.</param>
+        </member>
         <member name="M:RiptideNetworking.Message.GetShort">
             <summary>Retrieves a <see langword="short"/> from the message.</summary>
             <returns>The <see langword="short"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetUShort">
+            <summary>Retrieves a <see langword="ushort"/> from the message.</summary>
+            <returns>The <see langword="ushort"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadUShort">
+            <summary>Retrieves a <see langword="ushort"/> from the next 2 bytes, starting at the read position.</summary>
+            <returns>The converted <see langword="ushort"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.PeekUShort">
+            <summary>Retrieves a <see langword="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
             <summary>Adds a <see langword="short"/> array to the message.</summary>
             <param name="array">The <see langword="short"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The Message instance that the <see langword="short"/> array was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
+            <summary>Adds a <see langword="ushort"/> array to the message.</summary>
+            <param name="array">The <see langword="ushort"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="ushort"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShortArray">
             <summary>Retrieves a <see langword="short"/> array from the message.</summary>
@@ -491,24 +517,6 @@
             <summary>Retrieves a <see langword="short"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
             <returns>The <see langword="short"/> array that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
-            <summary>Adds a <see langword="ushort"/> to the message.</summary>
-            <param name="value">The <see langword="ushort"/> to add.</param>
-            <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.GetUShort">
-            <summary>Retrieves a <see langword="ushort"/> from the message.</summary>
-            <returns>The <see langword="ushort"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.PeekUShort">
-            <summary>Retrieves a <see langword="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
-            <summary>Adds a <see langword="ushort"/> array to the message.</summary>
-            <param name="array">The <see langword="ushort"/> array to add.</param>
-            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="ushort"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShortArray">
             <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
@@ -524,15 +532,38 @@
             <param name="value">The <see langword="int"/> to add.</param>
             <returns>The Message instance that the <see langword="int"/> was added to.</returns>
         </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
+            <summary>Adds a <see langword="uint"/> to the message.</summary>
+            <param name="value">The <see langword="uint"/> to add.</param>
+            <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Write(System.Int32)">
+            <summary>Converts a given <see langword="int"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see langword="int"/> to convert.</param>
+        </member>
         <member name="M:RiptideNetworking.Message.GetInt">
             <summary>Retrieves an <see langword="int"/> from the message.</summary>
             <returns>The <see langword="int"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetUInt">
+            <summary>Retrieves a <see langword="uint"/> from the message.</summary>
+            <returns>The <see langword="uint"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadInt">
+            <summary>Retrieves an <see langword="int"/> from the next 4 bytes, starting at the read position.</summary>
+            <returns>The converted <see langword="int"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
             <summary>Adds an <see langword="int"/> array message.</summary>
             <param name="array">The <see langword="int"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The Message instance that the <see langword="int"/> array was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
+            <summary>Adds a <see langword="uint"/> array to the message.</summary>
+            <param name="array">The <see langword="uint"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="uint"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetIntArray">
             <summary>Retrieves an <see langword="int"/> array from the message.</summary>
@@ -542,21 +573,6 @@
             <summary>Retrieves an <see langword="int"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
             <returns>The <see langword="int"/> array that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
-            <summary>Adds a <see langword="uint"/> to the message.</summary>
-            <param name="value">The <see langword="uint"/> to add.</param>
-            <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.GetUInt">
-            <summary>Retrieves a <see langword="uint"/> from the message.</summary>
-            <returns>The <see langword="uint"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
-            <summary>Adds a <see langword="uint"/> array to the message.</summary>
-            <param name="array">The <see langword="uint"/> array to add.</param>
-            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="uint"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUIntArray">
             <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
@@ -572,15 +588,34 @@
             <param name="value">The <see langword="long"/> to add.</param>
             <returns>The Message instance that the <see langword="long"/> was added to.</returns>
         </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
+            <summary>Adds a <see langword="ulong"/> to the message.</summary>
+            <param name="value">The <see langword="ulong"/> to add.</param>
+            <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Write(System.Int64)">
+            <summary>Converts a given <see langword="long"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see langword="long"/> to convert.</param>
+        </member>
         <member name="M:RiptideNetworking.Message.GetLong">
             <summary>Retrieves a <see langword="long"/> from the message.</summary>
             <returns>The <see langword="long"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetULong">
+            <summary>Retrieves a <see langword="ulong"/> from the message.</summary>
+            <returns>The <see langword="ulong"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
             <summary>Adds a <see langword="long"/> array to the message.</summary>
             <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The Message instance that the <see langword="long"/> array was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
+            <summary>Adds a <see langword="ulong"/> array to the message.</summary>
+            <param name="array">The <see langword="ulong"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The Message instance that the <see langword="ulong"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLongArray">
             <summary>Retrieves a <see langword="long"/> array from the message.</summary>
@@ -590,21 +625,6 @@
             <summary>Retrieves a <see langword="long"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
             <returns>The <see langword="long"/> array that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
-            <summary>Adds a <see langword="ulong"/> to the message.</summary>
-            <param name="value">The <see langword="ulong"/> to add.</param>
-            <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.GetULong">
-            <summary>Retrieves a <see langword="ulong"/> from the message.</summary>
-            <returns>The <see langword="ulong"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
-            <summary>Adds a <see langword="ulong"/> array to the message.</summary>
-            <param name="array">The <see langword="ulong"/> array to add.</param>
-            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="ulong"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULongArray">
             <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
@@ -749,11 +769,8 @@
             <param name="data">The data to send.</param>
             <param name="toEndPoint">The endpoint to send the data to.</param>
         </member>
-        <member name="F:RiptideNetworking.Rudp.send">
-            <summary>The method to use when sending data.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Rudp.logName">
-            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
+        <member name="F:RiptideNetworking.Rudp.rudpSocket">
+            <summary>The RudpSocket instance to use when sending data.</summary>
         </member>
         <member name="P:RiptideNetworking.Rudp.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -761,10 +778,9 @@
         <member name="P:RiptideNetworking.Rudp.SmoothRTT">
             <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         </member>
-        <member name="M:RiptideNetworking.Rudp.#ctor(RiptideNetworking.Rudp.Send,System.String)">
+        <member name="M:RiptideNetworking.Rudp.#ctor(RiptideNetworking.RudpSocket)">
             <summary>Handles initial setup.</summary>
-            <param name="send">The method to use when sending data.</param>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="rudpSocket">The RudpSocket instance to use when sending data.</param>
         </member>
         <member name="M:RiptideNetworking.Rudp.UpdateReceivedAcks(System.UInt16,System.UInt16)">
             <summary>Updates which messages we've received acks for.</summary>
@@ -847,6 +863,9 @@
         </member>
         <member name="T:RiptideNetworking.RudpSocket">
             <summary>Base class for all RUDP connections.</summary>
+        </member>
+        <member name="P:RiptideNetworking.RudpSocket.ShouldOutputInfoLogs">
+            <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         </member>
         <member name="F:RiptideNetworking.RudpSocket.LogName">
             <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/></summary>

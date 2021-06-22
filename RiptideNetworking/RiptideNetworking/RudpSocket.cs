@@ -19,6 +19,8 @@ namespace RiptideNetworking
     /// <summary>Base class for all RUDP connections.</summary>
     public abstract class RudpSocket
     {
+        /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
+        public bool ShouldOutputInfoLogs { get; set; } = true;
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/></summary>
         public readonly string LogName;
 

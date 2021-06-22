@@ -28,10 +28,8 @@ namespace RiptideNetworking
         /// <param name="data">The data to send.</param>
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
         internal delegate void Send(byte[] data, IPEndPoint toEndPoint);
-        /// <summary>The method to use when sending data.</summary>
-        private readonly Send send;
-        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
-        private readonly string logName;
+        /// <summary>The RudpSocket instance to use when sending data.</summary>
+        private readonly RudpSocket rudpSocket;
 
         private short _rtt = -1;
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -48,12 +46,10 @@ namespace RiptideNetworking
         internal short SmoothRTT { get; set; } = -1;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="send">The method to use when sending data.</param>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        internal Rudp(Send send, string logName)
+        /// <param name="rudpSocket">The RudpSocket instance to use when sending data.</param>
+        internal Rudp(RudpSocket rudpSocket)
         {
-            this.send = send;
-            this.logName = logName;
+            this.rudpSocket = rudpSocket;
             SendLockables = new SendLockables();
             ReceiveLockables = new ReceiveLockables();
         }
@@ -209,24 +205,28 @@ namespace RiptideNetworking
                 if (sendAttempts >= maxSendAttempts)
                 {
                     // Send attempts exceeds max send attempts, so give up
-                    HeaderType headerType = (HeaderType)data[0];
-                    if (headerType == HeaderType.reliable)
+                    if (rudp.rudpSocket.ShouldOutputInfoLogs)
                     {
-#if BIG_ENDIAN
-                        ushort messageId = (ushort)(data[4] | (data[3] << 8));
-#else
-                        ushort messageId = (ushort)(data[3] | (data[4] << 8));
-#endif
-                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        HeaderType headerType = (HeaderType)data[0];
+                        if (headerType == HeaderType.reliable)
+                        {
+    #if BIG_ENDIAN
+                            ushort messageId = (ushort)(data[4] | (data[3] << 8));
+    #else
+                            ushort messageId = (ushort)(data[3] | (data[4] << 8));
+    #endif
+                        
+                            RiptideLogger.Log(rudp.rudpSocket.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        }
+                        else
+                            RiptideLogger.Log(rudp.rudpSocket.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
                     }
-                    else
-                        RiptideLogger.Log(rudp.logName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
 
                     Clear();
                     return;
                 }
 
-                rudp.send(data, remoteEndPoint);
+                rudp.rudpSocket.Send(data, remoteEndPoint);
                 
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;

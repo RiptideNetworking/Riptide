@@ -42,7 +42,7 @@ namespace RiptideNetworking
             this.server = server;
             remoteEndPoint = endPoint;
             Id = id;
-            Rudp = new Rudp(server.Send, this.server.LogName);
+            Rudp = new Rudp(server);
             lastHeartbeat = DateTime.UtcNow;
 
             connectionState = ConnectionState.connecting;
@@ -133,7 +133,7 @@ namespace RiptideNetworking
 
             ushort id = message.GetUShort();
 
-            if (Id != id)
+            if (Id != id && server.ShouldOutputInfoLogs)
                 RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 
             connectionState = ConnectionState.connected;

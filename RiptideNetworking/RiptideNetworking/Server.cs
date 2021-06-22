@@ -69,9 +69,11 @@ namespace RiptideNetworking
 
             StartListening(port);
 
-            RiptideLogger.Log(LogName, $"Started on port {port}.");
             heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
             IsRunning = true;
+
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, $"Started on port {port}.");
         }
 
         /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
@@ -188,7 +190,7 @@ namespace RiptideNetworking
                     HandleDisconnect(fromEndPoint);
                     break;
                 default:
-                    RiptideLogger.Log($"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                    RiptideLogger.Log("ERROR", $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
         }
@@ -301,7 +303,8 @@ namespace RiptideNetworking
                 lock (clients)
                     clients.Remove(client.remoteEndPoint);
 
-                RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
+                if (ShouldOutputInfoLogs)
+                    RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
                 OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
 
                 availableClientIds.Add(client.Id);
@@ -325,7 +328,9 @@ namespace RiptideNetworking
             heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
             heartbeatTimer.Dispose();
             StopListening();
-            RiptideLogger.Log(LogName, "Server stopped.");
+
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, "Server stopped.");
         }
 
         #region Messages
@@ -383,7 +388,8 @@ namespace RiptideNetworking
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         internal void OnClientConnected(ServerClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, $"{e.Client.remoteEndPoint} connected successfully! Client ID: {e.Client.Id}");
 
             if (receiveActionQueue == null)
                 ClientConnected?.Invoke(this, e);
@@ -402,7 +408,8 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
         internal void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
 
             if (receiveActionQueue == null)
                 ClientDisconnected?.Invoke(this, e);
