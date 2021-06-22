@@ -150,11 +150,9 @@ namespace RiptideNetworking
         internal void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
         {
 #if BIG_ENDIAN
-            byte[] idBytes = new byte[Message.shortLength];
-            Array.Copy(data, 1, idBytes, 0, Message.shortLength);
-            ushort sequenceId = BitConverter.ToUInt16(Message.StandardizeEndianness(idBytes), 0);
+            ushort sequenceId = (ushort)(data[2] | (data[1] << 8));
 #else
-            ushort sequenceId = BitConverter.ToUInt16(data, 1);
+            ushort sequenceId = (ushort)(data[1] | (data[2] << 8));
 #endif
 
             lock (lockables)

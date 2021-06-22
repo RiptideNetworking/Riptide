@@ -213,12 +213,11 @@ namespace RiptideNetworking
                     if (headerType == HeaderType.reliable)
                     {
 #if BIG_ENDIAN
-                        byte[] idBytes = new byte[Message.shortLength];
-                        Array.Copy(data, 3, idBytes, 0, Message.shortLength);
-                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {BitConverter.ToUInt16(Message.StandardizeEndianness(idBytes), 0)}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        ushort messageId = (ushort)(data[4] | (data[3] << 8));
 #else
-                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {BitConverter.ToUInt16(data, 3)}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
+                        RiptideLogger.Log(rudp.logName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
                     }
                     else
                         RiptideLogger.Log(rudp.logName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
