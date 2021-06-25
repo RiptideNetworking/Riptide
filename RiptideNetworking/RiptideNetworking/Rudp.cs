@@ -24,10 +24,6 @@ namespace RiptideNetworking
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         protected readonly float retryTimeMultiplier = 1.2f;
 
-        /// <summary>Signature for methods used to send data.</summary>
-        /// <param name="data">The data to send.</param>
-        /// <param name="toEndPoint">The endpoint to send the data to.</param>
-        internal delegate void Send(byte[] data, IPEndPoint toEndPoint);
         /// <summary>The RudpSocket instance to use when sending data.</summary>
         private readonly RudpSocket rudpSocket;
 
