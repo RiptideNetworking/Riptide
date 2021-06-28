@@ -434,10 +434,15 @@
             <summary>Retrieves a <see langword="byte"/> from the message.</summary>
             <returns>The <see langword="byte"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Byte[])">
+        <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)">
             <summary>Adds a <see langword="byte"/> array to the message.</summary>
-            <param name="value">The <see langword="byte"/> array to add.</param>
+            <param name="array">The <see langword="byte"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The Message instance that the <see langword="byte"/> array was added to.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetByteArray">
+            <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
+            <returns>The <see langword="byte"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetByteArray(System.Int32)">
             <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
@@ -763,11 +768,6 @@
         </member>
         <member name="F:RiptideNetworking.Rudp.retryTimeMultiplier">
             <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        </member>
-        <member name="T:RiptideNetworking.Rudp.Send">
-            <summary>Signature for methods used to send data.</summary>
-            <param name="data">The data to send.</param>
-            <param name="toEndPoint">The endpoint to send the data to.</param>
         </member>
         <member name="F:RiptideNetworking.Rudp.rudpSocket">
             <summary>The RudpSocket instance to use when sending data.</summary>

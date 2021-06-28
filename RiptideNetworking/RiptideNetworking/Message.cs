@@ -279,7 +279,7 @@ namespace RiptideNetworking
             if (UnwrittenLength < boolLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'bool'!");
 
-            Bytes[writePos++] = value ? (byte)1 : (byte)0;
+            Bytes[writePos++] = (byte)(value ? 1 : 0);
             return this;
         }
 
@@ -303,14 +303,28 @@ namespace RiptideNetworking
         public Message Add(bool[] array, bool includeLength = true)
         {
             ushort byteLength = (ushort)(array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1));
+
             if (UnwrittenLength < byteLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'bool[]'!");
 
             if (includeLength)
                 Add((ushort)array.Length);
 
-            BitArray bits = new BitArray(array);
-            bits.CopyTo(Bytes, writePos);
+            // Pack 8 bools into each byte
+            bool isLengthMultipleOf8 = array.Length % 8 == 0;
+            for (int i = 0; i < byteLength; i++)
+            {
+                byte nextByte = 0;
+                int bitsToWrite = 8;
+                if ((i + 1) == byteLength && !isLengthMultipleOf8)
+                    bitsToWrite = array.Length % 8;
+
+                for (int bit = 0; bit < bitsToWrite; bit++)
+                    nextByte |= (byte)((array[i * 8 + bit] ? 1 : 0) << bit);
+
+                Bytes[writePos + i] = nextByte;
+            }
+
             writePos += byteLength;
             return this;
         }
@@ -327,17 +341,27 @@ namespace RiptideNetworking
         public bool[] GetBoolArray(ushort length)
         {
             ushort byteLength = (ushort)(length / 8 + (length % 8 == 0 ? 0 : 1));
+
             if (UnreadLength < byteLength)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / shortLength);
+                length = (ushort)(UnreadLength * 8);
             }
 
-            BitArray bits = new BitArray(GetByteArray(byteLength));
+            // Read 8 bools from each byte
             bool[] array = new bool[length];
-            for (int i = 0; i < array.Length; i++)
-                array[i] = bits.Get(i);
+            bool isLengthMultipleOf8 = array.Length % 8 == 0;
+            for (int i = 0; i < byteLength; i++)
+            {
+                int bitsToRead = 8;
+                if ((i + 1) == byteLength && !isLengthMultipleOf8)
+                    bitsToRead = array.Length % 8;
 
+                for (int bit = 0; bit < bitsToRead; bit++)
+                    array[i * 8 + bit] = (Bytes[readPos + i] >> bit & 1) == 1;
+            }
+
+            readPos += byteLength;
             return array;
         }
 #endregion
