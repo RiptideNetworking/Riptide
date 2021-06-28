@@ -1094,7 +1094,7 @@ namespace RiptideNetworking
             if (UnwrittenLength < stringBytes.Length)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'string'!");
 
-            Add(stringBytes); // Add the string itself
+            Add(stringBytes, false); // Add the string itself
             return this;
         }
 
