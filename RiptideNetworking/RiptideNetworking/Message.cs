@@ -247,14 +247,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <returns>The <see cref="byte"/> array that was retrieved.</returns>
-        public byte[] GetByteArray()
+        public byte[] GetBytes()
         {
-            return GetByteArray(GetUShort());
+            return GetBytes(GetUShort());
         }
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <param name="length">The length of the <see cref="byte"/> array.</param>
         /// <returns>The <see cref="byte"/> array that was retrieved.</returns>
-        public byte[] GetByteArray(int length)
+        public byte[] GetBytes(int length)
         {
             byte[] value = new byte[length];
 
@@ -331,14 +331,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
         /// <returns>The <see cref="bool"/> array that was retrieved.</returns>
-        public bool[] GetBoolArray()
+        public bool[] GetBools()
         {
-            return GetBoolArray(GetUShort());
+            return GetBools(GetUShort());
         }
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="bool"/> array that was retrieved.</returns>
-        public bool[] GetBoolArray(ushort length)
+        public bool[] GetBools(ushort length)
         {
             ushort byteLength = (ushort)(length / 8 + (length % 8 == 0 ? 0 : 1));
 
@@ -500,14 +500,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <returns>The <see cref="short"/> array that was retrieved.</returns>
-        public short[] GetShortArray()
+        public short[] GetShorts()
         {
-            return GetShortArray(GetUShort());
+            return GetShorts(GetUShort());
         }
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="short"/> array that was retrieved.</returns>
-        public short[] GetShortArray(ushort length)
+        public short[] GetShorts(ushort length)
         {
             short[] array = new short[length];
 
@@ -525,14 +525,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <returns>The <see cref="ushort"/> array that was retrieved.</returns>
-        public ushort[] GetUShortArray()
+        public ushort[] GetUShorts()
         {
-            return GetUShortArray(GetUShort());
+            return GetUShorts(GetUShort());
         }
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="ushort"/> array that was retrieved.</returns>
-        public ushort[] GetUShortArray(ushort length)
+        public ushort[] GetUShorts(ushort length)
         {
             ushort[] array = new ushort[length];
 
@@ -671,14 +671,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <returns>The <see cref="int"/> array that was retrieved.</returns>
-        public int[] GetIntArray()
+        public int[] GetInts()
         {
-            return GetIntArray(GetUShort());
+            return GetInts(GetUShort());
         }
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="int"/> array that was retrieved.</returns>
-        public int[] GetIntArray(ushort length)
+        public int[] GetInts(ushort length)
         {
             int[] array = new int[length];
 
@@ -696,14 +696,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <returns>The <see cref="uint"/> array that was retrieved.</returns>
-        public uint[] GetUIntArray()
+        public uint[] GetUInts()
         {
-            return GetUIntArray(GetUShort());
+            return GetUInts(GetUShort());
         }
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="uint"/> array that was retrieved.</returns>
-        public uint[] GetUIntArray(ushort length)
+        public uint[] GetUInts(ushort length)
         {
             uint[] array = new uint[length];
 
@@ -848,14 +848,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <returns>The <see cref="long"/> array that was retrieved.</returns>
-        public long[] GetLongArray()
+        public long[] GetLongs()
         {
-            return GetLongArray(GetUShort());
+            return GetLongs(GetUShort());
         }
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="long"/> array that was retrieved.</returns>
-        public long[] GetLongArray(ushort length)
+        public long[] GetLongs(ushort length)
         {
             long[] array = new long[length];
 
@@ -873,14 +873,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <returns>The <see cref="ulong"/> array that was retrieved.</returns>
-        public ulong[] GetULongArray()
+        public ulong[] GetULongs()
         {
-            return GetULongArray(GetUShort());
+            return GetULongs(GetUShort());
         }
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="ulong"/> array that was retrieved.</returns>
-        public ulong[] GetULongArray(ushort length)
+        public ulong[] GetULongs(ushort length)
         {
             ulong[] array = new ulong[length];
 
@@ -962,14 +962,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <returns>The <see cref="float"/> array that was retrieved.</returns>
-        public float[] GetFloatArray()
+        public float[] GetFloats()
         {
-            return GetFloatArray(GetUShort());
+            return GetFloats(GetUShort());
         }
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="float"/> array that was retrieved.</returns>
-        public float[] GetFloatArray(ushort length)
+        public float[] GetFloats(ushort length)
         {
             float[] array = new float[length];
 
@@ -1058,14 +1058,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a<see cref="double"/> array from the message.</summary>
         /// <returns>The <see cref="double"/> array that was retrieved.</returns>
-        public double[] GetDoubleArray()
+        public double[] GetDoubles()
         {
-            return GetDoubleArray(GetUShort());
+            return GetDoubles(GetUShort());
         }
         /// <summary>Retrieves a<see cref="double"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="double"/> array that was retrieved.</returns>
-        public double[] GetDoubleArray(ushort length)
+        public double[] GetDoubles(ushort length)
         {
             double[] array = new double[length];
 
@@ -1131,14 +1131,14 @@ namespace RiptideNetworking
 
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <returns>The <see cref="string"/> array that was retrieved.</returns>
-        public string[] GetStringArray()
+        public string[] GetStrings()
         {
-            return GetStringArray(GetUShort());
+            return GetStrings(GetUShort());
         }
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="length">The length of the array.</param>
         /// <returns>The <see cref="string"/> array that was retrieved.</returns>
-        public string[] GetStringArray(ushort length)
+        public string[] GetStrings(ushort length)
         {
             string[] array = new string[length];
             for (int i = 0; i < array.Length; i++)

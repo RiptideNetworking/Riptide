@@ -334,22 +334,22 @@
             <summary>The message instance used for handling internal messages.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.boolLength">
-            <summary>How many bytes a <see langword="bool"/> is represented by.</summary>
+            <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.shortLength">
-            <summary>How many bytes a <see langword="short"/> (or <see langword="ushort"/>) is represented by.</summary>
+            <summary>How many bytes a <see cref="T:System.Int16"/> (or <see cref="T:System.UInt16"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.intLength">
-            <summary>How many bytes an <see langword="int"/> (or <see langword="uint"/>) is represented by.</summary>
+            <summary>How many bytes an <see cref="T:System.Int32"/> (or <see cref="T:System.UInt32"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.longLength">
-            <summary>How many bytes a <see langword="long"/> (or <see langword="ulong"/>) is represented by.</summary>
+            <summary>How many bytes a <see cref="T:System.Int64"/> (or <see cref="T:System.UInt64"/>) is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.floatLength">
-            <summary>How many bytes a <see langword="float"/> is represented by.</summary>
+            <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.doubleLength">
-            <summary>How many bytes a <see langword="double"/> is represented by.</summary>
+            <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.ReadableLength">
             <summary>The length in bytes of the data that can be read from the message.</summary>
@@ -426,291 +426,291 @@
             <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
-            <summary>Adds a single <see langword="byte"/> to the message.</summary>
-            <param name="value">The <see langword="byte"/> to add.</param>
-            <returns>The Message instance that the <see langword="byte"/> was added to.</returns>
+            <summary>Adds a single <see cref="T:System.Byte"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Byte"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Byte"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetByte">
-            <summary>Retrieves a <see langword="byte"/> from the message.</summary>
-            <returns>The <see langword="byte"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Byte"/> from the message.</summary>
+            <returns>The <see cref="T:System.Byte"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)">
-            <summary>Adds a <see langword="byte"/> array to the message.</summary>
-            <param name="array">The <see langword="byte"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.Byte"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.Byte"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="byte"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Byte"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetByteArray">
-            <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
-            <returns>The <see langword="byte"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetBytes">
+            <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetByteArray(System.Int32)">
-            <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
-            <param name="length">The length of the <see langword="byte"/> array.</param>
-            <returns>The <see langword="byte"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetBytes(System.Int32)">
+            <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
+            <param name="length">The length of the <see cref="T:System.Byte"/> array.</param>
+            <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
-            <summary>Adds a <see langword="bool"/> to the message.</summary>
-            <param name="value">The <see langword="bool"/> to add.</param>
-            <returns>The Message instance that the <see langword="bool"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.Boolean"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Boolean"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Boolean"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBool">
-            <summary>Retrieves a <see langword="bool"/> from the message.</summary>
-            <returns>The <see langword="bool"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Boolean"/> from the message.</summary>
+            <returns>The <see cref="T:System.Boolean"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)">
-            <summary>Adds a <see langword="bool"/> array to the message.</summary>
-            <param name="array">The <see langword="bool"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.Boolean"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.Boolean"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="bool"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Boolean"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetBoolArray">
-            <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
-            <returns>The <see langword="bool"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetBools">
+            <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetBoolArray(System.UInt16)">
-            <summary>Retrieves a <see langword="bool"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetBools(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="bool"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16)">
-            <summary>Adds a <see langword="short"/> to the message.</summary>
-            <param name="value">The <see langword="short"/> to add.</param>
-            <returns>The Message instance that the <see langword="short"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.Int16"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Int16"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Int16"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
-            <summary>Adds a <see langword="ushort"/> to the message.</summary>
-            <param name="value">The <see langword="ushort"/> to add.</param>
-            <returns>The Message instance that the <see langword="ushort"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.UInt16"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.UInt16"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.UInt16"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Write(System.UInt16)">
-            <summary>Converts a given <see langword="ushort"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see langword="ushort"/> to convert.</param>
+            <summary>Converts a given <see cref="T:System.UInt16"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetShort">
-            <summary>Retrieves a <see langword="short"/> from the message.</summary>
-            <returns>The <see langword="short"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Int16"/> from the message.</summary>
+            <returns>The <see cref="T:System.Int16"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShort">
-            <summary>Retrieves a <see langword="ushort"/> from the message.</summary>
-            <returns>The <see langword="ushort"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.UInt16"/> from the message.</summary>
+            <returns>The <see cref="T:System.UInt16"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.ReadUShort">
-            <summary>Retrieves a <see langword="ushort"/> from the next 2 bytes, starting at the read position.</summary>
-            <returns>The converted <see langword="ushort"/>.</returns>
+            <summary>Retrieves a <see cref="T:System.UInt16"/> from the next 2 bytes, starting at the read position.</summary>
+            <returns>The converted <see cref="T:System.UInt16"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.PeekUShort">
-            <summary>Retrieves a <see langword="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
+            <summary>Retrieves a <see cref="T:System.UInt16"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
-            <summary>Adds a <see langword="short"/> array to the message.</summary>
-            <param name="array">The <see langword="short"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.Int16"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.Int16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="short"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Int16"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
-            <summary>Adds a <see langword="ushort"/> array to the message.</summary>
-            <param name="array">The <see langword="ushort"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.UInt16"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.UInt16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="ushort"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.UInt16"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetShortArray">
-            <summary>Retrieves a <see langword="short"/> array from the message.</summary>
-            <returns>The <see langword="short"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetShorts">
+            <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetShortArray(System.UInt16)">
-            <summary>Retrieves a <see langword="short"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetShorts(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="short"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUShortArray">
-            <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
-            <returns>The <see langword="ushort"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetUShorts">
+            <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
+            <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUShortArray(System.UInt16)">
-            <summary>Retrieves a <see langword="ushort"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetUShorts(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="ushort"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32)">
-            <summary>Adds an <see langword="int"/> to the message.</summary>
-            <param name="value">The <see langword="int"/> to add.</param>
-            <returns>The Message instance that the <see langword="int"/> was added to.</returns>
+            <summary>Adds an <see cref="T:System.Int32"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Int32"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Int32"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
-            <summary>Adds a <see langword="uint"/> to the message.</summary>
-            <param name="value">The <see langword="uint"/> to add.</param>
-            <returns>The Message instance that the <see langword="uint"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.UInt32"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.UInt32"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.UInt32"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Write(System.Int32)">
-            <summary>Converts a given <see langword="int"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see langword="int"/> to convert.</param>
+            <summary>Converts a given <see cref="T:System.Int32"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetInt">
-            <summary>Retrieves an <see langword="int"/> from the message.</summary>
-            <returns>The <see langword="int"/> that was retrieved.</returns>
+            <summary>Retrieves an <see cref="T:System.Int32"/> from the message.</summary>
+            <returns>The <see cref="T:System.Int32"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUInt">
-            <summary>Retrieves a <see langword="uint"/> from the message.</summary>
-            <returns>The <see langword="uint"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.UInt32"/> from the message.</summary>
+            <returns>The <see cref="T:System.UInt32"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.ReadInt">
-            <summary>Retrieves an <see langword="int"/> from the next 4 bytes, starting at the read position.</summary>
-            <returns>The converted <see langword="int"/>.</returns>
+            <summary>Retrieves an <see cref="T:System.Int32"/> from the next 4 bytes, starting at the read position.</summary>
+            <returns>The converted <see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
-            <summary>Adds an <see langword="int"/> array message.</summary>
-            <param name="array">The <see langword="int"/> array to add.</param>
+            <summary>Adds an <see cref="T:System.Int32"/> array message.</summary>
+            <param name="array">The <see cref="T:System.Int32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="int"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Int32"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
-            <summary>Adds a <see langword="uint"/> array to the message.</summary>
-            <param name="array">The <see langword="uint"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.UInt32"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.UInt32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="uint"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.UInt32"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetIntArray">
-            <summary>Retrieves an <see langword="int"/> array from the message.</summary>
-            <returns>The <see langword="int"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetInts">
+            <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetIntArray(System.UInt16)">
-            <summary>Retrieves an <see langword="int"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetInts(System.UInt16)">
+            <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="int"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUIntArray">
-            <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
-            <returns>The <see langword="uint"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetUInts">
+            <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
+            <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUIntArray(System.UInt16)">
-            <summary>Retrieves a <see langword="uint"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetUInts(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="uint"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64)">
-            <summary>Adds a <see langword="long"/> to the message.</summary>
-            <param name="value">The <see langword="long"/> to add.</param>
-            <returns>The Message instance that the <see langword="long"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.Int64"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Int64"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Int64"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
-            <summary>Adds a <see langword="ulong"/> to the message.</summary>
-            <param name="value">The <see langword="ulong"/> to add.</param>
-            <returns>The Message instance that the <see langword="ulong"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.UInt64"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.UInt64"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.UInt64"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Write(System.Int64)">
-            <summary>Converts a given <see langword="long"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see langword="long"/> to convert.</param>
+            <summary>Converts a given <see cref="T:System.Int64"/> to bytes and adds them to the message's contents.</summary>
+            <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetLong">
-            <summary>Retrieves a <see langword="long"/> from the message.</summary>
-            <returns>The <see langword="long"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Int64"/> from the message.</summary>
+            <returns>The <see cref="T:System.Int64"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULong">
-            <summary>Retrieves a <see langword="ulong"/> from the message.</summary>
-            <returns>The <see langword="ulong"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.UInt64"/> from the message.</summary>
+            <returns>The <see cref="T:System.UInt64"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
-            <summary>Adds a <see langword="long"/> array to the message.</summary>
+            <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
             <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="long"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Int64"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
-            <summary>Adds a <see langword="ulong"/> array to the message.</summary>
-            <param name="array">The <see langword="ulong"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.UInt64"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.UInt64"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="ulong"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.UInt64"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetLongArray">
-            <summary>Retrieves a <see langword="long"/> array from the message.</summary>
-            <returns>The <see langword="long"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetLongs">
+            <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetLongArray(System.UInt16)">
-            <summary>Retrieves a <see langword="long"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetLongs(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="long"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetULongArray">
-            <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
-            <returns>The <see langword="ulong"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetULongs">
+            <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
+            <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetULongArray(System.UInt16)">
-            <summary>Retrieves a <see langword="ulong"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetULongs(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="ulong"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single)">
-            <summary>Adds a <see langword="float"/> to the message.</summary>
-            <param name="value">The <see langword="float"/> to add.</param>
-            <returns>The Message instance that the <see langword="float"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.Single"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Single"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Single"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloat">
-            <summary>Retrieves a <see langword="float"/> from the message.</summary>
-            <returns>The <see langword="float"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Single"/> from the message.</summary>
+            <returns>The <see cref="T:System.Single"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)">
-            <summary>Adds a <see langword="float"/> array to the message.</summary>
-            <param name="array">The <see langword="float"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.Single"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="float"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Single"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetFloatArray">
-            <summary>Retrieves a <see langword="float"/> array from the message.</summary>
-            <returns>The <see langword="float"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetFloats">
+            <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetFloatArray(System.UInt16)">
-            <summary>Retrieves a <see langword="float"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetFloats(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="float"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double)">
-            <summary>Adds a <see langword="double"/> to the message.</summary>
-            <param name="value">The <see langword="double"/> to add.</param>
-            <returns>The Message instance that the <see langword="double"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.Double"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.Double"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.Double"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDouble">
-            <summary>Retrieves a <see langword="double"/> from the message.</summary>
-            <returns>The <see langword="double"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Double"/> from the message.</summary>
+            <returns>The <see cref="T:System.Double"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)">
-            <summary>Adds a <see langword="double"/> array to the message.</summary>
-            <param name="array">The <see langword="double"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.Double"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="double"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.Double"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetDoubleArray">
-            <summary>Retrieves a<see langword="double"/> array from the message.</summary>
-            <returns>The <see langword="double"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetDoubles">
+            <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
+            <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetDoubleArray(System.UInt16)">
-            <summary>Retrieves a<see langword="double"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetDoubles(System.UInt16)">
+            <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="double"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.String)">
-            <summary>Adds a <see langword="string"/> to the message.</summary>
-            <param name="value">The <see langword="string"/> to add.</param>
-            <returns>The Message instance that the <see langword="string"/> was added to.</returns>
+            <summary>Adds a <see cref="T:System.String"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.String"/> to add.</param>
+            <returns>The Message instance that the <see cref="T:System.String"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetString">
-            <summary>Retrieves a <see langword="string"/> from the message.</summary>
-            <returns>The <see langword="string"/> that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.String"/> from the message.</summary>
+            <returns>The <see cref="T:System.String"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
-            <summary>Adds a <see langword="string"/> array to the message.</summary>
-            <param name="array">The <see langword="string"/> array to add.</param>
+            <summary>Adds a <see cref="T:System.String"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.String"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The Message instance that the <see langword="string"/> array was added to.</returns>
+            <returns>The Message instance that the <see cref="T:System.String"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetStringArray">
-            <summary>Retrieves a <see langword="string"/> array from the message.</summary>
-            <returns>The <see langword="string"/> array that was retrieved.</returns>
+        <member name="M:RiptideNetworking.Message.GetStrings">
+            <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
+            <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetStringArray(System.UInt16)">
-            <summary>Retrieves a <see langword="string"/> array from the message.</summary>
+        <member name="M:RiptideNetworking.Message.GetStrings(System.UInt16)">
+            <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
             <param name="length">The length of the array.</param>
-            <returns>The <see langword="string"/> array that was retrieved.</returns>
+            <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
         </member>
         <member name="T:RiptideNetworking.RiptideLogger">
             <summary>Provides functionality for logging messages.</summary>
@@ -755,7 +755,7 @@
             <summary>The next sequence ID to use.</summary>
         </member>
         <member name="F:RiptideNetworking.Rudp.LeftBit">
-            <summary>A <see langword="ushort"/> with the left-most bit set to 1.</summary>
+            <summary>A <see cref="T:System.UInt16"/> with the left-most bit set to 1.</summary>
         </member>
         <member name="P:RiptideNetworking.Rudp.SendLockables">
             <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
