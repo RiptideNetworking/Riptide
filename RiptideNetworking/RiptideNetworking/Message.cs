@@ -229,18 +229,28 @@ namespace RiptideNetworking
         }
 
         /// <summary>Adds a <see langword="byte"/> array to the message.</summary>
-        /// <param name="value">The <see langword="byte"/> array to add.</param>
+        /// <param name="array">The <see langword="byte"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The Message instance that the <see langword="byte"/> array was added to.</returns>
-        public Message Add(byte[] value)
+        public Message Add(byte[] array, bool includeLength = true)
         {
-            if (UnwrittenLength < value.Length)
+            if (includeLength)
+                Add((ushort)array.Length);
+
+            if (UnwrittenLength < array.Length)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'byte[]'!");
 
-            Array.Copy(value, 0, Bytes, writePos, value.Length);
-            writePos += (ushort)value.Length;
+            Array.Copy(array, 0, Bytes, writePos, array.Length);
+            writePos += (ushort)array.Length;
             return this;
         }
 
+        /// <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
+        /// <returns>The <see langword="byte"/> array that was retrieved.</returns>
+        public byte[] GetByteArray()
+        {
+            return GetByteArray(GetUShort());
+        }
         /// <summary>Retrieves a <see langword="byte"/> array from the message.</summary>
         /// <param name="length">The length of the <see langword="byte"/> array.</param>
         /// <returns>The <see langword="byte"/> array that was retrieved.</returns>
@@ -251,16 +261,16 @@ namespace RiptideNetworking
             if (UnreadLength < length)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
-                length = UnreadLength;
+                length = (ushort)UnreadLength;
             }
 
             Array.Copy(Bytes, readPos, value, 0, length); // Copy the bytes at readPos' position to the array that will be returned
             readPos += (ushort)length;
             return value;
         }
-#endregion
+        #endregion
 
-#region Bool
+        #region Bool
         /// <summary>Adds a <see langword="bool"/> to the message.</summary>
         /// <param name="value">The <see langword="bool"/> to add.</param>
         /// <returns>The Message instance that the <see langword="bool"/> was added to.</returns>
