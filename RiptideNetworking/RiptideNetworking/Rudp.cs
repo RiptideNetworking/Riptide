@@ -12,7 +12,7 @@ namespace RiptideNetworking
         private int lastSequenceId;
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
-        /// <summary>A <see langword="ushort"/> with the left-most bit set to 1.</summary>
+        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
         protected const ushort LeftBit = 1 << 15;
 
         /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
