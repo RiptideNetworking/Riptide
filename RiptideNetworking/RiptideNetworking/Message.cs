@@ -274,21 +274,40 @@ namespace RiptideNetworking
                 return GetBytes(GetByte());
         }
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
-        /// <param name="amount">The length of the <see cref="byte"/> array.</param>
+        /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <returns>The <see cref="byte"/> array that was retrieved.</returns>
         public byte[] GetBytes(int amount)
         {
-            byte[] value = new byte[amount];
+            byte[] array = new byte[amount];
+            ReadBytes(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
+        /// <param name="amount">The amount of bytes to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetBytes(int amount, byte[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} bytes, starting at index {startIndex}!");
 
+            ReadBytes(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of bytes to read.</param>
+        /// <param name="array">The array to write the bytes into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadBytes(int amount, byte[] array, int startIndex = 0)
+        {
             if (UnreadLength < amount)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
                 amount = UnreadLength;
             }
 
-            Array.Copy(Bytes, readPos, value, 0, amount); // Copy the bytes at readPos' position to the array that will be returned
+            Array.Copy(Bytes, readPos, array, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
             readPos += (ushort)amount;
-            return value;
         }
         #endregion
 
@@ -379,32 +398,57 @@ namespace RiptideNetworking
                 return GetBools(GetByte());
         }
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of bools to retrieve.</param>
         /// <returns>The <see cref="bool"/> array that was retrieved.</returns>
-        public bool[] GetBools(ushort length)
+        public bool[] GetBools(int amount)
         {
-            ushort byteLength = (ushort)(length / 8 + (length % 8 == 0 ? 0 : 1));
-            if (UnreadLength < byteLength)
+            bool[] array = new bool[amount];
+
+            int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
+            if (UnreadLength < byteAmount)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
-                length = (ushort)(UnreadLength * 8);
+                byteAmount = UnreadLength;
             }
 
+            ReadBools(byteAmount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="bool"/> array with bools retrieved from the message.</summary>
+        /// <param name="amount">The amount of bools to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetBools(int amount, bool[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} bools, starting at index {startIndex}!");
+
+            int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
+            if (UnreadLength < byteAmount)
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
+
+            ReadBools(byteAmount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of bools from the message and writes them into the given array.</summary>
+        /// <param name="byteAmount">The number of bytes the bools are being stored in.</param>
+        /// <param name="array">The array to write the bools into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadBools(int byteAmount, bool[] array, int startIndex = 0)
+        {
             // Read 8 bools from each byte
-            bool[] array = new bool[length];
             bool isLengthMultipleOf8 = array.Length % 8 == 0;
-            for (int i = 0; i < byteLength; i++)
+            for (int i = 0; i < byteAmount; i++)
             {
                 int bitsToRead = 8;
-                if ((i + 1) == byteLength && !isLengthMultipleOf8)
+                if ((i + 1) == byteAmount && !isLengthMultipleOf8)
                     bitsToRead = array.Length % 8;
 
                 for (int bit = 0; bit < bitsToRead; bit++)
-                    array[i * 8 + bit] = (Bytes[readPos + i] >> bit & 1) == 1;
+                    array[startIndex + (i * 8 + bit)] = (Bytes[readPos + i] >> bit & 1) == 1;
             }
 
-            readPos += byteLength;
-            return array;
+            readPos += (ushort)byteAmount;
         }
         #endregion
 
@@ -581,22 +625,24 @@ namespace RiptideNetworking
                 return GetShorts(GetByte());
         }
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of shorts to retrieve.</param>
         /// <returns>The <see cref="short"/> array that was retrieved.</returns>
-        public short[] GetShorts(ushort length)
+        public short[] GetShorts(int amount)
         {
-            short[] array = new short[length];
-
-            if (UnreadLength < length * shortLength)
-            {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / shortLength);
-            }
-
-            for (int i = 0; i < length; i++)
-                array[i] = GetShort();
-
+            short[] array = new short[amount];
+            ReadShorts(amount, array);
             return array;
+        }
+        /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
+        /// <param name="amount">The amount of shorts to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetShorts(int amount, short[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} shorts, starting at index {startIndex}!");
+
+            ReadShorts(amount, array, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
@@ -616,22 +662,56 @@ namespace RiptideNetworking
                 return GetUShorts(GetByte());
         }
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of ushorts to retrieve.</param>
         /// <returns>The <see cref="ushort"/> array that was retrieved.</returns>
-        public ushort[] GetUShorts(ushort length)
+        public ushort[] GetUShorts(int amount)
         {
-            ushort[] array = new ushort[length];
+            ushort[] array = new ushort[amount];
+            ReadUShorts(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
+        /// <param name="amount">The amount of ushorts to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetUShorts(int amount, ushort[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} ushorts, starting at index {startIndex}!");
 
-            if (UnreadLength < length * shortLength)
+            ReadUShorts(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of shorts from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of shorts to read.</param>
+        /// <param name="array">The array to write the shorts into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadShorts(int amount, short[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * shortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / shortLength);
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
+                amount = UnreadLength / shortLength;
             }
 
-            for (int i = 0; i < length; i++)
-                array[i] = GetUShort();
-            
-            return array;
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = (short)ReadUShort();
+        }
+
+        /// <summary>Reads a number of ushorts from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of ushorts to read.</param>
+        /// <param name="array">The array to write the ushorts into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadUShorts(int amount, ushort[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * shortLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
+                amount = UnreadLength / shortLength;
+            }
+
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = ReadUShort();
         }
         #endregion
 
@@ -796,22 +876,24 @@ namespace RiptideNetworking
                 return GetInts(GetByte());
         }
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of ints to retrieve.</param>
         /// <returns>The <see cref="int"/> array that was retrieved.</returns>
-        public int[] GetInts(ushort length)
+        public int[] GetInts(int amount)
         {
-            int[] array = new int[length];
-
-            if (UnreadLength < length * intLength)
-            {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / intLength);
-            }
-
-            for (int i = 0; i < length; i++)
-                array[i] = GetInt();
-
+            int[] array = new int[amount];
+            ReadInts(amount, array);
             return array;
+        }
+        /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
+        /// <param name="amount">The amount of ints to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetInts(int amount, int[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} ints, starting at index {startIndex}!");
+
+            ReadInts(amount, array, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
@@ -831,22 +913,56 @@ namespace RiptideNetworking
                 return GetUInts(GetByte());
         }
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of uints to retrieve.</param>
         /// <returns>The <see cref="uint"/> array that was retrieved.</returns>
-        public uint[] GetUInts(ushort length)
+        public uint[] GetUInts(int amount)
         {
-            uint[] array = new uint[length];
+            uint[] array = new uint[amount];
+            ReadUInts(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
+        /// <param name="amount">The amount of uints to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetUInts(int amount, uint[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} uints, starting at index {startIndex}!");
 
-            if (UnreadLength < length * intLength)
+            ReadUInts(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of ints from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of ints to read.</param>
+        /// <param name="array">The array to write the ints into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadInts(int amount, int[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * intLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / intLength);
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
+                amount = UnreadLength / intLength;
             }
 
-            for (int i = 0; i < length; i++)
-                array[i] = GetUInt();
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = ReadInt();
+        }
 
-            return array;
+        /// <summary>Reads a number of uints from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of uints to read.</param>
+        /// <param name="array">The array to write the uints into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadUInts(int amount, uint[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * intLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
+                amount = UnreadLength / intLength;
+            }
+
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = (uint)ReadInt();
         }
         #endregion
 
@@ -912,13 +1028,7 @@ namespace RiptideNetworking
                 return 0;
             }
 
-            // Convert the bytes at readPos' position to a long
-#if BIG_ENDIAN
-            Array.Reverse(Bytes, readPos, longLength);
-#endif
-            long value = BitConverter.ToInt64(Bytes, readPos);
-            readPos += longLength;
-            return value;
+            return ReadLong();
         }
 
         /// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
@@ -931,11 +1041,19 @@ namespace RiptideNetworking
                 return 0;
             }
             
+            return (ulong)ReadLong();
+        }
+
+        /// <summary>Retrieves a <see cref="long"/> from the next 8 bytes, starting at the read position.</summary>
+        /// <returns>The converted <see cref="long"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private long ReadLong()
+        {
             // Convert the bytes at readPos' position to a ulong
 #if BIG_ENDIAN
             Array.Reverse(Bytes, readPos, longLength);
 #endif
-            ulong value = BitConverter.ToUInt64(Bytes, readPos);
+            long value = BitConverter.ToInt64(Bytes, readPos);
             readPos += longLength;
             return value;
         }
@@ -1017,22 +1135,24 @@ namespace RiptideNetworking
                 return GetLongs(GetByte());
         }
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of longs to retrieve.</param>
         /// <returns>The <see cref="long"/> array that was retrieved.</returns>
-        public long[] GetLongs(ushort length)
+        public long[] GetLongs(int amount)
         {
-            long[] array = new long[length];
-
-            if (UnreadLength < length * longLength)
-            {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / longLength);
-            }
-
-            for (int i = 0; i < length; i++)
-                array[i] = GetLong();
-
+            long[] array = new long[amount];
+            ReadLongs(amount, array);
             return array;
+        }
+        /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
+        /// <param name="amount">The amount of longs to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetLongs(int amount, long[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} longs, starting at index {startIndex}!");
+
+            ReadLongs(amount, array, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
@@ -1052,22 +1172,56 @@ namespace RiptideNetworking
                 return GetULongs(GetByte());
         }
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of ulongs to retrieve.</param>
         /// <returns>The <see cref="ulong"/> array that was retrieved.</returns>
-        public ulong[] GetULongs(ushort length)
+        public ulong[] GetULongs(int amount)
         {
-            ulong[] array = new ulong[length];
+            ulong[] array = new ulong[amount];
+            ReadULongs(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
+        /// <param name="amount">The amount of ulongs to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetULongs(int amount, ulong[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} ulongs, starting at index {startIndex}!");
 
-            if (UnreadLength < length * longLength)
+            ReadULongs(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of longs from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of longs to read.</param>
+        /// <param name="array">The array to write the longs into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadLongs(int amount, long[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * longLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / longLength);
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
+                amount = UnreadLength / longLength;
             }
 
-            for (int i = 0; i < length; i++)
-                array[i] = GetULong();
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = ReadLong();
+        }
 
-            return array;
+        /// <summary>Reads a number of ulongs from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of ulongs to read.</param>
+        /// <param name="array">The array to write the ulongs into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadULongs(int amount, ulong[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * longLength)
+            {
+                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
+                amount = UnreadLength / longLength;
+            }
+
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = (ulong)ReadLong();
         }
         #endregion
 
@@ -1106,6 +1260,14 @@ namespace RiptideNetworking
                 return 0;
             }
 
+            return ReadFloat();
+        }
+
+        /// <summary>Retrieves a <see cref="float"/> from the next 4 bytes, starting at the read position.</summary>
+        /// <returns>The converted <see cref="float"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private float ReadFloat()
+        {
             // Convert the bytes at readPos' position to a float
 #if BIG_ENDIAN
             FloatConverter converter = new FloatConverter { byte3 = Bytes[readPos], byte2 = Bytes[readPos + 1], byte1 = Bytes[readPos + 2], byte0 = Bytes[readPos + 3] };
@@ -1163,22 +1325,40 @@ namespace RiptideNetworking
                 return GetFloats(GetByte());
         }
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of floats to retrieve.</param>
         /// <returns>The <see cref="float"/> array that was retrieved.</returns>
-        public float[] GetFloats(ushort length)
+        public float[] GetFloats(int amount)
         {
-            float[] array = new float[length];
+            float[] array = new float[amount];
+            ReadFloats(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
+        /// <param name="amount">The amount of floats to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetFloats(int amount, float[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} floats, starting at index {startIndex}!");
 
-            if (UnreadLength < length * floatLength)
+            ReadFloats(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of floats from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of floats to read.</param>
+        /// <param name="array">The array to write the floats into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadFloats(int amount, float[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * floatLength)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / floatLength);
+                amount = UnreadLength / floatLength;
             }
 
-            for (int i = 0; i < length; i++)
-                array[i] = GetFloat();
-
-            return array;
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = ReadFloat();
         }
         #endregion
 
@@ -1225,11 +1405,19 @@ namespace RiptideNetworking
                 return 0;
             }
 
+            return ReadDouble();
+        }
+
+        /// <summary>Retrieves a <see cref="double"/> from the next 8 bytes, starting at the read position.</summary>
+        /// <returns>The converted <see cref="double"/>.</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private double ReadDouble()
+        {
             // Convert the bytes at readPos' position to a double
 #if BIG_ENDIAN
             Array.Reverse(Bytes, readPos, doubleLength);
 #endif
-            double value = BitConverter.ToDouble(Bytes, readPos); 
+            double value = BitConverter.ToDouble(Bytes, readPos);
             readPos += doubleLength;
             return value;
         }
@@ -1281,22 +1469,40 @@ namespace RiptideNetworking
                 return GetDoubles(GetByte());
         }
         /// <summary>Retrieves a<see cref="double"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of doubles to retrieve.</param>
         /// <returns>The <see cref="double"/> array that was retrieved.</returns>
-        public double[] GetDoubles(ushort length)
+        public double[] GetDoubles(int amount)
         {
-            double[] array = new double[length];
+            double[] array = new double[amount];
+            ReadDoubles(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
+        /// <param name="amount">The amount of doubles to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetDoubles(int amount, double[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} doubles, starting at index {startIndex}!");
 
-            if (UnreadLength < length * doubleLength)
+            ReadDoubles(amount, array, startIndex);
+        }
+
+        /// <summary>Reads a number of doubles from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of doubles to read.</param>
+        /// <param name="array">The array to write the doubles into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadDoubles(int amount, double[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount * doubleLength)
             {
                 RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
-                length = (ushort)(UnreadLength / doubleLength);
+                amount = UnreadLength / doubleLength;
             }
 
-            for (int i = 0; i < length; i++)
-                array[i] = GetDouble();
-
-            return array;
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = ReadDouble();
         }
         #endregion
 
@@ -1376,15 +1582,27 @@ namespace RiptideNetworking
                 return GetStrings(GetByte());
         }
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
-        /// <param name="length">The length of the array.</param>
+        /// <param name="amount">The amount of strings to retrieve.</param>
         /// <returns>The <see cref="string"/> array that was retrieved.</returns>
-        public string[] GetStrings(ushort length)
+        public string[] GetStrings(int amount)
         {
-            string[] array = new string[length];
+            string[] array = new string[amount];
             for (int i = 0; i < array.Length; i++)
                 array[i] = GetString();
 
             return array;
+        }
+        /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
+        /// <param name="amount">The amount of string to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetStrings(int amount, string[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentOutOfRangeException($"Destination array isn't long enough to fit {amount} strings, starting at index {startIndex}!");
+
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = GetString();
         }
         #endregion
         #endregion

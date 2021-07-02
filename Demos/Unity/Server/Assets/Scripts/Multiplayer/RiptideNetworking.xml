@@ -460,8 +460,20 @@
         </member>
         <member name="M:RiptideNetworking.Message.GetBytes(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
-            <param name="amount">The length of the <see cref="T:System.Byte"/> array.</param>
+            <param name="amount">The amount of bytes to retrieve.</param>
             <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetBytes(System.Int32,System.Byte[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Byte"/> array with bytes retrieved from the message.</summary>
+            <param name="amount">The amount of bytes to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadBytes(System.Int32,System.Byte[],System.Int32)">
+            <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of bytes to read.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> to the message.</summary>
@@ -496,10 +508,22 @@
             </param>
             <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetBools(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetBools(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of bools to retrieve.</param>
             <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetBools(System.Int32,System.Boolean[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Boolean"/> array with bools retrieved from the message.</summary>
+            <param name="amount">The amount of bools to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadBools(System.Int32,System.Boolean[],System.Int32)">
+            <summary>Reads a number of bools from the message and writes them into the given array.</summary>
+            <param name="byteAmount">The number of bytes the bools are being stored in.</param>
+            <param name="array">The array to write the bools into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int16)">
             <summary>Adds a <see cref="T:System.Int16"/> to the message.</summary>
@@ -567,10 +591,16 @@
             </param>
             <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetShorts(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetShorts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of shorts to retrieve.</param>
             <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetShorts(System.Int32,System.Int16[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Int16"/> array with shorts retrieved from the message.</summary>
+            <param name="amount">The amount of shorts to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShorts(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
@@ -583,10 +613,28 @@
             </param>
             <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUShorts(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetUShorts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of ushorts to retrieve.</param>
             <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetUShorts(System.Int32,System.UInt16[],System.Int32)">
+            <summary>Populates a <see cref="T:System.UInt16"/> array with ushorts retrieved from the message.</summary>
+            <param name="amount">The amount of ushorts to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadShorts(System.Int32,System.Int16[],System.Int32)">
+            <summary>Reads a number of shorts from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of shorts to read.</param>
+            <param name="array">The array to write the shorts into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadUShorts(System.Int32,System.UInt16[],System.Int32)">
+            <summary>Reads a number of ushorts from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of ushorts to read.</param>
+            <param name="array">The array to write the ushorts into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32)">
             <summary>Adds an <see cref="T:System.Int32"/> to the message.</summary>
@@ -651,10 +699,16 @@
             </param>
             <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetInts(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetInts(System.Int32)">
             <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of ints to retrieve.</param>
             <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetInts(System.Int32,System.Int32[],System.Int32)">
+            <summary>Populates an <see cref="T:System.Int32"/> array with ints retrieved from the message.</summary>
+            <param name="amount">The amount of ints to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetUInts(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
@@ -667,10 +721,28 @@
             </param>
             <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUInts(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetUInts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of uints to retrieve.</param>
             <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetUInts(System.Int32,System.UInt32[],System.Int32)">
+            <summary>Populates a <see cref="T:System.UInt32"/> array with uints retrieved from the message.</summary>
+            <param name="amount">The amount of uints to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadInts(System.Int32,System.Int32[],System.Int32)">
+            <summary>Reads a number of ints from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of ints to read.</param>
+            <param name="array">The array to write the ints into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadUInts(System.Int32,System.UInt32[],System.Int32)">
+            <summary>Reads a number of uints from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of uints to read.</param>
+            <param name="array">The array to write the uints into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64)">
             <summary>Adds a <see cref="T:System.Int64"/> to the message.</summary>
@@ -693,6 +765,10 @@
         <member name="M:RiptideNetworking.Message.GetULong">
             <summary>Retrieves a <see cref="T:System.UInt64"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt64"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadLong">
+            <summary>Retrieves a <see cref="T:System.Int64"/> from the next 8 bytes, starting at the read position.</summary>
+            <returns>The converted <see cref="T:System.Int64"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
@@ -731,10 +807,16 @@
             </param>
             <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetLongs(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetLongs(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of longs to retrieve.</param>
             <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetLongs(System.Int32,System.Int64[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Int64"/> array with longs retrieved from the message.</summary>
+            <param name="amount">The amount of longs to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.GetULongs(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
@@ -747,10 +829,28 @@
             </param>
             <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetULongs(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetULongs(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of ulongs to retrieve.</param>
             <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetULongs(System.Int32,System.UInt64[],System.Int32)">
+            <summary>Populates a <see cref="T:System.UInt64"/> array with ulongs retrieved from the message.</summary>
+            <param name="amount">The amount of ulongs to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadLongs(System.Int32,System.Int64[],System.Int32)">
+            <summary>Reads a number of longs from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of longs to read.</param>
+            <param name="array">The array to write the longs into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadULongs(System.Int32,System.UInt64[],System.Int32)">
+            <summary>Reads a number of ulongs from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of ulongs to read.</param>
+            <param name="array">The array to write the ulongs into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single)">
             <summary>Adds a <see cref="T:System.Single"/> to the message.</summary>
@@ -760,6 +860,10 @@
         <member name="M:RiptideNetworking.Message.GetFloat">
             <summary>Retrieves a <see cref="T:System.Single"/> from the message.</summary>
             <returns>The <see cref="T:System.Single"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadFloat">
+            <summary>Retrieves a <see cref="T:System.Single"/> from the next 4 bytes, starting at the read position.</summary>
+            <returns>The converted <see cref="T:System.Single"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
@@ -785,10 +889,22 @@
             </param>
             <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetFloats(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetFloats(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of floats to retrieve.</param>
             <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetFloats(System.Int32,System.Single[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Single"/> array with floats retrieved from the message.</summary>
+            <param name="amount">The amount of floats to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadFloats(System.Int32,System.Single[],System.Int32)">
+            <summary>Reads a number of floats from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of floats to read.</param>
+            <param name="array">The array to write the floats into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double)">
             <summary>Adds a <see cref="T:System.Double"/> to the message.</summary>
@@ -798,6 +914,10 @@
         <member name="M:RiptideNetworking.Message.GetDouble">
             <summary>Retrieves a <see cref="T:System.Double"/> from the message.</summary>
             <returns>The <see cref="T:System.Double"/> that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadDouble">
+            <summary>Retrieves a <see cref="T:System.Double"/> from the next 8 bytes, starting at the read position.</summary>
+            <returns>The converted <see cref="T:System.Double"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
@@ -823,10 +943,22 @@
             </param>
             <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetDoubles(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetDoubles(System.Int32)">
             <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of doubles to retrieve.</param>
             <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetDoubles(System.Int32,System.Double[],System.Int32)">
+            <summary>Populates a <see cref="T:System.Double"/> array with doubles retrieved from the message.</summary>
+            <param name="amount">The amount of doubles to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.ReadDoubles(System.Int32,System.Double[],System.Int32)">
+            <summary>Reads a number of doubles from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of doubles to read.</param>
+            <param name="array">The array to write the doubles into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.String)">
             <summary>Adds a <see cref="T:System.String"/> to the message.</summary>
@@ -861,10 +993,16 @@
             </param>
             <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetStrings(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.GetStrings(System.Int32)">
             <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
-            <param name="length">The length of the array.</param>
+            <param name="amount">The amount of strings to retrieve.</param>
             <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetStrings(System.Int32,System.String[],System.Int32)">
+            <summary>Populates a <see cref="T:System.String"/> array with strings retrieved from the message.</summary>
+            <param name="amount">The amount of string to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
         <member name="T:RiptideNetworking.RiptideLogger">
             <summary>Provides functionality for logging messages.</summary>

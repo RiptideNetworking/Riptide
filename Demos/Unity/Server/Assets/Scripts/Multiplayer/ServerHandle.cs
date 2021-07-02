@@ -10,6 +10,8 @@ public class ServerHandle : MonoBehaviour
 
     public static void PlayerInput(ServerClient fromClient, Message message)
     {
-        Player.List[fromClient.Id].SetInput(message.GetBools(5), message.GetVector3());
+        Player player = Player.List[fromClient.Id];
+        message.GetBools(5, player.Inputs);
+        player.SetForwardDirection(message.GetVector3());
     }
 }

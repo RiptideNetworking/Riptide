@@ -16,7 +16,7 @@ public class Player : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float jumpSpeed;
 
-    private bool[] inputs;
+    public bool[] Inputs { get; set; }
     private float yVelocity;
 
     private void OnValidate()
@@ -31,22 +31,22 @@ public class Player : MonoBehaviour
         moveSpeed *= Time.fixedDeltaTime;
         jumpSpeed *= Time.fixedDeltaTime;
 
-        inputs = new bool[5];
+        Inputs = new bool[5];
     }
 
     private void FixedUpdate()
     {
         Vector2 inputDirection = Vector2.zero;
-        if (inputs[0])
+        if (Inputs[0])
             inputDirection.y += 1;
 
-        if (inputs[1])
+        if (Inputs[1])
             inputDirection.y -= 1;
 
-        if (inputs[2])
+        if (Inputs[2])
             inputDirection.x -= 1;
 
-        if (inputs[3])
+        if (Inputs[3])
             inputDirection.x += 1;
         
         Move(inputDirection);
@@ -60,7 +60,7 @@ public class Player : MonoBehaviour
         if (controller.isGrounded)
         {
             yVelocity = 0f;
-            if (inputs[4])
+            if (Inputs[4])
                 yVelocity = jumpSpeed;
         }
         yVelocity += gravity;
@@ -71,9 +71,8 @@ public class Player : MonoBehaviour
         SendMovement();
     }
 
-    public void SetInput(bool[] inputs, Vector3 forward)
+    public void SetForwardDirection(Vector3 forward)
     {
-        this.inputs = inputs;
         forward.y = 0; // Keep the player upright
         transform.forward = forward;
     }
