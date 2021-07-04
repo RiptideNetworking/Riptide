@@ -246,7 +246,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetBytes to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length)
@@ -355,7 +359,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetBools to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             ushort byteLength = (ushort)(array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1));
@@ -566,7 +574,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetShorts to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * shortLength)
@@ -596,7 +608,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetUShorts to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * shortLength)
@@ -817,7 +833,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetInts to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * intLength)
@@ -847,7 +867,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetUInts to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * intLength)
@@ -1076,7 +1100,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetLongs to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * longLength)
@@ -1106,7 +1134,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetULongs to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * longLength)
@@ -1296,7 +1328,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetFloats to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * floatLength)
@@ -1440,7 +1476,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetDoubles to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             if (UnwrittenLength < array.Length * doubleLength)
@@ -1556,7 +1596,11 @@ namespace RiptideNetworking
                 if (isBigArray)
                     Add((ushort)array.Length);
                 else
+                {
+                    if (array.Length > byte.MaxValue)
+                        throw new Exception($"Array is too long for the length to be stored in a single byte! Set isBigArray to true when calling Add & GetStrings to store the length in 2 bytes instead.");
                     Add((byte)array.Length);
+                }
             }
 
             for (int i = 0; i < array.Length; i++)
