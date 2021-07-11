@@ -169,7 +169,7 @@ namespace RiptideNetworking
                     if ((lockables.AcksBitfield & seqIdBit) == 0)
                     {
                         // If we haven't received this packet before
-                        lockables.AcksBitfield |= (ushort)(1 << sequenceGap - 1); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
                         lockables.LastReceivedSeqId = sequenceId;
                         SendAck(sequenceId, fromEndPoint);
                     }
