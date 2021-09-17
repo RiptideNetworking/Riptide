@@ -31,7 +31,7 @@ namespace RiptideNetworking
         /// <summary>Whether or not we are listening for incoming data.</summary>
         private bool isListening = false;
         /// <summary>The maximum amount of data that can be received at once.</summary>
-        private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is ~1500
+        private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is 1280
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -169,7 +169,7 @@ namespace RiptideNetworking
                     if ((lockables.AcksBitfield & seqIdBit) == 0)
                     {
                         // If we haven't received this packet before
-                        lockables.AcksBitfield |= (ushort)(1 << sequenceGap - 1); // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
                         lockables.LastReceivedSeqId = sequenceId;
                         SendAck(sequenceId, fromEndPoint);
                     }

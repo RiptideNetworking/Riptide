@@ -86,7 +86,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable Message instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        internal Message(ushort maxSize = 1500)
+        internal Message(ushort maxSize = 1280)
         {
             Bytes = new byte[maxSize];
         }
@@ -94,7 +94,7 @@ namespace RiptideNetworking
         /// <summary>Initializes a reusable Message instance with a pre-defined header type.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         /// <param name="headerType">The header type to initialize the message with.</param>
-        internal Message(HeaderType headerType, ushort maxSize = 1500)
+        internal Message(HeaderType headerType, ushort maxSize = 1280)
         {
             Bytes = new byte[maxSize];
 
@@ -151,6 +151,7 @@ namespace RiptideNetworking
             message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             message.writePos = 0;
             message.readPos = 0;
+            message.ReadableLength = 0;
             message.Add((byte)headerType);
             if (message.SendMode == MessageSendMode.reliable)
                 message.writePos += shortLength;

@@ -53,6 +53,12 @@ namespace RiptideNetworking
         internal void Disconnect()
         {
             connectionState = ConnectionState.notConnected;
+
+            lock (Rudp.PendingMessages)
+            {
+                foreach (Rudp.PendingMessage pendingMessage in Rudp.PendingMessages.Values)
+                    pendingMessage.Clear();
+            }
         }
 
         #region Messages

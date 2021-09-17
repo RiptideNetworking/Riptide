@@ -5,6 +5,7 @@
 
 ### Unity
 Example projects to show how to set up connection, disconnection, and *very* basic server-authoritative player movement in Unity.
+Unity Version: 2020.3.12f1
 
 ### Console
 Server-client setup using .NET Core console apps. Once connected, clients send 1000 test messages to the server, which sends them back as soon as they're received.

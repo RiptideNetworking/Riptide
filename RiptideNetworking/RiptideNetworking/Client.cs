@@ -238,6 +238,12 @@ namespace RiptideNetworking
             heartbeatTimer.Dispose();
             StopListening();
             connectionState = ConnectionState.notConnected;
+
+            lock (rudp.PendingMessages)
+            {
+                foreach (Rudp.PendingMessage pendingMessage in rudp.PendingMessages.Values)
+                    pendingMessage.Clear();
+            }
         }
 
         #region Messages
@@ -381,6 +387,7 @@ namespace RiptideNetworking
                 receiveActionQueue.Add(() => Connected?.Invoke(this, e));
         }
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
+        /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
         public event EventHandler ConnectionFailed;
         private void OnConnectionFailed(EventArgs e)
         {
