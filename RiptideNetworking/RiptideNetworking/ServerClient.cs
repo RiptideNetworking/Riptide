@@ -66,7 +66,7 @@ namespace RiptideNetworking
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         internal void SendAck(ushort forSeqId)
         {
-            Message message = Message.CreateInternal(forSeqId == Rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
+            Message message = Message.Create(forSeqId == Rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
             message.Add(Rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(Rudp.SendLockables.AcksBitfield); // Acks
 
@@ -105,7 +105,7 @@ namespace RiptideNetworking
         /// <summary>Sends a heartbeat message.</summary>
         internal void SendHeartbeat(byte pingId)
         {
-            Message message = Message.CreateInternal(HeaderType.heartbeat);
+            Message message = Message.Create(HeaderType.heartbeat);
             message.Add(pingId);
 
             server.Send(message, this);
@@ -116,15 +116,15 @@ namespace RiptideNetworking
         internal void HandleHeartbeat(Message message)
         {
             SendHeartbeat(message.GetByte());
-
             Rudp.RTT = message.GetShort();
+
             lastHeartbeat = DateTime.UtcNow;
         }
 
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.CreateInternal(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome);
             message.Add(Id);
 
             server.Send(message, this, 25);
@@ -138,7 +138,6 @@ namespace RiptideNetworking
                 return;
 
             ushort id = message.GetUShort();
-
             if (Id != id && server.ShouldOutputInfoLogs)
                 RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 

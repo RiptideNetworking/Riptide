@@ -44,14 +44,11 @@ namespace RiptideNetworking
     /// <summary>Represents a packet.</summary>
     public class Message
     {
-        /// <summary>The message instance used for sending user messages.</summary>
-        private static readonly Message send = new Message();
-        /// <summary>The message instance used for sending internal messages.</summary>
-        private static readonly Message sendInternal = new Message(25);
-        /// <summary>The message instance used for handling user messages.</summary>
-        private static readonly Message handle = new Message();
-        /// <summary>The message instance used for handling internal messages.</summary>
-        private static readonly Message handleInternal = new Message(25);
+        /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
+        /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
+        public static byte InstancesPerSocket { get; set; } = 4;
+        /// <summary>A pool of reusable message instances.</summary>
+        private static readonly List<Message> pool = new List<Message>();
 
         /// <summary>How many bytes a <see cref="bool"/> is represented by.</summary>
         public const byte boolLength = sizeof(bool);
@@ -103,84 +100,93 @@ namespace RiptideNetworking
                 writePos += shortLength;
         }
 
-        /// <summary>Reinitializes the Message instance used for sending.</summary>
+        #region Pooling
+        /// <summary>Increases the amount of messages in the pool. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
+        internal static void IncreasePoolCount()
+        {
+            lock (pool)
+            {
+                pool.Capacity += InstancesPerSocket * 2; // x2 so there's room for extra Message instance in the event that more are needed
+
+                for (int i = 0; i < InstancesPerSocket; i++)
+                    pool.Add(new Message());
+            }
+        }
+
+        /// <summary>Decreases the amount of messages in the pool. For use when a <see cref="Server"/> or <see cref="Client"/> is stopped.</summary>
+        internal static void DecreasePoolCount()
+        {
+            lock (pool)
+            {
+                if (pool.Count < InstancesPerSocket)
+                    return;
+
+                for (int i = 0; i < InstancesPerSocket; i++)
+                    pool.RemoveAt(0);
+            }
+        }
+
+        /// <summary>Gets a Message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            Reinitialize(send, (HeaderType)sendMode);
-            send.Add(id);
-            return send;
+            return RetrieveFromPool().Reinitialize((HeaderType)sendMode).Add(id);
         }
 
-        /// <summary>Reinitializes the Message instance used for handling.</summary>
+        /// <summary>Gets a Message instance that can be used for sending.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
+        internal static Message Create(HeaderType headerType)
+        {
+            return RetrieveFromPool().Reinitialize(headerType);
+        }
+
+        /// <summary>Gets a Message instance that can be used for handling.</summary>
         /// <param name="headerType">The message's header type.</param>
         /// <param name="data">The bytes contained in the message.</param>
         /// <returns>A message instance ready to be used for handling.</returns>
         internal static Message Create(HeaderType headerType, byte[] data)
         {
-            Reinitialize(handle, headerType, data);
-            return handle;
+            return RetrieveFromPool().Reinitialize(headerType, data);
         }
 
-        /// <summary>Reinitializes the Message instance used for sending internal messages.</summary>
-        /// <param name="headerType">The message's header type.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
-        internal static Message CreateInternal(HeaderType headerType)
+        /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
+        /// <returns></returns>
+        private static Message RetrieveFromPool()
         {
-            Reinitialize(sendInternal, headerType);
-            return sendInternal;
-        }
-
-        /// <summary>Reinitializes the Message instance used for handling internal messages.</summary>
-        /// <param name="headerType">The message's header type.</param>
-        /// <param name="data">The bytes contained in the message.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
-        internal static Message CreateInternal(HeaderType headerType, byte[] data)
-        {
-            Reinitialize(handleInternal, headerType, data);
-            return handleInternal;
-        }
-
-        /// <summary>Reinitializes a message for sending.</summary>
-        /// <param name="message">The message to initialize.</param>
-        /// <param name="headerType">The message's header type.</param>
-        private static void Reinitialize(Message message, HeaderType headerType)
-        {
-            message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            message.writePos = 0;
-            message.readPos = 0;
-            message.ReadableLength = 0;
-            message.Add((byte)headerType);
-            if (message.SendMode == MessageSendMode.reliable)
-                message.writePos += shortLength;
-        }
-
-        /// <summary>Reinitializes a message for handling.</summary>
-        /// <param name="message">The message to initialize.</param>
-        /// <param name="headerType">The message's header type.</param>
-        /// <param name="data">The bytes contained in the message.</param>
-        private static void Reinitialize(Message message, HeaderType headerType, byte[] data)
-        {
-            message.SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            message.writePos = (ushort)data.Length;
-            message.readPos = (ushort)(message.SendMode == MessageSendMode.reliable ? 3 : 1);
-
-            if (data.Length > message.Bytes.Length)
+            lock (pool)
             {
-                RiptideLogger.Log("ERROR", $"Can't fully handle {data.Length} bytes because it exceeds the maximum of {message.Bytes.Length}, message will contain incomplete data!");
-                Array.Copy(data, 0, message.Bytes, 0, message.Bytes.Length);
-                message.ReadableLength = message.Bytes.Length;
-            }
-            else
-            {
-                Array.Copy(data, 0, message.Bytes, 0, data.Length);
-                message.ReadableLength = data.Length;
+                Message message;
+                if (pool.Count > 0)
+                {
+                    message = pool[0];
+                    pool.RemoveAt(0);
+                }
+                else
+                    message = new Message();
+
+                return message;
             }
         }
+        #endregion
 
         #region Functions
+        /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
+        public void Release()
+        {
+            lock (pool)
+            {
+                if (pool.Count < pool.Capacity)
+                {
+                    // Pool exists and there's room
+                    if (!pool.Contains(this))
+                        pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+                }
+            }
+        }
+
         /// <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
         /// <param name="seqId">The sequence ID to insert.</param>
         internal void SetSequenceIdBytes(ushort seqId)
@@ -199,6 +205,45 @@ namespace RiptideNetworking
         {
             writePos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
             readPos = 0;
+        }
+
+        /// <summary>Reinitializes a message for sending.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        internal Message Reinitialize(HeaderType headerType)
+        {
+            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            writePos = 0;
+            readPos = 0;
+            ReadableLength = 0;
+            Add((byte)headerType);
+            if (SendMode == MessageSendMode.reliable)
+                writePos += shortLength;
+
+            return this;
+        }
+
+        /// <summary>Reinitializes a message for handling.</summary>
+        /// <param name="headerType">The message's header type.</param>
+        /// <param name="data">The bytes contained in the message.</param>
+        internal Message Reinitialize(HeaderType headerType, byte[] data)
+        {
+            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            writePos = (ushort)data.Length;
+            readPos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
+
+            if (data.Length > Bytes.Length)
+            {
+                RiptideLogger.Log("ERROR", $"Can't fully handle {data.Length} bytes because it exceeds the maximum of {Bytes.Length}, message will contain incomplete data!");
+                Array.Copy(data, 0, Bytes, 0, Bytes.Length);
+                ReadableLength = Bytes.Length;
+            }
+            else
+            {
+                Array.Copy(data, 0, Bytes, 0, data.Length);
+                ReadableLength = data.Length;
+            }
+
+            return this;
         }
         #endregion
 

@@ -51,8 +51,6 @@ namespace RiptideNetworking
         private Timer heartbeatTimer;
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
-        /// <summary>A unique reusable message for sending heartbeats to avoid threading issues.</summary>
-        private readonly Message heartbeatMessage = new Message(HeaderType.heartbeat, 4);
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
         /// <summary>The currently pending ping.</summary>
@@ -65,10 +63,15 @@ namespace RiptideNetworking
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
-        /// <param name="receiveActionQueue">The action queue to add messages to. Passing <see langword="null"/> will cause messages to be handled immediately on the same thread on which they were received.</param>
+        /// <param name="receiveActionQueue">The action queue to add messages to.</param>
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue = null, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
+        /// <remarks>
+        ///   Setting <paramref name="receiveActionQueue"/> to <see langword="null"/> will cause all of the client's events to execute on the same thread as the one they were invoked on.
+        ///   This is NOT thread safe and should only be done if you wish to implement a custom threading solution.
+        ///   Doing so will also require you to manually call <see cref="Message.Release"/> once you've finished retrieving the data you needed from a message.
+        /// </remarks>
+        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
         {
             this.receiveActionQueue = receiveActionQueue;
             _heartbeatInterval = heartbeatInterval;
@@ -131,9 +134,17 @@ namespace RiptideNetworking
         /// <param name="headerType">The header type of the data.</param>
         internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
+            Message message = Message.Create(headerType, data);
+
 #if DETAILED_LOGGING
             if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
                 RiptideLogger.Log(LogName, $"Received {headerType} message from {fromEndPoint}.");
+            
+            ushort messageId = message.PeekUShort();
+            if (headerType == HeaderType.reliable)
+                RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
+            else if (headerType == HeaderType.unreliable)
+                RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
 #endif
 
             switch (headerType)
@@ -143,51 +154,37 @@ namespace RiptideNetworking
                 case HeaderType.reliable:
                     if (receiveActionQueue == null)
                     {
-                        Message message = Message.Create(headerType, data);
-#if DETAILED_LOGGING
-                        ushort messageId = message.PeekUShort();
-                        if (headerType == HeaderType.reliable)
-                            RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
-                        else if (headerType == HeaderType.unreliable)
-                            RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
-#endif
                         OnMessageReceived(new ClientMessageReceivedEventArgs(message));
+                        // Don't release the message yet because the user has chosen to handle threading themselves, meaning they may still need the instance after this method finishes executing
                     }
                     else
                     {
                         receiveActionQueue.Add(() =>
                         {
-                            Message message = Message.Create(headerType, data);
-#if DETAILED_LOGGING
-                            ushort messageId = message.PeekUShort();
-                            if (headerType == HeaderType.reliable)
-                                RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
-                            else if (headerType == HeaderType.unreliable)
-                                RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
-#endif
                             OnMessageReceived(new ClientMessageReceivedEventArgs(message));
+                            message.Release();
                         });
                     }
-                    break;
+                    return;
 
                 // Internal messages
                 case HeaderType.ack:
-                    HandleAck(Message.CreateInternal(headerType, data));
+                    HandleAck(message);
                     break;
                 case HeaderType.ackExtra:
-                    HandleAckExtra(Message.CreateInternal(headerType, data));
+                    HandleAckExtra(message);
                     break;
                 case HeaderType.heartbeat:
-                    HandleHeartbeat(Message.CreateInternal(headerType, data));
+                    HandleHeartbeat(message);
                     break;
                 case HeaderType.welcome:
-                    HandleWelcome(Message.CreateInternal(headerType, data));
+                    HandleWelcome(message);
                     break;
                 case HeaderType.clientConnected:
-                    HandleClientConnected(Message.CreateInternal(headerType, data));
+                    HandleClientConnected(message);
                     break;
                 case HeaderType.clientDisconnected:
-                    HandleClientDisconnected(Message.CreateInternal(headerType, data));
+                    HandleClientDisconnected(message);
                     break;
                 case HeaderType.disconnect:
                     HandleDisconnect();
@@ -196,6 +193,8 @@ namespace RiptideNetworking
                     RiptideLogger.Log("ERROR", $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
+
+            message.Release();
         }
 
         /// <summary>Handles the given reliably sent data.</summary>
@@ -210,12 +209,16 @@ namespace RiptideNetworking
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
-        public void Send(Message message, byte maxSendAttempts = 15)
+        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
+        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, remoteEndPoint);
             else
                 SendReliable(message, remoteEndPoint, rudp, maxSendAttempts);
+
+            if (shouldRelease)
+                message.Release();
         }
 
         /// <summary>Disconnects from the server.</summary>
@@ -250,7 +253,7 @@ namespace RiptideNetworking
         /// <summary>Sends a connect message.</summary>
         private void SendConnect()
         {
-            Send(Message.CreateInternal(HeaderType.connect));
+            Send(Message.Create(HeaderType.connect));
         }
 
         /// <summary>Sends an ack message for a sequence ID to a specific endpoint.</summary>
@@ -258,7 +261,7 @@ namespace RiptideNetworking
         /// <param name="toEndPoint">The endpoint to send the ack to.</param>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
-            Message message = Message.CreateInternal(forSeqId == rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
+            Message message = Message.Create(forSeqId == rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
             message.Add(rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
             message.Add(rudp.SendLockables.AcksBitfield); // Acks
 
@@ -299,11 +302,11 @@ namespace RiptideNetworking
         {
             pendingPing = (lastPingId++, DateTime.UtcNow);
 
-            heartbeatMessage.Reuse();
-            heartbeatMessage.Add(pendingPing.id);
-            heartbeatMessage.Add(rudp.RTT);
+            Message message = Message.Create(HeaderType.heartbeat);
+            message.Add(pendingPing.id);
+            message.Add(rudp.RTT);
 
-            Send(heartbeatMessage);
+            Send(message);
         }
 
         /// <summary>Handles a heartbeat message.</summary>
@@ -339,7 +342,7 @@ namespace RiptideNetworking
         /// <summary>Sends a welcome (received) message.</summary>
         internal void SendWelcomeReceived()
         {
-            Message message = Message.CreateInternal(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome);
             message.Add(Id);
 
             Send(message, 25);
@@ -362,7 +365,7 @@ namespace RiptideNetworking
         /// <summary>Sends a disconnect message.</summary>
         private void SendDisconnect()
         {
-            Send(Message.CreateInternal(HeaderType.disconnect));
+            Send(Message.Create(HeaderType.disconnect));
         }
 
         /// <summary>Handles a disconnect message.</summary>

@@ -55,10 +55,10 @@ namespace ConsoleClient
             };
 
             client.Connected += (s, e) => Connected();
-            client.MessageReceived += (s, e) => messageHandlers[e.Message.GetUShort()](e.Message);
+            client.MessageReceived += (s, e) => MessageReceived(e.Message);
             client.Disconnected += (s, e) => Disconnected();
             
-            client.Connect("127.0.0.1", 7777);
+            client.Connect("127.0.0.1", 7777, null);
             client.TimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
 
             Console.ReadLine();
@@ -75,6 +75,12 @@ namespace ConsoleClient
             Console.WriteLine("Press enter to disconnect at any time.");
 
             client.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), 25);
+        }
+
+        private static void MessageReceived(Message message)
+        {
+            messageHandlers[message.GetUShort()](message);
+            message.Release();
         }
 
         private static void Disconnected()

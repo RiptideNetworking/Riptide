@@ -34,10 +34,10 @@ namespace ConsoleServer
             };
 
             server.ClientConnected += (s, e) => players.Add(e.Client.Id, new Player(e.Client));
-            server.MessageReceived += (s, e) => messageHandlers[e.Message.GetUShort()](e.FromClient, e.Message);
+            server.MessageReceived += (s, e) => MessageReceived(e.Message, e.FromClient);
             server.ClientDisconnected += (s, e) => players.Remove(e.Id);
 
-            server.Start(7777, 10);
+            server.Start(7777, 10, null);
             server.ClientTimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
 
             Console.WriteLine("Press enter to stop the server at any time.");
@@ -45,6 +45,12 @@ namespace ConsoleServer
             server.Stop();
 
             Console.ReadLine();
+        }
+
+        private static void MessageReceived(Message message, ServerClient fromClient)
+        {
+            messageHandlers[message.GetUShort()](fromClient, message);
+            message.Release();
         }
 
         private static void HandleStartTest(ServerClient fromClient, Message message)

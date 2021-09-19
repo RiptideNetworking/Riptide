@@ -44,6 +44,8 @@ namespace RiptideNetworking
         /// <param name="port">The local port to listen on.</param>
         protected void StartListening(ushort port = 0)
         {
+            Message.IncreasePoolCount();
+
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             socket.Bind(localEndPoint);
@@ -61,6 +63,8 @@ namespace RiptideNetworking
 
             socket.Close();
             socket = null;
+
+            Message.DecreasePoolCount();
         }
 
         /// <summary>Listens for and receives incoming packets.</summary>
