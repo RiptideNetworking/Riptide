@@ -99,10 +99,7 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
-        /// <param name="endPoint">The endpoint from which the message was sent.</param>
-        /// <param name="firstByte">The first byte of the message.</param>
-        /// <returns><see langword="true"/> if the message should be handled.</returns>
+        /// <inheritdoc/>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             lock (clients)
@@ -123,10 +120,7 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Handles the given data.</summary>
-        /// <param name="data">The data to handle.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
+        /// <inheritdoc/>
         internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             Message message = Message.Create(headerType, data);
@@ -195,18 +189,13 @@ namespace RiptideNetworking
             message.Release();
         }
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
+        /// <inheritdoc/>
         internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
         }
 
-        /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
-        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
-        /// <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
+        /// <inheritdoc/>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
             clients[toEndPoint].SendAck(forSeqId);

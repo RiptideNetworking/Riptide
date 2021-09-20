@@ -119,19 +119,13 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
-        /// <param name="endPoint">The endpoint from which the message was sent.</param>
-        /// <param name="firstByte">The first byte of the message.</param>
-        /// <returns><see langword="true"/> if the message should be handled.</returns>
+        /// <inheritdoc/>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             return endPoint.Equals(remoteEndPoint);
         }
 
-        /// <summary>Handles the given data.</summary>
-        /// <param name="data">The data to handle.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
+        /// <inheritdoc/>
         internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             Message message = Message.Create(headerType, data);
@@ -197,10 +191,7 @@ namespace RiptideNetworking
             message.Release();
         }
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
+        /// <inheritdoc/>
         internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             ReliableHandle(data, fromEndPoint, headerType, rudp.SendLockables);
@@ -256,9 +247,7 @@ namespace RiptideNetworking
             Send(Message.Create(HeaderType.connect));
         }
 
-        /// <summary>Sends an ack message for a sequence ID to a specific endpoint.</summary>
-        /// <param name="forSeqId">The sequence ID to acknowledge.</param>
-        /// <param name="toEndPoint">The endpoint to send the ack to.</param>
+        /// <inheritdoc/>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
             Message message = Message.Create(forSeqId == rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
