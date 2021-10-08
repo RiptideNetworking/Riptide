@@ -1,20 +1,16 @@
 ﻿using RiptideNetworking;
 using System;
 using System.Collections.Generic;
-using System.Timers;
+using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace ConsoleServer
 {
     class Program
     {
-        private static readonly Server server = new Server();
+        private static Server server;
         private static readonly Dictionary<ushort, Player> players = new Dictionary<ushort, Player>();
-
-        /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
-        /// <param name="fromClient">The client from whom the message was received.</param>
-        /// <param name="message">The message that was received.</param>
-        public delegate void MessageHandler(ServerClient fromClient, Message message);
-        private static Dictionary<ushort, MessageHandler> messageHandlers;
+        private static bool isRunning;
 
         private static bool isRoundTripTest;
         private static int testIdAmount;
@@ -26,34 +22,38 @@ namespace ConsoleServer
             Console.Title = "Server";
             
             RiptideLogger.Initialize(Console.WriteLine, true);
+            isRunning = true;
 
-            messageHandlers = new Dictionary<ushort, MessageHandler>()
-            {
-                { (ushort)MessageId.startTest, HandleStartTest },
-                { (ushort)MessageId.testMessage, HandleTestMessage }
-            };
-
-            server.ClientConnected += (s, e) => players.Add(e.Client.Id, new Player(e.Client));
-            server.MessageReceived += (s, e) => MessageReceived(e.Message, e.FromClient);
-            server.ClientDisconnected += (s, e) => players.Remove(e.Id);
-
-            server.Start(7777, 10, null);
-            server.ClientTimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            new Thread(new ThreadStart(Loop)).Start();
 
             Console.WriteLine("Press enter to stop the server at any time.");
             Console.ReadLine();
-            server.Stop();
+
+            isRunning = false;
 
             Console.ReadLine();
         }
 
-        private static void MessageReceived(Message message, ServerClient fromClient)
+        private static void Loop()
         {
-            messageHandlers[message.GetUShort()](fromClient, message);
-            message.Release();
+            server = new Server();
+            server.ClientConnected += (s, e) => players.Add(e.Client.Id, new Player(e.Client));
+            server.ClientDisconnected += (s, e) => players.Remove(e.Id);
+
+            server.Start(7777, 10);
+            server.ClientTimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+
+            while (isRunning)
+            {
+                server.Tick();
+                Thread.Sleep(10);
+            }
+
+            server.Stop();
         }
 
-        private static void HandleStartTest(ServerClient fromClient, Message message)
+        [MessageHandler((ushort)MessageId.startTest)]
+        public static void HandleStartTest(ServerClient fromClient, Message message)
         {
             isRoundTripTest = message.GetBool();
             testIdAmount = message.GetInt();
@@ -68,7 +68,6 @@ namespace ConsoleServer
             server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), fromClient, 25);
         }
 
-        
         private static void SendTestMessage(ServerClient fromClient, int reliableTestId)
         {
             Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.testMessage);
@@ -77,7 +76,8 @@ namespace ConsoleServer
             server.Send(message, fromClient);
         }
 
-        private static void HandleTestMessage(ServerClient fromClient, Message message)
+        [MessageHandler((ushort)MessageId.testMessage)]
+        public static void HandleTestMessage(ServerClient fromClient, Message message)
         {
             int reliableTestId = message.GetInt();
 

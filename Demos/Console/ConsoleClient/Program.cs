@@ -9,12 +9,8 @@ namespace ConsoleClient
 {
     class Program
     {
-        private static readonly Client client = new Client();
-
-        /// <summary>Encapsulates a method that handles a message from the server.</summary>
-        /// <param name="message">The message that was received.</param>
-        public delegate void MessageHandler(Message message);
-        private static Dictionary<ushort, MessageHandler> messageHandlers;
+        private static Client client;
+        private static bool isRunning;
 
         private static bool isRoundTripTest;
         private static bool isTestRunning;
@@ -47,26 +43,34 @@ namespace ConsoleClient
             Console.SetCursorPosition(0, Console.CursorTop);
 
             RiptideLogger.Initialize(Console.WriteLine, true);
+            isRunning = true;
 
-            messageHandlers = new Dictionary<ushort, MessageHandler>()
-            {
-                { (ushort)MessageId.startTest, HandleStartTest },
-                { (ushort)MessageId.testMessage, HandleTestMessage }
-            };
-
-            client.Connected += (s, e) => Connected();
-            client.MessageReceived += (s, e) => MessageReceived(e.Message);
-            client.Disconnected += (s, e) => Disconnected();
-            
-            client.Connect("127.0.0.1", 7777, null);
-            client.TimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            new Thread(new ThreadStart(Loop)).Start();
 
             Console.ReadLine();
+
+            isRunning = false;
+            
+            Console.ReadLine();
+        }
+
+        private static void Loop()
+        {
+            client = new Client();
+            client.Connected += (s, e) => Connected();
+            client.Disconnected += (s, e) => Disconnected();
+
+            client.Connect("127.0.0.1", 7777);
+            client.TimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+
+            while (isRunning)
+            {
+                client.Tick();
+                Thread.Sleep(10);
+            }
 
             client.Disconnect();
             Disconnected();
-            
-            Console.ReadLine();
         }
 
         private static void Connected()
@@ -75,12 +79,6 @@ namespace ConsoleClient
             Console.WriteLine("Press enter to disconnect at any time.");
 
             client.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), 25);
-        }
-
-        private static void MessageReceived(Message message)
-        {
-            messageHandlers[message.GetUShort()](message);
-            message.Release();
         }
 
         private static void Disconnected()
@@ -98,7 +96,8 @@ namespace ConsoleClient
             isTestRunning = false;
         }
 
-        private static void HandleStartTest(Message message)
+        [MessageHandler((ushort)MessageId.startTest)]
+        public static void HandleStartTest(Message message)
         {
             if (message.GetBool() != isRoundTripTest || message.GetInt() != testIdAmount)
             {
@@ -171,7 +170,8 @@ namespace ConsoleClient
             client.Send(message);
         }
 
-        private static void HandleTestMessage(Message message)
+        [MessageHandler((ushort)MessageId.testMessage)]
+        public static void HandleTestMessage(Message message)
         {
             int reliableTestId = message.GetInt();
 

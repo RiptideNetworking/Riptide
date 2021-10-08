@@ -171,7 +171,7 @@ namespace RiptideNetworking
             }
         }
         #endregion
-
+        
         #region Functions
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()

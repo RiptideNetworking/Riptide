@@ -122,5 +122,19 @@ public class Player : MonoBehaviour
         message.Add(transform.forward);
         NetworkManager.Singleton.Server.SendToAll(message);
     }
+
+    [MessageHandler((ushort)ClientToServerId.playerName)]
+    public static void PlayerName(ServerClient fromClient, Message message)
+    {
+        Spawn(fromClient.Id, message.GetString());
+    }
+
+    [MessageHandler((ushort)ClientToServerId.playerInput)]
+    public static void PlayerInput(ServerClient fromClient, Message message)
+    {
+        Player player = List[fromClient.Id];
+        message.GetBools(5, player.Inputs);
+        player.SetForwardDirection(message.GetVector3());
+    }
     #endregion
 }

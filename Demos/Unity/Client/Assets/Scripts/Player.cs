@@ -36,4 +36,20 @@ public class Player : MonoBehaviour
         player.username = username;
         list.Add(player.id, player);
     }
+
+    #region Messages
+    [MessageHandler((ushort)ServerToClientId.spawnPlayer)]
+    public static void SpawnPlayer(Message message)
+    {
+        Spawn(message.GetUShort(), message.GetString(), message.GetVector3());
+    }
+
+    [MessageHandler((ushort)ServerToClientId.playerMovement)]
+    public static void PlayerMovement(Message message)
+    {
+        ushort playerId = message.GetUShort();
+        if (list.TryGetValue(playerId, out Player player))
+            player.Move(message.GetVector3(), message.GetVector3());
+    }
+    #endregion
 }

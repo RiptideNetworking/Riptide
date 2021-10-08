@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Threading;
 
 namespace RiptideNetworking
@@ -32,8 +35,6 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
-        private ActionQueue receiveActionQueue;
         /// <summary>The connection's remote endpoint.</summary>
         private IPEndPoint remoteEndPoint;
         /// <summary>The client's Rudp instance.</summary>
@@ -56,24 +57,23 @@ namespace RiptideNetworking
         /// <summary>The currently pending ping.</summary>
         private (byte id, DateTime sendTime) pendingPing;
 
+        /// <summary>Encapsulates a method that handles a message from the server.</summary>
+        /// <param name="message">The message that was received.</param>
+        public delegate void MessageHandler(Message message);
+        /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
+        private Dictionary<ushort, MessageHandler> messageHandlers;
+
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(string logName = "CLIENT") : base(logName) { }
+        public Client(string logName = "CLIENT") : base(logName, Assembly.GetCallingAssembly()) { }
 
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
-        /// <param name="receiveActionQueue">The action queue to add messages to.</param>
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-        /// <remarks>
-        ///   Setting <paramref name="receiveActionQueue"/> to <see langword="null"/> will cause all of the client's events to execute on the same thread as the one they were invoked on.
-        ///   This is NOT thread safe and should only be done if you wish to implement a custom threading solution.
-        ///   Doing so will also require you to manually call <see cref="Message.Release"/> once you've finished retrieving the data you needed from a message.
-        /// </remarks>
-        public void Connect(string ip, ushort port, ActionQueue receiveActionQueue, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
+        public void Connect(string ip, ushort port, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
         {
-            this.receiveActionQueue = receiveActionQueue;
             _heartbeatInterval = heartbeatInterval;
             this.maxConnectionAttempts = maxConnectionAttempts;
             connectionAttempts = 0;
@@ -82,11 +82,41 @@ namespace RiptideNetworking
 
             StartListening();
             connectionState = ConnectionState.connecting;
-            
+
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, $"Connecting to {remoteEndPoint}...");
 
             heartbeatTimer = new Timer(Heartbeat, null, 0, HeartbeatInterval);
+        }
+
+        /// <inheritdoc/>
+        protected override void CreateMessageHandlersDictionary(Assembly assembly)
+        {
+            MethodInfo[] methods = assembly.GetTypes()
+                                           .SelectMany(t => t.GetMethods())
+                                           .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
+                                           .ToArray();
+
+            messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
+            for (int i = 0; i < methods.Length; i++)
+            {
+                ushort messageId = methods[i].GetCustomAttribute<MessageHandlerAttribute>().MessageId;
+                if (messageHandlers.ContainsKey(messageId))
+                    RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {messageId}! Only one handler method is allowed per ID!");
+                else
+                {
+                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
+                    if (clientMessageHandler != null)
+                        messageHandlers.Add(messageId, (MessageHandler)clientMessageHandler);
+                    else
+                    {
+                        // It's not a message handler for Client instances, but it might be one for Server instances
+                        Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
+                        if (serverMessageHandler != null)
+                            RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
+                    }
+                }
+            }
         }
 
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
@@ -146,19 +176,18 @@ namespace RiptideNetworking
                 // User messages
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
-                    if (receiveActionQueue == null)
+                    receiveActionQueue.Add(() =>
                     {
-                        OnMessageReceived(new ClientMessageReceivedEventArgs(message));
-                        // Don't release the message yet because the user has chosen to handle threading themselves, meaning they may still need the instance after this method finishes executing
-                    }
-                    else
-                    {
-                        receiveActionQueue.Add(() =>
-                        {
-                            OnMessageReceived(new ClientMessageReceivedEventArgs(message));
-                            message.Release();
-                        });
-                    }
+                        ushort messageId = message.GetUShort();
+                        OnMessageReceived(new ClientMessageReceivedEventArgs(messageId, message));
+
+                        if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                            messageHandler(message);
+                        else
+                            RiptideLogger.Log($"ERROR", $"No handler method found for message ID {messageId}");
+
+                        message.Release();
+                    });
                     return;
 
                 // Internal messages
@@ -187,7 +216,7 @@ namespace RiptideNetworking
                     RiptideLogger.Log("ERROR", $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
-
+            
             message.Release();
         }
 
@@ -373,10 +402,7 @@ namespace RiptideNetworking
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Connected successfully!");
 
-            if (receiveActionQueue == null)
-                Connected?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => Connected?.Invoke(this, e));
+            receiveActionQueue.Add(() => Connected?.Invoke(this, e));
         }
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
         /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
@@ -386,10 +412,7 @@ namespace RiptideNetworking
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Connection to server failed!");
 
-            if (receiveActionQueue == null)
-                ConnectionFailed?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, e));
+            receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, e));
         }
         /// <summary>Invoked when a message is received from the server.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
@@ -404,10 +427,7 @@ namespace RiptideNetworking
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Disconnected from server.");
 
-            if (receiveActionQueue == null)
-                Disconnected?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => Disconnected?.Invoke(this, e));
+            receiveActionQueue.Add(() => Disconnected?.Invoke(this, e));
         }
 
         /// <summary>Invoked when a new client connects.</summary>
@@ -417,10 +437,7 @@ namespace RiptideNetworking
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, $"Client {e.Id} connected.");
 
-            if (receiveActionQueue == null)
-                ClientConnected?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
+            receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
         }
         /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
@@ -429,20 +446,14 @@ namespace RiptideNetworking
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
 
-            if (receiveActionQueue == null)
-                ClientDisconnected?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
+            receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
         }
 
         /// <summary>Invoked when ping is updated.</summary>
         public event EventHandler<PingUpdatedEventArgs> PingUpdated;
         private void OnPingUpdated(PingUpdatedEventArgs e)
         {
-            if (receiveActionQueue == null)
-                PingUpdated?.Invoke(this, e);
-            else
-                receiveActionQueue.Add(() => PingUpdated?.Invoke(this, e));
+            receiveActionQueue.Add(() => PingUpdated?.Invoke(this, e));
         }
         #endregion
     }

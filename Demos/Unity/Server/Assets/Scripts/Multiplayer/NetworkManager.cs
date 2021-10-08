@@ -39,13 +39,6 @@ public class NetworkManager : MonoBehaviour
     public GameObject PlayerPrefab => playerPrefab;
 
     public Server Server { get; private set; }
-    private ActionQueue actionQueue;
-
-    /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
-    /// <param name="fromClient">The client from whom the message was received.</param>
-    /// <param name="message">The message that was received.</param>
-    public delegate void MessageHandler(ServerClient fromClient, Message message);
-    private Dictionary<ushort, MessageHandler> messageHandlers;
 
     private void Awake()
     {
@@ -66,25 +59,16 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, true);
 #endif
 
-        messageHandlers = new Dictionary<ushort, MessageHandler>()
-        {
-            { (ushort)ClientToServerId.playerName, ServerHandle.PlayerName },
-            { (ushort)ClientToServerId.playerInput, ServerHandle.PlayerInput },
-        };
-
-        actionQueue = new ActionQueue();
-
         Server = new Server();
         Server.ClientConnected += NewPlayerConnected;
-        Server.MessageReceived += MessageReceived;
         Server.ClientDisconnected += PlayerLeft;
 
-        Server.Start(port, maxClientCount, actionQueue);
+        Server.Start(port, maxClientCount);
     }
 
     private void FixedUpdate()
     {
-        actionQueue.ExecuteAll();
+        Server.Tick();
     }
 
     private void OnApplicationQuit()
@@ -92,7 +76,6 @@ public class NetworkManager : MonoBehaviour
         Server.Stop();
 
         Server.ClientConnected -= NewPlayerConnected;
-        Server.MessageReceived -= MessageReceived;
         Server.ClientDisconnected -= PlayerLeft;
     }
 
@@ -103,11 +86,6 @@ public class NetworkManager : MonoBehaviour
             if (player.Id != e.Client.Id)
                 player.SendSpawn(e.Client);
         }
-    }
-
-    private void MessageReceived(object sender, ServerMessageReceivedEventArgs e)
-    {
-        messageHandlers[e.Message.GetUShort()](e.FromClient, e.Message);
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)

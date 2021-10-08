@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Reflection;
 using System.Threading;
 
 namespace RiptideNetworking
@@ -24,6 +25,9 @@ namespace RiptideNetworking
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/></summary>
         public readonly string LogName;
 
+        /// <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+        protected ActionQueue receiveActionQueue;
+
         /// <summary>How long to wait for a response, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
         /// <summary>The socket to use for sending and receiving.</summary>
@@ -35,10 +39,24 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        protected RudpSocket(string logName)
+        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
+        protected RudpSocket(string logName, Assembly assembly)
         {
             LogName = logName;
+            CreateMessageHandlersDictionary(assembly);
+            receiveActionQueue = new ActionQueue();
         }
+
+        /// <summary>Initiates handling of incoming messages.</summary>
+        /// <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+        public void Tick()
+        {
+            receiveActionQueue.ExecuteAll();
+        }
+
+        /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
+        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
+        protected abstract void CreateMessageHandlersDictionary(Assembly assembly);
 
         /// <summary>Starts listening for incoming packets.</summary>
         /// <param name="port">The local port to listen on.</param>

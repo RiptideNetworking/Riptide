@@ -23,15 +23,19 @@ namespace RiptideNetworking
     {
         /// <summary>The client that the message was received from.</summary>
         public ServerClient FromClient { get; private set; }
+        /// <summary>The ID of the message.</summary>
+        public ushort MessageId { get; private set; }
         /// <summary>The message that was received.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="fromClient">The client that the message was received from.</param>
+        /// <param name="messageId">The ID of the message.</param>
         /// <param name="message">The message that was received.</param>
-        public ServerMessageReceivedEventArgs(ServerClient fromClient, Message message)
+        public ServerMessageReceivedEventArgs(ServerClient fromClient, ushort messageId, Message message)
         {
             FromClient = fromClient;
+            MessageId = messageId;
             Message = message;
         }
     }
@@ -53,13 +57,17 @@ namespace RiptideNetworking
     /// <summary>Contains event data for when the client receives a message from the server.</summary>
     public class ClientMessageReceivedEventArgs : EventArgs
     {
+        /// <summary>The ID of the message.</summary>
+        public ushort MessageId { get; private set; }
         /// <summary>The message that was received.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
+        /// <param name="messageId">The ID of the message.</param>
         /// <param name="message">The message that was received.</param>
-        public ClientMessageReceivedEventArgs(Message message)
+        public ClientMessageReceivedEventArgs(ushort messageId, Message message)
         {
+            MessageId = messageId;
             Message = message;
         }
     }
