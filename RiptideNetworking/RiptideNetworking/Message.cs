@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -153,7 +152,7 @@ namespace RiptideNetworking
         }
 
         /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
-        /// <returns></returns>
+        /// <returns>A message instance ready to be used for sending or handling.</returns>
         private static Message RetrieveFromPool()
         {
             lock (pool)

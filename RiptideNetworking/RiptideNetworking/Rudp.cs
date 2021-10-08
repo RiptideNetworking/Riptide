@@ -206,11 +206,11 @@ namespace RiptideNetworking
                         HeaderType headerType = (HeaderType)data[0];
                         if (headerType == HeaderType.reliable)
                         {
-    #if BIG_ENDIAN
+#if BIG_ENDIAN
                             ushort messageId = (ushort)(data[4] | (data[3] << 8));
-    #else
+#else
                             ushort messageId = (ushort)(data[3] | (data[4] << 8));
-    #endif
+#endif
                         
                             RiptideLogger.Log(rudp.rudpSocket.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
                         }
