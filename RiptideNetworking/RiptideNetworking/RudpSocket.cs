@@ -39,11 +39,9 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
-        protected RudpSocket(string logName, Assembly assembly)
+        protected RudpSocket(string logName)
         {
             LogName = logName;
-            CreateMessageHandlersDictionary(assembly);
             receiveActionQueue = new ActionQueue();
         }
 
@@ -56,7 +54,8 @@ namespace RiptideNetworking
 
         /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
         /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
-        protected abstract void CreateMessageHandlersDictionary(Assembly assembly);
+        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
+        protected abstract void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId);
 
         /// <summary>Starts listening for incoming packets.</summary>
         /// <param name="port">The local port to listen on.</param>

@@ -86,14 +86,15 @@
             <summary>Handles initial setup.</summary>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,System.UInt16,System.Byte)">
+        <member name="M:RiptideNetworking.Client.Connect(System.String,System.UInt16,System.UInt16,System.Byte,System.Byte)">
             <summary>Attempts to connect to an IP and port.</summary>
             <param name="ip">The IP to connect to.</param>
             <param name="port">The remote port to connect to.</param>
             <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
+            <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:RiptideNetworking.Client.messageHandlers"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Client.CreateMessageHandlersDictionary(System.Reflection.Assembly)">
+        <member name="M:RiptideNetworking.Client.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Client.Heartbeat(System.Object)">
@@ -406,7 +407,7 @@
         </member>
         <member name="M:RiptideNetworking.Message.RetrieveFromPool">
             <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
-            <returns></returns>
+            <returns>A message instance ready to be used for sending or handling.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Release">
             <summary>Returns the message instance to the internal pool so it can be reused.</summary>
@@ -1012,12 +1013,19 @@
         <member name="P:RiptideNetworking.MessageHandlerAttribute.MessageId">
             <summary>The ID of the message type that this method is meant to handle.</summary>
         </member>
+        <member name="P:RiptideNetworking.MessageHandlerAttribute.GroupId">
+            <summary>The ID of the group of message handlers this method belongs to.</summary>
+        </member>
         <member name="F:RiptideNetworking.MessageHandlerAttribute.messageId">
             <summary>The ID of the message type that this method is meant to handle.</summary>
         </member>
-        <member name="M:RiptideNetworking.MessageHandlerAttribute.#ctor(System.UInt16)">
-            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> class with the <paramref name="messageId"/> value.</summary>
+        <member name="F:RiptideNetworking.MessageHandlerAttribute.groupId">
+            <summary>The ID of the group of message handlers this method belongs to.</summary>
+        </member>
+        <member name="M:RiptideNetworking.MessageHandlerAttribute.#ctor(System.UInt16,System.Byte)">
+            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> values.</summary>
             <param name="messageId">The ID of the message type that this method is meant to handle.</param>
+            <param name="groupId">The ID of the group of message handlers this method belongs to.</param>
         </member>
         <member name="T:RiptideNetworking.RiptideLogger">
             <summary>Provides functionality for logging messages.</summary>
@@ -1192,18 +1200,18 @@
         <member name="F:RiptideNetworking.RudpSocket.maxPacketSize">
             <summary>The maximum amount of data that can be received at once.</summary>
         </member>
-        <member name="M:RiptideNetworking.RudpSocket.#ctor(System.String,System.Reflection.Assembly)">
+        <member name="M:RiptideNetworking.RudpSocket.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
-            <param name="assembly">The assembly to search for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/>.</param>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.Tick">
             <summary>Initiates handling of incoming messages.</summary>
             <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>
-        <member name="M:RiptideNetworking.RudpSocket.CreateMessageHandlersDictionary(System.Reflection.Assembly)">
+        <member name="M:RiptideNetworking.RudpSocket.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <summary>Searches the given assembly for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
             <param name="assembly">The assembly to search for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/>.</param>
+            <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
         </member>
         <member name="M:RiptideNetworking.RudpSocket.StartListening(System.UInt16)">
             <summary>Starts listening for incoming packets.</summary>
@@ -1314,17 +1322,21 @@
         <member name="F:RiptideNetworking.Server.messageHandlers">
             <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         </member>
+        <member name="F:RiptideNetworking.Server.messageHandlerGroupId">
+            <summary>The ID of the group of message handler methods to use when building <see cref="F:RiptideNetworking.Server.messageHandlers"/>.</summary>
+        </member>
         <member name="M:RiptideNetworking.Server.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.UInt16)">
+        <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.UInt16,System.Byte)">
             <summary>Starts the server.</summary>
             <param name="port">The local port on which to start the server.</param>
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
             <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
+            <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:RiptideNetworking.Server.messageHandlers"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Server.CreateMessageHandlersDictionary(System.Reflection.Assembly)">
+        <member name="M:RiptideNetworking.Server.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Server.Heartbeat(System.Object)">

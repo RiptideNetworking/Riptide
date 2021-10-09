@@ -51,21 +51,27 @@ namespace RiptideNetworking
         public delegate void MessageHandler(ServerClient fromClient, Message message);
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
+        /// <summary>The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</summary>
+        private byte messageHandlerGroupId;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(string logName = "SERVER") : base(logName, Assembly.GetCallingAssembly()) { }
+        public Server(string logName = "SERVER") : base(logName) { }
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
-        public void Start(ushort port, ushort maxClientCount, ushort clientHeartbeatInterval = 1000)
+        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
+        public void Start(ushort port, ushort maxClientCount, ushort clientHeartbeatInterval = 1000, byte messageHandlerGroupId = 0)
         {
             Port = port;
             MaxClientCount = maxClientCount;
             clients = new Dictionary<IPEndPoint, ServerClient>(MaxClientCount);
             timedOutClients = new List<IPEndPoint>(MaxClientCount);
+            
+            this.messageHandlerGroupId = messageHandlerGroupId;
+            CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             InitializeClientIds();
             _clientHeartbeatInterval = clientHeartbeatInterval;
@@ -80,7 +86,7 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        protected override void CreateMessageHandlersDictionary(Assembly assembly)
+        protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
                                            .SelectMany(t => t.GetMethods())
@@ -90,7 +96,11 @@ namespace RiptideNetworking
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
             for (int i = 0; i < methods.Length; i++)
             {
-                ushort messageId = methods[i].GetCustomAttribute<MessageHandlerAttribute>().MessageId;
+                MessageHandlerAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerAttribute>();
+                if (attribute.GroupId != messageHandlerGroupId)
+                    break;
+
+                ushort messageId = attribute.MessageId;
                 if (messageHandlers.ContainsKey(messageId))
                     RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {messageId}! Only one handler method is allowed per ID!");
                 else
@@ -179,7 +189,7 @@ namespace RiptideNetworking
                             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                                 messageHandler(client, message);
                             else
-                                RiptideLogger.Log($"ERROR", $"No handler method found for message ID {messageId}");
+                                RiptideLogger.Log("ERROR", $"No handler method found for message ID {messageId}!");
                         }
 
                         message.Release();

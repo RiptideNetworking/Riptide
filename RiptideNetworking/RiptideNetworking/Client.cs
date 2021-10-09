@@ -65,14 +65,15 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(string logName = "CLIENT") : base(logName, Assembly.GetCallingAssembly()) { }
+        public Client(string logName = "CLIENT") : base(logName) { }
 
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="ip">The IP to connect to.</param>
         /// <param name="port">The remote port to connect to.</param>
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-        public void Connect(string ip, ushort port, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5)
+        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
+        public void Connect(string ip, ushort port, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, byte messageHandlerGroupId = 0)
         {
             _heartbeatInterval = heartbeatInterval;
             this.maxConnectionAttempts = maxConnectionAttempts;
@@ -80,6 +81,7 @@ namespace RiptideNetworking
             remoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
             rudp = new Rudp(this);
 
+            CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
             StartListening();
             connectionState = ConnectionState.connecting;
 
@@ -90,7 +92,7 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        protected override void CreateMessageHandlersDictionary(Assembly assembly)
+        protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
                                            .SelectMany(t => t.GetMethods())
@@ -100,7 +102,11 @@ namespace RiptideNetworking
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
             for (int i = 0; i < methods.Length; i++)
             {
-                ushort messageId = methods[i].GetCustomAttribute<MessageHandlerAttribute>().MessageId;
+                MessageHandlerAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerAttribute>();
+                if (attribute.GroupId != messageHandlerGroupId)
+                    break;
+
+                ushort messageId = attribute.MessageId;
                 if (messageHandlers.ContainsKey(messageId))
                     RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {messageId}! Only one handler method is allowed per ID!");
                 else
@@ -184,7 +190,7 @@ namespace RiptideNetworking
                         if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                             messageHandler(message);
                         else
-                            RiptideLogger.Log($"ERROR", $"No handler method found for message ID {messageId}");
+                            RiptideLogger.Log("ERROR", $"No handler method found for message ID {messageId}!");
 
                         message.Release();
                     });
