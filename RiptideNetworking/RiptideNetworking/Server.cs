@@ -112,7 +112,7 @@ namespace RiptideNetworking
                     {
                         // It's not a message handler for Server instances, but it might be one for Client instances
                         Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
-                        if (serverMessageHandler != null)
+                        if (serverMessageHandler == null)
                             RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
                     }
                 }
