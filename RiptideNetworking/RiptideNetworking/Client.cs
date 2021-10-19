@@ -138,8 +138,7 @@ namespace RiptideNetworking
                 }
                 else
                 {
-                    LocalDisconnect();
-                    OnConnectionFailed(EventArgs.Empty);
+                    OnConnectionFailed();
                 }    
             }
             else if (connectionState == ConnectionState.connected)
@@ -360,7 +359,7 @@ namespace RiptideNetworking
             lastHeartbeat = DateTime.UtcNow;
 
             SendWelcomeReceived();
-            OnConnected(EventArgs.Empty);
+            OnConnected();
         }
 
         /// <summary>Sends a welcome (received) message.</summary>
@@ -394,31 +393,34 @@ namespace RiptideNetworking
 
         /// <summary>Handles a disconnect message.</summary>
         private void HandleDisconnect()
-        {
-            LocalDisconnect();
-            OnDisconnected(EventArgs.Empty);
+        {            
+            OnDisconnected();
         }
         #endregion
 
         #region Events
         /// <summary>Invoked when a connection to the server is established.</summary>
         public event EventHandler Connected;
-        private void OnConnected(EventArgs e)
+        private void OnConnected()
         {
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Connected successfully!");
 
-            receiveActionQueue.Add(() => Connected?.Invoke(this, e));
+            receiveActionQueue.Add(() => Connected?.Invoke(this, EventArgs.Empty));
         }
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
         /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
         public event EventHandler ConnectionFailed;
-        private void OnConnectionFailed(EventArgs e)
+        private void OnConnectionFailed()
         {
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Connection to server failed!");
 
-            receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, e));
+            receiveActionQueue.Add(() =>
+            {
+                LocalDisconnect();
+                ConnectionFailed?.Invoke(this, EventArgs.Empty);
+            });
         }
         /// <summary>Invoked when a message is received from the server.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
@@ -428,12 +430,16 @@ namespace RiptideNetworking
         }
         /// <summary>Invoked when disconnected by the server.</summary>
         public event EventHandler Disconnected;
-        private void OnDisconnected(EventArgs e)
+        private void OnDisconnected()
         {
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Disconnected from server.");
 
-            receiveActionQueue.Add(() => Disconnected?.Invoke(this, e));
+            receiveActionQueue.Add(() =>
+            {
+                LocalDisconnect();
+                Disconnected?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         /// <summary>Invoked when a new client connects.</summary>
