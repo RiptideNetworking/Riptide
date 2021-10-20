@@ -100,21 +100,21 @@ namespace RiptideNetworking
                 if (attribute.GroupId != messageHandlerGroupId)
                     break;
 
-                ushort messageId = attribute.MessageId;
-                if (messageHandlers.ContainsKey(messageId))
-                    RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {messageId}! Only one handler method is allowed per ID!");
+                Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
+                if (clientMessageHandler != null)
+                {
+                    // It's a message handler for Server instances
+                    if (messageHandlers.ContainsKey(attribute.MessageId))
+                        RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
+                    else
+                        messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
+                }
                 else
                 {
-                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
-                    if (clientMessageHandler != null)
-                        messageHandlers.Add(messageId, (MessageHandler)clientMessageHandler);
-                    else
-                    {
-                        // It's not a message handler for Server instances, but it might be one for Client instances
-                        Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
-                        if (serverMessageHandler == null)
-                            RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
-                    }
+                    // It's not a message handler for Server instances, but it might be one for Client instances
+                    Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
+                    if (serverMessageHandler == null)
+                        RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
                 }
             }
         }
