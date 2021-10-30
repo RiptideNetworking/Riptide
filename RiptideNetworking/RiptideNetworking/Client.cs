@@ -28,7 +28,7 @@ namespace RiptideNetworking
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
         /// <summary>The numeric ID.</summary>
-        public ushort Id { get; private set; }
+        public ushort Id => client.Id;
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
         public short RTT => client.RTT;
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
@@ -53,7 +53,7 @@ namespace RiptideNetworking
         
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(IClient client, string logName = "CLIENT")
+        public Client(IClient client)
         {
             this.client = client;
         }
@@ -109,6 +109,12 @@ namespace RiptideNetworking
             }
         }
 
+        /// <inheritdoc/>
+        public override void Tick()
+        {
+            client.Tick();
+        }
+
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
@@ -117,6 +123,9 @@ namespace RiptideNetworking
         {
             client.Send(message, maxSendAttempts, shouldRelease);
         }
+
+        /// <summary>Disconnects from the server.</summary>
+        public void Disconnect() => client.Disconnect();
 
         private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
         {

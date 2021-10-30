@@ -29,8 +29,6 @@ namespace RiptideNetworking
         public ushort MaxClientCount => server.MaxClientCount;
         /// <summary>The number of currently connected clients.</summary>
         public int ClientCount => server.ClientCount;
-        /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
-        public ushort ClientTimeoutTime { get; set; } = 5000;
         /// <inheritdoc/>
         public override bool ShouldOutputInfoLogs
         {
@@ -48,7 +46,7 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(IServer server, string logName = "SERVER")
+        public Server(IServer server)
         {
             this.server = server;
         }
@@ -101,6 +99,12 @@ namespace RiptideNetworking
                         RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public override void Tick()
+        {
+            server.Tick();
         }
 
         /// <summary>Sends a message to a specific client.</summary>

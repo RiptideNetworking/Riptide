@@ -1,4 +1,5 @@
 ﻿using RiptideNetworking;
+using RiptideNetworking.Transports.RudpTransport;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -36,12 +37,11 @@ namespace ConsoleServer
 
         private static void Loop()
         {
-            server = new Server();
+            server = new Server(new RudpServer(ushort.MaxValue)); // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
             server.ClientConnected += (s, e) => players.Add(e.Client.Id, new Player(e.Client));
             server.ClientDisconnected += (s, e) => players.Remove(e.Id);
 
             server.Start(7777, 10);
-            server.ClientTimeoutTime = ushort.MaxValue; // Avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
 
             while (isRunning)
             {
@@ -53,7 +53,7 @@ namespace ConsoleServer
         }
 
         [MessageHandler((ushort)MessageId.startTest)]
-        public static void HandleStartTest(ServerClient fromClient, Message message)
+        public static void HandleStartTest(ushort fromClientId, Message message)
         {
             isRoundTripTest = message.GetBool();
             testIdAmount = message.GetInt();
@@ -65,24 +65,24 @@ namespace ConsoleServer
                     remainingTestIds.Add(i + 1);
             }
 
-            server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), fromClient, 25);
+            server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), fromClientId, 25);
         }
 
-        private static void SendTestMessage(ServerClient fromClient, int reliableTestId)
+        private static void SendTestMessage(ushort fromClientId, int reliableTestId)
         {
             Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.testMessage);
             message.Add(reliableTestId);
 
-            server.Send(message, fromClient);
+            server.Send(message, fromClientId);
         }
 
         [MessageHandler((ushort)MessageId.testMessage)]
-        public static void HandleTestMessage(ServerClient fromClient, Message message)
+        public static void HandleTestMessage(ushort fromClientId, Message message)
         {
             int reliableTestId = message.GetInt();
 
             if (isRoundTripTest)
-                SendTestMessage(fromClient, reliableTestId);
+                SendTestMessage(fromClientId, reliableTestId);
             else
             {
                 lock (remainingTestIds)

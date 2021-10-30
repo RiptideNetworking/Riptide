@@ -4,9 +4,9 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace RiptideNetworking.Transports.RUDPTransport
+namespace RiptideNetworking.Transports.RudpTransport
 {
-    class RudpClient : RudpListener, IClient
+    public class RudpClient : RudpListener, IClient
     {
         /// <inheritdoc/>
         public event EventHandler Connected;
@@ -35,7 +35,7 @@ namespace RiptideNetworking.Transports.RUDPTransport
         public bool IsConnected => connectionState == ConnectionState.connected;
         /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
-        private ushort _heartbeatInterval = 1000;
+        private ushort _heartbeatInterval;
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         public ushort HeartbeatInterval
         {
@@ -57,7 +57,7 @@ namespace RiptideNetworking.Transports.RUDPTransport
         /// <summary>How many connection attempts have been made.</summary>
         private byte connectionAttempts;
         /// <summary>How many connection attempts to make before giving up.</summary>
-        private byte maxConnectionAttempts = 5;
+        private byte maxConnectionAttempts;
 
         /// <summary>Whether or not the client has timed out.</summary>
         private bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime;
@@ -71,16 +71,24 @@ namespace RiptideNetworking.Transports.RUDPTransport
         private (byte id, DateTime sendTime) pendingPing;
 
         /// <summary>Handles initial setup.</summary>
+        /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
+        /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+        /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public RudpClient(string logName = "CLIENT") : base(logName) { }
+        public RudpClient(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") : base(logName)
+        {
+            TimeoutTime = timeoutTime;
+            _heartbeatInterval = heartbeatInterval;
+            this.maxConnectionAttempts = maxConnectionAttempts;
+        }
 
         /// <inheritdoc/>
         public void Connect(string hostAddress)
         {
             string[] ipAndPort = hostAddress.Split(':');
-            if (ipAndPort.Length != 2 || !IPAddress.TryParse(ipAndPort[0], out IPAddress ip) || ushort.TryParse(ipAndPort[1], out ushort port))
+            if (ipAndPort.Length != 2 || !IPAddress.TryParse(ipAndPort[0], out IPAddress ip) || !ushort.TryParse(ipAndPort[1], out ushort port))
             {
-                RiptideLogger.Log("ERROR", "Invalid host address!");
+                RiptideLogger.Log("ERROR", $"Invalid host address '{hostAddress}'!");
                 return;
             }
 

@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 
-namespace RiptideNetworking.Transports.RUDPTransport
+namespace RiptideNetworking.Transports.RudpTransport
 {
     public class RudpServer : RudpListener, IServer
     {
@@ -27,7 +27,7 @@ namespace RiptideNetworking.Transports.RUDPTransport
         public IServerClient[] Clients => clients.Values.ToArray();
         /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
         public ushort ClientTimeoutTime { get; set; } = 5000;
-        private ushort _clientHeartbeatInterval = 1000;
+        private ushort _clientHeartbeatInterval;
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         public ushort ClientHeartbeatInterval
         {
@@ -50,8 +50,14 @@ namespace RiptideNetworking.Transports.RUDPTransport
         private Timer heartbeatTimer;
 
         /// <summary>Handles initial setup.</summary>
+        /// <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
+        /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public RudpServer(string logName = "SERVER") : base(logName) { }
+        public RudpServer(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") : base(logName)
+        {
+            ClientTimeoutTime = clientTimeoutTime;
+            _clientHeartbeatInterval = clientHeartbeatInterval;
+        }
 
         /// <inheritdoc/>
         public void Start(ushort port, ushort maxClientCount)

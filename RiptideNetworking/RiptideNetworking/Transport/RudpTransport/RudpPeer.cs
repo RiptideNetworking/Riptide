@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideNetworking.Transports.RUDPTransport
+namespace RiptideNetworking.Transports.RudpTransport
 {
     class RudpPeer
     {

@@ -38,6 +38,9 @@ namespace RiptideNetworking.Transports
         /// <summary>Attempts to connect to an IP and port.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         void Connect(string hostAddress);
+        /// <summary>Initiates handling of incoming messages.</summary>
+        /// <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+        void Tick();
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>

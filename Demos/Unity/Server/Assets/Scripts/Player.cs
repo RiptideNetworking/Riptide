@@ -95,7 +95,7 @@ public class Player : MonoBehaviour
     #region Messages
     /// <summary>Sends a player's info to the given client.</summary>
     /// <param name="toClient">The client to send the message to.</param>
-    public void SendSpawn(ServerClient toClient)
+    public void SendSpawn(ushort toClient)
     {
         NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)), toClient);
     }
@@ -123,15 +123,15 @@ public class Player : MonoBehaviour
     }
 
     [MessageHandler((ushort)ClientToServerId.playerName)]
-    public static void PlayerName(ServerClient fromClient, Message message)
+    public static void PlayerName(ushort fromClientId, Message message)
     {
-        Spawn(fromClient.Id, message.GetString());
+        Spawn(fromClientId, message.GetString());
     }
 
     [MessageHandler((ushort)ClientToServerId.playerInput)]
-    public static void PlayerInput(ServerClient fromClient, Message message)
+    public static void PlayerInput(ushort fromClientId, Message message)
     {
-        Player player = List[fromClient.Id];
+        Player player = List[fromClientId];
         message.GetBools(5, player.Inputs);
         player.SetForwardDirection(message.GetVector3());
     }

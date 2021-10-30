@@ -1,4 +1,5 @@
 ﻿using RiptideNetworking;
+using RiptideNetworking.Transports.RudpTransport;
 using System;
 using UnityEngine;
 
@@ -51,7 +52,7 @@ public class NetworkManager : MonoBehaviour
     {
         RiptideLogger.Initialize(Debug.Log, false);
 
-        Client = new Client();
+        Client = new Client(new RudpClient());
         Client.Connected += DidConnect;
         Client.ConnectionFailed += FailedToConnect;
         Client.ClientDisconnected += PlayerLeft;
@@ -75,7 +76,7 @@ public class NetworkManager : MonoBehaviour
 
     public void Connect()
     {
-        Client.Connect(ip, port);
+        Client.Connect($"{ip}:{port}");
     }
 
     private void DidConnect(object sender, EventArgs e)

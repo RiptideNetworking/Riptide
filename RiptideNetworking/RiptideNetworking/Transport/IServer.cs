@@ -22,6 +22,9 @@ namespace RiptideNetworking.Transports
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         void Start(ushort port, ushort maxClientCount);
+        /// <summary>Initiates handling of incoming messages.</summary>
+        /// <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+        void Tick();
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClientId">The client to send the message to.</param>

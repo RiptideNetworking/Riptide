@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading;
 
-namespace RiptideNetworking.Transports.RUDPTransport
+namespace RiptideNetworking.Transports.RudpTransport
 {
     public abstract class RudpListener
     {

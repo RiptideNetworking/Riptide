@@ -1,4 +1,5 @@
 ﻿using RiptideNetworking;
+using RiptideNetworking.Transports.RudpTransport;
 using UnityEngine;
 
 public enum ServerToClientId : ushort
@@ -57,7 +58,7 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, true);
 #endif
 
-        Server = new Server();
+        Server = new Server(new RudpServer());
         Server.ClientConnected += NewPlayerConnected;
         Server.ClientDisconnected += PlayerLeft;
 
@@ -82,7 +83,7 @@ public class NetworkManager : MonoBehaviour
         foreach (Player player in Player.List.Values)
         {
             if (player.Id != e.Client.Id)
-                player.SendSpawn(e.Client);
+                player.SendSpawn(e.Client.Id);
         }
     }
 

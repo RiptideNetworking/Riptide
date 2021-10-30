@@ -1,12 +1,13 @@
 ﻿using RiptideNetworking;
+using RiptideNetworking.Transports;
 
 namespace ConsoleServer
 {
     class Player
     {
-        internal readonly ServerClient client;
+        internal readonly IServerClient client;
 
-        internal Player(ServerClient client)
+        internal Player(IServerClient client)
         {
             this.client = client;
         }

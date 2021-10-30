@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace RiptideNetworking.Transports.RUDPTransport
+namespace RiptideNetworking.Transports.RudpTransport
 {
     public class RudpServerClient : IServerClient
     {
