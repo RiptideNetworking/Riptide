@@ -5,21 +5,22 @@ using System.Threading;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
+    /// <summary>Provides base sending &#38; receiving functionality for <see cref="RudpServer"/> and <see cref="RudpClient"/>.</summary>
     public abstract class RudpListener
     {
         /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         public bool ShouldOutputInfoLogs { get; set; } = true;
-        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/></summary>
+        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
 
-        /// <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+        /// <summary>The <see cref="ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         protected ActionQueue receiveActionQueue;
 
         /// <summary>How long to wait for a response, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
         /// <summary>The socket to use for sending and receiving.</summary>
         private Socket socket;
-        /// <summary>Whether or not we are listening for incoming data.</summary>
+        /// <summary>Whether or not we are currently listening for incoming data.</summary>
         private bool isListening = false;
         /// <summary>The maximum amount of data that can be received at once.</summary>
         private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is 1280
@@ -32,8 +33,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             receiveActionQueue = new ActionQueue();
         }
 
-        /// <summary>Initiates handling of incoming messages.</summary>
-        /// <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+        /// <summary>Initiates handling of currently queued messages.</summary>
+        /// <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         public void Tick()
         {
             receiveActionQueue.ExecuteAll();
@@ -260,7 +261,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Reliably sends the given message.</summary>
         /// <param name="message">The message to send reliably.</param>
         /// <param name="toEndPoint">The endpoint to send the message to.</param>
-        /// <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
+        /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer, byte maxSendAttempts)
         {

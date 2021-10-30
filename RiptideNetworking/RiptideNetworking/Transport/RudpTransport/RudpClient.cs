@@ -4,6 +4,7 @@ using System.Threading;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
+    /// <summary>A client that can connect to an <see cref="RudpServer"/>.</summary>
     public class RudpClient : RudpListener, IClient
     {
         /// <inheritdoc/>
@@ -34,7 +35,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
         private ushort _heartbeatInterval;
-        /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+        /// <summary>The interval (in milliseconds) at which to send and expect heartbeats from the server.</summary>
         public ushort HeartbeatInterval
         {
             get => _heartbeatInterval;
@@ -46,13 +47,13 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        /// <summary>The client's Rudp instance.</summary>
+        /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         private RudpPeer peer;
         /// <summary>The connection's remote endpoint.</summary>
         private IPEndPoint remoteEndPoint;
         /// <summary>The client's current connection state.</summary>
         private ConnectionState connectionState = ConnectionState.notConnected;
-        /// <summary>How many connection attempts have been made.</summary>
+        /// <summary>How many connection attempts have been made so far.</summary>
         private byte connectionAttempts;
         /// <summary>How many connection attempts to make before giving up.</summary>
         private byte maxConnectionAttempts;
@@ -81,6 +82,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
+        /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         public void Connect(string hostAddress)
         {
             string[] ipAndPort = hostAddress.Split(':');
@@ -369,6 +371,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         #endregion
 
         #region Events
+        /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         private void OnConnected()
         {
             if (ShouldOutputInfoLogs)
@@ -376,6 +379,8 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             receiveActionQueue.Add(() => Connected?.Invoke(this, EventArgs.Empty));
         }
+
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed()
         {
             if (ShouldOutputInfoLogs)
@@ -387,14 +392,22 @@ namespace RiptideNetworking.Transports.RudpTransport
                 ConnectionFailed?.Invoke(this, EventArgs.Empty);
             });
         }
+
+        /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         internal void OnMessageReceived(ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
         }
+
+        /// <summary>Invokes the <see cref="PingUpdated"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         private void OnPingUpdated(PingUpdatedEventArgs e)
         {
             receiveActionQueue.Add(() => PingUpdated?.Invoke(this, e));
         }
+
+        /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         private void OnDisconnected()
         {
             if (ShouldOutputInfoLogs)
@@ -407,7 +420,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             });
         }
 
-
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
@@ -415,6 +429,9 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
         }
+
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)

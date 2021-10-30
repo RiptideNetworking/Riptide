@@ -22,14 +22,14 @@
             <summary>Executes all actions in the queue on the calling thread.</summary>
         </member>
         <member name="T:RiptideNetworking.Client">
-            <summary>Represents a client connection.</summary>
+            <summary>A client that can connect to a <see cref="T:RiptideNetworking.Server"/>.</summary>
         </member>
         <member name="E:RiptideNetworking.Client.Connected">
             <summary>Invoked when a connection to the server is established.</summary>
         </member>
         <member name="E:RiptideNetworking.Client.ConnectionFailed">
             <summary>Invoked when a connection to the server fails to be established.</summary>
-            <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
+            <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         </member>
         <member name="E:RiptideNetworking.Client.MessageReceived">
             <summary>Invoked when a message is received from the server.</summary>
@@ -47,7 +47,7 @@
             <summary>Invoked when a client disconnects.</summary>
         </member>
         <member name="P:RiptideNetworking.Client.Id">
-            <summary>The numeric ID.</summary>
+            <summary>The numeric ID of the client.</summary>
         </member>
         <member name="P:RiptideNetworking.Client.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -71,14 +71,21 @@
         <member name="F:RiptideNetworking.Client.messageHandlers">
             <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         </member>
+        <member name="F:RiptideNetworking.Client.client">
+            <summary>The underlying client that is used for sending and receiving data.</summary>
+        </member>
         <member name="M:RiptideNetworking.Client.#ctor(RiptideNetworking.Transports.IClient)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="client">The underlying client that is used for sending and receiving data.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte)">
-            <summary>Attempts to connect to an IP and port.</summary>
+            <summary>Attempts connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:RiptideNetworking.Client.messageHandlers"/>.</param>
+            <remarks>
+              Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
+              If you are using a different transport, check the relevant documentation for what information it requires in the host address.
+            </remarks>
         </member>
         <member name="M:RiptideNetworking.Client.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <inheritdoc/>
@@ -89,11 +96,14 @@
         <member name="M:RiptideNetworking.Client.Send(RiptideNetworking.Message,System.Byte,System.Boolean)">
             <summary>Sends a message to the server.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Client.OnMessageReceived(System.Object,RiptideNetworking.ClientMessageReceivedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Client.MessageReceived"/> event and initiates handling of the received message.</summary>
         </member>
         <member name="T:RiptideNetworking.ConnectionState">
             <summary>The state of a connection.</summary>
@@ -107,6 +117,9 @@
         <member name="F:RiptideNetworking.ConnectionState.connected">
             <summary>Connected. A connection was successfully established.</summary>
         </member>
+        <member name="T:RiptideNetworking.Common">
+            <summary>Contains shared functionality for <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/>.</summary>
+        </member>
         <member name="P:RiptideNetworking.Common.ShouldOutputInfoLogs">
             <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         </member>
@@ -116,8 +129,8 @@
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
         </member>
         <member name="M:RiptideNetworking.Common.Tick">
-            <summary>Initiates handling of incoming messages.</summary>
-            <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+            <summary>Initiates handling of currently queued messages.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>
         <member name="T:RiptideNetworking.ServerClientConnectedEventArgs">
             <summary>Contains event data for when a client connects to the server.</summary>
@@ -256,7 +269,7 @@
             <summary>For reliable internal client disconnected messages.</summary>
         </member>
         <member name="T:RiptideNetworking.Message">
-            <summary>Represents a packet.</summary>
+            <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.InstancesPerSocket">
             <summary>How many messages to add to the pool for each <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> instance that is started.</summary>
@@ -998,7 +1011,7 @@
             <returns>The formatted timestamp.</returns>
         </member>
         <member name="T:RiptideNetworking.Server">
-            <summary>Represents a server which can accept connections from clients.</summary>
+            <summary>A server that can accept connections from <see cref="T:RiptideNetworking.Client"/>s.</summary>
         </member>
         <member name="E:RiptideNetworking.Server.ClientConnected">
             <summary>Invoked when a new client connects.</summary>
@@ -1017,7 +1030,7 @@
         </member>
         <member name="P:RiptideNetworking.Server.Clients">
             <summary>An array of all the currently connected clients.</summary>
-            <remarks>The position of each <see cref="T:RiptideNetworking.Transports.IServerClient"/> instance in the array does NOT necessarily correspond to that client's numeric ID.</remarks>
+            <remarks>The position of each <see cref="T:RiptideNetworking.Transports.IServerClient"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         </member>
         <member name="P:RiptideNetworking.Server.MaxClientCount">
             <summary>The maximum number of clients that can be connected at any time.</summary>
@@ -1030,15 +1043,18 @@
         </member>
         <member name="T:RiptideNetworking.Server.MessageHandler">
             <summary>Encapsulates a method that handles a message from a certain client.</summary>
-            <param name="fromClientId">The client from whom the message was received.</param>
+            <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
             <param name="message">The message that was received.</param>
         </member>
         <member name="F:RiptideNetworking.Server.messageHandlers">
             <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         </member>
+        <member name="F:RiptideNetworking.Server.server">
+            <summary>The underlying server that is used for managing connections and sending and receiving data.</summary>
+        </member>
         <member name="M:RiptideNetworking.Server.#ctor(RiptideNetworking.Transports.IServer)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
         </member>
         <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Byte)">
             <summary>Starts the server.</summary>
@@ -1055,36 +1071,42 @@
         <member name="M:RiptideNetworking.Server.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
             <summary>Sends a message to a specific client.</summary>
             <param name="message">The message to send.</param>
-            <param name="toClientId">The client to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="toClientId">The numeric ID of the client to send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
             <summary>Sends a message to all conected clients.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
             <summary>Sends a message to all connected clients except one.</summary>
             <param name="message">The message to send.</param>
-            <param name="exceptToClientId">The client NOT to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Server.DisconnectClient(System.UInt16)">
             <summary>Kicks a specific client.</summary>
-            <param name="clientId">The client to kick.</param>
+            <param name="clientId">The numeric ID of the client to kick.</param>
         </member>
         <member name="M:RiptideNetworking.Server.Stop">
             <summary>Stops the server.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Server.OnMessageReceived(System.Object,RiptideNetworking.ServerMessageReceivedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Server.MessageReceived"/> event and initiates handling of the received message.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Transports.IClient">
+            <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
         </member>
         <member name="E:RiptideNetworking.Transports.IClient.Connected">
             <summary>Invoked when a connection to the server is established.</summary>
         </member>
         <member name="E:RiptideNetworking.Transports.IClient.ConnectionFailed">
             <summary>Invoked when a connection to the server fails to be established.</summary>
-            <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
+            <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         </member>
         <member name="E:RiptideNetworking.Transports.IClient.MessageReceived">
             <summary>Invoked when a message is received from the server.</summary>
@@ -1102,7 +1124,7 @@
             <summary>Invoked when a client disconnects.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.IClient.Id">
-            <summary>The numeric ID.</summary>
+            <summary>The numeric ID of the client.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.IClient.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -1120,21 +1142,24 @@
             <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Connect(System.String)">
-            <summary>Attempts to connect to an IP and port.</summary>
+            <summary>Attempts connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Tick">
-            <summary>Initiates handling of incoming messages.</summary>
-            <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+            <summary>Initiates handling of currently queued messages.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Byte,System.Boolean)">
             <summary>Sends a message to the server.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Disconnect">
             <summary>Disconnects from the server.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Transports.IServer">
+            <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.IServer.Port">
             <summary>The local port that the server is running on.</summary>
@@ -1147,7 +1172,7 @@
         </member>
         <member name="P:RiptideNetworking.Transports.IServer.Clients">
             <summary>An array of all the currently connected clients.</summary>
-            <remarks>The position of each <see cref="T:RiptideNetworking.Transports.IServerClient"/> instance in the array does NOT necessarily correspond to that client's numeric ID.</remarks>
+            <remarks>The position of each <see cref="T:RiptideNetworking.Transports.IServerClient"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         </member>
         <member name="P:RiptideNetworking.Transports.IServer.ShouldOutputInfoLogs">
             <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
@@ -1158,32 +1183,35 @@
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.Tick">
-            <summary>Initiates handling of incoming messages.</summary>
-            <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+            <summary>Initiates handling of currently queued messages.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
             <summary>Sends a message to a specific client.</summary>
             <param name="message">The message to send.</param>
-            <param name="toClientId">The client to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="toClientId">The numeric ID of the client to send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
             <summary>Sends a message to all conected clients.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
             <summary>Sends a message to all connected clients except one.</summary>
             <param name="message">The message to send.</param>
-            <param name="exceptToClientId">The client NOT to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+            <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.DisconnectClient(System.UInt16)">
             <summary>Kicks a specific client.</summary>
-            <param name="clientId">The client to kick.</param>
+            <param name="clientId">The numeric ID of the client to kick.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.IServer.Shutdown">
+            <summary>Disconnects all clients and stops listening for new connections.</summary>
         </member>
         <member name="E:RiptideNetworking.Transports.IServer.ClientConnected">
             <summary>Invoked when a new client connects.</summary>
@@ -1194,8 +1222,11 @@
         <member name="E:RiptideNetworking.Transports.IServer.ClientDisconnected">
             <summary>Invoked when a client disconnects.</summary>
         </member>
+        <member name="T:RiptideNetworking.Transports.IServerClient">
+            <summary>Represents a transport-agnostic server client object.</summary>
+        </member>
         <member name="P:RiptideNetworking.Transports.IServerClient.Id">
-            <summary>The numeric ID.</summary>
+            <summary>The numeric ID of the client.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.IServerClient.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -1208,6 +1239,9 @@
         </member>
         <member name="P:RiptideNetworking.Transports.IServerClient.IsConnected">
             <summary>Whether or not the client is currently connected.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpClient">
+            <summary>A client that can connect to an <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/>.</summary>
         </member>
         <member name="E:RiptideNetworking.Transports.RudpTransport.RudpClient.Connected">
             <inheritdoc/>
@@ -1249,10 +1283,10 @@
             <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpClient.HeartbeatInterval">
-            <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
+            <summary>The interval (in milliseconds) at which to send and expect heartbeats from the server.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.peer">
-            <summary>The client's Rudp instance.</summary>
+            <summary>The client's <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> instance.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.remoteEndPoint">
             <summary>The connection's remote endpoint.</summary>
@@ -1261,7 +1295,7 @@
             <summary>The client's current connection state.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.connectionAttempts">
-            <summary>How many connection attempts have been made.</summary>
+            <summary>How many connection attempts have been made so far.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.maxConnectionAttempts">
             <summary>How many connection attempts to make before giving up.</summary>
@@ -1290,6 +1324,7 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Connect(System.String)">
             <inheritdoc/>
+            <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat(System.Object)">
             <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpClient.heartbeatTimer"/>.</summary>
@@ -1354,14 +1389,42 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.HandleDisconnect">
             <summary>Handles a disconnect message.</summary>
         </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnConnected">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.Connected"/> event.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnConnectionFailed">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.ConnectionFailed"/> event.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnMessageReceived(RiptideNetworking.ClientMessageReceivedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.MessageReceived"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnPingUpdated(RiptideNetworking.PingUpdatedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.PingUpdated"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnDisconnected">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.Disconnected"/> event.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnClientConnected(RiptideNetworking.ClientConnectedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.ClientConnected"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnClientDisconnected(RiptideNetworking.ClientDisconnectedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.ClientDisconnected"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpListener">
+            <summary>Provides base sending &#38; receiving functionality for <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/> and <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpClient"/>.</summary>
+        </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldOutputInfoLogs">
             <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.LogName">
-            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/></summary>
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.receiveActionQueue">
-            <summary>The action queue to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+            <summary>The <see cref="T:RiptideNetworking.ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
@@ -1370,7 +1433,7 @@
             <summary>The socket to use for sending and receiving.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.isListening">
-            <summary>Whether or not we are listening for incoming data.</summary>
+            <summary>Whether or not we are currently listening for incoming data.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.maxPacketSize">
             <summary>The maximum amount of data that can be received at once.</summary>
@@ -1380,8 +1443,8 @@
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Tick">
-            <summary>Initiates handling of incoming messages.</summary>
-            <remarks>Should generally be called from within a regularly executed update loop. Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+            <summary>Initiates handling of currently queued messages.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.StartListening(System.UInt16)">
             <summary>Starts listening for incoming packets.</summary>
@@ -1439,13 +1502,19 @@
             <summary>Reliably sends the given message.</summary>
             <param name="message">The message to send reliably.</param>
             <param name="toEndPoint">The endpoint to send the message to.</param>
-            <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
+            <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.SendAck(System.UInt16,System.Net.IPEndPoint)">
             <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
             <param name="forSeqId">The sequence ID to acknowledge.</param>
             <param name="toEndPoint">The endpoint to send the acknowledgement to.</param>
+        </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpPeer">
+            <summary>Provides functionality for sending and receiving messages reliably.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.lastSequenceId">
+            <summary>The last used sequence ID.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.NextSequenceId">
             <summary>The next sequence ID to use.</summary>
@@ -1460,13 +1529,13 @@
             <summary>The lockable values which are used to determine which messages the other end has received.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessages">
-            <summary>The currently pending reliably sent messages whose delivery has not been acknowledged. Stored by sequence ID.</summary>
+            <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.retryTimeMultiplier">
             <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.listener">
-            <summary>The RudpListener instance to use when sending data.</summary>
+            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpListener"/> whose socket to use when sending data.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.RTT">
             <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -1476,7 +1545,7 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.#ctor(RiptideNetworking.Transports.RudpTransport.RudpListener)">
             <summary>Handles initial setup.</summary>
-            <param name="rudpListener">The RudpSocket instance to use when sending data.</param>
+            <param name="rudpListener">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpListener"/> whose socket to use when sending data.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.UpdateReceivedAcks(System.UInt16,System.UInt16)">
             <summary>Updates which messages we've received acks for.</summary>
@@ -1484,10 +1553,10 @@
             <param name="remoteAcksBitField">A redundant list of sequence IDs that the other end has (or has not) received.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.GetSequenceGap(System.UInt16,System.UInt16)">
-            <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
+            <summary>Calculates the signed gap between sequence IDs, accounting for wrapping.</summary>
             <param name="seqId1">The new sequence ID.</param>
             <param name="seqId2">The previous sequence ID.</param>
-            <returns>The (signed) gap between the two given sequence IDs.</returns>
+            <returns>The signed gap between the two given sequence IDs. A positive gap means <paramref name="seqId1"/> is newer than <paramref name="seqId2"/>. A negative gap means <paramref name="seqId1"/> is older than <paramref name="seqId2"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.CheckMessageAckStatus(System.UInt16,System.UInt16)">
             <summary>Check the ack status of the given sequence ID.</summary>
@@ -1499,10 +1568,10 @@
             <param name="seqId">The sequence ID that was acknowledged.</param>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage">
-            <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged.</summary>
+            <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.peer">
-            <summary>The Rudp instance to use to send (and resend) the pending message.</summary>
+            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.remoteEndPoint">
             <summary>The intended destination endpoint of the message.</summary>
@@ -1517,7 +1586,7 @@
             <summary>How often to try sending the message before giving up.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.sendAttempts">
-            <summary>How many send attempts have been made.</summary>
+            <summary>How many send attempts have been made so far.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.lastSendTime">
             <summary>The time of the latest send attempt.</summary>
@@ -1530,7 +1599,7 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,System.Byte)">
             <summary>Handles initial setup.</summary>
-            <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
+            <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that is being sent reliably.</param>
             <param name="toEndPoint">The intended destination endpoint of the message.</param>
@@ -1544,6 +1613,9 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Clear">
             <summary>Clears and removes the message from the dictionary of pending messages.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpServer">
+            <summary>A server that can accept connections from <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpClient"/>s.</summary>
         </member>
         <member name="E:RiptideNetworking.Transports.RudpTransport.RudpServer.ClientConnected">
             <inheritdoc/>
@@ -1573,7 +1645,7 @@
             <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpServer.clients">
-            <summary>Currently connected clients, accessible by their endpoints.</summary>
+            <summary>Currently connected clients, accessible by their endpoints or numeric ID.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpServer.timedOutClients">
             <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpServer.clients"/> dictionary.</summary>
@@ -1596,6 +1668,13 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
             <inheritdoc/>
         </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,RiptideNetworking.Transports.RudpTransport.RudpServerClient,System.Byte,System.Boolean)">
+            <summary>Sends a message to a specific client.</summary>
+            <param name="message">The message to send.</param>
+            <param name="toClient">The client to send the message to.</param>
+            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
+            <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
+        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
             <inheritdoc/>
         </member>
@@ -1607,6 +1686,19 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Shutdown">
             <inheritdoc/>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.OnClientConnected(System.Net.IPEndPoint,RiptideNetworking.ServerClientConnectedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpServer.ClientConnected"/> event.</summary>
+            <param name="clientEndPoint">The endpoint of the newly connected client.</param>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.OnMessageReceived(RiptideNetworking.ServerMessageReceivedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpServer.MessageReceived"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.OnClientDisconnected(RiptideNetworking.ClientDisconnectedEventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpServer.ClientDisconnected"/> event.</summary>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
@@ -1645,7 +1737,10 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendClientDisconnected(System.UInt16)">
             <summary>Sends a client disconnected message.</summary>
-            <param name="id">The ID of the client that disconnected.</param>
+            <param name="id">The numeric ID of the client that disconnected.</param>
+        </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpServerClient">
+            <summary>Represents a server's connection to a client.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpServerClient.Id">
             <inheritdoc/>
@@ -1666,7 +1761,7 @@
             <summary>The connection's remote endpoint.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpServerClient.Peer">
-            <summary>The client's Rudp instance.</summary>
+            <summary>The client's <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> instance.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpServerClient.SendLockables">
             <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
@@ -1678,16 +1773,16 @@
             <summary>The time at which the last heartbeat was received from the client.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpServerClient.server">
-            <summary>The server that the client is associated with.</summary>
+            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/> that the client is associated with.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpServerClient.connectionState">
             <summary>The client's current connection state.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServerClient.#ctor(RiptideNetworking.Transports.RudpTransport.RudpServer,System.Net.IPEndPoint,System.UInt16)">
             <summary>Handles initial setup.</summary>
-            <param name="server">The server this client is associated with.</param>
-            <param name="endPoint">The remote endpoint of the client.</param>
-            <param name="id">The ID of the client.</param>
+            <param name="server">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/> that the client is associated with.</param>
+            <param name="endPoint">The connection's remote endpoint.</param>
+            <param name="id">The numeric ID of the client.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServerClient.Disconnect">
             <summary>Cleans up local objects on disconnection.</summary>

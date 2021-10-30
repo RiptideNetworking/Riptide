@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace RiptideNetworking
 {
-    /// <summary>Represents a server which can accept connections from clients.</summary>
+    /// <summary>A server that can accept connections from <see cref="Client"/>s.</summary>
     public class Server : Common
     {
         /// <summary>Invoked when a new client connects.</summary>
@@ -21,7 +21,7 @@ namespace RiptideNetworking
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => server.Port;
         /// <summary>An array of all the currently connected clients.</summary>
-        /// <remarks>The position of each <see cref="IServerClient"/> instance in the array does NOT necessarily correspond to that client's numeric ID.</remarks>
+        /// <remarks>The position of each <see cref="IServerClient"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         public IServerClient[] Clients => server.Clients;
         /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount => server.MaxClientCount;
@@ -34,16 +34,17 @@ namespace RiptideNetworking
             set => server.ShouldOutputInfoLogs = value;
         }
         /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
-        /// <param name="fromClientId">The client from whom the message was received.</param>
+        /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
         
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
+        /// <summary>The underlying server that is used for managing connections and sending and receiving data.</summary>
         private IServer server;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
         public Server(IServer server)
         {
             this.server = server;
@@ -107,8 +108,8 @@ namespace RiptideNetworking
 
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="toClientId">The client to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        /// <param name="toClientId">The numeric ID of the client to send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
@@ -117,7 +118,7 @@ namespace RiptideNetworking
 
         /// <summary>Sends a message to all conected clients.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
@@ -126,8 +127,8 @@ namespace RiptideNetworking
 
         /// <summary>Sends a message to all connected clients except one.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="exceptToClientId">The client NOT to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
@@ -135,7 +136,7 @@ namespace RiptideNetworking
         }
 
         /// <summary>Kicks a specific client.</summary>
-        /// <param name="clientId">The client to kick.</param>
+        /// <param name="clientId">The numeric ID of the client to kick.</param>
         public void DisconnectClient(ushort clientId)
         {
             server.DisconnectClient(clientId);
@@ -152,6 +153,7 @@ namespace RiptideNetworking
         {
             ClientConnected?.Invoke(this, e);
         }
+        /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);

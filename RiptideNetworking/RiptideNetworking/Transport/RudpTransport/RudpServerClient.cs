@@ -3,6 +3,7 @@ using System.Net;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
+    /// <summary>Represents a server's connection to a client.</summary>
     public class RudpServerClient : IServerClient
     {
         /// <inheritdoc/>
@@ -19,7 +20,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The connection's remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 
-        /// <summary>The client's Rudp instance.</summary>
+        /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         internal RudpPeer Peer { get; private set; }
         /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
         internal SendLockables SendLockables => Peer.SendLockables;
@@ -28,15 +29,15 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
-        /// <summary>The server that the client is associated with.</summary>
+        /// <summary>The <see cref="RudpServer"/> that the client is associated with.</summary>
         private readonly RudpServer server;
         /// <summary>The client's current connection state.</summary>
         private ConnectionState connectionState = ConnectionState.notConnected;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="server">The server this client is associated with.</param>
-        /// <param name="endPoint">The remote endpoint of the client.</param>
-        /// <param name="id">The ID of the client.</param>
+        /// <param name="server">The <see cref="RudpServer"/> that the client is associated with.</param>
+        /// <param name="endPoint">The connection's remote endpoint.</param>
+        /// <param name="id">The numeric ID of the client.</param>
         internal RudpServerClient(RudpServer server, IPEndPoint endPoint, ushort id)
         {
             this.server = server;

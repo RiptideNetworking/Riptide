@@ -6,6 +6,7 @@ using System.Threading;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
+    /// <summary>A server that can accept connections from <see cref="RudpClient"/>s.</summary>
     public class RudpServer : RudpListener, IServer
     {
         /// <inheritdoc/>
@@ -38,7 +39,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        /// <summary>Currently connected clients, accessible by their endpoints.</summary>
+        /// <summary>Currently connected clients, accessible by their endpoints or numeric ID.</summary>
         private DoubleKeyDictionary<ushort, IPEndPoint, RudpServerClient> clients;
         /// <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="clients"/> dictionary.</summary>
         private List<IPEndPoint> timedOutClients;
@@ -84,7 +85,12 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (shouldRelease)
                 message.Release();
         }
-        
+
+        /// <summary>Sends a message to a specific client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The client to send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
+        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         internal void Send(Message message, RudpServerClient toClient, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
@@ -179,6 +185,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                 RiptideLogger.Log(LogName, "Server stopped.");
         }
 
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        /// <param name="clientEndPoint">The endpoint of the newly connected client.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
         internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
@@ -189,11 +198,15 @@ namespace RiptideNetworking.Transports.RudpTransport
             SendClientConnected(clientEndPoint, e.Client.Id);
         }
 
+        /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         private void OnMessageReceived(ServerMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
         }
 
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
@@ -403,7 +416,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Sends a client disconnected message.</summary>
-        /// <param name="id">The ID of the client that disconnected.</param>
+        /// <param name="id">The numeric ID of the client that disconnected.</param>
         private void SendClientDisconnected(ushort id)
         {
             Message message = Message.Create(HeaderType.clientDisconnected);

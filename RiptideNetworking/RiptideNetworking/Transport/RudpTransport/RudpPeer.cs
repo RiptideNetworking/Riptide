@@ -6,8 +6,10 @@ using Timer = System.Timers.Timer;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
+    /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
     class RudpPeer
     {
+        /// <summary>The last used sequence ID.</summary>
         private int lastSequenceId;
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
@@ -18,12 +20,12 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal SendLockables SendLockables { get; private set; }
         /// <summary>The lockable values which are used to determine which messages the other end has received.</summary>
         internal ReceiveLockables ReceiveLockables { get; private set; }
-        /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged. Stored by sequence ID.</summary>
+        /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         protected readonly float retryTimeMultiplier = 1.2f;
 
-        /// <summary>The RudpListener instance to use when sending data.</summary>
+        /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
         private readonly RudpListener listener;
 
         private short _rtt = -1;
@@ -41,7 +43,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal short SmoothRTT { get; set; } = -1;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="rudpListener">The RudpSocket instance to use when sending data.</param>
+        /// <param name="rudpListener">The <see cref="RudpListener"/> whose socket to use when sending data.</param>
         internal RudpPeer(RudpListener rudpListener)
         {
             listener = rudpListener;
@@ -90,10 +92,10 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
         }
 
-        /// <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
+        /// <summary>Calculates the signed gap between sequence IDs, accounting for wrapping.</summary>
         /// <param name="seqId1">The new sequence ID.</param>
         /// <param name="seqId2">The previous sequence ID.</param>
-        /// <returns>The (signed) gap between the two given sequence IDs.</returns>
+        /// <returns>The signed gap between the two given sequence IDs. A positive gap means <paramref name="seqId1"/> is newer than <paramref name="seqId2"/>. A negative gap means <paramref name="seqId1"/> is older than <paramref name="seqId2"/>.</returns>
         internal static int GetSequenceGap(ushort seqId1, ushort seqId2)
         {
             int gap = seqId1 - seqId2;
@@ -133,10 +135,10 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged.</summary>
+        /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
         internal class PendingMessage
         {
-            /// <summary>The Rudp instance to use to send (and resend) the pending message.</summary>
+            /// <summary>The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</summary>
             private readonly RudpPeer peer;
             /// <summary>The intended destination endpoint of the message.</summary>
             private readonly IPEndPoint remoteEndPoint;
@@ -146,7 +148,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             private readonly byte[] data;
             /// <summary>How often to try sending the message before giving up.</summary>
             private readonly byte maxSendAttempts;
-            /// <summary>How many send attempts have been made.</summary>
+            /// <summary>How many send attempts have been made so far.</summary>
             private byte sendAttempts;
             /// <summary>The time of the latest send attempt.</summary>
             private DateTime lastSendTime;
@@ -156,7 +158,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             private bool wasCleared;
 
             /// <summary>Handles initial setup.</summary>
-            /// <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
+            /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
             /// <param name="sequenceId">The sequence ID of the message.</param>
             /// <param name="message">The message that is being sent reliably.</param>
             /// <param name="toEndPoint">The intended destination endpoint of the message.</param>

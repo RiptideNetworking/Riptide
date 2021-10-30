@@ -6,13 +6,13 @@ using System.Reflection;
 
 namespace RiptideNetworking
 {
-    /// <summary>Represents a client connection.</summary>
+    /// <summary>A client that can connect to a <see cref="Server"/>.</summary>
     public class Client : Common
     {
         /// <summary>Invoked when a connection to the server is established.</summary>
         public event EventHandler Connected;
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
-        /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is blocking the connection.</remarks>
+        /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         public event EventHandler ConnectionFailed;
         /// <summary>Invoked when a message is received from the server.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
@@ -25,7 +25,7 @@ namespace RiptideNetworking
         /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
-        /// <summary>The numeric ID.</summary>
+        /// <summary>The numeric ID of the client.</summary>
         public ushort Id => client.Id;
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
         public short RTT => client.RTT;
@@ -47,18 +47,23 @@ namespace RiptideNetworking
 
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
+        /// <summary>The underlying client that is used for sending and receiving data.</summary>
         private IClient client;
-        
+
         /// <summary>Handles initial setup.</summary>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        /// <param name="client">The underlying client that is used for sending and receiving data.</param>
         public Client(IClient client)
         {
             this.client = client;
         }
 
-        /// <summary>Attempts to connect to an IP and port.</summary>
+        /// <summary>Attempts connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
+        /// <remarks>
+        ///   Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
+        ///   If you are using a different transport, check the relevant documentation for what information it requires in the host address.
+        /// </remarks>
         public void Connect(string hostAddress, byte messageHandlerGroupId = 0)
         {
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
@@ -115,7 +120,7 @@ namespace RiptideNetworking
 
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending a reliable message before giving up.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
@@ -125,6 +130,7 @@ namespace RiptideNetworking
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect() => client.Disconnect();
 
+        /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);

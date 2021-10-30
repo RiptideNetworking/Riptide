@@ -40,7 +40,7 @@ namespace RiptideNetworking
         clientDisconnected,
     }
 
-    /// <summary>Represents a packet.</summary>
+    /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
