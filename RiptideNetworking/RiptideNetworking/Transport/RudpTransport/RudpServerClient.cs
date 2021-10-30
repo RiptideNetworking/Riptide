@@ -1,35 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
+using System.Text;
 
-namespace RiptideNetworking
+namespace RiptideNetworking.Transports.RUDPTransport
 {
-    /// <summary>Represents a server's connection to a client.</summary>
-    public class ServerClient
+    public class RudpServerClient : IServerClient
     {
-        /// <summary>The numeric ID.</summary>
+        /// <inheritdoc/>
         public ushort Id { get; private set; }
-        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
-        public short RTT => Rudp.RTT;
-        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
-        public short SmoothRTT => Rudp.SmoothRTT;
-        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
+        /// <inheritdoc/>
+        public short RTT => Peer.RTT;
+        /// <inheritdoc/>
+        public short SmoothRTT => Peer.SmoothRTT;
+        /// <inheritdoc/>
         public bool IsConnecting => connectionState == ConnectionState.connecting;
-        /// <summary>Whether or not the client is currently connected.</summary>
+        /// <inheritdoc/>
         public bool IsConnected => connectionState == ConnectionState.connected;
+
         /// <summary>The connection's remote endpoint.</summary>
         public readonly IPEndPoint remoteEndPoint;
 
         /// <summary>The client's Rudp instance.</summary>
-        internal Rudp Rudp { get; private set; }
+        internal RudpPeer Peer { get; private set; }
         /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
-        internal SendLockables SendLockables => Rudp.SendLockables;
+        internal SendLockables SendLockables => Peer.SendLockables;
         /// <summary>Whether or not the client has timed out.</summary>
         internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime;
 
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
         private DateTime lastHeartbeat;
         /// <summary>The server that the client is associated with.</summary>
-        private readonly Server server;
+        private readonly RudpServer server;
         /// <summary>The client's current connection state.</summary>
         private ConnectionState connectionState = ConnectionState.notConnected;
 
@@ -37,12 +39,12 @@ namespace RiptideNetworking
         /// <param name="server">The server this client is associated with.</param>
         /// <param name="endPoint">The remote endpoint of the client.</param>
         /// <param name="id">The ID of the client.</param>
-        internal ServerClient(Server server, IPEndPoint endPoint, ushort id)
+        internal RudpServerClient(RudpServer server, IPEndPoint endPoint, ushort id)
         {
             this.server = server;
             remoteEndPoint = endPoint;
             Id = id;
-            Rudp = new Rudp(server);
+            Peer = new RudpPeer(server);
             lastHeartbeat = DateTime.UtcNow;
 
             connectionState = ConnectionState.connecting;
@@ -54,9 +56,9 @@ namespace RiptideNetworking
         {
             connectionState = ConnectionState.notConnected;
 
-            lock (Rudp.PendingMessages)
+            lock (Peer.PendingMessages)
             {
-                foreach (Rudp.PendingMessage pendingMessage in Rudp.PendingMessages.Values)
+                foreach (RudpPeer.PendingMessage pendingMessage in Peer.PendingMessages.Values)
                     pendingMessage.Clear();
             }
         }
@@ -66,11 +68,11 @@ namespace RiptideNetworking
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         internal void SendAck(ushort forSeqId)
         {
-            Message message = Message.Create(forSeqId == Rudp.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
-            message.Add(Rudp.SendLockables.LastReceivedSeqId); // Last remote sequence ID
-            message.Add(Rudp.SendLockables.AcksBitfield); // Acks
+            Message message = Message.Create(forSeqId == Peer.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
+            message.Add(Peer.SendLockables.LastReceivedSeqId); // Last remote sequence ID
+            message.Add(Peer.SendLockables.AcksBitfield); // Acks
 
-            if (forSeqId == Rudp.SendLockables.LastReceivedSeqId)
+            if (forSeqId == Peer.SendLockables.LastReceivedSeqId)
                 server.Send(message, this);
             else
             {
@@ -86,8 +88,8 @@ namespace RiptideNetworking
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
 
-            Rudp.AckMessage(remoteLastReceivedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
-            Rudp.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
+            Peer.AckMessage(remoteLastReceivedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
+            Peer.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
         /// <summary>Handles an ack message for a sequence ID other than the last received one.</summary>
@@ -98,8 +100,8 @@ namespace RiptideNetworking
             ushort remoteAcksBitField = message.GetUShort();
             ushort ackedSeqId = message.GetUShort();
 
-            Rudp.AckMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
-            Rudp.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
+            Peer.AckMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
+            Peer.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
         /// <summary>Sends a heartbeat message.</summary>
@@ -116,7 +118,7 @@ namespace RiptideNetworking
         internal void HandleHeartbeat(Message message)
         {
             SendHeartbeat(message.GetByte());
-            Rudp.RTT = message.GetShort();
+            Peer.RTT = message.GetShort();
 
             lastHeartbeat = DateTime.UtcNow;
         }
@@ -142,7 +144,7 @@ namespace RiptideNetworking
                 RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 
             connectionState = ConnectionState.connected;
-            server.OnClientConnected(new ServerClientConnectedEventArgs(this));
+            server.OnClientConnected(remoteEndPoint, new ServerClientConnectedEventArgs(this));
         }
         #endregion
     }

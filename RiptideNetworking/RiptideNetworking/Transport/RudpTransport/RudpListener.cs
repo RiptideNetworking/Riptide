@@ -1,24 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Text;
 using System.Threading;
 
-namespace RiptideNetworking
+namespace RiptideNetworking.Transports.RUDPTransport
 {
-    /// <summary>The state of a connection.</summary>
-    enum ConnectionState : byte
-    {
-        /// <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
-        notConnected,
-        /// <summary>Connecting. Still trying to establish a connection.</summary>
-        connecting,
-        /// <summary>Connected. A connection was successfully established.</summary>
-        connected,
-    }
-
-    /// <summary>Base class for all RUDP connections.</summary>
-    public abstract class RudpSocket
+    public abstract class RudpListener
     {
         /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         public bool ShouldOutputInfoLogs { get; set; } = true;
@@ -39,7 +29,7 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        protected RudpSocket(string logName)
+        protected RudpListener(string logName)
         {
             LogName = logName;
             receiveActionQueue = new ActionQueue();
@@ -51,11 +41,6 @@ namespace RiptideNetworking
         {
             receiveActionQueue.ExecuteAll();
         }
-
-        /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
-        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
-        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
-        protected abstract void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId);
 
         /// <summary>Starts listening for incoming packets.</summary>
         /// <param name="port">The local port to listen on.</param>
@@ -181,7 +166,7 @@ namespace RiptideNetworking
             lock (lockables)
             {
                 // Update acks
-                int sequenceGap = Rudp.GetSequenceGap(sequenceId, lockables.LastReceivedSeqId);
+                int sequenceGap = RudpPeer.GetSequenceGap(sequenceId, lockables.LastReceivedSeqId);
                 if (sequenceGap > 0)
                 {
                     // The received sequence ID is newer than the previous one
@@ -278,20 +263,20 @@ namespace RiptideNetworking
         /// <summary>Reliably sends the given message.</summary>
         /// <param name="message">The message to send reliably.</param>
         /// <param name="toEndPoint">The endpoint to send the message to.</param>
-        /// <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
+        /// <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        internal void SendReliable(Message message, IPEndPoint toEndPoint, Rudp rudp, byte maxSendAttempts)
+        internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer, byte maxSendAttempts)
         {
             if (socket == null)
                 return;
 
-            ushort sequenceId = rudp.NextSequenceId; // Get the next sequence ID
+            ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
             message.SetSequenceIdBytes(sequenceId); // Set the message's sequence ID bytes
 
-            Rudp.PendingMessage pendingMessage = new Rudp.PendingMessage(rudp, sequenceId, message, toEndPoint, maxSendAttempts);
-            lock (rudp.PendingMessages)
+            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint, maxSendAttempts);
+            lock (peer.PendingMessages)
             {
-                rudp.PendingMessages.Add(sequenceId, pendingMessage);
+                peer.PendingMessages.Add(sequenceId, pendingMessage);
                 pendingMessage.TrySend();
             }
         }

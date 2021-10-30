@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Text;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideNetworking
+namespace RiptideNetworking.Transports.RUDPTransport
 {
-    /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
-    internal class Rudp
+    class RudpPeer
     {
         private int lastSequenceId;
         /// <summary>The next sequence ID to use.</summary>
@@ -24,8 +24,8 @@ namespace RiptideNetworking
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         protected readonly float retryTimeMultiplier = 1.2f;
 
-        /// <summary>The RudpSocket instance to use when sending data.</summary>
-        private readonly RudpSocket rudpSocket;
+        /// <summary>The RudpListener instance to use when sending data.</summary>
+        private readonly RudpListener listener;
 
         private short _rtt = -1;
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
@@ -42,10 +42,10 @@ namespace RiptideNetworking
         internal short SmoothRTT { get; set; } = -1;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="rudpSocket">The RudpSocket instance to use when sending data.</param>
-        internal Rudp(RudpSocket rudpSocket)
+        /// <param name="rudpListener">The RudpSocket instance to use when sending data.</param>
+        internal RudpPeer(RudpListener rudpListener)
         {
-            this.rudpSocket = rudpSocket;
+            listener = rudpListener;
             SendLockables = new SendLockables();
             ReceiveLockables = new ReceiveLockables();
         }
@@ -56,39 +56,39 @@ namespace RiptideNetworking
         internal void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteAcksBitField)
         {
             lock (ReceiveLockables) lock (PendingMessages)
-            {
-                int sequenceGap = GetSequenceGap(remoteLastReceivedSeqId, ReceiveLockables.LastAckedSeqId);
-                if (sequenceGap > 0)
                 {
-                    // The latest sequence ID that the other end has received is newer than the previous one
-                    for (int i = 1; i < sequenceGap; i++) // NOTE: loop starts at 1, meaning it only runs if the gap in sequence IDs is greater than 1
+                    int sequenceGap = GetSequenceGap(remoteLastReceivedSeqId, ReceiveLockables.LastAckedSeqId);
+                    if (sequenceGap > 0)
                     {
-                        ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for a previous ack
-                        CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16 + i), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield (before it's removed)
-                    }
-                    ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for the latest ack
-                    ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << sequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
-                    ReceiveLockables.LastAckedSeqId = remoteLastReceivedSeqId;
+                        // The latest sequence ID that the other end has received is newer than the previous one
+                        for (int i = 1; i < sequenceGap; i++) // NOTE: loop starts at 1, meaning it only runs if the gap in sequence IDs is greater than 1
+                        {
+                            ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for a previous ack
+                            CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16 + i), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield (before it's removed)
+                        }
+                        ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for the latest ack
+                        ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << sequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
+                        ReceiveLockables.LastAckedSeqId = remoteLastReceivedSeqId;
 
-                    CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
+                        CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
+                    }
+                    else if (sequenceGap < 0)
+                    {
+                        // TODO: remove? I don't think this case ever executes
+                        // The latest sequence ID that the other end has received is older than the previous one (out of order ack)
+                        sequenceGap = (ushort)(-sequenceGap - 1); // Because bit shifting is 0-based
+                        ushort ackedBit = (ushort)(1 << sequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
+                        ReceiveLockables.AckedMessagesBitfield |= ackedBit; // Set the bit corresponding to the sequence ID
+                        if (PendingMessages.TryGetValue(remoteLastReceivedSeqId, out PendingMessage pendingMessage))
+                            pendingMessage.Clear(); // Message was successfully delivered, remove it from the pending messages.
+                    }
+                    else
+                    {
+                        // The latest sequence ID that the other end has received is the same as the previous one (duplicate ack)
+                        ReceiveLockables.AckedMessagesBitfield |= remoteAcksBitField; // Combine the bit fields
+                        CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
+                    }
                 }
-                else if (sequenceGap < 0)
-                {
-                    // TODO: remove? I don't think this case ever executes
-                    // The latest sequence ID that the other end has received is older than the previous one (out of order ack)
-                    sequenceGap = (ushort)(-sequenceGap - 1); // Because bit shifting is 0-based
-                    ushort ackedBit = (ushort)(1 << sequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
-                    ReceiveLockables.AckedMessagesBitfield |= ackedBit; // Set the bit corresponding to the sequence ID
-                    if (PendingMessages.TryGetValue(remoteLastReceivedSeqId, out PendingMessage pendingMessage))
-                        pendingMessage.Clear(); // Message was successfully delivered, remove it from the pending messages.
-                }
-                else
-                {
-                    // The latest sequence ID that the other end has received is the same as the previous one (duplicate ack)
-                    ReceiveLockables.AckedMessagesBitfield |= remoteAcksBitField; // Combine the bit fields
-                    CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
-                }
-            }
         }
 
         /// <summary>Calculates the (signed) gap between sequence IDs, accounting for wrapping.</summary>
@@ -138,7 +138,7 @@ namespace RiptideNetworking
         internal class PendingMessage
         {
             /// <summary>The Rudp instance to use to send (and resend) the pending message.</summary>
-            private readonly Rudp rudp;
+            private readonly RudpPeer peer;
             /// <summary>The intended destination endpoint of the message.</summary>
             private readonly IPEndPoint remoteEndPoint;
             /// <summary>The sequence ID of the message.</summary>
@@ -157,14 +157,14 @@ namespace RiptideNetworking
             private bool wasCleared;
 
             /// <summary>Handles initial setup.</summary>
-            /// <param name="rudp">The Rudp instance to use to send (and resend) the pending message.</param>
+            /// <param name="peer">The Rudp instance to use to send (and resend) the pending message.</param>
             /// <param name="sequenceId">The sequence ID of the message.</param>
             /// <param name="message">The message that is being sent reliably.</param>
             /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
             /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            internal PendingMessage(Rudp rudp, ushort sequenceId, Message message, IPEndPoint toEndPoint, byte maxSendAttempts)
+            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint, byte maxSendAttempts)
             {
-                this.rudp = rudp;
+                this.peer = peer;
                 this.sequenceId = sequenceId;
                 data = new byte[message.WrittenLength];
                 Array.Copy(message.Bytes, data, data.Length);
@@ -184,12 +184,12 @@ namespace RiptideNetworking
                 {
                     if (!wasCleared)
                     {
-                        if (lastSendTime.AddMilliseconds(rudp.SmoothRTT < 0 ? 25 : rudp.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                        if (lastSendTime.AddMilliseconds(peer.SmoothRTT < 0 ? 25 : peer.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
                             TrySend();
                         else
                         {
                             retryTimer.Start();
-                            retryTimer.Interval = (rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier));
+                            retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * peer.retryTimeMultiplier));
                         }
                     }
                 }
@@ -201,7 +201,7 @@ namespace RiptideNetworking
                 if (sendAttempts >= maxSendAttempts)
                 {
                     // Send attempts exceeds max send attempts, so give up
-                    if (rudp.rudpSocket.ShouldOutputInfoLogs)
+                    if (peer.listener.ShouldOutputInfoLogs)
                     {
                         HeaderType headerType = (HeaderType)data[0];
                         if (headerType == HeaderType.reliable)
@@ -211,24 +211,24 @@ namespace RiptideNetworking
 #else
                             ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
-                        
-                            RiptideLogger.Log(rudp.rudpSocket.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
+
+                            RiptideLogger.Log(peer.listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
                         }
                         else
-                            RiptideLogger.Log(rudp.rudpSocket.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
+                            RiptideLogger.Log(peer.listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
                     }
 
                     Clear();
                     return;
                 }
 
-                rudp.rudpSocket.Send(data, remoteEndPoint);
-                
+                peer.listener.Send(data, remoteEndPoint);
+
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
 
                 retryTimer.Start();
-                retryTimer.Interval = rudp.SmoothRTT < 0 ? 50 : Math.Max(10, rudp.SmoothRTT * rudp.retryTimeMultiplier);
+                retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * peer.retryTimeMultiplier);
             }
 
             /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
@@ -238,9 +238,9 @@ namespace RiptideNetworking
                 {
                     if (!wasCleared)
                     {
-                        lock (rudp.PendingMessages)
-                            rudp.PendingMessages.Remove(sequenceId);
-                        
+                        lock (peer.PendingMessages)
+                            peer.PendingMessages.Remove(sequenceId);
+
                         retryTimer.Stop();
                         retryTimer.Dispose();
                         wasCleared = true;

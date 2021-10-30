@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiptideNetworking.Transports;
+using System;
 
 namespace RiptideNetworking
 {
@@ -6,11 +7,11 @@ namespace RiptideNetworking
     public class ServerClientConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
-        public ServerClient Client { get; private set; }
+        public IServerClient Client { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
-        public ServerClientConnectedEventArgs(ServerClient client)
+        public ServerClientConnectedEventArgs(IServerClient client)
         {
             Client = client;
         }
@@ -20,19 +21,19 @@ namespace RiptideNetworking
     public class ServerMessageReceivedEventArgs : EventArgs
     {
         /// <summary>The client that the message was received from.</summary>
-        public ServerClient FromClient { get; private set; }
+        public ushort FromClientId { get; private set; }
         /// <summary>The ID of the message.</summary>
         public ushort MessageId { get; private set; }
         /// <summary>The message that was received.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
-        /// <param name="fromClient">The client that the message was received from.</param>
+        /// <param name="fromClientId">The client that the message was received from.</param>
         /// <param name="messageId">The ID of the message.</param>
         /// <param name="message">The message that was received.</param>
-        public ServerMessageReceivedEventArgs(ServerClient fromClient, ushort messageId, Message message)
+        public ServerMessageReceivedEventArgs(ushort fromClientId, ushort messageId, Message message)
         {
-            FromClient = fromClient;
+            FromClientId = fromClientId;
             MessageId = messageId;
             Message = message;
         }
