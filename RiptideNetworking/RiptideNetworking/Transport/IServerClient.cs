@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace RiptideNetworking.Transports
+﻿namespace RiptideNetworking.Transports
 {
     public interface IServerClient
     {

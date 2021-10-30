@@ -1,5 +1,4 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Transports;
+﻿using RiptideNetworking.Transports;
 
 namespace ConsoleServer
 {
