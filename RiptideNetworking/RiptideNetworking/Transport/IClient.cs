@@ -3,7 +3,7 @@
 namespace RiptideNetworking.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
-    public interface IClient
+    public interface IClient : IConnectionInfo
     {
         /// <summary>Invoked when a connection to the server is established.</summary>
         event EventHandler Connected;
@@ -12,8 +12,6 @@ namespace RiptideNetworking.Transports
         event EventHandler ConnectionFailed;
         /// <summary>Invoked when a message is received from the server.</summary>
         event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <summary>Invoked when ping is updated.</summary>
-        event EventHandler<PingUpdatedEventArgs> PingUpdated;
         /// <summary>Invoked when disconnected by the server.</summary>
         event EventHandler Disconnected;
         /// <summary>Invoked when a new client connects.</summary>
@@ -21,16 +19,6 @@ namespace RiptideNetworking.Transports
         /// <summary>Invoked when a client disconnects.</summary>
         event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
-        /// <summary>The numeric ID of the client.</summary>
-        ushort Id { get; }
-        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
-        short RTT { get; }
-        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
-        short SmoothRTT { get; }
-        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
-        bool IsConnecting { get; }
-        /// <summary>Whether or not the client is currently connected.</summary>
-        bool IsConnected { get; }
         /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         bool ShouldOutputInfoLogs { get; set; }
 

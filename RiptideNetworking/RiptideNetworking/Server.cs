@@ -21,8 +21,8 @@ namespace RiptideNetworking
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => server.Port;
         /// <summary>An array of all the currently connected clients.</summary>
-        /// <remarks>The position of each <see cref="IServerClient"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
-        public IServerClient[] Clients => server.Clients;
+        /// <remarks>The position of each <see cref="IConnectionInfo"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
+        public IConnectionInfo[] Clients => server.Clients;
         /// <summary>The maximum number of clients that can be connected at any time.</summary>
         public ushort MaxClientCount => server.MaxClientCount;
         /// <summary>The number of currently connected clients.</summary>
@@ -45,10 +45,7 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
-        public Server(IServer server)
-        {
-            this.server = server;
-        }
+        public Server(IServer server) => this.server = server;
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
@@ -58,9 +55,9 @@ namespace RiptideNetworking
         {
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
-            server.ClientConnected += OnClientConnected;
+            server.ClientConnected += ClientConnected;
             server.MessageReceived += OnMessageReceived;
-            server.ClientDisconnected += OnClientDisconnected;
+            server.ClientDisconnected += ClientDisconnected;
             server.Start(port, maxClientCount);
 
             IsRunning = true;
@@ -101,58 +98,43 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        public override void Tick()
-        {
-            server.Tick();
-        }
+        public override void Tick() => server.Tick();
 
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClientId">The numeric ID of the client to send the message to.</param>
         /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            server.Send(message, toClientId, maxSendAttempts, shouldRelease);
-        }
+        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.Send(message, toClientId, maxSendAttempts, shouldRelease);
 
         /// <summary>Sends a message to all conected clients.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            server.SendToAll(message, maxSendAttempts, shouldRelease);
-        }
+        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, maxSendAttempts, shouldRelease);
 
         /// <summary>Sends a message to all connected clients except one.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
         /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            server.SendToAll(message, exceptToClientId, maxSendAttempts, shouldRelease);
-        }
+        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, maxSendAttempts, shouldRelease);
 
         /// <summary>Kicks a specific client.</summary>
         /// <param name="clientId">The numeric ID of the client to kick.</param>
-        public void DisconnectClient(ushort clientId)
-        {
-            server.DisconnectClient(clientId);
-        }
-        
+        public void DisconnectClient(ushort clientId) => server.DisconnectClient(clientId);
+
         /// <summary>Stops the server.</summary>
         public void Stop()
         {
             server.Shutdown();
+            server.ClientConnected -= ClientConnected;
+            server.MessageReceived -= OnMessageReceived;
+            server.ClientDisconnected -= ClientDisconnected;
+
             IsRunning = false;
         }
 
-        private void OnClientConnected(object s, ServerClientConnectedEventArgs e)
-        {
-            ClientConnected?.Invoke(this, e);
-        }
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
         {
@@ -162,10 +144,6 @@ namespace RiptideNetworking
                 messageHandler(e.FromClientId, e.Message);
             else
                 RiptideLogger.Log("ERROR", $"No handler method found for message ID {e.MessageId}!");
-        }
-        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e)
-        {
-            ClientDisconnected?.Invoke(this, e);
         }
     }
 }

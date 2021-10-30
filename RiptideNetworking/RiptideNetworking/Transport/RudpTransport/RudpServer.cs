@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiptideNetworking.Transports.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -23,10 +24,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public int ClientCount => clients.Count;
         /// <inheritdoc/>
-        public IServerClient[] Clients => clients.Values.ToArray();
+        public IConnectionInfo[] Clients => clients.Values.ToArray();
         /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
         public ushort ClientTimeoutTime { get; set; } = 5000;
-        private ushort _clientHeartbeatInterval;
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         public ushort ClientHeartbeatInterval
         {
@@ -38,9 +38,10 @@ namespace RiptideNetworking.Transports.RudpTransport
                     heartbeatTimer.Change(0, value);
             }
         }
+        private ushort _clientHeartbeatInterval;
 
         /// <summary>Currently connected clients, accessible by their endpoints or numeric ID.</summary>
-        private DoubleKeyDictionary<ushort, IPEndPoint, RudpServerClient> clients;
+        private DoubleKeyDictionary<ushort, IPEndPoint, RudpConnection> clients;
         /// <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="clients"/> dictionary.</summary>
         private List<IPEndPoint> timedOutClients;
         /// <summary>All currently unused client IDs.</summary>
@@ -63,7 +64,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             Port = port;
             MaxClientCount = maxClientCount;
-            clients = new DoubleKeyDictionary<ushort, IPEndPoint, RudpServerClient>(MaxClientCount);
+            clients = new DoubleKeyDictionary<ushort, IPEndPoint, RudpConnection>(MaxClientCount);
             timedOutClients = new List<IPEndPoint>(MaxClientCount);
 
             InitializeClientIds();
@@ -76,159 +77,56 @@ namespace RiptideNetworking.Transports.RudpTransport
                 RiptideLogger.Log(LogName, $"Started on port {port}.");
         }
 
-        /// <inheritdoc/>
-        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            if (clients.TryGetValue(toClientId, out RudpServerClient toClient))
-                Send(message, toClient, maxSendAttempts, false);
 
-            if (shouldRelease)
-                message.Release();
-        }
-
-        /// <summary>Sends a message to a specific client.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="toClient">The client to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
-        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        internal void Send(Message message, RudpServerClient toClient, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            if (message.SendMode == MessageSendMode.unreliable)
-                Send(message.Bytes, message.WrittenLength, toClient.remoteEndPoint);
-            else
-                SendReliable(message, toClient.remoteEndPoint, toClient.Peer, maxSendAttempts);
-
-            if (shouldRelease)
-                message.Release();
-        }
-
-        /// <inheritdoc/>
-        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
+        /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
+        private void Heartbeat(object state)
         {
             lock (clients)
             {
-                if (message.SendMode == MessageSendMode.unreliable)
+                foreach (RudpConnection client in clients.Values)
                 {
-                    foreach (RudpServerClient client in clients.Values)
-                        Send(message.Bytes, message.WrittenLength, client.remoteEndPoint);
+                    if (client.HasTimedOut)
+                        timedOutClients.Add(client.RemoteEndPoint);
                 }
-                else
-                {
-                    foreach (RudpServerClient client in clients.Values)
-                        SendReliable(message, client.remoteEndPoint, client.Peer, maxSendAttempts);
-                }
-            }
 
-            if (shouldRelease)
-                message.Release();
+                foreach (IPEndPoint clientEndPoint in timedOutClients)
+                    HandleDisconnect(clientEndPoint); // Disconnect the client
+
+                timedOutClients.Clear();
+            }
         }
 
+
         /// <inheritdoc/>
-        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
+        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
         {
             lock (clients)
             {
-                if (message.SendMode == MessageSendMode.unreliable)
+                if (clients.ContainsKey(endPoint))
                 {
-                    foreach (RudpServerClient client in clients.Values)
-                        if (client.Id != exceptToClientId)
-                            Send(message.Bytes, message.WrittenLength, client.remoteEndPoint);
+                    // Client is already connected
+                    if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
+                        return true;
                 }
-                else
+                else if (clients.Count < MaxClientCount)
                 {
-                    foreach (RudpServerClient client in clients.Values)
-                        if (client.Id != exceptToClientId)
-                            SendReliable(message, client.remoteEndPoint, client.Peer, maxSendAttempts);
+                    // Client is not yet connected and the server has capacity
+                    if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
+                    {
+                        ushort id = GetAvailableClientId();
+                        clients.Add(id, endPoint, new RudpConnection(this, endPoint, id));
+                    }
                 }
+                return false;
             }
-
-            if (shouldRelease)
-                message.Release();
         }
 
         /// <inheritdoc/>
-        public void DisconnectClient(ushort clientId)
-        {
-            if (clients.TryGetValue(clientId, out RudpServerClient client))
-            {
-                SendDisconnect(clientId);
-                client.Disconnect();
-                lock (clients)
-                    clients.Remove(clientId, client.remoteEndPoint);
-
-                if (ShouldOutputInfoLogs)
-                    RiptideLogger.Log(LogName, $"Kicked {client.remoteEndPoint}.");
-                OnClientDisconnected(new ClientDisconnectedEventArgs(clientId));
-
-                availableClientIds.Add(clientId);
-            }
-            else
-                RiptideLogger.Log(LogName, $"Failed to kick {client.remoteEndPoint} because they weren't connected.");
-        }
-
-        /// <inheritdoc/>
-        public void Shutdown()
-        {
-            byte[] disconnectBytes = { (byte)HeaderType.disconnect };
-            lock (clients)
-            {
-                foreach (RudpServerClient client in clients.Values)
-                    Send(disconnectBytes, client.remoteEndPoint);
-                clients.Clear();
-            }
-
-            heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            heartbeatTimer.Dispose();
-            StopListening();
-
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Server stopped.");
-        }
-
-        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        /// <param name="clientEndPoint">The endpoint of the newly connected client.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
-        {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
-
-            receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
-
-            SendClientConnected(clientEndPoint, e.Client.Id);
-        }
-
-        /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(ServerMessageReceivedEventArgs e)
-        {
-            MessageReceived?.Invoke(this, e);
-        }
-
-        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientDisconnected(ClientDisconnectedEventArgs e)
-        {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
-
-            receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
-
-            SendClientDisconnected(e.Id);
-        }
-
-        /// <inheritdoc/>
-        internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
-        {
-            ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
-        }
-
-        /// <inheritdoc/>
-        internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             lock (clients)
             {
-                if (!clients.TryGetValue(fromEndPoint, out RudpServerClient client))
+                if (!clients.TryGetValue(fromEndPoint, out RudpConnection client))
                     return;
 
                 Message message = Message.Create(headerType, data);
@@ -254,7 +152,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                             // This block may execute on a different thread, so we double check if the client is still in the dictionary in case they disconnected
                             lock (clients)
                             {
-                                if (clients.TryGetValue(fromEndPoint, out RudpServerClient client2))
+                                if (clients.TryGetValue(fromEndPoint, out RudpConnection client2))
                                 {
                                     ushort messageId = message.GetUShort();
                                     OnMessageReceived(new ServerMessageReceivedEventArgs(client2.Id, messageId, message));
@@ -297,33 +195,118 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
+        protected override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
-            lock (clients)
-            {
-                if (clients.ContainsKey(endPoint))
-                {
-                    // Client is already connected
-                    if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
-                        return true;
-                }
-                else if (clients.Count < MaxClientCount)
-                {
-                    // Client is not yet connected and the server has capacity
-                    if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
-                    {
-                        ushort id = GetAvailableClientId();
-                        clients.Add(id, endPoint, new RudpServerClient(this, endPoint, id));
-                    }
-                }
-                return false;
-            }
+            ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
         }
 
         /// <inheritdoc/>
-        protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
+        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
         {
-            clients[toEndPoint].SendAck(forSeqId);
+            if (clients.TryGetValue(toClientId, out RudpConnection toClient))
+                Send(message, toClient, maxSendAttempts, false);
+
+            if (shouldRelease)
+                message.Release();
+        }
+
+        /// <summary>Sends a message to a specific client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The client to send the message to.</param>
+        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
+        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
+        internal void Send(Message message, RudpConnection toClient, byte maxSendAttempts = 15, bool shouldRelease = true)
+        {
+            if (message.SendMode == MessageSendMode.unreliable)
+                Send(message.Bytes, message.WrittenLength, toClient.RemoteEndPoint);
+            else
+                SendReliable(message, toClient.RemoteEndPoint, toClient.Peer, maxSendAttempts);
+
+            if (shouldRelease)
+                message.Release();
+        }
+
+        /// <inheritdoc/>
+        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
+        {
+            lock (clients)
+            {
+                if (message.SendMode == MessageSendMode.unreliable)
+                {
+                    foreach (RudpConnection client in clients.Values)
+                        Send(message.Bytes, message.WrittenLength, client.RemoteEndPoint);
+                }
+                else
+                {
+                    foreach (RudpConnection client in clients.Values)
+                        SendReliable(message, client.RemoteEndPoint, client.Peer, maxSendAttempts);
+                }
+            }
+
+            if (shouldRelease)
+                message.Release();
+        }
+
+        /// <inheritdoc/>
+        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
+        {
+            lock (clients)
+            {
+                if (message.SendMode == MessageSendMode.unreliable)
+                {
+                    foreach (RudpConnection client in clients.Values)
+                        if (client.Id != exceptToClientId)
+                            Send(message.Bytes, message.WrittenLength, client.RemoteEndPoint);
+                }
+                else
+                {
+                    foreach (RudpConnection client in clients.Values)
+                        if (client.Id != exceptToClientId)
+                            SendReliable(message, client.RemoteEndPoint, client.Peer, maxSendAttempts);
+                }
+            }
+
+            if (shouldRelease)
+                message.Release();
+        }
+
+        /// <inheritdoc/>
+        public void DisconnectClient(ushort clientId)
+        {
+            if (clients.TryGetValue(clientId, out RudpConnection client))
+            {
+                SendDisconnect(clientId);
+                client.Disconnect();
+                lock (clients)
+                    clients.Remove(clientId, client.RemoteEndPoint);
+
+                if (ShouldOutputInfoLogs)
+                    RiptideLogger.Log(LogName, $"Kicked {client.RemoteEndPoint}.");
+                OnClientDisconnected(new ClientDisconnectedEventArgs(clientId));
+
+                availableClientIds.Add(clientId);
+            }
+            else
+                RiptideLogger.Log(LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected.");
+        }
+
+        /// <inheritdoc/>
+        public void Shutdown()
+        {
+            byte[] disconnectBytes = { (byte)HeaderType.disconnect };
+            lock (clients)
+            {
+                foreach (RudpConnection client in clients.Values)
+                    Send(disconnectBytes, client.RemoteEndPoint);
+                clients.Clear();
+            }
+
+            heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
+            heartbeatTimer.Dispose();
+            StopListening();
+
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, "Server stopped.");
         }
 
         /// <summary>Initializes available client IDs.</summary>
@@ -351,24 +334,6 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
-        private void Heartbeat(object state)
-        {
-            lock (clients)
-            {
-                foreach (RudpServerClient client in clients.Values)
-                {
-                    if (client.HasTimedOut)
-                        timedOutClients.Add(client.remoteEndPoint);
-                }
-
-                foreach (IPEndPoint clientEndPoint in timedOutClients)
-                    HandleDisconnect(clientEndPoint); // Disconnect the client
-
-                timedOutClients.Clear();
-            }
-        }
-
         #region Messages
         /// <summary>Sends a disconnect message.</summary>
         /// <param name="clientId">The client to send the disconnect message to.</param>
@@ -377,11 +342,17 @@ namespace RiptideNetworking.Transports.RudpTransport
             Send(Message.Create(HeaderType.disconnect), clientId);
         }
 
+        /// <inheritdoc/>
+        protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
+        {
+            clients[toEndPoint].SendAck(forSeqId);
+        }
+
         /// <summary>Handles a disconnect message.</summary>
         /// <param name="fromEndPoint">The endpoint from which the disconnect message was received.</param>
         private void HandleDisconnect(IPEndPoint fromEndPoint)
         {
-            if (clients.TryGetValue(fromEndPoint, out RudpServerClient client))
+            if (clients.TryGetValue(fromEndPoint, out RudpConnection client))
             {
                 client.Disconnect();
                 lock (clients)
@@ -405,9 +376,9 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             lock (clients)
             {
-                foreach (RudpServerClient client in clients.Values)
+                foreach (RudpConnection client in clients.Values)
                 {
-                    if (!client.remoteEndPoint.Equals(endPoint))
+                    if (!client.RemoteEndPoint.Equals(endPoint))
                         Send(message, client, 25, false);
                 }
             }
@@ -423,10 +394,44 @@ namespace RiptideNetworking.Transports.RudpTransport
             message.Add(id);
 
             lock (clients)
-                foreach (RudpServerClient client in clients.Values)
+                foreach (RudpConnection client in clients.Values)
                     Send(message, client, 25, false);
 
             message.Release();
+        }
+        #endregion
+
+        #region Events
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        /// <param name="clientEndPoint">The endpoint of the newly connected client.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
+        {
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
+
+            receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
+
+            SendClientConnected(clientEndPoint, e.Client.Id);
+        }
+
+        /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnMessageReceived(ServerMessageReceivedEventArgs e)
+        {
+            MessageReceived?.Invoke(this, e);
+        }
+
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientDisconnected(ClientDisconnectedEventArgs e)
+        {
+            if (ShouldOutputInfoLogs)
+                RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
+
+            receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
+
+            SendClientDisconnected(e.Id);
         }
         #endregion
     }

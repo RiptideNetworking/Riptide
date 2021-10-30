@@ -9,26 +9,14 @@ namespace RiptideNetworking.Transports.RudpTransport
     /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
     class RudpPeer
     {
-        /// <summary>The last used sequence ID.</summary>
-        private int lastSequenceId;
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
-        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
-        protected const ushort LeftBit = 1 << 15;
-
         /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
         internal SendLockables SendLockables { get; private set; }
         /// <summary>The lockable values which are used to determine which messages the other end has received.</summary>
         internal ReceiveLockables ReceiveLockables { get; private set; }
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
-        /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        protected readonly float retryTimeMultiplier = 1.2f;
-
-        /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
-        private readonly RudpListener listener;
-
-        private short _rtt = -1;
         /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
         internal short RTT
         {
@@ -39,8 +27,19 @@ namespace RiptideNetworking.Transports.RudpTransport
                 _rtt = value;
             }
         }
+        private short _rtt = -1;
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         internal short SmoothRTT { get; set; } = -1;
+
+        /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
+        protected readonly float retryTimeMultiplier = 1.2f;
+
+        /// <summary>The last used sequence ID.</summary>
+        private int lastSequenceId;
+        /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
+        private readonly RudpListener listener;
+        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
+        private const ushort LeftBit = 1 << 15;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="rudpListener">The <see cref="RudpListener"/> whose socket to use when sending data.</param>
@@ -92,19 +91,6 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
         }
 
-        /// <summary>Calculates the signed gap between sequence IDs, accounting for wrapping.</summary>
-        /// <param name="seqId1">The new sequence ID.</param>
-        /// <param name="seqId2">The previous sequence ID.</param>
-        /// <returns>The signed gap between the two given sequence IDs. A positive gap means <paramref name="seqId1"/> is newer than <paramref name="seqId2"/>. A negative gap means <paramref name="seqId1"/> is older than <paramref name="seqId2"/>.</returns>
-        internal static int GetSequenceGap(ushort seqId1, ushort seqId2)
-        {
-            int gap = seqId1 - seqId2;
-            if (Math.Abs(gap) <= 32768) // Difference is small, meaning sequence IDs are close together
-                return gap;
-            else // Difference is big, meaning sequence IDs are far apart
-                return (seqId1 <= 32768 ? ushort.MaxValue + 1 + seqId1 : seqId1) - (seqId2 <= 32768 ? ushort.MaxValue + 1 + seqId2 : seqId2);
-        }
-
         /// <summary>Check the ack status of the given sequence ID.</summary>
         /// <param name="sequenceId">The sequence ID whose ack status to check.</param>
         /// <param name="bit">The bit corresponding to the sequence ID's position in the bit field.</param>
@@ -133,6 +119,19 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (PendingMessages.TryGetValue(seqId, out PendingMessage pendingMessage))
                     pendingMessage.Clear();
             }
+        }
+
+        /// <summary>Calculates the signed gap between sequence IDs, accounting for wrapping.</summary>
+        /// <param name="seqId1">The new sequence ID.</param>
+        /// <param name="seqId2">The previous sequence ID.</param>
+        /// <returns>The signed gap between the two given sequence IDs. A positive gap means <paramref name="seqId1"/> is newer than <paramref name="seqId2"/>. A negative gap means <paramref name="seqId1"/> is older than <paramref name="seqId2"/>.</returns>
+        internal static int GetSequenceGap(ushort seqId1, ushort seqId2)
+        {
+            int gap = seqId1 - seqId2;
+            if (Math.Abs(gap) <= 32768) // Difference is small, meaning sequence IDs are close together
+                return gap;
+            else // Difference is big, meaning sequence IDs are far apart
+                return (seqId1 <= 32768 ? ushort.MaxValue + 1 + seqId1 : seqId1) - (seqId2 <= 32768 ? ushort.MaxValue + 1 + seqId2 : seqId2);
         }
 
         /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>

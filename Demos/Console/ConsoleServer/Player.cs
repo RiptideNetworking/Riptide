@@ -4,9 +4,9 @@ namespace ConsoleServer
 {
     class Player
     {
-        internal readonly IServerClient client;
+        internal readonly IConnectionInfo client;
 
-        internal Player(IServerClient client)
+        internal Player(IConnectionInfo client)
         {
             this.client = client;
         }

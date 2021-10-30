@@ -1,4 +1,4 @@
-﻿namespace RiptideNetworking
+﻿namespace RiptideNetworking.Transports.RudpTransport
 {
     /// <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>
     internal class SendLockables

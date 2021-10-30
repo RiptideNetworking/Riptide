@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RiptideNetworking.Transports.Utils;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -146,7 +147,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="data">The reliably sent data.</param>
         /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
         /// <param name="headerType">The header type of the data.</param>
-        internal abstract void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
+        protected abstract void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
 
         /// <summary>Handles the given reliably sent data.</summary>
         /// <param name="data">The reliably sent data.</param>
@@ -218,7 +219,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="data">The data to handle.</param>
         /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
         /// <param name="headerType">The header type of the data.</param>
-        internal abstract void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
+        protected abstract void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
 
         /// <summary>Sends data.</summary>
         /// <param name="data">The data to send.</param>

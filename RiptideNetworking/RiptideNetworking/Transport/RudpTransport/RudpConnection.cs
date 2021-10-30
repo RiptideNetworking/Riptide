@@ -4,7 +4,7 @@ using System.Net;
 namespace RiptideNetworking.Transports.RudpTransport
 {
     /// <summary>Represents a server's connection to a client.</summary>
-    public class RudpServerClient : IServerClient
+    public class RudpConnection : IConnectionInfo
     {
         /// <inheritdoc/>
         public ushort Id { get; private set; }
@@ -18,7 +18,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         public bool IsConnected => connectionState == ConnectionState.connected;
 
         /// <summary>The connection's remote endpoint.</summary>
-        public readonly IPEndPoint remoteEndPoint;
+        public readonly IPEndPoint RemoteEndPoint;
 
         /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         internal RudpPeer Peer { get; private set; }
@@ -38,10 +38,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="server">The <see cref="RudpServer"/> that the client is associated with.</param>
         /// <param name="endPoint">The connection's remote endpoint.</param>
         /// <param name="id">The numeric ID of the client.</param>
-        internal RudpServerClient(RudpServer server, IPEndPoint endPoint, ushort id)
+        internal RudpConnection(RudpServer server, IPEndPoint endPoint, ushort id)
         {
             this.server = server;
-            remoteEndPoint = endPoint;
+            RemoteEndPoint = endPoint;
             Id = id;
             Peer = new RudpPeer(server);
             lastHeartbeat = DateTime.UtcNow;
@@ -143,7 +143,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 RiptideLogger.Log(server.LogName, $"Client has assumed incorrect ID: {id}");
 
             connectionState = ConnectionState.connected;
-            server.OnClientConnected(remoteEndPoint, new ServerClientConnectedEventArgs(this));
+            server.OnClientConnected(RemoteEndPoint, new ServerClientConnectedEventArgs(this));
         }
         #endregion
     }

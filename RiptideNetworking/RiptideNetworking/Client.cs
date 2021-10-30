@@ -16,8 +16,6 @@ namespace RiptideNetworking
         public event EventHandler ConnectionFailed;
         /// <summary>Invoked when a message is received from the server.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <summary>Invoked when ping is updated.</summary>
-        public event EventHandler<PingUpdatedEventArgs> PingUpdated;
         /// <summary>Invoked when disconnected by the server.</summary>
         public event EventHandler Disconnected;
         /// <summary>Invoked when a new client connects.</summary>
@@ -52,10 +50,7 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="client">The underlying client that is used for sending and receiving data.</param>
-        public Client(IClient client)
-        {
-            this.client = client;
-        }
+        public Client(IClient client) => this.client = client;
 
         /// <summary>Attempts connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
@@ -71,7 +66,6 @@ namespace RiptideNetworking
             client.Connected += Connected;
             client.ConnectionFailed += ConnectionFailed;
             client.MessageReceived += OnMessageReceived;
-            client.PingUpdated += PingUpdated;
             client.Disconnected += Disconnected;
             client.ClientConnected += ClientConnected;
             client.ClientDisconnected += ClientDisconnected;
@@ -113,25 +107,28 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        public override void Tick()
-        {
-            client.Tick();
-        }
+        public override void Tick() => client.Tick();
 
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
-        {
-            client.Send(message, maxSendAttempts, shouldRelease);
-        }
+        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => client.Send(message, maxSendAttempts, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>
-        public void Disconnect() => client.Disconnect();
+        public void Disconnect()
+        {
+            client.Disconnect();
+            client.Connected -= Connected;
+            client.ConnectionFailed -= ConnectionFailed;
+            client.MessageReceived -= OnMessageReceived;
+            client.Disconnected -= Disconnected;
+            client.ClientConnected -= ClientConnected;
+            client.ClientDisconnected -= ClientDisconnected;
+        }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
+        private void OnMessageReceived(object s, ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
 

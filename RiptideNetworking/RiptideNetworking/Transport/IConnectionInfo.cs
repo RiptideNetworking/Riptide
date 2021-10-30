@@ -1,7 +1,7 @@
 ﻿namespace RiptideNetworking.Transports
 {
-    /// <summary>Represents a transport-agnostic server client object.</summary>
-    public interface IServerClient
+    /// <summary>Defines methods, properties, and events which every transport's connections must implement.</summary>
+    public interface IConnectionInfo
     {
         /// <summary>The numeric ID of the client.</summary>
         ushort Id { get; }

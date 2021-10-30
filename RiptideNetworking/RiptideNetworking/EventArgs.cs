@@ -7,11 +7,11 @@ namespace RiptideNetworking
     public class ServerClientConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
-        public IServerClient Client { get; private set; }
+        public IConnectionInfo Client { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
-        public ServerClientConnectedEventArgs(IServerClient client)
+        public ServerClientConnectedEventArgs(IConnectionInfo client)
         {
             Client = client;
         }
@@ -82,24 +82,6 @@ namespace RiptideNetworking
         public ClientDisconnectedEventArgs(ushort id)
         {
             Id = id;
-        }
-    }
-
-    /// <summary>Contains event data for when the ping is updated.</summary>
-    public class PingUpdatedEventArgs : EventArgs
-    {
-        /// <summary>The round trip time of the latest ping.</summary>
-        public short RTT { get; private set; }
-        /// <summary>The smoothed round trip time of the latest ping.</summary>
-        public short SmoothRTT { get; private set; }
-
-        /// <summary>Initializes event data.</summary>
-        /// <param name="RTT">The round trip time of the latest ping.</param>
-        /// <param name="smoothRTT">The smoothed round trip time of the latest ping.</param>
-        public PingUpdatedEventArgs(short RTT, short smoothRTT)
-        {
-            this.RTT = RTT;
-            SmoothRTT = smoothRTT;
         }
     }
 }

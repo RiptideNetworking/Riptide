@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace RiptideNetworking
+namespace RiptideNetworking.Transports.Utils
 {
     /// <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
     public class ActionQueue

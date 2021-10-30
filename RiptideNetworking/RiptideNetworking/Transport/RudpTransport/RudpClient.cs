@@ -14,8 +14,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
         /// <inheritdoc/>
-        public event EventHandler<PingUpdatedEventArgs> PingUpdated;
-        /// <inheritdoc/>
         public event EventHandler Disconnected;
         /// <inheritdoc/>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
@@ -34,7 +32,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         public bool IsConnected => connectionState == ConnectionState.connected;
         /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
-        private ushort _heartbeatInterval;
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats from the server.</summary>
         public ushort HeartbeatInterval
         {
@@ -46,6 +43,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     heartbeatTimer.Change(0, value);
             }
         }
+        private ushort _heartbeatInterval;
 
         /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         private RudpPeer peer;
@@ -141,7 +139,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        internal override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             Message message = Message.Create(headerType, data);
 
@@ -201,7 +199,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        internal override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
         {
             ReliableHandle(data, fromEndPoint, headerType, peer.SendLockables);
         }
@@ -311,10 +309,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             byte pingId = message.GetByte();
 
             if (pendingPing.id == pingId)
-            {
                 peer.RTT = (short)Math.Max(1f, (DateTime.UtcNow - pendingPing.sendTime).TotalMilliseconds);
-                OnPingUpdated(new PingUpdatedEventArgs(peer.RTT, peer.SmoothRTT));
-            }
 
             lastHeartbeat = DateTime.UtcNow;
         }
@@ -335,7 +330,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Sends a welcome (received) message.</summary>
-        internal void SendWelcomeReceived()
+        private void SendWelcomeReceived()
         {
             Message message = Message.Create(HeaderType.welcome);
             message.Add(Id);
@@ -395,16 +390,9 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
         /// <param name="e">The event args to invoke the event with.</param>
-        internal void OnMessageReceived(ClientMessageReceivedEventArgs e)
+        private void OnMessageReceived(ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
-        }
-
-        /// <summary>Invokes the <see cref="PingUpdated"/> event.</summary>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnPingUpdated(PingUpdatedEventArgs e)
-        {
-            receiveActionQueue.Add(() => PingUpdated?.Invoke(this, e));
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>

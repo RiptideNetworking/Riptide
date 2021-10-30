@@ -16,7 +16,7 @@ namespace RiptideNetworking
     }
 
     /// <summary>The header type of a <see cref="Message"/>.</summary>
-    internal enum HeaderType : byte
+    public enum HeaderType : byte
     {
         /// <summary>For unreliable user messages.</summary>
         unreliable,
