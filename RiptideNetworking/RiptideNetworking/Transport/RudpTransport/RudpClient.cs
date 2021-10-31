@@ -87,7 +87,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             string[] ipAndPort = hostAddress.Split(':');
             if (ipAndPort.Length != 2 || !IPAddress.TryParse(ipAndPort[0], out IPAddress ip) || !ushort.TryParse(ipAndPort[1], out ushort port))
             {
-                RiptideLogger.Log("ERROR", $"Invalid host address '{hostAddress}'!");
+                RiptideLogger.Log(LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
                 return;
             }
 
@@ -192,7 +192,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     HandleDisconnect();
                     break;
                 default:
-                    RiptideLogger.Log("ERROR", $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                    RiptideLogger.Log(LogName, $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
                     return;
             }
 
@@ -227,7 +227,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             LocalDisconnect();
 
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Disconnected.");
+                RiptideLogger.Log(LogName, "Disconnected from server (initiated locally).");
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
@@ -400,7 +400,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void OnDisconnected()
         {
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Disconnected from server.");
+                RiptideLogger.Log(LogName, "Disconnected from server (initiated remotely).");
 
             receiveActionQueue.Add(() =>
             {

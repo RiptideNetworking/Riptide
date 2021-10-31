@@ -92,7 +92,7 @@ namespace RiptideNetworking
                 {
                     // It's a message handler for Client instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
-                        RiptideLogger.Log("ERROR", $"Message handler method already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
+                        RiptideLogger.Log("ERROR", $"Message handler method (type: client) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
                 }
@@ -101,7 +101,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Client instances, but it might be one for Server instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match a message handler signature!");
+                        RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match any acceptable message handler signatures, double-check its parameters!");
                 }
             }
         }
@@ -135,7 +135,7 @@ namespace RiptideNetworking
             if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
                 messageHandler(e.Message);
             else
-                RiptideLogger.Log("ERROR", $"No handler method found for message ID {e.MessageId}!");
+                RiptideLogger.Log("ERROR", $"No handler method (type: client) found for message ID {e.MessageId}!");
         }
     }
 }

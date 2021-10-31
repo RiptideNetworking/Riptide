@@ -118,6 +118,13 @@ namespace RiptideNetworking.Transports.RudpTransport
                         clients.Add(id, endPoint, new RudpConnection(this, endPoint, id));
                     }
                 }
+                else
+                {
+                    // Server is full
+                    if (ShouldOutputInfoLogs)
+                        RiptideLogger.Log(LogName, $"Server is full! Rejecting connection from {endPoint}.");
+                }
+                
                 return false;
             }
         }
@@ -187,7 +194,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                         HandleDisconnect(fromEndPoint);
                         break;
                     default:
-                        RiptideLogger.Log("ERROR", $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
+                        RiptideLogger.Log(LogName, $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes received from {fromEndPoint}.");
                         return;
                 }
 
@@ -276,19 +283,24 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             if (clients.TryGetValue(clientId, out RudpConnection client))
             {
-                SendDisconnect(clientId);
-                client.Disconnect();
-                lock (clients)
-                    clients.Remove(clientId, client.RemoteEndPoint);
-
+                SendDisconnect(client.Id);
                 if (ShouldOutputInfoLogs)
-                    RiptideLogger.Log(LogName, $"Kicked {client.RemoteEndPoint}.");
-                OnClientDisconnected(new ClientDisconnectedEventArgs(clientId));
+                    RiptideLogger.Log(LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
 
-                availableClientIds.Add(clientId);
+                LocalDisconnect(client);
+                availableClientIds.Add(client.Id);
             }
             else
-                RiptideLogger.Log(LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected.");
+                RiptideLogger.Log(LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected!");
+        }
+
+        private void LocalDisconnect(RudpConnection client)
+        {
+            client.Disconnect();
+            lock (clients)
+                clients.Remove(client.Id, client.RemoteEndPoint);
+
+            OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
         }
 
         /// <inheritdoc/>
@@ -355,11 +367,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             if (clients.TryGetValue(fromEndPoint, out RudpConnection client))
             {
-                client.Disconnect();
-                lock (clients)
-                    clients.Remove(client.Id, fromEndPoint);
-                OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
-
+                LocalDisconnect(client);
                 availableClientIds.Add(client.Id);
             }
         }
@@ -428,7 +436,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Client {e.Id} has disconnected.");
+                RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
 
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
 
