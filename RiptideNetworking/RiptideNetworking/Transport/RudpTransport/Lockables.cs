@@ -1,4 +1,5 @@
-﻿namespace RiptideNetworking.Transports.RudpTransport
+﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+namespace RiptideNetworking.Transports.RudpTransport
 {
     /// <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>
     internal class SendLockables
@@ -18,3 +19,4 @@
         internal ushort AckedMessagesBitfield;
     }
 }
+#endif

@@ -1,4 +1,5 @@
-﻿using RiptideNetworking.Transports.Utils;
+﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+using RiptideNetworking.Transports.Utils;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -286,3 +287,4 @@ namespace RiptideNetworking.Transports.RudpTransport
         protected abstract void SendAck(ushort forSeqId, IPEndPoint toEndPoint);
     }
 }
+#endif

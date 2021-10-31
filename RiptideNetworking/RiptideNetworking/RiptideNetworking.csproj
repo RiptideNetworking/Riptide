@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -11,13 +11,26 @@
     <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
   </PropertyGroup>
 
+  <!-- WITH TRANSPORT -->
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
-    <OutputPath>bin\Release\netstandard2.0\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <IncludeTransport Condition="'$(IncludeTransport)' == ''">yes</IncludeTransport>
+    <OutputPath>bin\Release\netstandard2.0\WithTransport\</OutputPath>
+    <DocumentationFile>bin\Release\netstandard2.0\WithTransport\RiptideNetworking.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <!-- WITHOUT TRANSPORT -->
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)|$(IncludeTransport)'=='Release|AnyCPU|no'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>RiptideNoTransport</AssemblyName>
+    <DefineConstants>EXCLUDE_DEFAULT_TRANSPORT</DefineConstants>
+    <OutputPath>bin\Release\netstandard2.0\WithoutTransport\</OutputPath>
+    <DocumentationFile>bin\Release\netstandard2.0\WithoutTransport\RiptideNoTransport.xml</DocumentationFile>
   </PropertyGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y" />
+    <MSBuild Condition="'$(IncludeTransport)' == 'yes'" Projects="$(MSBuildProjectFile)" Properties="IncludeTransport=no" />
+    <Exec Condition="'$(IncludeTransport)' == 'yes'" Command="if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;if $(ConfigurationName) == Release xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y" />
   </Target>
 
 </Project>
