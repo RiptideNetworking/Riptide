@@ -1626,8 +1626,9 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.TrySend">
             <summary>Attempts to send the message.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Clear">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Clear(System.Boolean)">
             <summary>Clears and removes the message from the dictionary of pending messages.</summary>
+            <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessages"/>.</param>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpServer">
             <summary>A server that can accept connections from <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpClient"/>s.</summary>

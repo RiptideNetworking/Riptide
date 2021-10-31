@@ -241,7 +241,9 @@ namespace RiptideNetworking.Transports.RudpTransport
             lock (peer.PendingMessages)
             {
                 foreach (RudpPeer.PendingMessage pendingMessage in peer.PendingMessages.Values)
-                    pendingMessage.Clear();
+                    pendingMessage.Clear(false);
+
+                peer.PendingMessages.Clear();
             }
         }
 

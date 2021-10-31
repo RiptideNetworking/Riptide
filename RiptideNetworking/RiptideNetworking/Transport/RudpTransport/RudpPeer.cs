@@ -233,14 +233,16 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
 
             /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
-            internal void Clear()
+            /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="PendingMessages"/>.</param>
+            internal void Clear(bool shouldRemoveFromDictionary = true)
             {
                 lock (this)
                 {
                     if (!wasCleared)
                     {
-                        lock (peer.PendingMessages)
-                            peer.PendingMessages.Remove(sequenceId);
+                        if (shouldRemoveFromDictionary)
+                            lock (peer.PendingMessages)
+                                peer.PendingMessages.Remove(sequenceId);
 
                         retryTimer.Stop();
                         retryTimer.Dispose();
