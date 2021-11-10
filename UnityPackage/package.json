@@ -1,0 +1,24 @@
+{
+    "name": "net.tomweiland.riptide-networking",
+    "version": "0.8.0",
+    "displayName": "Riptide Networking",
+    "description": "Riptide Networking provides functionality for sending data back and forth in multiplayer games.",
+    "unity": "2020.3",
+    "license": "MIT",
+    "author": {
+        "name": "Tom Weiland",
+        "email": "contact@tomweiland.net",
+        "url": "https://www.youtube.com/c/TomWeiland"
+    },
+    "dependencies": {},
+    "keywords": [
+        "riptide",
+        "networking",
+        "multiplayer"
+    ],
+    "repository": {
+      "url": "https://github.com/tom-weiland/RiptideNetworking",
+      "type": "git",
+      "revision": "434e39e917b0d6d6a91fef17eb6f4479ad1fa385"
+    }
+}
