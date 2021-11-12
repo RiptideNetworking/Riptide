@@ -2,17 +2,6 @@
 
 namespace RiptideNetworking
 {
-    /// <summary>The state of a connection.</summary>
-    enum ConnectionState : byte
-    {
-        /// <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
-        notConnected,
-        /// <summary>Connecting. Still trying to establish a connection.</summary>
-        connecting,
-        /// <summary>Connected. A connection was successfully established.</summary>
-        connected,
-    }
-
     /// <summary>Contains shared functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
     public abstract class Common
     {

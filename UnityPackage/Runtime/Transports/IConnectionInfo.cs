@@ -1,5 +1,16 @@
 ﻿namespace RiptideNetworking.Transports
 {
+    /// <summary>The state of a connection.</summary>
+    public enum ConnectionState : byte
+    {
+        /// <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
+        notConnected,
+        /// <summary>Connecting. Still trying to establish a connection.</summary>
+        connecting,
+        /// <summary>Connected. A connection was successfully established.</summary>
+        connected,
+    }
+
     /// <summary>Defines methods, properties, and events which every transport's connections must implement.</summary>
     public interface IConnectionInfo
     {
@@ -9,6 +20,8 @@
         short RTT { get; }
         /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
         short SmoothRTT { get; }
+        /// <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
+        bool IsNotConnected { get; }
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
         bool IsConnecting { get; }
         /// <summary>Whether or not the client is currently connected.</summary>

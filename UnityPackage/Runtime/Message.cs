@@ -62,6 +62,11 @@ namespace RiptideNetworking
         /// <summary>How many bytes a <see cref="double"/> is represented by.</summary>
         public const byte doubleLength = sizeof(double);
 
+
+        /// <summary>The message's send mode.</summary>
+        public MessageSendMode SendMode { get; private set; }
+        /// <summary>The message's data.</summary>
+        public byte[] Bytes { get; private set; }
         /// <summary>The length in bytes of the data that can be read from the message.</summary>
         public int ReadableLength { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
@@ -70,10 +75,6 @@ namespace RiptideNetworking
         public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
         internal int UnwrittenLength => Bytes.Length - writePos;
-        /// <summary>The message's send mode.</summary>
-        internal MessageSendMode SendMode { get; private set; }
-        /// <summary>The message's data.</summary>
-        internal byte[] Bytes { get; private set; }
 
         /// <summary>The position in the byte array that the next bytes will be written to.</summary>
         private ushort writePos = 0;
@@ -146,7 +147,7 @@ namespace RiptideNetworking
         /// <param name="headerType">The message's header type.</param>
         /// <param name="data">The bytes contained in the message.</param>
         /// <returns>A message instance ready to be used for handling.</returns>
-        internal static Message Create(HeaderType headerType, byte[] data)
+        public static Message Create(HeaderType headerType, byte[] data)
         {
             return RetrieveFromPool().Reinitialize(headerType, data);
         }

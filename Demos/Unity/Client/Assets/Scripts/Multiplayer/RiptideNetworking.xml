@@ -85,18 +85,6 @@
         <member name="M:RiptideNetworking.Client.OnMessageReceived(System.Object,RiptideNetworking.ClientMessageReceivedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.MessageReceived"/> event and initiates handling of the received message.</summary>
         </member>
-        <member name="T:RiptideNetworking.ConnectionState">
-            <summary>The state of a connection.</summary>
-        </member>
-        <member name="F:RiptideNetworking.ConnectionState.notConnected">
-            <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
-        </member>
-        <member name="F:RiptideNetworking.ConnectionState.connecting">
-            <summary>Connecting. Still trying to establish a connection.</summary>
-        </member>
-        <member name="F:RiptideNetworking.ConnectionState.connected">
-            <summary>Connected. A connection was successfully established.</summary>
-        </member>
         <member name="T:RiptideNetworking.Common">
             <summary>Contains shared functionality for <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/>.</summary>
         </member>
@@ -244,6 +232,12 @@
         <member name="F:RiptideNetworking.Message.doubleLength">
             <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
         </member>
+        <member name="P:RiptideNetworking.Message.SendMode">
+            <summary>The message's send mode.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Message.Bytes">
+            <summary>The message's data.</summary>
+        </member>
         <member name="P:RiptideNetworking.Message.ReadableLength">
             <summary>The length in bytes of the data that can be read from the message.</summary>
         </member>
@@ -255,12 +249,6 @@
         </member>
         <member name="P:RiptideNetworking.Message.UnwrittenLength">
             <summary>How many more bytes can be written into the packet.</summary>
-        </member>
-        <member name="P:RiptideNetworking.Message.SendMode">
-            <summary>The message's send mode.</summary>
-        </member>
-        <member name="P:RiptideNetworking.Message.Bytes">
-            <summary>The message's data.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.writePos">
             <summary>The position in the byte array that the next bytes will be written to.</summary>
@@ -1088,6 +1076,18 @@
         <member name="M:RiptideNetworking.Transports.IClient.Disconnect">
             <summary>Disconnects from the server.</summary>
         </member>
+        <member name="T:RiptideNetworking.Transports.ConnectionState">
+            <summary>The state of a connection.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.ConnectionState.notConnected">
+            <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.ConnectionState.connecting">
+            <summary>Connecting. Still trying to establish a connection.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.ConnectionState.connected">
+            <summary>Connected. A connection was successfully established.</summary>
+        </member>
         <member name="T:RiptideNetworking.Transports.IConnectionInfo">
             <summary>Defines methods, properties, and events which every transport's connections must implement.</summary>
         </member>
@@ -1099,6 +1099,9 @@
         </member>
         <member name="P:RiptideNetworking.Transports.IConnectionInfo.SmoothRTT">
             <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Transports.IConnectionInfo.IsNotConnected">
+            <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
         </member>
         <member name="P:RiptideNetworking.Transports.IConnectionInfo.IsConnecting">
             <summary>Whether or not the client is currently in the process of connecting.</summary>
@@ -1216,6 +1219,9 @@
             <inheritdoc/>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpClient.SmoothRTT">
+            <inheritdoc/>
+        </member>
+        <member name="P:RiptideNetworking.Transports.RudpTransport.RudpClient.IsNotConnected">
             <inheritdoc/>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpClient.IsConnecting">
@@ -1365,6 +1371,9 @@
             <inheritdoc/>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpConnection.SmoothRTT">
+            <inheritdoc/>
+        </member>
+        <member name="P:RiptideNetworking.Transports.RudpTransport.RudpConnection.IsNotConnected">
             <inheritdoc/>
         </member>
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpConnection.IsConnecting">

@@ -161,10 +161,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                             lock (clients)
                             {
                                 if (clients.TryGetValue(fromEndPoint, out RudpConnection client2))
-                                {
-                                    ushort messageId = message.GetUShort();
-                                    OnMessageReceived(new ServerMessageReceivedEventArgs(client2.Id, messageId, message));
-                                }
+                                    OnMessageReceived(new ServerMessageReceivedEventArgs(client2.Id, message.GetUShort(), message));
                             }
 
                             message.Release();

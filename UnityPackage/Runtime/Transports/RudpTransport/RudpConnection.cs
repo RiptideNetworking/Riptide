@@ -14,6 +14,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public short SmoothRTT => Peer.SmoothRTT;
         /// <inheritdoc/>
+        public bool IsNotConnected => connectionState == ConnectionState.notConnected;
+        /// <inheritdoc/>
         public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <inheritdoc/>
         public bool IsConnected => connectionState == ConnectionState.connected;
@@ -138,7 +140,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="message">The welcome message to handle.</param>
         internal void HandleWelcomeReceived(Message message)
         {
-            if (connectionState == ConnectionState.connected)
+            if (IsConnected)
                 return;
 
             ushort id = message.GetUShort();

@@ -28,6 +28,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public short SmoothRTT => peer.SmoothRTT;
         /// <inheritdoc/>
+        public bool IsNotConnected => connectionState == ConnectionState.notConnected;
+        /// <inheritdoc/>
         public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <inheritdoc/>
         public bool IsConnected => connectionState == ConnectionState.connected;
@@ -107,7 +109,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat(object state)
         {
-            if (connectionState == ConnectionState.connecting)
+            if (IsConnecting)
             {
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
@@ -120,7 +122,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     OnConnectionFailed();
                 }
             }
-            else if (connectionState == ConnectionState.connected)
+            else if (IsConnected)
             {
                 // If connected and not timed out, send heartbeats
                 if (HasTimedOut)
@@ -162,8 +164,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 case HeaderType.reliable:
                     receiveActionQueue.Add(() =>
                     {
-                        ushort messageId = message.GetUShort();
-                        OnMessageReceived(new ClientMessageReceivedEventArgs(messageId, message));
+                        OnMessageReceived(new ClientMessageReceivedEventArgs(message.GetUShort(), message));
 
                         message.Release();
                     });
@@ -220,7 +221,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public void Disconnect()
         {
-            if (connectionState == ConnectionState.notConnected)
+            if (IsNotConnected)
                 return;
 
             SendDisconnect();
@@ -321,7 +322,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="message">The welcome message to handle.</param>
         private void HandleWelcome(Message message)
         {
-            if (connectionState == ConnectionState.connected)
+            if (IsConnected)
                 return;
 
             Id = message.GetUShort();
