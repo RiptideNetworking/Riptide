@@ -6,9 +6,9 @@ namespace RiptideNetworking
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]
     public sealed class MessageHandlerAttribute : Attribute
     {
-        /// <summary>The ID of the message type that this method is meant to handle.</summary>
+        /// <inheritdoc cref="messageId"/>
         public ushort MessageId => messageId;
-        /// <summary>The ID of the group of message handlers this method belongs to.</summary>
+        /// <inheritdoc cref="groupId"/>
         public byte GroupId => groupId;
 
         /// <summary>The ID of the message type that this method is meant to handle.</summary>
