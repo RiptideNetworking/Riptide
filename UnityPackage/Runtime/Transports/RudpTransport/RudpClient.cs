@@ -385,11 +385,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Connection to server failed!");
 
-            receiveActionQueue.Add(() =>
-            {
-                LocalDisconnect();
-                ConnectionFailed?.Invoke(this, EventArgs.Empty);
-            });
+            LocalDisconnect();
+            receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, EventArgs.Empty));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
@@ -405,11 +402,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (ShouldOutputInfoLogs)
                 RiptideLogger.Log(LogName, "Disconnected from server (initiated remotely).");
 
-            receiveActionQueue.Add(() =>
-            {
-                LocalDisconnect();
-                Disconnected?.Invoke(this, EventArgs.Empty);
-            });
+            LocalDisconnect();
+            receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>

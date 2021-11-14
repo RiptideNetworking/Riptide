@@ -9,29 +9,30 @@ namespace RiptideNetworking
     /// <summary>A client that can connect to a <see cref="Server"/>.</summary>
     public class Client : Common
     {
-        /// <summary>Invoked when a connection to the server is established.</summary>
+        /// <inheritdoc cref="IClient.Connected"/>
         public event EventHandler Connected;
-        /// <summary>Invoked when a connection to the server fails to be established.</summary>
-        /// <remarks>This occurs when a connection request times out, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
+        /// <inheritdoc cref="IClient.ConnectionFailed"/>
         public event EventHandler ConnectionFailed;
-        /// <summary>Invoked when a message is received from the server.</summary>
+        /// <inheritdoc cref="IClient.MessageReceived"/>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <summary>Invoked when disconnected by the server.</summary>
+        /// <inheritdoc cref="IClient.Disconnected"/>
         public event EventHandler Disconnected;
-        /// <summary>Invoked when a new client connects.</summary>
+        /// <inheritdoc cref="IClient.ClientConnected"/>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
-        /// <summary>Invoked when a client disconnects.</summary>
+        /// <inheritdoc cref="IClient.ClientDisconnected"/>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
-        /// <summary>The numeric ID of the client.</summary>
+        /// <inheritdoc cref="IConnectionInfo.Id"/>
         public ushort Id => client.Id;
-        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
+        /// <inheritdoc cref="IConnectionInfo.RTT"/>
         public short RTT => client.RTT;
-        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        /// <inheritdoc cref="IConnectionInfo.SmoothRTT"/>
         public short SmoothRTT => client.SmoothRTT;
-        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
+        /// <inheritdoc cref="IConnectionInfo.IsNotConnected"/>
+        public bool IsNotConnected => client.IsNotConnected;
+        /// <inheritdoc cref="IConnectionInfo.IsConnecting"/>
         public bool IsConnecting => client.IsConnecting;
-        /// <summary>Whether or not the client is currently connected.</summary>
+        /// <inheritdoc cref="IConnectionInfo.IsConnected"/>
         public bool IsConnected => client.IsConnected;
         /// <inheritdoc/>
         public override bool ShouldOutputInfoLogs
@@ -64,9 +65,9 @@ namespace RiptideNetworking
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += Connected;
-            client.ConnectionFailed += ConnectionFailed;
+            client.ConnectionFailed += OnConnectionFailed;
             client.MessageReceived += OnMessageReceived;
-            client.Disconnected += Disconnected;
+            client.Disconnected += OnDisconnected;
             client.ClientConnected += ClientConnected;
             client.ClientDisconnected += ClientDisconnected;
             client.Connect(hostAddress);
@@ -87,6 +88,12 @@ namespace RiptideNetworking
                 if (attribute.GroupId != messageHandlerGroupId)
                     break;
 
+                if (!methods[i].IsStatic)
+                {
+                    RiptideLogger.Log("ERROR", $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+                    break;
+                }
+
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
                 if (clientMessageHandler != null)
                 {
@@ -101,7 +108,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Client instances, but it might be one for Server instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match any acceptable message handler signatures, double-check its parameters!");
+                        RiptideLogger.Log("ERROR", $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
         }
@@ -109,22 +116,31 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         public override void Tick() => client.Tick();
 
-        /// <summary>Sends a message to the server.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
-        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
+        /// <inheritdoc cref="IClient.Send(Message, byte, bool)"/>
         public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => client.Send(message, maxSendAttempts, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
         {
             client.Disconnect();
+            LocalDisconnect();
+        }
+
+        private void LocalDisconnect()
+        {
             client.Connected -= Connected;
             client.ConnectionFailed -= ConnectionFailed;
             client.MessageReceived -= OnMessageReceived;
             client.Disconnected -= Disconnected;
             client.ClientConnected -= ClientConnected;
             client.ClientDisconnected -= ClientDisconnected;
+        }
+
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
+        private void OnConnectionFailed(object s, EventArgs e)
+        {
+            LocalDisconnect();
+            ConnectionFailed?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -136,6 +152,13 @@ namespace RiptideNetworking
                 messageHandler(e.Message);
             else
                 RiptideLogger.Log("ERROR", $"No handler method (type: client) found for message ID {e.MessageId}!");
+        }
+
+        /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
+        private void OnDisconnected(object s, EventArgs e)
+        {
+            LocalDisconnect();
+            Disconnected?.Invoke(this, e);
         }
     }
 }

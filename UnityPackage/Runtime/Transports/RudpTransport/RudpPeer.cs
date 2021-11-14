@@ -18,7 +18,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal ReceiveLockables ReceiveLockables { get; private set; }
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
-        /// <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
+        /// <inheritdoc cref="IConnectionInfo.RTT"/>
         internal short RTT
         {
             get => _rtt;
@@ -29,7 +29,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
         private short _rtt = -1;
-        /// <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
+        /// <inheritdoc cref="IConnectionInfo.SmoothRTT"/>
         internal short SmoothRTT { get; set; } = -1;
 
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>

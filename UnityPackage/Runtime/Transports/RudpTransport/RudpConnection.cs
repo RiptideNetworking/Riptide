@@ -25,7 +25,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         internal RudpPeer Peer { get; private set; }
-        /// <summary>The lockable values which are used to inform the other end of which messages we've received.</summary>
+        /// <inheritdoc cref="RudpPeer.SendLockables"/>
         internal SendLockables SendLockables => Peer.SendLockables;
         /// <summary>Whether or not the client has timed out.</summary>
         internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > server.ClientTimeoutTime;

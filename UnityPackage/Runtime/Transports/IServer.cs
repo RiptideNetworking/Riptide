@@ -3,7 +3,7 @@
 namespace RiptideNetworking.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
-    public interface IServer
+    public interface IServer : ICommon
     {
         /// <summary>Invoked when a new client connects.</summary>
         event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
@@ -21,16 +21,11 @@ namespace RiptideNetworking.Transports
         /// <summary>An array of all the currently connected clients.</summary>
         /// <remarks>The position of each <see cref="IConnectionInfo"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         IConnectionInfo[] Clients { get; }
-        /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
-        bool ShouldOutputInfoLogs { get; set; }
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         void Start(ushort port, ushort maxClientCount);
-        /// <summary>Initiates handling of currently queued messages.</summary>
-        /// <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
-        void Tick();
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClientId">The numeric ID of the client to send the message to.</param>

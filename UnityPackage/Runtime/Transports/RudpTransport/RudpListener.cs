@@ -10,7 +10,7 @@ namespace RiptideNetworking.Transports.RudpTransport
     /// <summary>Provides base sending &#38; receiving functionality for <see cref="RudpServer"/> and <see cref="RudpClient"/>.</summary>
     public abstract class RudpListener
     {
-        /// <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
+        /// <inheritdoc cref="ICommon.ShouldOutputInfoLogs"/>
         public bool ShouldOutputInfoLogs { get; set; } = true;
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
@@ -35,8 +35,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             receiveActionQueue = new ActionQueue();
         }
 
-        /// <summary>Initiates handling of currently queued messages.</summary>
-        /// <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+        /// <inheritdoc cref="ICommon.Tick"/>
         public void Tick()
         {
             receiveActionQueue.ExecuteAll();
