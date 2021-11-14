@@ -65,9 +65,9 @@ namespace RiptideNetworking
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += Connected;
-            client.ConnectionFailed += ConnectionFailed;
+            client.ConnectionFailed += OnConnectionFailed;
             client.MessageReceived += OnMessageReceived;
-            client.Disconnected += Disconnected;
+            client.Disconnected += OnDisconnected;
             client.ClientConnected += ClientConnected;
             client.ClientDisconnected += ClientDisconnected;
             client.Connect(hostAddress);
@@ -117,12 +117,24 @@ namespace RiptideNetworking
         public void Disconnect()
         {
             client.Disconnect();
+            LocalDisconnect();
+        }
+
+        private void LocalDisconnect()
+        {
             client.Connected -= Connected;
             client.ConnectionFailed -= ConnectionFailed;
             client.MessageReceived -= OnMessageReceived;
             client.Disconnected -= Disconnected;
             client.ClientConnected -= ClientConnected;
             client.ClientDisconnected -= ClientDisconnected;
+        }
+
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
+        private void OnConnectionFailed(object s, EventArgs e)
+        {
+            LocalDisconnect();
+            ConnectionFailed?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -134,6 +146,13 @@ namespace RiptideNetworking
                 messageHandler(e.Message);
             else
                 RiptideLogger.Log("ERROR", $"No handler method (type: client) found for message ID {e.MessageId}!");
+        }
+
+        /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
+        private void OnDisconnected(object s, EventArgs e)
+        {
+            LocalDisconnect();
+            Disconnected?.Invoke(this, e);
         }
     }
 }

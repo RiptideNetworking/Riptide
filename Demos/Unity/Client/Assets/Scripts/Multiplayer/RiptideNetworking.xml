@@ -81,8 +81,14 @@
         <member name="M:RiptideNetworking.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
         </member>
+        <member name="M:RiptideNetworking.Client.OnConnectionFailed(System.Object,System.EventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Client.ConnectionFailed"/> event.</summary>
+        </member>
         <member name="M:RiptideNetworking.Client.OnMessageReceived(System.Object,RiptideNetworking.ClientMessageReceivedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.MessageReceived"/> event and initiates handling of the received message.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Client.OnDisconnected(System.Object,System.EventArgs)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Client.Disconnected"/> event.</summary>
         </member>
         <member name="T:RiptideNetworking.Common">
             <summary>Contains shared functionality for <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/>.</summary>
