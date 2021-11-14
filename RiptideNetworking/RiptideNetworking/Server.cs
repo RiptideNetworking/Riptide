@@ -77,6 +77,12 @@ namespace RiptideNetworking
                 if (attribute.GroupId != messageHandlerGroupId)
                     break;
 
+                if (!methods[i].IsStatic)
+                {
+                    RiptideLogger.Log("ERROR", $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+                    break;
+                }
+
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
                 if (clientMessageHandler != null)
                 {
@@ -91,7 +97,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Server instances, but it might be one for Client instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log("ERROR", $"Method '{methods[i].Name}' didn't match any acceptable message handler signatures, double-check its parameters!");
+                        RiptideLogger.Log("ERROR", $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
         }
