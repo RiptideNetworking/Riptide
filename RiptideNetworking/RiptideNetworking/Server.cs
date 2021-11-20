@@ -52,6 +52,9 @@ namespace RiptideNetworking
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0)
         {
+            if (IsRunning)
+                Stop();
+
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             server.ClientConnected += ClientConnected;
@@ -120,6 +123,9 @@ namespace RiptideNetworking
         /// <summary>Stops the server.</summary>
         public void Stop()
         {
+            if (!IsRunning)
+                return;
+
             server.Shutdown();
             server.ClientConnected -= ClientConnected;
             server.MessageReceived -= OnMessageReceived;

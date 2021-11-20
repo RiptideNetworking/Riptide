@@ -62,6 +62,9 @@ namespace RiptideNetworking
         /// </remarks>
         public void Connect(string hostAddress, byte messageHandlerGroupId = 0)
         {
+            if (IsConnecting || IsConnected)
+                Disconnect();
+
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += Connected;
@@ -122,6 +125,9 @@ namespace RiptideNetworking
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
         {
+            if (IsNotConnected)
+                return;
+
             client.Disconnect();
             LocalDisconnect();
         }
