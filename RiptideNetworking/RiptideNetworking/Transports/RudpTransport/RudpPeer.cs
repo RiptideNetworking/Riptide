@@ -1,5 +1,4 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
-using RiptideNetworking.Transports.Utils;
+﻿using RiptideNetworking.Transports.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -258,4 +257,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
     }
 }
-#endif

@@ -1,5 +1,4 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
-using System;
+﻿using System;
 using System.Net;
 
 namespace RiptideNetworking.Transports.RudpTransport
@@ -153,4 +152,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         #endregion
     }
 }
-#endif
