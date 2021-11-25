@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RiptideNetworking.Transports.Utils
 {
+    /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
     public class RiptideConverter
     {
         /// <summary>Converts a given <see cref="ushort"/> to bytes and writes them into the array.</summary>

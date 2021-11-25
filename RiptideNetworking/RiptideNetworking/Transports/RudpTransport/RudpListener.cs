@@ -129,10 +129,10 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        /// <summary>Takes received data and prepares it to be handled.</summary>
-        /// <param name="data">The contents of the packet.</param>
-        /// <param name="length">The length of the contents of the packet.</param>
-        /// <param name="remoteEndPoint">The endpoint from which the packet was received.</param>
+        /// <summary>Takes a received message and prepares it to be handled.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="length">The length of the contents of message.</param>
+        /// <param name="remoteEndPoint">The endpoint from which the message was received.</param>
         private void PrepareToHandle(Message message, int length, IPEndPoint remoteEndPoint)
         {
             HeaderType messageHeader = message.PrepareForUse((ushort)length);
@@ -154,15 +154,15 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <returns><see langword="true"/> if the message should be handled.</returns>
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader);
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
         /// <param name="messageHeader">The header of the message.</param>
         protected abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
         /// <param name="messageHeader">The header of the message.</param>
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
         internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader, SendLockables lockables)
@@ -222,9 +222,9 @@ namespace RiptideNetworking.Transports.RudpTransport
             Handle(message, fromEndPoint, messageHeader);
         }
 
-        /// <summary>Handles the given data.</summary>
-        /// <param name="data">The data to handle.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        /// <summary>Handles the given message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
         /// <param name="messageHeader">The header of the message.</param>
         protected abstract void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
 
