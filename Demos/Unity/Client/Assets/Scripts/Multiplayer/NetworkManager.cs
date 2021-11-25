@@ -97,5 +97,8 @@ public class NetworkManager : MonoBehaviour
     private void DidDisconnect(object sender, EventArgs e)
     {
         UIManager.Singleton.BackToMain();
+
+        foreach (Player player in Player.list.Values)
+            Destroy(player.gameObject);
     }
 }
