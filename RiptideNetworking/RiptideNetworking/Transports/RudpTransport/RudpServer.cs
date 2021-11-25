@@ -99,20 +99,20 @@ namespace RiptideNetworking.Transports.RudpTransport
 
 
         /// <inheritdoc/>
-        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
+        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
         {
             lock (clients)
             {
                 if (clients.ContainsKey(endPoint))
                 {
                     // Client is already connected
-                    if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
+                    if (messageHeader != HeaderType.connect) // It's not a connect message, so handle it
                         return true;
                 }
                 else if (clients.Count < MaxClientCount)
                 {
                     // Client is not yet connected and the server has capacity
-                    if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
+                    if (messageHeader == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
                     {
                         ushort id = GetAvailableClientId();
                         clients.Add(id, endPoint, new RudpConnection(this, endPoint, id));
@@ -130,27 +130,25 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
             lock (clients)
             {
                 if (!clients.TryGetValue(fromEndPoint, out RudpConnection client))
                     return;
 
-                Message message = Message.Create(headerType, data);
-
 #if DETAILED_LOGGING
-                if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Received {headerType} message from {fromEndPoint}."); 
+                if (messageHeader != HeaderType.reliable && messageHeader != HeaderType.unreliable)
+                    RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}."); 
 
                 ushort messageId = message.PeekUShort();
-                if (headerType == HeaderType.reliable)
+                if (messageHeader == HeaderType.reliable)
                     RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
-                else if (headerType == HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+                else if (messageHeader == HeaderType.unreliable)
+                    RiptideLogger.Log(LogName, $"Received unreliable message (ID: {messageId}) from {fromEndPoint}.");
 #endif
 
-                switch (headerType)
+                switch (messageHeader)
                 {
                     // User messages
                     case HeaderType.unreliable:
@@ -191,8 +189,8 @@ namespace RiptideNetworking.Transports.RudpTransport
                         HandleDisconnect(fromEndPoint);
                         break;
                     default:
-                        RiptideLogger.Log(LogName, $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes received from {fromEndPoint}.");
-                        return;
+                        RiptideLogger.Log(LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {fromEndPoint}.");
+                        break;
                 }
 
                 message.Release();
@@ -200,9 +198,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
-            ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
+            ReliableHandle(message, fromEndPoint, messageHeader, clients[fromEndPoint].SendLockables);
         }
 
         /// <inheritdoc/>

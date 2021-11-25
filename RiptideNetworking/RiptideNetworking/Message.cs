@@ -126,30 +126,28 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Gets a Message instance that can be used for sending.</summary>
+        /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return RetrieveFromPool().Reinitialize((HeaderType)sendMode).Add(id);
+            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode).Add(id);
         }
 
-        /// <summary>Gets a Message instance that can be used for sending.</summary>
-        /// <param name="headerType">The message's header type.</param>
+        /// <summary>Gets a message instance that can be used for sending.</summary>
+        /// <param name="messageHeader">The message's header type.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        internal static Message Create(HeaderType headerType)
+        public static Message Create(HeaderType messageHeader)
         {
-            return RetrieveFromPool().Reinitialize(headerType);
+            return RetrieveFromPool().PrepareForUse(messageHeader);
         }
 
-        /// <summary>Gets a Message instance that can be used for handling.</summary>
-        /// <param name="headerType">The message's header type.</param>
-        /// <param name="data">The bytes contained in the message.</param>
+        /// <summary>Gets a message instance that can be used for handling.</summary>
         /// <returns>A message instance ready to be used for handling.</returns>
-        public static Message Create(HeaderType headerType, byte[] data)
+        public static Message Create()
         {
-            return RetrieveFromPool().Reinitialize(headerType, data);
+            return RetrieveFromPool();
         }
 
         /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
@@ -187,63 +185,30 @@ namespace RiptideNetworking
             }
         }
 
-        /// <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
-        /// <param name="seqId">The sequence ID to insert.</param>
-        internal void SetSequenceIdBytes(ushort seqId)
+        /// <summary>Prepares a message to be used for sending.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
+        private Message PrepareForUse(HeaderType messageHeader)
         {
-#if BIG_ENDIAN
-            Bytes[2] = (byte)seqId;
-            Bytes[1] = (byte)(seqId >> 8);
-#else
-            Bytes[1] = (byte)seqId;
-            Bytes[2] = (byte)(seqId >> 8);
-#endif
-        }
-
-        /// <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
-        internal void Reuse()
-        {
-            writePos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
-            readPos = 0;
-        }
-
-        /// <summary>Reinitializes a message for sending.</summary>
-        /// <param name="headerType">The message's header type.</param>
-        internal Message Reinitialize(HeaderType headerType)
-        {
-            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             writePos = 0;
             readPos = 0;
             ReadableLength = 0;
-            Add((byte)headerType);
-            if (SendMode == MessageSendMode.reliable)
-                writePos += shortLength;
-
+            SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            Add((byte)messageHeader);
             return this;
         }
 
-        /// <summary>Reinitializes a message for handling.</summary>
-        /// <param name="headerType">The message's header type.</param>
-        /// <param name="data">The bytes contained in the message.</param>
-        internal Message Reinitialize(HeaderType headerType, byte[] data)
+        /// <summary>Prepares a message to be used for handling.</summary>
+        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
+        /// <returns>The header of the message.</returns>
+        public HeaderType PrepareForUse(ushort contentLength)
         {
-            SendMode = headerType >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            writePos = (ushort)data.Length;
-            readPos = (ushort)(SendMode == MessageSendMode.reliable ? 3 : 1);
-
-            if (data.Length > Bytes.Length)
-            {
-                RiptideLogger.Log("ERROR", $"Can't fully handle {data.Length} bytes because it exceeds the maximum of {Bytes.Length}, message will contain incomplete data!");
-                Array.Copy(data, 0, Bytes, 0, Bytes.Length);
-                ReadableLength = Bytes.Length;
-            }
-            else
-            {
-                Array.Copy(data, 0, Bytes, 0, data.Length);
-                ReadableLength = data.Length;
-            }
-
-            return this;
+            writePos = contentLength;
+            readPos = 0;
+            ReadableLength = contentLength;
+            HeaderType messageHeader = (HeaderType)GetByte();
+            SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            return messageHeader;
         }
         #endregion
 

@@ -1,4 +1,5 @@
 ﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+using RiptideNetworking.Transports.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -167,8 +168,12 @@ namespace RiptideNetworking.Transports.RudpTransport
             {
                 this.peer = peer;
                 this.sequenceId = sequenceId;
-                data = new byte[message.WrittenLength];
-                Array.Copy(message.Bytes, data, data.Length);
+
+                data = new byte[message.WrittenLength + Message.shortLength];
+                data[0] = message.Bytes[0]; // Copy message header
+                RiptideConverter.ToBytes(sequenceId, data, 1); // Insert sequence ID
+                Array.Copy(message.Bytes, 1, data, 3, message.WrittenLength - 1); // Copy the rest of the message
+
                 remoteEndPoint = toEndPoint;
                 this.maxSendAttempts = maxSendAttempts;
                 sendAttempts = 0;
