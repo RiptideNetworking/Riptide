@@ -1,4 +1,8 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
 using System;
 using System.Net;
 using System.Threading;
@@ -136,28 +140,26 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
+        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
         {
             return endPoint.Equals(remoteEndPoint);
         }
 
         /// <inheritdoc/>
-        protected override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
-            Message message = Message.Create(headerType, data);
-
 #if DETAILED_LOGGING
-            if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
-                RiptideLogger.Log(LogName, $"Received {headerType} message from {fromEndPoint}.");
+            if (messageHeader != HeaderType.reliable && messageHeader != HeaderType.unreliable)
+                RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}.");
             
             ushort messageId = message.PeekUShort();
-            if (headerType == HeaderType.reliable)
+            if (messageHeader == HeaderType.reliable)
                 RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
-            else if (headerType == HeaderType.unreliable)
-                RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+            else if (messageHeader == HeaderType.unreliable)
+                RiptideLogger.Log(LogName, $"Received unreliable message (ID: {messageId}) from {fromEndPoint}.");
 #endif
 
-            switch (headerType)
+            switch (messageHeader)
             {
                 // User messages
                 case HeaderType.unreliable:
@@ -193,26 +195,26 @@ namespace RiptideNetworking.Transports.RudpTransport
                     HandleDisconnect();
                     break;
                 default:
-                    RiptideLogger.Log(LogName, $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes.");
-                    return;
+                    RiptideLogger.Log(LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    break;
             }
 
             message.Release();
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
-            ReliableHandle(data, fromEndPoint, headerType, peer.SendLockables);
+            ReliableHandle(message, fromEndPoint, messageHeader, peer.SendLockables);
         }
 
         /// <inheritdoc/>
-        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
+        public void Send(Message message, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, remoteEndPoint);
             else
-                SendReliable(message, remoteEndPoint, peer, maxSendAttempts);
+                SendReliable(message, remoteEndPoint, peer);
 
             if (shouldRelease)
                 message.Release();
@@ -336,10 +338,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a welcome (received) message.</summary>
         private void SendWelcomeReceived()
         {
-            Message message = Message.Create(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome, 25);
             message.Add(Id);
 
-            Send(message, 25);
+            Send(message);
         }
 
         /// <summary>Handles a client connected message.</summary>
@@ -428,4 +430,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         #endregion
     }
 }
-#endif

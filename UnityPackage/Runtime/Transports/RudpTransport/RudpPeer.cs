@@ -1,4 +1,9 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
+using RiptideNetworking.Transports.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -147,7 +152,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             /// <summary>The contents of the message.</summary>
             private readonly byte[] data;
             /// <summary>How often to try sending the message before giving up.</summary>
-            private readonly byte maxSendAttempts;
+            private readonly int maxSendAttempts;
             /// <summary>How many send attempts have been made so far.</summary>
             private byte sendAttempts;
             /// <summary>The time of the latest send attempt.</summary>
@@ -162,15 +167,18 @@ namespace RiptideNetworking.Transports.RudpTransport
             /// <param name="sequenceId">The sequence ID of the message.</param>
             /// <param name="message">The message that is being sent reliably.</param>
             /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
-            /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint, byte maxSendAttempts)
+            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
             {
                 this.peer = peer;
                 this.sequenceId = sequenceId;
-                data = new byte[message.WrittenLength];
-                Array.Copy(message.Bytes, data, data.Length);
+
+                data = new byte[message.WrittenLength + RiptideConverter.ushortLength];
+                data[0] = message.Bytes[0]; // Copy message header
+                RiptideConverter.FromUShort(sequenceId, data, 1); // Insert sequence ID
+                Array.Copy(message.Bytes, 1, data, 3, message.WrittenLength - 1); // Copy the rest of the message
+
                 remoteEndPoint = toEndPoint;
-                this.maxSendAttempts = maxSendAttempts;
+                maxSendAttempts = message.MaxSendAttempts;
                 sendAttempts = 0;
 
                 retryTimer = new Timer();
@@ -253,4 +261,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
     }
 }
-#endif

@@ -1,4 +1,9 @@
-﻿using RiptideNetworking.Transports;
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
+using RiptideNetworking.Transports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,6 +58,13 @@ namespace RiptideNetworking
         /// <param name="client">The underlying client that is used for sending and receiving data.</param>
         public Client(IClient client) => this.client = client;
 
+        /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
+        /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
+        /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+        /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
+
         /// <summary>Attempts connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
@@ -62,6 +74,9 @@ namespace RiptideNetworking
         /// </remarks>
         public void Connect(string hostAddress, byte messageHandlerGroupId = 0)
         {
+            if (IsConnecting || IsConnected)
+                Disconnect();
+
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += Connected;
@@ -77,7 +92,7 @@ namespace RiptideNetworking
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods())
+                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                                            .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
                                            .ToArray();
 
@@ -116,12 +131,15 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         public override void Tick() => client.Tick();
 
-        /// <inheritdoc cref="IClient.Send(Message, byte, bool)"/>
-        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => client.Send(message, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IClient.Send(Message, bool)"/>
+        public void Send(Message message, bool shouldRelease = true) => client.Send(message, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
         {
+            if (IsNotConnected)
+                return;
+
             client.Disconnect();
             LocalDisconnect();
         }

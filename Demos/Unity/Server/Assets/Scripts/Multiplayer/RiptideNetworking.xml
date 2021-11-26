@@ -60,6 +60,13 @@
             <summary>Handles initial setup.</summary>
             <param name="client">The underlying client that is used for sending and receiving data.</param>
         </member>
+        <member name="M:RiptideNetworking.Client.#ctor(System.UInt16,System.UInt16,System.Byte,System.String)">
+            <summary>Handles initial setup using the built-in RUDP transport.</summary>
+            <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
+            <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
+            <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+        </member>
         <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte)">
             <summary>Attempts connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
@@ -75,8 +82,8 @@
         <member name="M:RiptideNetworking.Client.Tick">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Client.Send(RiptideNetworking.Message,System.Byte,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Byte,System.Boolean)"/>
+        <member name="M:RiptideNetworking.Client.Send(RiptideNetworking.Message,System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Boolean)"/>
         </member>
         <member name="M:RiptideNetworking.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
@@ -218,26 +225,12 @@
         <member name="F:RiptideNetworking.Message.pool">
             <summary>A pool of reusable message instances.</summary>
         </member>
-        <member name="F:RiptideNetworking.Message.boolLength">
-            <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Message.shortLength">
-            <summary>How many bytes a <see cref="T:System.Int16"/> (or <see cref="T:System.UInt16"/>) is represented by.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Message.intLength">
-            <summary>How many bytes an <see cref="T:System.Int32"/> (or <see cref="T:System.UInt32"/>) is represented by.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Message.longLength">
-            <summary>How many bytes a <see cref="T:System.Int64"/> (or <see cref="T:System.UInt64"/>) is represented by.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Message.floatLength">
-            <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Message.doubleLength">
-            <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
-        </member>
         <member name="P:RiptideNetworking.Message.SendMode">
             <summary>The message's send mode.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Message.MaxSendAttempts">
+            <summary>How often to try sending the message before giving up.</summary>
+            <remarks>The default RUDP transport only uses this when sending messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
         </member>
         <member name="P:RiptideNetworking.Message.Bytes">
             <summary>The message's data.</summary>
@@ -264,32 +257,27 @@
             <summary>Initializes a reusable Message instance.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(RiptideNetworking.HeaderType,System.UInt16)">
-            <summary>Initializes a reusable Message instance with a pre-defined header type.</summary>
-            <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-            <param name="headerType">The header type to initialize the message with.</param>
-        </member>
         <member name="M:RiptideNetworking.Message.IncreasePoolCount">
             <summary>Increases the amount of messages in the pool. For use when a new <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is started.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.DecreasePoolCount">
             <summary>Decreases the amount of messages in the pool. For use when a <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is stopped.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16)">
-            <summary>Gets a Message instance that can be used for sending.</summary>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16,System.Int32)">
+            <summary>Gets a message instance that can be used for sending.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
+            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType)">
-            <summary>Gets a Message instance that can be used for sending.</summary>
-            <param name="headerType">The message's header type.</param>
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType,System.Int32)">
+            <summary>Gets a message instance that can be used for sending.</summary>
+            <param name="messageHeader">The message's header type.</param>
+            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType,System.Byte[])">
-            <summary>Gets a Message instance that can be used for handling.</summary>
-            <param name="headerType">The message's header type.</param>
-            <param name="data">The bytes contained in the message.</param>
+        <member name="M:RiptideNetworking.Message.Create">
+            <summary>Gets a message instance that can be used for handling.</summary>
             <returns>A message instance ready to be used for handling.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.RetrieveFromPool">
@@ -299,21 +287,16 @@
         <member name="M:RiptideNetworking.Message.Release">
             <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.SetSequenceIdBytes(System.UInt16)">
-            <summary>Sets the bytes reserved for the sequence ID (should only be called on reliable messages).</summary>
-            <param name="seqId">The sequence ID to insert.</param>
+        <member name="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.HeaderType,System.Int32)">
+            <summary>Prepares a message to be used for sending.</summary>
+            <param name="messageHeader">The header of the message.</param>
+            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
+            <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Reuse">
-            <summary>Resets the internal write position so the message be reused. Header type and send mode remain unchanged, but message contents can be rewritten.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Message.Reinitialize(RiptideNetworking.HeaderType)">
-            <summary>Reinitializes a message for sending.</summary>
-            <param name="headerType">The message's header type.</param>
-        </member>
-        <member name="M:RiptideNetworking.Message.Reinitialize(RiptideNetworking.HeaderType,System.Byte[])">
-            <summary>Reinitializes a message for handling.</summary>
-            <param name="headerType">The message's header type.</param>
-            <param name="data">The bytes contained in the message.</param>
+        <member name="M:RiptideNetworking.Message.PrepareForUse(System.UInt16)">
+            <summary>Prepares a message to be used for handling.</summary>
+            <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
+            <returns>The header of the message.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
             <summary>Adds a single <see cref="T:System.Byte"/> to the message.</summary>
@@ -425,10 +408,6 @@
             <param name="value">The <see cref="T:System.UInt16"/> to add.</param>
             <returns>The Message instance that the <see cref="T:System.UInt16"/> was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Write(System.UInt16)">
-            <summary>Converts a given <see cref="T:System.UInt16"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
-        </member>
         <member name="M:RiptideNetworking.Message.GetShort">
             <summary>Retrieves a <see cref="T:System.Int16"/> from the message.</summary>
             <returns>The <see cref="T:System.Int16"/> that was retrieved.</returns>
@@ -436,10 +415,6 @@
         <member name="M:RiptideNetworking.Message.GetUShort">
             <summary>Retrieves a <see cref="T:System.UInt16"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt16"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.ReadUShort">
-            <summary>Retrieves a <see cref="T:System.UInt16"/> from the next 2 bytes, starting at the read position.</summary>
-            <returns>The converted <see cref="T:System.UInt16"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.PeekUShort">
             <summary>Retrieves a <see cref="T:System.UInt16"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
@@ -536,10 +511,6 @@
             <param name="value">The <see cref="T:System.UInt32"/> to add.</param>
             <returns>The Message instance that the <see cref="T:System.UInt32"/> was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Write(System.Int32)">
-            <summary>Converts a given <see cref="T:System.Int32"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
-        </member>
         <member name="M:RiptideNetworking.Message.GetInt">
             <summary>Retrieves an <see cref="T:System.Int32"/> from the message.</summary>
             <returns>The <see cref="T:System.Int32"/> that was retrieved.</returns>
@@ -547,10 +518,6 @@
         <member name="M:RiptideNetworking.Message.GetUInt">
             <summary>Retrieves a <see cref="T:System.UInt32"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt32"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.ReadInt">
-            <summary>Retrieves an <see cref="T:System.Int32"/> from the next 4 bytes, starting at the read position.</summary>
-            <returns>The converted <see cref="T:System.Int32"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean,System.Boolean)">
             <summary>Adds an <see cref="T:System.Int32"/> array message.</summary>
@@ -644,10 +611,6 @@
             <param name="value">The <see cref="T:System.UInt64"/> to add.</param>
             <returns>The Message instance that the <see cref="T:System.UInt64"/> was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Write(System.Int64)">
-            <summary>Converts a given <see cref="T:System.Int64"/> to bytes and adds them to the message's contents.</summary>
-            <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
-        </member>
         <member name="M:RiptideNetworking.Message.GetLong">
             <summary>Retrieves a <see cref="T:System.Int64"/> from the message.</summary>
             <returns>The <see cref="T:System.Int64"/> that was retrieved.</returns>
@@ -655,10 +618,6 @@
         <member name="M:RiptideNetworking.Message.GetULong">
             <summary>Retrieves a <see cref="T:System.UInt64"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt64"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.ReadLong">
-            <summary>Retrieves a <see cref="T:System.Int64"/> from the next 8 bytes, starting at the read position.</summary>
-            <returns>The converted <see cref="T:System.Int64"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
@@ -751,10 +710,6 @@
             <summary>Retrieves a <see cref="T:System.Single"/> from the message.</summary>
             <returns>The <see cref="T:System.Single"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.ReadFloat">
-            <summary>Retrieves a <see cref="T:System.Single"/> from the next 4 bytes, starting at the read position.</summary>
-            <returns>The converted <see cref="T:System.Single"/>.</returns>
-        </member>
         <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Single"/> array to add.</param>
@@ -804,10 +759,6 @@
         <member name="M:RiptideNetworking.Message.GetDouble">
             <summary>Retrieves a <see cref="T:System.Double"/> from the message.</summary>
             <returns>The <see cref="T:System.Double"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.ReadDouble">
-            <summary>Retrieves a <see cref="T:System.Double"/> from the next 8 bytes, starting at the read position.</summary>
-            <returns>The converted <see cref="T:System.Double"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
@@ -995,6 +946,12 @@
             <summary>Handles initial setup.</summary>
             <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
         </member>
+        <member name="M:RiptideNetworking.Server.#ctor(System.UInt16,System.UInt16,System.String)">
+            <summary>Handles initial setup using the built-in RUDP transport.</summary>
+            <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
+            <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+        </member>
         <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Byte)">
             <summary>Starts the server.</summary>
             <param name="port">The local port on which to start the server.</param>
@@ -1007,14 +964,14 @@
         <member name="M:RiptideNetworking.Server.Tick">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Server.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)"/>
+        <member name="M:RiptideNetworking.Server.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)"/>
         </member>
-        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)"/>
+        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.Boolean)"/>
         </member>
-        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)"/>
+        <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)"/>
         </member>
         <member name="M:RiptideNetworking.Server.DisconnectClient(System.UInt16)">
             <inheritdoc cref="M:RiptideNetworking.Transports.IServer.DisconnectClient(System.UInt16)"/>
@@ -1051,10 +1008,9 @@
             <summary>Attempts connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Boolean)">
             <summary>Sends a message to the server.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Disconnect">
@@ -1133,24 +1089,21 @@
             <param name="port">The local port on which to start the server.</param>
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.IServer.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.IServer.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <summary>Sends a message to a specific client.</summary>
             <param name="message">The message to send.</param>
             <param name="toClientId">The numeric ID of the client to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.Boolean)">
             <summary>Sends a message to all conected clients.</summary>
             <param name="message">The message to send.</param>
-            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <summary>Sends a message to all connected clients except one.</summary>
             <param name="message">The message to send.</param>
             <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.DisconnectClient(System.UInt16)">
@@ -1267,16 +1220,16 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat(System.Object)">
             <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpClient.heartbeatTimer"/>.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Handle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Send(RiptideNetworking.Message,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Send(RiptideNetworking.Message,System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Disconnect">
@@ -1446,9 +1399,6 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.isListening">
             <summary>Whether or not we are currently listening for incoming data.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.maxPacketSize">
-            <summary>The maximum amount of data that can be received at once.</summary>
-        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
@@ -1466,36 +1416,36 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Receive">
             <summary>Listens for and receives incoming packets.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.PrepareToHandle(System.Byte[],System.Int32,System.Net.IPEndPoint)">
-            <summary>Takes received data and prepares it to be handled.</summary>
-            <param name="data">The contents of the packet.</param>
-            <param name="length">The length of the contents of the packet.</param>
-            <param name="remoteEndPoint">The endpoint from which the packet was received.</param>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.PrepareToHandle(RiptideNetworking.Message,System.Int32,System.Net.IPEndPoint)">
+            <summary>Takes a received message and prepares it to be handled.</summary>
+            <param name="message">The message that was received.</param>
+            <param name="length">The length of the contents of message.</param>
+            <param name="remoteEndPoint">The endpoint from which the message was received.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
             <param name="endPoint">The endpoint from which the message was sent.</param>
-            <param name="firstByte">The first byte of the message.</param>
+            <param name="messageHeader">The header of the message.</param>
             <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
-            <summary>Handles the given reliably sent data.</summary>
-            <param name="data">The reliably sent data.</param>
-            <param name="fromEndPoint">The endpoint from which the data was received.</param>
-            <param name="headerType">The header type of the data.</param>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+            <summary>Handles the given reliably sent message.</summary>
+            <param name="message">The message that was received.</param>
+            <param name="fromEndPoint">The endpoint from which the message was received.</param>
+            <param name="messageHeader">The header of the message.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType,RiptideNetworking.Transports.RudpTransport.SendLockables)">
-            <summary>Handles the given reliably sent data.</summary>
-            <param name="data">The reliably sent data.</param>
-            <param name="fromEndPoint">The endpoint from which the data was received.</param>
-            <param name="headerType">The header type of the data.</param>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType,RiptideNetworking.Transports.RudpTransport.SendLockables)">
+            <summary>Handles the given reliably sent message.</summary>
+            <param name="message">The message that was received.</param>
+            <param name="fromEndPoint">The endpoint from which the message was received.</param>
+            <param name="messageHeader">The header of the message.</param>
             <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
-            <summary>Handles the given data.</summary>
-            <param name="data">The data to handle.</param>
-            <param name="fromEndPoint">The endpoint from which the data was received.</param>
-            <param name="headerType">The header type of the data.</param>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+            <summary>Handles the given message.</summary>
+            <param name="message">The message that was received.</param>
+            <param name="fromEndPoint">The endpoint from which the message was received.</param>
+            <param name="messageHeader">The header of the message.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Send(System.Byte[],System.Net.IPEndPoint)">
             <summary>Sends data.</summary>
@@ -1508,12 +1458,11 @@
             <param name="numBytes">The number of bytes to send from the given data.</param>
             <param name="toEndPoint">The endpoint to send the data to.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.SendReliable(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.RudpPeer,System.Byte)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.SendReliable(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.RudpPeer)">
             <summary>Reliably sends the given message.</summary>
             <param name="message">The message to send reliably.</param>
             <param name="toEndPoint">The endpoint to send the message to.</param>
             <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.SendAck(System.UInt16,System.Net.IPEndPoint)">
             <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
@@ -1607,13 +1556,12 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.wasCleared">
             <summary>Whether the pending message has been cleared or not.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,System.Byte)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <summary>Handles initial setup.</summary>
             <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that is being sent reliably.</param>
             <param name="toEndPoint">The intended destination endpoint of the message.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.RetrySend">
             <summary>Resends the message.</summary>
@@ -1679,29 +1627,28 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Heartbeat(System.Object)">
             <summary>Checks if clients have timed out. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpServer.heartbeatTimer"/>.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ShouldHandleMessageFrom(System.Net.IPEndPoint,System.Byte)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Handle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(System.Byte[],System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,RiptideNetworking.Transports.RudpTransport.RudpConnection,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,RiptideNetworking.Transports.RudpTransport.RudpConnection,System.Boolean)">
             <summary>Sends a message to a specific client.</summary>
             <param name="message">The message to send.</param>
             <param name="toClient">The client to send the message to.</param>
-            <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.Boolean)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Byte,System.Boolean)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.DisconnectClient(System.UInt16)">
@@ -1847,6 +1794,132 @@
             <summary>Gets the value associated with the specified key 2.</summary>
             <param name="key">The key 2 of the value to get.</param>
             <returns>The value associated with the specified key 2.</returns>
+        </member>
+        <member name="T:RiptideNetworking.Transports.Utils.RiptideConverter">
+            <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.boolLength">
+            <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.shortLength">
+            <summary>How many bytes a <see cref="T:System.Int16"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.ushortLength">
+            <summary>How many bytes a <see cref="T:System.UInt16"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.intLength">
+            <summary>How many bytes an <see cref="T:System.Int32"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.uintLength">
+            <summary>How many bytes an <see cref="T:System.UInt32"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.longLength">
+            <summary>How many bytes a <see cref="T:System.Int64"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.ulongLength">
+            <summary>How many bytes a <see cref="T:System.UInt64"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.floatLength">
+            <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.doubleLength">
+            <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromShort(System.Int16,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.Int16"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.Int16"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromUShort(System.UInt16,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.UInt16"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToShort(System.Byte[],System.Int32)">
+            <summary>Converts the 2 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int16"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.Int16"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToUShort(System.Byte[],System.Int32)">
+            <summary>Converts the 2 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt16"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.UInt16"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromInt(System.Int32,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.Int32"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromUInt(System.UInt32,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.UInt32"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.UInt32"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToInt(System.Byte[],System.Int32)">
+            <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int32"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.Int32"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToUInt(System.Byte[],System.Int32)">
+            <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt32"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.UInt32"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromLong(System.Int64,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.Int64"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromULong(System.UInt64,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.UInt64"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.UInt64"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToLong(System.Byte[],System.Int32)">
+            <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int64"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.Int64"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToULong(System.Byte[],System.Int32)">
+            <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt64"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.UInt64"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromFloat(System.Single,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.Single"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.Single"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToFloat(System.Byte[],System.Int32)">
+            <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Single"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.Single"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromDouble(System.Double,System.Byte[],System.Int32)">
+            <summary>Converts a given <see cref="T:System.Double"/> to bytes and writes them into the given array.</summary>
+            <param name="value">The <see cref="T:System.Double"/> to convert.</param>
+            <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position in the array at which to write the bytes.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToDouble(System.Byte[],System.Int32)">
+            <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Double"/>.</summary>
+            <param name="array">The array to read the bytes from.</param>
+            <param name="startIndex">The position in the array at which to read the bytes.</param>
+            <returns>The converted <see cref="T:System.Double"/>.</returns>
         </member>
     </members>
 </doc>

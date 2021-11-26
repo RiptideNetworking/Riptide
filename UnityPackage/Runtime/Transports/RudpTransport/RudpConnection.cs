@@ -1,4 +1,8 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
 using System;
 using System.Net;
 
@@ -130,10 +134,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.Create(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome, 25);
             message.Add(Id);
 
-            server.Send(message, this, 25);
+            server.Send(message, this);
         }
 
         /// <summary>Handles a welcome message.</summary>
@@ -153,4 +157,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         #endregion
     }
 }
-#endif

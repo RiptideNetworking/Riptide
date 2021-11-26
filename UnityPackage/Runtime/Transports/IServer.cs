@@ -1,4 +1,9 @@
-﻿using System;
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
+using System;
 
 namespace RiptideNetworking.Transports
 {
@@ -29,20 +34,17 @@ namespace RiptideNetworking.Transports
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClientId">The numeric ID of the client to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        void Send(Message message, ushort toClientId, byte maxSendAttempts, bool shouldRelease);
+        void Send(Message message, ushort toClientId, bool shouldRelease);
         /// <summary>Sends a message to all conected clients.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        void SendToAll(Message message, byte maxSendAttempts, bool shouldRelease);
+        void SendToAll(Message message, bool shouldRelease);
         /// <summary>Sends a message to all connected clients except one.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts, bool shouldRelease);
+        void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease);
         /// <summary>Kicks a specific client.</summary>
         /// <param name="clientId">The numeric ID of the client to kick.</param>
         void DisconnectClient(ushort clientId);

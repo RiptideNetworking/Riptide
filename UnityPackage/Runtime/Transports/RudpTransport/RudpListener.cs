@@ -1,4 +1,8 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
 using RiptideNetworking.Transports.Utils;
 using System;
 using System.Net;
@@ -24,8 +28,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         private Socket socket;
         /// <summary>Whether or not we are currently listening for incoming data.</summary>
         private bool isListening = false;
-        /// <summary>The maximum amount of data that can be received at once.</summary>
-        private readonly ushort maxPacketSize = 4096; // TODO: make smaller? MTU is 1280
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -72,21 +74,32 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void Receive()
         {
             EndPoint bufferEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
-            byte[] receiveBuffer = new byte[maxPacketSize];
             isListening = true;
 
             while (isListening)
             {
                 int byteCount;
+                Message message = null;
 
                 try
                 {
                     if (socket.Available == 0 && !socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
                         continue;
-                    byteCount = socket.ReceiveFrom(receiveBuffer, 0, receiveBuffer.Length, SocketFlags.None, ref bufferEndPoint);
+
+                    message = Message.Create();
+                    byteCount = socket.ReceiveFrom(message.Bytes, 0, message.Bytes.Length, SocketFlags.None, ref bufferEndPoint);
+
+                    if (byteCount < 1)
+                    {
+                        message.Release();
+                        continue;
+                    }
                 }
                 catch (SocketException ex)
                 {
+                    if (message != null)
+                        message.Release();
+
                     switch (ex.SocketErrorCode)
                     {
                         case SocketError.Interrupted:
@@ -97,70 +110,68 @@ namespace RiptideNetworking.Transports.RudpTransport
                         case SocketError.TimedOut:
                             break;
                         default:
-                            PrepareToHandle(null, 0, (IPEndPoint)bufferEndPoint);
                             break;
                     }
                     continue;
                 }
                 catch (ObjectDisposedException)
                 {
+                    if (message != null)
+                        message.Release();
+
                     return;
                 }
                 catch (NullReferenceException)
                 {
+                    if (message != null)
+                        message.Release();
+
                     return;
                 }
 
-                PrepareToHandle(receiveBuffer, byteCount, (IPEndPoint)bufferEndPoint);
+                PrepareToHandle(message, byteCount, (IPEndPoint)bufferEndPoint);
             }
         }
 
-        /// <summary>Takes received data and prepares it to be handled.</summary>
-        /// <param name="data">The contents of the packet.</param>
-        /// <param name="length">The length of the contents of the packet.</param>
-        /// <param name="remoteEndPoint">The endpoint from which the packet was received.</param>
-        private void PrepareToHandle(byte[] data, int length, IPEndPoint remoteEndPoint)
+        /// <summary>Takes a received message and prepares it to be handled.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="length">The length of the contents of message.</param>
+        /// <param name="remoteEndPoint">The endpoint from which the message was received.</param>
+        private void PrepareToHandle(Message message, int length, IPEndPoint remoteEndPoint)
         {
-            if (data == null || length < 1 || !ShouldHandleMessageFrom(remoteEndPoint, data[0]))
+            HeaderType messageHeader = message.PrepareForUse((ushort)length);
+            if (!ShouldHandleMessageFrom(remoteEndPoint, messageHeader))
                 return;
 
-            byte[] messageData = new byte[length];
-            Array.Copy(data, messageData, length);
-
-            HeaderType headerType = (HeaderType)messageData[0];
-            if (headerType >= HeaderType.reliable)
+            if (message.SendMode == MessageSendMode.reliable)
             {
-                if (messageData.Length >= 3) // Reliable messages have a 3 byte header, so don't handle anything with less than that
-                    ReliableHandle(messageData, remoteEndPoint, headerType);
+                if (message.UnreadLength >= 2) // Reliable messages have a 3 byte header (one of which we've already read out) so don't handle anything with less than that
+                    ReliableHandle(message, remoteEndPoint, messageHeader);
             }
             else
-                Handle(messageData, remoteEndPoint, headerType);
+                Handle(message, remoteEndPoint, messageHeader);
         }
 
         /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
         /// <param name="endPoint">The endpoint from which the message was sent.</param>
-        /// <param name="firstByte">The first byte of the message.</param>
+        /// <param name="messageHeader">The header of the message.</param>
         /// <returns><see langword="true"/> if the message should be handled.</returns>
-        protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte);
+        protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader);
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
-        protected abstract void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
+        /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
+        /// <param name="messageHeader">The header of the message.</param>
+        protected abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
 
-        /// <summary>Handles the given reliably sent data.</summary>
-        /// <param name="data">The reliably sent data.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
+        /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
+        /// <param name="messageHeader">The header of the message.</param>
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
-        internal void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType, SendLockables lockables)
+        internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader, SendLockables lockables)
         {
-#if BIG_ENDIAN
-            ushort sequenceId = (ushort)(data[2] | (data[1] << 8));
-#else
-            ushort sequenceId = (ushort)(data[1] | (data[2] << 8));
-#endif
+            ushort sequenceId = message.GetUShort();
 
             lock (lockables)
             {
@@ -212,14 +223,14 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
             }
 
-            Handle(data, fromEndPoint, headerType);
+            Handle(message, fromEndPoint, messageHeader);
         }
 
-        /// <summary>Handles the given data.</summary>
-        /// <param name="data">The data to handle.</param>
-        /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
-        /// <param name="headerType">The header type of the data.</param>
-        protected abstract void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType);
+        /// <summary>Handles the given message.</summary>
+        /// <param name="message">The message that was received.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
+        /// <param name="messageHeader">The header of the message.</param>
+        protected abstract void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
 
         /// <summary>Sends data.</summary>
         /// <param name="data">The data to send.</param>
@@ -263,16 +274,13 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="message">The message to send reliably.</param>
         /// <param name="toEndPoint">The endpoint to send the message to.</param>
         /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer, byte maxSendAttempts)
+        internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer)
         {
             if (socket == null)
                 return;
 
             ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
-            message.SetSequenceIdBytes(sequenceId); // Set the message's sequence ID bytes
-
-            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint, maxSendAttempts);
+            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint);
             lock (peer.PendingMessages)
             {
                 peer.PendingMessages.Add(sequenceId, pendingMessage);
@@ -286,4 +294,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         protected abstract void SendAck(ushort forSeqId, IPEndPoint toEndPoint);
     }
 }
-#endif

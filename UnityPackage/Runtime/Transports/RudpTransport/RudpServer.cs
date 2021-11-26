@@ -1,4 +1,8 @@
-﻿#if !EXCLUDE_DEFAULT_TRANSPORT
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
 using RiptideNetworking.Transports.Utils;
 using System;
 using System.Collections.Generic;
@@ -99,20 +103,20 @@ namespace RiptideNetworking.Transports.RudpTransport
 
 
         /// <inheritdoc/>
-        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, byte firstByte)
+        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
         {
             lock (clients)
             {
                 if (clients.ContainsKey(endPoint))
                 {
                     // Client is already connected
-                    if ((HeaderType)firstByte != HeaderType.connect) // It's not a connect message, so handle it
+                    if (messageHeader != HeaderType.connect) // It's not a connect message, so handle it
                         return true;
                 }
                 else if (clients.Count < MaxClientCount)
                 {
                     // Client is not yet connected and the server has capacity
-                    if ((HeaderType)firstByte == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
+                    if (messageHeader == HeaderType.connect) // It's a connect message, which doesn't need to be handled like other messages
                     {
                         ushort id = GetAvailableClientId();
                         clients.Add(id, endPoint, new RudpConnection(this, endPoint, id));
@@ -130,27 +134,25 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void Handle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
             lock (clients)
             {
                 if (!clients.TryGetValue(fromEndPoint, out RudpConnection client))
                     return;
 
-                Message message = Message.Create(headerType, data);
-
 #if DETAILED_LOGGING
-                if (headerType != HeaderType.reliable && headerType != HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Received {headerType} message from {fromEndPoint}."); 
+                if (messageHeader != HeaderType.reliable && messageHeader != HeaderType.unreliable)
+                    RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}."); 
 
                 ushort messageId = message.PeekUShort();
-                if (headerType == HeaderType.reliable)
+                if (messageHeader == HeaderType.reliable)
                     RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
-                else if (headerType == HeaderType.unreliable)
-                    RiptideLogger.Log(LogName, $"Received message (ID: {messageId}) from {fromEndPoint}.");
+                else if (messageHeader == HeaderType.unreliable)
+                    RiptideLogger.Log(LogName, $"Received unreliable message (ID: {messageId}) from {fromEndPoint}.");
 #endif
 
-                switch (headerType)
+                switch (messageHeader)
                 {
                     // User messages
                     case HeaderType.unreliable:
@@ -191,8 +193,8 @@ namespace RiptideNetworking.Transports.RudpTransport
                         HandleDisconnect(fromEndPoint);
                         break;
                     default:
-                        RiptideLogger.Log(LogName, $"Unknown message header type '{headerType}'! Discarding {data.Length} bytes received from {fromEndPoint}.");
-                        return;
+                        RiptideLogger.Log(LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {fromEndPoint}.");
+                        break;
                 }
 
                 message.Release();
@@ -200,16 +202,16 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(byte[] data, IPEndPoint fromEndPoint, HeaderType headerType)
+        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
         {
-            ReliableHandle(data, fromEndPoint, headerType, clients[fromEndPoint].SendLockables);
+            ReliableHandle(message, fromEndPoint, messageHeader, clients[fromEndPoint].SendLockables);
         }
 
         /// <inheritdoc/>
-        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
+        public void Send(Message message, ushort toClientId, bool shouldRelease = true)
         {
             if (clients.TryGetValue(toClientId, out RudpConnection toClient))
-                Send(message, toClient, maxSendAttempts, false);
+                Send(message, toClient, false);
 
             if (shouldRelease)
                 message.Release();
@@ -218,21 +220,20 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a message to a specific client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        internal void Send(Message message, RudpConnection toClient, byte maxSendAttempts = 15, bool shouldRelease = true)
+        internal void Send(Message message, RudpConnection toClient, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, toClient.RemoteEndPoint);
             else
-                SendReliable(message, toClient.RemoteEndPoint, toClient.Peer, maxSendAttempts);
+                SendReliable(message, toClient.RemoteEndPoint, toClient.Peer);
 
             if (shouldRelease)
                 message.Release();
         }
 
         /// <inheritdoc/>
-        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
+        public void SendToAll(Message message, bool shouldRelease = true)
         {
             lock (clients)
             {
@@ -244,7 +245,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 else
                 {
                     foreach (RudpConnection client in clients.Values)
-                        SendReliable(message, client.RemoteEndPoint, client.Peer, maxSendAttempts);
+                        SendReliable(message, client.RemoteEndPoint, client.Peer);
                 }
             }
 
@@ -253,7 +254,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true)
+        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
         {
             lock (clients)
             {
@@ -267,7 +268,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 {
                     foreach (RudpConnection client in clients.Values)
                         if (client.Id != exceptToClientId)
-                            SendReliable(message, client.RemoteEndPoint, client.Peer, maxSendAttempts);
+                            SendReliable(message, client.RemoteEndPoint, client.Peer);
                 }
             }
 
@@ -377,17 +378,13 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (clients.Count <= 1)
                 return; // We don't send this to the newly connected client anyways, so don't even bother creating a message if he is the only one connected
 
-            Message message = Message.Create(HeaderType.clientConnected);
+            Message message = Message.Create(HeaderType.clientConnected, 25);
             message.Add(id);
 
             lock (clients)
-            {
                 foreach (RudpConnection client in clients.Values)
-                {
                     if (!client.RemoteEndPoint.Equals(endPoint))
-                        Send(message, client, 25, false);
-                }
-            }
+                        Send(message, client, false);
 
             message.Release();
         }
@@ -396,12 +393,12 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="id">The numeric ID of the client that disconnected.</param>
         private void SendClientDisconnected(ushort id)
         {
-            Message message = Message.Create(HeaderType.clientDisconnected);
+            Message message = Message.Create(HeaderType.clientDisconnected, 25);
             message.Add(id);
 
             lock (clients)
                 foreach (RudpConnection client in clients.Values)
-                    Send(message, client, 25, false);
+                    Send(message, client, false);
 
             message.Release();
         }
@@ -442,4 +439,3 @@ namespace RiptideNetworking.Transports.RudpTransport
         #endregion
     }
 }
-#endif

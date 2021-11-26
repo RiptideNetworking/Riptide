@@ -1,4 +1,9 @@
-﻿using RiptideNetworking.Transports;
+﻿
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) 2021 Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+
+using RiptideNetworking.Transports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,12 +51,21 @@ namespace RiptideNetworking
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
         public Server(IServer server) => this.server = server;
 
+        /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
+        /// <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
+        /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") => server = new Transports.RudpTransport.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
+
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0)
         {
+            if (IsRunning)
+                Stop();
+
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             server.ClientConnected += ClientConnected;
@@ -66,7 +80,7 @@ namespace RiptideNetworking
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods())
+                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                                            .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
                                            .ToArray();
 
@@ -105,14 +119,14 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         public override void Tick() => server.Tick();
 
-        /// <inheritdoc cref="IServer.Send(Message, ushort, byte, bool)"/>
-        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.Send(message, toClientId, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.Send(Message, ushort, bool)"/>
+        public void Send(Message message, ushort toClientId, bool shouldRelease = true) => server.Send(message, toClientId, shouldRelease);
 
-        /// <inheritdoc cref="IServer.SendToAll(Message, byte, bool)"/>
-        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.SendToAll(Message, bool)"/>
+        public void SendToAll(Message message, bool shouldRelease = true) => server.SendToAll(message, shouldRelease);
 
-        /// <inheritdoc cref="IServer.SendToAll(Message, ushort, byte, bool)"/>
-        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.SendToAll(Message, ushort, bool)"/>
+        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, shouldRelease);
 
         /// <inheritdoc cref="IServer.DisconnectClient(ushort)"/>
         public void DisconnectClient(ushort clientId) => server.DisconnectClient(clientId);
@@ -120,6 +134,9 @@ namespace RiptideNetworking
         /// <summary>Stops the server.</summary>
         public void Stop()
         {
+            if (!IsRunning)
+                return;
+
             server.Shutdown();
             server.ClientConnected -= ClientConnected;
             server.MessageReceived -= OnMessageReceived;
