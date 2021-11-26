@@ -51,6 +51,12 @@ namespace RiptideNetworking
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
         public Server(IServer server) => this.server = server;
 
+        /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
+        /// <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
+        /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") => server = new Transports.RudpTransport.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
+
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>

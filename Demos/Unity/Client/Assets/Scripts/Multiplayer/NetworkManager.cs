@@ -4,7 +4,6 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using RiptideNetworking;
-using RiptideNetworking.Transports.RudpTransport;
 using System;
 using UnityEngine;
 
@@ -57,7 +56,7 @@ public class NetworkManager : MonoBehaviour
     {
         RiptideLogger.Initialize(Debug.Log, false);
 
-        Client = new Client(new RudpClient());
+        Client = new Client();
         Client.Connected += DidConnect;
         Client.ConnectionFailed += FailedToConnect;
         Client.ClientDisconnected += PlayerLeft;

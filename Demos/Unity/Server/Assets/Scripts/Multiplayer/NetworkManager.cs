@@ -4,7 +4,6 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using RiptideNetworking;
-using RiptideNetworking.Transports.RudpTransport;
 using UnityEngine;
 
 public enum ServerToClientId : ushort
@@ -63,7 +62,7 @@ public class NetworkManager : MonoBehaviour
         RiptideLogger.Initialize(Debug.Log, true);
 #endif
 
-        Server = new Server(new RudpServer());
+        Server = new Server();
         Server.ClientConnected += NewPlayerConnected;
         Server.ClientDisconnected += PlayerLeft;
 
