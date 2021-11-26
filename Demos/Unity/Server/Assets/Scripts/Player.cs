@@ -128,13 +128,13 @@ public class Player : MonoBehaviour
     }
 
     [MessageHandler((ushort)ClientToServerId.playerName)]
-    public static void PlayerName(ushort fromClientId, Message message)
+    private static void PlayerName(ushort fromClientId, Message message)
     {
         Spawn(fromClientId, message.GetString());
     }
 
     [MessageHandler((ushort)ClientToServerId.playerInput)]
-    public static void PlayerInput(ushort fromClientId, Message message)
+    private static void PlayerInput(ushort fromClientId, Message message)
     {
         Player player = List[fromClientId];
         message.GetBools(5, player.Inputs);

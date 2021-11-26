@@ -85,7 +85,7 @@ namespace RiptideNetworking
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods())
+                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
                                            .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
                                            .ToArray();
 

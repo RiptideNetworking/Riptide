@@ -58,7 +58,7 @@ namespace ConsoleServer
         }
 
         [MessageHandler((ushort)MessageId.startTest)]
-        public static void HandleStartTest(ushort fromClientId, Message message)
+        private static void HandleStartTest(ushort fromClientId, Message message)
         {
             isRoundTripTest = message.GetBool();
             testIdAmount = message.GetInt();
@@ -82,7 +82,7 @@ namespace ConsoleServer
         }
 
         [MessageHandler((ushort)MessageId.testMessage)]
-        public static void HandleTestMessage(ushort fromClientId, Message message)
+        private static void HandleTestMessage(ushort fromClientId, Message message)
         {
             int reliableTestId = message.GetInt();
 

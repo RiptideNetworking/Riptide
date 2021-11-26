@@ -43,13 +43,13 @@ public class Player : MonoBehaviour
 
     #region Messages
     [MessageHandler((ushort)ServerToClientId.spawnPlayer)]
-    public static void SpawnPlayer(Message message)
+    private static void SpawnPlayer(Message message)
     {
         Spawn(message.GetUShort(), message.GetString(), message.GetVector3());
     }
 
     [MessageHandler((ushort)ServerToClientId.playerMovement)]
-    public static void PlayerMovement(Message message)
+    private static void PlayerMovement(Message message)
     {
         ushort playerId = message.GetUShort();
         if (list.TryGetValue(playerId, out Player player))
