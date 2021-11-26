@@ -1,8 +1,8 @@
 {
     "name": "net.tomweiland.riptide-networking",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "displayName": "Riptide Networking",
-    "description": "Riptide Networking provides functionality for sending data back and forth in multiplayer games.",
+    "description": "Riptide Networking is a lightweight C# networking library primarily designed for use in multiplayer games.",
     "unity": "2019.4",
     "license": "MIT",
     "author": {
