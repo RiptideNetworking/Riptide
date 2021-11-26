@@ -82,7 +82,7 @@ namespace ConsoleClient
             Console.WriteLine();
             Console.WriteLine("Press enter to disconnect at any time.");
 
-            client.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), 25);
+            client.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest, 25).Add(isRoundTripTest).Add(testIdAmount));
         }
 
         private static void Disconnected()

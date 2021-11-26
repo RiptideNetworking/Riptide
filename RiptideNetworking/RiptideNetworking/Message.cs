@@ -55,6 +55,9 @@ namespace RiptideNetworking
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
+        /// <summary>How often to try sending the message before giving up.</summary>
+        /// <remarks>The default RUDP transport only uses this when sending messages with their <see cref="SendMode"/> set to <see cref="MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
+        public int MaxSendAttempts { get; set; }
         /// <summary>The message's data.</summary>
         public byte[] Bytes { get; private set; }
         /// <summary>The length in bytes of the data that can be read from the message.</summary>
@@ -107,18 +110,20 @@ namespace RiptideNetworking
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(MessageSendMode sendMode, ushort id)
+        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15)
         {
-            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode).Add(id);
+            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode, maxSendAttempts).Add(id);
         }
 
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(HeaderType messageHeader)
+        public static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
         {
-            return RetrieveFromPool().PrepareForUse(messageHeader);
+            return RetrieveFromPool().PrepareForUse(messageHeader, maxSendAttempts);
         }
 
         /// <summary>Gets a message instance that can be used for handling.</summary>
@@ -165,12 +170,14 @@ namespace RiptideNetworking
 
         /// <summary>Prepares a message to be used for sending.</summary>
         /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        private Message PrepareForUse(HeaderType messageHeader)
+        private Message PrepareForUse(HeaderType messageHeader, int maxSendAttempts)
         {
             writePos = 0;
             readPos = 0;
             ReadableLength = 0;
+            MaxSendAttempts = maxSendAttempts;
             SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
             Add((byte)messageHeader);
             return this;

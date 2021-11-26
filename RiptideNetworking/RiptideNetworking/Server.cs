@@ -113,14 +113,14 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         public override void Tick() => server.Tick();
 
-        /// <inheritdoc cref="IServer.Send(Message, ushort, byte, bool)"/>
-        public void Send(Message message, ushort toClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.Send(message, toClientId, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.Send(Message, ushort, bool)"/>
+        public void Send(Message message, ushort toClientId, bool shouldRelease = true) => server.Send(message, toClientId, shouldRelease);
 
-        /// <inheritdoc cref="IServer.SendToAll(Message, byte, bool)"/>
-        public void SendToAll(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.SendToAll(Message, bool)"/>
+        public void SendToAll(Message message, bool shouldRelease = true) => server.SendToAll(message, shouldRelease);
 
-        /// <inheritdoc cref="IServer.SendToAll(Message, ushort, byte, bool)"/>
-        public void SendToAll(Message message, ushort exceptToClientId, byte maxSendAttempts = 15, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IServer.SendToAll(Message, ushort, bool)"/>
+        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, shouldRelease);
 
         /// <inheritdoc cref="IServer.DisconnectClient(ushort)"/>
         public void DisconnectClient(ushort clientId) => server.DisconnectClient(clientId);

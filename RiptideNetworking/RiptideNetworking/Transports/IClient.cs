@@ -29,9 +29,8 @@ namespace RiptideNetworking.Transports
         void Connect(string hostAddress);
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="maxSendAttempts">How often to try sending <paramref name="message"/> before giving up. Only applies to messages with their <see cref="Message.SendMode"/> set to <see cref="MessageSendMode.reliable"/>.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        void Send(Message message, byte maxSendAttempts, bool shouldRelease);
+        void Send(Message message, bool shouldRelease);
         /// <summary>Disconnects from the server.</summary>
         void Disconnect();
     }

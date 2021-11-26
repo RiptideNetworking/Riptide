@@ -152,7 +152,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             /// <summary>The contents of the message.</summary>
             private readonly byte[] data;
             /// <summary>How often to try sending the message before giving up.</summary>
-            private readonly byte maxSendAttempts;
+            private readonly int maxSendAttempts;
             /// <summary>How many send attempts have been made so far.</summary>
             private byte sendAttempts;
             /// <summary>The time of the latest send attempt.</summary>
@@ -167,8 +167,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             /// <param name="sequenceId">The sequence ID of the message.</param>
             /// <param name="message">The message that is being sent reliably.</param>
             /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
-            /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint, byte maxSendAttempts)
+            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
             {
                 this.peer = peer;
                 this.sequenceId = sequenceId;
@@ -179,7 +178,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 Array.Copy(message.Bytes, 1, data, 3, message.WrittenLength - 1); // Copy the rest of the message
 
                 remoteEndPoint = toEndPoint;
-                this.maxSendAttempts = maxSendAttempts;
+                maxSendAttempts = message.MaxSendAttempts;
                 sendAttempts = 0;
 
                 retryTimer = new Timer();

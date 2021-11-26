@@ -124,8 +124,8 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         public override void Tick() => client.Tick();
 
-        /// <inheritdoc cref="IClient.Send(Message, byte, bool)"/>
-        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true) => client.Send(message, maxSendAttempts, shouldRelease);
+        /// <inheritdoc cref="IClient.Send(Message, bool)"/>
+        public void Send(Message message, bool shouldRelease = true) => client.Send(message, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()

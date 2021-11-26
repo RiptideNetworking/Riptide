@@ -70,7 +70,7 @@ namespace ConsoleServer
                     remainingTestIds.Add(i + 1);
             }
 
-            server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest).Add(isRoundTripTest).Add(testIdAmount), fromClientId, 25);
+            server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest, 25).Add(isRoundTripTest).Add(testIdAmount), fromClientId);
         }
 
         private static void SendTestMessage(ushort fromClientId, int reliableTestId)

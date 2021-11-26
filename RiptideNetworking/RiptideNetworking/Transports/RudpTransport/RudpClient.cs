@@ -209,12 +209,12 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        public void Send(Message message, byte maxSendAttempts = 15, bool shouldRelease = true)
+        public void Send(Message message, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength, remoteEndPoint);
             else
-                SendReliable(message, remoteEndPoint, peer, maxSendAttempts);
+                SendReliable(message, remoteEndPoint, peer);
 
             if (shouldRelease)
                 message.Release();
@@ -338,10 +338,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a welcome (received) message.</summary>
         private void SendWelcomeReceived()
         {
-            Message message = Message.Create(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome, 25);
             message.Add(Id);
 
-            Send(message, 25);
+            Send(message);
         }
 
         /// <summary>Handles a client connected message.</summary>

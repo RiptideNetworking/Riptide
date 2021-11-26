@@ -274,14 +274,13 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="message">The message to send reliably.</param>
         /// <param name="toEndPoint">The endpoint to send the message to.</param>
         /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer, byte maxSendAttempts)
+        internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer)
         {
             if (socket == null)
                 return;
 
             ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
-            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint, maxSendAttempts);
+            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint);
             lock (peer.PendingMessages)
             {
                 peer.PendingMessages.Add(sequenceId, pendingMessage);

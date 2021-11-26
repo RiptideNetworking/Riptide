@@ -134,10 +134,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.Create(HeaderType.welcome);
+            Message message = Message.Create(HeaderType.welcome, 25);
             message.Add(Id);
 
-            server.Send(message, this, 25);
+            server.Send(message, this);
         }
 
         /// <summary>Handles a welcome message.</summary>
