@@ -42,22 +42,32 @@ namespace RiptideNetworking.Utils
         }
 
         /// <summary>Executes all actions in the queue on the calling thread.</summary>
+        /// <remarks>This method should only be called from a single thread in the application.</remarks>
         public void ExecuteAll()
         {
             if (hasActionToExecute)
             {
-                // If there's an action in the queue
-                executionQueueCopy.Clear(); // Clear the old actions from the copied queue
+                executionQueueCopy.Clear();
                 lock (executionQueue)
                 {
-                    executionQueueCopy.AddRange(executionQueue); // Copy actions from the queue to the copied queue
-                    executionQueue.Clear(); // Clear the actions from the queue
+                    executionQueueCopy.AddRange(executionQueue);
+                    executionQueue.Clear();
                     hasActionToExecute = false;
                 }
 
                 // Execute all actions from the copied queue
                 for (int i = 0; i < executionQueueCopy.Count; i++)
                     executionQueueCopy[i]();
+            }
+        }
+
+        /// <summary>Clears all actions in the queue without executing them.</summary>
+        public void Clear()
+        {
+            lock (executionQueue)
+            {
+                executionQueue.Clear();
+                hasActionToExecute = false;
             }
         }
     }
