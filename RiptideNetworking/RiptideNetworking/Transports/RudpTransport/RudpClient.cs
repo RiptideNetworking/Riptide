@@ -232,8 +232,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             SendDisconnect();
             LocalDisconnect();
 
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
+            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
@@ -379,8 +378,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         private void OnConnected()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
+            RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
 
             receiveActionQueue.Add(() => Connected?.Invoke(this, EventArgs.Empty));
         }
@@ -388,8 +386,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
+            RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
 
             LocalDisconnect();
             receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, EventArgs.Empty));
@@ -405,8 +402,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         private void OnDisconnected()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
+            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
 
             LocalDisconnect();
             receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
@@ -416,8 +412,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} connected.");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} connected.");
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
         }
@@ -426,8 +421,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
 
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
         }

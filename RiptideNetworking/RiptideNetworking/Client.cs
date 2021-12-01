@@ -40,12 +40,6 @@ namespace RiptideNetworking
         public bool IsConnecting => client.IsConnecting;
         /// <inheritdoc cref="IConnectionInfo.IsConnected"/>
         public bool IsConnected => client.IsConnected;
-        /// <inheritdoc/>
-        public override bool ShouldOutputInfoLogs
-        {
-            get => client.ShouldOutputInfoLogs;
-            set => client.ShouldOutputInfoLogs = value;
-        }
         /// <summary>Encapsulates a method that handles a message from the server.</summary>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);

@@ -14,8 +14,6 @@ namespace RiptideNetworking.Transports.RudpTransport
     /// <summary>Provides base sending &#38; receiving functionality for <see cref="RudpServer"/> and <see cref="RudpClient"/>.</summary>
     public abstract class RudpListener
     {
-        /// <inheritdoc cref="ICommon.ShouldOutputInfoLogs"/>
-        public bool ShouldOutputInfoLogs { get; set; } = true;
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
 

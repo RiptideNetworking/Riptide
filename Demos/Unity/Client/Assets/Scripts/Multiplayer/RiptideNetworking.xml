@@ -43,9 +43,6 @@
         <member name="P:RiptideNetworking.Client.IsConnected">
             <inheritdoc cref="P:RiptideNetworking.Transports.IConnectionInfo.IsConnected"/>
         </member>
-        <member name="P:RiptideNetworking.Client.ShouldOutputInfoLogs">
-            <inheritdoc/>
-        </member>
         <member name="T:RiptideNetworking.Client.MessageHandler">
             <summary>Encapsulates a method that handles a message from the server.</summary>
             <param name="message">The message that was received.</param>
@@ -99,9 +96,6 @@
         </member>
         <member name="T:RiptideNetworking.Common">
             <summary>Contains shared functionality for <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/>.</summary>
-        </member>
-        <member name="P:RiptideNetworking.Common.ShouldOutputInfoLogs">
-            <inheritdoc cref="P:RiptideNetworking.Transports.ICommon.ShouldOutputInfoLogs"/>
         </member>
         <member name="M:RiptideNetworking.Common.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <summary>Searches the given assembly for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
@@ -218,6 +212,9 @@
         <member name="T:RiptideNetworking.Message">
             <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
+        <member name="F:RiptideNetworking.Message.MaxMessageSize">
+            <summary>The maximum amount of bytes that a message can contain.</summary>
+        </member>
         <member name="P:RiptideNetworking.Message.InstancesPerSocket">
             <summary>How many messages to add to the pool for each <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> instance that is started.</summary>
             <remarks>Changes will not affect <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/> instances which are already running until they are restarted.</remarks>
@@ -253,7 +250,7 @@
         <member name="F:RiptideNetworking.Message.readPos">
             <summary>The position in the byte array that the next bytes will be read from.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.#ctor(System.UInt16)">
+        <member name="M:RiptideNetworking.Message.#ctor(System.Int32)">
             <summary>Initializes a reusable Message instance.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
@@ -892,9 +889,6 @@
         <member name="P:RiptideNetworking.Server.ClientCount">
             <inheritdoc cref="P:RiptideNetworking.Transports.IServer.ClientCount"/>
         </member>
-        <member name="P:RiptideNetworking.Server.ShouldOutputInfoLogs">
-            <inheritdoc/>
-        </member>
         <member name="T:RiptideNetworking.Server.MessageHandler">
             <summary>Encapsulates a method that handles a message from a certain client.</summary>
             <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
@@ -982,9 +976,6 @@
         </member>
         <member name="T:RiptideNetworking.Transports.ICommon">
             <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
-        </member>
-        <member name="P:RiptideNetworking.Transports.ICommon.ShouldOutputInfoLogs">
-            <summary>Whether or not to output informational log messages. Error-related log messages ignore this setting.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.ICommon.Tick">
             <summary>Initiates handling of currently queued messages.</summary>
@@ -1348,9 +1339,6 @@
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpListener">
             <summary>Provides base sending &#38; receiving functionality for <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/> and <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpClient"/>.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldOutputInfoLogs">
-            <inheritdoc cref="P:RiptideNetworking.Transports.ICommon.ShouldOutputInfoLogs"/>
-        </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.LogName">
             <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</summary>
         </member>
@@ -1496,6 +1484,9 @@
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage">
             <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
         </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.pool">
+            <summary>A pool of reusable <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instances.</summary>
+        </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.peer">
             <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</summary>
         </member>
@@ -1507,6 +1498,9 @@
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.data">
             <summary>The contents of the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.writtenLength">
+            <summary>The length in bytes of the data that has been written to the message.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.maxSendAttempts">
             <summary>How often to try sending the message before giving up.</summary>
@@ -1523,12 +1517,22 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.wasCleared">
             <summary>Whether the pending message has been cleared or not.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor">
             <summary>Handles initial setup.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.CreateAndSend(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance, initializes it and then sends it.</summary>
             <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that is being sent reliably.</param>
             <param name="toEndPoint">The intended destination endpoint of the message.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.RetrieveFromPool">
+            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
+            <returns>A <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Release">
+            <summary>Returns the <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance to the internal pool so it can be reused.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.RetrySend">
             <summary>Resends the message.</summary>
@@ -1680,6 +1684,10 @@
         </member>
         <member name="M:RiptideNetworking.Utils.ActionQueue.ExecuteAll">
             <summary>Executes all actions in the queue on the calling thread.</summary>
+            <remarks>This method should only be called from a single thread in the application.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Utils.ActionQueue.Clear">
+            <summary>Clears all actions in the queue without executing them.</summary>
         </member>
         <member name="T:RiptideNetworking.Utils.DoubleKeyDictionary`3">
             <summary>Represents a collection of two keys for each value.</summary>

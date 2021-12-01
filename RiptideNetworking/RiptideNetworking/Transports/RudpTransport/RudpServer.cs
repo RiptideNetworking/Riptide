@@ -123,8 +123,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 else
                 {
                     // Server is full
-                    if (ShouldOutputInfoLogs)
-                        RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {endPoint}.");
+                    RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {endPoint}.");
                 }
                 
                 return false;
@@ -280,8 +279,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (clients.TryGetValue(clientId, out RudpConnection client))
             {
                 SendDisconnect(client.Id);
-                if (ShouldOutputInfoLogs)
-                    RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
+                RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
 
                 LocalDisconnect(client);
                 availableClientIds.Add(client.Id);
@@ -314,8 +312,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             heartbeatTimer.Dispose();
             StopListening();
 
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, "Server stopped.");
+            RiptideLogger.Log(LogType.info, LogName, "Server stopped.");
         }
 
         /// <summary>Initializes available client IDs.</summary>
@@ -408,11 +405,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
+            RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
-
             SendClientConnected(clientEndPoint, e.Client.Id);
         }
 
@@ -427,11 +422,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
 
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
-
             SendClientDisconnected(e.Id);
         }
         #endregion

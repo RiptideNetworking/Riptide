@@ -262,7 +262,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (sendAttempts >= maxSendAttempts)
                 {
                     // Send attempts exceeds max send attempts, so give up
-                    if (peer.listener.ShouldOutputInfoLogs)
+                    if (RiptideLogger.IsWarningLoggingEnabled)
                     {
                         HeaderType headerType = (HeaderType)data[0];
                         if (headerType == HeaderType.reliable)
@@ -272,7 +272,6 @@ namespace RiptideNetworking.Transports.RudpTransport
 #else
                             ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
-
                             RiptideLogger.Log(LogType.warning, peer.listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
                         }
                         else

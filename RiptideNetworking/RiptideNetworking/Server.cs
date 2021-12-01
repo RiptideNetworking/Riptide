@@ -32,12 +32,6 @@ namespace RiptideNetworking
         public ushort MaxClientCount => server.MaxClientCount;
         /// <inheritdoc cref="IServer.ClientCount"/>
         public int ClientCount => server.ClientCount;
-        /// <inheritdoc/>
-        public override bool ShouldOutputInfoLogs
-        {
-            get => server.ShouldOutputInfoLogs;
-            set => server.ShouldOutputInfoLogs = value;
-        }
         /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>

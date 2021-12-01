@@ -25,13 +25,13 @@ namespace RiptideNetworking.Utils
     public class RiptideLogger
     {
         /// <summary>Whether or not <see cref="LogType.debug"/> messages will be logged.</summary>
-        public bool IsDebugLoggingEnabled => logMethods.ContainsKey(LogType.debug);
+        public static bool IsDebugLoggingEnabled => logMethods.ContainsKey(LogType.debug);
         /// <summary>Whether or not <see cref="LogType.info"/> messages will be logged.</summary>
-        public bool IsInfoLoggingEnabled => logMethods.ContainsKey(LogType.info);
+        public static bool IsInfoLoggingEnabled => logMethods.ContainsKey(LogType.info);
         /// <summary>Whether or not <see cref="LogType.warning"/> messages will be logged.</summary>
-        public bool IsWarningLoggingEnabled => logMethods.ContainsKey(LogType.warning);
+        public static bool IsWarningLoggingEnabled => logMethods.ContainsKey(LogType.warning);
         /// <summary>Whether or not <see cref="LogType.error"/> messages will be logged.</summary>
-        public bool IsErrorLoggingEnabled => logMethods.ContainsKey(LogType.error);
+        public static bool IsErrorLoggingEnabled => logMethods.ContainsKey(LogType.error);
         /// <summary>Encapsulates a method used to log messages.</summary>
         /// <param name="log">The message to log.</param>
         public delegate void LogMethod(string log);
