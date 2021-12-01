@@ -54,7 +54,7 @@ public class NetworkManager : MonoBehaviour
 
     private void Start()
     {
-        RiptideLogger.Initialize(Debug.Log, false);
+        RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 
         Client = new Client();
         Client.Connected += DidConnect;

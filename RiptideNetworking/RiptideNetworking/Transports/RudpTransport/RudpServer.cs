@@ -77,9 +77,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             StartListening(port);
 
             heartbeatTimer = new Timer(Heartbeat, null, 0, ClientHeartbeatInterval);
-
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Started on port {port}.");
+            RiptideLogger.Log(LogType.info, LogName, $"Started on port {port}.");
         }
 
 
@@ -126,7 +124,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 {
                     // Server is full
                     if (ShouldOutputInfoLogs)
-                        RiptideLogger.Log(LogName, $"Server is full! Rejecting connection from {endPoint}.");
+                        RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {endPoint}.");
                 }
                 
                 return false;
@@ -193,7 +191,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                         HandleDisconnect(fromEndPoint);
                         break;
                     default:
-                        RiptideLogger.Log(LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {fromEndPoint}.");
+                        RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {fromEndPoint}.");
                         break;
                 }
 
@@ -283,13 +281,13 @@ namespace RiptideNetworking.Transports.RudpTransport
             {
                 SendDisconnect(client.Id);
                 if (ShouldOutputInfoLogs)
-                    RiptideLogger.Log(LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
+                    RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
 
                 LocalDisconnect(client);
                 availableClientIds.Add(client.Id);
             }
             else
-                RiptideLogger.Log(LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected!");
+                RiptideLogger.Log(LogType.warning, LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected!");
         }
 
         private void LocalDisconnect(RudpConnection client)
@@ -317,7 +315,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             StopListening();
 
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Server stopped.");
+                RiptideLogger.Log(LogType.info, LogName, "Server stopped.");
         }
 
         /// <summary>Initializes available client IDs.</summary>
@@ -340,7 +338,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
             else
             {
-                RiptideLogger.Log(LogName, "No available client IDs, assigned 0!");
+                RiptideLogger.Log(LogType.error, LogName, "No available client IDs, assigned 0!");
                 return 0;
             }
         }
@@ -411,7 +409,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
+                RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
 
@@ -430,7 +428,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
             if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
+                RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
 
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
 

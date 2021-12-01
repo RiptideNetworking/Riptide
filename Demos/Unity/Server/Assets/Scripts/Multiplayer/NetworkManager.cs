@@ -54,7 +54,7 @@ public class NetworkManager : MonoBehaviour
         Application.targetFrameRate = 30;
 
 #if UNITY_EDITOR
-        RiptideLogger.Initialize(Debug.Log, false);
+        RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 #else
         Console.Title = "Server";
         Console.Clear();

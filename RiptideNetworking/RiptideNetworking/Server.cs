@@ -93,7 +93,7 @@ namespace RiptideNetworking
 
                 if (!methods[i].IsStatic)
                 {
-                    RiptideLogger.Log("ERROR", $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+                    RiptideLogger.Log(LogType.error, $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
                     break;
                 }
 
@@ -102,7 +102,7 @@ namespace RiptideNetworking
                 {
                     // It's a message handler for Server instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
-                        RiptideLogger.Log("ERROR", $"Message handler method (type: server) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
+                        RiptideLogger.Log(LogType.error, $"Message handler method (type: server) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
                 }
@@ -111,7 +111,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Server instances, but it might be one for Client instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log("ERROR", $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                        RiptideLogger.Log(LogType.error, $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
         }
@@ -153,7 +153,7 @@ namespace RiptideNetworking
             if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
                 messageHandler(e.FromClientId, e.Message);
             else
-                RiptideLogger.Log("ERROR", $"No handler method (type: server) found for message ID {e.MessageId}!");
+                RiptideLogger.Log(LogType.warning, $"No handler method (type: server) found for message ID {e.MessageId}!");
         }
     }
 }

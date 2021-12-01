@@ -149,7 +149,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             ushort id = message.GetUShort();
             if (Id != id)
-                RiptideLogger.Log(server.LogName, $"Client has assumed ID {id} instead of {Id}!");
+                RiptideLogger.Log(LogType.error, server.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
             connectionState = ConnectionState.connected;
             server.OnClientConnected(RemoteEndPoint, new ServerClientConnectedEventArgs(this));

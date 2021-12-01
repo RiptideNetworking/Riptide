@@ -30,7 +30,7 @@ namespace RiptideNetworking.Transports.Utils
         {
             if (action == null)
             {
-                RiptideLogger.Log(LogName, "No action to execute!");
+                RiptideLogger.Log(LogType.error, LogName, "No action to execute!");
                 return;
             }
 

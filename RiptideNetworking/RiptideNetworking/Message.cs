@@ -217,7 +217,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < 1)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
                 return 0;
             }
             
@@ -302,7 +302,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
                 amount = UnreadLength;
             }
 
@@ -330,7 +330,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.boolLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
                 return false;
             }
             
@@ -411,7 +411,7 @@ namespace RiptideNetworking
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
                 byteAmount = UnreadLength;
             }
 
@@ -429,7 +429,7 @@ namespace RiptideNetworking
 
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
 
             ReadBools(byteAmount, array, startIndex);
         }
@@ -489,7 +489,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.shortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
                 return 0;
             }
 
@@ -504,7 +504,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
                 return 0;
             }
 
@@ -518,7 +518,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
                 return 0;
             }
 
@@ -675,7 +675,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.shortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.shortLength;
             }
 
@@ -694,7 +694,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.shortLength;
             }
 
@@ -739,7 +739,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.intLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
                 return 0;
             }
 
@@ -754,7 +754,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.uintLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
                 return 0;
             }
 
@@ -913,7 +913,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.intLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.intLength;
             }
 
@@ -932,7 +932,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.uintLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.uintLength;
             }
 
@@ -977,7 +977,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.longLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
                 return 0;
             }
 
@@ -992,7 +992,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ulongLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
                 return 0;
             }
 
@@ -1151,7 +1151,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.longLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.longLength;
             }
 
@@ -1170,7 +1170,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.ulongLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.ulongLength;
             }
 
@@ -1202,7 +1202,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.floatLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
                 return 0;
             }
 
@@ -1290,7 +1290,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.floatLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.floatLength;
             }
 
@@ -1322,7 +1322,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.doubleLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
                 return 0;
             }
 
@@ -1410,7 +1410,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.doubleLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.doubleLength;
             }
 
@@ -1445,7 +1445,7 @@ namespace RiptideNetworking
             ushort length = GetUShort(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadLength < length)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
                 length = (ushort)UnreadLength;
             }
             
