@@ -5,6 +5,7 @@
 
 using RiptideNetworking.Utils;
 using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 
@@ -72,8 +73,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         private DateTime lastHeartbeat;
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
-        /// <summary>The currently pending ping.</summary>
-        private (byte id, DateTime sendTime) pendingPing;
+        /// <summary>The ID of the currently pending ping.</summary>
+        private byte pendingPingId;
+        /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
+        private Stopwatch pendingPingStopwatch;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -85,6 +88,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             TimeoutTime = timeoutTime;
             _heartbeatInterval = heartbeatInterval;
             this.maxConnectionAttempts = maxConnectionAttempts;
+            pendingPingStopwatch = new Stopwatch();
         }
 
         /// <inheritdoc/>
@@ -298,10 +302,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a heartbeat message.</summary>
         private void SendHeartbeat()
         {
-            pendingPing = (lastPingId++, DateTime.UtcNow);
+            pendingPingId = lastPingId++;
+            pendingPingStopwatch.Restart();
 
             Message message = Message.Create(HeaderType.heartbeat);
-            message.Add(pendingPing.id);
+            message.Add(pendingPingId);
             message.Add(peer.RTT);
 
             Send(message);
@@ -313,8 +318,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             byte pingId = message.GetByte();
 
-            if (pendingPing.id == pingId)
-                peer.RTT = (short)Math.Max(1f, (DateTime.UtcNow - pendingPing.sendTime).TotalMilliseconds);
+            if (pendingPingId == pingId)
+                peer.RTT = (short)Math.Max(1f, pendingPingStopwatch.ElapsedMilliseconds);
 
             lastHeartbeat = DateTime.UtcNow;
         }

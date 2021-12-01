@@ -1167,8 +1167,11 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.lastPingId">
             <summary>ID of the last ping that was sent.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.pendingPing">
-            <summary>The currently pending ping.</summary>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.pendingPingId">
+            <summary>The ID of the currently pending ping.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.pendingPingStopwatch">
+            <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.#ctor(System.UInt16,System.UInt16,System.Byte,System.String)">
             <summary>Handles initial setup.</summary>
