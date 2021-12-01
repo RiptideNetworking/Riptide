@@ -143,16 +143,21 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
         internal class PendingMessage
         {
+            /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
+            private static readonly List<PendingMessage> pool = new List<PendingMessage>();
+
             /// <summary>The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</summary>
-            private readonly RudpPeer peer;
+            private RudpPeer peer;
             /// <summary>The intended destination endpoint of the message.</summary>
-            private readonly IPEndPoint remoteEndPoint;
+            private IPEndPoint remoteEndPoint;
             /// <summary>The sequence ID of the message.</summary>
-            private readonly ushort sequenceId;
+            private ushort sequenceId;
             /// <summary>The contents of the message.</summary>
-            private readonly byte[] data;
+            private byte[] data;
+            /// <summary>The length in bytes of the data that has been written to the message.</summary>
+            private int writtenLength;
             /// <summary>How often to try sending the message before giving up.</summary>
-            private readonly int maxSendAttempts;
+            private int maxSendAttempts;
             /// <summary>How many send attempts have been made so far.</summary>
             private byte sendAttempts;
             /// <summary>The time of the latest send attempt.</summary>
@@ -163,28 +168,75 @@ namespace RiptideNetworking.Transports.RudpTransport
             private bool wasCleared;
 
             /// <summary>Handles initial setup.</summary>
-            /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
-            /// <param name="sequenceId">The sequence ID of the message.</param>
-            /// <param name="message">The message that is being sent reliably.</param>
-            /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
-            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
+            internal PendingMessage()
             {
-                this.peer = peer;
-                this.sequenceId = sequenceId;
-
-                data = new byte[message.WrittenLength + RiptideConverter.ushortLength];
-                data[0] = message.Bytes[0]; // Copy message header
-                RiptideConverter.FromUShort(sequenceId, data, 1); // Insert sequence ID
-                Array.Copy(message.Bytes, 1, data, 3, message.WrittenLength - 1); // Copy the rest of the message
-
-                remoteEndPoint = toEndPoint;
-                maxSendAttempts = message.MaxSendAttempts;
-                sendAttempts = 0;
+                data = new byte[Message.MaxMessageSize]; // TODO: this doesn't account for the 2 byte sequence ID that we insert later (in the CreateAndSend method). Need to find a clean way to address that
 
                 retryTimer = new Timer();
                 retryTimer.Elapsed += (s, e) => RetrySend();
                 retryTimer.AutoReset = false;
             }
+
+            #region Pooling
+            /// <summary>Retrieves a <see cref="PendingMessage"/> instance, initializes it and then sends it.</summary>
+            /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
+            /// <param name="sequenceId">The sequence ID of the message.</param>
+            /// <param name="message">The message that is being sent reliably.</param>
+            /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
+            internal static void CreateAndSend(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
+            {
+                PendingMessage pendingMessage = RetrieveFromPool();
+                pendingMessage.peer = peer;
+                pendingMessage.sequenceId = sequenceId;
+
+                pendingMessage.data[0] = message.Bytes[0]; // Copy message header
+                RiptideConverter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
+                Array.Copy(message.Bytes, 1, pendingMessage.data, 3, message.WrittenLength - 1); // Copy the rest of the message
+                pendingMessage.writtenLength = message.WrittenLength + RiptideConverter.ushortLength;
+
+                pendingMessage.remoteEndPoint = toEndPoint;
+                pendingMessage.maxSendAttempts = message.MaxSendAttempts;
+                pendingMessage.sendAttempts = 0;
+                pendingMessage.wasCleared = false;
+
+                lock (peer.PendingMessages)
+                {
+                    peer.PendingMessages.Add(sequenceId, pendingMessage);
+                    pendingMessage.TrySend();
+                }
+            }
+
+            /// <summary>Retrieves a <see cref="PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
+            /// <returns>A <see cref="PendingMessage"/> instance.</returns>
+            private static PendingMessage RetrieveFromPool()
+            {
+                lock (pool)
+                {
+                    PendingMessage message;
+                    if (pool.Count > 0)
+                    {
+                        message = pool[0];
+                        pool.RemoveAt(0);
+                    }
+                    else
+                        message = new PendingMessage();
+
+                    return message;
+                }
+            }
+
+            /// <summary>Returns the <see cref="PendingMessage"/> instance to the internal pool so it can be reused.</summary>
+            private void Release()
+            {
+                lock (pool)
+                {
+                    if (!pool.Contains(this))
+                        pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+
+                    // TODO: consider doing something to decrease pool capacity if there are far more available instance than are needed
+                }
+            }
+            #endregion
 
             /// <summary>Resends the message.</summary>
             internal void RetrySend()
@@ -231,7 +283,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     return;
                 }
 
-                peer.listener.Send(data, remoteEndPoint);
+                peer.listener.Send(data, writtenLength, remoteEndPoint);
 
                 lastSendTime = DateTime.UtcNow;
                 sendAttempts++;
@@ -246,16 +298,13 @@ namespace RiptideNetworking.Transports.RudpTransport
             {
                 lock (this)
                 {
-                    if (!wasCleared)
-                    {
-                        if (shouldRemoveFromDictionary)
-                            lock (peer.PendingMessages)
-                                peer.PendingMessages.Remove(sequenceId);
+                    if (shouldRemoveFromDictionary)
+                        lock (peer.PendingMessages)
+                            peer.PendingMessages.Remove(sequenceId);
 
-                        retryTimer.Stop();
-                        retryTimer.Dispose();
-                        wasCleared = true;
-                    }
+                    retryTimer.Stop();
+                    wasCleared = true;
+                    Release();
                 }
             }
         }

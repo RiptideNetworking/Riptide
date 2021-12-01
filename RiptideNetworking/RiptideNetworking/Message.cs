@@ -47,6 +47,9 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        /// <summary>The maximum amount of bytes that a message can contain.</summary>
+        public const int MaxMessageSize = 1280;
+
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
         public static byte InstancesPerSocket { get; set; } = 4;
@@ -76,7 +79,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable Message instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        internal Message(ushort maxSize = 1280)
+        internal Message(int maxSize = MaxMessageSize)
         {
             Bytes = new byte[maxSize];
         }
@@ -151,9 +154,7 @@ namespace RiptideNetworking
                 return message;
             }
         }
-        #endregion
-        
-        #region Functions
+
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
@@ -167,7 +168,9 @@ namespace RiptideNetworking
                 }
             }
         }
+        #endregion
 
+        #region Functions
         /// <summary>Prepares a message to be used for sending.</summary>
         /// <param name="messageHeader">The header of the message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
