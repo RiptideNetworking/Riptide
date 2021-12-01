@@ -7,7 +7,7 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-namespace RiptideNetworking.Transports.Utils
+namespace RiptideNetworking.Utils
 {
     /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
     public class RiptideConverter

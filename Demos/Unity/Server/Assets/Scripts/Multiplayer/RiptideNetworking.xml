@@ -65,7 +65,7 @@
             <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
             <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte)">
             <summary>Attempts connect to the given host address.</summary>
@@ -865,89 +865,6 @@
             <param name="messageId">The ID of the message type that this method is meant to handle.</param>
             <param name="groupId">The ID of the group of message handlers this method belongs to.</param>
         </member>
-        <member name="T:RiptideNetworking.LogType">
-            <summary>Defines log message types.</summary>
-        </member>
-        <member name="F:RiptideNetworking.LogType.debug">
-            <summary>Logs that are used for investigation during development.</summary>
-        </member>
-        <member name="F:RiptideNetworking.LogType.info">
-            <summary>Logs that provide general information about application flow.</summary>
-        </member>
-        <member name="F:RiptideNetworking.LogType.warning">
-            <summary>Logs that highlight abnormal or unexpected events in the application flow.</summary>
-        </member>
-        <member name="F:RiptideNetworking.LogType.error">
-            <summary>Logs that highlight problematic events in the application flow which will cause unexpected behavior if not planned for.</summary>
-        </member>
-        <member name="T:RiptideNetworking.RiptideLogger">
-            <summary>Provides functionality for logging messages.</summary>
-        </member>
-        <member name="P:RiptideNetworking.RiptideLogger.IsDebugLoggingEnabled">
-            <summary>Whether or not <see cref="F:RiptideNetworking.LogType.debug"/> messages will be logged.</summary>
-        </member>
-        <member name="P:RiptideNetworking.RiptideLogger.IsInfoLoggingEnabled">
-            <summary>Whether or not <see cref="F:RiptideNetworking.LogType.info"/> messages will be logged.</summary>
-        </member>
-        <member name="P:RiptideNetworking.RiptideLogger.IsWarningLoggingEnabled">
-            <summary>Whether or not <see cref="F:RiptideNetworking.LogType.warning"/> messages will be logged.</summary>
-        </member>
-        <member name="P:RiptideNetworking.RiptideLogger.IsErrorLoggingEnabled">
-            <summary>Whether or not <see cref="F:RiptideNetworking.LogType.error"/> messages will be logged.</summary>
-        </member>
-        <member name="T:RiptideNetworking.RiptideLogger.LogMethod">
-            <summary>Encapsulates a method used to log messages.</summary>
-            <param name="log">The message to log.</param>
-        </member>
-        <member name="F:RiptideNetworking.RiptideLogger.logMethods">
-            <summary>Log methods, accessible by their <see cref="T:RiptideNetworking.LogType"/></summary>
-        </member>
-        <member name="F:RiptideNetworking.RiptideLogger.includeTimestamps">
-            <summary>Whether or not to include timestamps when logging messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.RiptideLogger.timestampFormat">
-            <summary>The format to use for timestamps.</summary>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.Initialize(RiptideNetworking.RiptideLogger.LogMethod,System.Boolean,System.String)">
-            <summary>Initializes <see cref="T:RiptideNetworking.RiptideLogger"/> with all log types enabled.</summary>
-            <param name="logMethod">The method to use when logging all types of messages.</param>
-            <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
-            <param name="timestampFormat">The format to use for timestamps.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.Initialize(RiptideNetworking.RiptideLogger.LogMethod,RiptideNetworking.RiptideLogger.LogMethod,RiptideNetworking.RiptideLogger.LogMethod,RiptideNetworking.RiptideLogger.LogMethod,System.Boolean,System.String)">
-            <summary>Initializes <see cref="T:RiptideNetworking.RiptideLogger"/> with the supplied log methods.</summary>
-            <param name="debugMethod">The method to use when logging debug messages. Set to <see langword="null"/> to disable debug logs.</param>
-            <param name="infoMethod">The method to use when logging info messages. Set to <see langword="null"/> to disable info logs.</param>
-            <param name="warningMethod">The method to use when logging warning messages. Set to <see langword="null"/> to disable warning logs.</param>
-            <param name="errorMethod">The method to use when logging error messages. Set to <see langword="null"/> to disable error logs.</param>
-            <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
-            <param name="timestampFormat">The format to use for timestamps.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.EnableLoggingFor(RiptideNetworking.LogType,RiptideNetworking.RiptideLogger.LogMethod)">
-            <summary>Enables logging for messages of the given <see cref="T:RiptideNetworking.LogType"/>.</summary>
-            <param name="logType">The type of message to enable logging for.</param>
-            <param name="logMethod">The method to use when logging this type of message.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.DisableLoggingFor(RiptideNetworking.LogType)">
-            <summary>Disables logging for messages of the given <see cref="T:RiptideNetworking.LogType"/>.</summary>
-            <param name="logType">The type of message to enable logging for.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.Log(RiptideNetworking.LogType,System.String)">
-            <summary>Logs a message.</summary>
-            <param name="logType">The type of log message that is being logged.</param>
-            <param name="message">The message to log.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.Log(RiptideNetworking.LogType,System.String,System.String)">
-            <summary>Logs a message.</summary>
-            <param name="logType">The type of log message that is being logged.</param>
-            <param name="logName">Who is logging this message.</param>
-            <param name="message">The message to log.</param>
-        </member>
-        <member name="M:RiptideNetworking.RiptideLogger.GetTimestamp(System.DateTime)">
-            <summary>Converts a <see cref="T:System.DateTime"/> object to a formatted timestamp string.</summary>
-            <param name="time">The time to format.</param>
-            <returns>The formatted timestamp.</returns>
-        </member>
         <member name="T:RiptideNetworking.Server">
             <summary>A server that can accept connections from <see cref="T:RiptideNetworking.Client"/>s.</summary>
         </member>
@@ -997,7 +914,7 @@
             <summary>Handles initial setup using the built-in RUDP transport.</summary>
             <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
             <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Byte)">
             <summary>Starts the server.</summary>
@@ -1258,7 +1175,7 @@
             <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
             <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Connect(System.String)">
             <inheritdoc/>
@@ -1432,10 +1349,10 @@
             <inheritdoc cref="P:RiptideNetworking.Transports.ICommon.ShouldOutputInfoLogs"/>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.LogName">
-            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.receiveActionQueue">
-            <summary>The <see cref="T:RiptideNetworking.Transports.Utils.ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+            <summary>The <see cref="T:RiptideNetworking.Utils.ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
@@ -1448,7 +1365,7 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Tick">
             <inheritdoc cref="M:RiptideNetworking.Transports.ICommon.Tick"/>
@@ -1666,7 +1583,7 @@
             <summary>Handles initial setup.</summary>
             <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
             <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Start(System.UInt16,System.UInt16)">
             <inheritdoc/>
@@ -1744,229 +1661,312 @@
             <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpServer.ClientDisconnected"/> event.</summary>
             <param name="e">The event args to invoke the event with.</param>
         </member>
-        <member name="T:RiptideNetworking.Transports.Utils.ActionQueue">
+        <member name="T:RiptideNetworking.Utils.ActionQueue">
             <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.ActionQueue.LogName">
-            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</summary>
+        <member name="F:RiptideNetworking.Utils.ActionQueue.LogName">
+            <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.ActionQueue.#ctor(System.String)">
+        <member name="M:RiptideNetworking.Utils.ActionQueue.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
-            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.RiptideLogger"/>.</param>
+            <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.ActionQueue.Add(System.Action)">
+        <member name="M:RiptideNetworking.Utils.ActionQueue.Add(System.Action)">
             <summary>Adds an action to the queue.</summary>
             <param name="action">The action to be added to the queue.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.ActionQueue.ExecuteAll">
+        <member name="M:RiptideNetworking.Utils.ActionQueue.ExecuteAll">
             <summary>Executes all actions in the queue on the calling thread.</summary>
         </member>
-        <member name="T:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3">
+        <member name="T:RiptideNetworking.Utils.DoubleKeyDictionary`3">
             <summary>Represents a collection of two keys for each value.</summary>
             <typeparam name="TKey1">Key type 1.</typeparam>
             <typeparam name="TKey2">Key type 2.</typeparam>
             <typeparam name="TValue">Value type.</typeparam>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.key1Dictionary">
+        <member name="F:RiptideNetworking.Utils.DoubleKeyDictionary`3.key1Dictionary">
             <summary>A dictionary mapping key 1s to values.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.key2Dictionary">
+        <member name="F:RiptideNetworking.Utils.DoubleKeyDictionary`3.key2Dictionary">
             <summary>A dictionary mapping key 2s to values.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.FirstKeys">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.FirstKeys">
             <summary>Gets a collection containing the first set of keys in the dictionary.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.SecondKeys">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.SecondKeys">
             <summary>Gets a collection containing the second set of keys in the dictionary.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Values">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.Values">
             <summary>Gets a collection containing the values in the dictionary.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Count">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.Count">
             <summary>Gets the number of key1/key2/value sets in the dictionary.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.#ctor">
-            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3"/> class that is empty and has the default initial capacity.</summary>
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.#ctor">
+            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.Utils.DoubleKeyDictionary`3"/> class that is empty and has the default initial capacity.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.#ctor(System.Int32)">
-            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3"/> class that is empty and has the specefied initial capacity.</summary>
-            <param name="capacity">The initial number of elements that the <see cref="T:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3"/> can contain.</param>
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.#ctor(System.Int32)">
+            <summary>Initializes a new instance of the <see cref="T:RiptideNetworking.Utils.DoubleKeyDictionary`3"/> class that is empty and has the specefied initial capacity.</summary>
+            <param name="capacity">The initial number of elements that the <see cref="T:RiptideNetworking.Utils.DoubleKeyDictionary`3"/> can contain.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.GetEnumerator">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.GetEnumerator">
             <summary>Returns an enumerator that iterates through the dictionary.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Add(`0,`1,`2)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.Add(`0,`1,`2)">
             <summary>Adds the specified keys and value to the dictionary.</summary>
             <param name="key1">The key 1 of the element to add.</param>
             <param name="key2">The key 2 of the element to add.</param>
             <param name="value">The value of the element to add.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.TryGetValue(`0,`2@)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.TryGetValue(`0,`2@)">
             <summary>Gets the value associated with the key 1.</summary>
             <param name="key">The key of the value to get.</param>
             <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
             <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.TryGetValue(`1,`2@)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.TryGetValue(`1,`2@)">
             <summary>Gets the value associated with the key 2.</summary>
             <param name="key">The key of the value to get.</param>
             <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
             <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.ContainsKey(`0)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.ContainsKey(`0)">
             <summary>Determines whether the dictionary contains the specified key 1.</summary>
             <param name="key">The key to locate in the dictionary.</param>
             <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.ContainsKey(`1)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.ContainsKey(`1)">
             <summary>Determines whether the dictionary contains the specified key 2.</summary>
             <param name="key">The key to locate in the dictionary.</param>
             <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Remove(`0,`1)">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.Remove(`0,`1)">
             <summary>Removes the value with the specified keys from the dictionary</summary>
             <param name="key1">The key 1 of the element to remove.</param>
             <param name="key2">The key 2 of the element to remove.</param>
             <returns><see langword="true"/> if the element is successfully found and removed; otherwise, <see langword="false"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Clear">
+        <member name="M:RiptideNetworking.Utils.DoubleKeyDictionary`3.Clear">
             <summary>Removes all keys and values from the dictionary.</summary>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Item(`0)">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.Item(`0)">
             <summary>Gets the value associated with the specified key 1.</summary>
             <param name="key">The key 1 of the value to get.</param>
             <returns>The value associated with the specified key 1.</returns>
         </member>
-        <member name="P:RiptideNetworking.Transports.Utils.DoubleKeyDictionary`3.Item(`1)">
+        <member name="P:RiptideNetworking.Utils.DoubleKeyDictionary`3.Item(`1)">
             <summary>Gets the value associated with the specified key 2.</summary>
             <param name="key">The key 2 of the value to get.</param>
             <returns>The value associated with the specified key 2.</returns>
         </member>
-        <member name="T:RiptideNetworking.Transports.Utils.RiptideConverter">
+        <member name="T:RiptideNetworking.Utils.RiptideConverter">
             <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.boolLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.boolLength">
             <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.shortLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.shortLength">
             <summary>How many bytes a <see cref="T:System.Int16"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.ushortLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.ushortLength">
             <summary>How many bytes a <see cref="T:System.UInt16"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.intLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.intLength">
             <summary>How many bytes an <see cref="T:System.Int32"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.uintLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.uintLength">
             <summary>How many bytes an <see cref="T:System.UInt32"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.longLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.longLength">
             <summary>How many bytes a <see cref="T:System.Int64"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.ulongLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.ulongLength">
             <summary>How many bytes a <see cref="T:System.UInt64"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.floatLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.floatLength">
             <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.Utils.RiptideConverter.doubleLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.doubleLength">
             <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromShort(System.Int16,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromShort(System.Int16,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Int16"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Int16"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromUShort(System.UInt16,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromUShort(System.UInt16,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.UInt16"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.UInt16"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToShort(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToShort(System.Byte[],System.Int32)">
             <summary>Converts the 2 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int16"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Int16"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToUShort(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToUShort(System.Byte[],System.Int32)">
             <summary>Converts the 2 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt16"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.UInt16"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromInt(System.Int32,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromInt(System.Int32,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Int32"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Int32"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromUInt(System.UInt32,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromUInt(System.UInt32,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.UInt32"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.UInt32"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToInt(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToInt(System.Byte[],System.Int32)">
             <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int32"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Int32"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToUInt(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToUInt(System.Byte[],System.Int32)">
             <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt32"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.UInt32"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromLong(System.Int64,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromLong(System.Int64,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Int64"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Int64"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromULong(System.UInt64,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromULong(System.UInt64,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.UInt64"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.UInt64"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToLong(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToLong(System.Byte[],System.Int32)">
             <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Int64"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Int64"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToULong(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToULong(System.Byte[],System.Int32)">
             <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.UInt64"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.UInt64"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromFloat(System.Single,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromFloat(System.Single,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Single"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Single"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToFloat(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToFloat(System.Byte[],System.Int32)">
             <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Single"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Single"/>.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.FromDouble(System.Double,System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.FromDouble(System.Double,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Double"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Double"/> to convert.</param>
             <param name="array">The array to write the bytes into.</param>
             <param name="startIndex">The position in the array at which to write the bytes.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.Utils.RiptideConverter.ToDouble(System.Byte[],System.Int32)">
+        <member name="M:RiptideNetworking.Utils.RiptideConverter.ToDouble(System.Byte[],System.Int32)">
             <summary>Converts the 8 bytes in the array at <paramref name="startIndex"/> to a <see cref="T:System.Double"/>.</summary>
             <param name="array">The array to read the bytes from.</param>
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Double"/>.</returns>
+        </member>
+        <member name="T:RiptideNetworking.Utils.LogType">
+            <summary>Defines log message types.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LogType.debug">
+            <summary>Logs that are used for investigation during development.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LogType.info">
+            <summary>Logs that provide general information about application flow.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LogType.warning">
+            <summary>Logs that highlight abnormal or unexpected events in the application flow.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LogType.error">
+            <summary>Logs that highlight problematic events in the application flow which will cause unexpected behavior if not planned for.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Utils.RiptideLogger">
+            <summary>Provides functionality for logging messages.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.RiptideLogger.IsDebugLoggingEnabled">
+            <summary>Whether or not <see cref="F:RiptideNetworking.Utils.LogType.debug"/> messages will be logged.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.RiptideLogger.IsInfoLoggingEnabled">
+            <summary>Whether or not <see cref="F:RiptideNetworking.Utils.LogType.info"/> messages will be logged.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.RiptideLogger.IsWarningLoggingEnabled">
+            <summary>Whether or not <see cref="F:RiptideNetworking.Utils.LogType.warning"/> messages will be logged.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.RiptideLogger.IsErrorLoggingEnabled">
+            <summary>Whether or not <see cref="F:RiptideNetworking.Utils.LogType.error"/> messages will be logged.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Utils.RiptideLogger.LogMethod">
+            <summary>Encapsulates a method used to log messages.</summary>
+            <param name="log">The message to log.</param>
+        </member>
+        <member name="F:RiptideNetworking.Utils.RiptideLogger.logMethods">
+            <summary>Log methods, accessible by their <see cref="T:RiptideNetworking.Utils.LogType"/></summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.RiptideLogger.includeTimestamps">
+            <summary>Whether or not to include timestamps when logging messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.RiptideLogger.timestampFormat">
+            <summary>The format to use for timestamps.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.Initialize(RiptideNetworking.Utils.RiptideLogger.LogMethod,System.Boolean,System.String)">
+            <summary>Initializes <see cref="T:RiptideNetworking.Utils.RiptideLogger"/> with all log types enabled.</summary>
+            <param name="logMethod">The method to use when logging all types of messages.</param>
+            <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
+            <param name="timestampFormat">The format to use for timestamps.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.Initialize(RiptideNetworking.Utils.RiptideLogger.LogMethod,RiptideNetworking.Utils.RiptideLogger.LogMethod,RiptideNetworking.Utils.RiptideLogger.LogMethod,RiptideNetworking.Utils.RiptideLogger.LogMethod,System.Boolean,System.String)">
+            <summary>Initializes <see cref="T:RiptideNetworking.Utils.RiptideLogger"/> with the supplied log methods.</summary>
+            <param name="debugMethod">The method to use when logging debug messages. Set to <see langword="null"/> to disable debug logs.</param>
+            <param name="infoMethod">The method to use when logging info messages. Set to <see langword="null"/> to disable info logs.</param>
+            <param name="warningMethod">The method to use when logging warning messages. Set to <see langword="null"/> to disable warning logs.</param>
+            <param name="errorMethod">The method to use when logging error messages. Set to <see langword="null"/> to disable error logs.</param>
+            <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
+            <param name="timestampFormat">The format to use for timestamps.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.EnableLoggingFor(RiptideNetworking.Utils.LogType,RiptideNetworking.Utils.RiptideLogger.LogMethod)">
+            <summary>Enables logging for messages of the given <see cref="T:RiptideNetworking.Utils.LogType"/>.</summary>
+            <param name="logType">The type of message to enable logging for.</param>
+            <param name="logMethod">The method to use when logging this type of message.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.DisableLoggingFor(RiptideNetworking.Utils.LogType)">
+            <summary>Disables logging for messages of the given <see cref="T:RiptideNetworking.Utils.LogType"/>.</summary>
+            <param name="logType">The type of message to enable logging for.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.Log(RiptideNetworking.Utils.LogType,System.String)">
+            <summary>Logs a message.</summary>
+            <param name="logType">The type of log message that is being logged.</param>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.Log(RiptideNetworking.Utils.LogType,System.String,System.String)">
+            <summary>Logs a message.</summary>
+            <param name="logType">The type of log message that is being logged.</param>
+            <param name="logName">Who is logging this message.</param>
+            <param name="message">The message to log.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.RiptideLogger.GetTimestamp(System.DateTime)">
+            <summary>Converts a <see cref="T:System.DateTime"/> object to a formatted timestamp string.</summary>
+            <param name="time">The time to format.</param>
+            <returns>The formatted timestamp.</returns>
         </member>
     </members>
 </doc>

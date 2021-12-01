@@ -4,6 +4,7 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using RiptideNetworking;
+using RiptideNetworking.Utils;
 using UnityEngine;
 
 public enum ServerToClientId : ushort

@@ -6,7 +6,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace RiptideNetworking
+namespace RiptideNetworking.Utils
 {
     /// <summary>Defines log message types.</summary>
     public enum LogType

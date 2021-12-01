@@ -5,6 +5,7 @@
 
 using RiptideNetworking;
 using RiptideNetworking.Transports.RudpTransport;
+using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
