@@ -278,7 +278,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return;
 
             ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
-            RudpPeer.PendingMessage.CreateAndSend(peer, sequenceId, message, toEndPoint);
+            PendingMessage.CreateAndSend(peer, sequenceId, message, toEndPoint);
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
