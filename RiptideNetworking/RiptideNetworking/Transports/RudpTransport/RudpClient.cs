@@ -108,38 +108,41 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             StartListening();
             connectionState = ConnectionState.connecting;
-
-            heartbeatTimer = new Timer(Heartbeat, null, 0, HeartbeatInterval);
+            
+            heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint}...");
         }
 
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
-        private void Heartbeat(object state)
+        private void Heartbeat()
         {
-            if (IsConnecting)
+            receiveActionQueue.Add(() =>
             {
-                // If still trying to connect, send connect messages instead of heartbeats
-                if (connectionAttempts < maxConnectionAttempts)
+                if (IsConnecting)
                 {
-                    SendConnect();
-                    connectionAttempts++;
+                    // If still trying to connect, send connect messages instead of heartbeats
+                    if (connectionAttempts < maxConnectionAttempts)
+                    {
+                        SendConnect();
+                        connectionAttempts++;
+                    }
+                    else
+                    {
+                        OnConnectionFailed();
+                    }
                 }
-                else
+                else if (IsConnected)
                 {
-                    OnConnectionFailed();
-                }
-            }
-            else if (IsConnected)
-            {
-                // If connected and not timed out, send heartbeats
-                if (HasTimedOut)
-                {
-                    HandleDisconnect();
-                    return;
-                }
+                    // If connected and not timed out, send heartbeats
+                    if (HasTimedOut)
+                    {
+                        HandleDisconnect();
+                        return;
+                    }
 
-                SendHeartbeat();
-            }
+                    SendHeartbeat();
+                }
+            });
         }
 
         /// <inheritdoc/>
