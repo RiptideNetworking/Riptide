@@ -59,7 +59,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
-        internal void Disconnect()
+        internal void LocalDisconnect()
         {
             connectionState = ConnectionState.notConnected;
 
