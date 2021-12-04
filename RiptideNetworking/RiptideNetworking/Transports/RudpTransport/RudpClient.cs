@@ -6,6 +6,7 @@
 using RiptideNetworking.Utils;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 
@@ -96,7 +97,22 @@ namespace RiptideNetworking.Transports.RudpTransport
         public void Connect(string hostAddress)
         {
             string[] ipAndPort = hostAddress.Split(':');
-            if (ipAndPort.Length != 2 || !IPAddress.TryParse(ipAndPort[0], out IPAddress ip) || !ushort.TryParse(ipAndPort[1], out ushort port))
+            string ipString = "";
+            string portString = "";
+            if (ipAndPort.Length > 2)
+            {
+                // There was more than one ':' in the host address, might be IPv6
+                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
+                portString = ipAndPort[ipAndPort.Length - 1];
+            }
+            else if (ipAndPort.Length == 2)
+            {
+                // IPv4
+                ipString = ipAndPort[0];
+                portString = ipAndPort[1];
+            }
+            
+            if (!IPAddress.TryParse(ipString, out IPAddress ip) || !ushort.TryParse(portString, out ushort port))
             {
                 RiptideLogger.Log(LogType.error, LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
                 return;

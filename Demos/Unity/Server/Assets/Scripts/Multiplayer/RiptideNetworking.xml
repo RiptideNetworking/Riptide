@@ -1086,6 +1086,72 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.ReceiveLockables.AckedMessagesBitfield">
             <summary>Messages that we sent which have been acknoweledged.</summary>
         </member>
+        <member name="T:RiptideNetworking.Transports.RudpTransport.PendingMessage">
+            <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.retryTimeMultiplier">
+            <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.pool">
+            <summary>A pool of reusable <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> instances.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.peer">
+            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.remoteEndPoint">
+            <summary>The intended destination endpoint of the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.sequenceId">
+            <summary>The sequence ID of the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.data">
+            <summary>The contents of the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.writtenLength">
+            <summary>The length in bytes of the data that has been written to the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.maxSendAttempts">
+            <summary>How often to try sending the message before giving up.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.sendAttempts">
+            <summary>How many send attempts have been made so far.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.lastSendTime">
+            <summary>The time of the latest send attempt.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.retryTimer">
+            <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.PendingMessage.wasCleared">
+            <summary>Whether the pending message has been cleared or not.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.#ctor">
+            <summary>Handles initial setup.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.CreateAndSend(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> instance, initializes it and then sends it.</summary>
+            <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
+            <param name="sequenceId">The sequence ID of the message.</param>
+            <param name="message">The message that is being sent reliably.</param>
+            <param name="toEndPoint">The intended destination endpoint of the message.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.RetrieveFromPool">
+            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
+            <returns>A <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> instance.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.Release">
+            <summary>Returns the <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> instance to the internal pool so it can be reused.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.RetrySend">
+            <summary>Resends the message.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.TrySend">
+            <summary>Attempts to send the message.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.PendingMessage.Clear(System.Boolean)">
+            <summary>Clears and removes the message from the dictionary of pending messages.</summary>
+            <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessages"/>.</param>
+        </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpClient">
             <summary>A client that can connect to an <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpServer"/>.</summary>
         </member>
@@ -1175,7 +1241,7 @@
             <inheritdoc/>
             <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat(System.Object)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat">
             <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpClient.heartbeatTimer"/>.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
@@ -1307,7 +1373,7 @@
             <param name="endPoint">The connection's remote endpoint.</param>
             <param name="id">The numeric ID of the client.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpConnection.Disconnect">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpConnection.LocalDisconnect">
             <summary>Cleans up local objects on disconnection.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpConnection.SendAck(System.UInt16)">
@@ -1445,14 +1511,11 @@
         <member name="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.SmoothRTT">
             <inheritdoc cref="P:RiptideNetworking.Transports.IConnectionInfo.SmoothRTT"/>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.retryTimeMultiplier">
-            <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.Listener">
+            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpListener"/> whose socket to use when sending data.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.lastSequenceId">
             <summary>The last used sequence ID.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.listener">
-            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpListener"/> whose socket to use when sending data.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.LeftBit">
             <summary>A <see cref="T:System.UInt16"/> with the left-most bit set to 1.</summary>
@@ -1472,7 +1535,7 @@
             <param name="bit">The bit corresponding to the sequence ID's position in the bit field.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.AckMessage(System.UInt16)">
-            <summary>Immediately marks the <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> of a given sequence ID as delivered.</summary>
+            <summary>Immediately marks the <see cref="T:RiptideNetworking.Transports.RudpTransport.PendingMessage"/> of a given sequence ID as delivered.</summary>
             <param name="seqId">The sequence ID that was acknowledged.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.GetSequenceGap(System.UInt16,System.UInt16)">
@@ -1480,69 +1543,6 @@
             <param name="seqId1">The new sequence ID.</param>
             <param name="seqId2">The previous sequence ID.</param>
             <returns>The signed gap between the two given sequence IDs. A positive gap means <paramref name="seqId1"/> is newer than <paramref name="seqId2"/>. A negative gap means <paramref name="seqId1"/> is older than <paramref name="seqId2"/>.</returns>
-        </member>
-        <member name="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage">
-            <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.pool">
-            <summary>A pool of reusable <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instances.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.peer">
-            <summary>The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.remoteEndPoint">
-            <summary>The intended destination endpoint of the message.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.sequenceId">
-            <summary>The sequence ID of the message.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.data">
-            <summary>The contents of the message.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.writtenLength">
-            <summary>The length in bytes of the data that has been written to the message.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.maxSendAttempts">
-            <summary>How often to try sending the message before giving up.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.sendAttempts">
-            <summary>How many send attempts have been made so far.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.lastSendTime">
-            <summary>The time of the latest send attempt.</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.retryTimer">
-            <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
-        </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.wasCleared">
-            <summary>Whether the pending message has been cleared or not.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.#ctor">
-            <summary>Handles initial setup.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.CreateAndSend(RiptideNetworking.Transports.RudpTransport.RudpPeer,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
-            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance, initializes it and then sends it.</summary>
-            <param name="peer">The <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer"/> to use to send (and resend) the pending message.</param>
-            <param name="sequenceId">The sequence ID of the message.</param>
-            <param name="message">The message that is being sent reliably.</param>
-            <param name="toEndPoint">The intended destination endpoint of the message.</param>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.RetrieveFromPool">
-            <summary>Retrieves a <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
-            <returns>A <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Release">
-            <summary>Returns the <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage"/> instance to the internal pool so it can be reused.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.RetrySend">
-            <summary>Resends the message.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.TrySend">
-            <summary>Attempts to send the message.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessage.Clear(System.Boolean)">
-            <summary>Clears and removes the message from the dictionary of pending messages.</summary>
-            <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="P:RiptideNetworking.Transports.RudpTransport.RudpPeer.PendingMessages"/>.</param>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.RudpServer">
             <summary>A server that can accept connections from <see cref="T:RiptideNetworking.Transports.RudpTransport.RudpClient"/>s.</summary>
@@ -1595,7 +1595,7 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Start(System.UInt16,System.UInt16)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Heartbeat(System.Object)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Heartbeat">
             <summary>Checks if clients have timed out. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpServer.heartbeatTimer"/>.</summary>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
