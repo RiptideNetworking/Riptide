@@ -83,7 +83,7 @@ Client.Send(message); // Sends message from client to server
 To handle messages, simply create a static method and give it the MessageHandler attribute:
 ```
 [MessageHandler(<someMessageFromServerID>)]
-private static void HandleSomeMessageFromServer(Message messag)
+private static void HandleSomeMessageFromServer(Message message)
 {
     int someInt = message.GetInt();
     bool someBool = message.GetBool();
