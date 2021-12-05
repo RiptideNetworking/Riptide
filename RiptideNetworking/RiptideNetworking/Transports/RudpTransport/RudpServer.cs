@@ -207,10 +207,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
+        protected override void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint)
         {
             if (TryGetClient(fromEndPoint, out RudpConnection client))
-                ReliableHandle(message, fromEndPoint, messageHeader, client.SendLockables);
+                ReliableHandle(messageHeader, sequenceId, message, fromEndPoint, client.SendLockables);
         }
 
         /// <inheritdoc/>
@@ -288,7 +288,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (TryGetClient(clientId, out RudpConnection client))
             {
                 SendDisconnect(client.Id);
-                RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint} (ID: {client.Id}).");
+                RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint.ToStringBasedOnIPFormat()} (ID: {client.Id}).");
 
                 LocalDisconnect(client);
             }
@@ -424,7 +424,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint} connected successfully! Client ID: {e.Client.Id}");
+            RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint.ToStringBasedOnIPFormat()} connected successfully! Client ID: {e.Client.Id}");
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
             SendClientConnected(clientEndPoint, e.Client.Id);

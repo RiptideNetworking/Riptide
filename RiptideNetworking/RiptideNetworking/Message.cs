@@ -47,8 +47,8 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
-        /// <summary>The maximum amount of bytes that a message can contain.</summary>
-        public const int MaxMessageSize = 1280;
+        /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
+        public const int MaxMessageSize = 1250;
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>

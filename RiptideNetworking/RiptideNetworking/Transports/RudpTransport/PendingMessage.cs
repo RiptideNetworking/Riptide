@@ -44,7 +44,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Handles initial setup.</summary>
         internal PendingMessage()
         {
-            data = new byte[Message.MaxMessageSize]; // TODO: this doesn't account for the 2 byte sequence ID that we insert later (in the CreateAndSend method). Need to find a clean way to address that
+            data = new byte[Message.MaxMessageSize + RiptideConverter.ushortLength]; // + ushort length because we need to add the sequence ID bytes
 
             retryTimer = new Timer();
             retryTimer.Elapsed += (s, e) => RetrySend();

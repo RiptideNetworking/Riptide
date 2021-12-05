@@ -26,6 +26,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         private Socket socket;
         /// <summary>Whether or not we are currently listening for incoming data.</summary>
         private bool isListening = false;
+        /// <summary>The buffer that incoming data is received into.</summary>
+        private byte[] receiveBuffer;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -72,32 +74,25 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void Receive()
         {
             EndPoint bufferEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
+            receiveBuffer = new byte[Message.MaxMessageSize + RiptideConverter.ushortLength];
             isListening = true;
 
             while (isListening)
             {
                 int byteCount;
-                Message message = null;
-
+                
                 try
                 {
                     if (socket.Available == 0 && !socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
                         continue;
 
-                    message = Message.Create();
-                    byteCount = socket.ReceiveFrom(message.Bytes, 0, message.Bytes.Length, SocketFlags.None, ref bufferEndPoint);
+                    byteCount = socket.ReceiveFrom(receiveBuffer, SocketFlags.None, ref bufferEndPoint);
 
                     if (byteCount < 1)
-                    {
-                        message.Release();
                         continue;
-                    }
                 }
                 catch (SocketException ex)
                 {
-                    if (message != null)
-                        message.Release();
-
                     switch (ex.SocketErrorCode)
                     {
                         case SocketError.Interrupted:
@@ -114,40 +109,46 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
                 catch (ObjectDisposedException)
                 {
-                    if (message != null)
-                        message.Release();
-
                     return;
                 }
                 catch (NullReferenceException)
                 {
-                    if (message != null)
-                        message.Release();
-
                     return;
                 }
 
-                PrepareToHandle(message, byteCount, (IPEndPoint)bufferEndPoint);
+                PrepareToHandle(byteCount, (IPEndPoint)bufferEndPoint);
             }
         }
 
         /// <summary>Takes a received message and prepares it to be handled.</summary>
-        /// <param name="message">The message that was received.</param>
         /// <param name="length">The length of the contents of message.</param>
         /// <param name="remoteEndPoint">The endpoint from which the message was received.</param>
-        private void PrepareToHandle(Message message, int length, IPEndPoint remoteEndPoint)
+        private void PrepareToHandle(int length, IPEndPoint remoteEndPoint)
         {
-            HeaderType messageHeader = message.PrepareForUse((ushort)length);
+            HeaderType messageHeader = (HeaderType)receiveBuffer[0];
             if (!ShouldHandleMessageFrom(remoteEndPoint, messageHeader))
                 return;
 
+            Message message = Message.Create();
+            message.Bytes[0] = receiveBuffer[0];
+            message.PrepareForUse((ushort)length);
+            
             if (message.SendMode == MessageSendMode.reliable)
             {
-                if (message.UnreadLength >= 2) // Reliable messages have a 3 byte header (one of which we've already read out) so don't handle anything with less than that
-                    ReliableHandle(message, remoteEndPoint, messageHeader);
+                if (length > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (3 or less means no payload for a reliably sent packet)
+                    Array.Copy(receiveBuffer, 3, message.Bytes, 1, length - 3);
+                else if (length < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
+                    return;
+                
+                ReliableHandle(messageHeader, RiptideConverter.ToUShort(receiveBuffer, 1), message, remoteEndPoint);
             }
             else
+            {
+                if (length > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
+                    Array.Copy(receiveBuffer, 1, message.Bytes, 1, length - 1);
+
                 Handle(message, remoteEndPoint, messageHeader);
+            }
         }
 
         /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
@@ -157,20 +158,20 @@ namespace RiptideNetworking.Transports.RudpTransport
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader);
 
         /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that was received.</param>
         /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
-        /// <param name="messageHeader">The header of the message.</param>
-        protected abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
+        protected abstract void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint);
 
         /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that was received.</param>
         /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
-        /// <param name="messageHeader">The header of the message.</param>
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
-        internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader, SendLockables lockables)
+        internal void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint, SendLockables lockables)
         {
-            ushort sequenceId = message.GetUShort();
-
             lock (lockables)
             {
                 // Update acks

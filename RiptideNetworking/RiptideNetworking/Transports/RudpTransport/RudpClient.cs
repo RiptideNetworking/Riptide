@@ -119,14 +119,14 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
 
             connectionAttempts = 0;
-            remoteEndPoint = new IPEndPoint(ip, port);
+            remoteEndPoint = new IPEndPoint(ip.MapToIPv6(), port);
             peer = new RudpPeer(this);
 
             StartListening();
             connectionState = ConnectionState.connecting;
             
             heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
-            RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint}...");
+            RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
         }
 
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
@@ -225,9 +225,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
+        protected override void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint)
         {
-            ReliableHandle(message, fromEndPoint, messageHeader, peer.SendLockables);
+            ReliableHandle(messageHeader, sequenceId, message, fromEndPoint, peer.SendLockables);
         }
 
         /// <inheritdoc/>

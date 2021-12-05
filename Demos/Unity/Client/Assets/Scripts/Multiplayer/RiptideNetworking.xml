@@ -213,7 +213,7 @@
             <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.MaxMessageSize">
-            <summary>The maximum amount of bytes that a message can contain.</summary>
+            <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.InstancesPerSocket">
             <summary>How many messages to add to the pool for each <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> instance that is started.</summary>
@@ -1250,7 +1250,7 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Send(RiptideNetworking.Message,System.Boolean)">
@@ -1420,6 +1420,9 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.isListening">
             <summary>Whether or not we are currently listening for incoming data.</summary>
         </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.receiveBuffer">
+            <summary>The buffer that incoming data is received into.</summary>
+        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.#ctor(System.String)">
             <summary>Handles initial setup.</summary>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
@@ -1437,9 +1440,8 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Receive">
             <summary>Listens for and receives incoming packets.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.PrepareToHandle(RiptideNetworking.Message,System.Int32,System.Net.IPEndPoint)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.PrepareToHandle(System.Int32,System.Net.IPEndPoint)">
             <summary>Takes a received message and prepares it to be handled.</summary>
-            <param name="message">The message that was received.</param>
             <param name="length">The length of the contents of message.</param>
             <param name="remoteEndPoint">The endpoint from which the message was received.</param>
         </member>
@@ -1449,17 +1451,19 @@
             <param name="messageHeader">The header of the message.</param>
             <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <summary>Handles the given reliably sent message.</summary>
+            <param name="messageHeader">The header of the message.</param>
+            <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that was received.</param>
             <param name="fromEndPoint">The endpoint from which the message was received.</param>
-            <param name="messageHeader">The header of the message.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType,RiptideNetworking.Transports.RudpTransport.SendLockables)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.SendLockables)">
             <summary>Handles the given reliably sent message.</summary>
+            <param name="messageHeader">The header of the message.</param>
+            <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that was received.</param>
             <param name="fromEndPoint">The endpoint from which the message was received.</param>
-            <param name="messageHeader">The header of the message.</param>
             <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
@@ -1604,7 +1608,7 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)">
@@ -1769,6 +1773,13 @@
             <summary>Gets the value associated with the specified key 2.</summary>
             <param name="key">The key 2 of the value to get.</param>
             <returns>The value associated with the specified key 2.</returns>
+        </member>
+        <member name="T:RiptideNetworking.Utils.Extensions">
+            <summary>Contains extension methods for various classes.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.Extensions.ToStringBasedOnIPFormat(System.Net.IPEndPoint)">
+            <summary>Takes an <see cref="T:System.Net.IPEndPoint"/> and returns a string containing its IP address and port number, accounting for whether the address is an IPv4 or IPv6.</summary>
+            <returns>A string containing the IP address and port number of the endpoint.</returns>
         </member>
         <member name="T:RiptideNetworking.Utils.RiptideConverter">
             <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
