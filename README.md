@@ -87,7 +87,7 @@ private static void HandleSomeMessageFromServer(Message messag)
 {
     int someInt = message.GetInt();
     bool someBool = message.GetBool();
-    float[] someFloats = message.GetFloatArray();
+    float[] someFloats = message.GetFloats();
     
     // Do stuff with the retrieved data here
 }
