@@ -1071,19 +1071,22 @@
         <member name="T:RiptideNetworking.Transports.RudpTransport.SendLockables">
             <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.SendLockables.LastReceivedSeqId">
+        <member name="P:RiptideNetworking.Transports.RudpTransport.SendLockables.LastReceivedSeqId">
             <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.SendLockables.AcksBitfield">
+        <member name="P:RiptideNetworking.Transports.RudpTransport.SendLockables.AcksBitfield">
             <summary>Messages that we have received and want to acknowledge.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Transports.RudpTransport.SendLockables.DuplicateFilterBitfield">
+            <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="P:RiptideNetworking.Transports.RudpTransport.SendLockables.AcksBitfield"/>'s range, used to improve duplicate message filtering capabilities.</summary>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.ReceiveLockables">
             <summary>Contains values that are accessed by multiple threads and are used to determine which messages the other end has received.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.ReceiveLockables.LastAckedSeqId">
+        <member name="P:RiptideNetworking.Transports.RudpTransport.ReceiveLockables.LastAckedSeqId">
             <summary>The sequence ID of the latest message that we've received an ack for.</summary>
         </member>
-        <member name="F:RiptideNetworking.Transports.RudpTransport.ReceiveLockables.AckedMessagesBitfield">
+        <member name="P:RiptideNetworking.Transports.RudpTransport.ReceiveLockables.AckedMessagesBitfield">
             <summary>Messages that we sent which have been acknoweledged.</summary>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.PendingMessage">
@@ -1465,6 +1468,18 @@
             <param name="message">The message that was received.</param>
             <param name="fromEndPoint">The endpoint from which the message was received.</param>
             <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.UpdateAcksBitfield(System.Int32,RiptideNetworking.Transports.RudpTransport.SendLockables)">
+            <summary>Updates the acks bitfield and determines whether or not to handle the message.</summary>
+            <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+            <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+            <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.UpdateDuplicateFilterBitfield(System.Int32,RiptideNetworking.Transports.RudpTransport.SendLockables)">
+            <summary>Updates the duplicate filter bitfield and determines whether or not to handle the message.</summary>
+            <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+            <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+            <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
             <summary>Handles the given message.</summary>

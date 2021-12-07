@@ -142,7 +142,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     if (headerType == HeaderType.reliable)
                     {
 #if BIG_ENDIAN
-                            ushort messageId = (ushort)(data[4] | (data[3] << 8));
+                        ushort messageId = (ushort)(data[4] | (data[3] << 8));
 #else
                         ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif

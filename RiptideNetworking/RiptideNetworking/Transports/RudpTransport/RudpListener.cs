@@ -172,6 +172,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
         internal void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint, SendLockables lockables)
         {
+            bool shouldHandle = true;
             lock (lockables)
             {
                 // Update acks
@@ -179,50 +180,78 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (sequenceGap > 0)
                 {
                     // The received sequence ID is newer than the previous one
-                    lockables.AcksBitfield <<= sequenceGap; // Shift the bits left to make room for the latest remote sequence ID
-                    ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-                    if ((lockables.AcksBitfield & seqIdBit) == 0)
+                    if (sequenceGap > 64)
+                        RiptideLogger.Log(LogType.warning, LogName, $"The gap between received sequence IDs was very large ({sequenceGap})! If the connection's packet loss, latency, or your send rate of reliable messages increases much further, sequence IDs may begin falling outside the bounds of the duplicate filter.");
+
+                    lockables.DuplicateFilterBitfield <<= sequenceGap;
+                    if (sequenceGap <= 16)
                     {
-                        // If we haven't received this packet before
-                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        ulong shiftedBits = (ulong)lockables.AcksBitfield << sequenceGap;
+                        lockables.AcksBitfield = (ushort)shiftedBits; // Give the acks bitfield the first 2 bytes of the shifted bits
+                        lockables.DuplicateFilterBitfield |= shiftedBits >> 16; // OR the last 6 bytes worth of the shifted bits into the duplicate filter bitfield
+
+                        shouldHandle = UpdateAcksBitfield(sequenceGap, lockables);
                         lockables.LastReceivedSeqId = sequenceId;
-                        SendAck(sequenceId, fromEndPoint);
                     }
-                    else
+                    else if (sequenceGap <= 80)
                     {
-                        SendAck(sequenceId, fromEndPoint);
-                        return; // Message was a duplicate, don't handle it
+                        ulong shiftedBits = (ulong)lockables.AcksBitfield << (sequenceGap - 16);
+                        lockables.AcksBitfield = 0; // Reset the acks bitfield as all its bits are being moved to the duplicate filter bitfield
+                        lockables.DuplicateFilterBitfield |= shiftedBits; // OR the shifted bits into the duplicate filter bitfield
+
+                        shouldHandle = UpdateDuplicateFilterBitfield(sequenceGap, lockables);
                     }
                 }
                 else if (sequenceGap < 0)
                 {
                     // The received sequence ID is older than the previous one (out of order message)
                     sequenceGap = -sequenceGap; // Make sequenceGap positive
-                    if (sequenceGap > 16) // If it's an old packet and its sequence ID doesn't fall within the bitfield's value range anymore
-                        SendAck(sequenceId, fromEndPoint); // TODO: store a larger bitfield locally to do a better job of filtering out old duplicates
-                    else
-                    {
-                        ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-                        if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
-                        {
-                            lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
-                            SendAck(sequenceId, fromEndPoint);
-                        }
-                        else
-                        {
-                            SendAck(sequenceId, fromEndPoint);
-                            return; // Message was a duplicate, don't handle it
-                        }
-                    }
+                    if (sequenceGap <= 16) // If the message's sequence ID still falls within the ack bitfield's value range
+                        shouldHandle = UpdateAcksBitfield(sequenceGap, lockables);
+                    else if (sequenceGap <= 80) // If it's an "old" message and its sequence ID doesn't fall within the ack bitfield's value range anymore (but it falls in the range of the duplicate filter)
+                        shouldHandle = UpdateDuplicateFilterBitfield(sequenceGap, lockables);
                 }
                 else // The received sequence ID is the same as the previous one (duplicate message)
-                {
-                    SendAck(sequenceId, fromEndPoint);
-                    return; // Message was a duplicate, don't handle it
-                }
+                    shouldHandle = false;
             }
 
-            Handle(message, fromEndPoint, messageHeader);
+            SendAck(sequenceId, fromEndPoint);
+            if (shouldHandle)
+                Handle(message, fromEndPoint, messageHeader);
+        }
+
+        /// <summary>Updates the acks bitfield and determines whether or not to handle the message.</summary>
+        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+        /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
+        private bool UpdateAcksBitfield(int sequenceGap, SendLockables lockables)
+        {
+            ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
+            if ((lockables.AcksBitfield & seqIdBit) == 0)
+            {
+                // If we haven't received this message before
+                lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                return true; // Message was "new", handle it
+            }
+            else // If we have received this message before
+                return false; // Message was a duplicate, don't handle it
+        }
+
+        /// <summary>Updates the duplicate filter bitfield and determines whether or not to handle the message.</summary>
+        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+        /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
+        private bool UpdateDuplicateFilterBitfield(int sequenceGap, SendLockables lockables)
+        {
+            ulong seqIdBit = (ulong)1 << (sequenceGap - 1 - 16); // Calculate which bit corresponds to the sequence ID and set it to 1
+            if ((lockables.DuplicateFilterBitfield & seqIdBit) == 0)
+            {
+                // If we haven't received this message before
+                lockables.DuplicateFilterBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                return true; // Message was "new", handle it
+            }
+            else // If we have received this message before
+                return false; // Message was a duplicate, don't handle it
         }
 
         /// <summary>Handles the given message.</summary>
