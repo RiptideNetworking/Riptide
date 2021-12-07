@@ -25,6 +25,7 @@ namespace ConsoleClient
         private static readonly int testIdAmount = 10000;
         private static List<int> remainingTestIds;
         private static Timer testEndWaitTimer;
+        private static int duplicateCount;
 
         private static void Main()
         {
@@ -118,6 +119,7 @@ namespace ConsoleClient
         private static void StartReliabilityTest()
         {
             isTestRunning = true;
+            duplicateCount = 0;
 
             remainingTestIds = new List<int>(testIdAmount);
             for (int i = 0; i < testIdAmount; i++)
@@ -157,8 +159,23 @@ namespace ConsoleClient
                 Console.WriteLine("Reliability test complete (round-trip):");
                 Console.WriteLine($"  Messages sent: {testIdAmount}");
                 Console.WriteLine($"  Messages lost: {remainingTestIds.Count}");
+                Console.WriteLine($"  Duplicates:    {duplicateCount}");
+                Console.WriteLine($"  Latency (RTT): {client.SmoothRTT}ms");
                 if (remainingTestIds.Count > 0)
                     Console.WriteLine($"  Test IDs lost: {string.Join(",", remainingTestIds)}");
+                if (duplicateCount > 0)
+                    Console.WriteLine("\nThis demo sends a reliable message every 2-3 milliseconds during the test, which is a very extreme use case.\n" +
+                        "Riptide's duplicate filter has a limited range, and a send rate like 33-50 reliable messages per 100ms will\n" +
+                        "max it out fast once combined with any amount of packet loss.\n\n" +
+                        "Most duplicates will be filtered out even at high send rates, but any messages that need to be resent due to\n" +
+                        "packet loss (and therefore take longer to arrive) are highly likely to be missed by Riptide's filter. If you\n" +
+                        "are simulating latency & packet loss with an app like Clumsy, you'll notice that increasing those numbers\n" +
+                        "will also increase the number of duplicates that aren't filtered out.\n\n" +
+                        "To reduce the amount of duplicate messages that Riptide does NOT manage to filter out, applications should\n" +
+                        "send reliable messages at a reasonable rate (unlike this demo). However, applications should also be\n" +
+                        "prepared to handle duplicate messages. Riptide can only filter out duplicates based on sequence ID, but if\n" +
+                        "(for example) a hacker modifies his client to send a message twice with different sequence IDs and your\n" +
+                        "server is not prepared for that, you may end up with issues such as players being spawned multiple times.");
             }
             else
                 Console.WriteLine("Reliability test complete (one-way)! See server console for results.");
@@ -183,7 +200,10 @@ namespace ConsoleClient
             lock (remainingTestIds)
             {
                 if (!remainingTestIds.Remove(reliableTestId))
+                {
+                    duplicateCount++;
                     Console.WriteLine($"Duplicate message received (Test ID: {reliableTestId}).");
+                }
             }
         }
     }
