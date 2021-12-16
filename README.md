@@ -1,13 +1,14 @@
 <div align="center">
   <img src="https://user-images.githubusercontent.com/51303091/119734159-690afc00-be2f-11eb-9673-c1f998025a3e.png" width="20%" height="auto">
 </div>
+<div align="center"><a href="https://tomweiland.net/youtube">YouTube</a>&emsp;<b>•</b>&emsp;<a href="https://discord.com/invite/tomweiland">Discord</a></div>
 <h1 align="center">RiptideNetworking</h1>
 
 RiptideNetworking is a lightweight C# networking library primarily designed for use in multiplayer games. It can be used in Unity as well as in other .NET environments such as console applications.
 
-Riptide provides functionality for establishing connections and sending data back and forth. Being a rather low-level solution, it leaves it up to you to decide what data you want to send and when, which is ideal if you like to be in control of your code and know what's going on under the hood.
+Riptide provides functionality for establishing connections and sending data back and forth, leaving it up to you to decide what data you want to send and when, which is ideal if you like to be in control of your code and know what's going on under the hood.
 
-Riptide is 100% free to use and only funded by [donations](https://ko-fi.com/Y8Y21O02J).
+Riptide is 100% free to use and only funded by [donations](https://github.com/sponsors/tom-weiland).
 
 ## Getting Started
 ### Unity
@@ -31,7 +32,7 @@ If you aren't using Unity, you can add the RiptideNetworking.dll file to your pr
 
 ## Usage
 ### Project Considerations
-If you are making a player-hosted game (often incorrectly referred to as "peer-to-peer") where one player acts as the server, you'll want all your code in a single project.
+If you are making a player-hosted game (sometimes mistakenly referred to as "peer-to-peer") where one player acts as the server, you'll want all your code in a single project.
 
 However, if you intend to build a standalone server, having separate projects for the server and client may be helpful.
 
@@ -103,14 +104,8 @@ A few things to note:
 - [RUDP Transport](https://github.com/tom-weiland/RiptideNetworking/tree/main/RiptideNetworking/RiptideNetworking/Transports/RudpTransport) (built-in)
 - [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
 
+## Donate
+If you'd like to financially support the development of Riptide and its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
+
 ## License
 Distributed under the MIT license. See [LICENSE.md](https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md) for more information.
-
----
-
-<p align="center">
-  <a href="https://tomweiland.net/youtube">YouTube</a>&emsp;<b>•</b>&emsp;<a href="https://discord.com/invite/tomweiland">Discord</a><br>
-  <a href="https://ko-fi.com/Y8Y21O02J">
-    <img src="https://www.ko-fi.com/img/githubbutton_sm.svg">
-  </a>
-</p>
