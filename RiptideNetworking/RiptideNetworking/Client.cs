@@ -60,6 +60,15 @@ namespace RiptideNetworking
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
 
+        /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
+        /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, byte)"/> will need to be called again.</remarks>
+        public void ChangeTransport(IClient client)
+        {
+            Disconnect();
+            this.client = client;
+        }
+
         /// <summary>Attempts connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
@@ -69,8 +78,7 @@ namespace RiptideNetworking
         /// </remarks>
         public void Connect(string hostAddress, byte messageHandlerGroupId = 0)
         {
-            if (IsConnecting || IsConnected)
-                Disconnect();
+            Disconnect();
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 

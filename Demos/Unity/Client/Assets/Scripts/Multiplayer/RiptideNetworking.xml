@@ -64,6 +64,11 @@
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
+        <member name="M:RiptideNetworking.Client.ChangeTransport(RiptideNetworking.Transports.IClient)">
+            <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
+            <param name="client">The underlying client that is used for managing the connection to the server.</param>
+            <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="M:RiptideNetworking.Client.Connect(System.String,System.Byte)"/> will need to be called again.</remarks>
+        </member>
         <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte)">
             <summary>Attempts connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
@@ -909,6 +914,11 @@
             <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
             <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.Server.ChangeTransport(RiptideNetworking.Transports.IServer)">
+            <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
+            <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
+            <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Byte)"/> will need to be called again.</remarks>
         </member>
         <member name="M:RiptideNetworking.Server.Start(System.UInt16,System.UInt16,System.Byte)">
             <summary>Starts the server.</summary>
