@@ -5,53 +5,56 @@
 
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
+namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleClient
 {
-    [SerializeField] private Player player;
-    [SerializeField] private float sensitivity = 100f;
-    [SerializeField] private float clampAngle = 85f;
-
-    private float verticalRotation;
-    private float horizontalRotation;
-
-    private void Start()
+    public class CameraController : MonoBehaviour
     {
-        verticalRotation = transform.localEulerAngles.x;
-        horizontalRotation = player.transform.eulerAngles.y;
-    }
+        [SerializeField] private Player player;
+        [SerializeField] private float sensitivity = 100f;
+        [SerializeField] private float clampAngle = 85f;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-            ToggleCursorMode();
+        private float verticalRotation;
+        private float horizontalRotation;
 
-        if (Cursor.lockState == CursorLockMode.Locked)
-            Look();
+        private void Start()
+        {
+            verticalRotation = transform.localEulerAngles.x;
+            horizontalRotation = player.transform.eulerAngles.y;
+        }
 
-        Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
-    }
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                ToggleCursorMode();
 
-    private void Look()
-    {
-        float mouseVertical = -Input.GetAxis("Mouse Y");
-        float mouseHorizontal = Input.GetAxis("Mouse X");
+            if (Cursor.lockState == CursorLockMode.Locked)
+                Look();
 
-        verticalRotation += mouseVertical * sensitivity * Time.deltaTime;
-        horizontalRotation += mouseHorizontal * sensitivity * Time.deltaTime;
+            Debug.DrawRay(transform.position, transform.forward * 2, Color.green);
+        }
 
-        verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
+        private void Look()
+        {
+            float mouseVertical = -Input.GetAxis("Mouse Y");
+            float mouseHorizontal = Input.GetAxis("Mouse X");
 
-        transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
-        player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
-    }
+            verticalRotation += mouseVertical * sensitivity * Time.deltaTime;
+            horizontalRotation += mouseHorizontal * sensitivity * Time.deltaTime;
 
-    private void ToggleCursorMode()
-    {
-        Cursor.visible = !Cursor.visible;
+            verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
 
-        if (Cursor.lockState == CursorLockMode.None)
-            Cursor.lockState = CursorLockMode.Locked;
-        else
-            Cursor.lockState = CursorLockMode.None;
+            transform.localRotation = Quaternion.Euler(verticalRotation, 0f, 0f);
+            player.transform.rotation = Quaternion.Euler(0f, horizontalRotation, 0f);
+        }
+
+        private void ToggleCursorMode()
+        {
+            Cursor.visible = !Cursor.visible;
+
+            if (Cursor.lockState == CursorLockMode.None)
+                Cursor.lockState = CursorLockMode.Locked;
+            else
+                Cursor.lockState = CursorLockMode.None;
+        }
     }
 }
