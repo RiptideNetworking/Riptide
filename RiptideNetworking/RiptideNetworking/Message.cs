@@ -77,7 +77,7 @@ namespace RiptideNetworking
         /// <summary>The position in the byte array that the next bytes will be read from.</summary>
         private ushort readPos = 0;
 
-        /// <summary>Initializes a reusable Message instance.</summary>
+        /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         internal Message(int maxSize = MaxMessageSize)
         {
@@ -204,7 +204,7 @@ namespace RiptideNetworking
         #region Byte
         /// <summary>Adds a single <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="byte"/> was added to.</returns>
+        /// <returns>The message that the <see cref="byte"/> was added to.</returns>
         public Message Add(byte value)
         {
             if (UnwrittenLength < 1)
@@ -237,7 +237,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="byte"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="byte"/> array was added to.</returns>
         public Message Add(byte[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -317,7 +317,7 @@ namespace RiptideNetworking
         #region Bool
         /// <summary>Adds a <see cref="bool"/> to the message.</summary>
         /// <param name="value">The <see cref="bool"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="bool"/> was added to.</returns>
+        /// <returns>The message that the <see cref="bool"/> was added to.</returns>
         public Message Add(bool value)
         {
             if (UnwrittenLength < RiptideConverter.boolLength)
@@ -350,7 +350,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="bool"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="bool"/> array was added to.</returns>
         public Message Add(bool[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -462,7 +462,7 @@ namespace RiptideNetworking
         #region Short & UShort
         /// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="short"/> was added to.</returns>
+        /// <returns>The message that the <see cref="short"/> was added to.</returns>
         public Message Add(short value)
         {
             if (UnwrittenLength < RiptideConverter.shortLength)
@@ -475,7 +475,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="ushort"/> to the message.</summary>
         /// <param name="value">The <see cref="ushort"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="ushort"/> was added to.</returns>
+        /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
         public Message Add(ushort value)
         {
             if (UnwrittenLength < RiptideConverter.ushortLength)
@@ -538,7 +538,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="short"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="short"/> array was added to.</returns>
         public Message Add(short[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -572,7 +572,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="ushort"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="ushort"/> array was added to.</returns>
         public Message Add(ushort[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -712,7 +712,7 @@ namespace RiptideNetworking
         #region Int & UInt
         /// <summary>Adds an <see cref="int"/> to the message.</summary>
         /// <param name="value">The <see cref="int"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="int"/> was added to.</returns>
+        /// <returns>The message that the <see cref="int"/> was added to.</returns>
         public Message Add(int value)
         {
             if (UnwrittenLength < RiptideConverter.intLength)
@@ -725,7 +725,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="uint"/> was added to.</returns>
+        /// <returns>The message that the <see cref="uint"/> was added to.</returns>
         public Message Add(uint value)
         {
             if (UnwrittenLength < RiptideConverter.uintLength)
@@ -776,7 +776,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="int"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="int"/> array was added to.</returns>
         public Message Add(int[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -810,7 +810,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="uint"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="uint"/> array was added to.</returns>
         public Message Add(uint[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -950,7 +950,7 @@ namespace RiptideNetworking
         #region Long & ULong
         /// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="long"/> was added to.</returns>
+        /// <returns>The message that the <see cref="long"/> was added to.</returns>
         public Message Add(long value)
         {
             if (UnwrittenLength < RiptideConverter.longLength)
@@ -963,7 +963,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="ulong"/> was added to.</returns>
+        /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
         public Message Add(ulong value)
         {
             if (UnwrittenLength < RiptideConverter.ulongLength)
@@ -1014,7 +1014,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="long"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="long"/> array was added to.</returns>
         public Message Add(long[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1048,7 +1048,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="ulong"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="ulong"/> array was added to.</returns>
         public Message Add(ulong[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1188,7 +1188,7 @@ namespace RiptideNetworking
         #region Float
         /// <summary>Adds a <see cref="float"/> to the message.</summary>
         /// <param name="value">The <see cref="float"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="float"/> was added to.</returns>
+        /// <returns>The message that the <see cref="float"/> was added to.</returns>
         public Message Add(float value)
         {
             if (UnwrittenLength < RiptideConverter.floatLength)
@@ -1224,7 +1224,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="float"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="float"/> array was added to.</returns>
         public Message Add(float[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1308,7 +1308,7 @@ namespace RiptideNetworking
         #region Double
         /// <summary>Adds a <see cref="double"/> to the message.</summary>
         /// <param name="value">The <see cref="double"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="double"/> was added to.</returns>
+        /// <returns>The message that the <see cref="double"/> was added to.</returns>
         public Message Add(double value)
         {
             if (UnwrittenLength < RiptideConverter.doubleLength)
@@ -1344,7 +1344,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="double"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="double"/> array was added to.</returns>
         public Message Add(double[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1428,7 +1428,7 @@ namespace RiptideNetworking
         #region String
         /// <summary>Adds a <see cref="string"/> to the message.</summary>
         /// <param name="value">The <see cref="string"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="string"/> was added to.</returns>
+        /// <returns>The message that the <see cref="string"/> was added to.</returns>
         public Message Add(string value)
         {
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
@@ -1467,7 +1467,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="string"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="string"/> array was added to.</returns>
         public Message Add(string[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
