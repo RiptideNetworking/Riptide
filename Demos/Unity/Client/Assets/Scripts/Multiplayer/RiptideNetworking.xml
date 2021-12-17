@@ -256,7 +256,7 @@
             <summary>The position in the byte array that the next bytes will be read from.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.#ctor(System.Int32)">
-            <summary>Initializes a reusable Message instance.</summary>
+            <summary>Initializes a reusable <see cref="T:RiptideNetworking.Message"/> instance.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
         <member name="M:RiptideNetworking.Message.IncreasePoolCount">
@@ -303,7 +303,7 @@
         <member name="M:RiptideNetworking.Message.Add(System.Byte)">
             <summary>Adds a single <see cref="T:System.Byte"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Byte"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Byte"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Byte"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetByte">
             <summary>Retrieves a <see cref="T:System.Byte"/> from the message.</summary>
@@ -320,7 +320,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Byte"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Byte"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBytes(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
@@ -353,7 +353,7 @@
         <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Boolean"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Boolean"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Boolean"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBool">
             <summary>Retrieves a <see cref="T:System.Boolean"/> from the message.</summary>
@@ -370,7 +370,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Boolean"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Boolean"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBools(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
@@ -403,12 +403,12 @@
         <member name="M:RiptideNetworking.Message.Add(System.Int16)">
             <summary>Adds a <see cref="T:System.Int16"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int16"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Int16"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int16"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
             <summary>Adds a <see cref="T:System.UInt16"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt16"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.UInt16"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt16"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShort">
             <summary>Retrieves a <see cref="T:System.Int16"/> from the message.</summary>
@@ -432,7 +432,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Int16"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int16"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt16"/> array to the message.</summary>
@@ -445,7 +445,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.UInt16"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt16"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShorts(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
@@ -506,12 +506,12 @@
         <member name="M:RiptideNetworking.Message.Add(System.Int32)">
             <summary>Adds an <see cref="T:System.Int32"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int32"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Int32"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int32"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
             <summary>Adds a <see cref="T:System.UInt32"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt32"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.UInt32"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt32"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetInt">
             <summary>Retrieves an <see cref="T:System.Int32"/> from the message.</summary>
@@ -532,7 +532,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Int32"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int32"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt32"/> array to the message.</summary>
@@ -545,7 +545,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.UInt32"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt32"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetInts(System.Boolean)">
             <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
@@ -606,12 +606,12 @@
         <member name="M:RiptideNetworking.Message.Add(System.Int64)">
             <summary>Adds a <see cref="T:System.Int64"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int64"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Int64"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int64"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
             <summary>Adds a <see cref="T:System.UInt64"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt64"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.UInt64"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt64"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLong">
             <summary>Retrieves a <see cref="T:System.Int64"/> from the message.</summary>
@@ -632,7 +632,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Int64"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Int64"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean,System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt64"/> array to the message.</summary>
@@ -645,7 +645,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.UInt64"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.UInt64"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLongs(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
@@ -706,7 +706,7 @@
         <member name="M:RiptideNetworking.Message.Add(System.Single)">
             <summary>Adds a <see cref="T:System.Single"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Single"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Single"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Single"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloat">
             <summary>Retrieves a <see cref="T:System.Single"/> from the message.</summary>
@@ -723,7 +723,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Single"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Single"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloats(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
@@ -756,7 +756,7 @@
         <member name="M:RiptideNetworking.Message.Add(System.Double)">
             <summary>Adds a <see cref="T:System.Double"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Double"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.Double"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.Double"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDouble">
             <summary>Retrieves a <see cref="T:System.Double"/> from the message.</summary>
@@ -773,7 +773,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.Double"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.Double"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDoubles(System.Boolean)">
             <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
@@ -806,7 +806,7 @@
         <member name="M:RiptideNetworking.Message.Add(System.String)">
             <summary>Adds a <see cref="T:System.String"/> to the message.</summary>
             <param name="value">The <see cref="T:System.String"/> to add.</param>
-            <returns>The Message instance that the <see cref="T:System.String"/> was added to.</returns>
+            <returns>The message that the <see cref="T:System.String"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetString">
             <summary>Retrieves a <see cref="T:System.String"/> from the message.</summary>
@@ -823,7 +823,7 @@
                 Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
               </para>
             </param>
-            <returns>The Message instance that the <see cref="T:System.String"/> array was added to.</returns>
+            <returns>The message that the <see cref="T:System.String"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetStrings(System.Boolean)">
             <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>

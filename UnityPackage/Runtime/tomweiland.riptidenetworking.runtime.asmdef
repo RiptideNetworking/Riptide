@@ -1,5 +1,6 @@
 {
     "name": "RiptideNetworking",
+    "rootNamespace": "RiptideNetworking",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -9,5 +10,5 @@
     "autoReferenced": true,
     "defineConstraints": [],
     "versionDefines": [],
-    "noEngineReferences": true
+    "noEngineReferences": false
 }

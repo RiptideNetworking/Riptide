@@ -3,7 +3,10 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking.Utils;
 using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading;
 
@@ -71,8 +74,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         private DateTime lastHeartbeat;
         /// <summary>ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
-        /// <summary>The currently pending ping.</summary>
-        private (byte id, DateTime sendTime) pendingPing;
+        /// <summary>The ID of the currently pending ping.</summary>
+        private byte pendingPingId;
+        /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
+        private Stopwatch pendingPingStopwatch;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -84,6 +89,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             TimeoutTime = timeoutTime;
             _heartbeatInterval = heartbeatInterval;
             this.maxConnectionAttempts = maxConnectionAttempts;
+            pendingPingStopwatch = new Stopwatch();
         }
 
         /// <inheritdoc/>
@@ -91,52 +97,68 @@ namespace RiptideNetworking.Transports.RudpTransport
         public void Connect(string hostAddress)
         {
             string[] ipAndPort = hostAddress.Split(':');
-            if (ipAndPort.Length != 2 || !IPAddress.TryParse(ipAndPort[0], out IPAddress ip) || !ushort.TryParse(ipAndPort[1], out ushort port))
+            string ipString = "";
+            string portString = "";
+            if (ipAndPort.Length > 2)
             {
-                RiptideLogger.Log(LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
+                // There was more than one ':' in the host address, might be IPv6
+                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
+                portString = ipAndPort[ipAndPort.Length - 1];
+            }
+            else if (ipAndPort.Length == 2)
+            {
+                // IPv4
+                ipString = ipAndPort[0];
+                portString = ipAndPort[1];
+            }
+            
+            if (!IPAddress.TryParse(ipString, out IPAddress ip) || !ushort.TryParse(portString, out ushort port))
+            {
+                RiptideLogger.Log(LogType.error, LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
                 return;
             }
 
             connectionAttempts = 0;
-            remoteEndPoint = new IPEndPoint(ip, port);
+            remoteEndPoint = new IPEndPoint(ip.MapToIPv6(), port);
             peer = new RudpPeer(this);
 
             StartListening();
             connectionState = ConnectionState.connecting;
-
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Connecting to {remoteEndPoint}...");
-
-            heartbeatTimer = new Timer(Heartbeat, null, 0, HeartbeatInterval);
+            
+            heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
+            RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
         }
 
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
-        private void Heartbeat(object state)
+        private void Heartbeat()
         {
-            if (IsConnecting)
+            receiveActionQueue.Add(() =>
             {
-                // If still trying to connect, send connect messages instead of heartbeats
-                if (connectionAttempts < maxConnectionAttempts)
+                if (IsConnecting)
                 {
-                    SendConnect();
-                    connectionAttempts++;
+                    // If still trying to connect, send connect messages instead of heartbeats
+                    if (connectionAttempts < maxConnectionAttempts)
+                    {
+                        SendConnect();
+                        connectionAttempts++;
+                    }
+                    else
+                    {
+                        OnConnectionFailed();
+                    }
                 }
-                else
+                else if (IsConnected)
                 {
-                    OnConnectionFailed();
-                }
-            }
-            else if (IsConnected)
-            {
-                // If connected and not timed out, send heartbeats
-                if (HasTimedOut)
-                {
-                    HandleDisconnect();
-                    return;
-                }
+                    // If connected and not timed out, send heartbeats
+                    if (HasTimedOut)
+                    {
+                        HandleDisconnect();
+                        return;
+                    }
 
-                SendHeartbeat();
-            }
+                    SendHeartbeat();
+                }
+            });
         }
 
         /// <inheritdoc/>
@@ -195,7 +217,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     HandleDisconnect();
                     break;
                 default:
-                    RiptideLogger.Log(LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
                     break;
             }
 
@@ -203,9 +225,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)
+        protected override void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint)
         {
-            ReliableHandle(message, fromEndPoint, messageHeader, peer.SendLockables);
+            ReliableHandle(messageHeader, sequenceId, message, fromEndPoint, peer.SendLockables);
         }
 
         /// <inheritdoc/>
@@ -229,8 +251,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             SendDisconnect();
             LocalDisconnect();
 
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Disconnected from server (initiated locally).");
+            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
@@ -243,7 +264,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             lock (peer.PendingMessages)
             {
-                foreach (RudpPeer.PendingMessage pendingMessage in peer.PendingMessages.Values)
+                foreach (PendingMessage pendingMessage in peer.PendingMessages.Values)
                     pendingMessage.Clear(false);
 
                 peer.PendingMessages.Clear();
@@ -299,10 +320,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a heartbeat message.</summary>
         private void SendHeartbeat()
         {
-            pendingPing = (lastPingId++, DateTime.UtcNow);
+            pendingPingId = lastPingId++;
+            pendingPingStopwatch.Restart();
 
             Message message = Message.Create(HeaderType.heartbeat);
-            message.Add(pendingPing.id);
+            message.Add(pendingPingId);
             message.Add(peer.RTT);
 
             Send(message);
@@ -314,8 +336,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             byte pingId = message.GetByte();
 
-            if (pendingPing.id == pingId)
-                peer.RTT = (short)Math.Max(1f, (DateTime.UtcNow - pendingPing.sendTime).TotalMilliseconds);
+            if (pendingPingId == pingId)
+                peer.RTT = (short)Math.Max(1f, pendingPingStopwatch.ElapsedMilliseconds);
 
             lastHeartbeat = DateTime.UtcNow;
         }
@@ -375,8 +397,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         private void OnConnected()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Connected successfully!");
+            RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
 
             receiveActionQueue.Add(() => Connected?.Invoke(this, EventArgs.Empty));
         }
@@ -384,8 +405,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Connection to server failed!");
+            RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
 
             LocalDisconnect();
             receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, EventArgs.Empty));
@@ -401,8 +421,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         private void OnDisconnected()
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, "Disconnected from server (initiated remotely).");
+            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
 
             LocalDisconnect();
             receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
@@ -412,8 +431,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientConnected(ClientConnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Client {e.Id} connected.");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} connected.");
 
             receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
         }
@@ -422,8 +440,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            if (ShouldOutputInfoLogs)
-                RiptideLogger.Log(LogName, $"Client {e.Id} disconnected.");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
 
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
         }

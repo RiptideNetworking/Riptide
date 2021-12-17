@@ -3,6 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking.Utils;
 using System;
 using System.Net;
 
@@ -58,13 +59,13 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
-        internal void Disconnect()
+        internal void LocalDisconnect()
         {
             connectionState = ConnectionState.notConnected;
 
             lock (Peer.PendingMessages)
             {
-                foreach (RudpPeer.PendingMessage pendingMessage in Peer.PendingMessages.Values)
+                foreach (PendingMessage pendingMessage in Peer.PendingMessages.Values)
                     pendingMessage.Clear(false);
 
                 Peer.PendingMessages.Clear();
@@ -149,7 +150,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             ushort id = message.GetUShort();
             if (Id != id)
-                RiptideLogger.Log(server.LogName, $"Client has assumed ID {id} instead of {Id}!");
+                RiptideLogger.Log(LogType.error, server.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
             connectionState = ConnectionState.connected;
             server.OnClientConnected(RemoteEndPoint, new ServerClientConnectedEventArgs(this));

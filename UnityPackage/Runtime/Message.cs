@@ -3,7 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports.Utils;
+using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,6 +47,9 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
+        public const int MaxMessageSize = 1250;
+
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
         public static byte InstancesPerSocket { get; set; } = 4;
@@ -74,9 +77,9 @@ namespace RiptideNetworking
         /// <summary>The position in the byte array that the next bytes will be read from.</summary>
         private ushort readPos = 0;
 
-        /// <summary>Initializes a reusable Message instance.</summary>
+        /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        internal Message(ushort maxSize = 1280)
+        internal Message(int maxSize = MaxMessageSize)
         {
             Bytes = new byte[maxSize];
         }
@@ -151,9 +154,7 @@ namespace RiptideNetworking
                 return message;
             }
         }
-        #endregion
-        
-        #region Functions
+
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
@@ -167,7 +168,9 @@ namespace RiptideNetworking
                 }
             }
         }
+        #endregion
 
+        #region Functions
         /// <summary>Prepares a message to be used for sending.</summary>
         /// <param name="messageHeader">The header of the message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
@@ -201,7 +204,7 @@ namespace RiptideNetworking
         #region Byte
         /// <summary>Adds a single <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="byte"/> was added to.</returns>
+        /// <returns>The message that the <see cref="byte"/> was added to.</returns>
         public Message Add(byte value)
         {
             if (UnwrittenLength < 1)
@@ -217,7 +220,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < 1)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
                 return 0;
             }
             
@@ -234,7 +237,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="byte"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="byte"/> array was added to.</returns>
         public Message Add(byte[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -302,7 +305,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte[]', array will contain default elements!");
                 amount = UnreadLength;
             }
 
@@ -314,7 +317,7 @@ namespace RiptideNetworking
         #region Bool
         /// <summary>Adds a <see cref="bool"/> to the message.</summary>
         /// <param name="value">The <see cref="bool"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="bool"/> was added to.</returns>
+        /// <returns>The message that the <see cref="bool"/> was added to.</returns>
         public Message Add(bool value)
         {
             if (UnwrittenLength < RiptideConverter.boolLength)
@@ -330,7 +333,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.boolLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
                 return false;
             }
             
@@ -347,7 +350,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="bool"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="bool"/> array was added to.</returns>
         public Message Add(bool[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -411,7 +414,7 @@ namespace RiptideNetworking
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
                 byteAmount = UnreadLength;
             }
 
@@ -429,7 +432,7 @@ namespace RiptideNetworking
 
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool[]', array will contain default elements!");
 
             ReadBools(byteAmount, array, startIndex);
         }
@@ -459,7 +462,7 @@ namespace RiptideNetworking
         #region Short & UShort
         /// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="short"/> was added to.</returns>
+        /// <returns>The message that the <see cref="short"/> was added to.</returns>
         public Message Add(short value)
         {
             if (UnwrittenLength < RiptideConverter.shortLength)
@@ -472,7 +475,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="ushort"/> to the message.</summary>
         /// <param name="value">The <see cref="ushort"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="ushort"/> was added to.</returns>
+        /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
         public Message Add(ushort value)
         {
             if (UnwrittenLength < RiptideConverter.ushortLength)
@@ -489,7 +492,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.shortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
                 return 0;
             }
 
@@ -504,7 +507,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
                 return 0;
             }
 
@@ -518,7 +521,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
                 return 0;
             }
 
@@ -535,7 +538,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="short"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="short"/> array was added to.</returns>
         public Message Add(short[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -569,7 +572,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="ushort"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="ushort"/> array was added to.</returns>
         public Message Add(ushort[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -675,7 +678,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.shortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.shortLength;
             }
 
@@ -694,7 +697,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.ushortLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.shortLength;
             }
 
@@ -709,7 +712,7 @@ namespace RiptideNetworking
         #region Int & UInt
         /// <summary>Adds an <see cref="int"/> to the message.</summary>
         /// <param name="value">The <see cref="int"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="int"/> was added to.</returns>
+        /// <returns>The message that the <see cref="int"/> was added to.</returns>
         public Message Add(int value)
         {
             if (UnwrittenLength < RiptideConverter.intLength)
@@ -722,7 +725,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="uint"/> was added to.</returns>
+        /// <returns>The message that the <see cref="uint"/> was added to.</returns>
         public Message Add(uint value)
         {
             if (UnwrittenLength < RiptideConverter.uintLength)
@@ -739,7 +742,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.intLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
                 return 0;
             }
 
@@ -754,7 +757,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.uintLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
                 return 0;
             }
 
@@ -773,7 +776,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="int"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="int"/> array was added to.</returns>
         public Message Add(int[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -807,7 +810,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="uint"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="uint"/> array was added to.</returns>
         public Message Add(uint[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -913,7 +916,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.intLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.intLength;
             }
 
@@ -932,7 +935,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.uintLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.uintLength;
             }
 
@@ -947,7 +950,7 @@ namespace RiptideNetworking
         #region Long & ULong
         /// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="long"/> was added to.</returns>
+        /// <returns>The message that the <see cref="long"/> was added to.</returns>
         public Message Add(long value)
         {
             if (UnwrittenLength < RiptideConverter.longLength)
@@ -960,7 +963,7 @@ namespace RiptideNetworking
 
         /// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="ulong"/> was added to.</returns>
+        /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
         public Message Add(ulong value)
         {
             if (UnwrittenLength < RiptideConverter.ulongLength)
@@ -977,7 +980,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.longLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
                 return 0;
             }
 
@@ -992,7 +995,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.ulongLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
                 return 0;
             }
 
@@ -1011,7 +1014,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="long"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="long"/> array was added to.</returns>
         public Message Add(long[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1045,7 +1048,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="ulong"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="ulong"/> array was added to.</returns>
         public Message Add(ulong[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1151,7 +1154,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.longLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.longLength;
             }
 
@@ -1170,7 +1173,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.ulongLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.ulongLength;
             }
 
@@ -1185,7 +1188,7 @@ namespace RiptideNetworking
         #region Float
         /// <summary>Adds a <see cref="float"/> to the message.</summary>
         /// <param name="value">The <see cref="float"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="float"/> was added to.</returns>
+        /// <returns>The message that the <see cref="float"/> was added to.</returns>
         public Message Add(float value)
         {
             if (UnwrittenLength < RiptideConverter.floatLength)
@@ -1202,7 +1205,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.floatLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
                 return 0;
             }
 
@@ -1221,7 +1224,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="float"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="float"/> array was added to.</returns>
         public Message Add(float[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1290,7 +1293,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.floatLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.floatLength;
             }
 
@@ -1305,7 +1308,7 @@ namespace RiptideNetworking
         #region Double
         /// <summary>Adds a <see cref="double"/> to the message.</summary>
         /// <param name="value">The <see cref="double"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="double"/> was added to.</returns>
+        /// <returns>The message that the <see cref="double"/> was added to.</returns>
         public Message Add(double value)
         {
             if (UnwrittenLength < RiptideConverter.doubleLength)
@@ -1322,7 +1325,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < RiptideConverter.doubleLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
                 return 0;
             }
 
@@ -1341,7 +1344,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="double"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="double"/> array was added to.</returns>
         public Message Add(double[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)
@@ -1410,7 +1413,7 @@ namespace RiptideNetworking
         {
             if (UnreadLength < amount * RiptideConverter.doubleLength)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
                 amount = UnreadLength / RiptideConverter.doubleLength;
             }
 
@@ -1425,7 +1428,7 @@ namespace RiptideNetworking
         #region String
         /// <summary>Adds a <see cref="string"/> to the message.</summary>
         /// <param name="value">The <see cref="string"/> to add.</param>
-        /// <returns>The Message instance that the <see cref="string"/> was added to.</returns>
+        /// <returns>The message that the <see cref="string"/> was added to.</returns>
         public Message Add(string value)
         {
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
@@ -1445,7 +1448,7 @@ namespace RiptideNetworking
             ushort length = GetUShort(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadLength < length)
             {
-                RiptideLogger.Log("ERROR", $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
+                RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
                 length = (ushort)UnreadLength;
             }
             
@@ -1464,7 +1467,7 @@ namespace RiptideNetworking
         ///     Writes the length using 1 <see cref="byte"/> if <see langword="false"/>.
         ///   </para>
         /// </param>
-        /// <returns>The Message instance that the <see cref="string"/> array was added to.</returns>
+        /// <returns>The message that the <see cref="string"/> array was added to.</returns>
         public Message Add(string[] array, bool includeLength = true, bool isBigArray = false)
         {
             if (includeLength)

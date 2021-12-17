@@ -3,12 +3,9 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports.Utils;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading;
-using Timer = System.Timers.Timer;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -36,14 +33,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         private short _rtt = -1;
         /// <inheritdoc cref="IConnectionInfo.SmoothRTT"/>
         internal short SmoothRTT { get; set; } = -1;
-
-        /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        protected readonly float retryTimeMultiplier = 1.2f;
+        /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
+        internal readonly RudpListener Listener;
 
         /// <summary>The last used sequence ID.</summary>
         private int lastSequenceId;
-        /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
-        private readonly RudpListener listener;
         /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
         private const ushort LeftBit = 1 << 15;
 
@@ -51,7 +45,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="rudpListener">The <see cref="RudpListener"/> whose socket to use when sending data.</param>
         internal RudpPeer(RudpListener rudpListener)
         {
-            listener = rudpListener;
+            Listener = rudpListener;
             SendLockables = new SendLockables();
             ReceiveLockables = new ReceiveLockables();
         }
@@ -138,126 +132,6 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return gap;
             else // Difference is big, meaning sequence IDs are far apart
                 return (seqId1 <= 32768 ? ushort.MaxValue + 1 + seqId1 : seqId1) - (seqId2 <= 32768 ? ushort.MaxValue + 1 + seqId2 : seqId2);
-        }
-
-        /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
-        internal class PendingMessage
-        {
-            /// <summary>The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</summary>
-            private readonly RudpPeer peer;
-            /// <summary>The intended destination endpoint of the message.</summary>
-            private readonly IPEndPoint remoteEndPoint;
-            /// <summary>The sequence ID of the message.</summary>
-            private readonly ushort sequenceId;
-            /// <summary>The contents of the message.</summary>
-            private readonly byte[] data;
-            /// <summary>How often to try sending the message before giving up.</summary>
-            private readonly int maxSendAttempts;
-            /// <summary>How many send attempts have been made so far.</summary>
-            private byte sendAttempts;
-            /// <summary>The time of the latest send attempt.</summary>
-            private DateTime lastSendTime;
-            /// <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
-            private readonly Timer retryTimer;
-            /// <summary>Whether the pending message has been cleared or not.</summary>
-            private bool wasCleared;
-
-            /// <summary>Handles initial setup.</summary>
-            /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
-            /// <param name="sequenceId">The sequence ID of the message.</param>
-            /// <param name="message">The message that is being sent reliably.</param>
-            /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
-            internal PendingMessage(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
-            {
-                this.peer = peer;
-                this.sequenceId = sequenceId;
-
-                data = new byte[message.WrittenLength + RiptideConverter.ushortLength];
-                data[0] = message.Bytes[0]; // Copy message header
-                RiptideConverter.FromUShort(sequenceId, data, 1); // Insert sequence ID
-                Array.Copy(message.Bytes, 1, data, 3, message.WrittenLength - 1); // Copy the rest of the message
-
-                remoteEndPoint = toEndPoint;
-                maxSendAttempts = message.MaxSendAttempts;
-                sendAttempts = 0;
-
-                retryTimer = new Timer();
-                retryTimer.Elapsed += (s, e) => RetrySend();
-                retryTimer.AutoReset = false;
-            }
-
-            /// <summary>Resends the message.</summary>
-            internal void RetrySend()
-            {
-                lock (this) // Make sure we don't try resending the message while another thread is clearing it because it was delivered
-                {
-                    if (!wasCleared)
-                    {
-                        if (lastSendTime.AddMilliseconds(peer.SmoothRTT < 0 ? 25 : peer.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                            TrySend();
-                        else
-                        {
-                            retryTimer.Start();
-                            retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * peer.retryTimeMultiplier));
-                        }
-                    }
-                }
-            }
-
-            /// <summary>Attempts to send the message.</summary>
-            internal void TrySend()
-            {
-                if (sendAttempts >= maxSendAttempts)
-                {
-                    // Send attempts exceeds max send attempts, so give up
-                    if (peer.listener.ShouldOutputInfoLogs)
-                    {
-                        HeaderType headerType = (HeaderType)data[0];
-                        if (headerType == HeaderType.reliable)
-                        {
-#if BIG_ENDIAN
-                            ushort messageId = (ushort)(data[4] | (data[3] << 8));
-#else
-                            ushort messageId = (ushort)(data[3] | (data[4] << 8));
-#endif
-
-                            RiptideLogger.Log(peer.listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
-                        }
-                        else
-                            RiptideLogger.Log(peer.listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
-                    }
-
-                    Clear();
-                    return;
-                }
-
-                peer.listener.Send(data, remoteEndPoint);
-
-                lastSendTime = DateTime.UtcNow;
-                sendAttempts++;
-
-                retryTimer.Start();
-                retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * peer.retryTimeMultiplier);
-            }
-
-            /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
-            /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="PendingMessages"/>.</param>
-            internal void Clear(bool shouldRemoveFromDictionary = true)
-            {
-                lock (this)
-                {
-                    if (!wasCleared)
-                    {
-                        if (shouldRemoveFromDictionary)
-                            lock (peer.PendingMessages)
-                                peer.PendingMessages.Remove(sequenceId);
-
-                        retryTimer.Stop();
-                        retryTimer.Dispose();
-                        wasCleared = true;
-                    }
-                }
-            }
         }
     }
 }

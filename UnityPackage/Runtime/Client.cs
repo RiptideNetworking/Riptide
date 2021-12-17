@@ -4,6 +4,7 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using RiptideNetworking.Transports;
+using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,12 +40,6 @@ namespace RiptideNetworking
         public bool IsConnecting => client.IsConnecting;
         /// <inheritdoc cref="IConnectionInfo.IsConnected"/>
         public bool IsConnected => client.IsConnected;
-        /// <inheritdoc/>
-        public override bool ShouldOutputInfoLogs
-        {
-            get => client.ShouldOutputInfoLogs;
-            set => client.ShouldOutputInfoLogs = value;
-        }
         /// <summary>Encapsulates a method that handles a message from the server.</summary>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);
@@ -65,6 +60,15 @@ namespace RiptideNetworking
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
 
+        /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
+        /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, byte)"/> will need to be called again.</remarks>
+        public void ChangeTransport(IClient client)
+        {
+            Disconnect();
+            this.client = client;
+        }
+
         /// <summary>Attempts connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
@@ -74,8 +78,7 @@ namespace RiptideNetworking
         /// </remarks>
         public void Connect(string hostAddress, byte messageHandlerGroupId = 0)
         {
-            if (IsConnecting || IsConnected)
-                Disconnect();
+            Disconnect();
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
@@ -105,7 +108,7 @@ namespace RiptideNetworking
 
                 if (!methods[i].IsStatic)
                 {
-                    RiptideLogger.Log("ERROR", $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+                    RiptideLogger.Log(LogType.error, $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
                     break;
                 }
 
@@ -114,7 +117,7 @@ namespace RiptideNetworking
                 {
                     // It's a message handler for Client instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
-                        RiptideLogger.Log("ERROR", $"Message handler method (type: client) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
+                        RiptideLogger.Log(LogType.error, $"Message handler method (type: client) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
                 }
@@ -123,7 +126,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Client instances, but it might be one for Server instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log("ERROR", $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                        RiptideLogger.Log(LogType.error, $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
         }
@@ -169,7 +172,7 @@ namespace RiptideNetworking
             if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
                 messageHandler(e.Message);
             else
-                RiptideLogger.Log("ERROR", $"No handler method (type: client) found for message ID {e.MessageId}!");
+                RiptideLogger.Log(LogType.warning, $"No handler method (type: client) found for message ID {e.MessageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>

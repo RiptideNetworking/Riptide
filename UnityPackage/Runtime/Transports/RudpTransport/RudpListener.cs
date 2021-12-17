@@ -3,7 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports.Utils;
+using RiptideNetworking.Utils;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -14,8 +14,6 @@ namespace RiptideNetworking.Transports.RudpTransport
     /// <summary>Provides base sending &#38; receiving functionality for <see cref="RudpServer"/> and <see cref="RudpClient"/>.</summary>
     public abstract class RudpListener
     {
-        /// <inheritdoc cref="ICommon.ShouldOutputInfoLogs"/>
-        public bool ShouldOutputInfoLogs { get; set; } = true;
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
 
@@ -28,6 +26,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         private Socket socket;
         /// <summary>Whether or not we are currently listening for incoming data.</summary>
         private bool isListening = false;
+        /// <summary>The buffer that incoming data is received into.</summary>
+        private byte[] receiveBuffer;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -49,10 +49,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             Message.IncreasePoolCount();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.Any, port);
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
+            socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
             socket.Bind(localEndPoint);
-
+            
             new Thread(new ThreadStart(Receive)).Start();
         }
 
@@ -74,32 +74,25 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void Receive()
         {
             EndPoint bufferEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
+            receiveBuffer = new byte[Message.MaxMessageSize + RiptideConverter.ushortLength];
             isListening = true;
 
             while (isListening)
             {
                 int byteCount;
-                Message message = null;
-
+                
                 try
                 {
                     if (socket.Available == 0 && !socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
                         continue;
 
-                    message = Message.Create();
-                    byteCount = socket.ReceiveFrom(message.Bytes, 0, message.Bytes.Length, SocketFlags.None, ref bufferEndPoint);
+                    byteCount = socket.ReceiveFrom(receiveBuffer, SocketFlags.None, ref bufferEndPoint);
 
                     if (byteCount < 1)
-                    {
-                        message.Release();
                         continue;
-                    }
                 }
                 catch (SocketException ex)
                 {
-                    if (message != null)
-                        message.Release();
-
                     switch (ex.SocketErrorCode)
                     {
                         case SocketError.Interrupted:
@@ -116,40 +109,46 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
                 catch (ObjectDisposedException)
                 {
-                    if (message != null)
-                        message.Release();
-
                     return;
                 }
                 catch (NullReferenceException)
                 {
-                    if (message != null)
-                        message.Release();
-
                     return;
                 }
 
-                PrepareToHandle(message, byteCount, (IPEndPoint)bufferEndPoint);
+                PrepareToHandle(byteCount, (IPEndPoint)bufferEndPoint);
             }
         }
 
         /// <summary>Takes a received message and prepares it to be handled.</summary>
-        /// <param name="message">The message that was received.</param>
         /// <param name="length">The length of the contents of message.</param>
         /// <param name="remoteEndPoint">The endpoint from which the message was received.</param>
-        private void PrepareToHandle(Message message, int length, IPEndPoint remoteEndPoint)
+        private void PrepareToHandle(int length, IPEndPoint remoteEndPoint)
         {
-            HeaderType messageHeader = message.PrepareForUse((ushort)length);
+            HeaderType messageHeader = (HeaderType)receiveBuffer[0];
             if (!ShouldHandleMessageFrom(remoteEndPoint, messageHeader))
                 return;
 
+            Message message = Message.Create();
+            message.Bytes[0] = receiveBuffer[0];
+            message.PrepareForUse((ushort)length);
+            
             if (message.SendMode == MessageSendMode.reliable)
             {
-                if (message.UnreadLength >= 2) // Reliable messages have a 3 byte header (one of which we've already read out) so don't handle anything with less than that
-                    ReliableHandle(message, remoteEndPoint, messageHeader);
+                if (length > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (3 or less means no payload for a reliably sent packet)
+                    Array.Copy(receiveBuffer, 3, message.Bytes, 1, length - 3);
+                else if (length < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
+                    return;
+                
+                ReliableHandle(messageHeader, RiptideConverter.ToUShort(receiveBuffer, 1), message, remoteEndPoint);
             }
             else
+            {
+                if (length > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
+                    Array.Copy(receiveBuffer, 1, message.Bytes, 1, length - 1);
+
                 Handle(message, remoteEndPoint, messageHeader);
+            }
         }
 
         /// <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
@@ -159,20 +158,21 @@ namespace RiptideNetworking.Transports.RudpTransport
         protected abstract bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader);
 
         /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that was received.</param>
         /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
-        /// <param name="messageHeader">The header of the message.</param>
-        protected abstract void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader);
+        protected abstract void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint);
 
         /// <summary>Handles the given reliably sent message.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that was received.</param>
         /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
-        /// <param name="messageHeader">The header of the message.</param>
         /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
-        internal void ReliableHandle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader, SendLockables lockables)
+        internal void ReliableHandle(HeaderType messageHeader, ushort sequenceId, Message message, IPEndPoint fromEndPoint, SendLockables lockables)
         {
-            ushort sequenceId = message.GetUShort();
-
+            bool shouldHandle = true;
             lock (lockables)
             {
                 // Update acks
@@ -180,50 +180,78 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (sequenceGap > 0)
                 {
                     // The received sequence ID is newer than the previous one
-                    lockables.AcksBitfield <<= sequenceGap; // Shift the bits left to make room for the latest remote sequence ID
-                    ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-                    if ((lockables.AcksBitfield & seqIdBit) == 0)
+                    if (sequenceGap > 64)
+                        RiptideLogger.Log(LogType.warning, LogName, $"The gap between received sequence IDs was very large ({sequenceGap})! If the connection's packet loss, latency, or your send rate of reliable messages increases much further, sequence IDs may begin falling outside the bounds of the duplicate filter.");
+
+                    lockables.DuplicateFilterBitfield <<= sequenceGap;
+                    if (sequenceGap <= 16)
                     {
-                        // If we haven't received this packet before
-                        lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                        ulong shiftedBits = (ulong)lockables.AcksBitfield << sequenceGap;
+                        lockables.AcksBitfield = (ushort)shiftedBits; // Give the acks bitfield the first 2 bytes of the shifted bits
+                        lockables.DuplicateFilterBitfield |= shiftedBits >> 16; // OR the last 6 bytes worth of the shifted bits into the duplicate filter bitfield
+
+                        shouldHandle = UpdateAcksBitfield(sequenceGap, lockables);
                         lockables.LastReceivedSeqId = sequenceId;
-                        SendAck(sequenceId, fromEndPoint);
                     }
-                    else
+                    else if (sequenceGap <= 80)
                     {
-                        SendAck(sequenceId, fromEndPoint);
-                        return; // Message was a duplicate, don't handle it
+                        ulong shiftedBits = (ulong)lockables.AcksBitfield << (sequenceGap - 16);
+                        lockables.AcksBitfield = 0; // Reset the acks bitfield as all its bits are being moved to the duplicate filter bitfield
+                        lockables.DuplicateFilterBitfield |= shiftedBits; // OR the shifted bits into the duplicate filter bitfield
+
+                        shouldHandle = UpdateDuplicateFilterBitfield(sequenceGap, lockables);
                     }
                 }
                 else if (sequenceGap < 0)
                 {
                     // The received sequence ID is older than the previous one (out of order message)
                     sequenceGap = -sequenceGap; // Make sequenceGap positive
-                    if (sequenceGap > 16) // If it's an old packet and its sequence ID doesn't fall within the bitfield's value range anymore
-                        SendAck(sequenceId, fromEndPoint); // TODO: store a larger bitfield locally to do a better job of filtering out old duplicates
-                    else
-                    {
-                        ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-                        if ((lockables.AcksBitfield & seqIdBit) == 0) // If we haven't received this packet before
-                        {
-                            lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
-                            SendAck(sequenceId, fromEndPoint);
-                        }
-                        else
-                        {
-                            SendAck(sequenceId, fromEndPoint);
-                            return; // Message was a duplicate, don't handle it
-                        }
-                    }
+                    if (sequenceGap <= 16) // If the message's sequence ID still falls within the ack bitfield's value range
+                        shouldHandle = UpdateAcksBitfield(sequenceGap, lockables);
+                    else if (sequenceGap <= 80) // If it's an "old" message and its sequence ID doesn't fall within the ack bitfield's value range anymore (but it falls in the range of the duplicate filter)
+                        shouldHandle = UpdateDuplicateFilterBitfield(sequenceGap, lockables);
                 }
                 else // The received sequence ID is the same as the previous one (duplicate message)
-                {
-                    SendAck(sequenceId, fromEndPoint);
-                    return; // Message was a duplicate, don't handle it
-                }
+                    shouldHandle = false;
             }
 
-            Handle(message, fromEndPoint, messageHeader);
+            SendAck(sequenceId, fromEndPoint);
+            if (shouldHandle)
+                Handle(message, fromEndPoint, messageHeader);
+        }
+
+        /// <summary>Updates the acks bitfield and determines whether or not to handle the message.</summary>
+        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+        /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
+        private bool UpdateAcksBitfield(int sequenceGap, SendLockables lockables)
+        {
+            ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
+            if ((lockables.AcksBitfield & seqIdBit) == 0)
+            {
+                // If we haven't received this message before
+                lockables.AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                return true; // Message was "new", handle it
+            }
+            else // If we have received this message before
+                return false; // Message was a duplicate, don't handle it
+        }
+
+        /// <summary>Updates the duplicate filter bitfield and determines whether or not to handle the message.</summary>
+        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
+        /// <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
+        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
+        private bool UpdateDuplicateFilterBitfield(int sequenceGap, SendLockables lockables)
+        {
+            ulong seqIdBit = (ulong)1 << (sequenceGap - 1 - 16); // Calculate which bit corresponds to the sequence ID and set it to 1
+            if ((lockables.DuplicateFilterBitfield & seqIdBit) == 0)
+            {
+                // If we haven't received this message before
+                lockables.DuplicateFilterBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
+                return true; // Message was "new", handle it
+            }
+            else // If we have received this message before
+                return false; // Message was a duplicate, don't handle it
         }
 
         /// <summary>Handles the given message.</summary>
@@ -280,12 +308,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return;
 
             ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
-            RudpPeer.PendingMessage pendingMessage = new RudpPeer.PendingMessage(peer, sequenceId, message, toEndPoint);
-            lock (peer.PendingMessages)
-            {
-                peer.PendingMessages.Add(sequenceId, pendingMessage);
-                pendingMessage.TrySend();
-            }
+            PendingMessage.CreateAndSend(peer, sequenceId, message, toEndPoint);
         }
 
         /// <summary>Sends an acknowledgement for a sequence ID to a specific endpoint.</summary>
