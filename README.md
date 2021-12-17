@@ -10,7 +10,7 @@ Riptide provides functionality for establishing connections and sending data bac
 
 Riptide is 100% free to use and only funded by [donations](https://github.com/sponsors/tom-weiland).
 
-## Getting Started
+## Installation
 ### Unity
 Using Unity's Package Manager:
 1. Open the Package Manager (Window > Package Manager)
@@ -30,7 +30,7 @@ If you aren't using Unity, you can add the RiptideNetworking.dll file to your pr
 5. Click the 'Browse' button in the bottom right corner of the window
 6. Navigate to the folder where you saved the RiptideNetworking.dll file and add it
 
-## Usage
+## Getting Started
 ### Project Considerations
 If you are making a player-hosted game (sometimes mistakenly referred to as "peer-to-peer") where one player acts as the server, you'll want all your code in a single project.
 
@@ -54,14 +54,15 @@ Set up a `NetworkManager` class like in the [Unity demo projects](https://github
 
 Additionally, you can set up a `MessageExtensions` class to extend the functionality of the `Message` class. This is helpful if you wish to send custom objects over the network—being able to directly Add/Get a `Vector3` from a message is much more convenient than having to call the Add/GetFloat method 3 times in a row. Refer to the [Unity demos](https://github.com/tom-weiland/RiptideNetworking/tree/main/Demos/Unity) for an example.
 
+Note that if you installed Riptide via the Unity package manager, `Message` extension methods for several types (including `Vector3` and `Quaternion`) are [already included](https://github.com/tom-weiland/RiptideNetworking/blob/main/UnityPackage/Runtime/MessageExtensionsUnity.cs).
+
 ### Creating and Sending Messages
 Messages are created like this:
 ```
 Message message = Message.Create(<messageSendMode>, <messageId>);
 ```
-`<messageSendMode>` should be set to either `MessageSendMode.reliable` or `MessageSendMode.unreliable`, depending on how you want your message to be sent.
-
-`<messageId>` should be set to the message's ID (a ushort). This ID will allow the other end to determine how to handle the message upon receiving it.
+`<messageSendMode>` should be set to either `MessageSendMode.reliable` or `MessageSendMode.unreliable`, depending on how you want your message to be sent.<br/>
+`<messageId>` should be set to the message's ID (a `ushort`). This ID will allow the other end to determine how to handle the message upon receiving it.
 
 To add data to your message, use:
 ```
@@ -78,7 +79,7 @@ Server.SendToAll(message); // Sends message from server to all clients
 Server.SendToAll(message, <toClientId>); // Sends message from server to all clients except one
 Client.Send(message); // Sends message from client to server
 ```
-`<toClientId>` should be set to the ID (a ushort) of the client you want the server to send—or not send, in the case of the SendToAll method—the message to. 
+`<toClientId>` should be set to the ID (a `ushort`) of the client you want the server to send—or not send, in the case of the SendToAll method—the message to. 
 
 ### Handling Messages
 To handle messages, simply create a static method and give it the MessageHandler attribute:
@@ -93,7 +94,7 @@ private static void HandleSomeMessageFromServer(Message message)
     // Do stuff with the retrieved data here
 }
 ```
-`<someMessageFromServerID>` should be set to the ID (a ushort) of the message you want this method to handle.
+`<someMessageFromServerID>` should be set to the ID (a `ushort`) of the message you want this method to handle.
 
 A few things to note:
 - to ensure that messages are actually handled, you _must_ regularly call the Tick method of the Server/Client instance you're using. If you're using Unity, FixedUpdate is a good place to do this
@@ -105,7 +106,7 @@ A few things to note:
 - [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
 
 ## Donate
-If you'd like to financially support the development of Riptide and its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
+Riptide is 100% free to use, but if you'd like to financially support its development as well as the development of its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
 
 ## License
 Distributed under the MIT license. See [LICENSE.md](https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md) for more information.
