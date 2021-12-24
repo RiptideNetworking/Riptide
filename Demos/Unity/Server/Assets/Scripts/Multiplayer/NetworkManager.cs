@@ -4,6 +4,7 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using RiptideNetworking.Utils;
+using System;
 using UnityEngine;
 
 namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleServer
@@ -58,10 +59,10 @@ namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleServer
 #if UNITY_EDITOR
             RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 #else
-        Console.Title = "Server";
-        Console.Clear();
-        Application.SetStackTraceLogType(LogType.Log, StackTraceLogType.None);
-        RiptideLogger.Initialize(Debug.Log, true);
+            Console.Title = "Server";
+            Console.Clear();
+            Application.SetStackTraceLogType(UnityEngine.LogType.Log, StackTraceLogType.None);
+            RiptideLogger.Initialize(Debug.Log, true);
 #endif
 
             Server = new Server();
