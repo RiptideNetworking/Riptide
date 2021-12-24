@@ -24,7 +24,7 @@ namespace RiptideNetworking.Transports
         /// <summary>Invoked when a client disconnects.</summary>
         event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
-        /// <summary>Attempts connect to the given host address.</summary>
+        /// <summary>Attempts to connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         void Connect(string hostAddress);
         /// <summary>Sends a message to the server.</summary>

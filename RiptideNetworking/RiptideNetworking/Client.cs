@@ -69,7 +69,7 @@ namespace RiptideNetworking
             this.client = client;
         }
 
-        /// <summary>Attempts connect to the given host address.</summary>
+        /// <summary>Attempts to connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <remarks>
