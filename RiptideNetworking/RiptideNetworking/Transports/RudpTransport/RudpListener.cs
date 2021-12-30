@@ -17,7 +17,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
 
-        /// <summary>The <see cref="ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+        /// <summary>The <see cref="ActionQueue"/> to use when invoking events.</summary>
         protected ActionQueue receiveActionQueue;
 
         /// <summary>How long to wait for a response, in microseconds.</summary>

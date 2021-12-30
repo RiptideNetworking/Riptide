@@ -1510,7 +1510,7 @@
             <summary>The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.receiveActionQueue">
-            <summary>The <see cref="T:RiptideNetworking.Utils.ActionQueue"/> to use when invoking events. <see langword="null"/> if events should be invoked immediately.</summary>
+            <summary>The <see cref="T:RiptideNetworking.Utils.ActionQueue"/> to use when invoking events.</summary>
         </member>
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpListener.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
@@ -1956,10 +1956,6 @@
             <param name="uniqueKey">This app's unique key, used to determine whether to handle or ignore received data.</param>
             <param name="broadcastPort">The port to send broadcasts to/listen for broadcasts on.</param>
         </member>
-        <member name="M:RiptideNetworking.Utils.LanDiscovery.Tick">
-            <summary>Initiates execution of any queued event invocations.</summary>
-            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Broadcasts will continue to discover hosts on the LAN in between calls, but the <see cref="E:RiptideNetworking.Utils.LanDiscovery.HostDiscovered"/> event won't be invoked until this method is executed.</remarks>
-        </member>
         <member name="M:RiptideNetworking.Utils.LanDiscovery.SendBroadcast">
             <summary>Sends a broadcast to all machines on the LAN.</summary>
         </member>
@@ -1972,6 +1968,10 @@
         </member>
         <member name="M:RiptideNetworking.Utils.LanDiscovery.ReceiveCallback(System.IAsyncResult)">
             <summary>Receives data.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.Tick">
+            <summary>Initiates execution of any queued event invocations.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Broadcasts will continue to discover hosts on the LAN in between calls, but the <see cref="E:RiptideNetworking.Utils.LanDiscovery.HostDiscovered"/> event won't be invoked until this method is executed.</remarks>
         </member>
         <member name="M:RiptideNetworking.Utils.LanDiscovery.SetBroadcastData">
             <summary>Sets the data that will be sent as part of a broadcast.</summary>
