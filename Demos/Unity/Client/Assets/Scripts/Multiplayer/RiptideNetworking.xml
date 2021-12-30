@@ -1894,6 +1894,139 @@
             <summary>Takes an <see cref="T:System.Net.IPEndPoint"/> and returns a string containing its IP address and port number, accounting for whether the address is an IPv4 or IPv6.</summary>
             <returns>A string containing the IP address and port number of the endpoint.</returns>
         </member>
+        <member name="T:RiptideNetworking.Utils.BroadcastMode">
+            <summary>Defines broadcast modes.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.BroadcastMode.none">
+            <summary>Not currently broadcasting or listening for broadcasts.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.BroadcastMode.broadcasting">
+            <summary>Currently broadcasting.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.BroadcastMode.listening">
+            <summary>Currently listening for broadcasts.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Utils.LanDiscovery">
+            <summary>Provides functionality for discovering game hosts over LAN.</summary>
+        </member>
+        <member name="E:RiptideNetworking.Utils.LanDiscovery.HostDiscovered">
+            <summary>Invoked when a host is found on the LAN.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.LanDiscovery.UniqueKey">
+            <summary>This app's unique key, used to determine whether to handle or ignore received data.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.LanDiscovery.Mode">
+            <summary>The current broadcast mode.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.LanDiscovery.BroadcastPort">
+            <summary>The port to send broadcasts to/listen for broadcasts on.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.LanDiscovery.HostIP">
+            <summary>The IP to broadcast.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.LanDiscovery.HostPort">
+            <summary>The port to broadcast.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.localIPAdress">
+            <summary>The current machine's local IP.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.subnetMask">
+            <summary>The subnet mask for <see cref="F:RiptideNetworking.Utils.LanDiscovery.localIPAdress"/>.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.broadcastEndPoint">
+            <summary>The endpoint to which to send data in order to broadcast it to all machines on the LAN.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.socket">
+            <summary>The socket used to send and listen for broadcasted data.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.endPoint">
+            <summary>A reusable <see cref="T:System.Net.EndPoint"/> instance.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.broadcastSendBytes">
+            <summary>The array used to broadcast data.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.broadcastReceiveBytes">
+            <summary>The array into which broadcasted data is received.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Utils.LanDiscovery.actionQueue">
+            <summary>The <see cref="T:RiptideNetworking.Utils.ActionQueue"/> to use when invoking events.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.#ctor(System.Int64,System.UInt16)">
+            <summary>Handles initial setup.</summary>
+            <param name="uniqueKey">This app's unique key, used to determine whether to handle or ignore received data.</param>
+            <param name="broadcastPort">The port to send broadcasts to/listen for broadcasts on.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.Tick">
+            <summary>Initiates execution of any queued event invocations.</summary>
+            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Broadcasts will continue to discover hosts on the LAN in between calls, but the <see cref="E:RiptideNetworking.Utils.LanDiscovery.HostDiscovered"/> event won't be invoked until this method is executed.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.SendBroadcast">
+            <summary>Sends a broadcast to all machines on the LAN.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.SendBroadcastResponse(System.Net.IPEndPoint)">
+            <summary>Sends a response to a broadcast.</summary>
+            <param name="toEndPoint">The endpoint to send the response to.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.StartListening">
+            <summary>Begins listening for broadcasted data.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.ReceiveCallback(System.IAsyncResult)">
+            <summary>Receives data.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.SetBroadcastData">
+            <summary>Sets the data that will be sent as part of a broadcast.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.SetBroadcastResponseData">
+            <summary>Sets the data that will be sent in response to a broadcast.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.HandleBroadcastData(System.Int32)">
+            <summary>Handles the data received as part of a broadcast.</summary>
+            <param name="bytesReceived">The number of bytes that were received.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.HandleBroadcastResponseData(System.Int32)">
+            <summary>Handles the data received in response to a broadcast.</summary>
+            <param name="bytesReceived">The number of bytes that were received.</param>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.Restart">
+            <summary>Stops all broadcast activities and prepares this <see cref="T:RiptideNetworking.Utils.LanDiscovery"/> instance for reuse.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.Stop">
+            <summary>Stops all broadcast activities.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.GetLocalIPAddress">
+            <summary>Retrieves the current machine's local IP.</summary>
+            <returns>The current machine's local IP.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.GetBroadcastAddress(System.Net.IPAddress,System.Net.IPAddress)">
+            <summary>Calculates the broadcast address, given an IP and its subnet mask.</summary>
+            <param name="address">The IP to use.</param>
+            <param name="subnetMask">The subnet mask to use.</param>
+            <returns>The calculated broadcast address.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.GetSubnetMask(System.Net.IPAddress)">
+            <summary>Takes an IP and retrieves its subnet mask.</summary>
+            <param name="address">The IP for which to retrieve the subnet mask.</param>
+            <returns>The retrieved subnet mask.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Utils.LanDiscovery.OnHostDiscovered(System.Net.IPAddress,System.UInt16)">
+            <summary>Invokes the <see cref="E:RiptideNetworking.Utils.LanDiscovery.HostDiscovered"/>.</summary>
+            <param name="ip">The IP of the discovered host.</param>
+            <param name="port">The port of the discovered host.</param>
+        </member>
+        <member name="T:RiptideNetworking.Utils.HostDiscoveredEventArgs">
+            <summary>Contains event data for when a host is discovered on the LAN.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.HostDiscoveredEventArgs.HostIP">
+            <summary>The IP of the discovered host.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Utils.HostDiscoveredEventArgs.HostPort">
+            <summary>The port of the discovered host.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.HostDiscoveredEventArgs.#ctor(System.Net.IPAddress,System.UInt16)">
+            <summary>Initializes event data.</summary>
+            <param name="hostIP">The IP of the discovered host.</param>
+            <param name="hostPort">The port of the discovered host.</param>
+        </member>
         <member name="T:RiptideNetworking.Utils.RiptideConverter">
             <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
         </member>
