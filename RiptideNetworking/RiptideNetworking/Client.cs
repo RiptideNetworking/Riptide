@@ -82,12 +82,12 @@ namespace RiptideNetworking
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
-            client.Connected += Connected;
+            client.Connected += OnConnected;
             client.ConnectionFailed += OnConnectionFailed;
             client.MessageReceived += OnMessageReceived;
             client.Disconnected += OnDisconnected;
-            client.ClientConnected += ClientConnected;
-            client.ClientDisconnected += ClientDisconnected;
+            client.ClientConnected += OnClientConnected;
+            client.ClientDisconnected += OnClientDisconnected;
             client.Connect(hostAddress);
         }
 
@@ -149,13 +149,16 @@ namespace RiptideNetworking
 
         private void LocalDisconnect()
         {
-            client.Connected -= Connected;
-            client.ConnectionFailed -= ConnectionFailed;
+            client.Connected -= OnConnected;
+            client.ConnectionFailed -= OnConnectionFailed;
             client.MessageReceived -= OnMessageReceived;
-            client.Disconnected -= Disconnected;
-            client.ClientConnected -= ClientConnected;
-            client.ClientDisconnected -= ClientDisconnected;
+            client.Disconnected -= OnDisconnected;
+            client.ClientConnected -= OnClientConnected;
+            client.ClientDisconnected -= OnClientDisconnected;
         }
+
+        /// <summary>Invokes the <see cref="Connected"/> event.</summary>
+        private void OnConnected(object s, EventArgs e) => Connected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed(object s, EventArgs e)
@@ -181,5 +184,11 @@ namespace RiptideNetworking
             LocalDisconnect();
             Disconnected?.Invoke(this, e);
         }
+
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        private void OnClientConnected(object s, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }

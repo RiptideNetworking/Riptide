@@ -71,14 +71,14 @@ namespace RiptideNetworking
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
-            server.ClientConnected += ClientConnected;
+            server.ClientConnected += OnClientConnected;
             server.MessageReceived += OnMessageReceived;
-            server.ClientDisconnected += ClientDisconnected;
+            server.ClientDisconnected += OnClientDisonnected;
             server.Start(port, maxClientCount);
 
             IsRunning = true;
         }
-
+        
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
@@ -141,12 +141,15 @@ namespace RiptideNetworking
                 return;
 
             server.Shutdown();
-            server.ClientConnected -= ClientConnected;
+            server.ClientConnected -= OnClientConnected;
             server.MessageReceived -= OnMessageReceived;
-            server.ClientDisconnected -= ClientDisconnected;
+            server.ClientDisconnected -= OnClientDisonnected;
 
             IsRunning = false;
         }
+
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
@@ -158,5 +161,8 @@ namespace RiptideNetworking
             else
                 RiptideLogger.Log(LogType.warning, $"No server-side handler method found for message ID {e.MessageId}!");
         }
+
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        private void OnClientDisonnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }
