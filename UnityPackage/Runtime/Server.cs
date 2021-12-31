@@ -71,19 +71,19 @@ namespace RiptideNetworking
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
-            server.ClientConnected += ClientConnected;
+            server.ClientConnected += OnClientConnected;
             server.MessageReceived += OnMessageReceived;
-            server.ClientDisconnected += ClientDisconnected;
+            server.ClientDisconnected += OnClientDisonnected;
             server.Start(port, maxClientCount);
 
             IsRunning = true;
         }
-
+        
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
             MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static))
+                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
                                            .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
                                            .ToArray();
 
@@ -95,17 +95,17 @@ namespace RiptideNetworking
                     break;
 
                 if (!methods[i].IsStatic)
-                {
-                    RiptideLogger.Log(LogType.error, $"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
-                    break;
-                }
+                    throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
 
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
                 if (clientMessageHandler != null)
                 {
                     // It's a message handler for Server instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
-                        RiptideLogger.Log(LogType.error, $"Message handler method (type: server) already exists for message ID {attribute.MessageId}! Only one handler method is allowed per ID!");
+                    {
+                        MethodInfo otherMethodWithId = messageHandlers[attribute.MessageId].GetMethodInfo();
+                        throw new Exception($"Server-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
+                    }
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
                 }
@@ -114,7 +114,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Server instances, but it might be one for Client instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        RiptideLogger.Log(LogType.error, $"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                        throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
         }
@@ -141,12 +141,15 @@ namespace RiptideNetworking
                 return;
 
             server.Shutdown();
-            server.ClientConnected -= ClientConnected;
+            server.ClientConnected -= OnClientConnected;
             server.MessageReceived -= OnMessageReceived;
-            server.ClientDisconnected -= ClientDisconnected;
+            server.ClientDisconnected -= OnClientDisonnected;
 
             IsRunning = false;
         }
+
+        /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
+        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
@@ -156,7 +159,10 @@ namespace RiptideNetworking
             if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
                 messageHandler(e.FromClientId, e.Message);
             else
-                RiptideLogger.Log(LogType.warning, $"No handler method (type: server) found for message ID {e.MessageId}!");
+                RiptideLogger.Log(LogType.warning, $"No server-side handler method found for message ID {e.MessageId}!");
         }
+
+        /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
+        private void OnClientDisonnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }

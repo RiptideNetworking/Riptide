@@ -3,10 +3,6 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace RiptideNetworking.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>

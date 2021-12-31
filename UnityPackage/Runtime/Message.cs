@@ -202,6 +202,10 @@ namespace RiptideNetworking
 
         #region Add & Retrieve Data
         #region Byte
+        /// <inheritdoc cref="Add(byte)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(byte)"/> and simply provides an alternative type-explicit way to add a <see cref="byte"/> to the message.</remarks>
+        public Message AddByte(byte value) => Add(value);
+
         /// <summary>Adds a single <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
@@ -226,6 +230,10 @@ namespace RiptideNetworking
             
             return Bytes[readPos++]; // Get the byte at readPos' position
         }
+
+        /// <inheritdoc cref="Add(byte[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(byte[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="byte"/> array to the message.</remarks>
+        public Message AddBytes(byte[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
         /// <param name="array">The <see cref="byte"/> array to add.</param>
@@ -315,6 +323,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Bool
+        /// <inheritdoc cref="Add(bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(bool)"/> and simply provides an alternative type-explicit way to add a <see cref="bool"/> to the message.</remarks>
+        public Message AddBool(bool value) => Add(value);
+
         /// <summary>Adds a <see cref="bool"/> to the message.</summary>
         /// <param name="value">The <see cref="bool"/> to add.</param>
         /// <returns>The message that the <see cref="bool"/> was added to.</returns>
@@ -339,6 +351,10 @@ namespace RiptideNetworking
             
             return Bytes[readPos++] == 1; // Convert the byte at readPos' position to a bool
         }
+
+        /// <inheritdoc cref="Add(bool[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(bool[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="bool"/> array to the message.</remarks>
+        public Message AddBools(bool[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="bool"/> array to the message.</summary>
         /// <param name="array">The <see cref="bool"/> array to add.</param>
@@ -460,6 +476,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Short & UShort
+        /// <inheritdoc cref="Add(short)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(short)"/> and simply provides an alternative type-explicit way to add a <see cref="short"/> to the message.</remarks>
+        public Message AddShort(short value) => Add(value);
+
         /// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
@@ -472,6 +492,10 @@ namespace RiptideNetworking
             writePos += RiptideConverter.shortLength;
             return this;
         }
+
+        /// <inheritdoc cref="Add(ushort)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(ushort)"/> and simply provides an alternative type-explicit way to add a <see cref="ushort"/> to the message.</remarks>
+        public Message AddUShort(ushort value) => Add(value);
 
         /// <summary>Adds a <see cref="ushort"/> to the message.</summary>
         /// <param name="value">The <see cref="ushort"/> to add.</param>
@@ -528,6 +552,10 @@ namespace RiptideNetworking
             return RiptideConverter.ToUShort(Bytes, readPos);
         }
 
+        /// <inheritdoc cref="Add(short[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(short[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="short"/> array to the message.</remarks>
+        public Message AddShorts(short[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
+
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
         /// <param name="array">The <see cref="short"/> array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -561,6 +589,10 @@ namespace RiptideNetworking
 
             return this;
         }
+
+        /// <inheritdoc cref="Add(ushort[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(ushort[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="ushort"/> array to the message.</remarks>
+        public Message AddUShorts(ushort[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="ushort"/> array to the message.</summary>
         /// <param name="array">The <see cref="ushort"/> array to add.</param>
@@ -710,6 +742,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Int & UInt
+        /// <inheritdoc cref="Add(int)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(int)"/> and simply provides an alternative type-explicit way to add a <see cref="int"/> to the message.</remarks>
+        public Message AddInt(int value) => Add(value);
+
         /// <summary>Adds an <see cref="int"/> to the message.</summary>
         /// <param name="value">The <see cref="int"/> to add.</param>
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
@@ -722,6 +758,10 @@ namespace RiptideNetworking
             writePos += RiptideConverter.intLength;
             return this;
         }
+
+        /// <inheritdoc cref="Add(uint)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(uint)"/> and simply provides an alternative type-explicit way to add a <see cref="uint"/> to the message.</remarks>
+        public Message AddUInt(uint value) => Add(value);
 
         /// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
@@ -766,6 +806,10 @@ namespace RiptideNetworking
             return value;
         }
 
+        /// <inheritdoc cref="Add(int[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(int[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="int"/> array to the message.</remarks>
+        public Message AddInts(int[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
+
         /// <summary>Adds an <see cref="int"/> array message.</summary>
         /// <param name="array">The <see cref="int"/> array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -799,6 +843,10 @@ namespace RiptideNetworking
 
             return this;
         }
+
+        /// <inheritdoc cref="Add(uint[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(uint[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="uint"/> array to the message.</remarks>
+        public Message AddUInts(uint[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="uint"/> array to the message.</summary>
         /// <param name="array">The <see cref="uint"/> array to add.</param>
@@ -948,6 +996,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Long & ULong
+        /// <inheritdoc cref="Add(long)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(long)"/> and simply provides an alternative type-explicit way to add a <see cref="long"/> to the message.</remarks>
+        public Message AddLong(long value) => Add(value);
+
         /// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
@@ -960,6 +1012,10 @@ namespace RiptideNetworking
             writePos += RiptideConverter.longLength;
             return this;
         }
+
+        /// <inheritdoc cref="Add(ulong)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(ulong)"/> and simply provides an alternative type-explicit way to add a <see cref="ulong"/> to the message.</remarks>
+        public Message AddULong(ulong value) => Add(value);
 
         /// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
@@ -1004,6 +1060,10 @@ namespace RiptideNetworking
             return value;
         }
 
+        /// <inheritdoc cref="Add(long[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(long[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="long"/> array to the message.</remarks>
+        public Message AddLongs(long[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
+
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -1037,6 +1097,10 @@ namespace RiptideNetworking
 
             return this;
         }
+
+        /// <inheritdoc cref="Add(ulong[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(ulong[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="ulong"/> array to the message.</remarks>
+        public Message AddULongs(ulong[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="ulong"/> array to the message.</summary>
         /// <param name="array">The <see cref="ulong"/> array to add.</param>
@@ -1186,6 +1250,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Float
+        /// <inheritdoc cref="Add(float)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(float)"/> and simply provides an alternative type-explicit way to add a <see cref="float"/> to the message.</remarks>
+        public Message AddFloat(float value) => Add(value);
+
         /// <summary>Adds a <see cref="float"/> to the message.</summary>
         /// <param name="value">The <see cref="float"/> to add.</param>
         /// <returns>The message that the <see cref="float"/> was added to.</returns>
@@ -1213,6 +1281,10 @@ namespace RiptideNetworking
             readPos += RiptideConverter.floatLength;
             return value;
         }
+
+        /// <inheritdoc cref="Add(float[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(float[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="float"/> array to the message.</remarks>
+        public Message AddFloats(float[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="float"/> array to the message.</summary>
         /// <param name="array">The <see cref="float"/> array to add.</param>
@@ -1306,6 +1378,10 @@ namespace RiptideNetworking
         #endregion
 
         #region Double
+        /// <inheritdoc cref="Add(double)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(double)"/> and simply provides an alternative type-explicit way to add a <see cref="double"/> to the message.</remarks>
+        public Message AddDouble(double value) => Add(value);
+
         /// <summary>Adds a <see cref="double"/> to the message.</summary>
         /// <param name="value">The <see cref="double"/> to add.</param>
         /// <returns>The message that the <see cref="double"/> was added to.</returns>
@@ -1333,6 +1409,10 @@ namespace RiptideNetworking
             readPos += RiptideConverter.doubleLength;
             return value;
         }
+
+        /// <inheritdoc cref="Add(double[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(double[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="double"/> array to the message.</remarks>
+        public Message AddDoubles(double[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="double"/> array to the message.</summary>
         /// <param name="array">The <see cref="double"/> array to add.</param>
@@ -1426,6 +1506,10 @@ namespace RiptideNetworking
         #endregion
 
         #region String
+        /// <inheritdoc cref="Add(string)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(string)"/> and simply provides an alternative type-explicit way to add a <see cref="string"/> to the message.</remarks>
+        public Message AddString(string value) => Add(value);
+
         /// <summary>Adds a <see cref="string"/> to the message.</summary>
         /// <param name="value">The <see cref="string"/> to add.</param>
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
@@ -1456,6 +1540,10 @@ namespace RiptideNetworking
             readPos += length;
             return value;
         }
+
+        /// <inheritdoc cref="Add(string[], bool, bool)"/>
+        /// <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="Add(string[], bool, bool)"/> and simply provides an alternative type-explicit way to add a <see cref="string"/> array to the message.</remarks>
+        public Message AddStrings(string[] value, bool includeLength = true, bool isBigArray = false) => Add(value, includeLength, isBigArray);
 
         /// <summary>Adds a <see cref="string"/> array to the message.</summary>
         /// <param name="array">The <see cref="string"/> array to add.</param>
