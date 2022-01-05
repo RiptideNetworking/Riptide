@@ -3,11 +3,11 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -15,7 +15,7 @@ namespace RiptideNetworking.Transports.RudpTransport
     public abstract class RudpListener
     {
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
-        public readonly string LogName;
+        public string LogName { get; }
 
         /// <summary>The <see cref="ActionQueue"/> to use when invoking events.</summary>
         protected ActionQueue receiveActionQueue;
@@ -52,7 +52,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
             socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
             socket.Bind(localEndPoint);
-            
+
             new Thread(new ThreadStart(Receive)).Start();
         }
 
@@ -80,7 +80,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             while (isListening)
             {
                 int byteCount;
-                
+
                 try
                 {
                     if (socket.Available == 0 && !socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
@@ -93,6 +93,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
                 catch (SocketException ex)
                 {
+#pragma warning disable IDE0010
                     switch (ex.SocketErrorCode)
                     {
                         case SocketError.Interrupted:
@@ -105,6 +106,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                         default:
                             break;
                     }
+#pragma warning restore IDE0010
                     continue;
                 }
                 catch (ObjectDisposedException)
@@ -132,14 +134,14 @@ namespace RiptideNetworking.Transports.RudpTransport
             Message message = Message.Create();
             message.Bytes[0] = receiveBuffer[0];
             message.PrepareForUse((ushort)length);
-            
+
             if (message.SendMode == MessageSendMode.reliable)
             {
                 if (length > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (3 or less means no payload for a reliably sent packet)
                     Array.Copy(receiveBuffer, 3, message.Bytes, 1, length - 3);
                 else if (length < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
                     return;
-                
+
                 ReliableHandle(messageHeader, RiptideConverter.ToUShort(receiveBuffer, 1), message, remoteEndPoint);
             }
             else
@@ -212,7 +214,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                         shouldHandle = UpdateDuplicateFilterBitfield(sequenceGap, lockables);
                 }
                 else // The received sequence ID is the same as the previous one (duplicate message)
+                {
                     shouldHandle = false;
+                }
             }
 
             SendAck(sequenceId, fromEndPoint);
@@ -226,7 +230,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
         private bool UpdateAcksBitfield(int sequenceGap, SendLockables lockables)
         {
-            ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
+            ushort seqIdBit = (ushort)(1 << (sequenceGap - 1)); // Calculate which bit corresponds to the sequence ID and set it to 1
             if ((lockables.AcksBitfield & seqIdBit) == 0)
             {
                 // If we haven't received this message before
@@ -234,7 +238,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return true; // Message was "new", handle it
             }
             else // If we have received this message before
+            {
                 return false; // Message was a duplicate, don't handle it
+            }
         }
 
         /// <summary>Updates the duplicate filter bitfield and determines whether or not to handle the message.</summary>
@@ -251,7 +257,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return true; // Message was "new", handle it
             }
             else // If we have received this message before
+            {
                 return false; // Message was a duplicate, don't handle it
+            }
         }
 
         /// <summary>Handles the given message.</summary>

@@ -37,7 +37,7 @@ namespace RiptideNetworking.Utils
         public delegate void LogMethod(string log);
 
         /// <summary>Log methods, accessible by their <see cref="LogType"/></summary>
-        private static Dictionary<LogType, LogMethod> logMethods = new Dictionary<LogType, LogMethod>(4);
+        private static readonly Dictionary<LogType, LogMethod> logMethods = new Dictionary<LogType, LogMethod>(4);
         /// <summary>Whether or not to include timestamps when logging messages.</summary>
         private static bool includeTimestamps;
         /// <summary>The format to use for timestamps.</summary>
@@ -47,7 +47,11 @@ namespace RiptideNetworking.Utils
         /// <param name="logMethod">The method to use when logging all types of messages.</param>
         /// <param name="includeTimestamps">Whether or not to include timestamps when logging messages.</param>
         /// <param name="timestampFormat">The format to use for timestamps.</param>
-        public static void Initialize(LogMethod logMethod, bool includeTimestamps, string timestampFormat = "HH:mm:ss") => Initialize(logMethod, logMethod, logMethod, logMethod, includeTimestamps, timestampFormat);
+        public static void Initialize(LogMethod logMethod, bool includeTimestamps, string timestampFormat = "HH:mm:ss")
+        {
+            Initialize(logMethod, logMethod, logMethod, logMethod, includeTimestamps, timestampFormat);
+        }
+
         /// <summary>Initializes <see cref="RiptideLogger"/> with the supplied log methods.</summary>
         /// <param name="debugMethod">The method to use when logging debug messages. Set to <see langword="null"/> to disable debug logs.</param>
         /// <param name="infoMethod">The method to use when logging info messages. Set to <see langword="null"/> to disable info logs.</param>
@@ -85,7 +89,10 @@ namespace RiptideNetworking.Utils
 
         /// <summary>Disables logging for messages of the given <see cref="LogType"/>.</summary>
         /// <param name="logType">The type of message to enable logging for.</param>
-        public static void DisableLoggingFor(LogType logType) => logMethods.Remove(logType);
+        public static void DisableLoggingFor(LogType logType)
+        {
+            logMethods.Remove(logType);
+        }
 
         /// <summary>Logs a message.</summary>
         /// <param name="logType">The type of log message that is being logged.</param>

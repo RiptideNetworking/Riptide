@@ -1,14 +1,13 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
-using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using RiptideNetworking.Transports;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking
 {
@@ -51,14 +50,20 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="client">The underlying client that is used for sending and receiving data.</param>
-        public Client(IClient client) => this.client = client;
+        public Client(IClient client)
+        {
+            this.client = client;
+        }
 
         /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
+        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT")
+        {
+            client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
+        }
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
@@ -119,7 +124,9 @@ namespace RiptideNetworking
                         throw new Exception($"Client-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
                     }
                     else
+                    {
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
+                    }
                 }
                 else
                 {
@@ -132,10 +139,16 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        public override void Tick() => client.Tick();
+        public override void Tick()
+        {
+            client.Tick();
+        }
 
         /// <inheritdoc cref="IClient.Send(Message, bool)"/>
-        public void Send(Message message, bool shouldRelease = true) => client.Send(message, shouldRelease);
+        public void Send(Message message, bool shouldRelease = true)
+        {
+            client.Send(message, shouldRelease);
+        }
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
@@ -158,7 +171,10 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
-        private void OnConnected(object s, EventArgs e) => Connected?.Invoke(this, e);
+        private void OnConnected(object s, EventArgs e)
+        {
+            Connected?.Invoke(this, e);
+        }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed(object s, EventArgs e)
@@ -186,9 +202,15 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object s, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        private void OnClientConnected(object s, ClientConnectedEventArgs e)
+        {
+            ClientConnected?.Invoke(this, e);
+        }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e)
+        {
+            ClientDisconnected?.Invoke(this, e);
+        }
     }
 }

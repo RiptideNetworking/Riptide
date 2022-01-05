@@ -3,12 +3,12 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
-using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using RiptideNetworking.Transports;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking
 {
@@ -36,7 +36,7 @@ namespace RiptideNetworking
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
-        
+
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
         /// <summary>The underlying server that is used for managing connections and sending and receiving data.</summary>
@@ -44,13 +44,19 @@ namespace RiptideNetworking
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
-        public Server(IServer server) => this.server = server;
+        public Server(IServer server)
+        {
+            this.server = server;
+        }
 
         /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
         /// <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
         /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") => server = new Transports.RudpTransport.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
+        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER")
+        {
+            server = new Transports.RudpTransport.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
+        }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
@@ -78,7 +84,7 @@ namespace RiptideNetworking
 
             IsRunning = true;
         }
-        
+
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
@@ -107,7 +113,9 @@ namespace RiptideNetworking
                         throw new Exception($"Server-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
                     }
                     else
+                    {
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
+                    }
                 }
                 else
                 {
@@ -120,19 +128,34 @@ namespace RiptideNetworking
         }
 
         /// <inheritdoc/>
-        public override void Tick() => server.Tick();
+        public override void Tick()
+        {
+            server.Tick();
+        }
 
         /// <inheritdoc cref="IServer.Send(Message, ushort, bool)"/>
-        public void Send(Message message, ushort toClientId, bool shouldRelease = true) => server.Send(message, toClientId, shouldRelease);
+        public void Send(Message message, ushort toClientId, bool shouldRelease = true)
+        {
+            server.Send(message, toClientId, shouldRelease);
+        }
 
         /// <inheritdoc cref="IServer.SendToAll(Message, bool)"/>
-        public void SendToAll(Message message, bool shouldRelease = true) => server.SendToAll(message, shouldRelease);
+        public void SendToAll(Message message, bool shouldRelease = true)
+        {
+            server.SendToAll(message, shouldRelease);
+        }
 
         /// <inheritdoc cref="IServer.SendToAll(Message, ushort, bool)"/>
-        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, shouldRelease);
+        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
+        {
+            server.SendToAll(message, exceptToClientId, shouldRelease);
+        }
 
         /// <inheritdoc cref="IServer.DisconnectClient(ushort)"/>
-        public void DisconnectClient(ushort clientId) => server.DisconnectClient(clientId);
+        public void DisconnectClient(ushort clientId)
+        {
+            server.DisconnectClient(clientId);
+        }
 
         /// <summary>Stops the server.</summary>
         public void Stop()
@@ -149,7 +172,10 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e)
+        {
+            ClientConnected?.Invoke(this, e);
+        }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
@@ -163,6 +189,9 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisonnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        private void OnClientDisonnected(object sender, ClientDisconnectedEventArgs e)
+        {
+            ClientDisconnected?.Invoke(this, e);
+        }
     }
 }

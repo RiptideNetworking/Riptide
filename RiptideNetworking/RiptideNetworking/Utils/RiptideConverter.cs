@@ -12,6 +12,7 @@ namespace RiptideNetworking.Utils
     /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
     public class RiptideConverter
     {
+#pragma warning disable IDE1006
         /// <summary>How many bytes a <see cref="bool"/> is represented by.</summary>
         public const byte boolLength = sizeof(bool);
         /// <summary>How many bytes a <see cref="short"/> is represented by.</summary>
@@ -30,6 +31,7 @@ namespace RiptideNetworking.Utils
         public const byte floatLength = sizeof(float);
         /// <summary>How many bytes a <see cref="double"/> is represented by.</summary>
         public const byte doubleLength = sizeof(double);
+#pragma warning restore IDE1006
 
         #region Short/UShort
         /// <summary>Converts a given <see cref="short"/> to bytes and writes them into the given array.</summary>
@@ -41,9 +43,9 @@ namespace RiptideNetworking.Utils
         {
 #if BIG_ENDIAN
             array[startIndex + 1] = (byte)value;
-            array[startIndex    ] = (byte)(value >> 8);
+            array[startIndex] = (byte)(value >> 8);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
 #endif
         }
@@ -56,9 +58,9 @@ namespace RiptideNetworking.Utils
         {
 #if BIG_ENDIAN
             array[startIndex + 1] = (byte)value;
-            array[startIndex    ] = (byte)(value >> 8);
+            array[startIndex] = (byte)(value >> 8);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
 #endif
         }
@@ -73,7 +75,7 @@ namespace RiptideNetworking.Utils
 #if BIG_ENDIAN
             return (short)(array[startIndex + 1] | (array[startIndex    ] << 8));
 #else
-            return (short)(array[startIndex    ] | (array[startIndex + 1] << 8));
+            return (short)(array[startIndex] | (array[startIndex + 1] << 8));
 #endif
         }
         /// <summary>Converts the 2 bytes in the array at <paramref name="startIndex"/> to a <see cref="ushort"/>.</summary>
@@ -86,7 +88,7 @@ namespace RiptideNetworking.Utils
 #if BIG_ENDIAN
             return (ushort)(array[startIndex + 1] | (array[startIndex    ] << 8));
 #else
-            return (ushort)(array[startIndex    ] | (array[startIndex + 1] << 8));
+            return (ushort)(array[startIndex] | (array[startIndex + 1] << 8));
 #endif
         }
         #endregion
@@ -105,7 +107,7 @@ namespace RiptideNetworking.Utils
             array[startIndex + 1] = (byte)(value >> 16);
             array[startIndex    ] = (byte)(value >> 24);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
@@ -122,9 +124,9 @@ namespace RiptideNetworking.Utils
             array[startIndex + 3] = (byte)value;
             array[startIndex + 2] = (byte)(value >> 8);
             array[startIndex + 1] = (byte)(value >> 16);
-            array[startIndex    ] = (byte)(value >> 24);
+            array[startIndex] = (byte)(value >> 24);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
@@ -141,7 +143,7 @@ namespace RiptideNetworking.Utils
 #if BIG_ENDIAN
             return array[startIndex + 3] | (array[startIndex + 2] << 8) | (array[startIndex + 1] << 16) | (array[startIndex    ] << 24);
 #else
-            return array[startIndex    ] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24);
+            return array[startIndex] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24);
 #endif
         }
         /// <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="uint"/>.</summary>
@@ -154,7 +156,7 @@ namespace RiptideNetworking.Utils
 #if BIG_ENDIAN
             return (uint)(array[startIndex + 3] | (array[startIndex + 2] << 8) | (array[startIndex + 1] << 16) | (array[startIndex    ] << 24));
 #else
-            return (uint)(array[startIndex    ] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24));
+            return (uint)(array[startIndex] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24));
 #endif
         }
         #endregion
@@ -175,9 +177,9 @@ namespace RiptideNetworking.Utils
             array[startIndex + 3] = (byte)(value >> 32);
             array[startIndex + 2] = (byte)(value >> 40);
             array[startIndex + 1] = (byte)(value >> 48);
-            array[startIndex    ] = (byte)(value >> 56);
+            array[startIndex] = (byte)(value >> 56);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
@@ -202,9 +204,9 @@ namespace RiptideNetworking.Utils
             array[startIndex + 3] = (byte)(value >> 32);
             array[startIndex + 2] = (byte)(value >> 40);
             array[startIndex + 1] = (byte)(value >> 48);
-            array[startIndex    ] = (byte)(value >> 56);
+            array[startIndex] = (byte)(value >> 56);
 #else
-            array[startIndex    ] = (byte)value;
+            array[startIndex] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
@@ -255,9 +257,9 @@ namespace RiptideNetworking.Utils
             array[startIndex + 3] = converter.byte0;
             array[startIndex + 2] = converter.byte1;
             array[startIndex + 1] = converter.byte2;
-            array[startIndex    ] = converter.byte3;
+            array[startIndex] = converter.byte3;
 #else
-            array[startIndex    ] = converter.byte0;
+            array[startIndex] = converter.byte0;
             array[startIndex + 1] = converter.byte1;
             array[startIndex + 2] = converter.byte2;
             array[startIndex + 3] = converter.byte3;
@@ -296,9 +298,9 @@ namespace RiptideNetworking.Utils
             array[startIndex + 3] = converter.byte4;
             array[startIndex + 2] = converter.byte5;
             array[startIndex + 1] = converter.byte6;
-            array[startIndex    ] = converter.byte7;
+            array[startIndex] = converter.byte7;
 #else
-            array[startIndex    ] = converter.byte0;
+            array[startIndex] = converter.byte0;
             array[startIndex + 1] = converter.byte1;
             array[startIndex + 2] = converter.byte2;
             array[startIndex + 3] = converter.byte3;

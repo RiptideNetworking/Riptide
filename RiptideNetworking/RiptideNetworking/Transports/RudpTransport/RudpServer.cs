@@ -3,12 +3,12 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -49,15 +49,15 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
         public ushort ClientHeartbeatInterval
         {
-            get => _clientHeartbeatInterval;
+            get => clientHeartbeatInterval;
             set
             {
-                _clientHeartbeatInterval = value;
+                clientHeartbeatInterval = value;
                 if (heartbeatTimer != null)
                     heartbeatTimer.Change(0, value);
             }
         }
-        private ushort _clientHeartbeatInterval;
+        private ushort clientHeartbeatInterval;
 
         /// <summary>Currently connected clients, accessible by their endpoints or numeric ID.</summary>
         private DoubleKeyDictionary<ushort, IPEndPoint, RudpConnection> clients;
@@ -75,7 +75,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         public RudpServer(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") : base(logName)
         {
             ClientTimeoutTime = clientTimeoutTime;
-            _clientHeartbeatInterval = clientHeartbeatInterval;
+            this.clientHeartbeatInterval = clientHeartbeatInterval;
         }
 
         /// <inheritdoc/>
@@ -102,8 +102,10 @@ namespace RiptideNetworking.Transports.RudpTransport
                 lock (clients)
                 {
                     foreach (RudpConnection client in clients.Values)
+                    {
                         if (client.HasTimedOut)
                             timedOutClients.Add(client.RemoteEndPoint);
+                    }
                 }
 
                 foreach (IPEndPoint clientEndPoint in timedOutClients)
@@ -112,7 +114,6 @@ namespace RiptideNetworking.Transports.RudpTransport
                 timedOutClients.Clear();
             });
         }
-
 
         /// <inheritdoc/>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
@@ -139,7 +140,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     // Server is full
                     RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {endPoint}.");
                 }
-                
+
                 return false;
             }
         }
@@ -152,7 +153,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
 #if DETAILED_LOGGING
             if (messageHeader != HeaderType.reliable && messageHeader != HeaderType.unreliable)
-                RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}."); 
+                RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}.");
 
             ushort messageId = message.PeekUShort();
             if (messageHeader == HeaderType.reliable)
@@ -267,14 +268,18 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (message.SendMode == MessageSendMode.unreliable)
                 {
                     foreach (RudpConnection client in clients.Values)
+                    {
                         if (client.Id != exceptToClientId)
                             Send(message.Bytes, message.WrittenLength, client.RemoteEndPoint);
+                    }
                 }
                 else
                 {
                     foreach (RudpConnection client in clients.Values)
+                    {
                         if (client.Id != exceptToClientId)
                             SendReliable(message, client.RemoteEndPoint, client.Peer);
+                    }
                 }
             }
 
@@ -293,7 +298,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                 LocalDisconnect(client);
             }
             else
+            {
                 RiptideLogger.Log(LogType.warning, LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected!");
+            }
         }
 
         private void LocalDisconnect(RudpConnection client)
@@ -396,9 +403,13 @@ namespace RiptideNetworking.Transports.RudpTransport
             message.Add(id);
 
             lock (clients)
+            {
                 foreach (RudpConnection client in clients.Values)
+                {
                     if (!client.RemoteEndPoint.Equals(endPoint))
                         Send(message, client, false);
+                }
+            }
 
             message.Release();
         }
@@ -411,8 +422,10 @@ namespace RiptideNetworking.Transports.RudpTransport
             message.Add(id);
 
             lock (clients)
+            {
                 foreach (RudpConnection client in clients.Values)
                     Send(message, client, false);
+            }
 
             message.Release();
         }

@@ -3,9 +3,9 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
 using System;
 using System.Net;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -24,10 +24,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         public bool IsConnecting => connectionState == ConnectionState.connecting;
         /// <inheritdoc/>
         public bool IsConnected => connectionState == ConnectionState.connected;
-
         /// <summary>The connection's remote endpoint.</summary>
-        public readonly IPEndPoint RemoteEndPoint;
-
+        public IPEndPoint RemoteEndPoint { get; }
         /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         internal RudpPeer Peer { get; private set; }
         /// <inheritdoc cref="RudpPeer.SendLockables"/>
@@ -82,7 +80,9 @@ namespace RiptideNetworking.Transports.RudpTransport
             message.Add(Peer.SendLockables.AcksBitfield); // Acks
 
             if (forSeqId == Peer.SendLockables.LastReceivedSeqId)
+            {
                 server.Send(message, this);
+            }
             else
             {
                 message.Add(forSeqId);

@@ -3,12 +3,12 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -45,15 +45,15 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats from the server.</summary>
         public ushort HeartbeatInterval
         {
-            get => _heartbeatInterval;
+            get => heartbeatInterval;
             set
             {
-                _heartbeatInterval = value;
+                heartbeatInterval = value;
                 if (heartbeatTimer != null)
                     heartbeatTimer.Change(0, value);
             }
         }
-        private ushort _heartbeatInterval;
+        private ushort heartbeatInterval;
 
         /// <summary>The client's <see cref="RudpPeer"/> instance.</summary>
         private RudpPeer peer;
@@ -64,7 +64,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>How many connection attempts have been made so far.</summary>
         private byte connectionAttempts;
         /// <summary>How many connection attempts to make before giving up.</summary>
-        private byte maxConnectionAttempts;
+        private readonly byte maxConnectionAttempts;
 
         /// <summary>Whether or not the client has timed out.</summary>
         private bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime;
@@ -77,7 +77,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
-        private Stopwatch pendingPingStopwatch;
+        private readonly Stopwatch pendingPingStopwatch;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -87,7 +87,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         public RudpClient(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") : base(logName)
         {
             TimeoutTime = timeoutTime;
-            _heartbeatInterval = heartbeatInterval;
+            this.heartbeatInterval = heartbeatInterval;
             this.maxConnectionAttempts = maxConnectionAttempts;
             pendingPingStopwatch = new Stopwatch();
         }
@@ -111,7 +111,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 ipString = ipAndPort[0];
                 portString = ipAndPort[1];
             }
-            
+
             if (!IPAddress.TryParse(ipString, out IPAddress ip) || !ushort.TryParse(portString, out ushort port))
             {
                 RiptideLogger.Log(LogType.error, LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
@@ -124,7 +124,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             StartListening();
             connectionState = ConnectionState.connecting;
-            
+
             heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
         }
@@ -173,7 +173,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 #if DETAILED_LOGGING
             if (messageHeader != HeaderType.reliable && messageHeader != HeaderType.unreliable)
                 RiptideLogger.Log(LogName, $"Received {messageHeader} message from {fromEndPoint}.");
-            
+
             ushort messageId = message.PeekUShort();
             if (messageHeader == HeaderType.reliable)
                 RiptideLogger.Log(LogName, $"Received reliable message (ID: {messageId}) from {fromEndPoint}.");
@@ -215,6 +215,8 @@ namespace RiptideNetworking.Transports.RudpTransport
                     break;
                 case HeaderType.disconnect:
                     HandleDisconnect();
+                    break;
+                case HeaderType.connect:
                     break;
                 default:
                     RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
@@ -286,7 +288,9 @@ namespace RiptideNetworking.Transports.RudpTransport
             message.Add(peer.SendLockables.AcksBitfield); // Acks
 
             if (forSeqId == peer.SendLockables.LastReceivedSeqId)
+            {
                 Send(message);
+            }
             else
             {
                 message.Add(forSeqId);

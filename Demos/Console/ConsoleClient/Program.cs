@@ -57,7 +57,7 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
             Console.ReadLine();
 
             isRunning = false;
-            
+
             Console.ReadLine();
         }
 
@@ -139,7 +139,7 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
                 {
                     // Wait
                 }
-                
+
                 SendTestMessage(nextReliableTestId++);
             }
 
@@ -178,7 +178,7 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
             }
             else
                 Console.WriteLine("Reliability test complete (one-way)! See server console for results.");
-            
+
             Console.WriteLine();
             isTestRunning = false;
         }

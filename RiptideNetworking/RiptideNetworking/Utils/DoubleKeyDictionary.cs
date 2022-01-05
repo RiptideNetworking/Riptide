@@ -16,9 +16,9 @@ namespace RiptideNetworking.Utils
     public class DoubleKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     {
         /// <summary>A dictionary mapping key 1s to values.</summary>
-        private Dictionary<TKey1, TValue> key1Dictionary;
+        private readonly Dictionary<TKey1, TValue> key1Dictionary;
         /// <summary>A dictionary mapping key 2s to values.</summary>
-        private Dictionary<TKey2, TValue> key2Dictionary;
+        private readonly Dictionary<TKey2, TValue> key2Dictionary;
 
         /// <summary>Gets a collection containing the first set of keys in the dictionary.</summary>
         public IEnumerable<TKey1> FirstKeys => key1Dictionary.Keys;
@@ -45,7 +45,10 @@ namespace RiptideNetworking.Utils
         }
 
         /// <summary>Returns an enumerator that iterates through the dictionary.</summary>
-        public IEnumerator GetEnumerator() => key1Dictionary.GetEnumerator();
+        public IEnumerator GetEnumerator()
+        {
+            return key1Dictionary.GetEnumerator();
+        }
 
         /// <summary>Adds the specified keys and value to the dictionary.</summary>
         /// <param name="key1">The key 1 of the element to add.</param>
@@ -64,23 +67,35 @@ namespace RiptideNetworking.Utils
         /// <param name="key">The key of the value to get.</param>
         /// <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetValue(TKey1 key, out TValue value) => key1Dictionary.TryGetValue(key, out value);
+        public bool TryGetValue(TKey1 key, out TValue value)
+        {
+            return key1Dictionary.TryGetValue(key, out value);
+        }
 
         /// <summary>Gets the value associated with the key 2.</summary>
         /// <param name="key">The key of the value to get.</param>
         /// <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetValue(TKey2 key, out TValue value) => key2Dictionary.TryGetValue(key, out value);
+        public bool TryGetValue(TKey2 key, out TValue value)
+        {
+            return key2Dictionary.TryGetValue(key, out value);
+        }
 
         /// <summary>Determines whether the dictionary contains the specified key 1.</summary>
         /// <param name="key">The key to locate in the dictionary.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool ContainsKey(TKey1 key) => key1Dictionary.ContainsKey(key);
+        public bool ContainsKey(TKey1 key)
+        {
+            return key1Dictionary.ContainsKey(key);
+        }
 
         /// <summary>Determines whether the dictionary contains the specified key 2.</summary>
         /// <param name="key">The key to locate in the dictionary.</param>
         /// <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        public bool ContainsKey(TKey2 key) => key2Dictionary.ContainsKey(key);
+        public bool ContainsKey(TKey2 key)
+        {
+            return key2Dictionary.ContainsKey(key);
+        }
 
         /// <summary>Removes the value with the specified keys from the dictionary</summary>
         /// <param name="key1">The key 1 of the element to remove.</param>
@@ -107,17 +122,11 @@ namespace RiptideNetworking.Utils
         /// <summary>Gets the value associated with the specified key 1.</summary>
         /// <param name="key">The key 1 of the value to get.</param>
         /// <returns>The value associated with the specified key 1.</returns>
-        public TValue this[TKey1 key]
-        {
-            get => key1Dictionary[key];
-        }
+        public TValue this[TKey1 key] => key1Dictionary[key];
 
         /// <summary>Gets the value associated with the specified key 2.</summary>
         /// <param name="key">The key 2 of the value to get.</param>
         /// <returns>The value associated with the specified key 2.</returns>
-        public TValue this[TKey2 key]
-        {
-            get => key2Dictionary[key];
-        }
+        public TValue this[TKey2 key] => key2Dictionary[key];
     }
 }

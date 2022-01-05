@@ -26,7 +26,7 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestServer
         private static void Main()
         {
             Console.Title = "Server";
-            
+
             RiptideLogger.Initialize(Console.WriteLine, true);
             isRunning = true;
 

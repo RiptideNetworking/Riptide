@@ -3,11 +3,11 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Timers;
+using RiptideNetworking.Utils;
 
 namespace RiptideNetworking.Transports.RudpTransport
 {
@@ -15,7 +15,7 @@ namespace RiptideNetworking.Transports.RudpTransport
     internal class PendingMessage
     {
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        private const float retryTimeMultiplier = 1.2f;
+        private const float RetryTimeMultiplier = 1.2f;
 
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
         private static readonly List<PendingMessage> pool = new List<PendingMessage>();
@@ -27,7 +27,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The sequence ID of the message.</summary>
         private ushort sequenceId;
         /// <summary>The contents of the message.</summary>
-        private byte[] data;
+        private readonly byte[] data;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         private int writtenLength;
         /// <summary>How often to try sending the message before giving up.</summary>
@@ -93,7 +93,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                     pool.RemoveAt(0);
                 }
                 else
+                {
                     message = new PendingMessage();
+                }
 
                 return message;
             }
@@ -120,11 +122,13 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (!wasCleared)
                 {
                     if (lastSendTime.AddMilliseconds(peer.SmoothRTT < 0 ? 25 : peer.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                    {
                         TrySend();
+                    }
                     else
                     {
                         retryTimer.Start();
-                        retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * retryTimeMultiplier));
+                        retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier);
                     }
                 }
             }
@@ -146,23 +150,25 @@ namespace RiptideNetworking.Transports.RudpTransport
 #else
                         ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, peer.listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
                     }
                     else
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
+                    {
+                        RiptideLogger.Log(LogType.warning, peer.listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
+                    }
                 }
 
                 Clear();
                 return;
             }
 
-            peer.Listener.Send(data, writtenLength, remoteEndPoint);
+            peer.listener.Send(data, writtenLength, remoteEndPoint);
 
             lastSendTime = DateTime.UtcNow;
             sendAttempts++;
 
             retryTimer.Start();
-            retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * retryTimeMultiplier);
+            retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier);
         }
 
         /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
@@ -172,8 +178,12 @@ namespace RiptideNetworking.Transports.RudpTransport
             lock (this)
             {
                 if (shouldRemoveFromDictionary)
+                {
                     lock (peer.PendingMessages)
+                    {
                         peer.PendingMessages.Remove(sequenceId);
+                    }
+                }
 
                 retryTimer.Stop();
                 wasCleared = true;

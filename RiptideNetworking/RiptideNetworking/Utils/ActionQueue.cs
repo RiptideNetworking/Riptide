@@ -12,7 +12,7 @@ namespace RiptideNetworking.Utils
     public class ActionQueue
     {
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
-        public readonly string LogName;
+        public string LogName { get; }
         private readonly List<Action> executionQueue = new List<Action>();
         private readonly List<Action> executionQueueCopy = new List<Action>();
         private bool hasActionToExecute = false;

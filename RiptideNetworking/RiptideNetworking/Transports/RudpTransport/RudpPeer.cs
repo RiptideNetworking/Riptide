@@ -10,7 +10,7 @@ using System.Threading;
 namespace RiptideNetworking.Transports.RudpTransport
 {
     /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
-    class RudpPeer
+    internal class RudpPeer
     {
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);
@@ -23,18 +23,18 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc cref="IConnectionInfo.RTT"/>
         internal short RTT
         {
-            get => _rtt;
+            get => rtt;
             set
             {
-                SmoothRTT = _rtt == -1 ? value : (short)Math.Max(1f, SmoothRTT * 0.7f + value * 0.3f);
-                _rtt = value;
+                SmoothRTT = rtt == -1 ? value : (short)Math.Max(1f, (SmoothRTT * 0.7f) + (value * 0.3f));
+                rtt = value;
             }
         }
-        private short _rtt = -1;
+        private short rtt = -1;
         /// <inheritdoc cref="IConnectionInfo.SmoothRTT"/>
         internal short SmoothRTT { get; set; } = -1;
         /// <summary>The <see cref="RudpListener"/> whose socket to use when sending data.</summary>
-        internal readonly RudpListener Listener;
+        internal readonly RudpListener listener;
 
         /// <summary>The last used sequence ID.</summary>
         private int lastSequenceId;
@@ -45,7 +45,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="rudpListener">The <see cref="RudpListener"/> whose socket to use when sending data.</param>
         internal RudpPeer(RudpListener rudpListener)
         {
-            Listener = rudpListener;
+            listener = rudpListener;
             SendLockables = new SendLockables();
             ReceiveLockables = new ReceiveLockables();
         }
@@ -55,7 +55,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="remoteAcksBitField">A redundant list of sequence IDs that the other end has (or has not) received.</param>
         internal void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteAcksBitField)
         {
-            lock (ReceiveLockables) lock (PendingMessages)
+            lock (ReceiveLockables)
+                lock (PendingMessages)
                 {
                     int sequenceGap = GetSequenceGap(remoteLastReceivedSeqId, ReceiveLockables.LastAckedSeqId);
                     if (sequenceGap > 0)
@@ -67,7 +68,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                             CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16 + i), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield (before it's removed)
                         }
                         ReceiveLockables.AckedMessagesBitfield <<= 1; // Shift the bits left to make room for the latest ack
-                        ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << sequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
+                        ReceiveLockables.AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << (sequenceGap - 1))); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
                         ReceiveLockables.LastAckedSeqId = remoteLastReceivedSeqId;
 
                         CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield

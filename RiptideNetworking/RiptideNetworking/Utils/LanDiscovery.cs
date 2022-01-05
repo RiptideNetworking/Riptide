@@ -34,16 +34,16 @@ namespace RiptideNetworking.Utils
         /// <summary>The port to send broadcasts to/listen for broadcasts on.</summary>
         public ushort BroadcastPort
         {
-            get => _broadcastPort;
+            get => broadcastPort;
             set
             {
                 if (value == 0)
                     throw new ArgumentOutOfRangeException("Broadcast port cannot be set to 0!");
 
-                if (value != _broadcastPort)
+                if (value != broadcastPort)
                 {
-                    _broadcastPort = value;
-                    
+                    broadcastPort = value;
+
                     endPoint = new IPEndPoint(IPAddress.Any, value);
                     try
                     {
@@ -51,27 +51,18 @@ namespace RiptideNetworking.Utils
                     }
                     catch (SocketException ex)
                     {
-                        RiptideLogger.Log(LogType.error, $"Failed to bind broadcast socket! Make sure port {_broadcastPort} isn't being used by another {nameof(LanDiscovery)} insance or by another application on this machine, or use a different port for broadcasting. Error: {ex}");
+                        RiptideLogger.Log(LogType.error, $"Failed to bind broadcast socket! Make sure port {broadcastPort} isn't being used by another {nameof(LanDiscovery)} insance or by another application on this machine, or use a different port for broadcasting. Error: {ex}");
                     }
                     broadcastEndPoint.Port = value;
                 }
             }
         }
-        private ushort _broadcastPort;
+        private ushort broadcastPort;
         /// <summary>The IP to broadcast.</summary>
-        public IPAddress HostIP
-        {
-            set => _hostIP = value;
-            protected get => _hostIP;
-        }
-        private IPAddress _hostIP;
+        public IPAddress HostIP { set; protected get; }
+
         /// <summary>The port to broadcast.</summary>
-        public ushort HostPort
-        {
-            set => _hostPort = value;
-            protected get => _hostPort;
-        }
-        private ushort _hostPort;
+        public ushort HostPort { set; protected get; }
 
         /// <summary>The current machine's local IP.</summary>
         protected IPAddress localIPAdress;
@@ -98,7 +89,7 @@ namespace RiptideNetworking.Utils
             actionQueue = new ActionQueue();
             UniqueKey = uniqueKey;
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            
+
             localIPAdress = GetLocalIPAddress();
             subnetMask = GetBroadcastAddress(localIPAdress, GetSubnetMask(localIPAdress));
             broadcastEndPoint = new IPEndPoint(subnetMask, broadcastPort);
@@ -142,7 +133,7 @@ namespace RiptideNetworking.Utils
                 RiptideLogger.Log(LogType.error, "LAN Discovery is in broadcast mode. Change the mode before listening!");
                 return;
             }
-            
+
             Mode = BroadcastMode.listening;
             socket.BeginReceiveFrom(broadcastReceiveBytes, 0, broadcastReceiveBytes.Length, SocketFlags.None, ref endPoint, ReceiveCallback, null);
         }
@@ -152,7 +143,9 @@ namespace RiptideNetworking.Utils
         {
             int bytesReceived = socket.EndReceiveFrom(result, ref endPoint);
             if (bytesReceived < 1)
+            {
                 return; // If there's no data
+            }
             else if (((IPEndPoint)endPoint).Address.Equals(localIPAdress))
             {
                 // If the packet came from this machine we don't want to handle it
@@ -250,8 +243,10 @@ namespace RiptideNetworking.Utils
         {
             IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (IPAddress ip in host.AddressList)
+            {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                     return ip;
+            }
 
             throw new Exception("No network adapters with an IPv4 address in the system!");
         }
@@ -278,10 +273,14 @@ namespace RiptideNetworking.Utils
         protected IPAddress GetSubnetMask(IPAddress address)
         {
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
+            {
                 foreach (UnicastIPAddressInformation unicastIPAddressInformation in adapter.GetIPProperties().UnicastAddresses)
+                {
                     if (unicastIPAddressInformation.Address.AddressFamily == AddressFamily.InterNetwork && address.Equals(unicastIPAddressInformation.Address))
                         return unicastIPAddressInformation.IPv4Mask;
-            
+                }
+            }
+
             throw new ArgumentException($"Can't find subnet mask for IP address '{address}'!");
         }
 
