@@ -74,7 +74,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void Receive()
         {
             EndPoint bufferEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
-            receiveBuffer = new byte[Message.MaxMessageSize + RiptideConverter.ushortLength];
+            receiveBuffer = new byte[Message.MaxMessageSize + RiptideConverter.UShortLength];
             isListening = true;
 
             while (isListening)

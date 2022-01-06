@@ -13,23 +13,23 @@ namespace RiptideNetworking.Utils
     public class RiptideConverter
     {
         /// <summary>How many bytes a <see cref="bool"/> is represented by.</summary>
-        public const byte boolLength = sizeof(bool);
+        public const byte BoolLength = sizeof(bool);
         /// <summary>How many bytes a <see cref="short"/> is represented by.</summary>
-        public const byte shortLength = sizeof(short);
+        public const byte ShortLength = sizeof(short);
         /// <summary>How many bytes a <see cref="ushort"/> is represented by.</summary>
-        public const byte ushortLength = sizeof(ushort);
+        public const byte UShortLength = sizeof(ushort);
         /// <summary>How many bytes an <see cref="int"/> is represented by.</summary>
-        public const byte intLength = sizeof(int);
+        public const byte IntLength = sizeof(int);
         /// <summary>How many bytes an <see cref="uint"/> is represented by.</summary>
-        public const byte uintLength = sizeof(uint);
+        public const byte UIntLength = sizeof(uint);
         /// <summary>How many bytes a <see cref="long"/> is represented by.</summary>
-        public const byte longLength = sizeof(long);
+        public const byte LongLength = sizeof(long);
         /// <summary>How many bytes a <see cref="ulong"/> is represented by.</summary>
-        public const byte ulongLength = sizeof(ulong);
+        public const byte ULongLength = sizeof(ulong);
         /// <summary>How many bytes a <see cref="float"/> is represented by.</summary>
-        public const byte floatLength = sizeof(float);
+        public const byte FloatLength = sizeof(float);
         /// <summary>How many bytes a <see cref="double"/> is represented by.</summary>
-        public const byte doubleLength = sizeof(double);
+        public const byte DoubleLength = sizeof(double);
 
         #region Short/UShort
         /// <summary>Converts a given <see cref="short"/> to bytes and writes them into the given array.</summary>
