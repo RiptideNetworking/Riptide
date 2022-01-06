@@ -1,5 +1,7 @@
 <div align="center">
-  <img src="https://user-images.githubusercontent.com/51303091/119734159-690afc00-be2f-11eb-9673-c1f998025a3e.png" width="20%" height="auto">
+  <a href="https://github.com/tom-weiland/RiptideNetworking">
+    <img src="https://user-images.githubusercontent.com/51303091/119734159-690afc00-be2f-11eb-9673-c1f998025a3e.png" width="20%" height="auto">
+  </a>
 </div>
 <div align="center"><a href="https://tomweiland.net/youtube">YouTube</a>&emsp;<b>•</b>&emsp;<a href="https://discord.com/invite/tomweiland">Discord</a></div>
 <h1 align="center">RiptideNetworking</h1>
@@ -9,6 +11,8 @@ RiptideNetworking is a lightweight C# networking library primarily designed for 
 Riptide provides functionality for establishing connections and sending data back and forth, leaving it up to you to decide what data you want to send and when, which is ideal if you like to be in control of your code and know what's going on under the hood.
 
 Riptide is 100% free to use and only funded by [donations](https://github.com/sponsors/tom-weiland).
+
+For a tutorial on how to set up Riptide in your project, see [this video](https://youtu.be/6kWNZOFcFQw).
 
 ## Installation
 ### Unity
@@ -31,6 +35,8 @@ If you aren't using Unity, you can add the RiptideNetworking.dll file to your pr
 6. Navigate to the folder where you saved the RiptideNetworking.dll file and add it
 
 ## Getting Started
+For a tutorial on how to set up Riptide in your project, see [this video](https://youtu.be/6kWNZOFcFQw).
+
 ### Project Considerations
 If you are making a player-hosted game (sometimes mistakenly referred to as "peer-to-peer") where one player acts as the server, you'll want all your code in a single project.
 
