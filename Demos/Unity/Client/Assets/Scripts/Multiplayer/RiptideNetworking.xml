@@ -190,39 +190,6 @@
         <member name="F:RiptideNetworking.MessageSendMode.reliable">
             <summary>Reliable send mode.</summary>
         </member>
-        <member name="T:RiptideNetworking.HeaderType">
-            <summary>The header type of a <see cref="T:RiptideNetworking.Message"/>.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.unreliable">
-            <summary>For unreliable user messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.ack">
-            <summary>For unreliable internal ack messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.ackExtra">
-            <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.connect">
-            <summary>For unreliable internal connect messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.heartbeat">
-            <summary>For unreliable internal heartbeat messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.disconnect">
-            <summary>For unreliable internal disconnect messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.reliable">
-            <summary>For reliable user messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.welcome">
-            <summary>For reliable internal welcome messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.clientConnected">
-            <summary>For reliable internal client connected messages.</summary>
-        </member>
-        <member name="F:RiptideNetworking.HeaderType.clientDisconnected">
-            <summary>For reliable internal client disconnected messages.</summary>
-        </member>
         <member name="T:RiptideNetworking.Message">
             <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
@@ -281,7 +248,7 @@
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.HeaderType,System.Int32)">
+        <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.Transports.HeaderType,System.Int32)">
             <summary>Gets a message instance that can be used for sending.</summary>
             <param name="messageHeader">The message's header type.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
@@ -298,7 +265,7 @@
         <member name="M:RiptideNetworking.Message.Release">
             <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.HeaderType,System.Int32)">
+        <member name="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.Transports.HeaderType,System.Int32)">
             <summary>Prepares a message to be used for sending.</summary>
             <param name="messageHeader">The header of the message.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
@@ -1181,6 +1148,51 @@
         <member name="M:RiptideNetworking.Transports.IServer.Shutdown">
             <summary>Disconnects all clients and stops listening for new connections.</summary>
         </member>
+        <member name="T:RiptideNetworking.Transports.HeaderType">
+            <summary>The header type of a <see cref="T:RiptideNetworking.Message"/>.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.unreliable">
+            <summary>For unreliable user messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.ack">
+            <summary>For unreliable internal ack messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.ackExtra">
+            <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.connect">
+            <summary>For unreliable internal connect messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.heartbeat">
+            <summary>For unreliable internal heartbeat messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.disconnect">
+            <summary>For unreliable internal disconnect messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.reliable">
+            <summary>For reliable user messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.welcome">
+            <summary>For reliable internal welcome messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.clientConnected">
+            <summary>For reliable internal client connected messages.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Transports.HeaderType.clientDisconnected">
+            <summary>For reliable internal client disconnected messages.</summary>
+        </member>
+        <member name="T:RiptideNetworking.Transports.MessageExtensionsTransports">
+            <summary>Contains extension methods for the <see cref="T:RiptideNetworking.Message"/> class which are only intended for use by transport-related code.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.Create(RiptideNetworking.Transports.HeaderType,System.Int32)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Create(RiptideNetworking.Transports.HeaderType,System.Int32)"/>
+        </member>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.Create">
+            <inheritdoc cref="M:RiptideNetworking.Message.Create"/>
+        </member>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.PrepareForUse(RiptideNetworking.Message,System.UInt16)">
+            <inheritdoc cref="M:RiptideNetworking.Message.PrepareForUse(System.UInt16)"/>
+        </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.SendLockables">
             <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>
         </member>
@@ -1360,13 +1372,13 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat">
             <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpClient.heartbeatTimer"/>.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ReliableHandle(RiptideNetworking.Transports.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Send(RiptideNetworking.Message,System.Boolean)">
@@ -1561,20 +1573,20 @@
             <param name="length">The length of the contents of message.</param>
             <param name="remoteEndPoint">The endpoint from which the message was received.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <summary>Determines whether or not to handle a message from a specific remote endpoint.</summary>
             <param name="endPoint">The endpoint from which the message was sent.</param>
             <param name="messageHeader">The header of the message.</param>
             <returns><see langword="true"/> if the message should be handled.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Transports.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <summary>Handles the given reliably sent message.</summary>
             <param name="messageHeader">The header of the message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
             <param name="message">The message that was received.</param>
             <param name="fromEndPoint">The endpoint from which the message was received.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.SendLockables)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.ReliableHandle(RiptideNetworking.Transports.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.SendLockables)">
             <summary>Handles the given reliably sent message.</summary>
             <param name="messageHeader">The header of the message.</param>
             <param name="sequenceId">The sequence ID of the message.</param>
@@ -1594,7 +1606,7 @@
             <param name="lockables">The lockable values which are used to inform the other end of which messages we've received.</param>
             <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpListener.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <summary>Handles the given message.</summary>
             <param name="message">The message that was received.</param>
             <param name="fromEndPoint">The endpoint from which the message was received.</param>
@@ -1730,13 +1742,13 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Heartbeat">
             <summary>Checks if clients have timed out. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpServer.heartbeatTimer"/>.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ShouldHandleMessageFrom(System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.HeaderType)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Handle(RiptideNetworking.Message,System.Net.IPEndPoint,RiptideNetworking.Transports.HeaderType)">
             <inheritdoc/>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(RiptideNetworking.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.ReliableHandle(RiptideNetworking.Transports.HeaderType,System.UInt16,RiptideNetworking.Message,System.Net.IPEndPoint)">
             <inheritdoc/>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.Send(RiptideNetworking.Message,System.UInt16,System.Boolean)">
@@ -2045,31 +2057,31 @@
         <member name="T:RiptideNetworking.Utils.RiptideConverter">
             <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.boolLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.BoolLength">
             <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.shortLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.ShortLength">
             <summary>How many bytes a <see cref="T:System.Int16"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.ushortLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.UShortLength">
             <summary>How many bytes a <see cref="T:System.UInt16"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.intLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.IntLength">
             <summary>How many bytes an <see cref="T:System.Int32"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.uintLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.UIntLength">
             <summary>How many bytes an <see cref="T:System.UInt32"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.longLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.LongLength">
             <summary>How many bytes a <see cref="T:System.Int64"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.ulongLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.ULongLength">
             <summary>How many bytes a <see cref="T:System.UInt64"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.floatLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.FloatLength">
             <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
         </member>
-        <member name="F:RiptideNetworking.Utils.RiptideConverter.doubleLength">
+        <member name="F:RiptideNetworking.Utils.RiptideConverter.DoubleLength">
             <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
         </member>
         <member name="M:RiptideNetworking.Utils.RiptideConverter.FromShort(System.Int16,System.Byte[],System.Int32)">

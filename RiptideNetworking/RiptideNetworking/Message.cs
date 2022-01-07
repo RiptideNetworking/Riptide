@@ -3,6 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking.Transports;
 using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,31 +18,6 @@ namespace RiptideNetworking
         unreliable = HeaderType.unreliable,
         /// <summary>Reliable send mode.</summary>
         reliable = HeaderType.reliable,
-    }
-
-    /// <summary>The header type of a <see cref="Message"/>.</summary>
-    public enum HeaderType : byte
-    {
-        /// <summary>For unreliable user messages.</summary>
-        unreliable,
-        /// <summary>For unreliable internal ack messages.</summary>
-        ack,
-        /// <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
-        ackExtra,
-        /// <summary>For unreliable internal connect messages.</summary>
-        connect,
-        /// <summary>For unreliable internal heartbeat messages.</summary>
-        heartbeat,
-        /// <summary>For unreliable internal disconnect messages.</summary>
-        disconnect,
-        /// <summary>For reliable user messages.</summary>
-        reliable,
-        /// <summary>For reliable internal welcome messages.</summary>
-        welcome,
-        /// <summary>For reliable internal client connected messages.</summary>
-        clientConnected,
-        /// <summary>For reliable internal client disconnected messages.</summary>
-        clientDisconnected,
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -79,7 +55,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        internal Message(int maxSize = MaxMessageSize)
+        private Message(int maxSize = MaxMessageSize)
         {
             Bytes = new byte[maxSize];
         }
@@ -124,14 +100,14 @@ namespace RiptideNetworking
         /// <param name="messageHeader">The message's header type.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
+        internal static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
         {
             return RetrieveFromPool().PrepareForUse(messageHeader, maxSendAttempts);
         }
 
         /// <summary>Gets a message instance that can be used for handling.</summary>
         /// <returns>A message instance ready to be used for handling.</returns>
-        public static Message Create()
+        internal static Message Create()
         {
             return RetrieveFromPool();
         }
@@ -189,7 +165,7 @@ namespace RiptideNetworking
         /// <summary>Prepares a message to be used for handling.</summary>
         /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
         /// <returns>The header of the message.</returns>
-        public HeaderType PrepareForUse(ushort contentLength)
+        internal HeaderType PrepareForUse(ushort contentLength)
         {
             writePos = contentLength;
             readPos = 0;
