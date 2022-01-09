@@ -64,7 +64,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>How many connection attempts have been made so far.</summary>
         private byte connectionAttempts;
         /// <summary>How many connection attempts to make before giving up.</summary>
-        private byte maxConnectionAttempts;
+        private readonly byte maxConnectionAttempts;
 
         /// <summary>Whether or not the client has timed out.</summary>
         private bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime;
@@ -77,7 +77,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
-        private Stopwatch pendingPingStopwatch;
+        private readonly Stopwatch pendingPingStopwatch;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -162,10 +162,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
-        {
-            return endPoint.Equals(remoteEndPoint);
-        }
+        protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader) => endPoint.Equals(remoteEndPoint);
 
         /// <inheritdoc/>
         protected override void Handle(Message message, IPEndPoint fromEndPoint, HeaderType messageHeader)

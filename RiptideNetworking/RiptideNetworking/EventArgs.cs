@@ -16,10 +16,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
-        public ServerClientConnectedEventArgs(IConnectionInfo client)
-        {
-            Client = client;
-        }
+        public ServerClientConnectedEventArgs(IConnectionInfo client) => Client = client;
     }
 
     /// <summary>Contains event data for when the server receives a message from a client.</summary>
@@ -52,10 +49,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes event data.</summary>
         /// <param name="id">The numeric ID of the newly connected client.</param>
-        public ClientConnectedEventArgs(ushort id)
-        {
-            Id = id;
-        }
+        public ClientConnectedEventArgs(ushort id) => Id = id;
     }
 
     /// <summary>Contains event data for when the client receives a message from the server.</summary>
@@ -84,9 +78,6 @@ namespace RiptideNetworking
 
         /// <summary>Initializes event data.</summary>
         /// <param name="id">The numeric ID of the client that disconnected.</param>
-        public ClientDisconnectedEventArgs(ushort id)
-        {
-            Id = id;
-        }
+        public ClientDisconnectedEventArgs(ushort id) => Id = id;
     }
 }

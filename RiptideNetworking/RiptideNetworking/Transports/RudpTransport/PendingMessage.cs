@@ -15,7 +15,7 @@ namespace RiptideNetworking.Transports.RudpTransport
     internal class PendingMessage
     {
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        private const float retryTimeMultiplier = 1.2f;
+        private const float RetryTimeMultiplier = 1.2f;
 
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
         private static readonly List<PendingMessage> pool = new List<PendingMessage>();
@@ -27,7 +27,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>The sequence ID of the message.</summary>
         private ushort sequenceId;
         /// <summary>The contents of the message.</summary>
-        private byte[] data;
+        private readonly byte[] data;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         private int writtenLength;
         /// <summary>How often to try sending the message before giving up.</summary>
@@ -124,7 +124,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     else
                     {
                         retryTimer.Start();
-                        retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * retryTimeMultiplier));
+                        retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier));
                     }
                 }
             }
@@ -162,7 +162,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             sendAttempts++;
 
             retryTimer.Start();
-            retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * retryTimeMultiplier);
+            retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier);
         }
 
         /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>

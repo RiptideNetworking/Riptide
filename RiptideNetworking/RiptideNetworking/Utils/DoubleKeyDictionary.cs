@@ -16,9 +16,9 @@ namespace RiptideNetworking.Utils
     public class DoubleKeyDictionary<TKey1, TKey2, TValue> : IEnumerable
     {
         /// <summary>A dictionary mapping key 1s to values.</summary>
-        private Dictionary<TKey1, TValue> key1Dictionary;
+        private readonly Dictionary<TKey1, TValue> key1Dictionary;
         /// <summary>A dictionary mapping key 2s to values.</summary>
-        private Dictionary<TKey2, TValue> key2Dictionary;
+        private readonly Dictionary<TKey2, TValue> key2Dictionary;
 
         /// <summary>Gets a collection containing the first set of keys in the dictionary.</summary>
         public IEnumerable<TKey1> FirstKeys => key1Dictionary.Keys;
@@ -107,17 +107,11 @@ namespace RiptideNetworking.Utils
         /// <summary>Gets the value associated with the specified key 1.</summary>
         /// <param name="key">The key 1 of the value to get.</param>
         /// <returns>The value associated with the specified key 1.</returns>
-        public TValue this[TKey1 key]
-        {
-            get => key1Dictionary[key];
-        }
+        public TValue this[TKey1 key] => key1Dictionary[key];
 
         /// <summary>Gets the value associated with the specified key 2.</summary>
         /// <param name="key">The key 2 of the value to get.</param>
         /// <returns>The value associated with the specified key 2.</returns>
-        public TValue this[TKey2 key]
-        {
-            get => key2Dictionary[key];
-        }
+        public TValue this[TKey2 key] => key2Dictionary[key];
     }
 }

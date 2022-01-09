@@ -10,7 +10,7 @@ using System.Threading;
 namespace RiptideNetworking.Transports.RudpTransport
 {
     /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
-    class RudpPeer
+    internal class RudpPeer
     {
         /// <summary>The next sequence ID to use.</summary>
         internal ushort NextSequenceId => (ushort)Interlocked.Increment(ref lastSequenceId);

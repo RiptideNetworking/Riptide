@@ -37,7 +37,7 @@ namespace RiptideNetworking.Utils
         public delegate void LogMethod(string log);
 
         /// <summary>Log methods, accessible by their <see cref="LogType"/></summary>
-        private static Dictionary<LogType, LogMethod> logMethods = new Dictionary<LogType, LogMethod>(4);
+        private static readonly Dictionary<LogType, LogMethod> logMethods = new Dictionary<LogType, LogMethod>(4);
         /// <summary>Whether or not to include timestamps when logging messages.</summary>
         private static bool includeTimestamps;
         /// <summary>The format to use for timestamps.</summary>

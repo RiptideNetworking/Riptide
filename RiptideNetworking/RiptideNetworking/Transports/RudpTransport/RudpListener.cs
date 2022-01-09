@@ -38,10 +38,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc cref="ICommon.Tick"/>
-        public void Tick()
-        {
-            receiveActionQueue.ExecuteAll();
-        }
+        public void Tick() => receiveActionQueue.ExecuteAll();
 
         /// <summary>Starts listening for incoming packets.</summary>
         /// <param name="port">The local port to listen on.</param>
