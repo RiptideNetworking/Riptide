@@ -110,24 +110,22 @@ namespace RiptideNetworking
                     throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
 
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
-                if (clientMessageHandler != null)
-                {
-                    // It's a message handler for Client instances
-                    if (messageHandlers.ContainsKey(attribute.MessageId))
-                    {
-                        MethodInfo otherMethodWithId = messageHandlers[attribute.MessageId].GetMethodInfo();
-                        throw new Exception($"Client-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
-                    }
-                    else
-                        messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
-                }
-                else
+                if (clientMessageHandler == null)
                 {
                     // It's not a message handler for Client instances, but it might be one for Server instances
-                    Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
+                    Action<ushort, Message> serverMessageHandler = (Action<ushort, Message>)Delegate.CreateDelegate(typeof(Action<ushort, Message>), methods[i], false);
                     if (serverMessageHandler == null)
                         throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                    clientMessageHandler = (MessageHandler)((message) => serverMessageHandler(0, message));
                 }
+                // It's a message handler for Client instances
+                if (messageHandlers.ContainsKey(attribute.MessageId))
+                {
+                    MethodInfo otherMethodWithId = messageHandlers[attribute.MessageId].GetMethodInfo();
+                    throw new Exception($"Client-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
+                }
+                else
+                    messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
             }
         }
 
