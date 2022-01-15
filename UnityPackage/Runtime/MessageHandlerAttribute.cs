@@ -13,20 +13,26 @@ namespace RiptideNetworking
     {
         /// <inheritdoc cref="messageId"/>
         public ushort MessageId => messageId;
+        /// <inheritdoc cref="clientServerIndependent"/>
+        public bool ClientServerIndependent => clientServerIndependent;
         /// <inheritdoc cref="groupId"/>
         public byte GroupId => groupId;
 
         /// <summary>The ID of the message type that this method is meant to handle.</summary>
         private readonly ushort messageId;
+        /// <summary>If the method should be client/server only or work with both.</summary>
+        private readonly bool clientServerIndependent;
         /// <summary>The ID of the group of message handlers this method belongs to.</summary>
         private readonly byte groupId;
 
-        /// <summary>Initializes a new instance of the <see cref="MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> values.</summary>
+        /// <summary>Initializes a new instance of the <see cref="MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> and <paramref name="clientServerIndependent"/> values.</summary>
         /// <param name="messageId">The ID of the message type that this method is meant to handle.</param>
+        /// <param name="clientServerIndependent">If the method should be client/server only or work with both.</param>
         /// <param name="groupId">The ID of the group of message handlers this method belongs to.</param>
-        public MessageHandlerAttribute(ushort messageId, byte groupId = 0)
+        public MessageHandlerAttribute(ushort messageId, bool clientServerIndependent = false, byte groupId = 0)
         {
             this.messageId = messageId;
+            this.clientServerIndependent = clientServerIndependent;
             this.groupId = groupId;
         }
     }
