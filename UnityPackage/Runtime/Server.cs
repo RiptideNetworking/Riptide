@@ -104,7 +104,10 @@ namespace RiptideNetworking
                     Action<Message> clientMessageHandler = (Action<Message>)Delegate.CreateDelegate(typeof(Action<Message>), methods[i], false);
                     if (clientMessageHandler == null)
                         throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
-                    serverMessageHandler = (MessageHandler)((clientId, message) => clientMessageHandler(message));
+                    if (attribute.ClientServerIndependent)
+                        serverMessageHandler = (MessageHandler)((clientId, message) => clientMessageHandler(message));
+                    else
+                        continue;
                 }
                 // It's a message handler for Server instances
                 if (messageHandlers.ContainsKey(attribute.MessageId))
