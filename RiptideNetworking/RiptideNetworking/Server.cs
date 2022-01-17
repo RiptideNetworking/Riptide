@@ -97,8 +97,8 @@ namespace RiptideNetworking
                 if (!methods[i].IsStatic)
                     throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
 
-                Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
-                if (clientMessageHandler != null)
+                Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
+                if (serverMessageHandler != null)
                 {
                     // It's a message handler for Server instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
@@ -107,13 +107,13 @@ namespace RiptideNetworking
                         throw new Exception($"Server-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
                     }
                     else
-                        messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
+                        messageHandlers.Add(attribute.MessageId, (MessageHandler)serverMessageHandler);
                 }
                 else
                 {
                     // It's not a message handler for Server instances, but it might be one for Client instances
-                    Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
-                    if (serverMessageHandler == null)
+                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
+                    if (clientMessageHandler == null)
                         throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
