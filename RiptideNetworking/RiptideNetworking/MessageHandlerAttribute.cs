@@ -19,6 +19,12 @@ namespace RiptideNetworking
         /// <summary>Initializes a new instance of the <see cref="MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> values.</summary>
         /// <param name="messageId">The ID of the message type that this method is meant to handle.</param>
         /// <param name="groupId">The ID of the group of message handlers this method belongs to.</param>
+        /// <remarks>
+        ///   <para>
+        ///     <see cref="Server"/> instances will include this method in their message handlers if its signature matches that of <see cref="Server.MessageHandler"/>.<br/>
+        ///     <see cref="Client"/> instances will include this method in their message handlers if its signature matches that of <see cref="Client.MessageHandler"/>.
+        ///   </para>
+        /// </remarks>
         public MessageHandlerAttribute(ushort messageId, byte groupId = 0)
         {
             MessageId = messageId;
