@@ -92,7 +92,7 @@ namespace RiptideNetworking
             {
                 MessageHandlerAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerAttribute>();
                 if (attribute.GroupId != messageHandlerGroupId)
-                    break;
+                    continue;
 
                 if (!methods[i].IsStatic)
                     throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
