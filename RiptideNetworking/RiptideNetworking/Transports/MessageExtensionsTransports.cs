@@ -10,6 +10,8 @@ namespace RiptideNetworking.Transports
     {
         /// <summary>For unreliable user messages.</summary>
         unreliable,
+        /// <summary>For unreliable user messages that servers should automatically relay to all other clients.</summary>
+        unreliableAutoRelay = unreliable + 1,
         /// <summary>For unreliable internal ack messages.</summary>
         ack,
         /// <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
@@ -22,6 +24,8 @@ namespace RiptideNetworking.Transports
         disconnect,
         /// <summary>For reliable user messages.</summary>
         reliable,
+        /// <summary>For reliable user messages that servers should automatically relay to all other clients.</summary>
+        reliableAutoRelay = reliable + 1,
         /// <summary>For reliable internal welcome messages.</summary>
         welcome,
         /// <summary>For reliable internal client connected messages.</summary>

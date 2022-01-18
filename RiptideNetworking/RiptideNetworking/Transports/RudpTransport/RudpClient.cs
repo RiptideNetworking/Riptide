@@ -182,7 +182,9 @@ namespace RiptideNetworking.Transports.RudpTransport
             {
                 // User messages
                 case HeaderType.unreliable:
+                case HeaderType.unreliableAutoRelay:
                 case HeaderType.reliable:
+                case HeaderType.reliableAutoRelay:
                     receiveActionQueue.Add(() =>
                     {
                         OnMessageReceived(new ClientMessageReceivedEventArgs(message.GetUShort(), message));

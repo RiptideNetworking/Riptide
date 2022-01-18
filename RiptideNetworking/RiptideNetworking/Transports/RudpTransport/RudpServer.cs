@@ -44,6 +44,8 @@ namespace RiptideNetworking.Transports.RudpTransport
                     return clients != null ? clients.Values.ToArray() : new IConnectionInfo[0];
             }
         }
+        /// <inheritdoc/>
+        public bool AllowAutoMessageRelay { get; set; } = false;
         /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
         public ushort ClientTimeoutTime { get; set; } = 5000;
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
@@ -166,14 +168,14 @@ namespace RiptideNetworking.Transports.RudpTransport
                 // User messages
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
-                    receiveActionQueue.Add(() =>
-                    {
-                        // This block may execute on a different thread, so we double check if the client is still in the dictionary in case they disconnected
-                        if (TryGetClient(fromEndPoint, out RudpConnection client2))
-                            OnMessageReceived(new ServerMessageReceivedEventArgs(client2.Id, message.GetUShort(), message));
-
-                        message.Release();
-                    });
+                    OnMessageReceived(message, fromEndPoint);
+                    return;
+                case HeaderType.unreliableAutoRelay:
+                case HeaderType.reliableAutoRelay:
+                    if (AllowAutoMessageRelay)
+                        SendToAll(message, client.Id);
+                    else
+                        OnMessageReceived(message, fromEndPoint);
                     return;
 
                 // Internal messages
@@ -432,9 +434,16 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(ServerMessageReceivedEventArgs e)
+        private void OnMessageReceived(Message message, IPEndPoint fromEndPoint)
         {
-            MessageReceived?.Invoke(this, e);
+            receiveActionQueue.Add(() =>
+            {
+                // This block may execute on a different thread, so we double check if the client is still in the dictionary in case they disconnected
+                if (TryGetClient(fromEndPoint, out RudpConnection client))
+                    MessageReceived?.Invoke(this, new ServerMessageReceivedEventArgs(client.Id, message.GetUShort(), message));
+
+                message.Release();
+            });
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
