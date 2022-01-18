@@ -128,8 +128,8 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             Message message = Message.Create();
             message.Bytes[0] = receiveBuffer[0];
-            message.PrepareForUse((ushort)length);
-            
+            message.PrepareForUse((ushort)(messageHeader >= HeaderType.reliable ? length - 2 : length)); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
+
             if (message.SendMode == MessageSendMode.reliable)
             {
                 if (length > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (3 or less means no payload for a reliably sent packet)
