@@ -22,6 +22,7 @@ namespace RiptideNetworking.Transports
         heartbeat,
         /// <summary>For unreliable internal disconnect messages.</summary>
         disconnect,
+
         /// <summary>For reliable user messages.</summary>
         reliable,
         /// <summary>For reliable user messages that servers should automatically relay to all other clients.</summary>

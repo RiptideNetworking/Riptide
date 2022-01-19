@@ -115,7 +115,6 @@ namespace RiptideNetworking.Transports.RudpTransport
             });
         }
 
-
         /// <inheritdoc/>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
         {
@@ -433,7 +432,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
-        /// <param name="e">The event args to invoke the event with.</param>
+        /// <param name="message">The received message.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
         private void OnMessageReceived(Message message, IPEndPoint fromEndPoint)
         {
             receiveActionQueue.Add(() =>
