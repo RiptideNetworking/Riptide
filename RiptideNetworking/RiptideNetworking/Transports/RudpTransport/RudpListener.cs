@@ -24,8 +24,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         private const int ReceivePollingTime = 500000; // 0.5 seconds
         /// <summary>The socket to use for sending and receiving.</summary>
         private Socket socket;
-        /// <summary>Whether or not we are currently listening for incoming data.</summary>
-        private bool isListening = false;
+        /// <summary>Whether or not the socket is ready to send and receive data.</summary>
+        private bool isRunning = false;
         /// <summary>The buffer that incoming data is received into.</summary>
         private byte[] receiveBuffer;
 
@@ -44,11 +44,19 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="port">The local port to listen on.</param>
         protected void StartListening(ushort port = 0)
         {
-            Message.IncreasePoolCount();
+            lock (receiveActionQueue)
+            {
+                if (isRunning)
+                    StopListening();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
-            socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
-            socket.Bind(localEndPoint);
+                Message.IncreasePoolCount();
+
+                IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
+                socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
+                socket.Bind(localEndPoint);
+
+                isRunning = true;
+            }
             
             new Thread(new ThreadStart(Receive)).Start();
         }
@@ -56,15 +64,16 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Stops listening for incoming packets.</summary>
         protected void StopListening()
         {
-            isListening = false;
+            lock (receiveActionQueue)
+            {
+                if (!isRunning)
+                    return;
 
-            if (socket == null)
-                return;
+                isRunning = false;
+                socket.Close();
 
-            socket.Close();
-            socket = null;
-
-            Message.DecreasePoolCount();
+                Message.DecreasePoolCount();
+            }
         }
 
         /// <summary>Listens for and receives incoming packets.</summary>
@@ -72,9 +81,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             EndPoint bufferEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
             receiveBuffer = new byte[Message.MaxMessageSize + RiptideConverter.UShortLength];
-            isListening = true;
 
-            while (isListening)
+            while (isRunning)
             {
                 int byteCount;
                 
@@ -262,7 +270,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
         internal void Send(byte[] data, IPEndPoint toEndPoint)
         {
-            if (socket != null)
+            if (isRunning)
             {
 #if DETAILED_LOGGING
                 if ((HeaderType)data[0] == HeaderType.reliable)
@@ -272,7 +280,23 @@ namespace RiptideNetworking.Transports.RudpTransport
                 else
                     RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
 #endif
-                socket.SendTo(data, toEndPoint);
+                try
+                {
+                    socket.SendTo(data, toEndPoint);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Literally just eat the exception. This exception should only be thrown if another thread triggers
+                    // a disconnect inbetween the if check and the socket.SendTo call executing, so it's extremely rare.
+                    // Eating the exception like this may not be ideal, but with it being as rare as it is, acquiring a
+                    // lock *every* time data needs to be sent seems quite wasteful, and try catch blocks don't really
+                    // slow things down when no exception is actually thrown: https://stackoverflow.com/a/64229258
+                }
+                catch (SocketException ex)
+                {
+                    if (ex.SocketErrorCode != SocketError.Interrupted) // Also caused by socket being closed while sending
+                        throw ex;
+                }
             }
         }
         /// <summary>Sends data.</summary>
@@ -281,7 +305,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
         internal void Send(byte[] data, int numBytes, IPEndPoint toEndPoint)
         {
-            if (socket != null)
+            if (isRunning)
             {
 #if DETAILED_LOGGING
                 if ((HeaderType)data[0] == HeaderType.reliable)
@@ -291,7 +315,23 @@ namespace RiptideNetworking.Transports.RudpTransport
                 else
                     RiptideLogger.Log(LogName, $"Sending {(HeaderType)data[0]} message to {toEndPoint}.");
 #endif
-                socket.SendTo(data, numBytes, SocketFlags.None, toEndPoint);
+                try
+                {
+                    socket.SendTo(data, numBytes, SocketFlags.None, toEndPoint);
+                }
+                catch (ObjectDisposedException)
+                {
+                    // Literally just eat the exception. This exception should only be thrown if another thread triggers
+                    // a disconnect inbetween the if check and the socket.SendTo call executing, so it's extremely rare.
+                    // Eating the exception like this may not be ideal, but with it being as rare as it is, acquiring a
+                    // lock *every* time data needs to be sent seems quite wasteful, and try catch blocks don't really
+                    // slow things down when no exception is actually thrown: https://stackoverflow.com/a/64229258
+                }
+                catch (SocketException ex)
+                {
+                    if (ex.SocketErrorCode != SocketError.Interrupted) // Also caused by socket being closed while sending
+                        throw ex;
+                }
             }
         }
 
@@ -301,7 +341,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
         internal void SendReliable(Message message, IPEndPoint toEndPoint, RudpPeer peer)
         {
-            if (socket == null)
+            if (!isRunning)
                 return;
 
             ushort sequenceId = peer.NextSequenceId; // Get the next sequence ID
