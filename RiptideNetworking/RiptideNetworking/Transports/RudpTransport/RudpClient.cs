@@ -132,33 +132,28 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat()
         {
-            receiveActionQueue.Add(() =>
+            if (IsConnecting)
             {
-                if (IsConnecting)
+                // If still trying to connect, send connect messages instead of heartbeats
+                if (connectionAttempts < maxConnectionAttempts)
                 {
-                    // If still trying to connect, send connect messages instead of heartbeats
-                    if (connectionAttempts < maxConnectionAttempts)
-                    {
-                        SendConnect();
-                        connectionAttempts++;
-                    }
-                    else
-                    {
-                        OnConnectionFailed();
-                    }
+                    SendConnect();
+                    connectionAttempts++;
                 }
-                else if (IsConnected)
+                else
+                    OnConnectionFailed();
+            }
+            else if (IsConnected)
+            {
+                // If connected and not timed out, send heartbeats
+                if (HasTimedOut)
                 {
-                    // If connected and not timed out, send heartbeats
-                    if (HasTimedOut)
-                    {
-                        HandleDisconnect();
-                        return;
-                    }
+                    OnDisconnected();
+                    return;
+                }
 
-                    SendHeartbeat();
-                }
-            });
+                SendHeartbeat();
+            }
         }
 
         /// <inheritdoc/>
@@ -247,27 +242,31 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (IsNotConnected)
                 return;
 
-            SendDisconnect();
-            LocalDisconnect();
-
-            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
+            SendDisconnect(); // This will just not send if already disconnected
+            if (LocalDisconnect())
+                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
-        private void LocalDisconnect()
+        /// <returns><see langword="true"/> if successfully disconnected.<br/><see langword="false"/> if it was already disconnected.</returns>
+        private bool LocalDisconnect()
         {
-            heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
-            heartbeatTimer.Dispose();
-            StopListening();
-            connectionState = ConnectionState.notConnected;
-
             lock (peer.PendingMessages)
             {
+                if (IsNotConnected)
+                    return false;
+
+                heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                heartbeatTimer.Dispose();
+                StopListening();
+                connectionState = ConnectionState.notConnected;
+
                 foreach (PendingMessage pendingMessage in peer.PendingMessages.Values)
                     pendingMessage.Clear(false);
 
                 peer.PendingMessages.Clear();
             }
+            return true;
         }
 
         #region Messages
@@ -404,10 +403,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
         private void OnConnectionFailed()
         {
-            RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
-
-            LocalDisconnect();
-            receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, EventArgs.Empty));
+            if (LocalDisconnect())
+            {
+                RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
+                receiveActionQueue.Add(() => ConnectionFailed?.Invoke(this, EventArgs.Empty));
+            }
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
@@ -420,10 +420,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         private void OnDisconnected()
         {
-            RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
-
-            LocalDisconnect();
-            receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
+            if (LocalDisconnect())
+            {
+                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
+                receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
+            }
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>

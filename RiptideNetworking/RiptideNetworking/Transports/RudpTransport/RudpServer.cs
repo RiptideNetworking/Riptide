@@ -99,20 +99,17 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat()
         {
-            receiveActionQueue.Add(() =>
+            lock (clients)
             {
-                lock (clients)
-                {
-                    foreach (RudpConnection client in clients.Values)
-                        if (client.HasTimedOut)
-                            timedOutClients.Add(client.RemoteEndPoint);
-                }
+                foreach (RudpConnection client in clients.Values)
+                    if (client.HasTimedOut)
+                        timedOutClients.Add(client.RemoteEndPoint);
+            }
 
-                foreach (IPEndPoint clientEndPoint in timedOutClients)
-                    HandleDisconnect(clientEndPoint); // Disconnect the clients
+            foreach (IPEndPoint clientEndPoint in timedOutClients)
+                HandleDisconnect(clientEndPoint); // Disconnect the clients
 
-                timedOutClients.Clear();
-            });
+            timedOutClients.Clear();
         }
 
         /// <inheritdoc/>
@@ -301,10 +298,13 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             client.LocalDisconnect();
             lock (clients)
-                clients.Remove(client.Id, client.RemoteEndPoint);
-
-            OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
-            availableClientIds.Add(client.Id);
+            {
+                if (clients.Remove(client.Id, client.RemoteEndPoint))
+                {
+                    OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
+                    availableClientIds.Add(client.Id);
+                }
+            }
         }
 
         /// <inheritdoc/>
