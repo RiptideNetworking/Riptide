@@ -48,14 +48,14 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
         #region Messages
         private void SendSpawn()
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageIds.spawnPlayer, shouldAutoRelay: true);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer, shouldAutoRelay: true);
             message.AddUShort(Id);
             message.AddString(username);
             message.AddVector3(transform.position);
             NetworkManager.Singleton.Client.Send(message);
         }
 
-        [MessageHandler((ushort)MessageIds.spawnPlayer)]
+        [MessageHandler((ushort)MessageId.spawnPlayer)]
         private static void SpawnPlayer(Message message)
         {
             Spawn(message.GetUShort(), message.GetString(), message.GetVector3());
@@ -63,7 +63,7 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
 
         internal void SendSpawn(ushort newPlayerId)
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageIds.spawnPlayer);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer);
             message.AddUShort(newPlayerId);
             message.AddUShort(Id);
             message.AddString(username);
@@ -71,18 +71,18 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
             NetworkManager.Singleton.Client.Send(message);
         }
 
-        [MessageHandler((ushort)MessageIds.spawnPlayer)]
+        [MessageHandler((ushort)MessageId.spawnPlayer)]
         private static void SpawnPlayer(ushort fromClientId, Message message)
         {
             ushort newPlayerId = message.GetUShort();
-            Message messageToSend = Message.Create(MessageSendMode.reliable, MessageIds.spawnPlayer);
+            Message messageToSend = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer);
             messageToSend.AddUShort(message.GetUShort());
             messageToSend.AddString(message.GetString());
             messageToSend.AddVector3(message.GetVector3());
             NetworkManager.Singleton.Server.Send(messageToSend, newPlayerId);
         }
 
-        [MessageHandler((ushort)MessageIds.playerMovement)]
+        [MessageHandler((ushort)MessageId.playerMovement)]
         private static void PlayerMovement(Message message)
         {
             ushort playerId = message.GetUShort();

@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
 {
-    internal enum MessageIds : ushort
+    internal enum MessageId : ushort
     {
         spawnPlayer = 1,
         playerMovement
