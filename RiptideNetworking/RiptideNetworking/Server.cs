@@ -79,7 +79,7 @@ namespace RiptideNetworking
 
             server.ClientConnected += OnClientConnected;
             server.MessageReceived += OnMessageReceived;
-            server.ClientDisconnected += OnClientDisonnected;
+            server.ClientDisconnected += OnClientDisconnected;
             server.Start(port, maxClientCount);
 
             IsRunning = true;
@@ -149,7 +149,7 @@ namespace RiptideNetworking
             server.Shutdown();
             server.ClientConnected -= OnClientConnected;
             server.MessageReceived -= OnMessageReceived;
-            server.ClientDisconnected -= OnClientDisonnected;
+            server.ClientDisconnected -= OnClientDisconnected;
 
             IsRunning = false;
         }
@@ -169,6 +169,6 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisonnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }
