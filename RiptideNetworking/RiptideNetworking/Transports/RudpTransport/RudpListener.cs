@@ -134,9 +134,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (!ShouldHandleMessageFrom(remoteEndPoint, messageHeader))
                 return;
 
-            Message message = Message.Create();
-            message.Bytes[0] = receiveBuffer[0];
-            message.PrepareForUse((ushort)(messageHeader >= HeaderType.reliable ? length - 2 : length)); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
+            Message message = Message.CreateRaw();
+            message.PrepareForUse(messageHeader, (ushort)(messageHeader >= HeaderType.reliable ? length - 2 : length)); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
 
             if (message.SendMode == MessageSendMode.reliable)
             {

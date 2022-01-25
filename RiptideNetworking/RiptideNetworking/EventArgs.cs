@@ -13,10 +13,17 @@ namespace RiptideNetworking
     {
         /// <summary>The newly connected client.</summary>
         public IConnectionInfo Client { get; private set; }
+        /// <summary>A message containing any custom data the client included when it connected.</summary>
+        public Message ConnectMessage { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
-        public ServerClientConnectedEventArgs(IConnectionInfo client) => Client = client;
+        /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
+        public ServerClientConnectedEventArgs(IConnectionInfo client, Message connectMessage)
+        {
+            Client = client;
+            ConnectMessage = connectMessage;
+        }
     }
 
     /// <summary>Contains event data for when the server receives a message from a client.</summary>

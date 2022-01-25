@@ -78,6 +78,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
         private readonly Stopwatch pendingPingStopwatch;
+        /// <summary>An array of custom bytes to include when connecting.</summary>
+        private byte[] connectBytes;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -94,7 +96,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <inheritdoc/>
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
-        public void Connect(string hostAddress)
+        public void Connect(string hostAddress, Message message)
         {
             string[] ipAndPort = hostAddress.Split(':');
             string ipString = "";
@@ -124,7 +126,15 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             StartListening();
             connectionState = ConnectionState.connecting;
-            
+
+            if (message != null)
+            {
+                connectBytes = message.GetBytes(message.WrittenLength);
+                message.Release();
+            }
+            else
+                connectBytes = null;
+
             heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
         }
@@ -360,6 +370,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             Message message = Message.Create(HeaderType.welcome, 25);
             message.Add(Id);
+            if (connectBytes != null)
+            {
+                message.Add(connectBytes, false);
+                connectBytes = null;
+            }
 
             Send(message);
         }

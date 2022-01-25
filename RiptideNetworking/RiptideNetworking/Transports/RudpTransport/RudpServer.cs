@@ -189,7 +189,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     break;
                 case HeaderType.welcome:
                     client.HandleWelcomeReceived(message);
-                    break;
+                    return; // Important so the message isn't released immediately
                 case HeaderType.clientConnected:
                 case HeaderType.clientDisconnected:
                     break;
@@ -427,7 +427,11 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint.ToStringBasedOnIPFormat()} connected successfully! Client ID: {e.Client.Id}");
 
-            receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
+            receiveActionQueue.Add(() =>
+            {
+                ClientConnected?.Invoke(this, e);
+                e.ConnectMessage.Release();
+            });
             SendClientConnected(clientEndPoint, e.Client.Id);
         }
 

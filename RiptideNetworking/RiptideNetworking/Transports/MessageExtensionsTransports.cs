@@ -51,10 +51,12 @@ namespace RiptideNetworking.Transports
         /// <inheritdoc cref="Message.Create(HeaderType, int)"/>
         public static Message Create(HeaderType messageHeader, int maxSendAttempts = 15) => Message.Create(messageHeader, maxSendAttempts);
 
-        /// <inheritdoc cref="Message.Create()"/>
-        public static Message Create() => Message.Create();
+        /// <inheritdoc cref="Message.CreateRaw()"/>
+        public static Message CreateRaw() => Message.CreateRaw();
 
-        /// <inheritdoc cref="Message.PrepareForUse(ushort)"/>
-        public static HeaderType PrepareForUse(this Message message, ushort contentLength) => message.PrepareForUse(contentLength);
+        /// <inheritdoc cref="Message.PrepareForUse(HeaderType, ushort)"/>
+        public static void PrepareForUse(this Message message, HeaderType messageHeader, ushort contentLength) => message.PrepareForUse(messageHeader, contentLength);
+        /// <inheritdoc cref="Message.SetHeader(HeaderType)"/>
+        public static void SetHeader(this Message message, HeaderType messageHeader) => message.SetHeader(messageHeader);
     }
 }

@@ -153,7 +153,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 RiptideLogger.Log(LogType.error, server.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
             connectionState = ConnectionState.connected;
-            server.OnClientConnected(RemoteEndPoint, new ServerClientConnectedEventArgs(this));
+            server.OnClientConnected(RemoteEndPoint, new ServerClientConnectedEventArgs(this, message));
         }
         #endregion
     }

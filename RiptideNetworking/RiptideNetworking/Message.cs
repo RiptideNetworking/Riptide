@@ -39,10 +39,8 @@ namespace RiptideNetworking
         public int MaxSendAttempts { get; set; }
         /// <summary>The message's data.</summary>
         public byte[] Bytes { get; private set; }
-        /// <summary>The length in bytes of the data that can be read from the message.</summary>
-        public int ReadableLength { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
-        public int UnreadLength => ReadableLength - readPos;
+        public int UnreadLength => writePos - readPos;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
@@ -83,6 +81,12 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Gets a usable message instance.</summary>
+        /// <returns>A message instance ready to be used.</returns>
+        public static Message Create()
+        {
+            return RetrieveFromPool().PrepareForUse();
+        }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
@@ -107,9 +111,11 @@ namespace RiptideNetworking
         {
             return RetrieveFromPool().PrepareForUse(messageHeader, maxSendAttempts);
         }
-        /// <summary>Gets a message instance that can be used for handling.</summary>
-        /// <returns>A message instance ready to be used for handling.</returns>
-        internal static Message Create()
+
+        /// <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
+        /// <remarks>As this message instance is returned straight from the pool, it will contain all previous data and settings. Using this instance without preparing it properly will likely result in unexpected behaviour.</remarks>
+        /// <returns>A message instance.</returns>
+        internal static Message CreateRaw()
         {
             return RetrieveFromPool();
         }
@@ -149,32 +155,50 @@ namespace RiptideNetworking
         #endregion
 
         #region Functions
-        /// <summary>Prepares a message to be used for sending.</summary>
+        /// <summary>Prepares the message to be used.</summary>
+        /// <returns>The message, ready to be used.</returns>
+        private Message PrepareForUse()
+        {
+            SetReadWritePos(0, 0);
+            return this;
+        }
+        /// <summary>Prepares the message to be used for sending.</summary>
         /// <param name="messageHeader">The header of the message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
+        /// <returns>The message, ready to be used for sending.</returns>
         private Message PrepareForUse(HeaderType messageHeader, int maxSendAttempts)
         {
-            writePos = 0;
-            readPos = 0;
-            ReadableLength = 0;
             MaxSendAttempts = maxSendAttempts;
-            SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            Add((byte)messageHeader);
+            SetReadWritePos(0, 1);
+            SetHeader(messageHeader);
+            return this;
+        }
+        /// <summary>Prepares the message to be used for handling.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
+        /// <returns>The message, ready to be used for handling.</returns>
+        internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
+        {
+            SetReadWritePos(1, contentLength);
+            SetHeader(messageHeader);
             return this;
         }
 
-        /// <summary>Prepares a message to be used for handling.</summary>
-        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
-        /// <returns>The header of the message.</returns>
-        internal HeaderType PrepareForUse(ushort contentLength)
+        /// <summary>Sets the message's read and write position.</summary>
+        /// <param name="newReadPos">The new read position.</param>
+        /// <param name="newWritePos">The new write position.</param>
+        private void SetReadWritePos(ushort newReadPos, ushort newWritePos)
         {
-            writePos = contentLength;
-            readPos = 0;
-            ReadableLength = contentLength;
-            HeaderType messageHeader = (HeaderType)GetByte();
+            readPos = newReadPos;
+            writePos = newWritePos;
+        }
+
+        /// <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="MessageSendMode"/>.</summary>
+        /// <param name="messageHeader">The header to use for this message.</param>
+        internal void SetHeader(HeaderType messageHeader)
+        {
+            Bytes[0] = (byte)messageHeader;
             SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            return messageHeader;
         }
         #endregion
 
