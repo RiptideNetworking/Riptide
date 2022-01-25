@@ -98,27 +98,8 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         public void Connect(string hostAddress, Message message)
         {
-            string[] ipAndPort = hostAddress.Split(':');
-            string ipString = "";
-            string portString = "";
-            if (ipAndPort.Length > 2)
-            {
-                // There was more than one ':' in the host address, might be IPv6
-                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
-                portString = ipAndPort[ipAndPort.Length - 1];
-            }
-            else if (ipAndPort.Length == 2)
-            {
-                // IPv4
-                ipString = ipAndPort[0];
-                portString = ipAndPort[1];
-            }
-            
-            if (!IPAddress.TryParse(ipString, out IPAddress ip) || !ushort.TryParse(portString, out ushort port))
-            {
-                RiptideLogger.Log(LogType.error, LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
+            if (!ParseHostAddress(hostAddress, out IPAddress ip, out ushort port))
                 return;
-            }
 
             connectionAttempts = 0;
             remoteEndPoint = new IPEndPoint(ip.MapToIPv6(), port);
@@ -137,6 +118,38 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
+        }
+
+        /// <summary>Parses the <paramref name="hostAddress"/> and retrieves its <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
+        /// <param name="hostAddress">The host address to parse.</param>
+        /// <param name="ip">The retrieved IP.</param>
+        /// <param name="port">The retrieved port.</param>
+        /// <returns>Whether or not the host address is valid.</returns>
+        private bool ParseHostAddress(string hostAddress, out IPAddress ip, out ushort port)
+        {
+            string[] ipAndPort = hostAddress.Split(':');
+            string ipString = "";
+            string portString = "";
+            if (ipAndPort.Length > 2)
+            {
+                // There was more than one ':' in the host address, might be IPv6
+                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
+                portString = ipAndPort[ipAndPort.Length - 1];
+            }
+            else if (ipAndPort.Length == 2)
+            {
+                // IPv4
+                ipString = ipAndPort[0];
+                portString = ipAndPort[1];
+            }
+
+            if (!IPAddress.TryParse(ipString, out ip) || !ushort.TryParse(portString, out port))
+            {
+                RiptideLogger.Log(LogType.error, LogName, $"Invalid host address '{hostAddress}'! IP and port should be separated by a colon, for example: '127.0.0.1:7777'.");
+                port = 0;
+                return false;
+            }
+            return true;
         }
 
         /// <summary>Sends a connnect or heartbeat message. Called by <see cref="heartbeatTimer"/>.</summary>
