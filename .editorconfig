@@ -86,16 +86,15 @@ dotnet_naming_rule.non_private_static_fields_should_be_pascal_case.severity = su
 dotnet_naming_rule.non_private_static_fields_should_be_pascal_case.symbols = non_private_static_fields
 dotnet_naming_rule.non_private_static_fields_should_be_pascal_case.style = pascal_case_style
 dotnet_naming_symbols.non_private_static_fields.applicable_kinds = field
-dotnet_naming_symbols.non_private_static_fields.applicable_accessibilities = public, protected, internal, protected_internal, private_protected
+dotnet_naming_symbols.non_private_static_fields.applicable_accessibilities = public, internal, protected_internal
 dotnet_naming_symbols.non_private_static_fields.required_modifiers = static
 
-# Non-private readonly fields should be PascalCase
-dotnet_naming_rule.non_private_readonly_fields_should_be_pascal_case.severity = suggestion
-dotnet_naming_rule.non_private_readonly_fields_should_be_pascal_case.symbols = non_private_readonly_fields
-dotnet_naming_rule.non_private_readonly_fields_should_be_pascal_case.style = pascal_case_style
-dotnet_naming_symbols.non_private_readonly_fields.applicable_kinds = field
-dotnet_naming_symbols.non_private_readonly_fields.applicable_accessibilities = public, protected, internal, protected_internal, private_protected
-dotnet_naming_symbols.non_private_readonly_fields.required_modifiers = readonly
+# Non-private fields should be PascalCase
+dotnet_naming_rule.non_private_fields_should_be_pascal_case.severity = suggestion
+dotnet_naming_rule.non_private_fields_should_be_pascal_case.symbols = non_private_fields
+dotnet_naming_rule.non_private_fields_should_be_pascal_case.style = pascal_case_style
+dotnet_naming_symbols.non_private_fields.applicable_kinds = field
+dotnet_naming_symbols.non_private_fields.applicable_accessibilities = public, internal, protected_internal
 
 # Static fields should be camelCase
 dotnet_naming_rule.static_fields_should_be_camel_case.severity = suggestion
