@@ -3,10 +3,11 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleServer
+namespace RiptideDemos.RudpTransport.Unity.ExampleServer
 {
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour
@@ -103,12 +104,12 @@ namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleServer
         /// <param name="toClient">The client to send the message to.</param>
         public void SendSpawn(ushort toClient)
         {
-            NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)), toClient);
+            NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.reliable, ServerToClientId.spawnPlayer)), toClient);
         }
         /// <summary>Sends a player's info to all clients.</summary>
         private void SendSpawn()
         {
-            NetworkManager.Singleton.Server.SendToAll(GetSpawnData(Message.Create(MessageSendMode.reliable, (ushort)ServerToClientId.spawnPlayer)));
+            NetworkManager.Singleton.Server.SendToAll(GetSpawnData(Message.Create(MessageSendMode.reliable, ServerToClientId.spawnPlayer)));
         }
 
         private Message GetSpawnData(Message message)
@@ -121,7 +122,7 @@ namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleServer
 
         private void SendMovement()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, (ushort)ServerToClientId.playerMovement);
+            Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerMovement);
             message.Add(Id);
             message.Add(transform.position);
             message.Add(transform.forward);

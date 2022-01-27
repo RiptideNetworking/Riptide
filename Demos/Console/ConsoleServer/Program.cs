@@ -3,6 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking;
 using RiptideNetworking.Transports.RudpTransport;
 using RiptideNetworking.Utils;
 using System;
@@ -10,9 +11,9 @@ using System.Collections.Generic;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestServer
+namespace RiptideDemos.RudpTransport.ConsoleApp.TestServer
 {
-    class Program
+    internal class Program
     {
         private static Server server;
         private static bool isRunning;
@@ -68,13 +69,13 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestServer
                     remainingTestIds.Add(i + 1);
             }
 
-            server.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest, 25).Add(isRoundTripTest).Add(testIdAmount), fromClientId);
+            server.Send(Message.Create(MessageSendMode.reliable, MessageId.startTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
         }
 
         private static void SendTestMessage(ushort fromClientId, int reliableTestId)
         {
-            Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.testMessage);
-            message.Add(reliableTestId);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.testMessage);
+            message.AddInt(reliableTestId);
 
             server.Send(message, fromClientId);
         }

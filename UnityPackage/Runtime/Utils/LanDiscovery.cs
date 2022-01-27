@@ -59,19 +59,9 @@ namespace RiptideNetworking.Utils
         }
         private ushort _broadcastPort;
         /// <summary>The IP to broadcast.</summary>
-        public IPAddress HostIP
-        {
-            set => _hostIP = value;
-            protected get => _hostIP;
-        }
-        private IPAddress _hostIP;
+        public IPAddress HostIP { set; protected get; }
         /// <summary>The port to broadcast.</summary>
-        public ushort HostPort
-        {
-            set => _hostPort = value;
-            protected get => _hostPort;
-        }
-        private ushort _hostPort;
+        public ushort HostPort { set; protected get; }
 
         /// <summary>The current machine's local IP.</summary>
         protected IPAddress localIPAdress;

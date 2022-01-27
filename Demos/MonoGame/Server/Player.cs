@@ -36,7 +36,7 @@ namespace RiptideDemos.RudpTransport.MonoGame.TestServer
 
         private Message CreateSpawnMessage()
         {
-            Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.PlayerSpawn);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.PlayerSpawn);
             message.Add(id);
             message.Add(position);
             return message;
@@ -44,7 +44,7 @@ namespace RiptideDemos.RudpTransport.MonoGame.TestServer
 
         internal void SendPosition()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, (ushort)MessageId.PlayerPosition);
+            Message message = Message.Create(MessageSendMode.unreliable, MessageId.PlayerPosition);
             message.AddUShort(id);
             message.AddVector2(position);
             Program.Server.SendToAll(message, id);

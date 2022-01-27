@@ -19,10 +19,7 @@ namespace RiptideNetworking.Utils
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public ActionQueue(string logName = "ACTION QUEUE")
-        {
-            LogName = logName;
-        }
+        public ActionQueue(string logName = "ACTION QUEUE") => LogName = logName;
 
         /// <summary>Adds an action to the queue.</summary>
         /// <param name="action">The action to be added to the queue.</param>

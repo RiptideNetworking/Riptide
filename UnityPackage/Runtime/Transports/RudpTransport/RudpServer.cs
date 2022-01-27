@@ -44,6 +44,8 @@ namespace RiptideNetworking.Transports.RudpTransport
                     return clients != null ? clients.Values.ToArray() : new IConnectionInfo[0];
             }
         }
+        /// <inheritdoc/>
+        public bool AllowAutoMessageRelay { get; set; } = false;
         /// <summary>The time (in milliseconds) after which to disconnect a client without a heartbeat.</summary>
         public ushort ClientTimeoutTime { get; set; } = 5000;
         /// <summary>The interval (in milliseconds) at which heartbeats are to be expected from clients.</summary>
@@ -97,22 +99,18 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
         private void Heartbeat()
         {
-            receiveActionQueue.Add(() =>
+            lock (clients)
             {
-                lock (clients)
-                {
-                    foreach (RudpConnection client in clients.Values)
-                        if (client.HasTimedOut)
-                            timedOutClients.Add(client.RemoteEndPoint);
-                }
+                foreach (RudpConnection client in clients.Values)
+                    if (client.HasTimedOut)
+                        timedOutClients.Add(client.RemoteEndPoint);
+            }
 
-                foreach (IPEndPoint clientEndPoint in timedOutClients)
-                    HandleDisconnect(clientEndPoint); // Disconnect the clients
+            foreach (IPEndPoint clientEndPoint in timedOutClients)
+                HandleDisconnect(clientEndPoint); // Disconnect the clients
 
-                timedOutClients.Clear();
-            });
+            timedOutClients.Clear();
         }
-
 
         /// <inheritdoc/>
         protected override bool ShouldHandleMessageFrom(IPEndPoint endPoint, HeaderType messageHeader)
@@ -166,14 +164,14 @@ namespace RiptideNetworking.Transports.RudpTransport
                 // User messages
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
-                    receiveActionQueue.Add(() =>
-                    {
-                        // This block may execute on a different thread, so we double check if the client is still in the dictionary in case they disconnected
-                        if (TryGetClient(fromEndPoint, out RudpConnection client2))
-                            OnMessageReceived(new ServerMessageReceivedEventArgs(client2.Id, message.GetUShort(), message));
-
-                        message.Release();
-                    });
+                    OnMessageReceived(message, fromEndPoint);
+                    return;
+                case HeaderType.unreliableAutoRelay:
+                case HeaderType.reliableAutoRelay:
+                    if (AllowAutoMessageRelay)
+                        SendToAll(message, client.Id);
+                    else
+                        OnMessageReceived(message, fromEndPoint);
                     return;
 
                 // Internal messages
@@ -191,7 +189,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     break;
                 case HeaderType.welcome:
                     client.HandleWelcomeReceived(message);
-                    break;
+                    return; // Important so the message isn't released immediately
                 case HeaderType.clientConnected:
                 case HeaderType.clientDisconnected:
                     break;
@@ -300,10 +298,13 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             client.LocalDisconnect();
             lock (clients)
-                clients.Remove(client.Id, client.RemoteEndPoint);
-
-            OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
-            availableClientIds.Add(client.Id);
+            {
+                if (clients.Remove(client.Id, client.RemoteEndPoint))
+                {
+                    OnClientDisconnected(new ClientDisconnectedEventArgs(client.Id));
+                    availableClientIds.Add(client.Id);
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -426,15 +427,27 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint.ToStringBasedOnIPFormat()} connected successfully! Client ID: {e.Client.Id}");
 
-            receiveActionQueue.Add(() => ClientConnected?.Invoke(this, e));
+            receiveActionQueue.Add(() =>
+            {
+                ClientConnected?.Invoke(this, e);
+                e.ConnectMessage.Release();
+            });
             SendClientConnected(clientEndPoint, e.Client.Id);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event.</summary>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(ServerMessageReceivedEventArgs e)
+        /// <param name="message">The received message.</param>
+        /// <param name="fromEndPoint">The endpoint from which the message was received.</param>
+        private void OnMessageReceived(Message message, IPEndPoint fromEndPoint)
         {
-            MessageReceived?.Invoke(this, e);
+            receiveActionQueue.Add(() =>
+            {
+                // This block may execute on a different thread, so we double check if the client is still in the dictionary in case they disconnected
+                if (TryGetClient(fromEndPoint, out RudpConnection client))
+                    MessageReceived?.Invoke(this, new ServerMessageReceivedEventArgs(client.Id, message.GetUShort(), message));
+
+                message.Release();
+            });
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>

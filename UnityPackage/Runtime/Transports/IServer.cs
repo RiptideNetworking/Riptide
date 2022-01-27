@@ -26,6 +26,10 @@ namespace RiptideNetworking.Transports
         /// <summary>An array of all the currently connected clients.</summary>
         /// <remarks>The position of each <see cref="IConnectionInfo"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         IConnectionInfo[] Clients { get; }
+        /// <summary>Whether or not to allow messages to be automatically sent to all other connected clients.</summary>
+        /// <remarks>This should never be enabled if you want to maintain server authority, as it theoretically allows hacked clients to tell your <see cref="Server"/> instance to automatically distribute any message to other clients.
+        /// However, it's extremely handy when building client-authoritative games where the <see cref="Server"/> instance acts mostly as a relay and is directly forwarding most messages to other clients anyways.</remarks>
+        bool AllowAutoMessageRelay { get; set; }
 
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>

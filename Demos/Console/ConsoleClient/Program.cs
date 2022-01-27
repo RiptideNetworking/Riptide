@@ -3,6 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking;
 using RiptideNetworking.Transports.RudpTransport;
 using RiptideNetworking.Utils;
 using System;
@@ -11,9 +12,9 @@ using System.Diagnostics;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
+namespace RiptideDemos.RudpTransport.ConsoleApp.TestClient
 {
-    class Program
+    internal class Program
     {
         private static Client client;
         private static bool isRunning;
@@ -83,7 +84,7 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
             Console.WriteLine();
             Console.WriteLine("Press enter to disconnect at any time.");
 
-            client.Send(Message.Create(MessageSendMode.reliable, (ushort)MessageId.startTest, 25).Add(isRoundTripTest).Add(testIdAmount));
+            client.Send(Message.Create(MessageSendMode.reliable, MessageId.startTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount));
         }
 
         private static void Disconnected()
@@ -185,8 +186,8 @@ namespace RiptideNetworking.Demos.RudpTransport.ConsoleApp.TestClient
 
         private static void SendTestMessage(int reliableTestId)
         {
-            Message message = Message.Create(MessageSendMode.reliable, (ushort)MessageId.testMessage);
-            message.Add(reliableTestId);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.testMessage);
+            message.AddInt(reliableTestId);
 
             client.Send(message);
         }

@@ -32,6 +32,12 @@ namespace RiptideNetworking
         public ushort MaxClientCount => server.MaxClientCount;
         /// <inheritdoc cref="IServer.ClientCount"/>
         public int ClientCount => server.ClientCount;
+        /// <inheritdoc cref="IServer.AllowAutoMessageRelay"/>
+        public bool AllowAutoMessageRelay
+        {
+            get => server.AllowAutoMessageRelay;
+            set => server.AllowAutoMessageRelay = value;
+        }
         /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
@@ -73,7 +79,7 @@ namespace RiptideNetworking
 
             server.ClientConnected += OnClientConnected;
             server.MessageReceived += OnMessageReceived;
-            server.ClientDisconnected += OnClientDisonnected;
+            server.ClientDisconnected += OnClientDisconnected;
             server.Start(port, maxClientCount);
 
             IsRunning = true;
@@ -92,13 +98,13 @@ namespace RiptideNetworking
             {
                 MessageHandlerAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerAttribute>();
                 if (attribute.GroupId != messageHandlerGroupId)
-                    break;
+                    continue;
 
                 if (!methods[i].IsStatic)
                     throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
 
-                Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
-                if (clientMessageHandler != null)
+                Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
+                if (serverMessageHandler != null)
                 {
                     // It's a message handler for Server instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
@@ -107,13 +113,13 @@ namespace RiptideNetworking
                         throw new Exception($"Server-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
                     }
                     else
-                        messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
+                        messageHandlers.Add(attribute.MessageId, (MessageHandler)serverMessageHandler);
                 }
                 else
                 {
                     // It's not a message handler for Server instances, but it might be one for Client instances
-                    Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
-                    if (serverMessageHandler == null)
+                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
+                    if (clientMessageHandler == null)
                         throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
                 }
             }
@@ -143,13 +149,13 @@ namespace RiptideNetworking
             server.Shutdown();
             server.ClientConnected -= OnClientConnected;
             server.MessageReceived -= OnMessageReceived;
-            server.ClientDisconnected -= OnClientDisonnected;
+            server.ClientDisconnected -= OnClientDisconnected;
 
             IsRunning = false;
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        private void OnClientConnected(object s, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
@@ -163,6 +169,6 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisonnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }

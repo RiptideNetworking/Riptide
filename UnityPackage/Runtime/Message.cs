@@ -3,6 +3,7 @@
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using RiptideNetworking.Transports;
 using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
@@ -17,31 +18,6 @@ namespace RiptideNetworking
         unreliable = HeaderType.unreliable,
         /// <summary>Reliable send mode.</summary>
         reliable = HeaderType.reliable,
-    }
-
-    /// <summary>The header type of a <see cref="Message"/>.</summary>
-    public enum HeaderType : byte
-    {
-        /// <summary>For unreliable user messages.</summary>
-        unreliable,
-        /// <summary>For unreliable internal ack messages.</summary>
-        ack,
-        /// <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
-        ackExtra,
-        /// <summary>For unreliable internal connect messages.</summary>
-        connect,
-        /// <summary>For unreliable internal heartbeat messages.</summary>
-        heartbeat,
-        /// <summary>For unreliable internal disconnect messages.</summary>
-        disconnect,
-        /// <summary>For reliable user messages.</summary>
-        reliable,
-        /// <summary>For reliable internal welcome messages.</summary>
-        welcome,
-        /// <summary>For reliable internal client connected messages.</summary>
-        clientConnected,
-        /// <summary>For reliable internal client disconnected messages.</summary>
-        clientDisconnected,
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -63,10 +39,8 @@ namespace RiptideNetworking
         public int MaxSendAttempts { get; set; }
         /// <summary>The message's data.</summary>
         public byte[] Bytes { get; private set; }
-        /// <summary>The length in bytes of the data that can be read from the message.</summary>
-        public int ReadableLength { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
-        public int UnreadLength => ReadableLength - readPos;
+        public int UnreadLength => writePos - readPos;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
@@ -79,10 +53,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        internal Message(int maxSize = MaxMessageSize)
-        {
-            Bytes = new byte[maxSize];
-        }
+        private Message(int maxSize = MaxMessageSize) => Bytes = new byte[maxSize];
 
         #region Pooling
         /// <summary>Increases the amount of messages in the pool. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
@@ -110,28 +81,41 @@ namespace RiptideNetworking
             }
         }
 
+        /// <summary>Gets a usable message instance.</summary>
+        /// <returns>A message instance ready to be used.</returns>
+        public static Message Create()
+        {
+            return RetrieveFromPool().PrepareForUse();
+        }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
+        /// <param name="shouldAutoRelay">Whether or not <see cref="Server"/> instances should automatically relay this message to all other clients. This has no effect when <see cref="Server.AllowAutoMessageRelay"/> is set to <see langword="false"/> and does not affect how clients handle messages.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15)
+        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
         {
-            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode, maxSendAttempts).Add(id);
+            return RetrieveFromPool().PrepareForUse(shouldAutoRelay ? (HeaderType)sendMode + 1 : (HeaderType)sendMode, maxSendAttempts).Add(id);
         }
-
+        /// <inheritdoc cref="Create(MessageSendMode, ushort, int, bool)"/>
+        /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
+        public static Message Create(MessageSendMode sendMode, Enum id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
+        {
+            return Create(sendMode, (ushort)(object)id, maxSendAttempts, shouldAutoRelay);
+        }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="messageHeader">The message's header type.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
+        internal static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
         {
             return RetrieveFromPool().PrepareForUse(messageHeader, maxSendAttempts);
         }
 
-        /// <summary>Gets a message instance that can be used for handling.</summary>
-        /// <returns>A message instance ready to be used for handling.</returns>
-        public static Message Create()
+        /// <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
+        /// <remarks>As this message instance is returned straight from the pool, it will contain all previous data and settings. Using this instance without preparing it properly will likely result in unexpected behaviour.</remarks>
+        /// <returns>A message instance.</returns>
+        internal static Message CreateRaw()
         {
             return RetrieveFromPool();
         }
@@ -171,32 +155,50 @@ namespace RiptideNetworking
         #endregion
 
         #region Functions
-        /// <summary>Prepares a message to be used for sending.</summary>
+        /// <summary>Prepares the message to be used.</summary>
+        /// <returns>The message, ready to be used.</returns>
+        private Message PrepareForUse()
+        {
+            SetReadWritePos(0, 0);
+            return this;
+        }
+        /// <summary>Prepares the message to be used for sending.</summary>
         /// <param name="messageHeader">The header of the message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
+        /// <returns>The message, ready to be used for sending.</returns>
         private Message PrepareForUse(HeaderType messageHeader, int maxSendAttempts)
         {
-            writePos = 0;
-            readPos = 0;
-            ReadableLength = 0;
             MaxSendAttempts = maxSendAttempts;
-            SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            Add((byte)messageHeader);
+            SetReadWritePos(0, 1);
+            SetHeader(messageHeader);
+            return this;
+        }
+        /// <summary>Prepares the message to be used for handling.</summary>
+        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
+        /// <returns>The message, ready to be used for handling.</returns>
+        internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
+        {
+            SetReadWritePos(1, contentLength);
+            SetHeader(messageHeader);
             return this;
         }
 
-        /// <summary>Prepares a message to be used for handling.</summary>
-        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
-        /// <returns>The header of the message.</returns>
-        public HeaderType PrepareForUse(ushort contentLength)
+        /// <summary>Sets the message's read and write position.</summary>
+        /// <param name="newReadPos">The new read position.</param>
+        /// <param name="newWritePos">The new write position.</param>
+        private void SetReadWritePos(ushort newReadPos, ushort newWritePos)
         {
-            writePos = contentLength;
-            readPos = 0;
-            ReadableLength = contentLength;
-            HeaderType messageHeader = (HeaderType)GetByte();
+            readPos = newReadPos;
+            writePos = newWritePos;
+        }
+
+        /// <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="MessageSendMode"/>.</summary>
+        /// <param name="messageHeader">The header to use for this message.</param>
+        internal void SetHeader(HeaderType messageHeader)
+        {
+            Bytes[0] = (byte)messageHeader;
             SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
-            return messageHeader;
         }
         #endregion
 
@@ -332,7 +334,7 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="bool"/> was added to.</returns>
         public Message Add(bool value)
         {
-            if (UnwrittenLength < RiptideConverter.boolLength)
+            if (UnwrittenLength < RiptideConverter.BoolLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'bool'!");
 
             Bytes[writePos++] = (byte)(value ? 1 : 0);
@@ -343,7 +345,7 @@ namespace RiptideNetworking
         /// <returns>The <see cref="bool"/> that was retrieved.</returns>
         public bool GetBool()
         {
-            if (UnreadLength < RiptideConverter.boolLength)
+            if (UnreadLength < RiptideConverter.BoolLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
                 return false;
@@ -485,11 +487,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
         public Message Add(short value)
         {
-            if (UnwrittenLength < RiptideConverter.shortLength)
+            if (UnwrittenLength < RiptideConverter.ShortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'short'!");
 
             RiptideConverter.FromShort(value, Bytes, writePos);
-            writePos += RiptideConverter.shortLength;
+            writePos += RiptideConverter.ShortLength;
             return this;
         }
 
@@ -502,11 +504,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
         public Message Add(ushort value)
         {
-            if (UnwrittenLength < RiptideConverter.ushortLength)
+            if (UnwrittenLength < RiptideConverter.UShortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ushort'!");
 
             RiptideConverter.FromUShort(value, Bytes, writePos);
-            writePos += RiptideConverter.ushortLength;
+            writePos += RiptideConverter.UShortLength;
             return this;
         }
 
@@ -514,14 +516,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
         public short GetShort()
         {
-            if (UnreadLength < RiptideConverter.shortLength)
+            if (UnreadLength < RiptideConverter.ShortLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short', returning 0!");
                 return 0;
             }
 
             short value = RiptideConverter.ToShort(Bytes, readPos);
-            readPos += RiptideConverter.shortLength;
+            readPos += RiptideConverter.ShortLength;
             return value;
         }
 
@@ -529,21 +531,21 @@ namespace RiptideNetworking
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
         public ushort GetUShort()
         {
-            if (UnreadLength < RiptideConverter.ushortLength)
+            if (UnreadLength < RiptideConverter.UShortLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort', returning 0!");
                 return 0;
             }
 
             ushort value = RiptideConverter.ToUShort(Bytes, readPos);
-            readPos += RiptideConverter.ushortLength;
+            readPos += RiptideConverter.UShortLength;
             return value;
         }
         
         /// <summary>Retrieves a <see cref="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         internal ushort PeekUShort()
         {
-            if (UnreadLength < RiptideConverter.ushortLength)
+            if (UnreadLength < RiptideConverter.UShortLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to peek type 'ushort', returning 0!");
                 return 0;
@@ -581,7 +583,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.shortLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.ShortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'short[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -619,7 +621,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.ushortLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.UShortLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ushort[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -708,16 +710,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadShorts(int amount, short[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.shortLength)
+            if (UnreadLength < amount * RiptideConverter.ShortLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'short[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.shortLength;
+                amount = UnreadLength / RiptideConverter.ShortLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToShort(Bytes, readPos);
-                readPos += RiptideConverter.shortLength;
+                readPos += RiptideConverter.ShortLength;
             }
         }
 
@@ -727,16 +729,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadUShorts(int amount, ushort[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.ushortLength)
+            if (UnreadLength < amount * RiptideConverter.UShortLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ushort[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.shortLength;
+                amount = UnreadLength / RiptideConverter.ShortLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToUShort(Bytes, readPos);
-                readPos += RiptideConverter.ushortLength;
+                readPos += RiptideConverter.UShortLength;
             }
         }
         #endregion
@@ -751,11 +753,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
         public Message Add(int value)
         {
-            if (UnwrittenLength < RiptideConverter.intLength)
+            if (UnwrittenLength < RiptideConverter.IntLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'int'!");
 
             RiptideConverter.FromInt(value, Bytes, writePos);
-            writePos += RiptideConverter.intLength;
+            writePos += RiptideConverter.IntLength;
             return this;
         }
 
@@ -768,11 +770,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
         public Message Add(uint value)
         {
-            if (UnwrittenLength < RiptideConverter.uintLength)
+            if (UnwrittenLength < RiptideConverter.UIntLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'uint'!");
 
             RiptideConverter.FromUInt(value, Bytes, writePos);
-            writePos += RiptideConverter.uintLength;
+            writePos += RiptideConverter.UIntLength;
             return this;
         }
 
@@ -780,14 +782,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="int"/> that was retrieved.</returns>
         public int GetInt()
         {
-            if (UnreadLength < RiptideConverter.intLength)
+            if (UnreadLength < RiptideConverter.IntLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int', returning 0!");
                 return 0;
             }
 
             int value = RiptideConverter.ToInt(Bytes, readPos);
-            readPos += RiptideConverter.intLength;
+            readPos += RiptideConverter.IntLength;
             return value;
         }
 
@@ -795,14 +797,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
         public uint GetUInt()
         {
-            if (UnreadLength < RiptideConverter.uintLength)
+            if (UnreadLength < RiptideConverter.UIntLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint', returning 0!");
                 return 0;
             }
 
             uint value = RiptideConverter.ToUInt(Bytes, readPos);
-            readPos += RiptideConverter.uintLength;
+            readPos += RiptideConverter.UIntLength;
             return value;
         }
 
@@ -835,7 +837,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.intLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.IntLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'int[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -873,7 +875,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.uintLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.UIntLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'uint[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -962,16 +964,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadInts(int amount, int[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.intLength)
+            if (UnreadLength < amount * RiptideConverter.IntLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'int[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.intLength;
+                amount = UnreadLength / RiptideConverter.IntLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToInt(Bytes, readPos);
-                readPos += RiptideConverter.intLength;
+                readPos += RiptideConverter.IntLength;
             }
         }
 
@@ -981,16 +983,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadUInts(int amount, uint[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.uintLength)
+            if (UnreadLength < amount * RiptideConverter.UIntLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'uint[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.uintLength;
+                amount = UnreadLength / RiptideConverter.UIntLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToUInt(Bytes, readPos);
-                readPos += RiptideConverter.uintLength;
+                readPos += RiptideConverter.UIntLength;
             }
         }
         #endregion
@@ -1005,11 +1007,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
         public Message Add(long value)
         {
-            if (UnwrittenLength < RiptideConverter.longLength)
+            if (UnwrittenLength < RiptideConverter.LongLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'long'!");
 
             RiptideConverter.FromLong(value, Bytes, writePos);
-            writePos += RiptideConverter.longLength;
+            writePos += RiptideConverter.LongLength;
             return this;
         }
 
@@ -1022,11 +1024,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
         public Message Add(ulong value)
         {
-            if (UnwrittenLength < RiptideConverter.ulongLength)
+            if (UnwrittenLength < RiptideConverter.ULongLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ulong'!");
 
             RiptideConverter.FromULong(value, Bytes, writePos);
-            writePos += RiptideConverter.ulongLength;
+            writePos += RiptideConverter.ULongLength;
             return this;
         }
 
@@ -1034,14 +1036,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
         public long GetLong()
         {
-            if (UnreadLength < RiptideConverter.longLength)
+            if (UnreadLength < RiptideConverter.LongLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long', returning 0!");
                 return 0;
             }
 
             long value = RiptideConverter.ToLong(Bytes, readPos);
-            readPos += RiptideConverter.longLength;
+            readPos += RiptideConverter.LongLength;
             return value;
         }
 
@@ -1049,14 +1051,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
         public ulong GetULong()
         {
-            if (UnreadLength < RiptideConverter.ulongLength)
+            if (UnreadLength < RiptideConverter.ULongLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong', returning 0!");
                 return 0;
             }
 
             ulong value = RiptideConverter.ToULong(Bytes, readPos);
-            readPos += RiptideConverter.ulongLength;
+            readPos += RiptideConverter.ULongLength;
             return value;
         }
 
@@ -1089,7 +1091,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.longLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.LongLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'long[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -1127,7 +1129,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.ulongLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.ULongLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'ulong[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -1216,16 +1218,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadLongs(int amount, long[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.longLength)
+            if (UnreadLength < amount * RiptideConverter.LongLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'long[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.longLength;
+                amount = UnreadLength / RiptideConverter.LongLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToLong(Bytes, readPos);
-                readPos += RiptideConverter.longLength;
+                readPos += RiptideConverter.LongLength;
             }
         }
 
@@ -1235,16 +1237,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadULongs(int amount, ulong[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.ulongLength)
+            if (UnreadLength < amount * RiptideConverter.ULongLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'ulong[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.ulongLength;
+                amount = UnreadLength / RiptideConverter.ULongLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToULong(Bytes, readPos);
-                readPos += RiptideConverter.ulongLength;
+                readPos += RiptideConverter.ULongLength;
             }
         }
         #endregion
@@ -1259,11 +1261,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="float"/> was added to.</returns>
         public Message Add(float value)
         {
-            if (UnwrittenLength < RiptideConverter.floatLength)
+            if (UnwrittenLength < RiptideConverter.FloatLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'float'!");
 
             RiptideConverter.FromFloat(value, Bytes, writePos);
-            writePos += RiptideConverter.floatLength;
+            writePos += RiptideConverter.FloatLength;
             return this;
         }
 
@@ -1271,14 +1273,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="float"/> that was retrieved.</returns>
         public float GetFloat()
         {
-            if (UnreadLength < RiptideConverter.floatLength)
+            if (UnreadLength < RiptideConverter.FloatLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float', returning 0!");
                 return 0;
             }
 
             float value = RiptideConverter.ToFloat(Bytes, readPos);
-            readPos += RiptideConverter.floatLength;
+            readPos += RiptideConverter.FloatLength;
             return value;
         }
 
@@ -1311,7 +1313,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.floatLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.FloatLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'float[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -1363,16 +1365,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadFloats(int amount, float[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.floatLength)
+            if (UnreadLength < amount * RiptideConverter.FloatLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'float[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.floatLength;
+                amount = UnreadLength / RiptideConverter.FloatLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToFloat(Bytes, readPos);
-                readPos += RiptideConverter.floatLength;
+                readPos += RiptideConverter.FloatLength;
             }
         }
         #endregion
@@ -1387,11 +1389,11 @@ namespace RiptideNetworking
         /// <returns>The message that the <see cref="double"/> was added to.</returns>
         public Message Add(double value)
         {
-            if (UnwrittenLength < RiptideConverter.doubleLength)
+            if (UnwrittenLength < RiptideConverter.DoubleLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'double'!");
 
             RiptideConverter.FromDouble(value, Bytes, writePos);
-            writePos += RiptideConverter.doubleLength;
+            writePos += RiptideConverter.DoubleLength;
             return this;
         }
 
@@ -1399,14 +1401,14 @@ namespace RiptideNetworking
         /// <returns>The <see cref="double"/> that was retrieved.</returns>
         public double GetDouble()
         {
-            if (UnreadLength < RiptideConverter.doubleLength)
+            if (UnreadLength < RiptideConverter.DoubleLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double', returning 0!");
                 return 0;
             }
 
             double value = RiptideConverter.ToDouble(Bytes, readPos);
-            readPos += RiptideConverter.doubleLength;
+            readPos += RiptideConverter.DoubleLength;
             return value;
         }
 
@@ -1439,7 +1441,7 @@ namespace RiptideNetworking
                 }
             }
 
-            if (UnwrittenLength < array.Length * RiptideConverter.doubleLength)
+            if (UnwrittenLength < array.Length * RiptideConverter.DoubleLength)
                 throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add type 'double[]'!");
 
             for (int i = 0; i < array.Length; i++)
@@ -1491,16 +1493,16 @@ namespace RiptideNetworking
         /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         private void ReadDoubles(int amount, double[] array, int startIndex = 0)
         {
-            if (UnreadLength < amount * RiptideConverter.doubleLength)
+            if (UnreadLength < amount * RiptideConverter.DoubleLength)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'double[]', array will contain default elements!");
-                amount = UnreadLength / RiptideConverter.doubleLength;
+                amount = UnreadLength / RiptideConverter.DoubleLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
                 array[startIndex + i] = RiptideConverter.ToDouble(Bytes, readPos);
-                readPos += RiptideConverter.doubleLength;
+                readPos += RiptideConverter.DoubleLength;
             }
         }
         #endregion

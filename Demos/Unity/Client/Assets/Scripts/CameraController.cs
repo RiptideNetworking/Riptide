@@ -5,7 +5,7 @@
 
 using UnityEngine;
 
-namespace RiptideNetworking.Demos.RudpTransport.Unity.ExampleClient
+namespace RiptideDemos.RudpTransport.Unity.ExampleClient
 {
     public class CameraController : MonoBehaviour
     {

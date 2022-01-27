@@ -67,12 +67,13 @@
         <member name="M:RiptideNetworking.Client.ChangeTransport(RiptideNetworking.Transports.IClient)">
             <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
             <param name="client">The underlying client that is used for managing the connection to the server.</param>
-            <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="M:RiptideNetworking.Client.Connect(System.String,System.Byte)"/> will need to be called again.</remarks>
+            <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="M:RiptideNetworking.Client.Connect(System.String,System.Byte,RiptideNetworking.Message)"/> will need to be called again.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte)">
+        <member name="M:RiptideNetworking.Client.Connect(System.String,System.Byte,RiptideNetworking.Message)">
             <summary>Attempts to connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:RiptideNetworking.Client.messageHandlers"/>.</param>
+            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:RiptideNetworking.Message.Create"/> to get an empty message instance.</param>
             <remarks>
               Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
               If you are using a different transport, check the relevant documentation for what information it requires in the host address.
@@ -125,9 +126,13 @@
         <member name="P:RiptideNetworking.ServerClientConnectedEventArgs.Client">
             <summary>The newly connected client.</summary>
         </member>
-        <member name="M:RiptideNetworking.ServerClientConnectedEventArgs.#ctor(RiptideNetworking.Transports.IConnectionInfo)">
+        <member name="P:RiptideNetworking.ServerClientConnectedEventArgs.ConnectMessage">
+            <summary>A message containing any custom data the client included when it connected.</summary>
+        </member>
+        <member name="M:RiptideNetworking.ServerClientConnectedEventArgs.#ctor(RiptideNetworking.Transports.IConnectionInfo,RiptideNetworking.Message)">
             <summary>Initializes event data.</summary>
             <param name="client">The newly connected client.</param>
+            <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
         </member>
         <member name="T:RiptideNetworking.ServerMessageReceivedEventArgs">
             <summary>Contains event data for when the server receives a message from a client.</summary>
@@ -213,9 +218,6 @@
         <member name="P:RiptideNetworking.Message.Bytes">
             <summary>The message's data.</summary>
         </member>
-        <member name="P:RiptideNetworking.Message.ReadableLength">
-            <summary>The length in bytes of the data that can be read from the message.</summary>
-        </member>
         <member name="P:RiptideNetworking.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
         </member>
@@ -241,6 +243,10 @@
         <member name="M:RiptideNetworking.Message.DecreasePoolCount">
             <summary>Decreases the amount of messages in the pool. For use when a <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is stopped.</summary>
         </member>
+        <member name="M:RiptideNetworking.Message.Create">
+            <summary>Gets a usable message instance.</summary>
+            <returns>A message instance ready to be used.</returns>
+        </member>
         <member name="M:RiptideNetworking.Message.Create(RiptideNetworking.MessageSendMode,System.UInt16,System.Int32,System.Boolean)">
             <summary>Gets a message instance that can be used for sending.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
@@ -259,9 +265,10 @@
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.Create">
-            <summary>Gets a message instance that can be used for handling.</summary>
-            <returns>A message instance ready to be used for handling.</returns>
+        <member name="M:RiptideNetworking.Message.CreateRaw">
+            <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
+            <remarks>As this message instance is returned straight from the pool, it will contain all previous data and settings. Using this instance without preparing it properly will likely result in unexpected behaviour.</remarks>
+            <returns>A message instance.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.RetrieveFromPool">
             <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
@@ -270,16 +277,30 @@
         <member name="M:RiptideNetworking.Message.Release">
             <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         </member>
+        <member name="M:RiptideNetworking.Message.PrepareForUse">
+            <summary>Prepares the message to be used.</summary>
+            <returns>The message, ready to be used.</returns>
+        </member>
         <member name="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.Transports.HeaderType,System.Int32)">
-            <summary>Prepares a message to be used for sending.</summary>
+            <summary>Prepares the message to be used for sending.</summary>
             <param name="messageHeader">The header of the message.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            <returns>A message instance ready to be used for sending.</returns>
+            <returns>The message, ready to be used for sending.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.PrepareForUse(System.UInt16)">
-            <summary>Prepares a message to be used for handling.</summary>
+        <member name="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.Transports.HeaderType,System.UInt16)">
+            <summary>Prepares the message to be used for handling.</summary>
+            <param name="messageHeader">The header of the message.</param>
             <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
-            <returns>The header of the message.</returns>
+            <returns>The message, ready to be used for handling.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.SetReadWritePos(System.UInt16,System.UInt16)">
+            <summary>Sets the message's read and write position.</summary>
+            <param name="newReadPos">The new read position.</param>
+            <param name="newWritePos">The new write position.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.SetHeader(RiptideNetworking.Transports.HeaderType)">
+            <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="T:RiptideNetworking.MessageSendMode"/>.</summary>
+            <param name="messageHeader">The header to use for this message.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddByte(System.Byte)">
             <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Byte)"/>
@@ -1025,7 +1046,7 @@
         <member name="M:RiptideNetworking.Server.OnMessageReceived(System.Object,RiptideNetworking.ServerMessageReceivedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Server.MessageReceived"/> event and initiates handling of the received message.</summary>
         </member>
-        <member name="M:RiptideNetworking.Server.OnClientDisonnected(System.Object,RiptideNetworking.ClientDisconnectedEventArgs)">
+        <member name="M:RiptideNetworking.Server.OnClientDisconnected(System.Object,RiptideNetworking.ClientDisconnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Server.ClientDisconnected"/> event.</summary>
         </member>
         <member name="T:RiptideNetworking.Transports.IClient">
@@ -1050,9 +1071,10 @@
         <member name="E:RiptideNetworking.Transports.IClient.ClientDisconnected">
             <summary>Invoked when a client disconnects.</summary>
         </member>
-        <member name="M:RiptideNetworking.Transports.IClient.Connect(System.String)">
+        <member name="M:RiptideNetworking.Transports.IClient.Connect(System.String,RiptideNetworking.Message)">
             <summary>Attempts to connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
+            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:RiptideNetworking.Message.Create"/> to get an empty message instance.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Boolean)">
             <summary>Sends a message to the server.</summary>
@@ -1206,11 +1228,14 @@
         <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.Create(RiptideNetworking.Transports.HeaderType,System.Int32)">
             <inheritdoc cref="M:RiptideNetworking.Message.Create(RiptideNetworking.Transports.HeaderType,System.Int32)"/>
         </member>
-        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.Create">
-            <inheritdoc cref="M:RiptideNetworking.Message.Create"/>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.CreateRaw">
+            <inheritdoc cref="M:RiptideNetworking.Message.CreateRaw"/>
         </member>
-        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.PrepareForUse(RiptideNetworking.Message,System.UInt16)">
-            <inheritdoc cref="M:RiptideNetworking.Message.PrepareForUse(System.UInt16)"/>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.PrepareForUse(RiptideNetworking.Message,RiptideNetworking.Transports.HeaderType,System.UInt16)">
+            <inheritdoc cref="M:RiptideNetworking.Message.PrepareForUse(RiptideNetworking.Transports.HeaderType,System.UInt16)"/>
+        </member>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.SetHeader(RiptideNetworking.Message,RiptideNetworking.Transports.HeaderType)">
+            <inheritdoc cref="M:RiptideNetworking.Message.SetHeader(RiptideNetworking.Transports.HeaderType)"/>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.SendLockables">
             <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>
@@ -1377,6 +1402,9 @@
         <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.pendingPingStopwatch">
             <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
         </member>
+        <member name="F:RiptideNetworking.Transports.RudpTransport.RudpClient.connectBytes">
+            <summary>An array of custom bytes to include when connecting.</summary>
+        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.#ctor(System.UInt16,System.UInt16,System.Byte,System.String)">
             <summary>Handles initial setup.</summary>
             <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
@@ -1384,9 +1412,16 @@
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
             <param name="logName">The name to use when logging messages via <see cref="T:RiptideNetworking.Utils.RiptideLogger"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Connect(System.String)">
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Connect(System.String,RiptideNetworking.Message)">
             <inheritdoc/>
             <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.ParseHostAddress(System.String,System.Net.IPAddress@,System.UInt16@)">
+            <summary>Parses the <paramref name="hostAddress"/> and retrieves its <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
+            <param name="hostAddress">The host address to parse.</param>
+            <param name="ip">The retrieved IP.</param>
+            <param name="port">The retrieved port.</param>
+            <returns>Whether or not the host address is valid.</returns>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.Heartbeat">
             <summary>Sends a connnect or heartbeat message. Called by <see cref="F:RiptideNetworking.Transports.RudpTransport.RudpClient.heartbeatTimer"/>.</summary>
