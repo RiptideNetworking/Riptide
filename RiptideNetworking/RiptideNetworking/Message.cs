@@ -97,12 +97,24 @@ namespace RiptideNetworking
         {
             return RetrieveFromPool().PrepareForUse(shouldAutoRelay ? (HeaderType)sendMode + 1 : (HeaderType)sendMode, maxSendAttempts).Add(id);
         }
+
         /// <inheritdoc cref="Create(MessageSendMode, ushort, int, bool)"/>
+        /// <typeparam name="TMessageId"> The enum type representing the enum supplying the id. </typeparam>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
-        public static Message Create(MessageSendMode sendMode, Enum id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
+        public static Message Create<TMessageId>(MessageSendMode sendMode, TMessageId id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
+            where TMessageId : Enum
         {
-            return Create(sendMode, (ushort)(object)id, maxSendAttempts, shouldAutoRelay);
+            try
+            {
+                var castId = Convert.ToUInt16(id);
+                return Create(sendMode, castId, maxSendAttempts, shouldAutoRelay);
+            }
+            catch (InvalidCastException ex)
+            {
+                throw new InvalidOperationException($"Enum \"{typeof(TMessageId).Name}\" must inherit from {nameof(Byte)} or {nameof(UInt16)} in order to be used as the id of the message.", ex);
+            }
         }
+
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="messageHeader">The message's header type.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
