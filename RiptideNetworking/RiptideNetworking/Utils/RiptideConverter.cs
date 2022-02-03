@@ -324,6 +324,7 @@ namespace RiptideNetworking.Utils
         #endregion
     }
 
+#pragma warning disable IDE1006
     [StructLayout(LayoutKind.Explicit)]
     internal struct FloatConverter
     {
@@ -349,4 +350,5 @@ namespace RiptideNetworking.Utils
 
         [FieldOffset(0)] public double doubleValue;
     }
+#pragma warning restore IDE1006
 }
