@@ -250,17 +250,17 @@ namespace RiptideNetworking.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void FromFloat(float value, byte[] array, int startIndex)
         {
-            FloatConverter converter = new FloatConverter { floatValue = value };
+            FloatConverter converter = new FloatConverter { FloatValue = value };
 #if BIG_ENDIAN
-            array[startIndex + 3] = converter.byte0;
-            array[startIndex + 2] = converter.byte1;
-            array[startIndex + 1] = converter.byte2;
-            array[startIndex    ] = converter.byte3;
+            array[startIndex + 3] = converter.Byte0;
+            array[startIndex + 2] = converter.Byte1;
+            array[startIndex + 1] = converter.Byte2;
+            array[startIndex    ] = converter.Byte3;
 #else
-            array[startIndex    ] = converter.byte0;
-            array[startIndex + 1] = converter.byte1;
-            array[startIndex + 2] = converter.byte2;
-            array[startIndex + 3] = converter.byte3;
+            array[startIndex    ] = converter.Byte0;
+            array[startIndex + 1] = converter.Byte1;
+            array[startIndex + 2] = converter.Byte2;
+            array[startIndex + 3] = converter.Byte3;
 #endif
         }
 
@@ -272,9 +272,9 @@ namespace RiptideNetworking.Utils
         public static float ToFloat(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
-            return new FloatConverter { byte3 = array[startIndex], byte2 = array[startIndex + 1], byte1 = array[startIndex + 2], byte0 = array[startIndex + 3] }.floatValue;
+            return new FloatConverter { Byte3 = array[startIndex], Byte2 = array[startIndex + 1], Byte1 = array[startIndex + 2], Byte0 = array[startIndex + 3] }.FloatValue;
 #else
-            return new FloatConverter { byte0 = array[startIndex], byte1 = array[startIndex + 1], byte2 = array[startIndex + 2], byte3 = array[startIndex + 3] }.floatValue;
+            return new FloatConverter { Byte0 = array[startIndex], Byte1 = array[startIndex + 1], Byte2 = array[startIndex + 2], Byte3 = array[startIndex + 3] }.FloatValue;
 #endif
         }
         #endregion
@@ -287,25 +287,25 @@ namespace RiptideNetworking.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void FromDouble(double value, byte[] array, int startIndex)
         {
-            DoubleConverter converter = new DoubleConverter { doubleValue = value };
+            DoubleConverter converter = new DoubleConverter { DoubleValue = value };
 #if BIG_ENDIAN
-            array[startIndex + 7] = converter.byte0;
-            array[startIndex + 6] = converter.byte1;
-            array[startIndex + 5] = converter.byte2;
-            array[startIndex + 4] = converter.byte3;
-            array[startIndex + 3] = converter.byte4;
-            array[startIndex + 2] = converter.byte5;
-            array[startIndex + 1] = converter.byte6;
-            array[startIndex    ] = converter.byte7;
+            array[startIndex + 7] = converter.Byte0;
+            array[startIndex + 6] = converter.Byte1;
+            array[startIndex + 5] = converter.Byte2;
+            array[startIndex + 4] = converter.Byte3;
+            array[startIndex + 3] = converter.Byte4;
+            array[startIndex + 2] = converter.Byte5;
+            array[startIndex + 1] = converter.Byte6;
+            array[startIndex    ] = converter.Byte7;
 #else
-            array[startIndex    ] = converter.byte0;
-            array[startIndex + 1] = converter.byte1;
-            array[startIndex + 2] = converter.byte2;
-            array[startIndex + 3] = converter.byte3;
-            array[startIndex + 4] = converter.byte4;
-            array[startIndex + 5] = converter.byte5;
-            array[startIndex + 6] = converter.byte6;
-            array[startIndex + 7] = converter.byte7;
+            array[startIndex    ] = converter.Byte0;
+            array[startIndex + 1] = converter.Byte1;
+            array[startIndex + 2] = converter.Byte2;
+            array[startIndex + 3] = converter.Byte3;
+            array[startIndex + 4] = converter.Byte4;
+            array[startIndex + 5] = converter.Byte5;
+            array[startIndex + 6] = converter.Byte6;
+            array[startIndex + 7] = converter.Byte7;
 #endif
         }
 
@@ -327,26 +327,26 @@ namespace RiptideNetworking.Utils
     [StructLayout(LayoutKind.Explicit)]
     internal struct FloatConverter
     {
-        [FieldOffset(0)] public byte byte0;
-        [FieldOffset(1)] public byte byte1;
-        [FieldOffset(2)] public byte byte2;
-        [FieldOffset(3)] public byte byte3;
+        [FieldOffset(0)] public byte Byte0;
+        [FieldOffset(1)] public byte Byte1;
+        [FieldOffset(2)] public byte Byte2;
+        [FieldOffset(3)] public byte Byte3;
 
-        [FieldOffset(0)] public float floatValue;
+        [FieldOffset(0)] public float FloatValue;
     }
 
     [StructLayout(LayoutKind.Explicit)]
     internal struct DoubleConverter
     {
-        [FieldOffset(0)] public byte byte0;
-        [FieldOffset(1)] public byte byte1;
-        [FieldOffset(2)] public byte byte2;
-        [FieldOffset(3)] public byte byte3;
-        [FieldOffset(4)] public byte byte4;
-        [FieldOffset(5)] public byte byte5;
-        [FieldOffset(6)] public byte byte6;
-        [FieldOffset(7)] public byte byte7;
+        [FieldOffset(0)] public byte Byte0;
+        [FieldOffset(1)] public byte Byte1;
+        [FieldOffset(2)] public byte Byte2;
+        [FieldOffset(3)] public byte Byte3;
+        [FieldOffset(4)] public byte Byte4;
+        [FieldOffset(5)] public byte Byte5;
+        [FieldOffset(6)] public byte Byte6;
+        [FieldOffset(7)] public byte Byte7;
 
-        [FieldOffset(0)] public double doubleValue;
+        [FieldOffset(0)] public double DoubleValue;
     }
 }
