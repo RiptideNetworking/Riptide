@@ -62,7 +62,7 @@ namespace RiptideNetworking
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
-        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, byte, Message)"/> will need to be called again.</remarks>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, byte, Message, int)"/> will need to be called again.</remarks>
         public void ChangeTransport(IClient client)
         {
             Disconnect();
@@ -73,12 +73,15 @@ namespace RiptideNetworking
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="maxMessageSize">The maximum amount of bytes that a message could possibly contain</param>
         /// <remarks>
         ///   Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
         ///   If you are using a different transport, check the relevant documentation for what information it requires in the host address.
         /// </remarks>
-        public void Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
+        public void Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null, int maxMessageSize = Message.DefaultMaxMessageSize)
         {
+            Message.MaxMessageSize = maxMessageSize;
+
             Disconnect();
 
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);

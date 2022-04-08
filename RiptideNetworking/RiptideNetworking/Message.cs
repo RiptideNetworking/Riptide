@@ -24,7 +24,10 @@ namespace RiptideNetworking
     public class Message
     {
         /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
-        public const int MaxMessageSize = 1250;
+        public static int MaxMessageSize { get; internal set; } = DefaultMaxMessageSize;
+
+        /// <summary>The default maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>>\
+        public const int DefaultMaxMessageSize = 1250;
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
@@ -53,7 +56,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        private Message(int maxSize = MaxMessageSize) => Bytes = new byte[maxSize];
+        private Message(int maxSize) => Bytes = new byte[maxSize];
 
         #region Pooling
         /// <summary>Increases the amount of messages in the pool. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
@@ -64,7 +67,7 @@ namespace RiptideNetworking
                 pool.Capacity += InstancesPerSocket * 2; // x2 so there's room for extra Message instance in the event that more are needed
 
                 for (int i = 0; i < InstancesPerSocket; i++)
-                    pool.Add(new Message());
+                    pool.Add(new Message(MaxMessageSize));
             }
         }
 
@@ -133,7 +136,7 @@ namespace RiptideNetworking
                     pool.RemoveAt(0);
                 }
                 else
-                    message = new Message();
+                    message = new Message(MaxMessageSize);
 
                 return message;
             }
