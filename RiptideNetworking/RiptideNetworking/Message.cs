@@ -32,9 +32,6 @@ namespace RiptideNetworking
             }
             set
             {
-                //8 bits per byte
-                if (value % 8 != 0) throw new Exception("MaxMessageSize must be divizable by 8");
-
                 //the default value for int properties is zero, so if it's not zero, that means its already been set
                 if (MaxMessageSize != 0) throw new Exception("MaxMessageSize has already been set");
 
