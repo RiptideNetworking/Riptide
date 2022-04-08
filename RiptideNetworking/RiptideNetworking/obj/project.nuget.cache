@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "z9lZpKoNil3UHJSY2Vj6Yj460diRuG2MvjwstCZKJ63mzvWBXD3xlxvOB2ZaOSSjHUApYMJnX9ZDqcgZZ0zCGQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\charl\\Source\\Repos\\RiptideNetworking\\RiptideNetworking\\RiptideNetworking\\RiptideNetworking.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\charl\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\charl\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}

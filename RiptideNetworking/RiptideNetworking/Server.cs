@@ -60,7 +60,7 @@ namespace RiptideNetworking
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>
-        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, int)"/> will need to be called again.</remarks>
+        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, int, byte)"/> will need to be called again.</remarks>
         public void ChangeTransport(IServer server)
         {
             Stop();
@@ -70,9 +70,9 @@ namespace RiptideNetworking
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
+        /// <param name="maxMessageSize">The maximum amount of bytes that a message could possibly contain</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
-        /// <param name="maxMessageSize"><see cref="Server.Start(ushort, ushort, byte, int)"/></param>
-        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, int maxMessageSize = Message.DefaultMaxMessageSize)
+        public void Start(ushort port, ushort maxClientCount, int maxMessageSize = Message.DefaultMaxMessageSize, byte messageHandlerGroupId = 0)
         {
             Message.MaxMessageSize = maxMessageSize;
 

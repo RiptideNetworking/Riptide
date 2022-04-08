@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>bin\Debug\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
+    <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>bin\Release\netstandard2.0\</OutputPath>
+    <DocumentationFile>bin\Release\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <UPMSourceFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Transports\RudpTransport\README.md" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;)" />
+    <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="@(UPMSourceFiles)" DestinationFiles="@(UPMSourceFiles->'$(SolutionDir)..\UnityPackage\Runtime\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="$(SolutionDir)..\LICENSE.md" DestinationFiles="$(SolutionDir)..\UnityPackage\LICENSE.md" SkipUnchangedFiles="true" />
+  </Target>
+
+</Project>

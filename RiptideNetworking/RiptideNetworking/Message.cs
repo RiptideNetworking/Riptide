@@ -24,20 +24,7 @@ namespace RiptideNetworking
     public class Message
     {
         /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
-        public static int MaxMessageSize
-        {
-            get
-            {
-                return MaxMessageSize;
-            }
-            set
-            {
-                //the default value for int properties is zero, so if it's not zero, that means its already been set
-                if (MaxMessageSize != 0) throw new Exception("MaxMessageSize has already been set");
-
-                MaxMessageSize = value;
-            }
-        }
+        public static int MaxMessageSize { get; internal set; }
 
         /// <summary>The default maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>>\
         public const int DefaultMaxMessageSize = 1250;
