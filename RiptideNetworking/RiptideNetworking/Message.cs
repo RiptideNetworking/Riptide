@@ -24,7 +24,22 @@ namespace RiptideNetworking
     public class Message
     {
         /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
-        public static int MaxMessageSize { get; internal set; }
+        public static int MaxMessageSize
+        {
+            get
+            {
+                return maxMessageSize;
+            }
+            set
+            {
+                if (hasMessageClassBeenCreated)
+                    return;
+
+                maxMessageSize = value;
+            }
+        }
+
+        private static int maxMessageSize = DefaultMaxMessageSize;
 
         /// <summary>The default maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>>\
         public const int DefaultMaxMessageSize = 1250;
@@ -34,6 +49,9 @@ namespace RiptideNetworking
         public static byte InstancesPerSocket { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
         private static readonly List<Message> pool = new List<Message>();
+
+        /// <summary>boolean to check if Message class has ever been created</summary>
+        private static bool hasMessageClassBeenCreated = false;
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -56,7 +74,11 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        private Message(int maxSize) => Bytes = new byte[maxSize];
+        private Message(int maxSize)
+        {
+            Bytes = new byte[maxSize];
+            hasMessageClassBeenCreated = true;
+        }
 
         #region Pooling
         /// <summary>Increases the amount of messages in the pool. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
