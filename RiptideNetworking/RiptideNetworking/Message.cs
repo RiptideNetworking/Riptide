@@ -33,7 +33,7 @@ namespace RiptideNetworking
             set
             {
                 if (hasMessageClassBeenCreated)
-                    return;
+                    throw new Exception("Cannot set MaxMessageSize after a Message instance has been created");
 
                 maxMessageSize = value;
             }
