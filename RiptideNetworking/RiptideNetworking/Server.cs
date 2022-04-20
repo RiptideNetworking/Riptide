@@ -75,6 +75,7 @@ namespace RiptideNetworking
         {
             Stop();
 
+            IncreaseActiveSocketCount();
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             server.ClientConnected += OnClientConnected;
@@ -151,6 +152,7 @@ namespace RiptideNetworking
             server.MessageReceived -= OnMessageReceived;
             server.ClientDisconnected -= OnClientDisconnected;
 
+            DecreaseActiveSocketCount();
             IsRunning = false;
         }
 

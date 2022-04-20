@@ -49,8 +49,6 @@ namespace RiptideNetworking.Transports.RudpTransport
                 if (isRunning)
                     StopListening();
 
-                Message.IncreasePoolCount();
-
                 IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
                 socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
                 socket.Bind(localEndPoint);
@@ -71,8 +69,6 @@ namespace RiptideNetworking.Transports.RudpTransport
 
                 isRunning = false;
                 socket.Close();
-
-                Message.DecreasePoolCount();
             }
         }
 

@@ -1,4 +1,4 @@
-﻿
+
 // This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -30,7 +30,7 @@ namespace RiptideNetworking
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
         public static byte InstancesPerSocket { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
-        private static readonly List<Message> pool = new List<Message>();
+        private static readonly List<Message> pool = new List<Message>(InstancesPerSocket * 2);
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -56,28 +56,27 @@ namespace RiptideNetworking
         private Message(int maxSize = MaxMessageSize) => Bytes = new byte[maxSize];
 
         #region Pooling
-        /// <summary>Increases the amount of messages in the pool. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
-        internal static void IncreasePoolCount()
+        /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
+        public static void TrimPool()
         {
             lock (pool)
             {
-                pool.Capacity += InstancesPerSocket * 2; // x2 so there's room for extra Message instance in the event that more are needed
-
-                for (int i = 0; i < InstancesPerSocket; i++)
-                    pool.Add(new Message());
-            }
-        }
-
-        /// <summary>Decreases the amount of messages in the pool. For use when a <see cref="Server"/> or <see cref="Client"/> is stopped.</summary>
-        internal static void DecreasePoolCount()
-        {
-            lock (pool)
-            {
-                if (pool.Count < InstancesPerSocket)
-                    return;
-
-                for (int i = 0; i < InstancesPerSocket; i++)
-                    pool.RemoveAt(0);
+                if (Common.ActiveSocketCount == 0)
+                {
+                    // No Servers or Clients are running, empty the list and reset the capacity
+                    pool.Clear();
+                    pool.Capacity = InstancesPerSocket * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+                }
+                else
+                {
+                    // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
+                    int idealInstanceAmount = Common.ActiveSocketCount * InstancesPerSocket;
+                    if (pool.Count > idealInstanceAmount)
+                    {
+                        pool.RemoveRange(Common.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
+                        pool.Capacity = idealInstanceAmount * 2;
+                    }
+                }
             }
         }
 

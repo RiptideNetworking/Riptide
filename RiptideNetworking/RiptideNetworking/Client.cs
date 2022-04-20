@@ -81,6 +81,7 @@ namespace RiptideNetworking
         {
             Disconnect();
 
+            IncreaseActiveSocketCount();
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += OnConnected;
@@ -156,6 +157,8 @@ namespace RiptideNetworking
             client.Disconnected -= OnDisconnected;
             client.ClientConnected -= OnClientConnected;
             client.ClientDisconnected -= OnClientDisconnected;
+
+            DecreaseActiveSocketCount();
         }
 
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
