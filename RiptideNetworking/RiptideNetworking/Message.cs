@@ -1,4 +1,4 @@
-
+﻿
 // This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -23,8 +23,36 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
-        /// <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
-        public const int MaxMessageSize = 1250;
+        /// <summary>The number of bytes required for a message's header.</summary>
+        /// <remarks>
+        ///     <para>1 byte for the actual header; 2 bytes for the message ID.</para>
+        ///     <b>NOTE:</b> Various transports may add additional bytes when sending messages, so this value may not reflect the true size of the header that is actually sent. For example, Riptide's default RUDP transport inserts an extra 2 bytes for the message's sequence ID when sending reliable messages, but this is not (and should not be) reflected in this value.
+        /// </remarks>
+        public const int HeaderSize = 3;
+        /// <summary>The maximum number of bytes that a message can contain, including the <see cref="HeaderSize"/>.</summary>
+        public static int MaxSize { get; private set; } = HeaderSize + 1250;
+        /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="HeaderSize"/>.</summary>
+        public static int MaxPayloadSize
+        {
+            get => MaxSize - HeaderSize;
+            set
+            {
+                if (Common.ActiveSocketCount > 0)
+                    RiptideLogger.Log(LogType.error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
+                else
+                {
+                    if (value < 0)
+                    {
+                        RiptideLogger.Log(LogType.error, $"The max payload size cannot be negative! Setting it to 0 instead of the given value ({value}).");
+                        MaxSize = HeaderSize;
+                    }
+                    else
+                        MaxSize = HeaderSize + value;
+
+                    TrimPool(); // When ActiveSocketCount is 0, this clears the pool
+                }
+            }
+        }
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
@@ -53,7 +81,7 @@ namespace RiptideNetworking
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
-        private Message(int maxSize = MaxMessageSize) => Bytes = new byte[maxSize];
+        private Message(int maxSize) => Bytes = new byte[maxSize];
 
         #region Pooling
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
@@ -132,7 +160,7 @@ namespace RiptideNetworking
                     pool.RemoveAt(0);
                 }
                 else
-                    message = new Message();
+                    message = new Message(MaxSize);
 
                 return message;
             }

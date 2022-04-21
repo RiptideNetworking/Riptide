@@ -112,6 +112,15 @@
         <member name="T:RiptideNetworking.Common">
             <summary>Contains shared functionality for <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/>.</summary>
         </member>
+        <member name="P:RiptideNetworking.Common.ActiveSocketCount">
+            <summary>The number of currently active <see cref="T:RiptideNetworking.Server"/> and <see cref="T:RiptideNetworking.Client"/> instances.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Common.IncreaseActiveSocketCount">
+            <summary>Increases <see cref="P:RiptideNetworking.Common.ActiveSocketCount"/>. For use when a new <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is started.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Common.DecreaseActiveSocketCount">
+            <summary>Decreases <see cref="P:RiptideNetworking.Common.ActiveSocketCount"/>. For use when a <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is stopped.</summary>
+        </member>
         <member name="M:RiptideNetworking.Common.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <summary>Searches the given assembly for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
             <param name="assembly">The assembly to search for methods with the <see cref="T:RiptideNetworking.MessageHandlerAttribute"/>.</param>
@@ -198,8 +207,18 @@
         <member name="T:RiptideNetworking.Message">
             <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
-        <member name="F:RiptideNetworking.Message.MaxMessageSize">
-            <summary>The maximum amount of bytes that a message can contain. Includes a 1 byte header.</summary>
+        <member name="F:RiptideNetworking.Message.HeaderSize">
+            <summary>The number of bytes required for a message's header.</summary>
+            <remarks>
+                <para>1 byte for the actual header; 2 bytes for the message ID.</para>
+                <b>NOTE:</b> Various transports may add additional bytes when sending messages, so this value may not reflect the true size of the header that is actually sent. For example, Riptide's default RUDP transport inserts an extra 2 bytes for the message's sequence ID when sending reliable messages, but this is not (and should not be) reflected in this value.
+            </remarks>
+        </member>
+        <member name="P:RiptideNetworking.Message.MaxSize">
+            <summary>The maximum number of bytes that a message can contain, including the <see cref="F:RiptideNetworking.Message.HeaderSize"/>.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Message.MaxPayloadSize">
+            <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="F:RiptideNetworking.Message.HeaderSize"/>.</summary>
         </member>
         <member name="P:RiptideNetworking.Message.InstancesPerSocket">
             <summary>How many messages to add to the pool for each <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> instance that is started.</summary>
@@ -237,11 +256,8 @@
             <summary>Initializes a reusable <see cref="T:RiptideNetworking.Message"/> instance.</summary>
             <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.IncreasePoolCount">
-            <summary>Increases the amount of messages in the pool. For use when a new <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is started.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Message.DecreasePoolCount">
-            <summary>Decreases the amount of messages in the pool. For use when a <see cref="T:RiptideNetworking.Server"/> or <see cref="T:RiptideNetworking.Client"/> is stopped.</summary>
+        <member name="M:RiptideNetworking.Message.TrimPool">
+            <summary>Trims the message pool to a more appropriate size for how many <see cref="T:RiptideNetworking.Server"/> and/or <see cref="T:RiptideNetworking.Client"/> instances are currently running.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.Create">
             <summary>Gets a usable message instance.</summary>
