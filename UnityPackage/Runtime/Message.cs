@@ -87,6 +87,20 @@ namespace RiptideNetworking
         {
             return RetrieveFromPool().PrepareForUse();
         }
+
+        /// <summary>Gets a message instance that can be used for sending.</summary>
+        /// <param name="bytes">The message bytes.</param>
+        /// <param name="skipHeader">Whether to skip the header or not.</param>
+        /// <returns>A message instance ready to be used for sending.</returns>
+        public static Message Create(byte[] bytes, bool skipHeader = true)
+        {
+            Message message = Create();
+            bytes.CopyTo(message.Bytes, 0);
+            message.writePos = (ushort)bytes.Length;
+            if (skipHeader) message.readPos = 1;
+            return message;
+        }
+
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
@@ -155,6 +169,15 @@ namespace RiptideNetworking
         #endregion
 
         #region Functions
+
+        /// <summary>Retrives only the bytes that have been written to in the message.</summary>
+        public byte[] WrittenBytes()
+        {
+            byte[] bytes = new byte[WrittenLength];
+            Array.Copy(Bytes, 0, bytes, 0, WrittenLength);
+            return bytes;
+        }
+
         /// <summary>Prepares the message to be used.</summary>
         /// <returns>The message, ready to be used.</returns>
         private Message PrepareForUse()
@@ -295,6 +318,7 @@ namespace RiptideNetworking
             ReadBytes(amount, array);
             return array;
         }
+        
         /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <param name="array">The array to populate.</param>
