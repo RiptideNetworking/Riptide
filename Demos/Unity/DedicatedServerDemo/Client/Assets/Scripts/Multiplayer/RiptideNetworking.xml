@@ -234,9 +234,6 @@
             <summary>How often to try sending the message before giving up.</summary>
             <remarks>The default RUDP transport only uses this when sending messages with their <see cref="P:RiptideNetworking.Message.SendMode"/> set to <see cref="F:RiptideNetworking.MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
         </member>
-        <member name="P:RiptideNetworking.Message.Bytes">
-            <summary>The message's data.</summary>
-        </member>
         <member name="P:RiptideNetworking.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
         </member>
@@ -245,6 +242,9 @@
         </member>
         <member name="P:RiptideNetworking.Message.UnwrittenLength">
             <summary>How many more bytes can be written into the packet.</summary>
+        </member>
+        <member name="P:RiptideNetworking.Message.Bytes">
+            <summary>The message's data.</summary>
         </member>
         <member name="F:RiptideNetworking.Message.writePos">
             <summary>The position in the byte array that the next bytes will be written to.</summary>
@@ -1239,7 +1239,10 @@
             <summary>For reliable internal client disconnected messages.</summary>
         </member>
         <member name="T:RiptideNetworking.Transports.MessageExtensionsTransports">
-            <summary>Contains extension methods for the <see cref="T:RiptideNetworking.Message"/> class which are only intended for use by transport-related code.</summary>
+            <summary>Contains extension methods for the <see cref="T:RiptideNetworking.Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
+            <remarks>Exposing these publicly as part of the <see cref="T:RiptideNetworking.Message"/> class would make them accessible and show up in intellisense wherever the <see cref="N:RiptideNetworking"/>
+            namespace is used. By making them extension methods housed in the <see cref="N:RiptideNetworking.Transports"/> namespace, usage requires explicitly referencing said namespace, which
+            should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
         </member>
         <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.Create(RiptideNetworking.Transports.HeaderType,System.Int32)">
             <inheritdoc cref="M:RiptideNetworking.Message.Create(RiptideNetworking.Transports.HeaderType,System.Int32)"/>
@@ -1252,6 +1255,10 @@
         </member>
         <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.SetHeader(RiptideNetworking.Message,RiptideNetworking.Transports.HeaderType)">
             <inheritdoc cref="M:RiptideNetworking.Message.SetHeader(RiptideNetworking.Transports.HeaderType)"/>
+        </member>
+        <member name="M:RiptideNetworking.Transports.MessageExtensionsTransports.GetDataBytes(RiptideNetworking.Message)">
+            <summary>Retrieves the message's underlying <see cref="T:System.Byte"/> array.</summary>
+            <returns>The message's underlying <see cref="T:System.Byte"/> array.</returns>
         </member>
         <member name="T:RiptideNetworking.Transports.RudpTransport.SendLockables">
             <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>

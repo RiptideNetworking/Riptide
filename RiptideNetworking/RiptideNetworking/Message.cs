@@ -1,4 +1,4 @@
-﻿
+
 // This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) 2021 Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -65,14 +65,14 @@ namespace RiptideNetworking
         /// <summary>How often to try sending the message before giving up.</summary>
         /// <remarks>The default RUDP transport only uses this when sending messages with their <see cref="SendMode"/> set to <see cref="MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
         public int MaxSendAttempts { get; set; }
-        /// <summary>The message's data.</summary>
-        public byte[] Bytes { get; private set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => writePos - readPos;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
         internal int UnwrittenLength => Bytes.Length - writePos;
+        /// <summary>The message's data.</summary>
+        internal byte[] Bytes { get; private set; }
 
         /// <summary>The position in the byte array that the next bytes will be written to.</summary>
         private ushort writePos = 0;

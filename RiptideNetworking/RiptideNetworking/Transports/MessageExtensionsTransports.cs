@@ -35,15 +35,13 @@ namespace RiptideNetworking.Transports
         clientDisconnected,
     }
 
-    /// <summary>Contains extension methods for the <see cref="Message"/> class which are only intended for use by transport-related code.</summary>
+    /// <summary>Contains extension methods for the <see cref="Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
+    /// <remarks>Exposing these publicly as part of the <see cref="Message"/> class would make them accessible and show up in intellisense wherever the <see cref="RiptideNetworking"/>
+    /// namespace is used. By making them extension methods housed in the <see cref="Transports"/> namespace, usage requires explicitly referencing said namespace, which
+    /// should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
     public static class MessageExtensionsTransports
     {
-        // These methods aren't required to use Riptide in a project, they're only needed when
-        // building custom transports. Having them publicly accessible in the Message class
-        // could easily lead to users accidentally using them when they really shouldn't be.
-        // Putting them in this class hides them from users unless they have the Transports
-        // namespace included, which should prevent most accidents.
-        //
+        //                        - Regarding the Create methods -
         // Sadly C# doesn't support *actual* static extension methods, so transports will have
         // to go through this class to use the Create methods; instead of being able to call
         // Message.Create(), transports will need to use MessageExtensionsTransports.Create() :/
@@ -56,7 +54,12 @@ namespace RiptideNetworking.Transports
 
         /// <inheritdoc cref="Message.PrepareForUse(HeaderType, ushort)"/>
         public static void PrepareForUse(this Message message, HeaderType messageHeader, ushort contentLength) => message.PrepareForUse(messageHeader, contentLength);
+
         /// <inheritdoc cref="Message.SetHeader(HeaderType)"/>
         public static void SetHeader(this Message message, HeaderType messageHeader) => message.SetHeader(messageHeader);
+
+        /// <summary>Retrieves the message's underlying <see cref="byte"/> array.</summary>
+        /// <returns>The message's underlying <see cref="byte"/> array.</returns>
+        public static byte[] GetDataBytes(this Message message) => message.Bytes;
     }
 }
