@@ -138,8 +138,8 @@ namespace RiptideNetworking
         /// <inheritdoc cref="IServer.SendToAll(Message, ushort, bool)"/>
         public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true) => server.SendToAll(message, exceptToClientId, shouldRelease);
 
-        /// <inheritdoc cref="IServer.DisconnectClient(ushort)"/>
-        public void DisconnectClient(ushort clientId) => server.DisconnectClient(clientId);
+        /// <inheritdoc cref="IServer.DisconnectClient(ushort, string)"/>
+        public void DisconnectClient(ushort clientId, string reason = "") => server.DisconnectClient(clientId, reason);
 
         /// <summary>Stops the server.</summary>
         public void Stop()

@@ -17,8 +17,8 @@ namespace RiptideNetworking.Transports
         event EventHandler ConnectionFailed;
         /// <summary>Invoked when a message is received from the server.</summary>
         event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <summary>Invoked when disconnected by the server.</summary>
-        event EventHandler Disconnected;
+        /// <summary>Invoked when disconnected from the server.</summary>
+        event EventHandler<DisconnectedEventArgs> Disconnected;
         /// <summary>Invoked when a new client connects.</summary>
         event EventHandler<ClientConnectedEventArgs> ClientConnected;
         /// <summary>Invoked when a client disconnects.</summary>

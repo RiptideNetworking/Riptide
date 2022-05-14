@@ -14,6 +14,17 @@ namespace RiptideNetworking.Transports.RudpTransport
     /// <summary>Provides base sending &#38; receiving functionality for <see cref="RudpServer"/> and <see cref="RudpClient"/>.</summary>
     public abstract class RudpListener
     {
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
+        protected const string ReasonTimedOut = "Timed out";
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.kicked"/>.</summary>
+        protected const string ReasonKicked = "Kicked";
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.serverStopped"/>.</summary>
+        protected const string ReasonServerStopped = "Server stopped";
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.disconnected"/>.</summary>
+        protected const string ReasonDisconnected = "Disconnected";
+        /// <summary>The text to log when disconnected due to an unknown reason.</summary>
+        protected const string ReasonUnknown = "Unknown reason";
+
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
 

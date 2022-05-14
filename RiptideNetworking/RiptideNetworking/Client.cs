@@ -22,7 +22,7 @@ namespace RiptideNetworking
         /// <inheritdoc cref="IClient.MessageReceived"/>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
         /// <inheritdoc cref="IClient.Disconnected"/>
-        public event EventHandler Disconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
         /// <inheritdoc cref="IClient.ClientConnected"/>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         /// <inheritdoc cref="IClient.ClientDisconnected"/>
@@ -183,7 +183,7 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
-        private void OnDisconnected(object s, EventArgs e)
+        private void OnDisconnected(object s, DisconnectedEventArgs e)
         {
             LocalDisconnect();
             Disconnected?.Invoke(this, e);

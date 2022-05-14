@@ -48,6 +48,17 @@ namespace RiptideNetworking
         }
     }
 
+    /// <summary>Contains event data for when a client disconnects from the server.</summary>
+    public class ClientDisconnectedEventArgs : EventArgs
+    {
+        /// <summary>The numeric ID of the client that disconnected.</summary>
+        public ushort Id { get; private set; }
+
+        /// <summary>Initializes event data.</summary>
+        /// <param name="id">The numeric ID of the client that disconnected.</param>
+        public ClientDisconnectedEventArgs(ushort id) => Id = id;
+    }
+
     /// <summary>Contains event data for when a new client connects.</summary>
     public class ClientConnectedEventArgs : EventArgs
     {
@@ -77,14 +88,21 @@ namespace RiptideNetworking
         }
     }
 
-    /// <summary>Contains event data for when a client disconnects from the server.</summary>
-    public class ClientDisconnectedEventArgs : EventArgs
+    /// <summary>Contains event data for when the client disconnects from a server.</summary>
+    public class DisconnectedEventArgs : EventArgs
     {
-        /// <summary>The numeric ID of the client that disconnected.</summary>
-        public ushort Id { get; private set; }
+        /// <summary>The reason for the disconnection.</summary>
+        public DisconnectReason Reason { get; private set; }
+        /// <summary>The custom reason included with the disconnection information (if any).</summary>
+        public string CustomMessage { get; private set; }
 
         /// <summary>Initializes event data.</summary>
-        /// <param name="id">The numeric ID of the client that disconnected.</param>
-        public ClientDisconnectedEventArgs(ushort id) => Id = id;
+        /// <param name="reason">The reason for the disconnection.</param>
+        /// <param name="customMessage">The custom reason included with the disconnection information (if any).</param>
+        public DisconnectedEventArgs(DisconnectReason reason, string customMessage = "")
+        {
+            Reason = reason;
+            CustomMessage = customMessage;
+        }
     }
 }

@@ -8,6 +8,20 @@ using System.Reflection;
 
 namespace RiptideNetworking
 {
+    /// <summary>The reason for a disconnection.</summary>
+    public enum DisconnectReason : byte
+    {
+        /// <summary>For when a client's connection times out. This also acts as the fallback reason—if a client disconnects and the message containing the <i>real</i> reason is lost in transmission, it can't
+        /// be resent as the connection will have already been closed. As a result, the other end will time out the connection after a short period of time and this will be used as the reason.</summary>
+        timedOut,
+        /// <summary>For when a client is forcibly disconnected by the server.</summary>
+        kicked,
+        /// <summary>For when the server shuts down.</summary>
+        serverStopped,
+        /// <summary>For when a client voluntarily disconnects.</summary>
+        disconnected
+    }
+
     /// <summary>Contains shared functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
     public abstract class Common
     {

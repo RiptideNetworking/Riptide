@@ -106,8 +106,9 @@ namespace RiptideNetworking.Transports.RudpTransport
                         timedOutClients.Add(client.RemoteEndPoint);
             }
 
-            foreach (IPEndPoint clientEndPoint in timedOutClients)
-                HandleDisconnect(clientEndPoint); // Disconnect the clients
+            foreach (IPEndPoint endPoint in timedOutClients)
+                if (TryGetClient(endPoint, out RudpConnection client))
+                    Disconnect(client, DisconnectReason.timedOut);
 
             timedOutClients.Clear();
         }
@@ -194,7 +195,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 case HeaderType.clientDisconnected:
                     break;
                 case HeaderType.disconnect:
-                    HandleDisconnect(fromEndPoint);
+                    Disconnect(client, DisconnectReason.disconnected);
                     break;
                 default:
                     RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {fromEndPoint}.");
@@ -281,17 +282,43 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        public void DisconnectClient(ushort clientId)
+        public void DisconnectClient(ushort clientId, string customMessage = "")
         {
             if (TryGetClient(clientId, out RudpConnection client))
-            {
-                SendDisconnect(client.Id);
-                RiptideLogger.Log(LogType.info, LogName, $"Kicked {client.RemoteEndPoint.ToStringBasedOnIPFormat()} (ID: {client.Id}).");
-
-                LocalDisconnect(client);
-            }
+                Disconnect(client, DisconnectReason.kicked, customMessage);
             else
-                RiptideLogger.Log(LogType.warning, LogName, $"Failed to kick {client.RemoteEndPoint} because they weren't connected!");
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {clientId} because they weren't connected!");
+        }
+        
+        /// <summary>Disconnects a given client.</summary>
+        /// <param name="client">The client to disconnect.</param>
+        /// <param name="reason">The reason why the client is being disconnected.</param>
+        /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
+        private void Disconnect(RudpConnection client, DisconnectReason reason, string customMessage = "")
+        {
+            SendDisconnect(client.Id, reason, customMessage);
+            string reasonString;
+            switch (reason)
+            {
+                case DisconnectReason.timedOut:
+                    reasonString = ReasonTimedOut;
+                    break;
+                case DisconnectReason.kicked:
+                    reasonString = string.IsNullOrEmpty(customMessage) ? ReasonKicked : customMessage;
+                    break;
+                case DisconnectReason.serverStopped:
+                    reasonString = ReasonServerStopped;
+                    break;
+                case DisconnectReason.disconnected:
+                    reasonString = ReasonDisconnected;
+                    break;
+                default:
+                    reasonString = ReasonUnknown;
+                    break;
+            }
+
+            RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client.RemoteEndPoint.ToStringBasedOnIPFormat()}) disconnected: {reasonString}.");
+            LocalDisconnect(client);
         }
 
         private void LocalDisconnect(RudpConnection client)
@@ -310,7 +337,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public void Shutdown()
         {
-            byte[] disconnectBytes = { (byte)HeaderType.disconnect };
+            byte[] disconnectBytes = { (byte)HeaderType.disconnect, (byte)DisconnectReason.serverStopped };
             lock (clients)
             {
                 foreach (RudpConnection client in clients.Values)
@@ -365,9 +392,15 @@ namespace RiptideNetworking.Transports.RudpTransport
         #region Messages
         /// <summary>Sends a disconnect message.</summary>
         /// <param name="clientId">The client to send the disconnect message to.</param>
-        private void SendDisconnect(ushort clientId)
+        /// <param name="reason">Why the client is being disconnected.</param>
+        /// <param name="customMessage">A custom message which is used to inform clients why they were disconnected.</param>
+        private void SendDisconnect(ushort clientId, DisconnectReason reason, string customMessage = "")
         {
-            Send(Message.Create(HeaderType.disconnect), clientId);
+            Message message = Message.Create(HeaderType.disconnect).AddByte((byte)reason);
+            if (reason == DisconnectReason.kicked && !string.IsNullOrEmpty(customMessage))
+                Send(message.AddString(customMessage), clientId);
+            else
+                Send(message, clientId);
         }
 
         /// <inheritdoc/>
@@ -375,14 +408,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         {
             if (TryGetClient(toEndPoint, out RudpConnection client))
                 client.SendAck(forSeqId);
-        }
-
-        /// <summary>Handles a disconnect message.</summary>
-        /// <param name="fromEndPoint">The endpoint from which the disconnect message was received.</param>
-        private void HandleDisconnect(IPEndPoint fromEndPoint)
-        {
-            if (TryGetClient(fromEndPoint, out RudpConnection client))
-                LocalDisconnect(client);
         }
 
         /// <summary>Sends a client connected message.</summary>
@@ -425,7 +450,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         internal void OnClientConnected(IPEndPoint clientEndPoint, ServerClientConnectedEventArgs e)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"{clientEndPoint.ToStringBasedOnIPFormat()} connected successfully! Client ID: {e.Client.Id}");
+            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Client.Id} ({clientEndPoint.ToStringBasedOnIPFormat()}) connected successfully!");
 
             receiveActionQueue.Add(() =>
             {
@@ -454,8 +479,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="e">The event args to invoke the event with.</param>
         private void OnClientDisconnected(ClientDisconnectedEventArgs e)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"Client {e.Id} disconnected.");
-
             receiveActionQueue.Add(() => ClientDisconnected?.Invoke(this, e));
             SendClientDisconnected(e.Id);
         }

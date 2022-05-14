@@ -5,7 +5,9 @@
 
 using RiptideNetworking;
 using RiptideNetworking.Utils;
+#if !UNITY_EDITOR
 using System;
+#endif
 using UnityEngine;
 
 namespace RiptideDemos.RudpTransport.Unity.ExampleServer

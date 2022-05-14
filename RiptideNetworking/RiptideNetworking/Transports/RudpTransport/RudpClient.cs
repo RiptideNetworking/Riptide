@@ -22,7 +22,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <inheritdoc/>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
         /// <inheritdoc/>
-        public event EventHandler Disconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
         /// <inheritdoc/>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         /// <inheritdoc/>
@@ -171,7 +171,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 // If connected and not timed out, send heartbeats
                 if (HasTimedOut)
                 {
-                    OnDisconnected();
+                    Disconnect(DisconnectReason.timedOut);
                     return;
                 }
 
@@ -231,7 +231,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                     HandleClientDisconnected(message);
                     break;
                 case HeaderType.disconnect:
-                    HandleDisconnect();
+                    HandleDisconnect(message);
                     break;
                 default:
                     RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
@@ -266,8 +266,38 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return;
 
             SendDisconnect(); // This will just not send if already disconnected
+            Disconnect(DisconnectReason.disconnected);
+        }
+        /// <summary>Disconnects from the server.</summary>
+        /// <param name="reason">The reason why the client is disconnecting/has disconnected.</param>
+        /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
+        private void Disconnect(DisconnectReason reason, string customMessage = "")
+        {
             if (LocalDisconnect())
-                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated locally).");
+            {
+                string reasonString;
+                switch (reason)
+                {
+                    case DisconnectReason.timedOut:
+                        reasonString = ReasonTimedOut;
+                        break;
+                    case DisconnectReason.kicked:
+                        reasonString = string.IsNullOrEmpty(customMessage) ? ReasonKicked : customMessage;
+                        break;
+                    case DisconnectReason.serverStopped:
+                        reasonString = ReasonServerStopped;
+                        break;
+                    case DisconnectReason.disconnected:
+                        reasonString = ReasonDisconnected;
+                        break;
+                    default:
+                        reasonString = ReasonUnknown;
+                        break;
+                }
+
+                RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
+                OnDisconnected(new DisconnectedEventArgs(DisconnectReason.timedOut, customMessage));
+            }
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
@@ -413,9 +443,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Handles a disconnect message.</summary>
-        private void HandleDisconnect()
+        /// <param name="message">The disconnect message to handle.</param>
+        private void HandleDisconnect(Message message)
         {
-            OnDisconnected();
+            Disconnect((DisconnectReason)message.GetByte(), message.UnreadLength > 0 ? message.GetString() : "");
         }
         #endregion
 
@@ -446,13 +477,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
-        private void OnDisconnected()
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnDisconnected(DisconnectedEventArgs e)
         {
-            if (LocalDisconnect())
-            {
-                RiptideLogger.Log(LogType.info, LogName, "Disconnected from server (initiated remotely).");
-                receiveActionQueue.Add(() => Disconnected?.Invoke(this, EventArgs.Empty));
-            }
+            receiveActionQueue.Add(() => Disconnected?.Invoke(this, e));
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>

@@ -101,7 +101,7 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleClient
             Destroy(Player.list[e.Id].gameObject);
         }
 
-        private void DidDisconnect(object sender, EventArgs e)
+        private void DidDisconnect(object sender, DisconnectedEventArgs e)
         {
             UIManager.Singleton.BackToMain();
 
