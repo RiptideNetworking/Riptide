@@ -377,16 +377,23 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
         }
 
-        private bool TryGetClient(ushort clientId, out RudpConnection client)
+        /// <summary>Attempts to retrieve a client using a given ID.</summary>
+        /// <param name="id">The ID of the client to retrieve.</param>
+        /// <param name="client">The retrieved client (if any).</param>
+        /// <returns><see langword="true"/> if the client was successfully retrieved; otherwise <see langword="false"/>.</returns>
+        private bool TryGetClient(ushort id, out RudpConnection client)
         {
             lock (clients)
-                return clients.TryGetValue(clientId, out client);
+                return clients.TryGetValue(id, out client);
         }
-
-        private bool TryGetClient(IPEndPoint fromEndPoint, out RudpConnection client)
+        /// <summary>Attempts to retrieve a client using a given endpoint.</summary>
+        /// <param name="endPoint">The endpoint of the client to retrieve.</param>
+        /// <param name="client">The retrieved client (if any).</param>
+        /// <returns><see langword="true"/> if the client was successfully retrieved; otherwise <see langword="false"/>.</returns>
+        private bool TryGetClient(IPEndPoint endPoint, out RudpConnection client)
         {
             lock (clients)
-                return clients.TryGetValue(fromEndPoint, out client);
+                return clients.TryGetValue(endPoint, out client);
         }
 
         #region Messages

@@ -149,6 +149,7 @@ namespace RiptideNetworking
             LocalDisconnect();
         }
 
+        /// <summary>Cleans up local objects on disconnection.</summary>
         private void LocalDisconnect()
         {
             client.Connected -= OnConnected;
@@ -162,17 +163,23 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
-        private void OnConnected(object s, EventArgs e) => Connected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnConnected(object sender, EventArgs e) => Connected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
-        private void OnConnectionFailed(object s, EventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnConnectionFailed(object sender, EventArgs e)
         {
             LocalDisconnect();
             ConnectionFailed?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        private void OnMessageReceived(object s, ClientMessageReceivedEventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
 
@@ -183,16 +190,22 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
-        private void OnDisconnected(object s, DisconnectedEventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnDisconnected(object sender, DisconnectedEventArgs e)
         {
             LocalDisconnect();
             Disconnected?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object s, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientConnected(object sender, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }

@@ -157,10 +157,14 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object s, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientConnected(object sender, ServerClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        private void OnMessageReceived(object s, ServerMessageReceivedEventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnMessageReceived(object sender, ServerMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
 
@@ -171,6 +175,8 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }
