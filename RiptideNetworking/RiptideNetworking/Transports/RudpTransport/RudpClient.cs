@@ -160,7 +160,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
                 {
-                    SendConnect();
+                    Send(Message.Create(HeaderType.connect));
                     connectionAttempts++;
                 }
                 else
@@ -225,13 +225,13 @@ namespace RiptideNetworking.Transports.RudpTransport
                     HandleWelcome(message);
                     break;
                 case HeaderType.clientConnected:
-                    HandleClientConnected(message);
+                    OnClientConnected(new ClientConnectedEventArgs(message.GetUShort()));
                     break;
                 case HeaderType.clientDisconnected:
-                    HandleClientDisconnected(message);
+                    OnClientDisconnected(new ClientDisconnectedEventArgs(message.GetUShort()));
                     break;
                 case HeaderType.disconnect:
-                    HandleDisconnect(message);
+                    Disconnect((DisconnectReason)message.GetByte(), message.UnreadLength > 0 ? message.GetString() : "");
                     break;
                 default:
                     RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
@@ -265,7 +265,7 @@ namespace RiptideNetworking.Transports.RudpTransport
             if (IsNotConnected)
                 return;
 
-            SendDisconnect(); // This will just not send if already disconnected
+            Send(Message.Create(HeaderType.disconnect));
             Disconnect(DisconnectReason.disconnected);
         }
         /// <summary>Disconnects from the server.</summary>
@@ -323,12 +323,6 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         #region Messages
-        /// <summary>Sends a connect message.</summary>
-        private void SendConnect()
-        {
-            Send(Message.Create(HeaderType.connect));
-        }
-
         /// <inheritdoc/>
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
@@ -420,33 +414,6 @@ namespace RiptideNetworking.Transports.RudpTransport
             }
 
             Send(message);
-        }
-
-        /// <summary>Handles a client connected message.</summary>
-        /// <param name="message">The client connected message to handle.</param>
-        private void HandleClientConnected(Message message)
-        {
-            OnClientConnected(new ClientConnectedEventArgs(message.GetUShort()));
-        }
-
-        /// <summary>Handles a client disconnected message.</summary>
-        /// <param name="message">The client disconnected message to handle.</param>
-        private void HandleClientDisconnected(Message message)
-        {
-            OnClientDisconnected(new ClientDisconnectedEventArgs(message.GetUShort()));
-        }
-
-        /// <summary>Sends a disconnect message.</summary>
-        private void SendDisconnect()
-        {
-            Send(Message.Create(HeaderType.disconnect));
-        }
-
-        /// <summary>Handles a disconnect message.</summary>
-        /// <param name="message">The disconnect message to handle.</param>
-        private void HandleDisconnect(Message message)
-        {
-            Disconnect((DisconnectReason)message.GetByte(), message.UnreadLength > 0 ? message.GetString() : "");
         }
         #endregion
 
