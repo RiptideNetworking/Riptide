@@ -146,7 +146,6 @@ namespace RiptideNetworking
                 return;
 
             client.Disconnect();
-            LocalDisconnect();
         }
 
         /// <summary>Cleans up local objects on disconnection.</summary>
