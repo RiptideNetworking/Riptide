@@ -296,7 +296,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 }
 
                 RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
-                OnDisconnected(new DisconnectedEventArgs(DisconnectReason.timedOut, customMessage));
+                OnDisconnected(new DisconnectedEventArgs(reason, customMessage));
             }
         }
 
