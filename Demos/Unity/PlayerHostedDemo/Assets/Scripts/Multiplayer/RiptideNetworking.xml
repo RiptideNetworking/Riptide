@@ -91,23 +91,38 @@
         <member name="M:RiptideNetworking.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
         </member>
+        <member name="M:RiptideNetworking.Client.LocalDisconnect">
+            <summary>Cleans up local objects on disconnection.</summary>
+        </member>
         <member name="M:RiptideNetworking.Client.OnConnected(System.Object,System.EventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.Connected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Client.OnConnectionFailed(System.Object,System.EventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.ConnectionFailed"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Client.OnMessageReceived(System.Object,RiptideNetworking.ClientMessageReceivedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.MessageReceived"/> event and initiates handling of the received message.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Client.OnDisconnected(System.Object,RiptideNetworking.DisconnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.Disconnected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Client.OnClientConnected(System.Object,RiptideNetworking.ClientConnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.ClientConnected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Client.OnClientDisconnected(System.Object,RiptideNetworking.ClientDisconnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Client.ClientDisconnected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="T:RiptideNetworking.DisconnectReason">
             <summary>The reason for a disconnection.</summary>
@@ -1080,6 +1095,9 @@
         <member name="M:RiptideNetworking.Server.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <inheritdoc cref="M:RiptideNetworking.Transports.IServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)"/>
         </member>
+        <member name="M:RiptideNetworking.Server.TryGetClient(System.UInt16,RiptideNetworking.Transports.IConnectionInfo@)">
+            <inheritdoc cref="M:RiptideNetworking.Transports.IServer.TryGetClient(System.UInt16,RiptideNetworking.Transports.IConnectionInfo@)"/>
+        </member>
         <member name="M:RiptideNetworking.Server.DisconnectClient(System.UInt16,System.String)">
             <inheritdoc cref="M:RiptideNetworking.Transports.IServer.DisconnectClient(System.UInt16,System.String)"/>
         </member>
@@ -1088,12 +1106,18 @@
         </member>
         <member name="M:RiptideNetworking.Server.OnClientConnected(System.Object,RiptideNetworking.ServerClientConnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Server.ClientConnected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Server.OnMessageReceived(System.Object,RiptideNetworking.ServerMessageReceivedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Server.MessageReceived"/> event and initiates handling of the received message.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="M:RiptideNetworking.Server.OnClientDisconnected(System.Object,RiptideNetworking.ClientDisconnectedEventArgs)">
             <summary>Invokes the <see cref="E:RiptideNetworking.Server.ClientDisconnected"/> event.</summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The event args to invoke the event with.</param>
         </member>
         <member name="T:RiptideNetworking.Transports.IClient">
             <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
@@ -1222,9 +1246,15 @@
             <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
             <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         </member>
+        <member name="M:RiptideNetworking.Transports.IServer.TryGetClient(System.UInt16,RiptideNetworking.Transports.IConnectionInfo@)">
+            <summary>Retrieves the client with the given ID, if a client with that ID is currently connected.</summary>
+            <param name="id">The ID of the client to retrieve.</param>
+            <param name="client">The retrieved client.</param>
+            <returns><see langword="true"/> if a client with the given ID is currently connected; otherwise <see langword="false"/>.</returns>
+        </member>
         <member name="M:RiptideNetworking.Transports.IServer.DisconnectClient(System.UInt16,System.String)">
             <summary>Disconnects a specific client.</summary>
-            <param name="clientId">The numeric ID of the client to disconnect.</param>
+            <param name="id">The numeric ID of the client to disconnect.</param>
             <param name="customMessage">A custom message (if any) which is used to inform clients why they were disconnected.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.IServer.Shutdown">
@@ -1504,9 +1534,6 @@
             <summary>Cleans up local objects on disconnection.</summary>
             <returns><see langword="true"/> if successfully disconnected.<br/><see langword="false"/> if it was already disconnected.</returns>
         </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.SendConnect">
-            <summary>Sends a connect message.</summary>
-        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.SendAck(System.UInt16,System.Net.IPEndPoint)">
             <inheritdoc/>
         </member>
@@ -1531,21 +1558,6 @@
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.SendWelcomeReceived">
             <summary>Sends a welcome (received) message.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.HandleClientConnected(RiptideNetworking.Message)">
-            <summary>Handles a client connected message.</summary>
-            <param name="message">The client connected message to handle.</param>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.HandleClientDisconnected(RiptideNetworking.Message)">
-            <summary>Handles a client disconnected message.</summary>
-            <param name="message">The client disconnected message to handle.</param>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.SendDisconnect">
-            <summary>Sends a disconnect message.</summary>
-        </member>
-        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.HandleDisconnect(RiptideNetworking.Message)">
-            <summary>Handles a disconnect message.</summary>
-            <param name="message">The disconnect message to handle.</param>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpClient.OnConnected">
             <summary>Invokes the <see cref="E:RiptideNetworking.Transports.RudpTransport.RudpClient.Connected"/> event.</summary>
@@ -1900,6 +1912,9 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendToAll(RiptideNetworking.Message,System.UInt16,System.Boolean)">
             <inheritdoc/>
         </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.TryGetClient(System.UInt16,RiptideNetworking.Transports.IConnectionInfo@)">
+            <inheritdoc/>
+        </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.DisconnectClient(System.UInt16,System.String)">
             <inheritdoc/>
         </member>
@@ -1918,6 +1933,18 @@
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.GetAvailableClientId">
             <summary>Retrieves an available client ID.</summary>
             <returns>The client ID. 0 if none available.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.TryGetClient(System.UInt16,RiptideNetworking.Transports.RudpTransport.RudpConnection@)">
+            <summary>Attempts to retrieve a client using a given ID.</summary>
+            <param name="id">The ID of the client to retrieve.</param>
+            <param name="client">The retrieved client (if any).</param>
+            <returns><see langword="true"/> if the client was successfully retrieved; otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.TryGetClient(System.Net.IPEndPoint,RiptideNetworking.Transports.RudpTransport.RudpConnection@)">
+            <summary>Attempts to retrieve a client using a given endpoint.</summary>
+            <param name="endPoint">The endpoint of the client to retrieve.</param>
+            <param name="client">The retrieved client (if any).</param>
+            <returns><see langword="true"/> if the client was successfully retrieved; otherwise <see langword="false"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Transports.RudpTransport.RudpServer.SendDisconnect(System.UInt16,RiptideNetworking.DisconnectReason,System.String)">
             <summary>Sends a disconnect message.</summary>

@@ -282,12 +282,20 @@ namespace RiptideNetworking.Transports.RudpTransport
         }
 
         /// <inheritdoc/>
-        public void DisconnectClient(ushort clientId, string customMessage = "")
+        public bool TryGetClient(ushort id, out IConnectionInfo client)
         {
-            if (TryGetClient(clientId, out RudpConnection client))
+            bool didGet = TryGetClient(id, out RudpConnection connection);
+            client = connection;
+            return didGet;
+        }
+
+        /// <inheritdoc/>
+        public void DisconnectClient(ushort id, string customMessage = "")
+        {
+            if (TryGetClient(id, out RudpConnection client))
                 Disconnect(client, DisconnectReason.kicked, customMessage);
             else
-                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {clientId} because they weren't connected!");
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {id} because they weren't connected!");
         }
         
         /// <summary>Disconnects a given client.</summary>

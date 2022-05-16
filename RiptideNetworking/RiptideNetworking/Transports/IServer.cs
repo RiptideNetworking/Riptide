@@ -49,10 +49,15 @@ namespace RiptideNetworking.Transports
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
         /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
         void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease);
+        /// <summary>Retrieves the client with the given ID, if a client with that ID is currently connected.</summary>
+        /// <param name="id">The ID of the client to retrieve.</param>
+        /// <param name="client">The retrieved client.</param>
+        /// <returns><see langword="true"/> if a client with the given ID is currently connected; otherwise <see langword="false"/>.</returns>
+        bool TryGetClient(ushort id, out IConnectionInfo client);
         /// <summary>Disconnects a specific client.</summary>
-        /// <param name="clientId">The numeric ID of the client to disconnect.</param>
+        /// <param name="id">The numeric ID of the client to disconnect.</param>
         /// <param name="customMessage">A custom message (if any) which is used to inform clients why they were disconnected.</param>
-        void DisconnectClient(ushort clientId, string customMessage = "");
+        void DisconnectClient(ushort id, string customMessage = "");
         /// <summary>Disconnects all clients and stops listening for new connections.</summary>
         void Shutdown();
     }
