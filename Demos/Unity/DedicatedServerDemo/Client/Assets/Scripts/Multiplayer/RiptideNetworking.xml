@@ -376,32 +376,18 @@
             <summary>Retrieves a <see cref="T:System.Byte"/> from the message.</summary>
             <returns>The <see cref="T:System.Byte"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddBytes(System.Byte[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Byte"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddBytes(System.Byte[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Byte"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Byte"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Byte"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Byte"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetBytes(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetBytes">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBytes(System.Int32)">
@@ -434,32 +420,18 @@
             <summary>Retrieves a <see cref="T:System.Boolean"/> from the message.</summary>
             <returns>The <see cref="T:System.Boolean"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddBools(System.Boolean[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Boolean"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddBools(System.Boolean[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Boolean"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Boolean"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Boolean"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetBools(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetBools">
             <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetBools(System.Int32)">
@@ -508,49 +480,28 @@
         <member name="M:RiptideNetworking.Message.PeekUShort">
             <summary>Retrieves a <see cref="T:System.UInt16"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
-        <member name="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int16"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int16"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int16"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Int16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Int16"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddUShorts(System.UInt16[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt16"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddUShorts(System.UInt16[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt16"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt16"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.UInt16"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetShorts(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetShorts">
             <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetShorts(System.Int32)">
@@ -564,15 +515,8 @@
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUShorts(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetUShorts">
             <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUShorts(System.Int32)">
@@ -624,49 +568,28 @@
             <summary>Retrieves a <see cref="T:System.UInt32"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt32"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddInts(System.Int32[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int32"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddInts(System.Int32[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int32"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
             <summary>Adds an <see cref="T:System.Int32"/> array message.</summary>
             <param name="array">The <see cref="T:System.Int32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Int32"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddUInts(System.UInt32[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt32"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddUInts(System.UInt32[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt32"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt32"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.UInt32"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetInts(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetInts">
             <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetInts(System.Int32)">
@@ -680,15 +603,8 @@
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.GetUInts(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetUInts">
             <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetUInts(System.Int32)">
@@ -740,49 +656,28 @@
             <summary>Retrieves a <see cref="T:System.UInt64"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt64"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddLongs(System.Int64[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int64"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddLongs(System.Int64[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int64"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
             <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Int64"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddULongs(System.UInt64[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt64"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddULongs(System.UInt64[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt64"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt64"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt64"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.UInt64"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetLongs(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetLongs">
             <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetLongs(System.Int32)">
@@ -796,15 +691,8 @@
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
-        <member name="M:RiptideNetworking.Message.GetULongs(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetULongs">
             <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetULongs(System.Int32)">
@@ -843,32 +731,18 @@
             <summary>Retrieves a <see cref="T:System.Single"/> from the message.</summary>
             <returns>The <see cref="T:System.Single"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddFloats(System.Single[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Single"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddFloats(System.Single[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Single"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Single"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Single"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetFloats(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetFloats">
             <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetFloats(System.Int32)">
@@ -901,32 +775,18 @@
             <summary>Retrieves a <see cref="T:System.Double"/> from the message.</summary>
             <returns>The <see cref="T:System.Double"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddDoubles(System.Double[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Double"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddDoubles(System.Double[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Double"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Double"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.Double"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetDoubles(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetDoubles">
             <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetDoubles(System.Int32)">
@@ -959,32 +819,18 @@
             <summary>Retrieves a <see cref="T:System.String"/> from the message.</summary>
             <returns>The <see cref="T:System.String"/> that was retrieved.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean,System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean,System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean,System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.String"/> array to the message.</remarks>
+        <member name="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)"/>
+            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.String"/> array to the message.</remarks>
         </member>
-        <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean,System.Boolean)">
+        <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
             <summary>Adds a <see cref="T:System.String"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.String"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <param name="isBigArray">
-              Whether or not the array being added has more than 255 elements. Does nothing if <paramref name="includeLength"/> is set to <see langword="false"/>.
-              <para>
-                Writes the length using 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Writes the length using 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The message that the <see cref="T:System.String"/> array was added to.</returns>
         </member>
-        <member name="M:RiptideNetworking.Message.GetStrings(System.Boolean)">
+        <member name="M:RiptideNetworking.Message.GetStrings">
             <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
-            <param name="isBigArray">
-              Whether or not the array being retrieved has more than 255 elements.
-              <para>
-                Reads the length from 2 bytes (<see cref="T:System.UInt16"/>) if <see langword="true"/>.<br/>
-                Reads the length from 1 <see cref="T:System.Byte"/> if <see langword="false"/>.
-              </para>
-            </param>
             <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.GetStrings(System.Int32)">
@@ -997,6 +843,20 @@
             <param name="amount">The amount of string to retrieve.</param>
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="F:RiptideNetworking.Message.OneByteLengthThreshold">
+            <summary>The maximum number of elements an array can contain where the length still fits into a single byte.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.TwoByteLengthThreshold">
+            <summary>The maximum number of elements an array can contain where the length still fits into two byte2.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Message.AddArrayLength(System.Int32)">
+            <summary>Adds the length of an array to the message, using either 1 or 2 bytes depending on how large the array is. Does not support arrays with more than 32,767 elements.</summary>
+            <param name="length">The length of the array.</param>
+        </member>
+        <member name="M:RiptideNetworking.Message.GetArrayLength">
+            <summary>Retrieves the length of an array from the message, using either 1 or 2 bytes depending on how large the array is.</summary>
+            <returns>The length of the array.</returns>
         </member>
         <member name="T:RiptideNetworking.MessageHandlerAttribute">
             <summary>Specifies a method as the message handler for messages with the given ID.</summary>
