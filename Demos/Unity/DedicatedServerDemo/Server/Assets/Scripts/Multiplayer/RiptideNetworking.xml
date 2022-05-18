@@ -78,6 +78,7 @@
               Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
               If you are using a different transport, check the relevant documentation for what information it requires in the host address.
             </remarks>
+            <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Client.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
             <inheritdoc/>
@@ -1005,6 +1006,7 @@
             <summary>Attempts to connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
             <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:RiptideNetworking.Message.Create"/> to get an empty message instance.</param>
+            <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
         </member>
         <member name="M:RiptideNetworking.Transports.IClient.Send(RiptideNetworking.Message,System.Boolean)">
             <summary>Sends a message to the server.</summary>

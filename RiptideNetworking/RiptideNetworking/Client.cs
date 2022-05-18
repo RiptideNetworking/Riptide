@@ -77,7 +77,8 @@ namespace RiptideNetworking
         ///   Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
         ///   If you are using a different transport, check the relevant documentation for what information it requires in the host address.
         /// </remarks>
-        public void Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
+        /// <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
+        public bool Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
         {
             Disconnect();
 
@@ -90,7 +91,7 @@ namespace RiptideNetworking
             client.Disconnected += OnDisconnected;
             client.ClientConnected += OnClientConnected;
             client.ClientDisconnected += OnClientDisconnected;
-            client.Connect(hostAddress, message);
+            return client.Connect(hostAddress, message);
         }
 
         /// <inheritdoc/>

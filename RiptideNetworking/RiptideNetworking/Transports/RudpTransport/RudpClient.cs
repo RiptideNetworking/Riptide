@@ -96,10 +96,10 @@ namespace RiptideNetworking.Transports.RudpTransport
 
         /// <inheritdoc/>
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
-        public void Connect(string hostAddress, Message message)
+        public bool Connect(string hostAddress, Message message)
         {
             if (!ParseHostAddress(hostAddress, out IPAddress ip, out ushort port))
-                return;
+                return false;
 
             connectionAttempts = 0;
             remoteEndPoint = new IPEndPoint(ip.MapToIPv6(), port);
@@ -118,6 +118,7 @@ namespace RiptideNetworking.Transports.RudpTransport
 
             heartbeatTimer = new Timer((o) => Heartbeat(), null, 0, HeartbeatInterval);
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {remoteEndPoint.ToStringBasedOnIPFormat()}...");
+            return true;
         }
 
         /// <summary>Parses the <paramref name="hostAddress"/> and retrieves its <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
