@@ -53,7 +53,7 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleClient
         public void SendName()
         {
             Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.playerName);
-            message.Add(usernameField.text);
+            message.AddString(usernameField.text);
             NetworkManager.Singleton.Client.Send(message);
         }
         #endregion

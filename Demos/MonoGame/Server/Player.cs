@@ -37,8 +37,8 @@ namespace RiptideDemos.RudpTransport.MonoGame.TestServer
         private Message CreateSpawnMessage()
         {
             Message message = Message.Create(MessageSendMode.reliable, MessageId.PlayerSpawn);
-            message.Add(id);
-            message.Add(position);
+            message.AddUShort(id);
+            message.AddVector2(position);
             return message;
         }
 

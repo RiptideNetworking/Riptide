@@ -50,8 +50,8 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleClient
         private void SendInput()
         {
             Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.playerInput);
-            message.Add(inputs, false);
-            message.Add(camTransform.forward);
+            message.AddBools(inputs, false);
+            message.AddVector3(camTransform.forward);
             NetworkManager.Singleton.Client.Send(message);
         }
         #endregion

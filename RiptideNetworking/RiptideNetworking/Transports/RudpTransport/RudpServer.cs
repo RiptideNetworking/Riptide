@@ -434,7 +434,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                 return; // We don't send this to the newly connected client anyways, so don't even bother creating a message if he is the only one connected
 
             Message message = Message.Create(HeaderType.clientConnected, 25);
-            message.Add(id);
+            message.AddUShort(id);
 
             lock (clients)
                 foreach (RudpConnection client in clients.Values)
@@ -449,7 +449,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void SendClientDisconnected(ushort id)
         {
             Message message = Message.Create(HeaderType.clientDisconnected, 25);
-            message.Add(id);
+            message.AddUShort(id);
 
             lock (clients)
                 foreach (RudpConnection client in clients.Values)

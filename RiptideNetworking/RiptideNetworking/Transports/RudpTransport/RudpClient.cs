@@ -328,14 +328,14 @@ namespace RiptideNetworking.Transports.RudpTransport
         protected override void SendAck(ushort forSeqId, IPEndPoint toEndPoint)
         {
             Message message = Message.Create(forSeqId == peer.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
-            message.Add(peer.SendLockables.LastReceivedSeqId); // Last remote sequence ID
-            message.Add(peer.SendLockables.AcksBitfield); // Acks
+            message.AddUShort(peer.SendLockables.LastReceivedSeqId); // Last remote sequence ID
+            message.AddUShort(peer.SendLockables.AcksBitfield); // Acks
 
             if (forSeqId == peer.SendLockables.LastReceivedSeqId)
                 Send(message);
             else
             {
-                message.Add(forSeqId);
+                message.AddUShort(forSeqId);
                 Send(message);
             }
         }
@@ -370,8 +370,8 @@ namespace RiptideNetworking.Transports.RudpTransport
             pendingPingStopwatch.Restart();
 
             Message message = Message.Create(HeaderType.heartbeat);
-            message.Add(pendingPingId);
-            message.Add(peer.RTT);
+            message.AddByte(pendingPingId);
+            message.AddShort(peer.RTT);
 
             Send(message);
         }
@@ -407,10 +407,10 @@ namespace RiptideNetworking.Transports.RudpTransport
         private void SendWelcomeReceived()
         {
             Message message = Message.Create(HeaderType.welcome, 25);
-            message.Add(Id);
+            message.AddUShort(Id);
             if (connectBytes != null)
             {
-                message.Add(connectBytes, false);
+                message.AddBytes(connectBytes, false);
                 connectBytes = null;
             }
 

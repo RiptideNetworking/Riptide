@@ -78,14 +78,14 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal void SendAck(ushort forSeqId)
         {
             Message message = Message.Create(forSeqId == Peer.SendLockables.LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
-            message.Add(Peer.SendLockables.LastReceivedSeqId); // Last remote sequence ID
-            message.Add(Peer.SendLockables.AcksBitfield); // Acks
+            message.AddUShort(Peer.SendLockables.LastReceivedSeqId); // Last remote sequence ID
+            message.AddUShort(Peer.SendLockables.AcksBitfield); // Acks
 
             if (forSeqId == Peer.SendLockables.LastReceivedSeqId)
                 server.Send(message, this);
             else
             {
-                message.Add(forSeqId);
+                message.AddUShort(forSeqId);
                 server.Send(message, this);
             }
         }
@@ -117,7 +117,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal void SendHeartbeat(byte pingId)
         {
             Message message = Message.Create(HeaderType.heartbeat);
-            message.Add(pingId);
+            message.AddByte(pingId);
 
             server.Send(message, this);
         }
@@ -136,7 +136,7 @@ namespace RiptideNetworking.Transports.RudpTransport
         internal void SendWelcome()
         {
             Message message = Message.Create(HeaderType.welcome, 25);
-            message.Add(Id);
+            message.AddUShort(Id);
 
             server.Send(message, this);
         }

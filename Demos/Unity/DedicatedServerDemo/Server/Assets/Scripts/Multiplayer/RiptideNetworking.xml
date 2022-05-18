@@ -365,10 +365,6 @@
             <param name="messageHeader">The header to use for this message.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddByte(System.Byte)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Byte)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Byte)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Byte"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Byte)">
             <summary>Adds a single <see cref="T:System.Byte"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Byte"/> to add.</param>
             <returns>The message that the <see cref="T:System.Byte"/> was added to.</returns>
@@ -378,10 +374,6 @@
             <returns>The <see cref="T:System.Byte"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddBytes(System.Byte[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Byte"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Byte"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Byte"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -409,10 +401,6 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddBool(System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Boolean"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Boolean"/> to add.</param>
             <returns>The message that the <see cref="T:System.Boolean"/> was added to.</returns>
@@ -422,10 +410,6 @@
             <returns>The <see cref="T:System.Boolean"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddBools(System.Boolean[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Boolean"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Boolean"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -453,19 +437,11 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddShort(System.Int16)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int16)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int16)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int16"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int16)">
             <summary>Adds a <see cref="T:System.Int16"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int16"/> to add.</param>
             <returns>The message that the <see cref="T:System.Int16"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddUShort(System.UInt16)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt16)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt16)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt16"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
             <summary>Adds a <see cref="T:System.UInt16"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt16"/> to add.</param>
             <returns>The message that the <see cref="T:System.UInt16"/> was added to.</returns>
@@ -482,20 +458,12 @@
             <summary>Retrieves a <see cref="T:System.UInt16"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int16"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int16"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Int16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The message that the <see cref="T:System.Int16"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddUShorts(System.UInt16[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt16"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt16"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt16"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -544,19 +512,11 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddInt(System.Int32)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int32)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int32)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int32"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int32)">
             <summary>Adds an <see cref="T:System.Int32"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int32"/> to add.</param>
             <returns>The message that the <see cref="T:System.Int32"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddUInt(System.UInt32)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt32)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt32)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt32"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
             <summary>Adds a <see cref="T:System.UInt32"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt32"/> to add.</param>
             <returns>The message that the <see cref="T:System.UInt32"/> was added to.</returns>
@@ -570,20 +530,12 @@
             <returns>The <see cref="T:System.UInt32"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddInts(System.Int32[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int32"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
             <summary>Adds an <see cref="T:System.Int32"/> array message.</summary>
             <param name="array">The <see cref="T:System.Int32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The message that the <see cref="T:System.Int32"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddUInts(System.UInt32[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt32"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt32"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt32"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -632,19 +584,11 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddLong(System.Int64)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int64)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int64)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int64"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int64)">
             <summary>Adds a <see cref="T:System.Int64"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Int64"/> to add.</param>
             <returns>The message that the <see cref="T:System.Int64"/> was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddULong(System.UInt64)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt64)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt64)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt64"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
             <summary>Adds a <see cref="T:System.UInt64"/> to the message.</summary>
             <param name="value">The <see cref="T:System.UInt64"/> to add.</param>
             <returns>The message that the <see cref="T:System.UInt64"/> was added to.</returns>
@@ -658,20 +602,12 @@
             <returns>The <see cref="T:System.UInt64"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddLongs(System.Int64[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Int64"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
             <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The message that the <see cref="T:System.Int64"/> array was added to.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddULongs(System.UInt64[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.UInt64"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt64"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.UInt64"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -720,10 +656,6 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddFloat(System.Single)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Single)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Single)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Single"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Single)">
             <summary>Adds a <see cref="T:System.Single"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Single"/> to add.</param>
             <returns>The message that the <see cref="T:System.Single"/> was added to.</returns>
@@ -733,10 +665,6 @@
             <returns>The <see cref="T:System.Single"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddFloats(System.Single[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Single"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Single"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -764,10 +692,6 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddDouble(System.Double)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Double)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Double)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Double"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Double)">
             <summary>Adds a <see cref="T:System.Double"/> to the message.</summary>
             <param name="value">The <see cref="T:System.Double"/> to add.</param>
             <returns>The message that the <see cref="T:System.Double"/> was added to.</returns>
@@ -777,10 +701,6 @@
             <returns>The <see cref="T:System.Double"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddDoubles(System.Double[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.Double"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Double"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -808,10 +728,6 @@
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:RiptideNetworking.Message.AddString(System.String)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.String)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.String)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.String"/> to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.String)">
             <summary>Adds a <see cref="T:System.String"/> to the message.</summary>
             <param name="value">The <see cref="T:System.String"/> to add.</param>
             <returns>The message that the <see cref="T:System.String"/> was added to.</returns>
@@ -821,10 +737,6 @@
             <returns>The <see cref="T:System.String"/> that was retrieved.</returns>
         </member>
         <member name="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)">
-            <inheritdoc cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)"/>
-            <remarks>Relying on the correct Add overload being chosen based on the parameter type can increase the odds of accidental type mismatches when retrieving data from a message. This method calls <see cref="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)"/> and simply provides an alternative type-explicit way to add a <see cref="T:System.String"/> array to the message.</remarks>
-        </member>
-        <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
             <summary>Adds a <see cref="T:System.String"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.String"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -858,6 +770,94 @@
         <member name="M:RiptideNetworking.Message.GetArrayLength">
             <summary>Retrieves the length of an array from the message, using either 1 or 2 bytes depending on how large the array is.</summary>
             <returns>The length of the array.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Byte)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddByte(System.Byte)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddByte(System.Byte)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddBool(System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddBool(System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int16)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddShort(System.Int16)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddShort(System.Int16)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt16)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddUShort(System.UInt16)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddUShort(System.UInt16)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int32)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddInt(System.Int32)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddInt(System.Int32)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt32)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddUInt(System.UInt32)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddUInt(System.UInt32)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int64)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddLong(System.Int64)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddLong(System.Int64)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt64)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddULong(System.UInt64)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddULong(System.UInt64)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Single)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddFloat(System.Single)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddFloat(System.Single)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Double)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddDouble(System.Double)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddDouble(System.Double)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.String)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddString(System.String)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddString(System.String)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Byte[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddBytes(System.Byte[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddBytes(System.Byte[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Boolean[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddBools(System.Boolean[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddBools(System.Boolean[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int16[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt16[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddUShorts(System.UInt16[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddUShorts(System.UInt16[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int32[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddInts(System.Int32[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddInts(System.Int32[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt32[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddUInts(System.UInt32[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddUInts(System.UInt32[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Int64[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddLongs(System.Int64[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddLongs(System.Int64[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.UInt64[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddULongs(System.UInt64[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddULongs(System.UInt64[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Single[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddFloats(System.Single[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddFloats(System.Single[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.Double[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddDoubles(System.Double[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddDoubles(System.Double[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
+            <inheritdoc cref="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)"/>.</remarks>
         </member>
         <member name="T:RiptideNetworking.MessageHandlerAttribute">
             <summary>Specifies a method as the message handler for messages with the given ID.</summary>

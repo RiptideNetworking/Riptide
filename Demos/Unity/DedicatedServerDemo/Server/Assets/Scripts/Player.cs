@@ -114,18 +114,18 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleServer
 
         private Message GetSpawnData(Message message)
         {
-            message.Add(Id);
-            message.Add(Username);
-            message.Add(transform.position);
+            message.AddUShort(Id);
+            message.AddString(Username);
+            message.AddVector3(transform.position);
             return message;
         }
 
         private void SendMovement()
         {
             Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerMovement);
-            message.Add(Id);
-            message.Add(transform.position);
-            message.Add(transform.forward);
+            message.AddUShort(Id);
+            message.AddVector3(transform.position);
+            message.AddVector3(transform.forward);
             NetworkManager.Singleton.Server.SendToAll(message);
         }
 
