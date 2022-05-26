@@ -29,28 +29,20 @@ namespace RiptideNetworking
             int splitCount = bytes.Length / unWrittenLength; //Todo get Unwritten length from a message prop
 
             if (splitCount <= 0)
-            {
                 splitCount = 1;
-            }
 
             if (bytes.Length % unWrittenLength != 0)
-            {
                 splitCount++;
-            }
 
             splitMessageInbound.AddInt(splitCount); //How many splits will be in this file
 
             if (messageDirection == MessageDirection.SendToServer)
-            {
                 PartialMessageHandler.Client.Send(splitMessageInbound);
-            }
             else if (messageDirection == MessageDirection.SendToClient)
-            {
                 if (toClientID.HasValue)
                     PartialMessageHandler.Server.Send(splitMessageInbound, toClientID.Value);
                 else
                     PartialMessageHandler.Server.SendToAll(splitMessageInbound);
-            }
 
             uint splitMessageOrdinal = 0;
             foreach (byte[] copySlice in bytes.Slices(unWrittenLength))
@@ -81,31 +73,17 @@ namespace RiptideNetworking
         public uint PartialMessageID { get; set; }
         public int PartialMessageCount { get; set; }
         public List<byte[]> MessageData { get; set; } = new List<byte[]>();
-        public bool IsDone
-        {
-            get
-            {
-                return MessageData.Count >= PartialMessageCount;
-            }
-        }
+        public bool IsDone => MessageData.Count >= PartialMessageCount;
 
         public void AddPartialMessage(uint ordinal, byte[] bytes)
         {
             if (this.MessageData.Any() == false)
-            {
                 this.MessageData.Add(bytes);
-            }
             else
-            {
                 if (this.MessageData.Count < ordinal)
-                {
                     this.MessageData.Add(bytes);
-                }
                 else if (this.MessageData.Count >= ordinal)
-                {
                     this.MessageData.Insert((int)ordinal - 1, bytes);
-                }
-            }
 
             PartialMessageProgress progressMessage = new PartialMessageProgress(this.PartialMessageID, this.PartialMessageCount, this.MessageData.Count);
             PartialMessageHandler.Client.messageProgressHandlers[this.ServerToClientID].Invoke(progressMessage);
