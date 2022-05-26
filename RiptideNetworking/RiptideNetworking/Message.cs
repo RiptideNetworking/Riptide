@@ -23,6 +23,12 @@ namespace RiptideNetworking
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        public byte[] Value { get; set; }
+        public Message(byte[] val)
+        {
+            Value = val;
+        }
+
         /// <summary>The number of bytes required for a message's header.</summary>
         /// <remarks>
         ///     <para>1 byte for the actual header; 2 bytes for the message ID.</para>
@@ -252,7 +258,7 @@ namespace RiptideNetworking
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'byte', returning 0!");
                 return 0;
             }
-            
+
             return Bytes[readPos++]; // Get the byte at readPos' position
         }
 
@@ -336,7 +342,7 @@ namespace RiptideNetworking
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'bool', returning false!");
                 return false;
             }
-            
+
             return Bytes[readPos++] == 1; // Convert the byte at readPos' position to a bool
         }
 
@@ -486,7 +492,7 @@ namespace RiptideNetworking
             readPos += RiptideConverter.UShortLength;
             return value;
         }
-        
+
         /// <summary>Retrieves a <see cref="ushort"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         internal ushort PeekUShort()
         {
@@ -1188,7 +1194,7 @@ namespace RiptideNetworking
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read type 'string', result will be truncated!");
                 length = (ushort)UnreadLength;
             }
-            
+
             string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
             readPos += length;
             return value;
@@ -1256,7 +1262,7 @@ namespace RiptideNetworking
             {
                 if (length > TwoByteLengthThreshold)
                     throw new Exception($"Messages do not support auto inclusion of array lengths for arrays with more than {TwoByteLengthThreshold} elements! Either send a smaller array or set the 'includeLength' paremeter to 'false' in the Add & Get methods.");
-                
+
                 if (UnwrittenLength < 2)
                     throw new Exception($"Message has insufficient remaining capacity ({UnwrittenLength}) to add an array length!");
 
@@ -1278,13 +1284,13 @@ namespace RiptideNetworking
 
             if ((Bytes[readPos] & 0b_1000_0000) == 0)
                 return GetByte();
-            
+
             if (UnreadLength < 2)
             {
                 RiptideLogger.Log(LogType.error, $"Message contains insufficient unread bytes ({UnreadLength}) to read an array length, setting length to 0!");
                 return 0;
             }
-            
+
             return (ushort)(((Bytes[readPos++] << 8) | Bytes[readPos++]) & 0b_0111_1111_1111_1111);
         }
         #endregion

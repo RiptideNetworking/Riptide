@@ -42,9 +42,14 @@ namespace RiptideNetworking
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
-        
+        /// <summary>Encapsulates a method that handles a message's progress from the server.</summary>
+        /// <param name="messageProgress">The message that was received.</param>
+        public delegate void MessageProgressHandler(PartialMessageProgress messageProgress);
+
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
+        /// <summary>Methods used to handle a message's progress, accessible by their corresponding message IDs.</summary>
+        private Dictionary<ushort, MessageProgressHandler> messageProgressHandlers;
         /// <summary>The underlying server that is used for managing connections and sending and receiving data.</summary>
         private IServer server;
 
@@ -83,9 +88,11 @@ namespace RiptideNetworking
             server.ClientDisconnected += OnClientDisconnected;
             server.Start(port, maxClientCount);
 
+            PartialMessageHandler.Server = this;
+
             IsRunning = true;
         }
-        
+
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
@@ -122,6 +129,46 @@ namespace RiptideNetworking
                     Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
                     if (clientMessageHandler == null)
                         throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        protected override void CreateMessageProgressHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
+        {
+            MethodInfo[] methods = assembly.GetTypes()
+                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
+                                           .Where(m => m.GetCustomAttributes(typeof(MessageHandlerProgressAttribute), false).Length > 0)
+                                           .ToArray();
+
+            messageProgressHandlers = new Dictionary<ushort, MessageProgressHandler>(methods.Length);
+            for (int i = 0; i < methods.Length; i++)
+            {
+                MessageHandlerProgressAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerProgressAttribute>();
+                if (attribute.GroupId != messageHandlerGroupId)
+                    continue;
+
+                if (!methods[i].IsStatic)
+                    throw new Exception($"Message progress handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+
+                Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(MessageProgressHandler), methods[i], false);
+                if (serverMessageHandler != null)
+                {
+                    // It's a message handler for Server instances
+                    if (messageProgressHandlers.ContainsKey(attribute.MessageId))
+                    {
+                        MethodInfo otherMethodWithId = messageProgressHandlers[attribute.MessageId].GetMethodInfo();
+                        throw new Exception($"Server-side message progress handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
+                    }
+                    else
+                        messageProgressHandlers.Add(attribute.MessageId, (MessageProgressHandler)serverMessageHandler);
+                }
+                else
+                {
+                    // It's not a message handler for Server instances, but it might be one for Client instances
+                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageProgressHandler), methods[i], false);
+                    if (clientMessageHandler == null)
+                        throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message progress handler method signatures, double-check its parameters!");
                 }
             }
         }

@@ -47,6 +47,11 @@ namespace RiptideNetworking
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
         protected abstract void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId);
 
+        /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerProgressAttribute"/> and adds them to the dictionary of handler methods.</summary>
+        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerProgressAttribute"/>.</param>
+        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
+        protected abstract void CreateMessageProgressHandlersDictionary(Assembly assembly, byte messageHandlerGroupId);
+
         /// <inheritdoc cref="ICommon.Tick"/>
         public abstract void Tick();
     }
