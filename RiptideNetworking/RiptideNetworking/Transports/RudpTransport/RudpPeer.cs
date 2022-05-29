@@ -55,7 +55,9 @@ namespace RiptideNetworking.Transports.RudpTransport
         /// <param name="remoteAcksBitField">A redundant list of sequence IDs that the other end has (or has not) received.</param>
         internal void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteAcksBitField)
         {
-            lock (ReceiveLockables) lock (PendingMessages)
+            lock (ReceiveLockables)
+            {
+                lock (PendingMessages)
                 {
                     int sequenceGap = GetSequenceGap(remoteLastReceivedSeqId, ReceiveLockables.LastAckedSeqId);
                     if (sequenceGap > 0)
@@ -89,6 +91,7 @@ namespace RiptideNetworking.Transports.RudpTransport
                         CheckMessageAckStatus((ushort)(ReceiveLockables.LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
                     }
                 }
+            }
         }
 
         /// <summary>Check the ack status of the given sequence ID.</summary>
