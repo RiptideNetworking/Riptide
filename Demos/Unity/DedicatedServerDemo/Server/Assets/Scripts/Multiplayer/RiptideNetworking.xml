@@ -241,6 +241,152 @@
             <param name="reason">The reason for the disconnection.</param>
             <param name="customMessage">The custom reason included with the disconnection information (if any).</param>
         </member>
+        <member name="T:RiptideNetworking.InsufficientCapacityException">
+            <summary>The exception that is thrown when a <see cref="T:RiptideNetworking.Message"/> does not contain enough unread bytes to add a certain value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.InsufficientCapacityException.RiptideMessage">
+            <summary>The message with insufficient remaining capacity.</summary>
+        </member>
+        <member name="F:RiptideNetworking.InsufficientCapacityException.TypeName">
+            <summary>The name of the type which could not be added to the message.</summary>
+        </member>
+        <member name="F:RiptideNetworking.InsufficientCapacityException.RequiredBytes">
+            <summary>The number of available bytes the type requires in order to be added successfully.</summary>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.#ctor">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InsufficientCapacityException"/> instance.</summary>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.#ctor(System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InsufficientCapacityException"/> instance with a specified error message.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InsufficientCapacityException"/> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="inner">The exception that is the cause of the current exception. If <paramref name="inner"/> is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.#ctor(RiptideNetworking.Message,System.String,System.Int32)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
+            <param name="message">The message with insufficient remaining capacity.</param>
+            <param name="typeName">The name of the type which could not be added to the message.</param>
+            <param name="requiredBytes">The number of available bytes required for the type to be added successfully.</param>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.#ctor(RiptideNetworking.Message,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
+            <param name="message">The message with insufficient remaining capacity.</param>
+            <param name="arrayLength">The length of the array which could not be added to the message.</param>
+            <param name="typeName">The name of the array's type.</param>
+            <param name="requiredBytes">The number of available bytes required for a single element of the array to be added successfully.</param>
+            <param name="totalRequiredBytes">The number of available bytes required for the entire array to be added successfully. If left as -1, this will be set to <paramref name="arrayLength"/> * <paramref name="requiredBytes"/>.</param>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.GetErrorMessage(RiptideNetworking.Message,System.String,System.Int32)">
+            <summary>Constructs the error message from the given information.</summary>
+            <returns>The error message.</returns>
+        </member>
+        <member name="M:RiptideNetworking.InsufficientCapacityException.GetErrorMessage(RiptideNetworking.Message,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>Constructs the error message from the given information.</summary>
+            <returns>The error message.</returns>
+        </member>
+        <member name="T:RiptideNetworking.NonStaticHandlerException">
+            <summary>The exception that is thrown when a method with a <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> is not marked as <see langword="static"/>.</summary>
+        </member>
+        <member name="F:RiptideNetworking.NonStaticHandlerException.DeclaringType">
+            <summary>The type containing the handler method.</summary>
+        </member>
+        <member name="F:RiptideNetworking.NonStaticHandlerException.HandlerMethodName">
+            <summary>The name of the handler method.</summary>
+        </member>
+        <member name="M:RiptideNetworking.NonStaticHandlerException.#ctor">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.NonStaticHandlerException"/> instance.</summary>
+        </member>
+        <member name="M:RiptideNetworking.NonStaticHandlerException.#ctor(System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.NonStaticHandlerException"/> instance with a specified error message.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.NonStaticHandlerException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.NonStaticHandlerException"/> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="inner">The exception that is the cause of the current exception. If <paramref name="inner"/> is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.NonStaticHandlerException.#ctor(System.Type,System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.NonStaticHandlerException"/> instance and constructs an error message from the given information.</summary>
+            <param name="declaringType">The type containing the handler method.</param>
+            <param name="handlerMethodName">The name of the handler method.</param>
+        </member>
+        <member name="M:RiptideNetworking.NonStaticHandlerException.GetErrorMessage(System.Type,System.String)">
+            <summary>Constructs the error message from the given information.</summary>
+            <returns>The error message.</returns>
+        </member>
+        <member name="T:RiptideNetworking.InvalidHandlerSignatureException">
+            <summary>The exception that is thrown when a method with a <see cref="T:RiptideNetworking.MessageHandlerAttribute"/> does not have an acceptable message handler method signature (either <see cref="T:RiptideNetworking.Server.MessageHandler"/> or <see cref="T:RiptideNetworking.Client.MessageHandler"/>).</summary>
+        </member>
+        <member name="F:RiptideNetworking.InvalidHandlerSignatureException.DeclaringType">
+            <summary>The type containing the handler method.</summary>
+        </member>
+        <member name="F:RiptideNetworking.InvalidHandlerSignatureException.HandlerMethodName">
+            <summary>The name of the handler method.</summary>
+        </member>
+        <member name="M:RiptideNetworking.InvalidHandlerSignatureException.#ctor">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InvalidHandlerSignatureException"/> instance.</summary>
+        </member>
+        <member name="M:RiptideNetworking.InvalidHandlerSignatureException.#ctor(System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InvalidHandlerSignatureException"/> instance with a specified error message.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.InvalidHandlerSignatureException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InvalidHandlerSignatureException"/> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="inner">The exception that is the cause of the current exception. If <paramref name="inner"/> is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.InvalidHandlerSignatureException.#ctor(System.Type,System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.InvalidHandlerSignatureException"/> instance and constructs an error message from the given information.</summary>
+            <param name="declaringType">The type containing the handler method.</param>
+            <param name="handlerMethodName">The name of the handler method.</param>
+        </member>
+        <member name="M:RiptideNetworking.InvalidHandlerSignatureException.GetErrorMessage(System.Type,System.String)">
+            <summary>Constructs the error message from the given information.</summary>
+            <returns>The error message.</returns>
+        </member>
+        <member name="T:RiptideNetworking.DuplicateHandlerException">
+            <summary>The exception that is thrown when multiple methods with <see cref="T:RiptideNetworking.MessageHandlerAttribute"/>s are set to handle messages with the same ID <i>and</i> have the same method signature.</summary>
+        </member>
+        <member name="F:RiptideNetworking.DuplicateHandlerException.Id">
+            <summary>The message ID with multiple handler methods.</summary>
+        </member>
+        <member name="F:RiptideNetworking.DuplicateHandlerException.DeclaringType1">
+            <summary>The type containing the first handler method.</summary>
+        </member>
+        <member name="F:RiptideNetworking.DuplicateHandlerException.HandlerMethodName1">
+            <summary>The name of the first handler method.</summary>
+        </member>
+        <member name="F:RiptideNetworking.DuplicateHandlerException.DeclaringType2">
+            <summary>The type containing the second handler method.</summary>
+        </member>
+        <member name="F:RiptideNetworking.DuplicateHandlerException.HandlerMethodName2">
+            <summary>The name of the second handler method.</summary>
+        </member>
+        <member name="M:RiptideNetworking.DuplicateHandlerException.#ctor">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.DuplicateHandlerException"/> instance with a specified error message.</summary>
+        </member>
+        <member name="M:RiptideNetworking.DuplicateHandlerException.#ctor(System.String)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.DuplicateHandlerException"/> instance with a specified error message.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.DuplicateHandlerException.#ctor(System.String,System.Exception)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.DuplicateHandlerException"/> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="inner">The exception that is the cause of the current exception. If <paramref name="inner"/> is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        </member>
+        <member name="M:RiptideNetworking.DuplicateHandlerException.#ctor(System.UInt16,System.Reflection.MethodInfo,System.Reflection.MethodInfo)">
+            <summary>Initializes a new <see cref="T:RiptideNetworking.DuplicateHandlerException"/> instance and constructs an error message from the given information.</summary>
+            <param name="id">The message ID with multiple handler methods.</param>
+            <param name="method1">The first handler method's info.</param>
+            <param name="method2">The second handler method's info.</param>
+        </member>
+        <member name="M:RiptideNetworking.DuplicateHandlerException.GetErrorMessage(System.UInt16,System.Reflection.MethodInfo,System.Reflection.MethodInfo)">
+            <summary>Constructs the error message from the given information.</summary>
+            <returns>The error message.</returns>
+        </member>
         <member name="T:RiptideNetworking.MessageSendMode">
             <summary>The send mode of a <see cref="T:RiptideNetworking.Message"/>.</summary>
         </member>
@@ -453,9 +599,6 @@
         <member name="M:RiptideNetworking.Message.GetUShort">
             <summary>Retrieves a <see cref="T:System.UInt16"/> from the message.</summary>
             <returns>The <see cref="T:System.UInt16"/> that was retrieved.</returns>
-        </member>
-        <member name="M:RiptideNetworking.Message.PeekUShort">
-            <summary>Retrieves a <see cref="T:System.UInt16"/> from the message without moving the read position, allowing the same bytes to be read again.</summary>
         </member>
         <member name="M:RiptideNetworking.Message.AddShorts(System.Int16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int16"/> array to the message.</summary>
@@ -858,6 +1001,63 @@
         <member name="M:RiptideNetworking.Message.Add(System.String[],System.Boolean)">
             <inheritdoc cref="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:RiptideNetworking.Message.AddStrings(System.String[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="F:RiptideNetworking.Message.ByteName">
+            <summary>The name of a <see cref="T:System.Byte"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.BoolName">
+            <summary>The name of a <see cref="T:System.Boolean"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.ShortName">
+            <summary>The name of a <see cref="T:System.Int16"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.UShortName">
+            <summary>The name of a <see cref="T:System.UInt16"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.IntName">
+            <summary>The name of an <see cref="T:System.Int32"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.UIntName">
+            <summary>The name of a <see cref="T:System.UInt32"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.LongName">
+            <summary>The name of a <see cref="T:System.Int64"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.ULongName">
+            <summary>The name of a <see cref="T:System.UInt64"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.FloatName">
+            <summary>The name of a <see cref="T:System.Single"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.DoubleName">
+            <summary>The name of a <see cref="T:System.Double"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.StringName">
+            <summary>The name of a <see cref="T:System.String"/> value.</summary>
+        </member>
+        <member name="F:RiptideNetworking.Message.ArrayLengthName">
+            <summary>The name of an array length value.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Message.NotEnoughBytesError(System.String,System.String)">
+            <summary>Constructs an error message for when a message contains insufficient unread bytes to retrieve a certain value.</summary>
+            <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
+            <param name="defaultReturn">Text describing the value which will be returned.</param>
+            <returns>The error message.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.NotEnoughBytesError(System.Int32,System.String)">
+            <summary>Constructs an error message for when a message contains insufficient unread bytes to retrieve an array of values.</summary>
+            <param name="arrayLength">The expected length of the array.</param>
+            <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
+            <returns>The error message.</returns>
+        </member>
+        <member name="M:RiptideNetworking.Message.ArrayNotLongEnoughError(System.Int32,System.Int32,System.Int32,System.String,System.String)">
+            <summary>Constructs an error message for when a number of retrieved values do not fit inside the bounds of the provided array.</summary>
+            <param name="amount">The number of values being retrieved.</param>
+            <param name="arrayLength">The length of the provided array.</param>
+            <param name="startIndex">The position in the array at which to begin writing values.</param>
+            <param name="valueName">The name of the value type which is being retrieved.</param>
+            <param name="pluralValueName">The name of the value type in plural form. If left empty, this will be set to <paramref name="valueName"/> with an <c>s</c> appended to it.</param>
+            <returns>The error message.</returns>
         </member>
         <member name="T:RiptideNetworking.MessageHandlerAttribute">
             <summary>Specifies a method as the message handler for messages with the given ID.</summary>
@@ -1948,6 +2148,16 @@
         <member name="M:RiptideNetworking.Utils.Extensions.ToStringBasedOnIPFormat(System.Net.IPEndPoint)">
             <summary>Takes an <see cref="T:System.Net.IPEndPoint"/> and returns a string containing its IP address and port number, accounting for whether the address is an IPv4 or IPv6.</summary>
             <returns>A string containing the IP address and port number of the endpoint.</returns>
+        </member>
+        <member name="T:RiptideNetworking.Utils.Helper">
+            <summary>Contains miscellaneous helper methods.</summary>
+        </member>
+        <member name="M:RiptideNetworking.Utils.Helper.CorrectForm(System.Int32,System.String,System.String)">
+            <summary>Determines whether <paramref name="singular"/> or <paramref name="plural"/> form should be used based on the <paramref name="amount"/>.</summary>
+            <param name="amount">The amount that <paramref name="singular"/> and <paramref name="plural"/> refer to.</param>
+            <param name="singular">The singular form.</param>
+            <param name="plural">The plural form.</param>
+            <returns><paramref name="singular"/> if <paramref name="amount"/> is 1; otherwise <paramref name="plural"/>.</returns>
         </member>
         <member name="T:RiptideNetworking.Utils.BroadcastMode">
             <summary>Defines broadcast modes.</summary>
