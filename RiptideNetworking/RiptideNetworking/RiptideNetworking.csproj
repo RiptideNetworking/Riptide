@@ -21,13 +21,9 @@
     <UPMSourceFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**\*.*" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Remove="Transports\RudpTransport\README.md" />
-  </ItemGroup>
-
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="if $(ConfigurationName) == Release (&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;)" />
-    <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="@(UPMSourceFiles)" DestinationFiles="@(UPMSourceFiles->'$(SolutionDir)..\UnityPackage\Runtime\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="@(UPMSourceFiles)" DestinationFiles="@(UPMSourceFiles->'$(SolutionDir)..\Unity\Packages\RiptideNetworking\Runtime\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="$(SolutionDir)..\LICENSE.md" DestinationFiles="$(SolutionDir)..\UnityPackage\LICENSE.md" SkipUnchangedFiles="true" />
   </Target>
 
