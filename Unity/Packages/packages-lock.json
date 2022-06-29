@@ -146,7 +146,7 @@
       }
     },
     "net.tomweiland.riptidenetworking": {
-      "version": "file:RiptideNetworking",
+      "version": "file:Core",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}
