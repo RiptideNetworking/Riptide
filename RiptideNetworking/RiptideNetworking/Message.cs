@@ -29,7 +29,7 @@ namespace RiptideNetworking
         /// </remarks>
         public const int HeaderSize = 3;
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="HeaderSize"/>.</summary>
-        public static int MaxSize { get; private set; } = HeaderSize + 1250;
+        public static int MaxSize { get; private set; } = HeaderSize + 1225;
         /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="HeaderSize"/>.</summary>
         public static int MaxPayloadSize
         {
