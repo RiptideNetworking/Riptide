@@ -96,10 +96,11 @@ namespace RiptideNetworking
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
-            MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
-                                           .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
-                                           .ToArray();
+            MethodInfo[] methods = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
+                .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
+                .ToArray();
 
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
             for (int i = 0; i < methods.Length; i++)
