@@ -178,6 +178,15 @@ namespace RiptideNetworking
             else
                 RiptideLogger.Log(LogType.warning, $"No client-side handler method found for message ID {e.MessageId}!");
         }
+        
+        /// <summary>Directly handles a message.</summary>
+        public void HandleMessage(Message message)
+        {
+            ushort messageId = message.GetUShort();
+            if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                messageHandler(message);
+            else
+                RiptideLogger.Log(LogType.warning, $"No client-side handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
