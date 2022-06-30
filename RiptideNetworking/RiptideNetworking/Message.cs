@@ -229,7 +229,7 @@ namespace Riptide
         #endregion
 
         #region Add & Retrieve Data
-        #region Byte
+        #region Byte & SByte
         /// <summary>Adds a single <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
@@ -239,6 +239,18 @@ namespace Riptide
                 throw new InsufficientCapacityException(this, ByteName, 1);
 
             Bytes[writePos++] = value;
+            return this;
+        }
+
+        /// <summary>Adds a single <see cref="sbyte"/> to the message.</summary>
+        /// <param name="value">The <see cref="sbyte"/> to add.</param>
+        /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
+        public Message AddSByte(sbyte value)
+        {
+            if (UnwrittenLength < 1)
+                throw new InsufficientCapacityException(this, SByteName, 1);
+
+            Bytes[writePos++] = (byte)value;
             return this;
         }
 
@@ -255,6 +267,19 @@ namespace Riptide
             return Bytes[readPos++]; // Get the byte at readPos' position
         }
 
+        /// <summary>Retrieves a <see cref="sbyte"/> from the message.</summary>
+        /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
+        public sbyte GetSByte()
+        {
+            if (UnreadLength < 1)
+            {
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(SByteName));
+                return 0;
+            }
+
+            return (sbyte)Bytes[readPos++]; // Get the sbyte at readPos' position
+        }
+
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
         /// <param name="array">The <see cref="byte"/> array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -269,6 +294,24 @@ namespace Riptide
 
             Array.Copy(array, 0, Bytes, writePos, array.Length);
             writePos += (ushort)array.Length;
+            return this;
+        }
+
+        /// <summary>Adds a <see cref="sbyte"/> array to the message.</summary>
+        /// <param name="array">The <see cref="sbyte"/> array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The message that the <see cref="sbyte"/> array was added to.</returns>
+        public Message AddSBytes(sbyte[] array, bool includeLength = true)
+        {
+            if (includeLength)
+                AddArrayLength(array.Length);
+
+            if (UnwrittenLength < array.Length)
+                throw new InsufficientCapacityException(this, array.Length, SByteName, 1);
+
+            for (int i = 0; i < array.Length; i++)
+                Bytes[writePos++] = (byte)array[i];
+            
             return this;
         }
 
@@ -296,6 +339,30 @@ namespace Riptide
             ReadBytes(amount, array, startIndex);
         }
 
+        /// <summary>Retrieves a <see cref="sbyte"/> array from the message.</summary>
+        /// <returns>The <see cref="sbyte"/> array that was retrieved.</returns>
+        public sbyte[] GetSBytes() => GetSBytes(GetArrayLength());
+        /// <summary>Retrieves a <see cref="sbyte"/> array from the message.</summary>
+        /// <param name="amount">The amount of sbytes to retrieve.</param>
+        /// <returns>The <see cref="sbyte"/> array that was retrieved.</returns>
+        public sbyte[] GetSBytes(int amount)
+        {
+            sbyte[] array = new sbyte[amount];
+            ReadSBytes(amount, array);
+            return array;
+        }
+        /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
+        /// <param name="amount">The amount of sbytes to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public void GetSBytes(int amount, sbyte[] array, int startIndex = 0)
+        {
+            if (startIndex + amount > array.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, SByteName));
+
+            ReadSBytes(amount, array, startIndex);
+        }
+
         /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of bytes to read.</param>
         /// <param name="array">The array to write the bytes into.</param>
@@ -310,6 +377,22 @@ namespace Riptide
 
             Array.Copy(Bytes, readPos, array, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
             readPos += (ushort)amount;
+        }
+
+        /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of sbytes to read.</param>
+        /// <param name="array">The array to write the sbytes into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadSBytes(int amount, sbyte[] array, int startIndex = 0)
+        {
+            if (UnreadLength < amount)
+            {
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, SByteName));
+                amount = UnreadLength;
+            }
+
+            for (int i = 0; i < amount; i++)
+                array[startIndex + i] = (sbyte)Bytes[readPos++];
         }
         #endregion
 
@@ -1286,6 +1369,9 @@ namespace Riptide
         /// <inheritdoc cref="AddByte(byte)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddByte(byte)"/>.</remarks>
         public Message Add(byte value) => AddByte(value);
+        /// <inheritdoc cref="AddSByte(sbyte)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddSByte(sbyte)"/>.</remarks>
+        public Message Add(sbyte value) => AddSByte(value);
         /// <inheritdoc cref="AddBool(bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddBool(bool)"/>.</remarks>
         public Message Add(bool value) => AddBool(value);
@@ -1320,6 +1406,9 @@ namespace Riptide
         /// <inheritdoc cref="AddBytes(byte[], bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddBytes(byte[], bool)"/>.</remarks>
         public Message Add(byte[] array, bool includeLength = true) => AddBytes(array, includeLength);
+        /// <inheritdoc cref="AddSBytes(sbyte[], bool)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddSBytes(sbyte[], bool)"/>.</remarks>
+        public Message Add(sbyte[] array, bool includeLength = true) => AddSBytes(array, includeLength);
         /// <inheritdoc cref="AddBools(bool[], bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddBools(bool[], bool)"/>.</remarks>
         public Message Add(bool[] array, bool includeLength = true) => AddBools(array, includeLength);
@@ -1356,6 +1445,8 @@ namespace Riptide
         #region Error Messaging
         /// <summary>The name of a <see cref="byte"/> value.</summary>
         private const string ByteName        = "byte";
+        /// <summary>The name of a <see cref="sbyte"/> value.</summary>
+        private const string SByteName        = "sbyte";
         /// <summary>The name of a <see cref="bool"/> value.</summary>
         private const string BoolName        = "bool";
         /// <summary>The name of a <see cref="short"/> value.</summary>

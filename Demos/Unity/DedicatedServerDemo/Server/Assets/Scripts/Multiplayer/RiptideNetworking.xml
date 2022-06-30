@@ -515,15 +515,30 @@
             <param name="value">The <see cref="T:System.Byte"/> to add.</param>
             <returns>The message that the <see cref="T:System.Byte"/> was added to.</returns>
         </member>
+        <member name="M:Riptide.Message.AddSByte(System.SByte)">
+            <summary>Adds a single <see cref="T:System.SByte"/> to the message.</summary>
+            <param name="value">The <see cref="T:System.SByte"/> to add.</param>
+            <returns>The message that the <see cref="T:System.SByte"/> was added to.</returns>
+        </member>
         <member name="M:Riptide.Message.GetByte">
             <summary>Retrieves a <see cref="T:System.Byte"/> from the message.</summary>
             <returns>The <see cref="T:System.Byte"/> that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSByte">
+            <summary>Retrieves a <see cref="T:System.SByte"/> from the message.</summary>
+            <returns>The <see cref="T:System.SByte"/> that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Byte"/> array to the message.</summary>
             <param name="array">The <see cref="T:System.Byte"/> array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
             <returns>The message that the <see cref="T:System.Byte"/> array was added to.</returns>
+        </member>
+        <member name="M:Riptide.Message.AddSBytes(System.SByte[],System.Boolean)">
+            <summary>Adds a <see cref="T:System.SByte"/> array to the message.</summary>
+            <param name="array">The <see cref="T:System.SByte"/> array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The message that the <see cref="T:System.SByte"/> array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetBytes">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
@@ -540,10 +555,31 @@
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
+        <member name="M:Riptide.Message.GetSBytes">
+            <summary>Retrieves a <see cref="T:System.SByte"/> array from the message.</summary>
+            <returns>The <see cref="T:System.SByte"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSBytes(System.Int32)">
+            <summary>Retrieves a <see cref="T:System.SByte"/> array from the message.</summary>
+            <param name="amount">The amount of sbytes to retrieve.</param>
+            <returns>The <see cref="T:System.SByte"/> array that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSBytes(System.Int32,System.SByte[],System.Int32)">
+            <summary>Populates a <see cref="T:System.SByte"/> array with bytes retrieved from the message.</summary>
+            <param name="amount">The amount of sbytes to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
         <member name="M:Riptide.Message.ReadBytes(System.Int32,System.Byte[],System.Int32)">
             <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
             <param name="amount">The amount of bytes to read.</param>
             <param name="array">The array to write the bytes into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        </member>
+        <member name="M:Riptide.Message.ReadSBytes(System.Int32,System.SByte[],System.Int32)">
+            <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of sbytes to read.</param>
+            <param name="array">The array to write the sbytes into.</param>
             <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
         </member>
         <member name="M:Riptide.Message.AddBool(System.Boolean)">
@@ -918,6 +954,10 @@
             <inheritdoc cref="M:Riptide.Message.AddByte(System.Byte)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddByte(System.Byte)"/>.</remarks>
         </member>
+        <member name="M:Riptide.Message.Add(System.SByte)">
+            <inheritdoc cref="M:Riptide.Message.AddSByte(System.SByte)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddSByte(System.SByte)"/>.</remarks>
+        </member>
         <member name="M:Riptide.Message.Add(System.Boolean)">
             <inheritdoc cref="M:Riptide.Message.AddBool(System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddBool(System.Boolean)"/>.</remarks>
@@ -962,6 +1002,10 @@
             <inheritdoc cref="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)"/>.</remarks>
         </member>
+        <member name="M:Riptide.Message.Add(System.SByte[],System.Boolean)">
+            <inheritdoc cref="M:Riptide.Message.AddSBytes(System.SByte[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddSBytes(System.SByte[],System.Boolean)"/>.</remarks>
+        </member>
         <member name="M:Riptide.Message.Add(System.Boolean[],System.Boolean)">
             <inheritdoc cref="M:Riptide.Message.AddBools(System.Boolean[],System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddBools(System.Boolean[],System.Boolean)"/>.</remarks>
@@ -1004,6 +1048,9 @@
         </member>
         <member name="F:Riptide.Message.ByteName">
             <summary>The name of a <see cref="T:System.Byte"/> value.</summary>
+        </member>
+        <member name="F:Riptide.Message.SByteName">
+            <summary>The name of a <see cref="T:System.SByte"/> value.</summary>
         </member>
         <member name="F:Riptide.Message.BoolName">
             <summary>The name of a <see cref="T:System.Boolean"/> value.</summary>
