@@ -45,7 +45,7 @@ However, if you intend to build a standalone server, having separate projects fo
 Riptide supports either of those (and more) architecture choices.
 
 ### Initial Setup
-Set up a `NetworkManager` class like in the [Unity demo projects](https://github.com/tom-weiland/RiptideNetworking/tree/main/Demos/Unity). To run your own logic when certain things happen, you can subscribe to the following events:
+Set up a `NetworkManager` class like in the [Unity demo projects](Demos/Unity). To run your own logic when certain things happen, you can subscribe to the following events:
 - Server
   - `ClientConnected` - invoked when a new client connects
   - `MessageReceived` - invoked when a message is received from a client (useful if you need to run custom logic for _every_ message that is received)
@@ -58,9 +58,9 @@ Set up a `NetworkManager` class like in the [Unity demo projects](https://github
   - `ClientConnected` - invoked when another client connects
   - `ClientDisonnected` - invoked when another client disconnects
 
-Additionally, you can set up a `MessageExtensions` class to extend the functionality of the `Message` class. This is helpful if you wish to send custom objects over the network—being able to directly Add/Get a `Vector3` from a message is much more convenient than having to call the Add/GetFloat method 3 times in a row. Refer to the [Unity demos](https://github.com/tom-weiland/RiptideNetworking/tree/main/Demos/Unity) for an example.
+Additionally, you can set up a `MessageExtensions` class to extend the functionality of the `Message` class. This is helpful if you wish to send custom objects over the network—being able to directly Add/Get a `Vector3` from a message is much more convenient than having to call the Add/GetFloat method 3 times in a row. Refer to the [Unity demos](Demos/Unity) for an example.
 
-Note that if you installed Riptide via the Unity package manager, `Message` extension methods for several types (including `Vector3` and `Quaternion`) are [already included](https://github.com/tom-weiland/RiptideNetworking/blob/main/UnityPackage/Runtime/MessageExtensionsUnity.cs).
+Note that if you installed Riptide via the Unity package manager, `Message` extension methods for several types (including `Vector3` and `Quaternion`) are [already included](Unity/Packages/Core/Runtime/MessageExtensions.cs).
 
 ### Creating and Sending Messages
 Messages are created like this:
@@ -108,11 +108,11 @@ A few things to note:
 - message handler methods need to be `static`
 
 ## Low-Level Transports
-- [RUDP Transport](https://github.com/tom-weiland/RiptideNetworking/tree/main/RiptideNetworking/RiptideNetworking/Transports/RudpTransport) (built-in)
+- [RUDP Transport](RiptideNetworking/RiptideNetworking/Transports/Rudp) (built-in)
 - [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
 
 ## Donate
 Riptide is 100% free to use, but if you'd like to financially support its development as well as the development of its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
 
 ## License
-Distributed under the MIT license. See [LICENSE.md](https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md) for more information.
+Distributed under the MIT license. See [LICENSE.md](LICENSE.md) for more information.
