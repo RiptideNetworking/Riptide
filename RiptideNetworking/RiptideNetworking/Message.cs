@@ -2,13 +2,13 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
-using RiptideNetworking.Utils;
+using Riptide.Transports;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>The send mode of a <see cref="Message"/>.</summary>
     public enum MessageSendMode : byte

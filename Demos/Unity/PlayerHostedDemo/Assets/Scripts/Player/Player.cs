@@ -1,8 +1,7 @@
-﻿using RiptideNetworking;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
+namespace Riptide.Demos.Rudp.PlayerHosted
 {
     public class Player : MonoBehaviour
     {

@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace RiptideNetworking.Utils
+namespace Riptide.Utils
 {
     /// <summary>Represents a collection of two keys for each value.</summary>
     /// <typeparam name="TKey1">Key type 1.</typeparam>

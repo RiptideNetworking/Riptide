@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
+namespace Riptide.Demos.Rudp.PlayerHosted
 {
     public class UIManager : MonoBehaviour
     {

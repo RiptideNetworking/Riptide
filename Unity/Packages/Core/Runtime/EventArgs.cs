@@ -2,10 +2,10 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
+using Riptide.Transports;
 using System;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>Contains event data for when a client connects to the server.</summary>
     public class ServerClientConnectedEventArgs : EventArgs

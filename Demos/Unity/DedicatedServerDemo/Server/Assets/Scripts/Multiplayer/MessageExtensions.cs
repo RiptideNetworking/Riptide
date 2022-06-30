@@ -1,7 +1,6 @@
-﻿using RiptideNetworking;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleServer
+namespace Riptide.Demos.Rudp.DedicatedServer
 {
     public static class MessageExtensions
     {

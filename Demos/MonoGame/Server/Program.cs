@@ -1,9 +1,8 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Threading;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestServer
+namespace Riptide.Demos.Rudp.MGServer
 {
     internal class Program
     {

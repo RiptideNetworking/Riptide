@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace RiptideNetworking.Utils
+namespace Riptide.Utils
 {
     /// <summary>Defines broadcast modes.</summary>
     public enum BroadcastMode

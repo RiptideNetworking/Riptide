@@ -1,6 +1,4 @@
-﻿using RiptideNetworking;
-
-namespace RiptideDemos.RudpTransport.MonoGame.TestClient
+﻿namespace Riptide.Demos.Rudp.MGClient
 {
     internal class NetworkManager
     {

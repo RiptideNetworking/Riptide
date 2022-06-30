@@ -1,7 +1,6 @@
-﻿using RiptideNetworking;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
+namespace Riptide.Demos.Rudp.PlayerHosted
 {
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour

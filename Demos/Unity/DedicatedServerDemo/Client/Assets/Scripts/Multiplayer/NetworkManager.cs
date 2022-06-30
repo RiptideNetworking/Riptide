@@ -1,9 +1,8 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleClient
+namespace Riptide.Demos.Rudp.DedicatedClient
 {
     public enum ServerToClientId : ushort
     {

@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace RiptideNetworking.Transports.RudpTransport
+namespace Riptide.Transports.Rudp
 {
     /// <summary>Provides functionality for sending and receiving messages reliably.</summary>
     internal class RudpPeer

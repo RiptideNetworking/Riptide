@@ -2,7 +2,7 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-namespace RiptideNetworking.Transports
+namespace Riptide.Transports
 {
     /// <summary>The state of a connection.</summary>
     public enum ConnectionState : byte

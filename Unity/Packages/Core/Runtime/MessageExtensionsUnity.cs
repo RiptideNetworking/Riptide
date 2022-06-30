@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     public static class MessageExtensionsUnity
     {

@@ -2,14 +2,14 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
+using Riptide.Utils;
 using System;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
 
-namespace RiptideNetworking.Transports.RudpTransport
+namespace Riptide.Transports.Rudp
 {
     /// <summary>A client that can connect to an <see cref="RudpServer"/>.</summary>
     public class RudpClient : RudpListener, IClient

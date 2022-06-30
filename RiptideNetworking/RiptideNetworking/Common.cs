@@ -2,10 +2,10 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
+using Riptide.Transports;
 using System.Reflection;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>The reason for a disconnection.</summary>
     public enum DisconnectReason : byte

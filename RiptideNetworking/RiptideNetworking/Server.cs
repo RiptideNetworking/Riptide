@@ -2,14 +2,14 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
-using RiptideNetworking.Utils;
+using Riptide.Transports;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>A server that can accept connections from <see cref="Client"/>s.</summary>
     public class Server : Common
@@ -55,7 +55,7 @@ namespace RiptideNetworking
         /// <param name="clientTimeoutTime">The time (in milliseconds) after which to disconnect a client without a heartbeat.</param>
         /// <param name="clientHeartbeatInterval">The interval (in milliseconds) at which heartbeats are to be expected from clients.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") => server = new Transports.RudpTransport.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
+        public Server(ushort clientTimeoutTime = 5000, ushort clientHeartbeatInterval = 1000, string logName = "SERVER") => server = new Transports.Rudp.RudpServer(clientTimeoutTime, clientHeartbeatInterval, logName);
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="server">The underlying server that is used for managing connections and sending and receiving data.</param>

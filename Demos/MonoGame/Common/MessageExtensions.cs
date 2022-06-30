@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
-using RiptideNetworking;
 
-namespace RiptideDemos.RudpTransport.MonoGame.Common
+namespace Riptide.Demos.Rudp.MGCommon
 {
     public enum MessageId : ushort
     {

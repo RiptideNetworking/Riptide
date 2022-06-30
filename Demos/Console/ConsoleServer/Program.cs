@@ -1,12 +1,11 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Transports.RudpTransport;
-using RiptideNetworking.Utils;
+﻿using Riptide.Transports.Rudp;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideDemos.RudpTransport.ConsoleApp.TestServer
+namespace Riptide.Demos.Rudp.ConsoleServer
 {
     internal class Program
     {

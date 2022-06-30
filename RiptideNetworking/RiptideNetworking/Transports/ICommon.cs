@@ -2,7 +2,7 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-namespace RiptideNetworking.Transports
+namespace Riptide.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
     public interface ICommon

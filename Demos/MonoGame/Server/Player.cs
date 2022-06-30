@@ -1,9 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using RiptideDemos.RudpTransport.MonoGame.Common;
-using RiptideNetworking;
+using Riptide.Demos.Rudp.MGCommon;
 using System.Collections.Generic;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestServer
+namespace Riptide.Demos.Rudp.MGServer
 {
     internal class Player
     {

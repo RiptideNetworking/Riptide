@@ -4,7 +4,7 @@
 
 using System;
 
-namespace RiptideNetworking.Transports
+namespace Riptide.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
     public interface IServer : ICommon

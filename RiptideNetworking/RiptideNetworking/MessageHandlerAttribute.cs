@@ -4,7 +4,7 @@
 
 using System;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>Specifies a method as the message handler for messages with the given ID.</summary>
     [AttributeUsage(AttributeTargets.Method, Inherited = false, AllowMultiple = false)]

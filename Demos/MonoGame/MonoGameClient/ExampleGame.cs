@@ -1,10 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiptideNetworking.Utils;
+using Riptide.Utils;
 using System;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestClient
+namespace Riptide.Demos.Rudp.MGClient
 {
     public class ExampleGame : Game
     {

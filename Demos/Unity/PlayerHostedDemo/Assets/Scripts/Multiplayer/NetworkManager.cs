@@ -1,9 +1,8 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
+namespace Riptide.Demos.Rudp.PlayerHosted
 {
     internal enum MessageId : ushort
     {

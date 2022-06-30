@@ -2,7 +2,7 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-namespace RiptideNetworking.Transports
+namespace Riptide.Transports
 {
     /// <summary>The header type of a <see cref="Message"/>.</summary>
     public enum HeaderType : byte
@@ -35,7 +35,7 @@ namespace RiptideNetworking.Transports
     }
 
     /// <summary>Contains extension methods for the <see cref="Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
-    /// <remarks>Exposing these publicly as part of the <see cref="Message"/> class would make them accessible and show up in intellisense wherever the <see cref="RiptideNetworking"/>
+    /// <remarks>Exposing these publicly as part of the <see cref="Message"/> class would make them accessible and show up in intellisense wherever the <see cref="Riptide"/>
     /// namespace is used. By making them extension methods housed in the <see cref="Transports"/> namespace, usage requires explicitly referencing said namespace, which
     /// should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
     public static class MessageExtensionsTransports

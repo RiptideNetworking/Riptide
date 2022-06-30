@@ -1,11 +1,10 @@
-﻿using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 #if !UNITY_EDITOR
 using System;
 #endif
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleServer
+namespace Riptide.Demos.Rudp.DedicatedServer
 {
     public enum ServerToClientId : ushort
     {

@@ -1,7 +1,6 @@
-﻿using RiptideNetworking;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleClient
+namespace Riptide.Demos.Rudp.DedicatedClient
 {
     public class PlayerController : MonoBehaviour
     {

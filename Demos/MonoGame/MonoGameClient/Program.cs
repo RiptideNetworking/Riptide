@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestClient
+namespace Riptide.Demos.Rudp.MGClient
 {
     public static class Program
     {

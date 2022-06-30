@@ -2,7 +2,7 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-namespace RiptideNetworking.Utils
+namespace Riptide.Utils
 {
     /// <summary>Contains miscellaneous helper methods.</summary>
     internal class Helper

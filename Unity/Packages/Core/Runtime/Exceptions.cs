@@ -2,11 +2,11 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
+using Riptide.Utils;
 using System;
 using System.Reflection;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unread bytes to add a certain value.</summary>
     public class InsufficientCapacityException : Exception
@@ -133,7 +133,7 @@ namespace RiptideNetworking
         /// <returns>The error message.</returns>
         private static string GetErrorMessage(Type declaringType, string handlerMethodName)
         {
-            return $"'{declaringType.Name}.{handlerMethodName}' doesn't match any acceptable message handler method signatures! Server message handler methods should have a 'ushort' and a '{nameof(RiptideNetworking.Message)}' parameter, while client message handler methods should only have a '{nameof(RiptideNetworking.Message)}' parameter.";
+            return $"'{declaringType.Name}.{handlerMethodName}' doesn't match any acceptable message handler method signatures! Server message handler methods should have a 'ushort' and a '{nameof(Riptide.Message)}' parameter, while client message handler methods should only have a '{nameof(Riptide.Message)}' parameter.";
         }
     }
 

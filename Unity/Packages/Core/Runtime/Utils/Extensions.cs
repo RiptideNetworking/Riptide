@@ -4,7 +4,7 @@
 
 using System.Net;
 
-namespace RiptideNetworking.Utils
+namespace Riptide.Utils
 {
     /// <summary>Contains extension methods for various classes.</summary>
     public static class Extensions

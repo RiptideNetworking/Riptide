@@ -2,11 +2,11 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Utils;
+using Riptide.Utils;
 using System;
 using System.Net;
 
-namespace RiptideNetworking.Transports.RudpTransport
+namespace Riptide.Transports.Rudp
 {
     /// <summary>Represents a server's connection to a client.</summary>
     public class RudpConnection : IConnectionInfo
