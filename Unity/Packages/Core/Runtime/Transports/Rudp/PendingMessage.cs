@@ -145,10 +145,10 @@ namespace Riptide.Transports.Rudp
 #else
                         ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} attempt(s), delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                     }
                     else
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} attempt(s), delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
 
                 Clear();
