@@ -64,14 +64,14 @@ Note that if you installed Riptide via the Unity package manager, `Message` exte
 
 ### Creating and Sending Messages
 Messages are created like this:
-```
+```cs
 Message message = Message.Create(<messageSendMode>, <messageId>);
 ```
 `<messageSendMode>` should be set to either `MessageSendMode.reliable` or `MessageSendMode.unreliable`, depending on how you want your message to be sent.<br/>
 `<messageId>` should be set to the message's ID (a `ushort`). This ID will allow the other end to determine how to handle the message upon receiving it.
 
 To add data to your message, use:
-```
+```cs
 message.Add(someValue);
 ```
 `someValue` can be any of the following types (or an array of that type): `byte`, `bool`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `string`
@@ -79,7 +79,7 @@ message.Add(someValue);
 Any custom types you may want to send usually consist of combinations of these primitive types. For example, a `Vector3` consists of 3 `float`s, so instead of literally sending the `Vector3` itself, you would send the x, y, and z, components as 3 separate `float`s (as mentioned above, you can extend the `Message` class to make this less cumbersome).
 
 To send your message, use one of the following:
-```
+```cs
 Server.Send(message, <toClientId>); // Sends message from server to 1 client
 Server.SendToAll(message); // Sends message from server to all clients
 Server.SendToAll(message, <toClientId>); // Sends message from server to all clients except one
@@ -89,7 +89,7 @@ Client.Send(message); // Sends message from client to server
 
 ### Handling Messages
 To handle messages, simply create a static method and give it the MessageHandler attribute:
-```
+```cs
 [MessageHandler(<someMessageFromServerID>)]
 private static void HandleSomeMessageFromServer(Message message)
 {
