@@ -387,6 +387,17 @@
             <summary>Constructs the error message from the given information.</summary>
             <returns>The error message.</returns>
         </member>
+        <member name="T:Riptide.IMessageSerializable">
+            <summary>Represents an type that can be added to and retrieved from messages using the <see cref="M:Riptide.Message.AddSerializable``1(``0)"/> and <see cref="M:Riptide.Message.GetSerializable``1"/> methods.</summary>
+        </member>
+        <member name="M:Riptide.IMessageSerializable.Serialize(Riptide.Message)">
+            <summary>Adds the type to the message.</summary>
+            <param name="message">The message to add the type to.</param>
+        </member>
+        <member name="M:Riptide.IMessageSerializable.Deserialize(Riptide.Message)">
+            <summary>Retrieves the type from the message.</summary>
+            <param name="message">The message to retrieve the type from.</param>
+        </member>
         <member name="T:Riptide.MessageSendMode">
             <summary>The send mode of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
@@ -950,6 +961,42 @@
             <summary>Retrieves the length of an array from the message, using either 1 or 2 bytes depending on how large the array is.</summary>
             <returns>The length of the array.</returns>
         </member>
+        <member name="M:Riptide.Message.AddSerializable``1(``0)">
+            <summary>Adds a serializable to the message.</summary>
+            <param name="value">The serializable to add.</param>
+            <returns>The message that the serializable was added to.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSerializable``1">
+            <summary>Retrieves a serializable from the message.</summary>
+            <returns>The serializable that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.AddSerializables``1(``0[],System.Boolean)">
+            <summary>Adds an array of serializables to the message.</summary>
+            <param name="array">The array to add.</param>
+            <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+            <returns>The message that the array was added to.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSerializables``1">
+            <summary>Retrieves an array of serializables from the message.</summary>
+            <returns>The array that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSerializables``1(System.Int32)">
+            <summary>Retrieves an array of serializables from the message.</summary>
+            <param name="amount">The amount of serializables to retrieve.</param>
+            <returns>The array that was retrieved.</returns>
+        </member>
+        <member name="M:Riptide.Message.GetSerializables``1(System.Int32,``0[],System.Int32)">
+            <summary>Populates an array of serializables retrieved from the message.</summary>
+            <param name="amount">The amount of serializables to retrieve.</param>
+            <param name="array">The array to populate.</param>
+            <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        </member>
+        <member name="M:Riptide.Message.ReadSerializables``1(System.Int32,``0[],System.Int32)">
+            <summary>Reads a number of serializables from the message and writes them into the given array.</summary>
+            <param name="amount">The amount of serializables to read.</param>
+            <param name="array">The array to write the serializables into.</param>
+            <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        </member>
         <member name="M:Riptide.Message.Add(System.Byte)">
             <inheritdoc cref="M:Riptide.Message.AddByte(System.Byte)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddByte(System.Byte)"/>.</remarks>
@@ -998,6 +1045,10 @@
             <inheritdoc cref="M:Riptide.Message.AddString(System.String)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddString(System.String)"/>.</remarks>
         </member>
+        <member name="M:Riptide.Message.Add``1(``0)">
+            <inheritdoc cref="M:Riptide.Message.AddSerializable``1(``0)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddSerializable``1(``0)"/>.</remarks>
+        </member>
         <member name="M:Riptide.Message.Add(System.Byte[],System.Boolean)">
             <inheritdoc cref="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)"/>.</remarks>
@@ -1045,6 +1096,10 @@
         <member name="M:Riptide.Message.Add(System.String[],System.Boolean)">
             <inheritdoc cref="M:Riptide.Message.AddStrings(System.String[],System.Boolean)"/>
             <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddStrings(System.String[],System.Boolean)"/>.</remarks>
+        </member>
+        <member name="M:Riptide.Message.Add``1(``0[],System.Boolean)">
+            <inheritdoc cref="M:Riptide.Message.AddSerializables``1(``0[],System.Boolean)"/>
+            <remarks>This method is simply an alternative way of calling <see cref="M:Riptide.Message.AddSerializables``1(``0[],System.Boolean)"/>.</remarks>
         </member>
         <member name="F:Riptide.Message.ByteName">
             <summary>The name of a <see cref="T:System.Byte"/> value.</summary>

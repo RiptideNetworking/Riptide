@@ -1365,6 +1365,75 @@ namespace Riptide
         }
         #endregion
 
+        #region IMessageSerializable Types
+        /// <summary>Adds a serializable to the message.</summary>
+        /// <param name="value">The serializable to add.</param>
+        /// <returns>The message that the serializable was added to.</returns>
+        public Message AddSerializable<T>(T value) where T : IMessageSerializable
+        {
+            value.Serialize(this);
+            return this;
+        }
+
+        /// <summary>Retrieves a serializable from the message.</summary>
+        /// <returns>The serializable that was retrieved.</returns>
+        public T GetSerializable<T>() where T : IMessageSerializable, new()
+        {
+            T t = new T();
+            t.Deserialize(this);
+            return t;
+        }
+
+        /// <summary>Adds an array of serializables to the message.</summary>
+        /// <param name="array">The array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <returns>The message that the array was added to.</returns>
+        public Message AddSerializables<T>(T[] array, bool includeLength = true) where T : IMessageSerializable
+        {
+            if (includeLength)
+                AddArrayLength(array.Length);
+
+            for (int i = 0; i < array.Length; i++)
+                AddSerializable(array[i]);
+
+            return this;
+        }
+
+        /// <summary>Retrieves an array of serializables from the message.</summary>
+        /// <returns>The array that was retrieved.</returns>
+        public T[] GetSerializables<T>() where T : IMessageSerializable, new() => GetSerializables<T>(GetArrayLength());
+        /// <summary>Retrieves an array of serializables from the message.</summary>
+        /// <param name="amount">The amount of serializables to retrieve.</param>
+        /// <returns>The array that was retrieved.</returns>
+        public T[] GetSerializables<T>(int amount) where T : IMessageSerializable, new()
+        {
+            T[] array = new T[amount];
+            ReadSerializables(amount, array);
+            return array;
+        }
+        /// <summary>Populates an array of serializables retrieved from the message.</summary>
+        /// <param name="amount">The amount of serializables to retrieve.</param>
+        /// <param name="array">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
+        public T[] GetSerializables<T>(int amount, T[] array, int startIndex = 0) where T : IMessageSerializable, new()
+        {
+            ReadSerializables(amount, array, startIndex);
+            return array;
+        }
+
+        /// <summary>Reads a number of serializables from the message and writes them into the given array.</summary>
+        /// <param name="amount">The amount of serializables to read.</param>
+        /// <param name="array">The array to write the serializables into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
+        private void ReadSerializables<T>(int amount, T[] array, int startIndex = 0) where T : IMessageSerializable, new()
+        {
+            for (int i = 0; i < amount; i++)
+            {
+                array[startIndex + i] = GetSerializable<T>();
+            }
+        }
+        #endregion
+
         #region Overload Versions
         /// <inheritdoc cref="AddByte(byte)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddByte(byte)"/>.</remarks>
@@ -1402,6 +1471,9 @@ namespace Riptide
         /// <inheritdoc cref="AddString(string)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string)"/>.</remarks>
         public Message Add(string value) => AddString(value);
+        /// <inheritdoc cref="AddSerializable{T}(T)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddSerializable{T}(T)"/>.</remarks>
+        public Message Add<T>(T value) where T : IMessageSerializable => AddSerializable(value);
 
         /// <inheritdoc cref="AddBytes(byte[], bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddBytes(byte[], bool)"/>.</remarks>
@@ -1439,6 +1511,9 @@ namespace Riptide
         /// <inheritdoc cref="AddStrings(string[], bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool)"/>.</remarks>
         public Message Add(string[] array, bool includeLength = true) => AddStrings(array, includeLength);
+        /// <inheritdoc cref="AddSerializables{T}(T[], bool)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddSerializables{T}(T[], bool)"/>.</remarks>
+        public Message Add<T>(T[] array, bool includeLength = true) where T : IMessageSerializable, new() => AddSerializables(array, includeLength);
         #endregion
         #endregion
 
