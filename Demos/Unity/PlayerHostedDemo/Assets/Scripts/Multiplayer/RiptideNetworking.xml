@@ -532,33 +532,33 @@
             <returns>The message that the <see cref="T:System.SByte"/> was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetByte">
-            <summary>Retrieves a <see cref="T:System.Byte"/> from the message.</summary>
+            <summary>Retrieves a single <see cref="T:System.Byte"/> from the message.</summary>
             <returns>The <see cref="T:System.Byte"/> that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetSByte">
-            <summary>Retrieves a <see cref="T:System.SByte"/> from the message.</summary>
+            <summary>Retrieves a single <see cref="T:System.SByte"/> from the message.</summary>
             <returns>The <see cref="T:System.SByte"/> that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.AddBytes(System.Byte[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Byte"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.Byte"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Byte"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.AddSBytes(System.SByte[],System.Boolean)">
-            <summary>Adds a <see cref="T:System.SByte"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.SByte"/> array to add.</param>
+            <summary>Adds an <see cref="T:System.SByte"/> array to the message.</summary>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.SByte"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetBytes">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetBytes(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Byte"/> array from the message.</summary>
             <param name="amount">The amount of bytes to retrieve.</param>
-            <returns>The <see cref="T:System.Byte"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetBytes(System.Int32,System.Byte[],System.Int32)">
             <summary>Populates a <see cref="T:System.Byte"/> array with bytes retrieved from the message.</summary>
@@ -567,13 +567,13 @@
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>
         <member name="M:Riptide.Message.GetSBytes">
-            <summary>Retrieves a <see cref="T:System.SByte"/> array from the message.</summary>
-            <returns>The <see cref="T:System.SByte"/> array that was retrieved.</returns>
+            <summary>Retrieves an <see cref="T:System.SByte"/> array from the message.</summary>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetSBytes(System.Int32)">
-            <summary>Retrieves a <see cref="T:System.SByte"/> array from the message.</summary>
+            <summary>Retrieves an <see cref="T:System.SByte"/> array from the message.</summary>
             <param name="amount">The amount of sbytes to retrieve.</param>
-            <returns>The <see cref="T:System.SByte"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetSBytes(System.Int32,System.SByte[],System.Int32)">
             <summary>Populates a <see cref="T:System.SByte"/> array with bytes retrieved from the message.</summary>
@@ -604,18 +604,18 @@
         </member>
         <member name="M:Riptide.Message.AddBools(System.Boolean[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Boolean"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.Boolean"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Boolean"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetBools">
             <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetBools(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Boolean"/> array from the message.</summary>
             <param name="amount">The amount of bools to retrieve.</param>
-            <returns>The <see cref="T:System.Boolean"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetBools(System.Int32,System.Boolean[],System.Int32)">
             <summary>Populates a <see cref="T:System.Boolean"/> array with bools retrieved from the message.</summary>
@@ -649,24 +649,24 @@
         </member>
         <member name="M:Riptide.Message.AddShorts(System.Int16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Int16"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.Int16"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Int16"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.AddUShorts(System.UInt16[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt16"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.UInt16"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.UInt16"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetShorts">
             <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetShorts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Int16"/> array from the message.</summary>
             <param name="amount">The amount of shorts to retrieve.</param>
-            <returns>The <see cref="T:System.Int16"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetShorts(System.Int32,System.Int16[],System.Int32)">
             <summary>Populates a <see cref="T:System.Int16"/> array with shorts retrieved from the message.</summary>
@@ -676,12 +676,12 @@
         </member>
         <member name="M:Riptide.Message.GetUShorts">
             <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
-            <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetUShorts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt16"/> array from the message.</summary>
             <param name="amount">The amount of ushorts to retrieve.</param>
-            <returns>The <see cref="T:System.UInt16"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetUShorts(System.Int32,System.UInt16[],System.Int32)">
             <summary>Populates a <see cref="T:System.UInt16"/> array with ushorts retrieved from the message.</summary>
@@ -721,24 +721,24 @@
         </member>
         <member name="M:Riptide.Message.AddInts(System.Int32[],System.Boolean)">
             <summary>Adds an <see cref="T:System.Int32"/> array message.</summary>
-            <param name="array">The <see cref="T:System.Int32"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Int32"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.AddUInts(System.UInt32[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt32"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.UInt32"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.UInt32"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetInts">
             <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetInts(System.Int32)">
             <summary>Retrieves an <see cref="T:System.Int32"/> array from the message.</summary>
             <param name="amount">The amount of ints to retrieve.</param>
-            <returns>The <see cref="T:System.Int32"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetInts(System.Int32,System.Int32[],System.Int32)">
             <summary>Populates an <see cref="T:System.Int32"/> array with ints retrieved from the message.</summary>
@@ -748,12 +748,12 @@
         </member>
         <member name="M:Riptide.Message.GetUInts">
             <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
-            <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetUInts(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt32"/> array from the message.</summary>
             <param name="amount">The amount of uints to retrieve.</param>
-            <returns>The <see cref="T:System.UInt32"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetUInts(System.Int32,System.UInt32[],System.Int32)">
             <summary>Populates a <see cref="T:System.UInt32"/> array with uints retrieved from the message.</summary>
@@ -795,22 +795,22 @@
             <summary>Adds a <see cref="T:System.Int64"/> array to the message.</summary>
             <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Int64"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.AddULongs(System.UInt64[],System.Boolean)">
             <summary>Adds a <see cref="T:System.UInt64"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.UInt64"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.UInt64"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetLongs">
             <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetLongs(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Int64"/> array from the message.</summary>
             <param name="amount">The amount of longs to retrieve.</param>
-            <returns>The <see cref="T:System.Int64"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetLongs(System.Int32,System.Int64[],System.Int32)">
             <summary>Populates a <see cref="T:System.Int64"/> array with longs retrieved from the message.</summary>
@@ -820,12 +820,12 @@
         </member>
         <member name="M:Riptide.Message.GetULongs">
             <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
-            <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetULongs(System.Int32)">
             <summary>Retrieves a <see cref="T:System.UInt64"/> array from the message.</summary>
             <param name="amount">The amount of ulongs to retrieve.</param>
-            <returns>The <see cref="T:System.UInt64"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetULongs(System.Int32,System.UInt64[],System.Int32)">
             <summary>Populates a <see cref="T:System.UInt64"/> array with ulongs retrieved from the message.</summary>
@@ -856,18 +856,18 @@
         </member>
         <member name="M:Riptide.Message.AddFloats(System.Single[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Single"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.Single"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Single"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetFloats">
             <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetFloats(System.Int32)">
             <summary>Retrieves a <see cref="T:System.Single"/> array from the message.</summary>
             <param name="amount">The amount of floats to retrieve.</param>
-            <returns>The <see cref="T:System.Single"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetFloats(System.Int32,System.Single[],System.Int32)">
             <summary>Populates a <see cref="T:System.Single"/> array with floats retrieved from the message.</summary>
@@ -892,18 +892,18 @@
         </member>
         <member name="M:Riptide.Message.AddDoubles(System.Double[],System.Boolean)">
             <summary>Adds a <see cref="T:System.Double"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.Double"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.Double"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetDoubles">
-            <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
-            <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
+            <summary>Retrieves a <see cref="T:System.Double"/> array from the message.</summary>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetDoubles(System.Int32)">
-            <summary>Retrieves a<see cref="T:System.Double"/> array from the message.</summary>
+            <summary>Retrieves a <see cref="T:System.Double"/> array from the message.</summary>
             <param name="amount">The amount of doubles to retrieve.</param>
-            <returns>The <see cref="T:System.Double"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetDoubles(System.Int32,System.Double[],System.Int32)">
             <summary>Populates a <see cref="T:System.Double"/> array with doubles retrieved from the message.</summary>
@@ -928,22 +928,22 @@
         </member>
         <member name="M:Riptide.Message.AddStrings(System.String[],System.Boolean)">
             <summary>Adds a <see cref="T:System.String"/> array to the message.</summary>
-            <param name="array">The <see cref="T:System.String"/> array to add.</param>
+            <param name="array">The array to add.</param>
             <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-            <returns>The message that the <see cref="T:System.String"/> array was added to.</returns>
+            <returns>The message that the array was added to.</returns>
         </member>
         <member name="M:Riptide.Message.GetStrings">
             <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
-            <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetStrings(System.Int32)">
             <summary>Retrieves a <see cref="T:System.String"/> array from the message.</summary>
             <param name="amount">The amount of strings to retrieve.</param>
-            <returns>The <see cref="T:System.String"/> array that was retrieved.</returns>
+            <returns>The array that was retrieved.</returns>
         </member>
         <member name="M:Riptide.Message.GetStrings(System.Int32,System.String[],System.Int32)">
             <summary>Populates a <see cref="T:System.String"/> array with strings retrieved from the message.</summary>
-            <param name="amount">The amount of string to retrieve.</param>
+            <param name="amount">The amount of strings to retrieve.</param>
             <param name="array">The array to populate.</param>
             <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         </member>

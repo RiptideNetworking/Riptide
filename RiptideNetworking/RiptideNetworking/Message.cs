@@ -254,7 +254,7 @@ namespace Riptide
             return this;
         }
 
-        /// <summary>Retrieves a <see cref="byte"/> from the message.</summary>
+        /// <summary>Retrieves a single <see cref="byte"/> from the message.</summary>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
         public byte GetByte()
         {
@@ -267,7 +267,7 @@ namespace Riptide
             return Bytes[readPos++]; // Get the byte at readPos' position
         }
 
-        /// <summary>Retrieves a <see cref="sbyte"/> from the message.</summary>
+        /// <summary>Retrieves a single <see cref="sbyte"/> from the message.</summary>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
         public sbyte GetSByte()
         {
@@ -281,9 +281,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
-        /// <param name="array">The <see cref="byte"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="byte"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddBytes(byte[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -297,10 +297,10 @@ namespace Riptide
             return this;
         }
 
-        /// <summary>Adds a <see cref="sbyte"/> array to the message.</summary>
-        /// <param name="array">The <see cref="sbyte"/> array to add.</param>
+        /// <summary>Adds an <see cref="sbyte"/> array to the message.</summary>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="sbyte"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddSBytes(sbyte[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -316,11 +316,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
-        /// <returns>The <see cref="byte"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public byte[] GetBytes() => GetBytes(GetArrayLength());
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
-        /// <returns>The <see cref="byte"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public byte[] GetBytes(int amount)
         {
             byte[] array = new byte[amount];
@@ -339,12 +339,12 @@ namespace Riptide
             ReadBytes(amount, array, startIndex);
         }
 
-        /// <summary>Retrieves a <see cref="sbyte"/> array from the message.</summary>
-        /// <returns>The <see cref="sbyte"/> array that was retrieved.</returns>
+        /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
+        /// <returns>The array that was retrieved.</returns>
         public sbyte[] GetSBytes() => GetSBytes(GetArrayLength());
-        /// <summary>Retrieves a <see cref="sbyte"/> array from the message.</summary>
+        /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
-        /// <returns>The <see cref="sbyte"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public sbyte[] GetSBytes(int amount)
         {
             sbyte[] array = new sbyte[amount];
@@ -423,9 +423,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="bool"/> array to the message.</summary>
-        /// <param name="array">The <see cref="bool"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="bool"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddBools(bool[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -455,11 +455,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
-        /// <returns>The <see cref="bool"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public bool[] GetBools() => GetBools(GetArrayLength());
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
         /// <param name="amount">The amount of bools to retrieve.</param>
-        /// <returns>The <see cref="bool"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public bool[] GetBools(int amount)
         {
             bool[] array = new bool[amount];
@@ -570,9 +570,9 @@ namespace Riptide
         }
         
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
-        /// <param name="array">The <see cref="short"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="short"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddShorts(short[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -588,9 +588,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="ushort"/> array to the message.</summary>
-        /// <param name="array">The <see cref="ushort"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="ushort"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddUShorts(ushort[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -606,11 +606,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
-        /// <returns>The <see cref="short"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public short[] GetShorts() => GetShorts(GetArrayLength());
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
-        /// <returns>The <see cref="short"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public short[] GetShorts(int amount)
         {
             short[] array = new short[amount];
@@ -630,11 +630,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
-        /// <returns>The <see cref="ushort"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public ushort[] GetUShorts() => GetUShorts(GetArrayLength());
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
-        /// <returns>The <see cref="ushort"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public ushort[] GetUShorts(int amount)
         {
             ushort[] array = new ushort[amount];
@@ -750,9 +750,9 @@ namespace Riptide
         }
 
         /// <summary>Adds an <see cref="int"/> array message.</summary>
-        /// <param name="array">The <see cref="int"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="int"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddInts(int[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -768,9 +768,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="uint"/> array to the message.</summary>
-        /// <param name="array">The <see cref="uint"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="uint"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddUInts(uint[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -786,11 +786,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
-        /// <returns>The <see cref="int"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public int[] GetInts() => GetInts(GetArrayLength());
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
-        /// <returns>The <see cref="int"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public int[] GetInts(int amount)
         {
             int[] array = new int[amount];
@@ -810,11 +810,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
-        /// <returns>The <see cref="uint"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public uint[] GetUInts() => GetUInts(GetArrayLength());
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
-        /// <returns>The <see cref="uint"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public uint[] GetUInts(int amount)
         {
             uint[] array = new uint[amount];
@@ -932,7 +932,7 @@ namespace Riptide
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="long"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddLongs(long[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -948,9 +948,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="ulong"/> array to the message.</summary>
-        /// <param name="array">The <see cref="ulong"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="ulong"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddULongs(ulong[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -966,11 +966,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
-        /// <returns>The <see cref="long"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public long[] GetLongs() => GetLongs(GetArrayLength());
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
-        /// <returns>The <see cref="long"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public long[] GetLongs(int amount)
         {
             long[] array = new long[amount];
@@ -990,11 +990,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
-        /// <returns>The <see cref="ulong"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public ulong[] GetULongs() => GetULongs(GetArrayLength());
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
-        /// <returns>The <see cref="ulong"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public ulong[] GetULongs(int amount)
         {
             ulong[] array = new ulong[amount];
@@ -1082,9 +1082,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="float"/> array to the message.</summary>
-        /// <param name="array">The <see cref="float"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="float"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddFloats(float[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -1100,11 +1100,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
-        /// <returns>The <see cref="float"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public float[] GetFloats() => GetFloats(GetArrayLength());
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
-        /// <returns>The <see cref="float"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public float[] GetFloats(int amount)
         {
             float[] array = new float[amount];
@@ -1173,9 +1173,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="double"/> array to the message.</summary>
-        /// <param name="array">The <see cref="double"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="double"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddDoubles(double[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -1190,12 +1190,12 @@ namespace Riptide
             return this;
         }
 
-        /// <summary>Retrieves a<see cref="double"/> array from the message.</summary>
-        /// <returns>The <see cref="double"/> array that was retrieved.</returns>
+        /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
+        /// <returns>The array that was retrieved.</returns>
         public double[] GetDoubles() => GetDoubles(GetArrayLength());
-        /// <summary>Retrieves a<see cref="double"/> array from the message.</summary>
+        /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
-        /// <returns>The <see cref="double"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public double[] GetDoubles(int amount)
         {
             double[] array = new double[amount];
@@ -1266,9 +1266,9 @@ namespace Riptide
         }
 
         /// <summary>Adds a <see cref="string"/> array to the message.</summary>
-        /// <param name="array">The <see cref="string"/> array to add.</param>
+        /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
-        /// <returns>The message that the <see cref="string"/> array was added to.</returns>
+        /// <returns>The message that the array was added to.</returns>
         public Message AddStrings(string[] array, bool includeLength = true)
         {
             if (includeLength)
@@ -1286,11 +1286,11 @@ namespace Riptide
         }
 
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
-        /// <returns>The <see cref="string"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public string[] GetStrings() => GetStrings(GetArrayLength());
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
-        /// <returns>The <see cref="string"/> array that was retrieved.</returns>
+        /// <returns>The array that was retrieved.</returns>
         public string[] GetStrings(int amount)
         {
             string[] array = new string[amount];
@@ -1300,7 +1300,7 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
-        /// <param name="amount">The amount of string to retrieve.</param>
+        /// <param name="amount">The amount of strings to retrieve.</param>
         /// <param name="array">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
         public void GetStrings(int amount, string[] array, int startIndex = 0)
