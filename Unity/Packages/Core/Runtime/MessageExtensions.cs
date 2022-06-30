@@ -6,7 +6,8 @@ using UnityEngine;
 
 namespace Riptide
 {
-    public static class MessageExtensionsUnity
+    /// <summary>Contains Unity-specific extension methods for the <see cref="Message"/> class.</summary>
+    public static class MessageExtensions
     {
         #region Vector2
         /// <inheritdoc cref="AddVector2(Message, Vector2)"/>

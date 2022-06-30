@@ -1180,6 +1180,67 @@
             <param name="sender">The source of the event.</param>
             <param name="e">The event args to invoke the event with.</param>
         </member>
+        <member name="T:Riptide.Transports.HeaderType">
+            <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.unreliable">
+            <summary>For unreliable user messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.unreliableAutoRelay">
+            <summary>For unreliable user messages that servers should automatically relay to all other clients.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.ack">
+            <summary>For unreliable internal ack messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.ackExtra">
+            <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.connect">
+            <summary>For unreliable internal connect messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.heartbeat">
+            <summary>For unreliable internal heartbeat messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.disconnect">
+            <summary>For unreliable internal disconnect messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.reliable">
+            <summary>For reliable user messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.reliableAutoRelay">
+            <summary>For reliable user messages that servers should automatically relay to all other clients.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.welcome">
+            <summary>For reliable internal welcome messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.clientConnected">
+            <summary>For reliable internal client connected messages.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
+            <summary>For reliable internal client disconnected messages.</summary>
+        </member>
+        <member name="T:Riptide.Transports.Extensions">
+            <summary>Contains extension methods for the <see cref="T:Riptide.Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
+            <remarks>Exposing these publicly as part of the <see cref="T:Riptide.Message"/> class would make them accessible and show up in intellisense wherever the <see cref="N:Riptide"/>
+            namespace is used. By making them extension methods housed in the <see cref="N:Riptide.Transports"/> namespace, usage requires explicitly referencing said namespace, which
+            should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
+        </member>
+        <member name="M:Riptide.Transports.Extensions.Create(Riptide.Transports.HeaderType,System.Int32)">
+            <inheritdoc cref="M:Riptide.Message.Create(Riptide.Transports.HeaderType,System.Int32)"/>
+        </member>
+        <member name="M:Riptide.Transports.Extensions.CreateRaw">
+            <inheritdoc cref="M:Riptide.Message.CreateRaw"/>
+        </member>
+        <member name="M:Riptide.Transports.Extensions.PrepareForUse(Riptide.Message,Riptide.Transports.HeaderType,System.UInt16)">
+            <inheritdoc cref="M:Riptide.Message.PrepareForUse(Riptide.Transports.HeaderType,System.UInt16)"/>
+        </member>
+        <member name="M:Riptide.Transports.Extensions.SetHeader(Riptide.Message,Riptide.Transports.HeaderType)">
+            <inheritdoc cref="M:Riptide.Message.SetHeader(Riptide.Transports.HeaderType)"/>
+        </member>
+        <member name="M:Riptide.Transports.Extensions.GetDataBytes(Riptide.Message)">
+            <summary>Retrieves the message's underlying <see cref="T:System.Byte"/> array.</summary>
+            <returns>The message's underlying <see cref="T:System.Byte"/> array.</returns>
+        </member>
         <member name="T:Riptide.Transports.IClient">
             <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
         </member>
@@ -1321,67 +1382,6 @@
         </member>
         <member name="M:Riptide.Transports.IServer.Shutdown">
             <summary>Disconnects all clients and stops listening for new connections.</summary>
-        </member>
-        <member name="T:Riptide.Transports.HeaderType">
-            <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.unreliable">
-            <summary>For unreliable user messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.unreliableAutoRelay">
-            <summary>For unreliable user messages that servers should automatically relay to all other clients.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.ack">
-            <summary>For unreliable internal ack messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.ackExtra">
-            <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.connect">
-            <summary>For unreliable internal connect messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.heartbeat">
-            <summary>For unreliable internal heartbeat messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.disconnect">
-            <summary>For unreliable internal disconnect messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.reliable">
-            <summary>For reliable user messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.reliableAutoRelay">
-            <summary>For reliable user messages that servers should automatically relay to all other clients.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.welcome">
-            <summary>For reliable internal welcome messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.clientConnected">
-            <summary>For reliable internal client connected messages.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
-            <summary>For reliable internal client disconnected messages.</summary>
-        </member>
-        <member name="T:Riptide.Transports.MessageExtensionsTransports">
-            <summary>Contains extension methods for the <see cref="T:Riptide.Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
-            <remarks>Exposing these publicly as part of the <see cref="T:Riptide.Message"/> class would make them accessible and show up in intellisense wherever the <see cref="N:Riptide"/>
-            namespace is used. By making them extension methods housed in the <see cref="N:Riptide.Transports"/> namespace, usage requires explicitly referencing said namespace, which
-            should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
-        </member>
-        <member name="M:Riptide.Transports.MessageExtensionsTransports.Create(Riptide.Transports.HeaderType,System.Int32)">
-            <inheritdoc cref="M:Riptide.Message.Create(Riptide.Transports.HeaderType,System.Int32)"/>
-        </member>
-        <member name="M:Riptide.Transports.MessageExtensionsTransports.CreateRaw">
-            <inheritdoc cref="M:Riptide.Message.CreateRaw"/>
-        </member>
-        <member name="M:Riptide.Transports.MessageExtensionsTransports.PrepareForUse(Riptide.Message,Riptide.Transports.HeaderType,System.UInt16)">
-            <inheritdoc cref="M:Riptide.Message.PrepareForUse(Riptide.Transports.HeaderType,System.UInt16)"/>
-        </member>
-        <member name="M:Riptide.Transports.MessageExtensionsTransports.SetHeader(Riptide.Message,Riptide.Transports.HeaderType)">
-            <inheritdoc cref="M:Riptide.Message.SetHeader(Riptide.Transports.HeaderType)"/>
-        </member>
-        <member name="M:Riptide.Transports.MessageExtensionsTransports.GetDataBytes(Riptide.Message)">
-            <summary>Retrieves the message's underlying <see cref="T:System.Byte"/> array.</summary>
-            <returns>The message's underlying <see cref="T:System.Byte"/> array.</returns>
         </member>
         <member name="T:Riptide.Transports.Rudp.SendLockables">
             <summary>Contains values that are accessed by multiple threads and are used to inform the other end of which messages we've received.</summary>

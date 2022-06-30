@@ -38,7 +38,7 @@ namespace Riptide.Transports
     /// <remarks>Exposing these publicly as part of the <see cref="Message"/> class would make them accessible and show up in intellisense wherever the <see cref="Riptide"/>
     /// namespace is used. By making them extension methods housed in the <see cref="Transports"/> namespace, usage requires explicitly referencing said namespace, which
     /// should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
-    public static class MessageExtensionsTransports
+    public static class Extensions
     {
         //                        - Regarding the Create methods -
         // Sadly C# doesn't support *actual* static extension methods, so transports will have
