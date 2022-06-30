@@ -329,14 +329,14 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetBytes(int amount, byte[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetBytes(int amount, byte[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ByteName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ByteName));
 
-            ReadBytes(amount, array, startIndex);
+            ReadBytes(amount, intoArray, startIndex);
         }
 
         /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
@@ -353,46 +353,46 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetSBytes(int amount, sbyte[] array, int startIndex = 0)
+        /// <param name="intArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="intArray"/>.</param>
+        public void GetSBytes(int amount, sbyte[] intArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, SByteName));
+            if (startIndex + amount > intArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intArray.Length, startIndex, SByteName));
 
-            ReadSBytes(amount, array, startIndex);
+            ReadSBytes(amount, intArray, startIndex);
         }
 
         /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of bytes to read.</param>
-        /// <param name="array">The array to write the bytes into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadBytes(int amount, byte[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the bytes into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, ByteName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ByteName));
                 amount = UnreadLength;
             }
 
-            Array.Copy(Bytes, readPos, array, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
+            Array.Copy(Bytes, readPos, intoArray, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
             readPos += (ushort)amount;
         }
 
         /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of sbytes to read.</param>
-        /// <param name="array">The array to write the sbytes into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadSBytes(int amount, sbyte[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the sbytes into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, SByteName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, SByteName));
                 amount = UnreadLength;
             }
 
             for (int i = 0; i < amount; i++)
-                array[startIndex + i] = (sbyte)Bytes[readPos++];
+                intoArray[startIndex + i] = (sbyte)Bytes[readPos++];
         }
         #endregion
 
@@ -476,36 +476,36 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="bool"/> array with bools retrieved from the message.</summary>
         /// <param name="amount">The amount of bools to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetBools(int amount, bool[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetBools(int amount, bool[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, BoolName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, BoolName));
 
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, BoolName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, BoolName));
 
-            ReadBools(byteAmount, array, startIndex);
+            ReadBools(byteAmount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of bools from the message and writes them into the given array.</summary>
         /// <param name="byteAmount">The number of bytes the bools are being stored in.</param>
-        /// <param name="array">The array to write the bools into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadBools(int byteAmount, bool[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the bools into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadBools(int byteAmount, bool[] intoArray, int startIndex = 0)
         {
             // Read 8 bools from each byte
-            bool isLengthMultipleOf8 = array.Length % 8 == 0;
+            bool isLengthMultipleOf8 = intoArray.Length % 8 == 0;
             for (int i = 0; i < byteAmount; i++)
             {
                 int bitsToRead = 8;
                 if ((i + 1) == byteAmount && !isLengthMultipleOf8)
-                    bitsToRead = array.Length % 8;
+                    bitsToRead = intoArray.Length % 8;
 
                 for (int bit = 0; bit < bitsToRead; bit++)
-                    array[startIndex + (i * 8 + bit)] = (Bytes[readPos + i] >> bit & 1) == 1;
+                    intoArray[startIndex + (i * 8 + bit)] = (Bytes[readPos + i] >> bit & 1) == 1;
             }
 
             readPos += (ushort)byteAmount;
@@ -619,14 +619,14 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetShorts(int amount, short[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetShorts(int amount, short[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ShortName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ShortName));
 
-            ReadShorts(amount, array, startIndex);
+            ReadShorts(amount, intoArray, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
@@ -643,50 +643,50 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetUShorts(int amount, ushort[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetUShorts(int amount, ushort[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, UShortName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UShortName));
 
-            ReadUShorts(amount, array, startIndex);
+            ReadUShorts(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of shorts from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of shorts to read.</param>
-        /// <param name="array">The array to write the shorts into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadShorts(int amount, short[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the shorts into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadShorts(int amount, short[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.ShortLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, ShortName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ShortName));
                 amount = UnreadLength / RiptideConverter.ShortLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToShort(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToShort(Bytes, readPos);
                 readPos += RiptideConverter.ShortLength;
             }
         }
 
         /// <summary>Reads a number of ushorts from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of ushorts to read.</param>
-        /// <param name="array">The array to write the ushorts into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadUShorts(int amount, ushort[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the ushorts into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadUShorts(int amount, ushort[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.UShortLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, UShortName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, UShortName));
                 amount = UnreadLength / RiptideConverter.ShortLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToUShort(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToUShort(Bytes, readPos);
                 readPos += RiptideConverter.UShortLength;
             }
         }
@@ -799,14 +799,14 @@ namespace Riptide
         }
         /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetInts(int amount, int[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetInts(int amount, int[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, IntName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, IntName));
 
-            ReadInts(amount, array, startIndex);
+            ReadInts(amount, intoArray, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
@@ -823,50 +823,50 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetUInts(int amount, uint[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetUInts(int amount, uint[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, UIntName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UIntName));
 
-            ReadUInts(amount, array, startIndex);
+            ReadUInts(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of ints from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of ints to read.</param>
-        /// <param name="array">The array to write the ints into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadInts(int amount, int[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the ints into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadInts(int amount, int[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.IntLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, IntName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, IntName));
                 amount = UnreadLength / RiptideConverter.IntLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToInt(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToInt(Bytes, readPos);
                 readPos += RiptideConverter.IntLength;
             }
         }
 
         /// <summary>Reads a number of uints from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of uints to read.</param>
-        /// <param name="array">The array to write the uints into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadUInts(int amount, uint[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the uints into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadUInts(int amount, uint[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.UIntLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, UIntName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, UIntName));
                 amount = UnreadLength / RiptideConverter.UIntLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToUInt(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToUInt(Bytes, readPos);
                 readPos += RiptideConverter.UIntLength;
             }
         }
@@ -979,14 +979,14 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetLongs(int amount, long[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetLongs(int amount, long[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, LongName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, LongName));
 
-            ReadLongs(amount, array, startIndex);
+            ReadLongs(amount, intoArray, startIndex);
         }
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
@@ -1003,50 +1003,50 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetULongs(int amount, ulong[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetULongs(int amount, ulong[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ULongName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ULongName));
 
-            ReadULongs(amount, array, startIndex);
+            ReadULongs(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of longs from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of longs to read.</param>
-        /// <param name="array">The array to write the longs into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadLongs(int amount, long[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the longs into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadLongs(int amount, long[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.LongLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, LongName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, LongName));
                 amount = UnreadLength / RiptideConverter.LongLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToLong(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToLong(Bytes, readPos);
                 readPos += RiptideConverter.LongLength;
             }
         }
 
         /// <summary>Reads a number of ulongs from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of ulongs to read.</param>
-        /// <param name="array">The array to write the ulongs into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadULongs(int amount, ulong[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the ulongs into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadULongs(int amount, ulong[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.ULongLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, ULongName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ULongName));
                 amount = UnreadLength / RiptideConverter.ULongLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToULong(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToULong(Bytes, readPos);
                 readPos += RiptideConverter.ULongLength;
             }
         }
@@ -1113,31 +1113,31 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetFloats(int amount, float[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetFloats(int amount, float[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, FloatName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, FloatName));
 
-            ReadFloats(amount, array, startIndex);
+            ReadFloats(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of floats from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of floats to read.</param>
-        /// <param name="array">The array to write the floats into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadFloats(int amount, float[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the floats into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadFloats(int amount, float[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.FloatLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, FloatName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, FloatName));
                 amount = UnreadLength / RiptideConverter.FloatLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToFloat(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToFloat(Bytes, readPos);
                 readPos += RiptideConverter.FloatLength;
             }
         }
@@ -1204,31 +1204,31 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetDoubles(int amount, double[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetDoubles(int amount, double[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, DoubleName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, DoubleName));
 
-            ReadDoubles(amount, array, startIndex);
+            ReadDoubles(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of doubles from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of doubles to read.</param>
-        /// <param name="array">The array to write the doubles into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadDoubles(int amount, double[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to write the doubles into.</param>
+        /// <param name="startIndex">The position at which to start writing into the array.</param>
+        private void ReadDoubles(int amount, double[] intoArray, int startIndex = 0)
         {
             if (UnreadLength < amount * RiptideConverter.DoubleLength)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, DoubleName));
+                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, DoubleName));
                 amount = UnreadLength / RiptideConverter.DoubleLength;
             }
 
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = RiptideConverter.ToDouble(Bytes, readPos);
+                intoArray[startIndex + i] = RiptideConverter.ToDouble(Bytes, readPos);
                 readPos += RiptideConverter.DoubleLength;
             }
         }
@@ -1301,15 +1301,15 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public void GetStrings(int amount, string[] array, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetStrings(int amount, string[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, StringName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName));
 
             for (int i = 0; i < amount; i++)
-                array[startIndex + i] = GetString();
+                intoArray[startIndex + i] = GetString();
         }
         #endregion
 
@@ -1413,23 +1413,25 @@ namespace Riptide
         }
         /// <summary>Populates an array of serializables retrieved from the message.</summary>
         /// <param name="amount">The amount of serializables to retrieve.</param>
-        /// <param name="array">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="array"/>.</param>
-        public T[] GetSerializables<T>(int amount, T[] array, int startIndex = 0) where T : IMessageSerializable, new()
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetSerializables<T>(int amount, T[] intoArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
-            ReadSerializables(amount, array, startIndex);
-            return array;
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, typeof(T).Name));
+
+            ReadSerializables(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of serializables from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of serializables to read.</param>
-        /// <param name="array">The array to write the serializables into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="array"/>.</param>
-        private void ReadSerializables<T>(int amount, T[] array, int startIndex = 0) where T : IMessageSerializable, new()
+        /// <param name="intArray">The array to write the serializables into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="intArray"/>.</param>
+        private void ReadSerializables<T>(int amount, T[] intArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
             for (int i = 0; i < amount; i++)
             {
-                array[startIndex + i] = GetSerializable<T>();
+                intArray[startIndex + i] = GetSerializable<T>();
             }
         }
         #endregion
