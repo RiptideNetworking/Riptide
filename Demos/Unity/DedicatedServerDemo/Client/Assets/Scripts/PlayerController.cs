@@ -1,12 +1,6 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+﻿using UnityEngine;
 
-using RiptideNetworking;
-using UnityEngine;
-
-namespace RiptideDemos.RudpTransport.Unity.ExampleClient
+namespace Riptide.Demos.Rudp.DedicatedClient
 {
     public class PlayerController : MonoBehaviour
     {
@@ -50,8 +44,8 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleClient
         private void SendInput()
         {
             Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.playerInput);
-            message.Add(inputs, false);
-            message.Add(camTransform.forward);
+            message.AddBools(inputs, false);
+            message.AddVector3(camTransform.forward);
             NetworkManager.Singleton.Client.Send(message);
         }
         #endregion

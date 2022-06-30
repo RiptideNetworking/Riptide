@@ -1,16 +1,15 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using RiptideNetworking.Transports;
-using RiptideNetworking.Utils;
+using Riptide.Transports;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace RiptideNetworking
+namespace Riptide
 {
     /// <summary>A client that can connect to a <see cref="Server"/>.</summary>
     public class Client : Common
@@ -22,7 +21,7 @@ namespace RiptideNetworking
         /// <inheritdoc cref="IClient.MessageReceived"/>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
         /// <inheritdoc cref="IClient.Disconnected"/>
-        public event EventHandler Disconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
         /// <inheritdoc cref="IClient.ClientConnected"/>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
         /// <inheritdoc cref="IClient.ClientDisconnected"/>
@@ -58,7 +57,7 @@ namespace RiptideNetworking
         /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.RudpTransport.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
+        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.Rudp.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
@@ -77,10 +76,11 @@ namespace RiptideNetworking
         ///   Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
         ///   If you are using a different transport, check the relevant documentation for what information it requires in the host address.
         /// </remarks>
-        public void Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
+        /// <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
+        public bool Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
         {
             Disconnect();
-            
+
             CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
 
             client.Connected += OnConnected;
@@ -89,16 +89,17 @@ namespace RiptideNetworking
             client.Disconnected += OnDisconnected;
             client.ClientConnected += OnClientConnected;
             client.ClientDisconnected += OnClientDisconnected;
-            client.Connect(hostAddress, message);
+            return client.Connect(hostAddress, message);
         }
 
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
         {
-            MethodInfo[] methods = assembly.GetTypes()
-                                           .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
-                                           .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
-                                           .ToArray();
+            MethodInfo[] methods = AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a => a.GetTypes())
+                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
+                .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
+                .ToArray();
 
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
             for (int i = 0; i < methods.Length; i++)
@@ -108,7 +109,7 @@ namespace RiptideNetworking
                     continue;
 
                 if (!methods[i].IsStatic)
-                    throw new Exception($"Message handler methods should be static, but '{methods[i].DeclaringType}.{methods[i].Name}' is an instance method!");
+                    throw new NonStaticHandlerException(methods[i].DeclaringType, methods[i].Name);
 
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
                 if (clientMessageHandler != null)
@@ -117,7 +118,7 @@ namespace RiptideNetworking
                     if (messageHandlers.ContainsKey(attribute.MessageId))
                     {
                         MethodInfo otherMethodWithId = messageHandlers[attribute.MessageId].GetMethodInfo();
-                        throw new Exception($"Client-side message handler methods '{methods[i].DeclaringType}.{methods[i].Name}' and '{otherMethodWithId.DeclaringType}.{otherMethodWithId.Name}' are both set to handle messages with ID {attribute.MessageId}! Only one handler method is allowed per message ID!");
+                        throw new DuplicateHandlerException(attribute.MessageId, methods[i], otherMethodWithId);
                     }
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)clientMessageHandler);
@@ -127,7 +128,7 @@ namespace RiptideNetworking
                     // It's not a message handler for Client instances, but it might be one for Server instances
                     Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(Server.MessageHandler), methods[i], false);
                     if (serverMessageHandler == null)
-                        throw new Exception($"'{methods[i].DeclaringType}.{methods[i].Name}' doesn't match any acceptable message handler method signatures, double-check its parameters!");
+                        throw new InvalidHandlerSignatureException(methods[i].DeclaringType, methods[i].Name);
                 }
             }
         }
@@ -145,9 +146,9 @@ namespace RiptideNetworking
                 return;
 
             client.Disconnect();
-            LocalDisconnect();
         }
 
+        /// <summary>Cleans up local objects on disconnection.</summary>
         private void LocalDisconnect()
         {
             client.Connected -= OnConnected;
@@ -156,27 +157,35 @@ namespace RiptideNetworking
             client.Disconnected -= OnDisconnected;
             client.ClientConnected -= OnClientConnected;
             client.ClientDisconnected -= OnClientDisconnected;
+
+            DecreaseActiveSocketCount();
         }
 
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
-        private void OnConnected(object s, EventArgs e) => Connected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnConnected(object sender, EventArgs e) => Connected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
-        private void OnConnectionFailed(object s, EventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnConnectionFailed(object sender, EventArgs e)
         {
             LocalDisconnect();
             ConnectionFailed?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        private void OnMessageReceived(object s, ClientMessageReceivedEventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
         {
             MessageReceived?.Invoke(this, e);
 
             if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
                 messageHandler(e.Message);
             else
-                RiptideLogger.Log(LogType.warning, $"No client-side handler method found for message ID {e.MessageId}!");
+                RiptideLogger.Log(LogType.warning, $"No client message handler method found for message ID {e.MessageId}!");
         }
         
         /// <summary>Directly handles a message.</summary>
@@ -190,16 +199,22 @@ namespace RiptideNetworking
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
-        private void OnDisconnected(object s, EventArgs e)
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnDisconnected(object sender, DisconnectedEventArgs e)
         {
             LocalDisconnect();
             Disconnected?.Invoke(this, e);
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        private void OnClientConnected(object s, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientConnected(object sender, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        private void OnClientDisconnected(object s, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The event args to invoke the event with.</param>
+        private void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
     }
 }

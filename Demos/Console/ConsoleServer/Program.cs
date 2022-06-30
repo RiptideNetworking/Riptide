@@ -1,17 +1,11 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using RiptideNetworking.Transports.RudpTransport;
-using RiptideNetworking.Utils;
+﻿using Riptide.Transports.Rudp;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace RiptideDemos.RudpTransport.ConsoleApp.TestServer
+namespace Riptide.Demos.Rudp.ConsoleServer
 {
     internal class Program
     {

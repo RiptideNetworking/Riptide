@@ -1,14 +1,8 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleClient
+namespace Riptide.Demos.Rudp.DedicatedClient
 {
     public enum ServerToClientId : ushort
     {
@@ -101,7 +95,7 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleClient
             Destroy(Player.list[e.Id].gameObject);
         }
 
-        private void DidDisconnect(object sender, EventArgs e)
+        private void DidDisconnect(object sender, DisconnectedEventArgs e)
         {
             UIManager.Singleton.BackToMain();
 

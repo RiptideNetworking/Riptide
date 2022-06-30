@@ -1,14 +1,10 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
+#if !UNITY_EDITOR
 using System;
+#endif
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleServer
+namespace Riptide.Demos.Rudp.DedicatedServer
 {
     public enum ServerToClientId : ushort
     {

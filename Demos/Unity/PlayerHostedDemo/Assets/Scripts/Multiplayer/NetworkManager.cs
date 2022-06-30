@@ -1,14 +1,8 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2022 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
+namespace Riptide.Demos.Rudp.PlayerHosted
 {
     internal enum MessageId : ushort
     {
@@ -76,7 +70,7 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
         private void OnApplicationQuit()
         {
             Server.Stop();
-            DisconnectClient();
+            Client.Disconnect();
         }
 
         internal void StartHost()
@@ -93,14 +87,7 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
         internal void LeaveGame()
         {
             Server.Stop();
-            DisconnectClient();
-        }
-
-        private void DisconnectClient()
-        {
             Client.Disconnect();
-            foreach (Player player in Player.List.Values)
-                Destroy(player.gameObject);
         }
 
         private void DidConnect(object sender, EventArgs e)
@@ -123,7 +110,7 @@ namespace RiptideDemos.RudpTransport.Unity.PlayerHosted
             Destroy(Player.List[e.Id].gameObject);
         }
 
-        private void DidDisconnect(object sender, EventArgs e)
+        private void DidDisconnect(object sender, DisconnectedEventArgs e)
         {
             foreach (Player player in Player.List.Values)
                 Destroy(player.gameObject);

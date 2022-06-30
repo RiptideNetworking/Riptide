@@ -20,7 +20,7 @@ Using Unity's Package Manager:
 1. Open the Package Manager (Window > Package Manager)
 2. Click the '+' (plus) button in the top left corner of the window
 3. Select the 'Add package from git URL...' option
-4. Enter the following URL: `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage`
+4. Enter the following base URL: `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v` and then append the version number you'd like to install. For example, if you want to install v1.2.0, you would enter `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` as the full URL
 5. Click 'Add' and wait for Riptide to be installed
 
 Alternatively, you can grab the RiptideNetworking.dll file (and RiptideNetworking.xml file for intellisense documentation) from the [latest release](https://github.com/tom-weiland/RiptideNetworking/releases/latest) and simply drop it into your Unity project.
@@ -45,7 +45,7 @@ However, if you intend to build a standalone server, having separate projects fo
 Riptide supports either of those (and more) architecture choices.
 
 ### Initial Setup
-Set up a `NetworkManager` class like in the [Unity demo projects](https://github.com/tom-weiland/RiptideNetworking/tree/main/Demos/Unity). To run your own logic when certain things happen, you can subscribe to the following events:
+Set up a `NetworkManager` class like in the [Unity demo projects](Demos/Unity). To run your own logic when certain things happen, you can subscribe to the following events:
 - Server
   - `ClientConnected` - invoked when a new client connects
   - `MessageReceived` - invoked when a message is received from a client (useful if you need to run custom logic for _every_ message that is received)
@@ -58,20 +58,20 @@ Set up a `NetworkManager` class like in the [Unity demo projects](https://github
   - `ClientConnected` - invoked when another client connects
   - `ClientDisonnected` - invoked when another client disconnects
 
-Additionally, you can set up a `MessageExtensions` class to extend the functionality of the `Message` class. This is helpful if you wish to send custom objects over the network—being able to directly Add/Get a `Vector3` from a message is much more convenient than having to call the Add/GetFloat method 3 times in a row. Refer to the [Unity demos](https://github.com/tom-weiland/RiptideNetworking/tree/main/Demos/Unity) for an example.
+Additionally, you can set up a `MessageExtensions` class to extend the functionality of the `Message` class. This is helpful if you wish to send custom objects over the network—being able to directly Add/Get a `Vector3` from a message is much more convenient than having to call the Add/GetFloat method 3 times in a row. Refer to the [Unity demos](Demos/Unity) for an example.
 
-Note that if you installed Riptide via the Unity package manager, `Message` extension methods for several types (including `Vector3` and `Quaternion`) are [already included](https://github.com/tom-weiland/RiptideNetworking/blob/main/UnityPackage/Runtime/MessageExtensionsUnity.cs).
+Note that if you installed Riptide via the Unity package manager, `Message` extension methods for several types (including `Vector3` and `Quaternion`) are [already included](Unity/Packages/Core/Runtime/MessageExtensions.cs).
 
 ### Creating and Sending Messages
 Messages are created like this:
-```
+```cs
 Message message = Message.Create(<messageSendMode>, <messageId>);
 ```
 `<messageSendMode>` should be set to either `MessageSendMode.reliable` or `MessageSendMode.unreliable`, depending on how you want your message to be sent.<br/>
 `<messageId>` should be set to the message's ID (a `ushort`). This ID will allow the other end to determine how to handle the message upon receiving it.
 
 To add data to your message, use:
-```
+```cs
 message.Add(someValue);
 ```
 `someValue` can be any of the following types (or an array of that type): `byte`, `bool`, `short`, `ushort`, `int`, `uint`, `long`, `ulong`, `float`, `double`, `string`
@@ -79,7 +79,7 @@ message.Add(someValue);
 Any custom types you may want to send usually consist of combinations of these primitive types. For example, a `Vector3` consists of 3 `float`s, so instead of literally sending the `Vector3` itself, you would send the x, y, and z, components as 3 separate `float`s (as mentioned above, you can extend the `Message` class to make this less cumbersome).
 
 To send your message, use one of the following:
-```
+```cs
 Server.Send(message, <toClientId>); // Sends message from server to 1 client
 Server.SendToAll(message); // Sends message from server to all clients
 Server.SendToAll(message, <toClientId>); // Sends message from server to all clients except one
@@ -89,7 +89,7 @@ Client.Send(message); // Sends message from client to server
 
 ### Handling Messages
 To handle messages, simply create a static method and give it the MessageHandler attribute:
-```
+```cs
 [MessageHandler(<someMessageFromServerID>)]
 private static void HandleSomeMessageFromServer(Message message)
 {
@@ -108,11 +108,11 @@ A few things to note:
 - message handler methods need to be `static`
 
 ## Low-Level Transports
-- [RUDP Transport](https://github.com/tom-weiland/RiptideNetworking/tree/main/RiptideNetworking/RiptideNetworking/Transports/RudpTransport) (built-in)
+- [RUDP Transport](RiptideNetworking/RiptideNetworking/Transports/Rudp) (built-in)
 - [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
 
 ## Donate
 Riptide is 100% free to use, but if you'd like to financially support its development as well as the development of its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
 
 ## License
-Distributed under the MIT license. See [LICENSE.md](https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md) for more information.
+Distributed under the MIT license. See [LICENSE.md](LICENSE.md) for more information.

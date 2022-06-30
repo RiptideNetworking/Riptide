@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>RiptideDemos.RudpTransport.MonoGame.TestServer</RootNamespace>
+    <RootNamespace>Riptide.Demos.Rudp.MGServer</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

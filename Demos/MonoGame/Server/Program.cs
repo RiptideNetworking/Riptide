@@ -1,14 +1,8 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2022 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using RiptideNetworking.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Threading;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestServer
+namespace Riptide.Demos.Rudp.MGServer
 {
     internal class Program
     {

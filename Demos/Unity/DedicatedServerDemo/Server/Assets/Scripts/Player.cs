@@ -1,13 +1,7 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2021 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using RiptideNetworking;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace RiptideDemos.RudpTransport.Unity.ExampleServer
+namespace Riptide.Demos.Rudp.DedicatedServer
 {
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour
@@ -114,18 +108,18 @@ namespace RiptideDemos.RudpTransport.Unity.ExampleServer
 
         private Message GetSpawnData(Message message)
         {
-            message.Add(Id);
-            message.Add(Username);
-            message.Add(transform.position);
+            message.AddUShort(Id);
+            message.AddString(Username);
+            message.AddVector3(transform.position);
             return message;
         }
 
         private void SendMovement()
         {
             Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerMovement);
-            message.Add(Id);
-            message.Add(transform.position);
-            message.Add(transform.forward);
+            message.AddUShort(Id);
+            message.AddVector3(transform.position);
+            message.AddVector3(transform.forward);
             NetworkManager.Singleton.Server.SendToAll(message);
         }
 

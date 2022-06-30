@@ -1,15 +1,10 @@
-﻿
-// This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) 2022 Tom Weiland
-// For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
-
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using RiptideNetworking.Utils;
+using Riptide.Utils;
 using System;
 
-namespace RiptideDemos.RudpTransport.MonoGame.TestClient
+namespace Riptide.Demos.Rudp.MGClient
 {
     public class ExampleGame : Game
     {
