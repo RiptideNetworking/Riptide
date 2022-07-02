@@ -80,7 +80,7 @@
             </remarks>
             <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
         </member>
-        <member name="M:Riptide.Client.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
+        <member name="M:Riptide.Client.CreateMessageHandlersDictionary(System.Byte)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Client.Tick">
@@ -153,9 +153,12 @@
         <member name="M:Riptide.Common.DecreaseActiveSocketCount">
             <summary>Decreases <see cref="P:Riptide.Common.ActiveSocketCount"/>. For use when a <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is stopped.</summary>
         </member>
-        <member name="M:Riptide.Common.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
+        <member name="M:Riptide.Common.FindMessageHandlers">
+            <summary>Retrieves methods marked with <see cref="T:Riptide.MessageHandlerAttribute"/>.</summary>
+            <returns>An array containing message handler methods.</returns>
+        </member>
+        <member name="M:Riptide.Common.CreateMessageHandlersDictionary(System.Byte)">
             <summary>Searches the given assembly for methods with the <see cref="T:Riptide.MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
-            <param name="assembly">The assembly to search for methods with the <see cref="T:Riptide.MessageHandlerAttribute"/>.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
         </member>
         <member name="M:Riptide.Common.Tick">
@@ -1243,7 +1246,7 @@
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:Riptide.Server.messageHandlers"/>.</param>
         </member>
-        <member name="M:Riptide.Server.CreateMessageHandlersDictionary(System.Reflection.Assembly,System.Byte)">
+        <member name="M:Riptide.Server.CreateMessageHandlersDictionary(System.Byte)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Server.Tick">

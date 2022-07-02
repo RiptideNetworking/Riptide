@@ -6,7 +6,6 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace Riptide
@@ -82,7 +81,7 @@ namespace Riptide
             Disconnect();
 
             IncreaseActiveSocketCount();
-            CreateMessageHandlersDictionary(Assembly.GetCallingAssembly(), messageHandlerGroupId);
+            CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             client.Connected += OnConnected;
             client.ConnectionFailed += OnConnectionFailed;
@@ -94,13 +93,9 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        protected override void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId)
+        protected override void CreateMessageHandlersDictionary(byte messageHandlerGroupId)
         {
-            MethodInfo[] methods = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
-                .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
-                .ToArray();
+            MethodInfo[] methods = FindMessageHandlers();
 
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
             for (int i = 0; i < methods.Length; i++)

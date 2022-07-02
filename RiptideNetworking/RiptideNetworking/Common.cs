@@ -3,6 +3,8 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using Riptide.Transports;
+using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Riptide
@@ -41,10 +43,24 @@ namespace Riptide
                 ActiveSocketCount = 0;
         }
 
+        /// <summary>Retrieves methods marked with <see cref="MessageHandlerAttribute"/>.</summary>
+        /// <returns>An array containing message handler methods.</returns>
+        protected MethodInfo[] FindMessageHandlers()
+        {
+            string thisAssemblyName = Assembly.GetExecutingAssembly().GetName().FullName;
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .Where(a => a
+                    .GetReferencedAssemblies()
+                    .Any(n => n.FullName == thisAssemblyName)) // Get only assemblies that reference this assembly
+                .SelectMany(a => a.GetTypes())
+                .SelectMany(t => t.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static | BindingFlags.Instance)) // Include instance methods in the search so we can show the developer an error instead of silently not adding instance methods to the dictionary
+                .Where(m => m.GetCustomAttributes(typeof(MessageHandlerAttribute), false).Length > 0)
+                .ToArray();
+        }
+
         /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
-        /// <param name="assembly">The assembly to search for methods with the <see cref="MessageHandlerAttribute"/>.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
-        protected abstract void CreateMessageHandlersDictionary(Assembly assembly, byte messageHandlerGroupId);
+        protected abstract void CreateMessageHandlersDictionary(byte messageHandlerGroupId);
 
         /// <inheritdoc cref="ICommon.Tick"/>
         public abstract void Tick();
