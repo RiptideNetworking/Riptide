@@ -37,7 +37,7 @@ namespace Riptide.Transports
     }
 
     /// <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
-    public interface ICommon
+    public interface IPeer
     {
         event EventHandler<DataReceivedEventArgs> DataReceived;
         event EventHandler<DisconnectedEventArgs> Disconnected;

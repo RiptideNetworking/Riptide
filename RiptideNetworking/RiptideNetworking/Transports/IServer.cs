@@ -7,7 +7,7 @@ using System;
 namespace Riptide.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
-    public interface IServer : ICommon
+    public interface IServer : IPeer
     {
         /// <summary>Invoked when a new client connects.</summary>
         event EventHandler<ConnectingEventArgs> Connecting;
