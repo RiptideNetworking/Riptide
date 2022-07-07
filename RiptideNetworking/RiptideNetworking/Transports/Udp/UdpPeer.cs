@@ -11,9 +11,6 @@ namespace Riptide.Transports.Udp
 {
     public abstract class UdpPeer
     {
-        /// <summary>The <see cref="ActionQueue"/> to use when invoking events.</summary>
-        protected ActionQueue receiveActionQueue;
-
         /// <summary>How long to wait for a response, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
         /// <summary>The socket to use for sending and receiving.</summary>
