@@ -411,7 +411,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientConnected(Connection client, Message connectMessage)
+        protected virtual void OnClientConnected(Connection client, Message connectMessage)
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) connected successfully!");
             SendClientConnected(client);
@@ -421,7 +421,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(Message message, Connection fromConnection)
+        protected virtual void OnMessageReceived(Message message, Connection fromConnection)
         {
             ushort messageId = message.GetUShort();
             MessageReceived?.Invoke(this, new ServerMessageReceivedEventArgs(fromConnection, messageId, message));
@@ -435,7 +435,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientDisconnected(ushort clientId)
+        protected virtual void OnClientDisconnected(ushort clientId)
         {
             SendClientDisconnected(clientId);
             ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));

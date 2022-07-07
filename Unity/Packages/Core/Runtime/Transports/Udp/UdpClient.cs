@@ -67,7 +67,7 @@ namespace Riptide.Transports.Udp
             CloseSocket();
         }
 
-        protected void OnConnected()
+        protected virtual void OnConnected()
         {
             Connected?.Invoke(this, EventArgs.Empty);
         }

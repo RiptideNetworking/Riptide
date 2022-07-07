@@ -325,14 +325,14 @@ namespace Riptide
 
         #region Events
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
-        private void OnConnected()
+        protected virtual void OnConnected()
         {
             RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
             Connected?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
-        private void OnConnectionFailed()
+        protected virtual void OnConnectionFailed()
         {
             RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
             ConnectionFailed?.Invoke(this, EventArgs.Empty);
@@ -341,7 +341,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(Message message)
+        protected virtual void OnMessageReceived(Message message)
         {
             ushort messageId = message.GetUShort();
             MessageReceived?.Invoke(this, new ClientMessageReceivedEventArgs(messageId, message));
@@ -355,7 +355,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnDisconnected(DisconnectReason reason, string customMessage = "")
+        protected virtual void OnDisconnected(DisconnectReason reason, string customMessage = "")
         {
             RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {customMessage}.");
             Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, customMessage));
@@ -364,7 +364,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientConnected(ushort clientId)
+        protected virtual void OnClientConnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} connected.");
             ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
@@ -373,7 +373,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientDisconnected(ushort clientId)
+        protected virtual void OnClientDisconnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} disconnected.");
             ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));

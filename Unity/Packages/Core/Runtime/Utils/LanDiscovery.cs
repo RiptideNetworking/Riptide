@@ -277,7 +277,7 @@ namespace Riptide.Utils
         /// <summary>Invokes the <see cref="HostDiscovered"/>.</summary>
         /// <param name="ip">The IP of the discovered host.</param>
         /// <param name="port">The port of the discovered host.</param>
-        protected void OnHostDiscovered(IPAddress ip, ushort port)
+        protected virtual void OnHostDiscovered(IPAddress ip, ushort port)
         {
             actionQueue.Add(() => HostDiscovered?.Invoke(this, new HostDiscoveredEventArgs(ip, port)));
         }

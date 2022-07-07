@@ -50,12 +50,12 @@ namespace Riptide.Transports.Udp
             connections.Clear();
         }
 
-        protected void OnConnecting(UdpConnection connection)
+        protected virtual void OnConnecting(UdpConnection connection)
         {
             Connecting?.Invoke(this, new ConnectingEventArgs(connection));
         }
 
-        protected void OnConnected(Connection connection)
+        protected virtual void OnConnected(Connection connection)
         {
             Connected?.Invoke(this, new ConnectedEventArgs(connection));
         }
@@ -69,7 +69,7 @@ namespace Riptide.Transports.Udp
         }
 
         // For when the transport detects/needs to initiate a disconnect - currently not needed
-        //protected void OnDisconnected(UdpConnection connection)
+        //protected virtual void OnDisconnected(UdpConnection connection)
         //{
         //    Disconnected?.Invoke(this, new DisconnectedEventArgs(connection, DisconnectReason.disconnected));
         //}
