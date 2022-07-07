@@ -393,7 +393,7 @@ namespace Riptide
             Message message = Message.Create(HeaderType.clientConnected, 25);
             message.AddUShort(newClient.Id);
 
-            SendToAll(message);
+            SendToAll(message, newClient.Id);
         }
 
         /// <summary>Sends a client disconnected message.</summary>
