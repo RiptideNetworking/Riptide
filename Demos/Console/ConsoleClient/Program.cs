@@ -19,6 +19,7 @@ namespace Riptide.Demos.Rudp.ConsoleClient
         private static List<int> remainingTestIds;
         private static Timer testEndWaitTimer;
         private static int duplicateCount;
+        private static int sendCount;
 
         private static void Main()
         {
@@ -68,6 +69,19 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             while (isRunning)
             {
                 client.Tick();
+
+                if (isTestRunning)
+                {
+                    for (int i = 0; i < 10; i++)
+                    {
+                        if (sendCount < testIdAmount)
+                        {
+                            SendTestMessage(nextReliableTestId++);
+                            sendCount++;
+                        }
+                    }
+                }
+
                 Thread.Sleep(10);
             }
 
@@ -109,36 +123,20 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             }
 
             if (!isTestRunning)
-                new Thread(new ThreadStart(StartReliabilityTest)).Start(); // StartReliabilityTest blocks the thread it runs on, so we need to put it on a different thread to avoid blocking the receive thread
+                StartReliabilityTest();
         }
 
         private static void StartReliabilityTest()
         {
             isTestRunning = true;
             duplicateCount = 0;
+            sendCount = 0;
 
             remainingTestIds = new List<int>(testIdAmount);
             for (int i = 0; i < testIdAmount; i++)
-            {
                 remainingTestIds.Add(i + 1);
-            }
 
             Console.WriteLine($"Starting reliability test ({(isRoundTripTest ? "round-trip" : "one-way")})!");
-
-            Stopwatch sw = new Stopwatch();
-            for (int i = 0; i < testIdAmount; i++)
-            {
-                if (!isTestRunning)
-                    return;
-
-                sw.Restart();
-                while (sw.ElapsedMilliseconds < 2)
-                {
-                    // Wait
-                }
-                
-                SendTestMessage(nextReliableTestId++);
-            }
 
             testEndWaitTimer = new Timer(20000);
             testEndWaitTimer.Elapsed += (e, s) => ReliabilityTestEnded();
