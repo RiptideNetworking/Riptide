@@ -57,40 +57,47 @@ namespace Riptide.Transports.Udp
             if (!isRunning)
                 return;
 
-            try
+            bool tryReceiveMore = true;
+            while (tryReceiveMore)
             {
-                int byteCount;
-                while (socket.Available > 0 && socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
+                int byteCount = 0;
+                try
                 {
-                    byteCount = socket.ReceiveFrom(receiveBuffer, SocketFlags.None, ref remoteEndPoint);
+                    if (socket.Available > 0 && socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
+                        byteCount = socket.ReceiveFrom(receiveBuffer, SocketFlags.None, ref remoteEndPoint);
+                    else
+                        tryReceiveMore = false;
+                }
+                catch (SocketException ex)
+                {
+                    tryReceiveMore = false;
+                    switch (ex.SocketErrorCode)
+                    {
+                        case SocketError.Interrupted:
+                        case SocketError.NotSocket:
+                            isRunning = false;
+                            break;
+                        case SocketError.ConnectionReset:
+                        case SocketError.MessageSize:
+                        case SocketError.TimedOut:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+                    tryReceiveMore = false;
+                    isRunning = false;
+                }
+                catch (NullReferenceException)
+                {
+                    tryReceiveMore = false;
+                    isRunning = false;
+                }
 
-                    if (byteCount > 0)
-                        OnDataReceived(receiveBuffer, byteCount, (IPEndPoint)remoteEndPoint);
-                }
-            }
-            catch (SocketException ex)
-            {
-                switch (ex.SocketErrorCode)
-                {
-                    case SocketError.Interrupted:
-                    case SocketError.NotSocket:
-                        isRunning = false;
-                        break;
-                    case SocketError.ConnectionReset:
-                    case SocketError.MessageSize:
-                    case SocketError.TimedOut:
-                        break;
-                    default:
-                        break;
-                }
-            }
-            catch (ObjectDisposedException)
-            {
-                isRunning = false;
-            }
-            catch (NullReferenceException)
-            {
-                isRunning = false;
+                if (byteCount > 0)
+                    OnDataReceived(receiveBuffer, byteCount, (IPEndPoint)remoteEndPoint);
             }
         }
 
