@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -68,31 +68,38 @@ namespace Riptide
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
 
-            connection.PendingMessages.Add(sequenceId, pendingMessage);
-            pendingMessage.TrySend();
+            lock (connection.PendingMessages)
+            {
+                connection.PendingMessages.Add(sequenceId, pendingMessage);
+                pendingMessage.TrySend();
+            }
         }
 
         /// <summary>Retrieves a <see cref="PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
         /// <returns>A <see cref="PendingMessage"/> instance.</returns>
         private static PendingMessage RetrieveFromPool()
         {
-            PendingMessage message;
-            if (pool.Count > 0)
+            lock (pool)
             {
-                message = pool[0];
-                pool.RemoveAt(0);
-            }
-            else
-                message = new PendingMessage();
+                PendingMessage message;
+                if (pool.Count > 0)
+                {
+                    message = pool[0];
+                    pool.RemoveAt(0);
+                }
+                else
+                    message = new PendingMessage();
 
-            return message;
+                return message;
+            }
         }
 
         /// <summary>Returns the <see cref="PendingMessage"/> instance to the internal pool so it can be reused.</summary>
         private void Release()
         {
-            if (!pool.Contains(this))
-                pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+            lock (pool)
+                if (!pool.Contains(this))
+                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
 
             // TODO: consider doing something to decrease pool capacity if there are far more
             //       available instance than are needed, which could occur if a large burst of
@@ -103,14 +110,17 @@ namespace Riptide
         /// <summary>Resends the message.</summary>
         internal void RetrySend()
         {
-            if (!wasCleared)
+            lock (data)
             {
-                if (lastSendTime.AddMilliseconds(connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                    TrySend();
-                else
+                if (!wasCleared)
                 {
-                    retryTimer.Start();
-                    retryTimer.Interval = (connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier));
+                    if (lastSendTime.AddMilliseconds(connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                        TrySend();
+                    else
+                    {
+                        retryTimer.Start();
+                        retryTimer.Interval = (connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier));
+                    }
                 }
             }
         }
@@ -154,12 +164,16 @@ namespace Riptide
         /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="RudpPeer.PendingMessages"/>.</param>
         internal void Clear(bool shouldRemoveFromDictionary = true)
         {
-            if (shouldRemoveFromDictionary)
-                connection.PendingMessages.Remove(sequenceId);
+            lock (data)
+            {
+                if (shouldRemoveFromDictionary)
+                    lock (connection.PendingMessages)
+                        connection.PendingMessages.Remove(sequenceId);
 
-            retryTimer.Stop();
-            wasCleared = true;
-            Release();
+                retryTimer.Stop();
+                wasCleared = true;
+                Release();
+            }
         }
     }
 }
