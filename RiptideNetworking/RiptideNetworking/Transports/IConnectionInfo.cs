@@ -4,17 +4,6 @@
 
 namespace Riptide.Transports
 {
-    /// <summary>The state of a connection.</summary>
-    public enum ConnectionState : byte
-    {
-        /// <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
-        notConnected,
-        /// <summary>Connecting. Still trying to establish a connection.</summary>
-        connecting,
-        /// <summary>Connected. A connection was successfully established.</summary>
-        connected,
-    }
-
     /// <summary>Defines methods, properties, and events which every transport's connections must implement.</summary>
     public interface IConnectionInfo
     {

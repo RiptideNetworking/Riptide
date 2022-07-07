@@ -36,7 +36,7 @@ namespace Riptide
             get => MaxSize - HeaderSize;
             set
             {
-                if (Common.ActiveSocketCount > 0)
+                if (Peer.ActiveSocketCount > 0)
                     RiptideLogger.Log(LogType.error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
                 else
                 {
@@ -88,7 +88,7 @@ namespace Riptide
         {
             lock (pool)
             {
-                if (Common.ActiveSocketCount == 0)
+                if (Peer.ActiveSocketCount == 0)
                 {
                     // No Servers or Clients are running, empty the list and reset the capacity
                     pool.Clear();
@@ -97,10 +97,10 @@ namespace Riptide
                 else
                 {
                     // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
-                    int idealInstanceAmount = Common.ActiveSocketCount * InstancesPerSocket;
+                    int idealInstanceAmount = Peer.ActiveSocketCount * InstancesPerSocket;
                     if (pool.Count > idealInstanceAmount)
                     {
-                        pool.RemoveRange(Common.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
+                        pool.RemoveRange(Peer.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
                         pool.Capacity = idealInstanceAmount * 2;
                     }
                 }

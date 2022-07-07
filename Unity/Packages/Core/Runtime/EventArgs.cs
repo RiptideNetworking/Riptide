@@ -11,14 +11,14 @@ namespace Riptide
     public class ServerClientConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
-        public IConnectionInfo Client { get; private set; }
+        public Connection Client { get; private set; }
         /// <summary>A message containing any custom data the client included when it connected.</summary>
         public Message ConnectMessage { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
         /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
-        public ServerClientConnectedEventArgs(IConnectionInfo client, Message connectMessage)
+        public ServerClientConnectedEventArgs(Connection client, Message connectMessage)
         {
             Client = client;
             ConnectMessage = connectMessage;
@@ -29,19 +29,19 @@ namespace Riptide
     public class ServerMessageReceivedEventArgs : EventArgs
     {
         /// <summary>The client that the message was received from.</summary>
-        public ushort FromClientId { get; private set; }
+        public Connection FromClient { get; private set; }
         /// <summary>The ID of the message.</summary>
         public ushort MessageId { get; private set; }
         /// <summary>The message that was received.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
-        /// <param name="fromClientId">The client that the message was received from.</param>
+        /// <param name="fromClient">The client that the message was received from.</param>
         /// <param name="messageId">The ID of the message.</param>
         /// <param name="message">The message that was received.</param>
-        public ServerMessageReceivedEventArgs(ushort fromClientId, ushort messageId, Message message)
+        public ServerMessageReceivedEventArgs(Connection fromClient, ushort messageId, Message message)
         {
-            FromClientId = fromClientId;
+            FromClient = fromClient;
             MessageId = messageId;
             Message = message;
         }

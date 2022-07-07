@@ -7,31 +7,17 @@ using System;
 namespace Riptide.Transports
 {
     /// <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
-    public interface IClient : ICommon, IConnectionInfo
+    public interface IClient : ICommon
     {
-        /// <summary>Invoked when a connection to the server is established.</summary>
         event EventHandler Connected;
-        /// <summary>Invoked when a connection to the server fails to be established.</summary>
-        /// <remarks>This occurs when a connection request fails, either because no server is listening on the expected IP and port, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         event EventHandler ConnectionFailed;
-        /// <summary>Invoked when a message is received from the server.</summary>
-        event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <summary>Invoked when disconnected from the server.</summary>
-        event EventHandler<DisconnectedEventArgs> Disconnected;
-        /// <summary>Invoked when a new client connects.</summary>
-        event EventHandler<ClientConnectedEventArgs> ClientConnected;
-        /// <summary>Invoked when a client disconnects.</summary>
-        event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
+        event EventHandler<ClientDisconnectedEventArgs> Disconnected;
 
         /// <summary>Attempts to connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         /// <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
-        bool Connect(string hostAddress, Message message);
-        /// <summary>Sends a message to the server.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        void Send(Message message, bool shouldRelease);
+        bool Connect(string hostAddress, out Connection connection, out string connectError);
         /// <summary>Disconnects from the server.</summary>
         void Disconnect();
     }

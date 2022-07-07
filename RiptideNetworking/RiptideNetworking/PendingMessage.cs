@@ -2,13 +2,14 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Text;
 using System.Timers;
 
-namespace Riptide.Transports.Rudp
+namespace Riptide
 {
     /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
     internal class PendingMessage
@@ -19,10 +20,8 @@ namespace Riptide.Transports.Rudp
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
         private static readonly List<PendingMessage> pool = new List<PendingMessage>();
 
-        /// <summary>The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</summary>
-        private RudpPeer peer;
-        /// <summary>The intended destination endpoint of the message.</summary>
-        private IPEndPoint remoteEndPoint;
+        /// <summary>The <see cref="Connection"/> to use to send (and resend) the pending message.</summary>
+        private Connection connection;
         /// <summary>The sequence ID of the message.</summary>
         private ushort sequenceId;
         /// <summary>The contents of the message.</summary>
@@ -52,14 +51,13 @@ namespace Riptide.Transports.Rudp
 
         #region Pooling
         /// <summary>Retrieves a <see cref="PendingMessage"/> instance, initializes it and then sends it.</summary>
-        /// <param name="peer">The <see cref="RudpPeer"/> to use to send (and resend) the pending message.</param>
         /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that is being sent reliably.</param>
-        /// <param name="toEndPoint">The intended destination endpoint of the message.</param>
-        internal static void CreateAndSend(RudpPeer peer, ushort sequenceId, Message message, IPEndPoint toEndPoint)
+        /// <param name="connection">The <see cref="Connection"/> to use to send (and resend) the pending message.</param>
+        internal static void CreateAndSend(ushort sequenceId, Message message, Connection connection)
         {
             PendingMessage pendingMessage = RetrieveFromPool();
-            pendingMessage.peer = peer;
+            pendingMessage.connection = connection;
             pendingMessage.sequenceId = sequenceId;
 
             pendingMessage.data[0] = message.Bytes[0]; // Copy message header
@@ -67,64 +65,53 @@ namespace Riptide.Transports.Rudp
             Array.Copy(message.Bytes, 1, pendingMessage.data, 3, message.WrittenLength - 1); // Copy the rest of the message
             pendingMessage.writtenLength = message.WrittenLength + RiptideConverter.UShortLength;
 
-            pendingMessage.remoteEndPoint = toEndPoint;
             pendingMessage.maxSendAttempts = message.MaxSendAttempts;
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
 
-            lock (peer.PendingMessages)
-            {
-                peer.PendingMessages.Add(sequenceId, pendingMessage);
-                pendingMessage.TrySend();
-            }
+            connection.PendingMessages.Add(sequenceId, pendingMessage);
+            pendingMessage.TrySend();
         }
 
         /// <summary>Retrieves a <see cref="PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
         /// <returns>A <see cref="PendingMessage"/> instance.</returns>
         private static PendingMessage RetrieveFromPool()
         {
-            lock (pool)
+            PendingMessage message;
+            if (pool.Count > 0)
             {
-                PendingMessage message;
-                if (pool.Count > 0)
-                {
-                    message = pool[0];
-                    pool.RemoveAt(0);
-                }
-                else
-                    message = new PendingMessage();
-
-                return message;
+                message = pool[0];
+                pool.RemoveAt(0);
             }
+            else
+                message = new PendingMessage();
+
+            return message;
         }
 
         /// <summary>Returns the <see cref="PendingMessage"/> instance to the internal pool so it can be reused.</summary>
         private void Release()
         {
-            lock (pool)
-            {
-                if (!pool.Contains(this))
-                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+            if (!pool.Contains(this))
+                pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
 
-                // TODO: consider doing something to decrease pool capacity if there are far more available instance than are needed
-            }
+            // TODO: consider doing something to decrease pool capacity if there are far more
+            //       available instance than are needed, which could occur if a large burst of
+            //       messages has to be sent for some reason
         }
         #endregion
 
         /// <summary>Resends the message.</summary>
         internal void RetrySend()
         {
-            lock (this) // Make sure we don't try resending the message while another thread is clearing it because it was delivered
+            if (!wasCleared)
             {
-                if (!wasCleared)
+                if (lastSendTime.AddMilliseconds(connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                    TrySend();
+                else
                 {
-                    if (lastSendTime.AddMilliseconds(peer.SmoothRTT < 0 ? 25 : peer.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                        TrySend();
-                    else
-                    {
-                        retryTimer.Start();
-                        retryTimer.Interval = (peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier));
-                    }
+                    retryTimer.Start();
+                    retryTimer.Interval = (connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier));
                 }
             }
         }
@@ -145,39 +132,35 @@ namespace Riptide.Transports.Rudp
 #else
                         ushort messageId = (ushort)(data[3] | (data[4] << 8));
 #endif
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                     }
                     else
-                        RiptideLogger.Log(LogType.warning, peer.Listener.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
 
                 Clear();
                 return;
             }
 
-            peer.Listener.Send(data, writtenLength, remoteEndPoint);
+            connection.Send(data, writtenLength);
 
             lastSendTime = DateTime.UtcNow;
             sendAttempts++;
 
             retryTimer.Start();
-            retryTimer.Interval = peer.SmoothRTT < 0 ? 50 : Math.Max(10, peer.SmoothRTT * RetryTimeMultiplier);
+            retryTimer.Interval = connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier);
         }
 
         /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
         /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="RudpPeer.PendingMessages"/>.</param>
         internal void Clear(bool shouldRemoveFromDictionary = true)
         {
-            lock (this)
-            {
-                if (shouldRemoveFromDictionary)
-                    lock (peer.PendingMessages)
-                        peer.PendingMessages.Remove(sequenceId);
+            if (shouldRemoveFromDictionary)
+                connection.PendingMessages.Remove(sequenceId);
 
-                retryTimer.Stop();
-                wasCleared = true;
-                Release();
-            }
+            retryTimer.Stop();
+            wasCleared = true;
+            Release();
         }
     }
 }
