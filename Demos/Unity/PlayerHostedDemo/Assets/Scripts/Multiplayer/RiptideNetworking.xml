@@ -1500,6 +1500,18 @@
             <param name="sender">The source of the event.</param>
             <param name="e">The event args to invoke the event with.</param>
         </member>
+        <member name="T:Riptide.Transports.IClient">
+            <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
+        </member>
+        <member name="M:Riptide.Transports.IClient.Connect(System.String,Riptide.Connection@,System.String@)">
+            <summary>Attempts to connect to the given host address.</summary>
+            <param name="hostAddress">The host address to connect to.</param>
+            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
+            <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
+        </member>
+        <member name="M:Riptide.Transports.IClient.Disconnect">
+            <summary>Disconnects from the server.</summary>
+        </member>
         <member name="T:Riptide.Transports.HeaderType">
             <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
@@ -1539,67 +1551,12 @@
         <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
             <summary>For reliable internal client disconnected messages.</summary>
         </member>
-        <member name="T:Riptide.Transports.Extensions">
-            <summary>Contains extension methods for the <see cref="T:Riptide.Message"/> class which are required by transport-related code but unnecessary in (and generally unintended for) everyday use of Riptide.</summary>
-            <remarks>Exposing these publicly as part of the <see cref="T:Riptide.Message"/> class would make them accessible and show up in intellisense wherever the <see cref="N:Riptide"/>
-            namespace is used. By making them extension methods housed in the <see cref="N:Riptide.Transports"/> namespace, usage requires explicitly referencing said namespace, which
-            should help avoid most cases of users accidentally using these methods simply because they are accessible and show up in intellisense.</remarks>
-        </member>
-        <member name="M:Riptide.Transports.Extensions.Create(Riptide.Transports.HeaderType,System.Int32)">
-            <inheritdoc cref="M:Riptide.Message.Create(Riptide.Transports.HeaderType,System.Int32)"/>
-        </member>
-        <member name="M:Riptide.Transports.Extensions.CreateRaw">
-            <inheritdoc cref="M:Riptide.Message.CreateRaw"/>
-        </member>
-        <member name="M:Riptide.Transports.Extensions.PrepareForUse(Riptide.Message,Riptide.Transports.HeaderType,System.UInt16)">
-            <inheritdoc cref="M:Riptide.Message.PrepareForUse(Riptide.Transports.HeaderType,System.UInt16)"/>
-        </member>
-        <member name="M:Riptide.Transports.Extensions.SetHeader(Riptide.Message,Riptide.Transports.HeaderType)">
-            <inheritdoc cref="M:Riptide.Message.SetHeader(Riptide.Transports.HeaderType)"/>
-        </member>
-        <member name="M:Riptide.Transports.Extensions.GetDataBytes(Riptide.Message)">
-            <summary>Retrieves the message's underlying <see cref="T:System.Byte"/> array.</summary>
-            <returns>The message's underlying <see cref="T:System.Byte"/> array.</returns>
-        </member>
-        <member name="T:Riptide.Transports.IClient">
-            <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
-        </member>
-        <member name="M:Riptide.Transports.IClient.Connect(System.String,Riptide.Connection@,System.String@)">
-            <summary>Attempts to connect to the given host address.</summary>
-            <param name="hostAddress">The host address to connect to.</param>
-            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
-            <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Transports.IClient.Disconnect">
-            <summary>Disconnects from the server.</summary>
-        </member>
         <member name="T:Riptide.Transports.ICommon">
             <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
         </member>
         <member name="M:Riptide.Transports.ICommon.Tick">
             <summary>Initiates handling of currently queued messages.</summary>
             <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
-        </member>
-        <member name="T:Riptide.Transports.IConnectionInfo">
-            <summary>Defines methods, properties, and events which every transport's connections must implement.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.Id">
-            <summary>The numeric ID of the client.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.RTT">
-            <summary>The round trip time of the connection. -1 if not calculated yet.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.SmoothRTT">
-            <summary>The smoothed round trip time of the connection. -1 if not calculated yet.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.IsNotConnected">
-            <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.IsConnecting">
-            <summary>Whether or not the client is currently in the process of connecting.</summary>
-        </member>
-        <member name="P:Riptide.Transports.IConnectionInfo.IsConnected">
-            <summary>Whether or not the client is currently connected.</summary>
         </member>
         <member name="T:Riptide.Transports.IServer">
             <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
@@ -1643,9 +1600,6 @@
         <member name="M:Riptide.Transports.Udp.UdpConnection.GetHashCode">
             <inheritdoc/>
         </member>
-        <member name="F:Riptide.Transports.Udp.UdpPeer.receiveActionQueue">
-            <summary>The <see cref="T:Riptide.Utils.ActionQueue"/> to use when invoking events.</summary>
-        </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
         </member>
@@ -1678,87 +1632,6 @@
         </member>
         <member name="M:Riptide.Utils.ActionQueue.Clear">
             <summary>Clears all actions in the queue without executing them.</summary>
-        </member>
-        <member name="T:Riptide.Utils.DoubleKeyDictionary`3">
-            <summary>Represents a collection of two keys for each value.</summary>
-            <typeparam name="TKey1">Key type 1.</typeparam>
-            <typeparam name="TKey2">Key type 2.</typeparam>
-            <typeparam name="TValue">Value type.</typeparam>
-        </member>
-        <member name="F:Riptide.Utils.DoubleKeyDictionary`3.key1Dictionary">
-            <summary>A dictionary mapping key 1s to values.</summary>
-        </member>
-        <member name="F:Riptide.Utils.DoubleKeyDictionary`3.key2Dictionary">
-            <summary>A dictionary mapping key 2s to values.</summary>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.FirstKeys">
-            <summary>Gets a collection containing the first set of keys in the dictionary.</summary>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.SecondKeys">
-            <summary>Gets a collection containing the second set of keys in the dictionary.</summary>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.Values">
-            <summary>Gets a collection containing the values in the dictionary.</summary>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.Count">
-            <summary>Gets the number of key1/key2/value sets in the dictionary.</summary>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.#ctor">
-            <summary>Initializes a new instance of the <see cref="T:Riptide.Utils.DoubleKeyDictionary`3"/> class that is empty and has the default initial capacity.</summary>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.#ctor(System.Int32)">
-            <summary>Initializes a new instance of the <see cref="T:Riptide.Utils.DoubleKeyDictionary`3"/> class that is empty and has the specefied initial capacity.</summary>
-            <param name="capacity">The initial number of elements that the <see cref="T:Riptide.Utils.DoubleKeyDictionary`3"/> can contain.</param>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.GetEnumerator">
-            <summary>Returns an enumerator that iterates through the dictionary.</summary>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.Add(`0,`1,`2)">
-            <summary>Adds the specified keys and value to the dictionary.</summary>
-            <param name="key1">The key 1 of the element to add.</param>
-            <param name="key2">The key 2 of the element to add.</param>
-            <param name="value">The value of the element to add.</param>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.TryGetValue(`0,`2@)">
-            <summary>Gets the value associated with the key 1.</summary>
-            <param name="key">The key of the value to get.</param>
-            <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
-            <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.TryGetValue(`1,`2@)">
-            <summary>Gets the value associated with the key 2.</summary>
-            <param name="key">The key of the value to get.</param>
-            <param name="value">When this method returns, contains the value associated with the specified key, if the key is found; otherwise, the default value for the type of the value parameter. This parameter is passed uninitialized.</param>
-            <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.ContainsKey(`0)">
-            <summary>Determines whether the dictionary contains the specified key 1.</summary>
-            <param name="key">The key to locate in the dictionary.</param>
-            <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.ContainsKey(`1)">
-            <summary>Determines whether the dictionary contains the specified key 2.</summary>
-            <param name="key">The key to locate in the dictionary.</param>
-            <returns><see langword="true"/> if the dictionary contains an element with the specified key; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.Remove(`0,`1)">
-            <summary>Removes the value with the specified keys from the dictionary</summary>
-            <param name="key1">The key 1 of the element to remove.</param>
-            <param name="key2">The key 2 of the element to remove.</param>
-            <returns><see langword="true"/> if the element is successfully found and removed; otherwise, <see langword="false"/>.</returns>
-        </member>
-        <member name="M:Riptide.Utils.DoubleKeyDictionary`3.Clear">
-            <summary>Removes all keys and values from the dictionary.</summary>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.Item(`0)">
-            <summary>Gets the value associated with the specified key 1.</summary>
-            <param name="key">The key 1 of the value to get.</param>
-            <returns>The value associated with the specified key 1.</returns>
-        </member>
-        <member name="P:Riptide.Utils.DoubleKeyDictionary`3.Item(`1)">
-            <summary>Gets the value associated with the specified key 2.</summary>
-            <param name="key">The key 2 of the value to get.</param>
-            <returns>The value associated with the specified key 2.</returns>
         </member>
         <member name="T:Riptide.Utils.Extensions">
             <summary>Contains extension methods for various classes.</summary>

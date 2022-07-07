@@ -244,11 +244,8 @@ namespace Riptide
         /// <param name="seqId">The sequence ID that was acknowledged.</param>
         internal void AckMessage(ushort seqId)
         {
-            lock (PendingMessages)
-            {
-                if (PendingMessages.TryGetValue(seqId, out PendingMessage pendingMessage))
-                    pendingMessage.Clear();
-            }
+            if (PendingMessages.TryGetValue(seqId, out PendingMessage pendingMessage))
+                pendingMessage.Clear();
         }
 
         #region Messages

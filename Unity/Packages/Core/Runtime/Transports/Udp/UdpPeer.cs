@@ -98,25 +98,7 @@ namespace Riptide.Transports.Udp
         internal void Send(byte[] dataBuffer, int numBytes, IPEndPoint toEndPoint)
         {
             if (isRunning)
-            {
-                try
-                {
-                    socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
-                }
-                catch (ObjectDisposedException)
-                {
-                    // Literally just eat the exception. This exception should only be thrown if another thread triggers
-                    // a disconnect inbetween the if check and the socket.SendTo call executing, so it's extremely rare.
-                    // Eating the exception like this may not be ideal, but with it being as rare as it is, acquiring a
-                    // lock *every* time data needs to be sent seems quite wasteful, and try catch blocks don't really
-                    // slow things down when no exception is actually thrown: https://stackoverflow.com/a/64229258
-                }
-                catch (SocketException ex)
-                {
-                    if (ex.SocketErrorCode != SocketError.Interrupted) // Also caused by socket being closed while sending
-                        throw ex;
-                }
-            }
+                socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
         }
 
         protected abstract void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint);

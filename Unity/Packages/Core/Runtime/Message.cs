@@ -86,23 +86,20 @@ namespace Riptide
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
         public static void TrimPool()
         {
-            lock (pool)
+            if (Peer.ActiveSocketCount == 0)
             {
-                if (Peer.ActiveSocketCount == 0)
+                // No Servers or Clients are running, empty the list and reset the capacity
+                pool.Clear();
+                pool.Capacity = InstancesPerSocket * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+            }
+            else
+            {
+                // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
+                int idealInstanceAmount = Peer.ActiveSocketCount * InstancesPerSocket;
+                if (pool.Count > idealInstanceAmount)
                 {
-                    // No Servers or Clients are running, empty the list and reset the capacity
-                    pool.Clear();
-                    pool.Capacity = InstancesPerSocket * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
-                }
-                else
-                {
-                    // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
-                    int idealInstanceAmount = Peer.ActiveSocketCount * InstancesPerSocket;
-                    if (pool.Count > idealInstanceAmount)
-                    {
-                        pool.RemoveRange(Peer.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
-                        pool.Capacity = idealInstanceAmount * 2;
-                    }
+                    pool.RemoveRange(Peer.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
+                    pool.Capacity = idealInstanceAmount * 2;
                 }
             }
         }
@@ -150,32 +147,26 @@ namespace Riptide
         /// <returns>A message instance ready to be used for sending or handling.</returns>
         private static Message RetrieveFromPool()
         {
-            lock (pool)
+            Message message;
+            if (pool.Count > 0)
             {
-                Message message;
-                if (pool.Count > 0)
-                {
-                    message = pool[0];
-                    pool.RemoveAt(0);
-                }
-                else
-                    message = new Message(MaxSize);
-
-                return message;
+                message = pool[0];
+                pool.RemoveAt(0);
             }
+            else
+                message = new Message(MaxSize);
+
+            return message;
         }
 
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
-            lock (pool)
+            if (pool.Count < pool.Capacity)
             {
-                if (pool.Count < pool.Capacity)
-                {
-                    // Pool exists and there's room
-                    if (!pool.Contains(this))
-                        pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
-                }
+                // Pool exists and there's room
+                if (!pool.Contains(this))
+                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
             }
         }
         #endregion
