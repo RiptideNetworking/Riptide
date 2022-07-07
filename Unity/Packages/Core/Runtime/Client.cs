@@ -317,9 +317,9 @@ namespace Riptide
             LocalDisconnect(DisconnectReason.neverConnected);
         }
 
-        private void TransportDisconnected(object sender, Transports.ClientDisconnectedEventArgs e)
+        private void TransportDisconnected(object sender, Transports.DisconnectedEventArgs e)
         {
-            if (connection == e.ClosedConnection)
+            if (connection == e.Connection)
                 LocalDisconnect(e.Reason);
         }
 

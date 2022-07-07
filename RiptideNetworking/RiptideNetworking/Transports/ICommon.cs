@@ -40,6 +40,7 @@ namespace Riptide.Transports
     public interface ICommon
     {
         event EventHandler<DataReceivedEventArgs> DataReceived;
+        event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>Initiates handling of currently queued messages.</summary>
         /// <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>

@@ -9,23 +9,23 @@ using System.Text;
 
 namespace Riptide.Transports
 {
-    public class ClientConnectingEventArgs
+    public class ConnectingEventArgs
     {
-        public readonly Connection NewConnection;
+        public readonly Connection Connection;
 
-        public ClientConnectingEventArgs(Connection newConnection)
+        public ConnectingEventArgs(Connection connection)
         {
-            NewConnection = newConnection;
+            Connection = connection;
         }
     }
     
-    public class ClientConnectedEventArgs
+    public class ConnectedEventArgs
     {
-        public readonly Connection NewConnection;
+        public readonly Connection Connection;
 
-        public ClientConnectedEventArgs(Connection newConnection)
+        public ConnectedEventArgs(Connection connection)
         {
-            NewConnection = newConnection;
+            Connection = connection;
         }
     }
 
@@ -43,14 +43,14 @@ namespace Riptide.Transports
         }
     }
 
-    public class ClientDisconnectedEventArgs
+    public class DisconnectedEventArgs
     {
-        public readonly Connection ClosedConnection;
+        public readonly Connection Connection;
         public readonly DisconnectReason Reason;
 
-        public ClientDisconnectedEventArgs(Connection closedConnection, DisconnectReason reason)
+        public DisconnectedEventArgs(Connection connection, DisconnectReason reason)
         {
-            ClosedConnection = closedConnection;
+            Connection = connection;
             Reason = reason;
         }
     }

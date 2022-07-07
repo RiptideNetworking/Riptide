@@ -1395,13 +1395,13 @@
             <summary>A server that can accept connections from <see cref="T:Riptide.Client"/>s.</summary>
         </member>
         <member name="E:Riptide.Server.ClientConnected">
-            <inheritdoc cref="E:Riptide.Transports.IServer.ClientConnecting"/>
+            <inheritdoc cref="E:Riptide.Transports.IServer.Connecting"/>
         </member>
         <member name="E:Riptide.Server.MessageReceived">
             <inheritdoc cref="!:IServer.MessageReceived"/>
         </member>
         <member name="E:Riptide.Server.ClientDisconnected">
-            <inheritdoc cref="E:Riptide.Transports.IServer.ClientDisconnected"/>
+            <inheritdoc cref="!:IServer.ConnectionClosed"/>
         </member>
         <member name="P:Riptide.Server.IsRunning">
             <summary>Whether or not the server is currently running.</summary>
@@ -1561,11 +1561,8 @@
         <member name="T:Riptide.Transports.IServer">
             <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
         </member>
-        <member name="E:Riptide.Transports.IServer.ClientConnecting">
+        <member name="E:Riptide.Transports.IServer.Connecting">
             <summary>Invoked when a new client connects.</summary>
-        </member>
-        <member name="E:Riptide.Transports.IServer.ClientDisconnected">
-            <summary>Invoked when a client disconnects.</summary>
         </member>
         <member name="P:Riptide.Transports.IServer.Port">
             <summary>The local port that the server is running on.</summary>

@@ -14,11 +14,11 @@ namespace Riptide
     /// <summary>A server that can accept connections from <see cref="Client"/>s.</summary>
     public class Server : Peer
     {
-        /// <inheritdoc cref="IServer.ClientConnecting"/>
+        /// <inheritdoc cref="IServer.Connecting"/>
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
         /// <inheritdoc cref="IServer.MessageReceived"/>
         public event EventHandler<ServerMessageReceivedEventArgs> MessageReceived;
-        /// <inheritdoc cref="IServer.ClientDisconnected"/>
+        /// <inheritdoc cref="IServer.ConnectionClosed"/>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
         /// <summary>Whether or not the server is currently running.</summary>
@@ -83,10 +83,10 @@ namespace Riptide
             timedOutClients = new List<Connection>(maxClientCount);
             InitializeClientIds();
 
-            transport.ClientConnecting += HandleConnectionAttempt;
-            transport.ClientConnected += AcceptConnection;
+            transport.Connecting += HandleConnectionAttempt;
+            transport.Connected += AcceptConnection;
             transport.DataReceived += HandleData;
-            transport.ClientDisconnected += TransportDisconnected;
+            transport.Disconnected += TransportDisconnected;
             transport.Start(port);
 
             StartHeartbeat();
@@ -131,31 +131,31 @@ namespace Riptide
             }
         }
 
-        private void HandleConnectionAttempt(object sender, ClientConnectingEventArgs e)
+        private void HandleConnectionAttempt(object sender, ConnectingEventArgs e)
         {
             if (ClientCount < MaxClientCount)
             {
-                if (!clients.ContainsValue(e.NewConnection))
+                if (!clients.ContainsValue(e.Connection))
                 {
                     ushort clientId = GetAvailableClientId();
-                    e.NewConnection.Id = clientId;
-                    e.NewConnection.Peer = this;
-                    transport.Accept(e.NewConnection);
+                    e.Connection.Id = clientId;
+                    e.Connection.Peer = this;
+                    transport.Accept(e.Connection);
                     return;
                 }
                 else
-                    RiptideLogger.Log(LogType.warning, LogName, $"{e.NewConnection} is already connected, rejecting connection!");
+                    RiptideLogger.Log(LogType.warning, LogName, $"{e.Connection} is already connected, rejecting connection!");
             }
             else
-                RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {e.NewConnection}.");
+                RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {e.Connection}.");
 
-            e.NewConnection.LocalDisconnect();
-            transport.Reject(e.NewConnection);
+            e.Connection.LocalDisconnect();
+            transport.Reject(e.Connection);
         }
 
-        private void AcceptConnection(object sender, Transports.ClientConnectedEventArgs e)
+        private void AcceptConnection(object sender, Transports.ConnectedEventArgs e)
         {
-            e.NewConnection.SendWelcome();
+            e.Connection.SendWelcome();
         }
 
         /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
@@ -317,9 +317,9 @@ namespace Riptide
             }
         }
 
-        private void TransportDisconnected(object sender, Transports.ClientDisconnectedEventArgs e)
+        private void TransportDisconnected(object sender, Transports.DisconnectedEventArgs e)
         {
-            LocalDisconnect(e.ClosedConnection, e.Reason);
+            LocalDisconnect(e.Connection, e.Reason);
         }
 
         /// <summary>Stops the server.</summary>
@@ -334,10 +334,10 @@ namespace Riptide
             clients.Clear();
 
             transport.Shutdown();
-            transport.ClientConnecting -= HandleConnectionAttempt;
-            transport.ClientConnected -= AcceptConnection;
+            transport.Connecting -= HandleConnectionAttempt;
+            transport.Connected -= AcceptConnection;
             transport.DataReceived -= HandleData;
-            transport.ClientDisconnected -= TransportDisconnected;
+            transport.Disconnected -= TransportDisconnected;
 
             DecreaseActiveSocketCount();
 

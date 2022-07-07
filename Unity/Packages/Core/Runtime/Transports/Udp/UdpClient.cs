@@ -15,7 +15,7 @@ namespace Riptide.Transports.Udp
         public event EventHandler Connected;
         public event EventHandler ConnectionFailed;
         public event EventHandler<DataReceivedEventArgs> DataReceived;
-        public event EventHandler<ClientDisconnectedEventArgs> Disconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
 
         private UdpConnection udpConnection;
 
@@ -30,7 +30,7 @@ namespace Riptide.Transports.Udp
                 return false;
             }
 
-            StartSocket();
+            OpenSocket();
 
             connection = udpConnection = new UdpConnection(new IPEndPoint(ip.MapToIPv6(), port), this);
             OnConnected();
@@ -66,7 +66,7 @@ namespace Riptide.Transports.Udp
 
         public void Disconnect()
         {
-            StopSocket();
+            CloseSocket();
         }
 
         protected void OnConnected()

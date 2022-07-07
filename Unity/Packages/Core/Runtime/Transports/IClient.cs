@@ -11,7 +11,6 @@ namespace Riptide.Transports
     {
         event EventHandler Connected;
         event EventHandler ConnectionFailed;
-        event EventHandler<ClientDisconnectedEventArgs> Disconnected;
 
         /// <summary>Attempts to connect to the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>

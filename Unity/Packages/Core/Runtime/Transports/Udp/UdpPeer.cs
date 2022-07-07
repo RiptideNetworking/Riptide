@@ -31,10 +31,10 @@ namespace Riptide.Transports.Udp
             Receive();
         }
 
-        protected void StartSocket(ushort port = 0)
+        protected void OpenSocket(ushort port = 0)
         {
             if (isRunning)
-                StopSocket();
+                CloseSocket();
 
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
             socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
@@ -44,7 +44,7 @@ namespace Riptide.Transports.Udp
             isRunning = true;
         }
 
-        protected void StopSocket()
+        protected void CloseSocket()
         {
             if (!isRunning)
                 return;

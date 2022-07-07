@@ -10,10 +10,8 @@ namespace Riptide.Transports
     public interface IServer : ICommon
     {
         /// <summary>Invoked when a new client connects.</summary>
-        event EventHandler<ClientConnectingEventArgs> ClientConnecting;
-        event EventHandler<ClientConnectedEventArgs> ClientConnected;
-        /// <summary>Invoked when a client disconnects.</summary>
-        event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
+        event EventHandler<ConnectingEventArgs> Connecting;
+        event EventHandler<ConnectedEventArgs> Connected;
 
         /// <summary>The local port that the server is running on.</summary>
         ushort Port { get; }

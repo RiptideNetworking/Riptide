@@ -11,10 +11,10 @@ namespace Riptide.Transports.Udp
 {
     public class UdpServer : UdpPeer, IServer
     {
-        public event EventHandler<ClientConnectingEventArgs> ClientConnecting;
-        public event EventHandler<ClientConnectedEventArgs> ClientConnected;
+        public event EventHandler<ConnectingEventArgs> Connecting;
+        public event EventHandler<ConnectedEventArgs> Connected;
         public event EventHandler<DataReceivedEventArgs> DataReceived;
-        public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
 
         public ushort Port { get; private set; }
 
@@ -25,7 +25,7 @@ namespace Riptide.Transports.Udp
             Port = port;
             connections = new Dictionary<IPEndPoint, Connection>();
 
-            StartSocket(port);
+            OpenSocket(port);
         }
 
         public void Accept(Connection connection)
@@ -33,7 +33,7 @@ namespace Riptide.Transports.Udp
             if (connection is UdpConnection udpConnection)
             {
                 connections[udpConnection.RemoteEndPoint] = udpConnection;
-                OnClientConnected(connection);
+                OnConnected(connection);
             }
         }
 
@@ -47,32 +47,32 @@ namespace Riptide.Transports.Udp
 
         public void Shutdown()
         {
-            StopSocket();
+            CloseSocket();
             connections.Clear();
         }
 
-        protected void OnClientConnecting(UdpConnection connection)
+        protected void OnConnecting(UdpConnection connection)
         {
-            ClientConnecting?.Invoke(this, new ClientConnectingEventArgs(connection));
+            Connecting?.Invoke(this, new ConnectingEventArgs(connection));
         }
 
-        protected void OnClientConnected(Connection connection)
+        protected void OnConnected(Connection connection)
         {
-            ClientConnected?.Invoke(this, new ClientConnectedEventArgs(connection));
+            Connected?.Invoke(this, new ConnectedEventArgs(connection));
         }
 
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
             if ((HeaderType)dataBuffer[0] == HeaderType.connect)
-                OnClientConnecting(new UdpConnection(fromEndPoint, this)); // TODO: consider pooling UdpConnection instances to mitigate the consequences of someone spamming fake connection attempts?
+                OnConnecting(new UdpConnection(fromEndPoint, this)); // TODO: consider pooling UdpConnection instances to mitigate the consequences of someone spamming fake connection attempts?
             else if (connections.TryGetValue(fromEndPoint, out Connection connection))
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(dataBuffer, amount, connection));
         }
 
         // For when the transport detects/needs to initiate a disconnect - currently not needed
-        //protected void OnClientDisconnected(UdpConnection connection)
+        //protected void OnDisconnected(UdpConnection connection)
         //{
-        //    ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(connection, DisconnectReason.disconnected));
+        //    Disconnected?.Invoke(this, new DisconnectedEventArgs(connection, DisconnectReason.disconnected));
         //}
     }
 }
