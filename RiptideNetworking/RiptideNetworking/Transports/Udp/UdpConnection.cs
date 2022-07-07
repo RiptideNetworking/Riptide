@@ -6,7 +6,6 @@ using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Text;
 
 namespace Riptide.Transports.Udp
 {

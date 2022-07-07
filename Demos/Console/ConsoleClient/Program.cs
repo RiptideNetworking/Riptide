@@ -1,5 +1,4 @@
-﻿using Riptide.Transports.Udp;
-using Riptide.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

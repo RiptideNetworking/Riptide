@@ -2,7 +2,6 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using Riptide.Utils;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -23,7 +22,7 @@ namespace Riptide.Transports.Udp
 
         protected UdpPeer()
         {
-            receiveBuffer = new byte[Message.MaxSize + RiptideConverter.UShortLength];
+            receiveBuffer = new byte[Message.MaxSize + sizeof(ushort)];
         }
 
         public void Tick()

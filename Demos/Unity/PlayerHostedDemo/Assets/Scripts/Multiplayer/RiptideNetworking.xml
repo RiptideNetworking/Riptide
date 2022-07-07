@@ -1321,7 +1321,7 @@
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
         </member>
         <member name="M:Riptide.Peer.Tick">
-            <inheritdoc cref="M:Riptide.Transports.ICommon.Tick"/>
+            <inheritdoc cref="M:Riptide.Transports.IPeer.Tick"/>
         </member>
         <member name="M:Riptide.Peer.IncreaseActiveSocketCount">
             <summary>Increases <see cref="P:Riptide.Peer.ActiveSocketCount"/>. For use when a new <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is started.</summary>
@@ -1551,10 +1551,10 @@
         <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
             <summary>For reliable internal client disconnected messages.</summary>
         </member>
-        <member name="T:Riptide.Transports.ICommon">
+        <member name="T:Riptide.Transports.IPeer">
             <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
         </member>
-        <member name="M:Riptide.Transports.ICommon.Tick">
+        <member name="M:Riptide.Transports.IPeer.Tick">
             <summary>Initiates handling of currently queued messages.</summary>
             <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
         </member>

@@ -87,7 +87,7 @@ namespace Riptide
 
         protected abstract void Heartbeat();
 
-        /// <inheritdoc cref="ICommon.Tick"/>
+        /// <inheritdoc cref="IPeer.Tick"/>
         public virtual void Tick()
         {
             if (heartbeatSW.ElapsedMilliseconds > nextHeartbeat)
