@@ -20,7 +20,7 @@ Using Unity's Package Manager:
 1. Open the Package Manager (Window > Package Manager)
 2. Click the '+' (plus) button in the top left corner of the window
 3. Select the 'Add package from git URL...' option
-4. Enter the following base URL: `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v` and then append the version number you'd like to install. For example, if you want to install v1.2.0, you would enter `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` as the full URL
+4. Enter the following base URL: `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` and then append the version number you'd like to install. For example, if you want to install v1.2.0, you would enter `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` as the full URL
 5. Click 'Add' and wait for Riptide to be installed
 
 Alternatively, you can grab the RiptideNetworking.dll file (and RiptideNetworking.xml file for intellisense documentation) from the [latest release](https://github.com/tom-weiland/RiptideNetworking/releases/latest) and simply drop it into your Unity project.
