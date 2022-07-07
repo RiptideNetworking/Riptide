@@ -36,7 +36,7 @@ namespace Riptide
             }
         }
         private short _rtt = -1;
-        internal short SmoothRTT { get; private set; } = -1;
+        public short SmoothRTT { get; private set; } = -1;
 
         internal Peer Peer { get; set; }
         /// <summary>The sequence ID of the latest message that we want to acknowledge.</summary>

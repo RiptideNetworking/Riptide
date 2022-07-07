@@ -1,5 +1,4 @@
-﻿using Riptide.Transports.Rudp;
-using Riptide.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -37,7 +36,10 @@ namespace Riptide.Demos.Rudp.ConsoleServer
 
         private static void Loop()
         {
-            server = new Server(new RudpServer(ushort.MaxValue)); // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            server = new Server
+            {
+                TimeoutTime = ushort.MaxValue // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            };
             server.Start(7777, 10);
 
             while (isRunning)

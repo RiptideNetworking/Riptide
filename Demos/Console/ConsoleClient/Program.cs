@@ -1,4 +1,4 @@
-﻿using Riptide.Transports.Rudp;
+﻿using Riptide.Transports.Udp;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
@@ -58,7 +58,10 @@ namespace Riptide.Demos.Rudp.ConsoleClient
 
         private static void Loop()
         {
-            client = new Client(new RudpClient(ushort.MaxValue)); // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            client = new Client
+            {
+                TimeoutTime = ushort.MaxValue // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            };
             client.Connected += (s, e) => Connected();
             client.Disconnected += (s, e) => Disconnected();
             client.Connect("127.0.0.1:7777");
