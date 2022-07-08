@@ -10,18 +10,25 @@ namespace Riptide.Transports.Udp
 {
     public abstract class UdpPeer
     {
+        protected const int DefaultSocketBufferSize = 1024 * 1024; // 1MB
+        private const int MinSocketBufferSize = 256 * 1024; // 256KB
         /// <summary>How long to wait for a response, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
+        private readonly int socketBufferSize;
+        /// <summary>The buffer that incoming data is received into.</summary>
+        private readonly byte[] receiveBuffer;
         /// <summary>The socket to use for sending and receiving.</summary>
         private Socket socket;
         /// <summary>Whether or not the socket is ready to send and receive data.</summary>
         private bool isRunning = false;
-        /// <summary>The buffer that incoming data is received into.</summary>
-        private readonly byte[] receiveBuffer;
         private EndPoint remoteEndPoint;
 
-        protected UdpPeer()
+        protected UdpPeer(int socketBufferSize = DefaultSocketBufferSize)
         {
+            if (socketBufferSize < MinSocketBufferSize)
+                throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");
+
+            this.socketBufferSize = socketBufferSize;
             receiveBuffer = new byte[Message.MaxSize + sizeof(ushort)];
         }
 
@@ -36,7 +43,11 @@ namespace Riptide.Transports.Udp
                 CloseSocket();
 
             IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
-            socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
+            socket = new Socket(SocketType.Dgram, ProtocolType.Udp)
+            {
+                SendBufferSize = socketBufferSize,
+                ReceiveBufferSize = socketBufferSize,
+            };
             socket.Bind(localEndPoint);
 
             remoteEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
