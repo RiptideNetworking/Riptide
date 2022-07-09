@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -60,7 +60,7 @@ namespace Riptide
         private ushort NextSequenceId => (ushort)++_lastSequenceId;
         private int _lastSequenceId;
         /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
-        private const ushort LeftBit = 0b_1000_0000;
+        private const ushort LeftBit = 0b_1000_0000_0000_0000;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The time at which the last heartbeat was received from the client.</summary>
