@@ -140,6 +140,12 @@
         <member name="F:Riptide.ConnectionState.connected">
             <summary>Connected. A connection was successfully established.</summary>
         </member>
+        <member name="P:Riptide.Connection.HasTimedOut">
+            <summary>Whether or not the client has timed out.</summary>
+        </member>
+        <member name="P:Riptide.Connection.PendingMessages">
+            <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
+        </member>
         <member name="P:Riptide.Connection.LastReceivedSeqId">
             <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
         </member>
@@ -154,12 +160,6 @@
         </member>
         <member name="P:Riptide.Connection.AckedMessagesBitfield">
             <summary>Messages that we sent which have been acknoweledged.</summary>
-        </member>
-        <member name="P:Riptide.Connection.HasTimedOut">
-            <summary>Whether or not the client has timed out.</summary>
-        </member>
-        <member name="P:Riptide.Connection.PendingMessages">
-            <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         </member>
         <member name="P:Riptide.Connection.NextSequenceId">
             <summary>The next sequence ID to use.</summary>
@@ -1600,14 +1600,14 @@
         <member name="F:Riptide.Transports.Udp.UdpPeer.ReceivePollingTime">
             <summary>How long to wait for a response, in microseconds.</summary>
         </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.receiveBuffer">
+            <summary>The buffer that incoming data is received into.</summary>
+        </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.socket">
             <summary>The socket to use for sending and receiving.</summary>
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.isRunning">
             <summary>Whether or not the socket is ready to send and receive data.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Udp.UdpPeer.receiveBuffer">
-            <summary>The buffer that incoming data is received into.</summary>
         </member>
         <member name="T:Riptide.Utils.ActionQueue">
             <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>

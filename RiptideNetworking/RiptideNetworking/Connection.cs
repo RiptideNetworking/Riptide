@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -39,23 +39,23 @@ namespace Riptide
         public short SmoothRTT { get; private set; } = -1;
 
         internal Peer Peer { get; set; }
-        /// <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
-        internal ushort LastReceivedSeqId { get; set; }
-        /// <summary>Messages that we have received and want to acknowledge.</summary>
-        internal ushort AcksBitfield { get; set; }
-        /// <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="AcksBitfield"/>'s range, used to improve duplicate message filtering capabilities.</summary>
-        internal ulong DuplicateFilterBitfield { get; set; }
-
-        /// <summary>The sequence ID of the latest message that we've received an ack for.</summary>
-        internal ushort LastAckedSeqId { get; set; }
-        /// <summary>Messages that we sent which have been acknoweledged.</summary>
-        internal ushort AckedMessagesBitfield { get; set; }
-        
         /// <summary>Whether or not the client has timed out.</summary>
         internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
+        /// <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
+        private ushort LastReceivedSeqId { get; set; }
+        /// <summary>Messages that we have received and want to acknowledge.</summary>
+        private ushort AcksBitfield { get; set; }
+        /// <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="AcksBitfield"/>'s range, used to improve duplicate message filtering capabilities.</summary>
+        private ulong DuplicateFilterBitfield { get; set; }
+
+        /// <summary>The sequence ID of the latest message that we've received an ack for.</summary>
+        private ushort LastAckedSeqId { get; set; }
+        /// <summary>Messages that we sent which have been acknoweledged.</summary>
+        private ushort AckedMessagesBitfield { get; set; }
+        
         /// <summary>The next sequence ID to use.</summary>
         private ushort NextSequenceId => (ushort)++_lastSequenceId;
         private int _lastSequenceId;
@@ -135,7 +135,7 @@ namespace Riptide
             }
             else // The received sequence ID is the same as the previous one (duplicate message)
                 doHandle = false;
-            
+
             SendAck(sequenceId);
             return doHandle;
         }

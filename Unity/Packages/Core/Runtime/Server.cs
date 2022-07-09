@@ -23,7 +23,7 @@ namespace Riptide
 
         /// <summary>Whether or not the server is currently running.</summary>
         public bool IsRunning { get; private set; }
-        public ushort MaxClientCount {get; private set; }
+        public ushort MaxClientCount { get; private set; }
         /// <inheritdoc cref="IServer.Port"/>
         public ushort Port => transport.Port;
         public Connection[] Clients => clients.Values.ToArray();
