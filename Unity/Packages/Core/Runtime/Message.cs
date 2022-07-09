@@ -196,8 +196,8 @@ namespace Riptide
         /// <returns>The message, ready to be used for handling.</returns>
         internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
         {
-            SetReadWritePos(1, contentLength);
             SetHeader(messageHeader);
+            SetReadWritePos(1, SendMode >= MessageSendMode.reliable ? (ushort)(contentLength - 2) : contentLength);
             return this;
         }
 

@@ -5,6 +5,7 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -50,6 +51,7 @@ namespace Riptide
         public ushort HeartbeatInterval { get; set; } = 1000;
         private readonly System.Diagnostics.Stopwatch heartbeatSW = new System.Diagnostics.Stopwatch();
         private long nextHeartbeat;
+        private Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
 
         public Peer(string logName)
         {
@@ -97,29 +99,41 @@ namespace Riptide
             }
         }
 
+        protected void HandleMessages()
+        {
+            while (messagesToHandle.Count > 0)
+            {
+                MessageToHandle handle = messagesToHandle.Dequeue();
+                Handle(handle.Message, handle.MessageHeader, handle.FromConnection);
+            }
+        }
+
         protected void HandleData(object sender, DataReceivedEventArgs e)
         {
             HeaderType messageHeader = (HeaderType)e.DataBuffer[0];
 
             Message message = Message.CreateRaw();
-            message.PrepareForUse(messageHeader, (ushort)(messageHeader >= HeaderType.reliable ? e.Amount - 2 : e.Amount)); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
+            message.PrepareForUse(messageHeader, (ushort)e.Amount); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
 
             if (message.SendMode == MessageSendMode.reliable)
             {
-                if (e.Amount > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (3 or less means no payload for a reliably sent packet)
-                    Array.Copy(e.DataBuffer, 3, message.Bytes, 1, e.Amount - 3);
-                else if (e.Amount < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
+                if (e.Amount < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
                     return;
 
                 if (e.FromConnection.ReliableHandle(RiptideConverter.ToUShort(e.DataBuffer, 1)))
-                    Handle(message, messageHeader, e.FromConnection);
+                {
+                    if (e.Amount > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (just 3 means no payload for a reliably sent packet)
+                        Array.Copy(e.DataBuffer, 3, message.Bytes, 1, e.Amount - 3);
+
+                    messagesToHandle.Enqueue(new MessageToHandle() { Message = message, MessageHeader = messageHeader, FromConnection = e.FromConnection });
+                }
             }
             else
             {
                 if (e.Amount > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
-                Handle(message, messageHeader, e.FromConnection);
+                messagesToHandle.Enqueue(new MessageToHandle() { Message = message, MessageHeader = messageHeader, FromConnection = e.FromConnection });
             }
         }
 
@@ -137,6 +151,20 @@ namespace Riptide
             ActiveSocketCount--;
             if (ActiveSocketCount < 0)
                 ActiveSocketCount = 0;
+        }
+    }
+
+    internal struct MessageToHandle
+    {
+        internal Message Message;
+        internal HeaderType MessageHeader;
+        internal Connection FromConnection;
+
+        public MessageToHandle(Message message, HeaderType messageHeader, Connection fromConnection)
+        {
+            Message = message;
+            MessageHeader = messageHeader;
+            FromConnection = fromConnection;
         }
     }
 }

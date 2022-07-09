@@ -202,6 +202,7 @@ namespace Riptide
         {
             base.Tick();
             transport.Tick();
+            HandleMessages();
         }
 
         protected override void Handle(Message message, HeaderType messageHeader, Connection connection)
