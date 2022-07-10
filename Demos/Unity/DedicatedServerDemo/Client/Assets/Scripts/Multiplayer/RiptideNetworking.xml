@@ -1500,90 +1500,216 @@
             <param name="sender">The source of the event.</param>
             <param name="e">The event args to invoke the event with.</param>
         </member>
+        <member name="T:Riptide.Transports.ConnectingEventArgs">
+            <summary>Contains event data for when a server's transport receives a connection attempt.</summary>
+        </member>
+        <member name="F:Riptide.Transports.ConnectingEventArgs.Connection">
+            <summary>The pending connection.</summary>
+        </member>
+        <member name="M:Riptide.Transports.ConnectingEventArgs.#ctor(Riptide.Connection)">
+            <summary>Initializes event data.</summary>
+            <param name="connection">The pending connection.</param>
+        </member>
+        <member name="T:Riptide.Transports.ConnectedEventArgs">
+            <summary>Contains event data for when a server's transport successfully establishes a connection to a client.</summary>
+        </member>
+        <member name="F:Riptide.Transports.ConnectedEventArgs.Connection">
+            <summary>The newly established connection.</summary>
+        </member>
+        <member name="M:Riptide.Transports.ConnectedEventArgs.#ctor(Riptide.Connection)">
+            <summary>Initializes event data.</summary>
+            <param name="connection">The newly established connection.</param>
+        </member>
+        <member name="T:Riptide.Transports.DataReceivedEventArgs">
+            <summary>Contains event data for when a server's or client's transport receives data.</summary>
+        </member>
+        <member name="F:Riptide.Transports.DataReceivedEventArgs.DataBuffer">
+            <summary>An array containing the received data.</summary>
+        </member>
+        <member name="F:Riptide.Transports.DataReceivedEventArgs.Amount">
+            <summary>The number of bytes that were received.</summary>
+        </member>
+        <member name="F:Riptide.Transports.DataReceivedEventArgs.FromConnection">
+            <summary>The connection which the data was received from.</summary>
+        </member>
+        <member name="M:Riptide.Transports.DataReceivedEventArgs.#ctor(System.Byte[],System.Int32,Riptide.Connection)">
+            <summary>Initializes event data.</summary>
+            <param name="dataBuffer">An array containing the received data.</param>
+            <param name="amount">The number of bytes that were received.</param>
+            <param name="fromConnection">The connection which the data was received from.</param>
+        </member>
+        <member name="T:Riptide.Transports.DisconnectedEventArgs">
+            <summary>Contains event data for when a server's or client's transport initiates or detects a disconnection.</summary>
+        </member>
+        <member name="F:Riptide.Transports.DisconnectedEventArgs.Connection">
+            <summary>The closed connection.</summary>
+        </member>
+        <member name="F:Riptide.Transports.DisconnectedEventArgs.Reason">
+            <summary>The reason for the disconnection.</summary>
+        </member>
+        <member name="M:Riptide.Transports.DisconnectedEventArgs.#ctor(Riptide.Connection,Riptide.DisconnectReason)">
+            <summary>Initializes event data.</summary>
+            <param name="connection">The closed connection.</param>
+            <param name="reason">The reason for the disconnection.</param>
+        </member>
         <member name="T:Riptide.Transports.IClient">
             <summary>Defines methods, properties, and events which every transport's client must implement.</summary>
         </member>
+        <member name="E:Riptide.Transports.IClient.Connected">
+            <summary>Invoked when a connection is established at the transport level.</summary>
+        </member>
+        <member name="E:Riptide.Transports.IClient.ConnectionFailed">
+            <summary>Invoked when a connection attempt fails at the transport level.</summary>
+        </member>
         <member name="M:Riptide.Transports.IClient.Connect(System.String,Riptide.Connection@,System.String@)">
-            <summary>Attempts to connect to the given host address.</summary>
+            <summary>Starts the transport and attempts to connect to the given host address.</summary>
             <param name="hostAddress">The host address to connect to.</param>
-            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
-            <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
+            <param name="connection">The pending connection. <see langword="null"/> if an issue occurred.</param>
+            <param name="connectError">The error message associated with the issue that occurred, if any.</param>
+            <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
         </member>
         <member name="M:Riptide.Transports.IClient.Disconnect">
-            <summary>Disconnects from the server.</summary>
+            <summary>Closes the connection to the server.</summary>
         </member>
         <member name="T:Riptide.Transports.HeaderType">
             <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.unreliable">
-            <summary>For unreliable user messages.</summary>
+            <summary>An unreliable user message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.unreliableAutoRelay">
-            <summary>For unreliable user messages that servers should automatically relay to all other clients.</summary>
+            <summary>An unreliable user message which servers should automatically relay to all other clients.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.ack">
-            <summary>For unreliable internal ack messages.</summary>
+            <summary>An internal unreliable ack message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.ackExtra">
-            <summary>For unreliable internal ack messages (when acknowledging a sequence ID other than the last received one).</summary>
+            <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.connect">
-            <summary>For unreliable internal connect messages.</summary>
+            <summary>An internal unreliable connect message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.heartbeat">
-            <summary>For unreliable internal heartbeat messages.</summary>
+            <summary>An internal unreliable heartbeat message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.disconnect">
-            <summary>For unreliable internal disconnect messages.</summary>
+            <summary>An internal unreliable disconnect message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.reliable">
-            <summary>For reliable user messages.</summary>
+            <summary>A reliable user message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.reliableAutoRelay">
-            <summary>For reliable user messages that servers should automatically relay to all other clients.</summary>
+            <summary>A reliable user message which servers should automatically relay to all other clients.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.welcome">
-            <summary>For reliable internal welcome messages.</summary>
+            <summary>An internal reliable welcome message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.clientConnected">
-            <summary>For reliable internal client connected messages.</summary>
+            <summary>An internal reliable client connected message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
-            <summary>For reliable internal client disconnected messages.</summary>
+            <summary>An internal reliable client disconnected message.</summary>
         </member>
         <member name="T:Riptide.Transports.IPeer">
-            <summary>Defines methods, properties, and events which every transport's server and client must implement.</summary>
+            <summary>Defines methods, properties, and events which every transport's server <i>and</i> client must implement.</summary>
+        </member>
+        <member name="E:Riptide.Transports.IPeer.DataReceived">
+            <summary>Invoked when data is received by the transport.</summary>
+        </member>
+        <member name="E:Riptide.Transports.IPeer.Disconnected">
+            <summary>Invoked when a disconnection is initiated or detected by the transport.</summary>
         </member>
         <member name="M:Riptide.Transports.IPeer.Tick">
-            <summary>Initiates handling of currently queued messages.</summary>
-            <remarks>This should generally be called from within a regularly executed update loop (like FixedUpdate in Unity). Messages will continue to be received in between calls, but won't be handled fully until this method is executed.</remarks>
+            <summary>Initiates handling of any received messages.</summary>
         </member>
         <member name="T:Riptide.Transports.IServer">
             <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
         </member>
         <member name="E:Riptide.Transports.IServer.Connecting">
-            <summary>Invoked when a new client connects.</summary>
+            <summary>Invoked when a new connection attempt is received by the transport.</summary>
+        </member>
+        <member name="E:Riptide.Transports.IServer.Connected">
+            <summary>Invoked when a connection is established at the transport level.</summary>
         </member>
         <member name="P:Riptide.Transports.IServer.Port">
             <summary>The local port that the server is running on.</summary>
         </member>
         <member name="M:Riptide.Transports.IServer.Start(System.UInt16)">
-            <summary>Starts the server.</summary>
-            <param name="port">The local port on which to start the server.</param>
+            <summary>Starts the transport and begins listening for incoming connections.</summary>
+            <param name="port">The local port on which to run the server.</param>
+        </member>
+        <member name="M:Riptide.Transports.IServer.Accept(Riptide.Connection)">
+            <summary>Accepts a pending connection.</summary>
+            <param name="connection">The connection to accept.</param>
+        </member>
+        <member name="M:Riptide.Transports.IServer.Reject(Riptide.Connection)">
+            <summary>Rejects a pending connection.</summary>
+            <param name="connection">The connection to reject.</param>
+        </member>
+        <member name="M:Riptide.Transports.IServer.Close(Riptide.Connection)">
+            <summary>Closes an active connection.</summary>
+            <param name="connection">The connection to close.</param>
         </member>
         <member name="M:Riptide.Transports.IServer.Shutdown">
-            <summary>Disconnects all clients and stops listening for new connections.</summary>
+            <summary>Closes all existing connections and stops listening for new connections.</summary>
+        </member>
+        <member name="T:Riptide.Transports.Udp.UdpClient">
+            <summary>A client which can connect to a <see cref="T:Riptide.Transports.Udp.UdpServer"/>.</summary>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpClient.Connected">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpClient.ConnectionFailed">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpClient.DataReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpClient.Disconnected">
+            <inheritdoc/>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpClient.udpConnection">
+            <summary>The connection to the server.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpClient.#ctor(System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpClient.Connect(System.String,Riptide.Connection@,System.String@)">
             <inheritdoc/>
             <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpClient.ParseHostAddress(System.String,System.Net.IPAddress@,System.UInt16@)">
-            <summary>Parses the <paramref name="hostAddress"/> and retrieves its <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
+            <summary>Parses <paramref name="hostAddress"/> into <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
             <param name="hostAddress">The host address to parse.</param>
             <param name="ip">The retrieved IP.</param>
             <param name="port">The retrieved port.</param>
-            <returns>Whether or not the host address is valid.</returns>
+            <returns>Whether or not <paramref name="hostAddress"/> was in a valid format.</returns>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpClient.Disconnect">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpClient.OnConnected">
+            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpClient.Connected"/> event.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Riptide.Transports.Udp.UdpConnection">
+            <summary>Represents a connection to a <see cref="T:Riptide.Transports.Udp.UdpServer"/> or <see cref="T:Riptide.Transports.Udp.UdpClient"/>.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpConnection.RemoteEndPoint">
+            <summary>The endpoint representing the other end of the connection.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpConnection.peer">
+            <summary>The local peer this connection is associated with.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpConnection.#ctor(System.Net.IPEndPoint,Riptide.Transports.Udp.UdpPeer)">
+            <summary>Initializes the connection.</summary>
+            <param name="remoteEndPoint">The endpoint representing the other end of the connection.</param>
+            <param name="peer">The local peer this connection is associated with.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpConnection.Send(System.Byte[],System.Int32)">
+            <inheritdoc/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpConnection.ToString">
             <inheritdoc/>
@@ -1597,17 +1723,111 @@
         <member name="M:Riptide.Transports.Udp.UdpConnection.GetHashCode">
             <inheritdoc/>
         </member>
-        <member name="F:Riptide.Transports.Udp.UdpPeer.ReceivePollingTime">
-            <summary>How long to wait for a response, in microseconds.</summary>
+        <member name="T:Riptide.Transports.Udp.UdpPeer">
+            <summary>Provides base send &#38; receive functionality for <see cref="T:Riptide.Transports.Udp.UdpServer"/> and <see cref="T:Riptide.Transports.Udp.UdpClient"/>.</summary>
         </member>
-        <member name="F:Riptide.Transports.Udp.UdpPeer.receiveBuffer">
-            <summary>The buffer that incoming data is received into.</summary>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize">
+            <summary>The default size used for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.MinSocketBufferSize">
+            <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.ReceivePollingTime">
+            <summary>How long to wait for a packet, in microseconds.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.socketBufferSize">
+            <summary>The size to use for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.receivedData">
+            <summary>The array that incoming data is received into.</summary>
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.socket">
             <summary>The socket to use for sending and receiving.</summary>
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.isRunning">
-            <summary>Whether or not the socket is ready to send and receive data.</summary>
+            <summary>Whether or not the transport is running.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.remoteEndPoint">
+            <summary>A reusable endpoint.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.#ctor(System.Int32)">
+            <summary>Initializes the transport.</summary>
+            <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.Tick">
+            <inheritdoc cref="M:Riptide.Transports.IPeer.Tick"/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.OpenSocket(System.UInt16)">
+            <summary>Opens the socket and starts the transport.</summary>
+            <param name="port">The port to bind the socket to.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.CloseSocket">
+            <summary>Closes the socket and stops the transport.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.Receive">
+            <summary>Polls the socket and checks if any data was received.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.Send(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <summary>Sends data to a given endpoint.</summary>
+            <param name="dataBuffer">The array containing the data.</param>
+            <param name="numBytes">The number of bytes in the array which should be sent.</param>
+            <param name="toEndPoint">The endpoint to send the data to.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <summary>Handles received data.</summary>
+            <param name="dataBuffer">A byte array containing the received data.</param>
+            <param name="amount">The number of bytes in <paramref name="dataBuffer"/> used by the received data.</param>
+            <param name="fromEndPoint">The endpoint from which the data was received.</param>
+        </member>
+        <member name="T:Riptide.Transports.Udp.UdpServer">
+            <summary>A server which can accept connections from <see cref="T:Riptide.Transports.Udp.UdpClient"/>s.</summary>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpServer.Connecting">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpServer.Connected">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpServer.DataReceived">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpServer.Disconnected">
+            <inheritdoc/>
+        </member>
+        <member name="P:Riptide.Transports.Udp.UdpServer.Port">
+            <inheritdoc/>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpServer.connections">
+            <summary>The currently open connections, accessible by their endpoints.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.#ctor(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.Start(System.UInt16)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.Accept(Riptide.Connection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.Reject(Riptide.Connection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.Close(Riptide.Connection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.Shutdown">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.OnConnecting(Riptide.Transports.Udp.UdpConnection)">
+            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpServer.Connecting"/> event.</summary>
+            <param name="connection">The pending connection.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.OnConnected(Riptide.Connection)">
+            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpServer.Connected"/> event.</summary>
+            <param name="connection">The successfully established connection.</param>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <inheritdoc/>
         </member>
         <member name="T:Riptide.Utils.ActionQueue">
             <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>

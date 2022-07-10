@@ -9,18 +9,25 @@ using System.Net;
 
 namespace Riptide.Transports.Udp
 {
+    /// <summary>Represents a connection to a <see cref="UdpServer"/> or <see cref="UdpClient"/>.</summary>
     public class UdpConnection : Connection, IEquatable<UdpConnection>
     {
+        /// <summary>The endpoint representing the other end of the connection.</summary>
         public readonly IPEndPoint RemoteEndPoint;
 
+        /// <summary>The local peer this connection is associated with.</summary>
         private readonly UdpPeer peer;
 
+        /// <summary>Initializes the connection.</summary>
+        /// <param name="remoteEndPoint">The endpoint representing the other end of the connection.</param>
+        /// <param name="peer">The local peer this connection is associated with.</param>
         internal UdpConnection(IPEndPoint remoteEndPoint, UdpPeer peer)
         {
             RemoteEndPoint = remoteEndPoint;
             this.peer = peer;
         }
 
+        /// <inheritdoc/>
         protected internal override void Send(byte[] dataBuffer, int amount)
         {
             peer.Send(dataBuffer, amount, RemoteEndPoint);

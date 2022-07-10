@@ -9,56 +9,31 @@ namespace Riptide.Transports
     /// <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
     public interface IServer : IPeer
     {
-        /// <summary>Invoked when a new client connects.</summary>
+        /// <summary>Invoked when a new connection attempt is received by the transport.</summary>
         event EventHandler<ConnectingEventArgs> Connecting;
+        /// <summary>Invoked when a connection is established at the transport level.</summary>
         event EventHandler<ConnectedEventArgs> Connected;
 
         /// <summary>The local port that the server is running on.</summary>
         ushort Port { get; }
-        ///// <summary>The maximum number of clients that can be connected at any time.</summary>
-        //ushort MaxClientCount { get; }
-        ///// <summary>The number of currently connected clients.</summary>
-        //int ClientCount { get; }
-        ///// <summary>An array of all the currently connected clients.</summary>
-        ///// <remarks>The position of each <see cref="IConnectionInfo"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
-        //IConnectionInfo[] Clients { get; }
-        ///// <summary>Whether or not to allow messages to be automatically sent to all other connected clients.</summary>
-        ///// <remarks>This should never be enabled if you want to maintain server authority, as it theoretically allows hacked clients to tell your <see cref="Server"/> instance to automatically distribute any message to other clients.
-        ///// However, it's extremely handy when building client-authoritative games where the <see cref="Server"/> instance acts mostly as a relay and is directly forwarding most messages to other clients anyways.</remarks>
-        //bool AllowAutoMessageRelay { get; set; }
-
-        /// <summary>Starts the server.</summary>
-        /// <param name="port">The local port on which to start the server.</param>
-        ///// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
-        //void Start(ushort port, ushort maxClientCount);
+        
+        /// <summary>Starts the transport and begins listening for incoming connections.</summary>
+        /// <param name="port">The local port on which to run the server.</param>
         void Start(ushort port);
-        ///// <summary>Sends a message to a specific client.</summary>
-        ///// <param name="message">The message to send.</param>
-        ///// <param name="toClientId">The numeric ID of the client to send the message to.</param>
-        ///// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        //void Send(Message message, ushort toClientId, bool shouldRelease);
-        ///// <summary>Sends a message to all conected clients.</summary>
-        ///// <param name="message">The message to send.</param>
-        ///// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        //void SendToAll(Message message, bool shouldRelease);
-        ///// <summary>Sends a message to all connected clients except one.</summary>
-        ///// <param name="message">The message to send.</param>
-        ///// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
-        ///// <param name="shouldRelease">Whether or not <paramref name="message"/> should be returned to the pool once its data has been sent.</param>
-        //void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease);
-        ///// <summary>Retrieves the client with the given ID, if a client with that ID is currently connected.</summary>
-        ///// <param name="id">The ID of the client to retrieve.</param>
-        ///// <param name="client">The retrieved client.</param>
-        ///// <returns><see langword="true"/> if a client with the given ID is currently connected; otherwise <see langword="false"/>.</returns>
-        //bool TryGetClient(ushort id, out IConnectionInfo client);
-        ///// <summary>Disconnects a specific client.</summary>
-        ///// <param name="id">The numeric ID of the client to disconnect.</param>
-        ///// <param name="customMessage">A custom message (if any) which is used to inform clients why they were disconnected.</param>
-        //void DisconnectClient(ushort id, string customMessage = "");
+        
+        /// <summary>Accepts a pending connection.</summary>
+        /// <param name="connection">The connection to accept.</param>
         void Accept(Connection connection);
+
+        /// <summary>Rejects a pending connection.</summary>
+        /// <param name="connection">The connection to reject.</param>
         void Reject(Connection connection);
+
+        /// <summary>Closes an active connection.</summary>
+        /// <param name="connection">The connection to close.</param>
         void Close(Connection connection);
-        /// <summary>Disconnects all clients and stops listening for new connections.</summary>
+
+        /// <summary>Closes all existing connections and stops listening for new connections.</summary>
         void Shutdown();
     }
 }

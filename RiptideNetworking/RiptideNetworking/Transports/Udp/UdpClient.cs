@@ -8,15 +8,22 @@ using System.Net;
 
 namespace Riptide.Transports.Udp
 {
+    /// <summary>A client which can connect to a <see cref="UdpServer"/>.</summary>
     public class UdpClient : UdpPeer, IClient
     {
+        /// <inheritdoc/>
         public event EventHandler Connected;
+        /// <inheritdoc/>
         public event EventHandler ConnectionFailed;
+        /// <inheritdoc/>
         public event EventHandler<DataReceivedEventArgs> DataReceived;
+        /// <inheritdoc/>
         public event EventHandler<DisconnectedEventArgs> Disconnected;
 
+        /// <summary>The connection to the server.</summary>
         private UdpConnection udpConnection;
 
+        /// <inheritdoc/>
         public UdpClient(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
 
         /// <inheritdoc/>
@@ -37,11 +44,11 @@ namespace Riptide.Transports.Udp
             return true;
         }
 
-        /// <summary>Parses the <paramref name="hostAddress"/> and retrieves its <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
+        /// <summary>Parses <paramref name="hostAddress"/> into <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
         /// <param name="hostAddress">The host address to parse.</param>
         /// <param name="ip">The retrieved IP.</param>
         /// <param name="port">The retrieved port.</param>
-        /// <returns>Whether or not the host address is valid.</returns>
+        /// <returns>Whether or not <paramref name="hostAddress"/> was in a valid format.</returns>
         private bool ParseHostAddress(string hostAddress, out IPAddress ip, out ushort port)
         {
             string[] ipAndPort = hostAddress.Split(':');
@@ -64,16 +71,19 @@ namespace Riptide.Transports.Udp
             return IPAddress.TryParse(ipString, out ip) && ushort.TryParse(portString, out port);
         }
 
+        /// <inheritdoc/>
         public void Disconnect()
         {
             CloseSocket();
         }
 
+        /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         protected virtual void OnConnected()
         {
             Connected?.Invoke(this, EventArgs.Empty);
         }
 
+        /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
             if (udpConnection.RemoteEndPoint.Equals(fromEndPoint))
