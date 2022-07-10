@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -119,7 +119,7 @@ namespace Riptide
                     else
                     {
                         retryTimer.Start();
-                        retryTimer.Interval = (connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier));
+                        retryTimer.Interval = connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier);
                     }
                 }
             }
@@ -135,14 +135,7 @@ namespace Riptide
                 {
                     HeaderType headerType = (HeaderType)data[0];
                     if (headerType == HeaderType.reliable)
-                    {
-#if BIG_ENDIAN
-                        ushort messageId = (ushort)(data[4] | (data[3] << 8));
-#else
-                        ushort messageId = (ushort)(data[3] | (data[4] << 8));
-#endif
-                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {messageId}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
-                    }
+                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {RiptideConverter.ToUShort(data, 3)}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                     else
                         RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
