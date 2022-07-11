@@ -36,6 +36,16 @@ namespace Riptide
     /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
     public abstract class Peer
     {
+        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
+        public readonly string LogName;
+        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
+        public ushort TimeoutTime { get; set; } = 5000;
+        /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
+        public ushort HeartbeatInterval { get; set; } = 1000;
+
+        /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
+        internal static int ActiveCount { get; private set; }
+
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.neverConnected"/>.</summary>
         protected const string ReasonNeverConnected = "Never connected";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
@@ -50,16 +60,6 @@ namespace Riptide
         protected const string ReasonDisconnected = "Disconnected";
         /// <summary>The text to log when disconnected due to an unknown reason.</summary>
         protected const string ReasonUnknown = "Unknown reason";
-
-        /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
-        internal static int ActiveCount { get; private set; }
-
-        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
-        public readonly string LogName;
-        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public ushort TimeoutTime { get; set; } = 5000;
-        /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
-        public ushort HeartbeatInterval { get; set; } = 1000;
 
         /// <summary>The stopwatch used to determine when it's time to send the next heartbeat.</summary>
         private readonly System.Diagnostics.Stopwatch heartbeatSW = new System.Diagnostics.Stopwatch();
