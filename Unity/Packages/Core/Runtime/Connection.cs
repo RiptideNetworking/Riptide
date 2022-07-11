@@ -12,20 +12,26 @@ namespace Riptide
     /// <summary>The state of a connection.</summary>
     public enum ConnectionState : byte
     {
-        /// <summary>Not connected. No connection has been established or the connection has been disconnected again.</summary>
+        /// <summary>Not connected. No connection has been established or the connection has been closed.</summary>
         notConnected,
         /// <summary>Connecting. Still trying to establish a connection.</summary>
         connecting,
-        /// <summary>Connected. A connection was successfully established.</summary>
+        /// <summary>Connected. A connection has been established successfully.</summary>
         connected,
     }
 
+    /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
+        /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
+        /// <summary>Whether or not the connection is currently <i>not</i> connected nor trying to connect.</summary>
         public bool IsNotConnected => state == ConnectionState.notConnected;
+        /// <summary>Whether or not the connection is currently in the process of connecting.</summary>
         public bool IsConnecting => state == ConnectionState.connecting;
+        /// <summary>Whether or not the connection is currently connected.</summary>
         public bool IsConnected => state == ConnectionState.connected;
+        /// <summary>The round trip time (ping) of the connection. -1 if not calculated yet.</summary>
         public short RTT
         {
             get => _rtt;
@@ -36,10 +42,13 @@ namespace Riptide
             }
         }
         private short _rtt = -1;
+        /// <summary>The smoothed round trip time (ping) of the connection. -1 if not calculated yet.</summary>
+        /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
 
+        /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
-        /// <summary>Whether or not the client has timed out.</summary>
+        /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
@@ -48,7 +57,7 @@ namespace Riptide
         private ushort LastReceivedSeqId { get; set; }
         /// <summary>Messages that we have received and want to acknowledge.</summary>
         private ushort AcksBitfield { get; set; }
-        /// <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="AcksBitfield"/>'s range, used to improve duplicate message filtering capabilities.</summary>
+        /// <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="AcksBitfield"/>'s range. Used to improve duplicate message filtering capabilities.</summary>
         private ulong DuplicateFilterBitfield { get; set; }
 
         /// <summary>The sequence ID of the latest message that we've received an ack for.</summary>
@@ -56,28 +65,36 @@ namespace Riptide
         /// <summary>Messages that we sent which have been acknoweledged.</summary>
         private ushort AckedMessagesBitfield { get; set; }
         
+        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
+        private const ushort LeftBit = 0b_1000_0000_0000_0000;
         /// <summary>The next sequence ID to use.</summary>
         private ushort NextSequenceId => (ushort)++_lastSequenceId;
         private int _lastSequenceId;
-        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
-        private const ushort LeftBit = 0b_1000_0000_0000_0000;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
-        /// <summary>The time at which the last heartbeat was received from the client.</summary>
+        /// <summary>The time at which the last heartbeat was received from the other end.</summary>
         private DateTime lastHeartbeat;
-        /// <summary>ID of the last ping that was sent.</summary>
+        /// <summary>The ID of the last ping that was sent.</summary>
         private byte lastPingId = 0;
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
         private readonly System.Diagnostics.Stopwatch pendingPingStopwatch = new System.Diagnostics.Stopwatch();
 
+        /// <summary>Initializes the connection.</summary>
         protected Connection()
         {
             state = ConnectionState.connecting;
             lastHeartbeat = DateTime.UtcNow;
         }
 
+        /// <summary>Sends a message.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks>
+        ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
+        ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
+        /// </remarks>
         internal void Send(Message message, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.unreliable)
@@ -92,8 +109,14 @@ namespace Riptide
                 message.Release();
         }
 
+        /// <summary>Sends data.</summary>
+        /// <param name="dataBuffer">The array containing the data.</param>
+        /// <param name="amount">The number of bytes in the array which should be sent.</param>
         protected internal abstract void Send(byte[] dataBuffer, int amount);
 
+        /// <summary>Updates acks and determines whether the message is a duplicate.</summary>
+        /// <param name="sequenceId">The message's sequence ID.</param>
+        /// <returns>Whether or not the message should be handled.</returns>
         internal bool ReliableHandle(ushort sequenceId)
         {
             bool doHandle = true;
@@ -140,7 +163,7 @@ namespace Riptide
             return doHandle;
         }
 
-        /// <summary>Cleans up local objects on disconnection.</summary>
+        /// <summary>Cleans up the local side of the connection.</summary>
         internal void LocalDisconnect()
         {
             state = ConnectionState.notConnected;
@@ -249,7 +272,7 @@ namespace Riptide
         }
 
         #region Messages
-        /// <summary>Sends an ack message for a sequence ID to a specific endpoint.</summary>
+        /// <summary>Sends an ack message for the given sequence ID.</summary>
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         private void SendAck(ushort forSeqId)
         {
@@ -331,6 +354,7 @@ namespace Riptide
         #region Client
         /// <summary>Handles a welcome message on the client.</summary>
         /// <param name="message">The welcome message to handle.</param>
+        /// <param name="connectBytes">Custom data to include.</param>
         internal void HandleWelcome(Message message, byte[] connectBytes)
         {
             Id = message.GetUShort();
@@ -341,6 +365,7 @@ namespace Riptide
         }
 
         /// <summary>Sends a welcome response message.</summary>
+        /// <param name="connectBytes">Custom data to include.</param>
         private void RespondWelcome(byte[] connectBytes)
         {
             Message message = Message.Create(HeaderType.welcome, 25);

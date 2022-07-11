@@ -4,7 +4,7 @@
 
 namespace Riptide
 {
-    /// <summary>Represents an type that can be added to and retrieved from messages using the <see cref="Message.AddSerializable{T}(T)"/> and <see cref="Message.GetSerializable{T}"/> methods.</summary>
+    /// <summary>Represents a type that can be added to and retrieved from messages using the <see cref="Message.AddSerializable{T}(T)"/> and <see cref="Message.GetSerializable{T}"/> methods.</summary>
     public interface IMessageSerializable
     {
         /// <summary>Adds the type to the message.</summary>

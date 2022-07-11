@@ -14,11 +14,11 @@ namespace Riptide.Transports
         /// <summary>Invoked when a connection is established at the transport level.</summary>
         event EventHandler<ConnectedEventArgs> Connected;
 
-        /// <summary>The local port that the server is running on.</summary>
+        /// <inheritdoc cref="Server.Port"/>
         ushort Port { get; }
         
         /// <summary>Starts the transport and begins listening for incoming connections.</summary>
-        /// <param name="port">The local port on which to run the server.</param>
+        /// <param name="port">The local port on which to listen for connections.</param>
         void Start(ushort port);
         
         /// <summary>Accepts a pending connection.</summary>

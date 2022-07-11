@@ -14,20 +14,26 @@ namespace Riptide
     /// <summary>The reason for a disconnection.</summary>
     public enum DisconnectReason : byte
     {
+        /// <summary>No connection was ever established.</summary>
         neverConnected,
+        /// <summary>The active transport detected a problem with the connection.</summary>
         transportError,
-        /// <summary>For when a client's connection times out. This also acts as the fallback reason—if a client disconnects and the message containing the <i>real</i> reason is lost in transmission, it can't
-        /// be resent as the connection will have already been closed. As a result, the other end will time out the connection after a short period of time and this will be used as the reason.</summary>
+        /// <summary>The connection timed out.</summary>
+        /// <remarks>
+        ///   This also acts as the fallback reason—if a client disconnects and the message containing the <i>real</i> reason is lost
+        ///   in transmission, it can't be resent as the connection will have already been closed. As a result, the other end will time
+        ///   out the connection after a short period of time and this will be used as the reason.
+        /// </remarks>
         timedOut,
-        /// <summary>For when a client is forcibly disconnected by the server.</summary>
+        /// <summary>The client was forcibly disconnected by the server.</summary>
         kicked,
-        /// <summary>For when the server shuts down.</summary>
+        /// <summary>The server shut down.</summary>
         serverStopped,
-        /// <summary>For when a client voluntarily disconnects.</summary>
+        /// <summary>The disconnection was initiated by the client.</summary>
         disconnected
     }
 
-    /// <summary>Contains shared functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
+    /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
     public abstract class Peer
     {
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
@@ -44,15 +50,22 @@ namespace Riptide
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
         internal static int ActiveSocketCount { get; private set; }
 
+        /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
-        /// <summary>The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</summary>
+        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
-        /// <summary>The interval (in milliseconds) at which to send and expect heartbeats from the server.</summary>
+        /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
         public ushort HeartbeatInterval { get; set; } = 1000;
+
+        /// <summary>The stopwatch used to determine when it's time to send the next heartbeat.</summary>
         private readonly System.Diagnostics.Stopwatch heartbeatSW = new System.Diagnostics.Stopwatch();
+        /// <summary>The time at which to send the next heartbeat.</summary>
         private long nextHeartbeat;
+        /// <summary>Received messages which need to be handled.</summary>
         private Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
 
+        /// <summary>Initializes the peer.</summary>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Peer(string logName)
         {
             LogName = logName;
@@ -73,23 +86,27 @@ namespace Riptide
                 .ToArray();
         }
 
-        /// <summary>Searches the given assembly for methods with the <see cref="MessageHandlerAttribute"/> and adds them to the dictionary of handler methods.</summary>
-        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building the message handlers dictionary.</param>
+        /// <summary>Builds a dictionary of message IDs and their corresponding message handler methods.</summary>
+        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to include in the dictionary.</param>
         protected abstract void CreateMessageHandlersDictionary(byte messageHandlerGroupId);
 
+        /// <summary>Starts the heart.</summary>
         protected void StartHeartbeat()
         {
             heartbeatSW.Start();
         }
 
+        /// <summary>Stops the heart.</summary>
+        /// <remarks><see href="https://tenor.com/view/johnny-depp-captain-jack-sparrow-pirates-of-the-caribbean-at-worlds-end-potc-gif-17032484">More info.</see></remarks>
         protected void StopHeartbeat()
         {
             heartbeatSW.Stop();
         }
 
+        /// <summary>Beats the heart.</summary>
         protected abstract void Heartbeat();
 
-        /// <inheritdoc cref="IPeer.Tick"/>
+        /// <summary>Calls <see cref="Heartbeat"/> every <see cref="HeartbeatInterval"/> milliseconds.</summary>
         public virtual void Tick()
         {
             if (heartbeatSW.ElapsedMilliseconds > nextHeartbeat)
@@ -99,6 +116,7 @@ namespace Riptide
             }
         }
 
+        /// <summary>Handles all queued messages.</summary>
         protected void HandleMessages()
         {
             while (messagesToHandle.Count > 0)
@@ -108,6 +126,7 @@ namespace Riptide
             }
         }
 
+        /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object sender, DataReceivedEventArgs e)
         {
             HeaderType messageHeader = (HeaderType)e.DataBuffer[0];
@@ -137,6 +156,10 @@ namespace Riptide
             }
         }
 
+        /// <summary>Handles a message.</summary>
+        /// <param name="message">The message to handle.</param>
+        /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="connection">The connection which the message was received on.</param>
         protected abstract void Handle(Message message, HeaderType messageHeader, Connection connection);
 
         /// <summary>Increases <see cref="ActiveSocketCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
@@ -154,12 +177,20 @@ namespace Riptide
         }
     }
 
+    /// <summary>Stores information about a message that needs to be handled.</summary>
     internal struct MessageToHandle
     {
+        /// <summary>The message that needs to be handled.</summary>
         internal Message Message;
+        /// <summary>The message's header type.</summary>
         internal HeaderType MessageHeader;
+        /// <summary>The connection on which the message was received.</summary>
         internal Connection FromConnection;
 
+        /// <summary>Handles initialization.</summary>
+        /// <param name="message">The message that needs to be handled.</param>
+        /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="fromConnection">The connection on which the message was received.</param>
         public MessageToHandle(Message message, HeaderType messageHeader, Connection fromConnection)
         {
             Message = message;

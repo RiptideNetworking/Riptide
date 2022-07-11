@@ -14,38 +14,45 @@ namespace Riptide
     /// <summary>A server that can accept connections from <see cref="Client"/>s.</summary>
     public class Server : Peer
     {
-        /// <inheritdoc cref="IServer.Connecting"/>
+        /// <summary>Invoked when a client connects.</summary>
         public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
-        /// <inheritdoc cref="IServer.MessageReceived"/>
+        /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<ServerMessageReceivedEventArgs> MessageReceived;
-        /// <inheritdoc cref="IServer.ConnectionClosed"/>
+        /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
         /// <summary>Whether or not the server is currently running.</summary>
         public bool IsRunning { get; private set; }
-        public ushort MaxClientCount { get; private set; }
-        /// <inheritdoc cref="IServer.Port"/>
+        /// <summary>The local port that the server is running on.</summary>
         public ushort Port => transport.Port;
-        public Connection[] Clients => clients.Values.ToArray();
+        /// <summary>The maximum number of concurrent connections.</summary>
+        public ushort MaxClientCount { get; private set; }
+        /// <summary>The number of currently connected clients.</summary>
         public int ClientCount => clients.Count;
+        /// <summary>An array of all the currently connected clients.</summary>
+        /// <remarks>The position of each <see cref="Connection"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
+        public Connection[] Clients => clients.Values.ToArray();
+        /// <summary>Whether or not to allow messages to be automatically sent to all other connected clients.</summary>
+        /// <remarks>This should never be enabled if you want to maintain server authority, as it theoretically allows hacked clients to tell your <see cref="Server"/> instance to automatically distribute any message to other clients. However, it's extremely handy when building client-authoritative games where the <see cref="Server"/> instance acts mostly as a relay and is directly forwarding most messages to other clients anyways.</remarks>
         public bool AllowAutoMessageRelay { get; set; }
-        /// <summary>Encapsulates a method that handles a message from a certain client.</summary>
+        /// <summary>Encapsulates a method that handles a message from a client.</summary>
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
 
+        /// <summary>Currently connected clients.</summary>
         private Dictionary<ushort, Connection> clients;
-        /// <summary>Endpoints of clients that have timed out and need to be removed from the <see cref="clients"/> dictionary.</summary>
+        /// <summary>Clients that have timed out and need to be removed from <see cref="clients"/>.</summary>
         private List<Connection> timedOutClients;
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
-        /// <summary>The underlying transport server that is used for managing connections and sending and receiving data.</summary>
+        /// <summary>The underlying transport's server that is used for sending and receiving data.</summary>
         private IServer transport;
         /// <summary>All currently unused client IDs.</summary>
         private List<ushort> availableClientIds;
 
         /// <summary>Handles initial setup.</summary>
-        /// <param name="transport">The underlying transport server that is used for sending and receiving data.</param>
+        /// <param name="transport">The transport to use for sending and receiving data.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Server(IServer transport, string logName = "SERVER") : base(logName)
         {
@@ -61,7 +68,7 @@ namespace Riptide
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte)"/> will need to be called again.</remarks>
+        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte)"/> must be called again.</remarks>
         public void ChangeTransport(IServer newTransport)
         {
             Stop();
@@ -131,6 +138,7 @@ namespace Riptide
             }
         }
 
+        /// <summary>Handles an incoming connection attempt.</summary>
         private void HandleConnectionAttempt(object sender, ConnectingEventArgs e)
         {
             if (ClientCount < MaxClientCount)
@@ -153,12 +161,13 @@ namespace Riptide
             transport.Reject(e.Connection);
         }
 
+        /// <summary>What to do when the transport establishes a connection.</summary>
         private void AcceptConnection(object sender, Transports.ConnectedEventArgs e)
         {
             e.Connection.SendWelcome();
         }
 
-        /// <summary>Checks if clients have timed out. Called by <see cref="heartbeatTimer"/>.</summary>
+        /// <summary>Checks if clients have timed out.</summary>
         protected override void Heartbeat()
         {
             foreach (Connection connection in clients.Values)
@@ -171,7 +180,7 @@ namespace Riptide
             timedOutClients.Clear();
         }
 
-        /// <inheritdoc/>
+        /// <summary>Polls the transport for received messages and then handles them.</summary>
         public override void Tick()
         {
             base.Tick();
@@ -179,6 +188,7 @@ namespace Riptide
             HandleMessages();
         }
 
+        /// <inheritdoc/>
         protected override void Handle(Message message, HeaderType messageHeader, Connection connection)
         {
             switch (messageHeader)
@@ -231,13 +241,27 @@ namespace Riptide
             message.Release();
         }
 
+        /// <summary>Sends a message to a given client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The numeric ID of the client to send the message to.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
         public void Send(Message message, ushort toClient, bool shouldRelease = true)
         {
             if (clients.TryGetValue(toClient, out Connection connection))
                 Send(message, connection, shouldRelease);
         }
-        public void Send(Message message, Connection toConnection, bool shouldRelease = true) => toConnection.Send(message, shouldRelease);
+        /// <summary>Sends a message to a given client.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="toClient">The client to send the message to.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        public void Send(Message message, Connection toClient, bool shouldRelease = true) => toClient.Send(message, shouldRelease);
 
+        /// <summary>Sends a message to all connected clients.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
         public void SendToAll(Message message, bool shouldRelease = true)
         {
             foreach (Connection client in clients.Values)
@@ -246,7 +270,11 @@ namespace Riptide
             if (shouldRelease)
                 message.Release();
         }
-
+        /// <summary>Sends a message to all connected clients except the given one.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
         public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
         {
             foreach (Connection client in clients.Values)
@@ -257,8 +285,15 @@ namespace Riptide
                 message.Release();
         }
 
+        /// <summary>Retrieves the client with the given ID, if a client with that ID is currently connected.</summary>
+        /// <param name="id">The ID of the client to retrieve.</param>
+        /// <param name="client">The retrieved client.</param>
+        /// <returns><see langword="true"/> if a client with the given ID was connected; otherwise <see langword="false"/>.</returns>
         public bool TryGetClient(ushort id, out Connection client) => clients.TryGetValue(id, out client);
 
+        /// <summary>Disconnects a specific client.</summary>
+        /// <param name="id">The numeric ID of the client to disconnect.</param>
+        /// <param name="customMessage">An optional custom message (if any) to inform the client why it was disconnected.</param>
         public void DisconnectClient(ushort id, string customMessage = "")
         {
             if (clients.TryGetValue(id, out Connection client))
@@ -267,9 +302,12 @@ namespace Riptide
                 LocalDisconnect(client, DisconnectReason.kicked, customMessage);
             }
             else
-                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {id} because they weren't connected!");
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {id} because it wasn't connected!");
         }
 
+        /// <summary>Disconnects the given client.</summary>
+        /// <param name="client">The client to disconnect.</param>
+        /// <param name="customMessage">An optional custom message (if any) to inform the client why it was disconnected.</param>
         public void DisconnectClient(Connection client, string customMessage = "")
         {
             if (clients.ContainsKey(client.Id))
@@ -278,10 +316,10 @@ namespace Riptide
                 LocalDisconnect(client, DisconnectReason.kicked, customMessage);
             }
             else
-                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {client.Id} because they weren't connected!");
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't disconnect client {client.Id} because it wasn't connected!");
         }
 
-        /// <summary>Disconnects a given client.</summary>
+        /// <summary>Cleans up the local side of the given connection.</summary>
         /// <param name="client">The client to disconnect.</param>
         /// <param name="reason">The reason why the client is being disconnected.</param>
         /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
@@ -318,6 +356,7 @@ namespace Riptide
             }
         }
 
+        /// <summary>What to do when the transport disconnects a client.</summary>
         private void TransportDisconnected(object sender, Transports.DisconnectedEventArgs e)
         {
             LocalDisconnect(e.Connection, e.Reason);
@@ -356,7 +395,7 @@ namespace Riptide
         }
 
         /// <summary>Retrieves an available client ID.</summary>
-        /// <returns>The client ID. 0 if none available.</returns>
+        /// <returns>The client ID. 0 if none were available.</returns>
         private ushort GetAvailableClientId()
         {
             if (availableClientIds.Count > 0)
@@ -377,7 +416,7 @@ namespace Riptide
         /// <param name="client">The client to send the disconnect message to.</param>
         /// <param name="reason">Why the client is being disconnected.</param>
         /// <param name="customMessage">A custom message which is used to inform clients why they were disconnected.</param>
-        private void SendDisconnect(Connection client, DisconnectReason reason, string customMessage = "")
+        private void SendDisconnect(Connection client, DisconnectReason reason, string customMessage)
         {
             Message message = Message.Create(HeaderType.disconnect);
             message.AddByte((byte)reason);
@@ -410,8 +449,8 @@ namespace Riptide
 
         #region Events
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
+        /// <param name="client">The newly connected client.</param>
+        /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
         protected virtual void OnClientConnected(Connection client, Message connectMessage)
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) connected successfully!");
@@ -420,8 +459,8 @@ namespace Riptide
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
+        /// <param name="message">The received message.</param>
+        /// <param name="fromConnection">The client from which the message was received.</param>
         protected virtual void OnMessageReceived(Message message, Connection fromConnection)
         {
             ushort messageId = message.GetUShort();
@@ -434,8 +473,7 @@ namespace Riptide
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
+        /// <param name="clientId">The numeric ID of the client that disconnected.</param>
         protected virtual void OnClientDisconnected(ushort clientId)
         {
             SendClientDisconnected(clientId);

@@ -94,7 +94,7 @@ namespace Riptide
             }
         }
 
-        /// <summary>Returns the <see cref="PendingMessage"/> instance to the internal pool so it can be reused.</summary>
+        /// <summary>Returns the <see cref="PendingMessage"/> instance to the pool so it can be reused.</summary>
         private void Release()
         {
             lock (pool)
@@ -153,8 +153,8 @@ namespace Riptide
             retryTimer.Interval = connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier);
         }
 
-        /// <summary>Clears and removes the message from the dictionary of pending messages.</summary>
-        /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="RudpPeer.PendingMessages"/>.</param>
+        /// <summary>Clears the message.</summary>
+        /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="Connection.PendingMessages"/>.</param>
         internal void Clear(bool shouldRemoveFromDictionary = true)
         {
             lock (data)
