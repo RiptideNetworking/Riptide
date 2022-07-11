@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedServer
+namespace Riptide.Demos.DedicatedServer
 {
     [RequireComponent(typeof(CharacterController))]
     public class Player : MonoBehaviour

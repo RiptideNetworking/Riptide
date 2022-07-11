@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedClient
+namespace Riptide.Demos.DedicatedClient
 {
     public class Player : MonoBehaviour
     {

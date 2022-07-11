@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedServer
+namespace Riptide.Demos.DedicatedServer
 {
     public static class MessageExtensions
     {

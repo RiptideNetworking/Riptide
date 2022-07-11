@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
-using Riptide.Demos.Rudp.MGCommon;
+using Riptide.Demos.MGCommon;
 using System.Collections.Generic;
 
-namespace Riptide.Demos.Rudp.MGServer
+namespace Riptide.Demos.MGServer
 {
     internal class Player
     {

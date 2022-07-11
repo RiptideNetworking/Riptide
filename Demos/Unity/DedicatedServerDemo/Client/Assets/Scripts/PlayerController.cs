@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedClient
+namespace Riptide.Demos.DedicatedClient
 {
     public class PlayerController : MonoBehaviour
     {

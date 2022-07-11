@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Riptide.Demos.Rudp.MGClient
+namespace Riptide.Demos.MGClient
 {
     public static class Program
     {

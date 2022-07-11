@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Riptide.Demos.Rudp.PlayerHosted
+namespace Riptide.Demos.PlayerHosted
 {
     [RequireComponent(typeof(CharacterController))]
     public class PlayerController : MonoBehaviour

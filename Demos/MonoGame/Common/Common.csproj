@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>Riptide.Demos.Rudp.MGCommon</RootNamespace>
+    <RootNamespace>Riptide.Demos.MGCommon</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

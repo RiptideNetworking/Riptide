@@ -1,4 +1,4 @@
-﻿namespace Riptide.Demos.Rudp.MGClient
+﻿namespace Riptide.Demos.MGClient
 {
     internal class NetworkManager
     {

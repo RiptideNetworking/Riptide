@@ -4,7 +4,7 @@ using System;
 #endif
 using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedServer
+namespace Riptide.Demos.DedicatedServer
 {
     public enum ServerToClientId : ushort
     {

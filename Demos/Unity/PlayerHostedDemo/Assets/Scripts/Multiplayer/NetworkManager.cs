@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace Riptide.Demos.Rudp.PlayerHosted
+namespace Riptide.Demos.PlayerHosted
 {
     internal enum MessageId : ushort
     {

@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-namespace Riptide.Demos.Rudp.DedicatedClient
+namespace Riptide.Demos.DedicatedClient
 {
     public enum ServerToClientId : ushort
     {

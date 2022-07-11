@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Riptide.Demos.Rudp.DedicatedClient
+namespace Riptide.Demos.DedicatedClient
 {
     public class UIManager : MonoBehaviour
     {

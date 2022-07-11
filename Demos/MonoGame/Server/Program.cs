@@ -2,7 +2,7 @@
 using System;
 using System.Threading;
 
-namespace Riptide.Demos.Rudp.MGServer
+namespace Riptide.Demos.MGServer
 {
     internal class Program
     {

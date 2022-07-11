@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using Riptide.Utils;
 using System;
 
-namespace Riptide.Demos.Rudp.MGClient
+namespace Riptide.Demos.MGClient
 {
     public class ExampleGame : Game
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
-namespace Riptide.Demos.Rudp.ConsoleClient
+namespace Riptide.Demos.ConsoleClient
 {
     internal class Program
     {
