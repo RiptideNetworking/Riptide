@@ -1623,6 +1623,12 @@
             <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:Riptide.Server.messageHandlers"/>.</param>
         </member>
+        <member name="M:Riptide.Server.SubToTransportEvents">
+            <summary>Subscribes appropriate methods to the transport's events.</summary>
+        </member>
+        <member name="M:Riptide.Server.UnsubFromTransportEvents">
+            <summary>Unsubscribes methods from all of the transport's events.</summary>
+        </member>
         <member name="M:Riptide.Server.CreateMessageHandlersDictionary(System.Byte)">
             <inheritdoc/>
         </member>

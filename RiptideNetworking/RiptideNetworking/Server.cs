@@ -90,17 +90,32 @@ namespace Riptide
             timedOutClients = new List<Connection>(maxClientCount);
             InitializeClientIds();
 
-            transport.Connecting += HandleConnectionAttempt;
-            transport.Connected += AcceptConnection;
-            transport.DataReceived += HandleData;
-            transport.Disconnected += TransportDisconnected;
+            SubToTransportEvents();
             transport.Start(port);
 
             StartHeartbeat();
             IsRunning = true;
             RiptideLogger.Log(LogType.info, LogName, $"Started on port {port}.");
         }
-        
+
+        /// <summary>Subscribes appropriate methods to the transport's events.</summary>
+        private void SubToTransportEvents()
+        {
+            transport.Connecting += HandleConnectionAttempt;
+            transport.Connected += AcceptConnection;
+            transport.DataReceived += HandleData;
+            transport.Disconnected += TransportDisconnected;
+        }
+
+        /// <summary>Unsubscribes methods from all of the transport's events.</summary>
+        private void UnsubFromTransportEvents()
+        {
+            transport.Connecting -= HandleConnectionAttempt;
+            transport.Connected -= AcceptConnection;
+            transport.DataReceived -= HandleData;
+            transport.Disconnected -= TransportDisconnected;
+        }
+
         /// <inheritdoc/>
         protected override void CreateMessageHandlersDictionary(byte messageHandlerGroupId)
         {
@@ -380,10 +395,7 @@ namespace Riptide
             clients.Clear();
 
             transport.Shutdown();
-            transport.Connecting -= HandleConnectionAttempt;
-            transport.Connected -= AcceptConnection;
-            transport.DataReceived -= HandleData;
-            transport.Disconnected -= TransportDisconnected;
+            UnsubFromTransportEvents();
 
             DecreaseActiveCount();
 
