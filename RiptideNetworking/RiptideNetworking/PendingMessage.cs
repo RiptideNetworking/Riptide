@@ -41,7 +41,7 @@ namespace Riptide
         /// <summary>Handles initial setup.</summary>
         internal PendingMessage()
         {
-            data = new byte[Message.MaxSize + RiptideConverter.UShortLength]; // + ushort length because we need to add the sequence ID bytes
+            data = new byte[Message.MaxSize + sizeof(ushort)]; // + ushort length because we need to add the sequence ID bytes
 
             retryTimer = new Timer();
             retryTimer.Elapsed += (s, e) => RetrySend();
@@ -62,7 +62,7 @@ namespace Riptide
             pendingMessage.data[0] = message.Bytes[0]; // Copy message header
             RiptideConverter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
             Array.Copy(message.Bytes, 1, pendingMessage.data, 3, message.WrittenLength - 1); // Copy the rest of the message
-            pendingMessage.writtenLength = message.WrittenLength + RiptideConverter.UShortLength;
+            pendingMessage.writtenLength = message.WrittenLength + sizeof(ushort);
 
             pendingMessage.maxSendAttempts = message.MaxSendAttempts;
             pendingMessage.sendAttempts = 0;

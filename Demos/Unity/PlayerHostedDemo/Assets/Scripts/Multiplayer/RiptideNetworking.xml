@@ -2251,33 +2251,6 @@
         <member name="T:Riptide.Utils.RiptideConverter">
             <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
         </member>
-        <member name="F:Riptide.Utils.RiptideConverter.BoolLength">
-            <summary>How many bytes a <see cref="T:System.Boolean"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.ShortLength">
-            <summary>How many bytes a <see cref="T:System.Int16"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.UShortLength">
-            <summary>How many bytes a <see cref="T:System.UInt16"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.IntLength">
-            <summary>How many bytes an <see cref="T:System.Int32"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.UIntLength">
-            <summary>How many bytes an <see cref="T:System.UInt32"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.LongLength">
-            <summary>How many bytes a <see cref="T:System.Int64"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.ULongLength">
-            <summary>How many bytes a <see cref="T:System.UInt64"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.FloatLength">
-            <summary>How many bytes a <see cref="T:System.Single"/> is represented by.</summary>
-        </member>
-        <member name="F:Riptide.Utils.RiptideConverter.DoubleLength">
-            <summary>How many bytes a <see cref="T:System.Double"/> is represented by.</summary>
-        </member>
         <member name="M:Riptide.Utils.RiptideConverter.FromShort(System.Int16,System.Byte[],System.Int32)">
             <summary>Converts a given <see cref="T:System.Int16"/> to bytes and writes them into the given array.</summary>
             <param name="value">The <see cref="T:System.Int16"/> to convert.</param>

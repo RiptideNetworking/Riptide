@@ -11,25 +11,6 @@ namespace Riptide.Utils
     /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
     public class RiptideConverter
     {
-        /// <summary>How many bytes a <see cref="bool"/> is represented by.</summary>
-        public const byte BoolLength = sizeof(bool);
-        /// <summary>How many bytes a <see cref="short"/> is represented by.</summary>
-        public const byte ShortLength = sizeof(short);
-        /// <summary>How many bytes a <see cref="ushort"/> is represented by.</summary>
-        public const byte UShortLength = sizeof(ushort);
-        /// <summary>How many bytes an <see cref="int"/> is represented by.</summary>
-        public const byte IntLength = sizeof(int);
-        /// <summary>How many bytes an <see cref="uint"/> is represented by.</summary>
-        public const byte UIntLength = sizeof(uint);
-        /// <summary>How many bytes a <see cref="long"/> is represented by.</summary>
-        public const byte LongLength = sizeof(long);
-        /// <summary>How many bytes a <see cref="ulong"/> is represented by.</summary>
-        public const byte ULongLength = sizeof(ulong);
-        /// <summary>How many bytes a <see cref="float"/> is represented by.</summary>
-        public const byte FloatLength = sizeof(float);
-        /// <summary>How many bytes a <see cref="double"/> is represented by.</summary>
-        public const byte DoubleLength = sizeof(double);
-
         #region Short/UShort
         /// <summary>Converts a given <see cref="short"/> to bytes and writes them into the given array.</summary>
         /// <param name="value">The <see cref="short"/> to convert.</param>
