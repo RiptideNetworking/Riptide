@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -148,7 +148,7 @@ namespace Riptide
                     if (e.Amount > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (just 3 means no payload for a reliably sent packet)
                         Array.Copy(e.DataBuffer, 3, message.Bytes, 1, e.Amount - 3);
 
-                    messagesToHandle.Enqueue(new MessageToHandle() { Message = message, MessageHeader = messageHeader, FromConnection = e.FromConnection });
+                    messagesToHandle.Enqueue(new MessageToHandle(message, messageHeader, e.FromConnection));
                 }
             }
             else
@@ -156,7 +156,7 @@ namespace Riptide
                 if (e.Amount > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
-                messagesToHandle.Enqueue(new MessageToHandle() { Message = message, MessageHeader = messageHeader, FromConnection = e.FromConnection });
+                messagesToHandle.Enqueue(new MessageToHandle(message, messageHeader, e.FromConnection));
             }
         }
 
@@ -185,11 +185,11 @@ namespace Riptide
     internal struct MessageToHandle
     {
         /// <summary>The message that needs to be handled.</summary>
-        internal Message Message;
+        internal readonly Message Message;
         /// <summary>The message's header type.</summary>
-        internal HeaderType MessageHeader;
+        internal readonly HeaderType MessageHeader;
         /// <summary>The connection on which the message was received.</summary>
-        internal Connection FromConnection;
+        internal readonly Connection FromConnection;
 
         /// <summary>Handles initialization.</summary>
         /// <param name="message">The message that needs to be handled.</param>

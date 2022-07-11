@@ -10,9 +10,9 @@ namespace Riptide
     public class ServerClientConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
-        public Connection Client { get; private set; }
+        public readonly Connection Client;
         /// <summary>A message containing any custom data the client included when it connected.</summary>
-        public Message ConnectMessage { get; private set; }
+        public readonly Message ConnectMessage;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
@@ -28,11 +28,11 @@ namespace Riptide
     public class ServerMessageReceivedEventArgs : EventArgs
     {
         /// <summary>The client from which the message was received.</summary>
-        public Connection FromClient { get; private set; }
+        public readonly Connection FromClient;
         /// <summary>The ID of the message.</summary>
-        public ushort MessageId { get; private set; }
+        public readonly ushort MessageId;
         /// <summary>The received message.</summary>
-        public Message Message { get; private set; }
+        public readonly Message Message;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="fromClient">The client from which the message was received.</param>
@@ -50,7 +50,7 @@ namespace Riptide
     public class ClientDisconnectedEventArgs : EventArgs
     {
         /// <summary>The numeric ID of the client that disconnected.</summary>
-        public ushort Id { get; private set; }
+        public readonly ushort Id;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="id">The numeric ID of the client that disconnected.</param>
@@ -61,7 +61,7 @@ namespace Riptide
     public class ClientConnectedEventArgs : EventArgs
     {
         /// <summary>The numeric ID of the newly connected client.</summary>
-        public ushort Id { get; private set; }
+        public readonly ushort Id;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="id">The numeric ID of the newly connected client.</param>
@@ -72,9 +72,9 @@ namespace Riptide
     public class ClientMessageReceivedEventArgs : EventArgs
     {
         /// <summary>The ID of the message.</summary>
-        public ushort MessageId { get; private set; }
+        public readonly ushort MessageId;
         /// <summary>The received message.</summary>
-        public Message Message { get; private set; }
+        public readonly Message Message;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="messageId">The ID of the message.</param>
@@ -90,9 +90,9 @@ namespace Riptide
     public class DisconnectedEventArgs : EventArgs
     {
         /// <summary>The reason for the disconnection.</summary>
-        public DisconnectReason Reason { get; private set; }
+        public readonly DisconnectReason Reason;
         /// <summary>The custom reason included with the disconnection information (if any).</summary>
-        public string CustomMessage { get; private set; }
+        public readonly string CustomMessage;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="reason">The reason for the disconnection.</param>

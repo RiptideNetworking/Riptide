@@ -324,10 +324,10 @@
         <member name="T:Riptide.ServerClientConnectedEventArgs">
             <summary>Contains event data for when a client connects to the server.</summary>
         </member>
-        <member name="P:Riptide.ServerClientConnectedEventArgs.Client">
+        <member name="F:Riptide.ServerClientConnectedEventArgs.Client">
             <summary>The newly connected client.</summary>
         </member>
-        <member name="P:Riptide.ServerClientConnectedEventArgs.ConnectMessage">
+        <member name="F:Riptide.ServerClientConnectedEventArgs.ConnectMessage">
             <summary>A message containing any custom data the client included when it connected.</summary>
         </member>
         <member name="M:Riptide.ServerClientConnectedEventArgs.#ctor(Riptide.Connection,Riptide.Message)">
@@ -338,13 +338,13 @@
         <member name="T:Riptide.ServerMessageReceivedEventArgs">
             <summary>Contains event data for when the server receives a message from a client.</summary>
         </member>
-        <member name="P:Riptide.ServerMessageReceivedEventArgs.FromClient">
+        <member name="F:Riptide.ServerMessageReceivedEventArgs.FromClient">
             <summary>The client from which the message was received.</summary>
         </member>
-        <member name="P:Riptide.ServerMessageReceivedEventArgs.MessageId">
+        <member name="F:Riptide.ServerMessageReceivedEventArgs.MessageId">
             <summary>The ID of the message.</summary>
         </member>
-        <member name="P:Riptide.ServerMessageReceivedEventArgs.Message">
+        <member name="F:Riptide.ServerMessageReceivedEventArgs.Message">
             <summary>The received message.</summary>
         </member>
         <member name="M:Riptide.ServerMessageReceivedEventArgs.#ctor(Riptide.Connection,System.UInt16,Riptide.Message)">
@@ -356,7 +356,7 @@
         <member name="T:Riptide.ClientDisconnectedEventArgs">
             <summary>Contains event data for when a client disconnects from the server.</summary>
         </member>
-        <member name="P:Riptide.ClientDisconnectedEventArgs.Id">
+        <member name="F:Riptide.ClientDisconnectedEventArgs.Id">
             <summary>The numeric ID of the client that disconnected.</summary>
         </member>
         <member name="M:Riptide.ClientDisconnectedEventArgs.#ctor(System.UInt16)">
@@ -366,7 +366,7 @@
         <member name="T:Riptide.ClientConnectedEventArgs">
             <summary>Contains event data for when a new client connects.</summary>
         </member>
-        <member name="P:Riptide.ClientConnectedEventArgs.Id">
+        <member name="F:Riptide.ClientConnectedEventArgs.Id">
             <summary>The numeric ID of the newly connected client.</summary>
         </member>
         <member name="M:Riptide.ClientConnectedEventArgs.#ctor(System.UInt16)">
@@ -376,10 +376,10 @@
         <member name="T:Riptide.ClientMessageReceivedEventArgs">
             <summary>Contains event data for when the client receives a message from the server.</summary>
         </member>
-        <member name="P:Riptide.ClientMessageReceivedEventArgs.MessageId">
+        <member name="F:Riptide.ClientMessageReceivedEventArgs.MessageId">
             <summary>The ID of the message.</summary>
         </member>
-        <member name="P:Riptide.ClientMessageReceivedEventArgs.Message">
+        <member name="F:Riptide.ClientMessageReceivedEventArgs.Message">
             <summary>The received message.</summary>
         </member>
         <member name="M:Riptide.ClientMessageReceivedEventArgs.#ctor(System.UInt16,Riptide.Message)">
@@ -390,10 +390,10 @@
         <member name="T:Riptide.DisconnectedEventArgs">
             <summary>Contains event data for when the client disconnects from a server.</summary>
         </member>
-        <member name="P:Riptide.DisconnectedEventArgs.Reason">
+        <member name="F:Riptide.DisconnectedEventArgs.Reason">
             <summary>The reason for the disconnection.</summary>
         </member>
-        <member name="P:Riptide.DisconnectedEventArgs.CustomMessage">
+        <member name="F:Riptide.DisconnectedEventArgs.CustomMessage">
             <summary>The custom reason included with the disconnection information (if any).</summary>
         </member>
         <member name="M:Riptide.DisconnectedEventArgs.#ctor(Riptide.DisconnectReason,System.String)">
@@ -1341,10 +1341,10 @@
               </para>
             </remarks>
         </member>
-        <member name="P:Riptide.MessageHandlerAttribute.MessageId">
+        <member name="F:Riptide.MessageHandlerAttribute.MessageId">
             <summary>The ID of the message type which this method is meant to handle.</summary>
         </member>
-        <member name="P:Riptide.MessageHandlerAttribute.GroupId">
+        <member name="F:Riptide.MessageHandlerAttribute.GroupId">
             <summary>The ID of the group of message handlers which this method belongs to.</summary>
         </member>
         <member name="M:Riptide.MessageHandlerAttribute.#ctor(System.UInt16,System.Byte)">

@@ -28,9 +28,9 @@ namespace Riptide
     public sealed class MessageHandlerAttribute : Attribute
     {
         /// <summary>The ID of the message type which this method is meant to handle.</summary>
-        public ushort MessageId { get; private set; }
+        public readonly ushort MessageId;
         /// <summary>The ID of the group of message handlers which this method belongs to.</summary>
-        public byte GroupId { get; private set; }
+        public readonly byte GroupId;
 
         /// <summary>Initializes a new instance of the <see cref="MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> values.</summary>
         /// <param name="messageId">The ID of the message type which this method is meant to handle.</param>
