@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -66,7 +66,7 @@ namespace Riptide
         /// <summary>The time at which to send the next heartbeat.</summary>
         private long nextHeartbeat;
         /// <summary>Received messages which need to be handled.</summary>
-        private Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
+        private readonly Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
 
         /// <summary>Initializes the peer.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -131,7 +131,7 @@ namespace Riptide
         }
 
         /// <summary>Handles data received by the transport.</summary>
-        protected void HandleData(object sender, DataReceivedEventArgs e)
+        protected void HandleData(object _, DataReceivedEventArgs e)
         {
             HeaderType messageHeader = (HeaderType)e.DataBuffer[0];
 
