@@ -48,7 +48,7 @@ namespace Riptide
         protected const string ReasonUnknown = "Unknown reason";
 
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
-        internal static int ActiveSocketCount { get; private set; }
+        internal static int ActiveCount { get; private set; }
 
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
@@ -162,18 +162,18 @@ namespace Riptide
         /// <param name="connection">The connection which the message was received on.</param>
         protected abstract void Handle(Message message, HeaderType messageHeader, Connection connection);
 
-        /// <summary>Increases <see cref="ActiveSocketCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
-        protected static void IncreaseActiveSocketCount()
+        /// <summary>Increases <see cref="ActiveCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
+        protected static void IncreaseActiveCount()
         {
-            ActiveSocketCount++;
+            ActiveCount++;
         }
 
-        /// <summary>Decreases <see cref="ActiveSocketCount"/>. For use when a <see cref="Server"/> or <see cref="Client"/> is stopped.</summary>
-        protected static void DecreaseActiveSocketCount()
+        /// <summary>Decreases <see cref="ActiveCount"/>. For use when a <see cref="Server"/> or <see cref="Client"/> is stopped.</summary>
+        protected static void DecreaseActiveCount()
         {
-            ActiveSocketCount--;
-            if (ActiveSocketCount < 0)
-                ActiveSocketCount = 0;
+            ActiveCount--;
+            if (ActiveCount < 0)
+                ActiveCount = 0;
         }
     }
 

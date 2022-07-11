@@ -583,7 +583,7 @@
         <member name="P:Riptide.Message.MaxPayloadSize">
             <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="F:Riptide.Message.HeaderSize"/>.</summary>
         </member>
-        <member name="P:Riptide.Message.InstancesPerSocket">
+        <member name="P:Riptide.Message.InstancesPerPeer">
             <summary>How many messages to add to the pool for each <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> instance that is started.</summary>
             <remarks>Changes will not affect <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances which are already running until they are restarted.</remarks>
         </member>
@@ -1401,7 +1401,7 @@
         <member name="F:Riptide.Peer.ReasonUnknown">
             <summary>The text to log when disconnected due to an unknown reason.</summary>
         </member>
-        <member name="P:Riptide.Peer.ActiveSocketCount">
+        <member name="P:Riptide.Peer.ActiveCount">
             <summary>The number of currently active <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances.</summary>
         </member>
         <member name="F:Riptide.Peer.LogName">
@@ -1459,11 +1459,11 @@
             <param name="messageHeader">The message's header type.</param>
             <param name="connection">The connection which the message was received on.</param>
         </member>
-        <member name="M:Riptide.Peer.IncreaseActiveSocketCount">
-            <summary>Increases <see cref="P:Riptide.Peer.ActiveSocketCount"/>. For use when a new <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is started.</summary>
+        <member name="M:Riptide.Peer.IncreaseActiveCount">
+            <summary>Increases <see cref="P:Riptide.Peer.ActiveCount"/>. For use when a new <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is started.</summary>
         </member>
-        <member name="M:Riptide.Peer.DecreaseActiveSocketCount">
-            <summary>Decreases <see cref="P:Riptide.Peer.ActiveSocketCount"/>. For use when a <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is stopped.</summary>
+        <member name="M:Riptide.Peer.DecreaseActiveCount">
+            <summary>Decreases <see cref="P:Riptide.Peer.ActiveCount"/>. For use when a <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> is stopped.</summary>
         </member>
         <member name="T:Riptide.MessageToHandle">
             <summary>Stores information about a message that needs to be handled.</summary>

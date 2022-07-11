@@ -36,7 +36,7 @@ namespace Riptide
             get => MaxSize - HeaderSize;
             set
             {
-                if (Peer.ActiveSocketCount > 0)
+                if (Peer.ActiveCount > 0)
                     RiptideLogger.Log(LogType.error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
                 else
                 {
@@ -55,9 +55,9 @@ namespace Riptide
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
-        public static byte InstancesPerSocket { get; set; } = 4;
+        public static byte InstancesPerPeer { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
-        private static readonly List<Message> pool = new List<Message>(InstancesPerSocket * 2);
+        private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -86,19 +86,19 @@ namespace Riptide
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
         public static void TrimPool()
         {
-            if (Peer.ActiveSocketCount == 0)
+            if (Peer.ActiveCount == 0)
             {
                 // No Servers or Clients are running, empty the list and reset the capacity
                 pool.Clear();
-                pool.Capacity = InstancesPerSocket * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
             }
             else
             {
                 // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
-                int idealInstanceAmount = Peer.ActiveSocketCount * InstancesPerSocket;
+                int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
                 if (pool.Count > idealInstanceAmount)
                 {
-                    pool.RemoveRange(Peer.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
+                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
                     pool.Capacity = idealInstanceAmount * 2;
                 }
             }

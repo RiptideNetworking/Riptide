@@ -100,7 +100,7 @@ namespace Riptide
 
             this.maxConnectionAttempts = maxConnectionAttempts;
             connection.Peer = this;
-            IncreaseActiveSocketCount();
+            IncreaseActiveCount();
             CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             if (message != null)
@@ -278,7 +278,7 @@ namespace Riptide
         private void LocalDisconnect(DisconnectReason reason, string customMessage = "")
         {
             UnsubFromTransportEvents();
-            DecreaseActiveSocketCount();
+            DecreaseActiveCount();
 
             StopHeartbeat();
             transport.Disconnect();

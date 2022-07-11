@@ -83,7 +83,7 @@ namespace Riptide
         {
             Stop();
 
-            IncreaseActiveSocketCount();
+            IncreaseActiveCount();
             CreateMessageHandlersDictionary(messageHandlerGroupId);
             MaxClientCount = maxClientCount;
             clients = new Dictionary<ushort, Connection>(maxClientCount);
@@ -379,7 +379,7 @@ namespace Riptide
             transport.DataReceived -= HandleData;
             transport.Disconnected -= TransportDisconnected;
 
-            DecreaseActiveSocketCount();
+            DecreaseActiveCount();
 
             StopHeartbeat();
             IsRunning = false;
