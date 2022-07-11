@@ -143,7 +143,7 @@ namespace Riptide
                 if (e.Amount < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
                     return;
 
-                if (e.FromConnection.ReliableHandle(RiptideConverter.ToUShort(e.DataBuffer, 1)))
+                if (e.FromConnection.ReliableHandle(Converter.ToUShort(e.DataBuffer, 1)))
                 {
                     if (e.Amount > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (just 3 means no payload for a reliably sent packet)
                         Array.Copy(e.DataBuffer, 3, message.Bytes, 1, e.Amount - 3);

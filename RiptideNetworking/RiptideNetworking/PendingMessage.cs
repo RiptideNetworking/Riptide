@@ -60,7 +60,7 @@ namespace Riptide
             pendingMessage.sequenceId = sequenceId;
 
             pendingMessage.data[0] = message.Bytes[0]; // Copy message header
-            RiptideConverter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
+            Converter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
             Array.Copy(message.Bytes, 1, pendingMessage.data, 3, message.WrittenLength - 1); // Copy the rest of the message
             pendingMessage.writtenLength = message.WrittenLength + sizeof(ushort);
 
@@ -135,7 +135,7 @@ namespace Riptide
                 {
                     HeaderType headerType = (HeaderType)data[0];
                     if (headerType == HeaderType.reliable)
-                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {RiptideConverter.ToUShort(data, 3)}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
+                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {Converter.ToUShort(data, 3)}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                     else
                         RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }

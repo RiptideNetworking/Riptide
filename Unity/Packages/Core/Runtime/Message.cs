@@ -512,7 +512,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(short))
                 throw new InsufficientCapacityException(this, ShortName, sizeof(short));
 
-            RiptideConverter.FromShort(value, Bytes, writePos);
+            Converter.FromShort(value, Bytes, writePos);
             writePos += sizeof(short);
             return this;
         }
@@ -525,7 +525,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(ushort))
                 throw new InsufficientCapacityException(this, UShortName, sizeof(ushort));
 
-            RiptideConverter.FromUShort(value, Bytes, writePos);
+            Converter.FromUShort(value, Bytes, writePos);
             writePos += sizeof(ushort);
             return this;
         }
@@ -540,7 +540,7 @@ namespace Riptide
                 return 0;
             }
 
-            short value = RiptideConverter.ToShort(Bytes, readPos);
+            short value = Converter.ToShort(Bytes, readPos);
             readPos += sizeof(short);
             return value;
         }
@@ -555,7 +555,7 @@ namespace Riptide
                 return 0;
             }
 
-            ushort value = RiptideConverter.ToUShort(Bytes, readPos);
+            ushort value = Converter.ToUShort(Bytes, readPos);
             readPos += sizeof(ushort);
             return value;
         }
@@ -658,7 +658,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToShort(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToShort(Bytes, readPos);
                 readPos += sizeof(short);
             }
         }
@@ -677,7 +677,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToUShort(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToUShort(Bytes, readPos);
                 readPos += sizeof(ushort);
             }
         }
@@ -692,7 +692,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(int))
                 throw new InsufficientCapacityException(this, IntName, sizeof(int));
 
-            RiptideConverter.FromInt(value, Bytes, writePos);
+            Converter.FromInt(value, Bytes, writePos);
             writePos += sizeof(int);
             return this;
         }
@@ -705,7 +705,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(uint))
                 throw new InsufficientCapacityException(this, UIntName, sizeof(uint));
 
-            RiptideConverter.FromUInt(value, Bytes, writePos);
+            Converter.FromUInt(value, Bytes, writePos);
             writePos += sizeof(uint);
             return this;
         }
@@ -720,7 +720,7 @@ namespace Riptide
                 return 0;
             }
 
-            int value = RiptideConverter.ToInt(Bytes, readPos);
+            int value = Converter.ToInt(Bytes, readPos);
             readPos += sizeof(int);
             return value;
         }
@@ -735,7 +735,7 @@ namespace Riptide
                 return 0;
             }
 
-            uint value = RiptideConverter.ToUInt(Bytes, readPos);
+            uint value = Converter.ToUInt(Bytes, readPos);
             readPos += sizeof(uint);
             return value;
         }
@@ -838,7 +838,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToInt(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToInt(Bytes, readPos);
                 readPos += sizeof(int);
             }
         }
@@ -857,7 +857,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToUInt(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToUInt(Bytes, readPos);
                 readPos += sizeof(uint);
             }
         }
@@ -872,7 +872,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(long))
                 throw new InsufficientCapacityException(this, LongName, sizeof(long));
 
-            RiptideConverter.FromLong(value, Bytes, writePos);
+            Converter.FromLong(value, Bytes, writePos);
             writePos += sizeof(long);
             return this;
         }
@@ -885,7 +885,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(ulong))
                 throw new InsufficientCapacityException(this, ULongName, sizeof(ulong));
 
-            RiptideConverter.FromULong(value, Bytes, writePos);
+            Converter.FromULong(value, Bytes, writePos);
             writePos += sizeof(ulong);
             return this;
         }
@@ -900,7 +900,7 @@ namespace Riptide
                 return 0;
             }
 
-            long value = RiptideConverter.ToLong(Bytes, readPos);
+            long value = Converter.ToLong(Bytes, readPos);
             readPos += sizeof(long);
             return value;
         }
@@ -915,7 +915,7 @@ namespace Riptide
                 return 0;
             }
 
-            ulong value = RiptideConverter.ToULong(Bytes, readPos);
+            ulong value = Converter.ToULong(Bytes, readPos);
             readPos += sizeof(ulong);
             return value;
         }
@@ -1018,7 +1018,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToLong(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToLong(Bytes, readPos);
                 readPos += sizeof(long);
             }
         }
@@ -1037,7 +1037,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToULong(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToULong(Bytes, readPos);
                 readPos += sizeof(ulong);
             }
         }
@@ -1052,7 +1052,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(float))
                 throw new InsufficientCapacityException(this, FloatName, sizeof(float));
 
-            RiptideConverter.FromFloat(value, Bytes, writePos);
+            Converter.FromFloat(value, Bytes, writePos);
             writePos += sizeof(float);
             return this;
         }
@@ -1067,7 +1067,7 @@ namespace Riptide
                 return 0;
             }
 
-            float value = RiptideConverter.ToFloat(Bytes, readPos);
+            float value = Converter.ToFloat(Bytes, readPos);
             readPos += sizeof(float);
             return value;
         }
@@ -1128,7 +1128,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToFloat(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToFloat(Bytes, readPos);
                 readPos += sizeof(float);
             }
         }
@@ -1143,7 +1143,7 @@ namespace Riptide
             if (UnwrittenLength < sizeof(double))
                 throw new InsufficientCapacityException(this, DoubleName, sizeof(double));
 
-            RiptideConverter.FromDouble(value, Bytes, writePos);
+            Converter.FromDouble(value, Bytes, writePos);
             writePos += sizeof(double);
             return this;
         }
@@ -1158,7 +1158,7 @@ namespace Riptide
                 return 0;
             }
 
-            double value = RiptideConverter.ToDouble(Bytes, readPos);
+            double value = Converter.ToDouble(Bytes, readPos);
             readPos += sizeof(double);
             return value;
         }
@@ -1219,7 +1219,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = RiptideConverter.ToDouble(Bytes, readPos);
+                intoArray[startIndex + i] = Converter.ToDouble(Bytes, readPos);
                 readPos += sizeof(double);
             }
         }

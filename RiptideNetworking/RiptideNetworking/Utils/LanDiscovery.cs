@@ -168,17 +168,17 @@ namespace Riptide.Utils
         /// <summary>Sets the data that will be sent as part of a broadcast.</summary>
         protected virtual void SetBroadcastData()
         {
-            RiptideConverter.FromLong(UniqueKey, broadcastSendBytes, 0);
+            Converter.FromLong(UniqueKey, broadcastSendBytes, 0);
         }
 
         /// <summary>Sets the data that will be sent in response to a broadcast.</summary>
         protected virtual void SetBroadcastResponseData()
         {
-            int ipBytes = RiptideConverter.ToInt(HostIP.GetAddressBytes(), 0);
+            int ipBytes = Converter.ToInt(HostIP.GetAddressBytes(), 0);
 
-            RiptideConverter.FromLong(UniqueKey, broadcastSendBytes, 0);
-            RiptideConverter.FromInt(ipBytes, broadcastSendBytes, 8);
-            RiptideConverter.FromUShort(HostPort, broadcastSendBytes, 12);
+            Converter.FromLong(UniqueKey, broadcastSendBytes, 0);
+            Converter.FromInt(ipBytes, broadcastSendBytes, 8);
+            Converter.FromUShort(HostPort, broadcastSendBytes, 12);
         }
 
         /// <summary>Handles the data received as part of a broadcast.</summary>
@@ -188,7 +188,7 @@ namespace Riptide.Utils
             if (bytesReceived < 8)
                 return; // Not enough bytes to read the expected data, presumably not a broadcast packet from our program
 
-            long key = RiptideConverter.ToLong(broadcastReceiveBytes, 0);
+            long key = Converter.ToLong(broadcastReceiveBytes, 0);
             if (key != UniqueKey)
                 return; // Key doesn't match, broadcast packet is not from our program
 
@@ -202,13 +202,13 @@ namespace Riptide.Utils
             if (bytesReceived < 14)
                 return; // Not enough bytes to read the data, presumably not a response to a broadcast packet from our program
 
-            long key = RiptideConverter.ToLong(broadcastReceiveBytes, 0);
+            long key = Converter.ToLong(broadcastReceiveBytes, 0);
             if (key != UniqueKey)
                 return; // Key doesn't match, broadcast response packet is not from our program
 
             byte[] hostIPBytes = new byte[4];
             Array.Copy(broadcastReceiveBytes, 8, hostIPBytes, 0, 4);
-            ushort hostPort = RiptideConverter.ToUShort(broadcastReceiveBytes, 12);
+            ushort hostPort = Converter.ToUShort(broadcastReceiveBytes, 12);
 
             OnHostDiscovered(new IPAddress(hostIPBytes), hostPort);
         }
@@ -252,12 +252,12 @@ namespace Riptide.Utils
         protected IPAddress GetBroadcastAddress(IPAddress address, IPAddress subnetMask)
         {
             // From https://www.medo64.com/2014/12/determining-ipv4-broadcast-address-in-c/
-            int addressInt = RiptideConverter.ToInt(address.GetAddressBytes(), 0);
-            int maskInt = RiptideConverter.ToInt(subnetMask.GetAddressBytes(), 0);
+            int addressInt = Converter.ToInt(address.GetAddressBytes(), 0);
+            int maskInt = Converter.ToInt(subnetMask.GetAddressBytes(), 0);
             int broadcastInt = addressInt | ~maskInt;
 
             byte[] broadcastIPBytes = new byte[4];
-            RiptideConverter.FromInt(broadcastInt, broadcastIPBytes, 0);
+            Converter.FromInt(broadcastInt, broadcastIPBytes, 0);
             return new IPAddress(broadcastIPBytes);
         }
 
