@@ -102,7 +102,7 @@ namespace Riptide
         private void SubToTransportEvents()
         {
             transport.Connecting += HandleConnectionAttempt;
-            transport.Connected += AcceptConnection;
+            transport.Connected += TransportConnected;
             transport.DataReceived += HandleData;
             transport.Disconnected += TransportDisconnected;
         }
@@ -111,7 +111,7 @@ namespace Riptide
         private void UnsubFromTransportEvents()
         {
             transport.Connecting -= HandleConnectionAttempt;
-            transport.Connected -= AcceptConnection;
+            transport.Connected -= TransportConnected;
             transport.DataReceived -= HandleData;
             transport.Disconnected -= TransportDisconnected;
         }
@@ -177,7 +177,7 @@ namespace Riptide
         }
 
         /// <summary>What to do when the transport establishes a connection.</summary>
-        private void AcceptConnection(object sender, Transports.ConnectedEventArgs e)
+        private void TransportConnected(object sender, ConnectedEventArgs e)
         {
             e.Connection.SendWelcome();
         }

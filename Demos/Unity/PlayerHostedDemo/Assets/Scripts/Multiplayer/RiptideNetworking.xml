@@ -1635,7 +1635,7 @@
         <member name="M:Riptide.Server.HandleConnectionAttempt(System.Object,Riptide.Transports.ConnectingEventArgs)">
             <summary>Handles an incoming connection attempt.</summary>
         </member>
-        <member name="M:Riptide.Server.AcceptConnection(System.Object,Riptide.Transports.ConnectedEventArgs)">
+        <member name="M:Riptide.Server.TransportConnected(System.Object,Riptide.Transports.ConnectedEventArgs)">
             <summary>What to do when the transport establishes a connection.</summary>
         </member>
         <member name="M:Riptide.Server.Heartbeat">
