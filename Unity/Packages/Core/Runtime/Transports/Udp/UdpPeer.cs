@@ -11,6 +11,9 @@ namespace Riptide.Transports.Udp
     /// <summary>Provides base send &#38; receive functionality for <see cref="UdpServer"/> and <see cref="UdpClient"/>.</summary>
     public abstract class UdpPeer
     {
+        /// <inheritdoc cref="IPeer.Disconnected"/>
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
+
         /// <summary>The default size used for the socket's send and receive buffers.</summary>
         protected const int DefaultSocketBufferSize = 1024 * 1024; // 1MB
         /// <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
@@ -139,5 +142,13 @@ namespace Riptide.Transports.Udp
         /// <param name="amount">The number of bytes in <paramref name="dataBuffer"/> used by the received data.</param>
         /// <param name="fromEndPoint">The endpoint from which the data was received.</param>
         protected abstract void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint);
+
+        /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
+        /// <param name="connection">The closed connection.</param>
+        /// <param name="reason">The reason for the disconnection.</param>
+        protected virtual void OnDisconnected(Connection connection, DisconnectReason reason)
+        {
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(connection, reason));
+        }
     }
 }

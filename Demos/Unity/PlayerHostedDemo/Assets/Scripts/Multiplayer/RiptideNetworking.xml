@@ -1386,6 +1386,18 @@
         <member name="T:Riptide.Peer">
             <summary>Provides base functionality for <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/>.</summary>
         </member>
+        <member name="F:Riptide.Peer.LogName">
+            <summary>The name to use when logging messages via <see cref="T:Riptide.Utils.RiptideLogger"/>.</summary>
+        </member>
+        <member name="P:Riptide.Peer.TimeoutTime">
+            <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
+        </member>
+        <member name="P:Riptide.Peer.HeartbeatInterval">
+            <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
+        </member>
+        <member name="P:Riptide.Peer.ActiveCount">
+            <summary>The number of currently active <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances.</summary>
+        </member>
         <member name="F:Riptide.Peer.ReasonNeverConnected">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.neverConnected"/>.</summary>
         </member>
@@ -1406,18 +1418,6 @@
         </member>
         <member name="F:Riptide.Peer.ReasonUnknown">
             <summary>The text to log when disconnected due to an unknown reason.</summary>
-        </member>
-        <member name="P:Riptide.Peer.ActiveCount">
-            <summary>The number of currently active <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances.</summary>
-        </member>
-        <member name="F:Riptide.Peer.LogName">
-            <summary>The name to use when logging messages via <see cref="T:Riptide.Utils.RiptideLogger"/>.</summary>
-        </member>
-        <member name="P:Riptide.Peer.TimeoutTime">
-            <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        </member>
-        <member name="P:Riptide.Peer.HeartbeatInterval">
-            <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
         </member>
         <member name="F:Riptide.Peer.heartbeatSW">
             <summary>The stopwatch used to determine when it's time to send the next heartbeat.</summary>
@@ -1902,9 +1902,6 @@
         <member name="E:Riptide.Transports.Udp.UdpClient.DataReceived">
             <inheritdoc/>
         </member>
-        <member name="E:Riptide.Transports.Udp.UdpClient.Disconnected">
-            <inheritdoc/>
-        </member>
         <member name="F:Riptide.Transports.Udp.UdpClient.udpConnection">
             <summary>The connection to the server.</summary>
         </member>
@@ -1927,6 +1924,9 @@
         </member>
         <member name="M:Riptide.Transports.Udp.UdpClient.OnConnected">
             <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpClient.Connected"/> event.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Udp.UdpClient.OnConnectionFailed">
+            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpClient.ConnectionFailed"/> event.</summary>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">
             <inheritdoc/>
@@ -1962,6 +1962,9 @@
         </member>
         <member name="T:Riptide.Transports.Udp.UdpPeer">
             <summary>Provides base send &#38; receive functionality for <see cref="T:Riptide.Transports.Udp.UdpServer"/> and <see cref="T:Riptide.Transports.Udp.UdpClient"/>.</summary>
+        </member>
+        <member name="E:Riptide.Transports.Udp.UdpPeer.Disconnected">
+            <inheritdoc cref="E:Riptide.Transports.IPeer.Disconnected"/>
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize">
             <summary>The default size used for the socket's send and receive buffers.</summary>
@@ -2016,6 +2019,11 @@
             <param name="amount">The number of bytes in <paramref name="dataBuffer"/> used by the received data.</param>
             <param name="fromEndPoint">The endpoint from which the data was received.</param>
         </member>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.OnDisconnected(Riptide.Connection,Riptide.DisconnectReason)">
+            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpPeer.Disconnected"/> event.</summary>
+            <param name="connection">The closed connection.</param>
+            <param name="reason">The reason for the disconnection.</param>
+        </member>
         <member name="T:Riptide.Transports.Udp.UdpServer">
             <summary>A server which can accept connections from <see cref="T:Riptide.Transports.Udp.UdpClient"/>s.</summary>
         </member>
@@ -2026,9 +2034,6 @@
             <inheritdoc/>
         </member>
         <member name="E:Riptide.Transports.Udp.UdpServer.DataReceived">
-            <inheritdoc/>
-        </member>
-        <member name="E:Riptide.Transports.Udp.UdpServer.Disconnected">
             <inheritdoc/>
         </member>
         <member name="P:Riptide.Transports.Udp.UdpServer.Port">

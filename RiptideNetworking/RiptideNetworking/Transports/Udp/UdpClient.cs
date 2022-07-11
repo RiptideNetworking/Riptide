@@ -17,8 +17,6 @@ namespace Riptide.Transports.Udp
         public event EventHandler ConnectionFailed;
         /// <inheritdoc/>
         public event EventHandler<DataReceivedEventArgs> DataReceived;
-        /// <inheritdoc/>
-        public event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>The connection to the server.</summary>
         private UdpConnection udpConnection;
@@ -81,6 +79,12 @@ namespace Riptide.Transports.Udp
         protected virtual void OnConnected()
         {
             Connected?.Invoke(this, EventArgs.Empty);
+        }
+
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
+        protected virtual void OnConnectionFailed()
+        {
+            ConnectionFailed?.Invoke(this, EventArgs.Empty);
         }
 
         /// <inheritdoc/>

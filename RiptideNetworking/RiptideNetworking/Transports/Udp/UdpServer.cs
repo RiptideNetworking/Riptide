@@ -17,8 +17,6 @@ namespace Riptide.Transports.Udp
         public event EventHandler<ConnectedEventArgs> Connected;
         /// <inheritdoc/>
         public event EventHandler<DataReceivedEventArgs> DataReceived;
-        /// <inheritdoc/>
-        public event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <inheritdoc/>
         public ushort Port { get; private set; }
