@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
@@ -82,10 +82,10 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
-            if ((HeaderType)dataBuffer[0] == HeaderType.connect)
-                OnConnecting(new UdpConnection(fromEndPoint, this)); // TODO: consider pooling UdpConnection instances to mitigate the consequences of someone spamming fake connection attempts?
-            else if (connections.TryGetValue(fromEndPoint, out Connection connection))
+            if (connections.TryGetValue(fromEndPoint, out Connection connection))
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(dataBuffer, amount, connection));
+            else if ((HeaderType)dataBuffer[0] == HeaderType.connect)
+                OnConnecting(new UdpConnection(fromEndPoint, this)); // TODO: consider pooling UdpConnection instances to mitigate the consequences of someone spamming fake connection attempts?
         }
     }
 }
