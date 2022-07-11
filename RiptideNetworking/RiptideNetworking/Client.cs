@@ -11,85 +11,126 @@ using System.Reflection;
 namespace Riptide
 {
     /// <summary>A client that can connect to a <see cref="Server"/>.</summary>
-    public class Client : Common
+    public class Client : Peer
     {
-        /// <inheritdoc cref="IClient.Connected"/>
+        /// <summary>Invoked when a connection to the server is established.</summary>
         public event EventHandler Connected;
-        /// <inheritdoc cref="IClient.ConnectionFailed"/>
+        /// <summary>Invoked when a connection to the server fails to be established.</summary>
+        /// <remarks>This occurs when a connection request fails, either because no server is listening on the on the given host address, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         public event EventHandler ConnectionFailed;
-        /// <inheritdoc cref="IClient.MessageReceived"/>
+        /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
-        /// <inheritdoc cref="IClient.Disconnected"/>
+        /// <summary>Invoked when disconnected from the server.</summary>
         public event EventHandler<DisconnectedEventArgs> Disconnected;
-        /// <inheritdoc cref="IClient.ClientConnected"/>
+        /// <summary>Invoked when a client connects.</summary>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
-        /// <inheritdoc cref="IClient.ClientDisconnected"/>
+        /// <summary>Invoked when a client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
-        /// <inheritdoc cref="IConnectionInfo.Id"/>
-        public ushort Id => client.Id;
-        /// <inheritdoc cref="IConnectionInfo.RTT"/>
-        public short RTT => client.RTT;
-        /// <inheritdoc cref="IConnectionInfo.SmoothRTT"/>
-        public short SmoothRTT => client.SmoothRTT;
-        /// <inheritdoc cref="IConnectionInfo.IsNotConnected"/>
-        public bool IsNotConnected => client.IsNotConnected;
-        /// <inheritdoc cref="IConnectionInfo.IsConnecting"/>
-        public bool IsConnecting => client.IsConnecting;
-        /// <inheritdoc cref="IConnectionInfo.IsConnected"/>
-        public bool IsConnected => client.IsConnected;
-        /// <summary>Encapsulates a method that handles a message from the server.</summary>
+        /// <summary>The client's numeric ID.</summary>
+        public ushort Id => connection.Id;
+        /// <inheritdoc cref="Connection.RTT"/>
+        public short RTT => connection.RTT;
+        /// <summary><inheritdoc cref="Connection.SmoothRTT"/></summary>
+        /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
+        public short SmoothRTT => connection.SmoothRTT;
+        /// <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
+        public bool IsNotConnected => connection.IsNotConnected;
+        /// <summary>Whether or not the client is currently in the process of connecting.</summary>
+        public bool IsConnecting => connection.IsConnecting;
+        /// <summary>Whether or not the client is currently connected.</summary>
+        public bool IsConnected => connection.IsConnected;
+        /// <summary>Encapsulates a method that handles a message from a server.</summary>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);
 
-        /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
+        /// <summary>The client's connection to a server.</summary>
+        private Connection connection;
+        /// <summary>How many connection attempts have been made so far.</summary>
+        private int connectionAttempts;
+        /// <summary>How many connection attempts to make before giving up.</summary>
+        private int maxConnectionAttempts;
+        /// <inheritdoc cref="Server.messageHandlers"/>
         private Dictionary<ushort, MessageHandler> messageHandlers;
-        /// <summary>The underlying client that is used for sending and receiving data.</summary>
-        private IClient client;
+        /// <summary>The underlying transport's client that is used for sending and receiving data.</summary>
+        private IClient transport;
+        /// <summary>Custom data to include when connecting.</summary>
+        private byte[] connectBytes;
 
-        /// <summary>Handles initial setup.</summary>
-        /// <param name="client">The underlying client that is used for sending and receiving data.</param>
-        public Client(IClient client) => this.client = client;
-
-        /// <summary>Handles initial setup using the built-in RUDP transport.</summary>
-        /// <param name="timeoutTime">The time (in milliseconds) after which to disconnect if there's no heartbeat from the server.</param>
-        /// <param name="heartbeatInterval">The interval (in milliseconds) at which heartbeats should be sent to the server.</param>
-        /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(ushort timeoutTime = 5000, ushort heartbeatInterval = 1000, byte maxConnectionAttempts = 5, string logName = "CLIENT") => client = new Transports.Rudp.RudpClient(timeoutTime, heartbeatInterval, maxConnectionAttempts, logName);
-
-        /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
-        /// <param name="client">The underlying client that is used for managing the connection to the server.</param>
-        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, byte, Message)"/> will need to be called again.</remarks>
-        public void ChangeTransport(IClient client)
+        /// <inheritdoc cref="Server(IServer, string)"/>
+        public Client(IClient transport, string logName = "CLIENT") : base(logName)
         {
-            Disconnect();
-            this.client = client;
+            this.transport = transport;
         }
 
-        /// <summary>Attempts to connect to the given host address.</summary>
+        /// <inheritdoc cref="Server(string)"/>
+        public Client(string logName = "CLIENT") : base(logName)
+        {
+            transport = new Transports.Udp.UdpClient();
+        }
+
+        /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
+        /// <param name="newTransport">The new transport to use for sending and receiving data.</param>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, int, byte, Message)"/> must be called again.</remarks>
+        public void ChangeTransport(IClient newTransport)
+        {
+            Disconnect();
+            transport = newTransport;
+        }
+
+        /// <summary>Attempts to connect to a server at the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
+        /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
-        /// <remarks>
-        ///   Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.<br/>
-        ///   If you are using a different transport, check the relevant documentation for what information it requires in the host address.
-        /// </remarks>
-        /// <returns><see langword="true"/> if the <paramref name="hostAddress"/> was in a valid format; otherwise <see langword="false"/>.</returns>
-        public bool Connect(string hostAddress, byte messageHandlerGroupId = 0, Message message = null)
+        /// <remarks>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</remarks>
+        /// <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
+        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null)
         {
             Disconnect();
 
-            IncreaseActiveSocketCount();
+            SubToTransportEvents();
+
+            if (!transport.Connect(hostAddress, out connection, out string connectError))
+            {
+                RiptideLogger.Log(LogType.error, LogName, connectError);
+                UnsubFromTransportEvents();
+                return false;
+            }
+
+            this.maxConnectionAttempts = maxConnectionAttempts;
+            connection.Peer = this;
+            IncreaseActiveCount();
             CreateMessageHandlersDictionary(messageHandlerGroupId);
 
-            client.Connected += OnConnected;
-            client.ConnectionFailed += OnConnectionFailed;
-            client.MessageReceived += OnMessageReceived;
-            client.Disconnected += OnDisconnected;
-            client.ClientConnected += OnClientConnected;
-            client.ClientDisconnected += OnClientDisconnected;
-            return client.Connect(hostAddress, message);
+            if (message != null)
+            {
+                connectBytes = message.GetBytes(message.WrittenLength);
+                message.Release();
+            }
+            else
+                connectBytes = null;
+
+            RiptideLogger.Log(LogType.info, LogName, $"Connecting to {connection}...");
+            return true;
+        }
+
+        /// <summary>Subscribes appropriate methods to the transport's events.</summary>
+        private void SubToTransportEvents()
+        {
+            transport.Connected += TransportConnected;
+            transport.ConnectionFailed += TransportConnectionFailed;
+            transport.DataReceived += HandleData;
+            transport.Disconnected += TransportDisconnected;
+        }
+        
+        /// <summary>Unsubscribes methods from all of the transport's events.</summary>
+        private void UnsubFromTransportEvents()
+        {
+            transport.Connected -= TransportConnected;
+            transport.ConnectionFailed -= TransportConnectionFailed;
+            transport.DataReceived -= HandleData;
+            transport.Disconnected -= TransportDisconnected;
         }
 
         /// <inheritdoc/>
@@ -130,77 +171,225 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        public override void Tick() => client.Tick();
+        protected override void Heartbeat()
+        {
+            if (IsConnecting)
+            {
+                // If still trying to connect, send connect messages instead of heartbeats
+                if (connectionAttempts < maxConnectionAttempts)
+                {
+                    Send(Message.Create(HeaderType.connect));
+                    connectionAttempts++;
+                }
+                else
+                    LocalDisconnect(DisconnectReason.neverConnected);
+            }
+            else if (IsConnected)
+            {
+                // If connected and not timed out, send heartbeats
+                if (connection.HasTimedOut)
+                {
+                    LocalDisconnect(DisconnectReason.timedOut);
+                    return;
+                }
 
-        /// <inheritdoc cref="IClient.Send(Message, bool)"/>
-        public void Send(Message message, bool shouldRelease = true) => client.Send(message, shouldRelease);
+                connection.SendHeartbeat();
+            }
+        }
+
+        /// <summary>Polls the transport for received messages and then handles them.</summary>
+        public override void Tick()
+        {
+            base.Tick();
+            transport.Tick();
+            HandleMessages();
+        }
+
+        /// <inheritdoc/>
+        protected override void Handle(Message message, HeaderType messageHeader, Connection connection)
+        {
+            switch (messageHeader)
+            {
+                // User messages
+                case HeaderType.unreliable:
+                case HeaderType.unreliableAutoRelay:
+                case HeaderType.reliable:
+                case HeaderType.reliableAutoRelay:
+                    OnMessageReceived(message);
+                    break;
+
+                // Internal messages
+                case HeaderType.ack:
+                    connection.HandleAck(message);
+                    break;
+                case HeaderType.ackExtra:
+                    connection.HandleAckExtra(message);
+                    break;
+                case HeaderType.connect:
+                    // Handled by transport, if at all
+                    break;
+                case HeaderType.heartbeat:
+                    connection.HandleHeartbeatResponse(message);
+                    break;
+                case HeaderType.welcome:
+                    if (IsConnecting)
+                    {
+                        connection.HandleWelcome(message, connectBytes);
+                        connectBytes = null;
+                        OnConnected();
+                    }
+                    break;
+                case HeaderType.clientConnected:
+                    OnClientConnected(message.GetUShort());
+                    break;
+                case HeaderType.clientDisconnected:
+                    OnClientDisconnected(message.GetUShort());
+                    break;
+                case HeaderType.disconnect:
+                    LocalDisconnect((DisconnectReason)message.GetByte(), message.UnreadLength > 0 ? message.GetString() : "");
+                    break;
+                default:
+                    RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    break;
+            }
+
+            message.Release();
+        }
+
+        /// <summary>Sends a message to the server.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        public void Send(Message message, bool shouldRelease = true) => connection.Send(message, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
         {
-            if (IsNotConnected)
+            if (connection == null || IsNotConnected)
                 return;
 
-            client.Disconnect();
+            Send(Message.Create(HeaderType.disconnect));
+            LocalDisconnect(DisconnectReason.disconnected);
         }
 
-        /// <summary>Cleans up local objects on disconnection.</summary>
-        private void LocalDisconnect()
+        /// <summary>Cleans up the local side of the connection.</summary>
+        /// <param name="reason">The reason why the client has disconnected.</param>
+        /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
+        private void LocalDisconnect(DisconnectReason reason, string customMessage = "")
         {
-            client.Connected -= OnConnected;
-            client.ConnectionFailed -= OnConnectionFailed;
-            client.MessageReceived -= OnMessageReceived;
-            client.Disconnected -= OnDisconnected;
-            client.ClientConnected -= OnClientConnected;
-            client.ClientDisconnected -= OnClientDisconnected;
+            UnsubFromTransportEvents();
+            DecreaseActiveCount();
 
-            DecreaseActiveSocketCount();
+            StopHeartbeat();
+            transport.Disconnect();
+
+            connection.LocalDisconnect();
+
+            if (reason == DisconnectReason.neverConnected)
+                OnConnectionFailed();
+            else
+            {
+                string reasonString;
+                switch (reason)
+                {
+                    case DisconnectReason.neverConnected:
+                        reasonString = ReasonNeverConnected;
+                        break;
+                    case DisconnectReason.transportError:
+                        reasonString = ReasonTransportError;
+                        break;
+                    case DisconnectReason.timedOut:
+                        reasonString = ReasonTimedOut;
+                        break;
+                    case DisconnectReason.kicked:
+                        reasonString = string.IsNullOrEmpty(customMessage) ? ReasonKicked : customMessage;
+                        break;
+                    case DisconnectReason.serverStopped:
+                        reasonString = ReasonServerStopped;
+                        break;
+                    case DisconnectReason.disconnected:
+                        reasonString = ReasonDisconnected;
+                        break;
+                    default:
+                        reasonString = ReasonUnknown;
+                        break;
+                }
+
+                OnDisconnected(reason, reasonString);
+            }   
         }
 
+        /// <summary>What to do when the transport establishes a connection.</summary>
+        private void TransportConnected(object sender, EventArgs e)
+        {
+            StartHeartbeat();
+        }
+
+        /// <summary>What to do when the transport fails to connect.</summary>
+        private void TransportConnectionFailed(object sender, EventArgs e)
+        {
+            LocalDisconnect(DisconnectReason.neverConnected);
+        }
+
+        /// <summary>What to do when the transport disconnects.</summary>
+        private void TransportDisconnected(object sender, Transports.DisconnectedEventArgs e)
+        {
+            if (connection == e.Connection)
+                LocalDisconnect(e.Reason);
+        }
+
+        #region Events
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnConnected(object sender, EventArgs e) => Connected?.Invoke(this, e);
+        protected virtual void OnConnected()
+        {
+            RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
+            Connected?.Invoke(this, EventArgs.Empty);
+        }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnConnectionFailed(object sender, EventArgs e)
+        protected virtual void OnConnectionFailed()
         {
-            LocalDisconnect();
-            ConnectionFailed?.Invoke(this, e);
+            RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
+            ConnectionFailed?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnMessageReceived(object sender, ClientMessageReceivedEventArgs e)
+        /// <param name="message">The received message.</param>
+        protected virtual void OnMessageReceived(Message message)
         {
-            MessageReceived?.Invoke(this, e);
+            ushort messageId = message.GetUShort();
+            MessageReceived?.Invoke(this, new ClientMessageReceivedEventArgs(messageId, message));
 
-            if (messageHandlers.TryGetValue(e.MessageId, out MessageHandler messageHandler))
-                messageHandler(e.Message);
+            if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                messageHandler(message);
             else
-                RiptideLogger.Log(LogType.warning, $"No client message handler method found for message ID {e.MessageId}!");
+                RiptideLogger.Log(LogType.warning, $"No client message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnDisconnected(object sender, DisconnectedEventArgs e)
+        /// <param name="reason">The reason for the disconnection.</param>
+        /// <param name="customMessage">The custom message to display for the disconnection reason.</param>
+        protected virtual void OnDisconnected(DisconnectReason reason, string customMessage)
         {
-            LocalDisconnect();
-            Disconnected?.Invoke(this, e);
+            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {customMessage}.");
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, customMessage));
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientConnected(object sender, ClientConnectedEventArgs e) => ClientConnected?.Invoke(this, e);
+        /// <param name="clientId">The numeric ID of the client that connected.</param>
+        protected virtual void OnClientConnected(ushort clientId)
+        {
+            RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} connected.");
+            ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
+        }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The event args to invoke the event with.</param>
-        private void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e) => ClientDisconnected?.Invoke(this, e);
+        /// <param name="clientId">The numeric ID of the client that disconnected.</param>
+        protected virtual void OnClientDisconnected(ushort clientId)
+        {
+            RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} disconnected.");
+            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+        }
+        #endregion
     }
 }

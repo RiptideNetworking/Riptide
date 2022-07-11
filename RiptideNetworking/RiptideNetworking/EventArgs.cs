@@ -2,7 +2,6 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using Riptide.Transports;
 using System;
 
 namespace Riptide
@@ -11,14 +10,14 @@ namespace Riptide
     public class ServerClientConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
-        public IConnectionInfo Client { get; private set; }
+        public Connection Client { get; private set; }
         /// <summary>A message containing any custom data the client included when it connected.</summary>
         public Message ConnectMessage { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
         /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
-        public ServerClientConnectedEventArgs(IConnectionInfo client, Message connectMessage)
+        public ServerClientConnectedEventArgs(Connection client, Message connectMessage)
         {
             Client = client;
             ConnectMessage = connectMessage;
@@ -28,20 +27,20 @@ namespace Riptide
     /// <summary>Contains event data for when the server receives a message from a client.</summary>
     public class ServerMessageReceivedEventArgs : EventArgs
     {
-        /// <summary>The client that the message was received from.</summary>
-        public ushort FromClientId { get; private set; }
+        /// <summary>The client from which the message was received.</summary>
+        public Connection FromClient { get; private set; }
         /// <summary>The ID of the message.</summary>
         public ushort MessageId { get; private set; }
-        /// <summary>The message that was received.</summary>
+        /// <summary>The received message.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
-        /// <param name="fromClientId">The client that the message was received from.</param>
+        /// <param name="fromClient">The client from which the message was received.</param>
         /// <param name="messageId">The ID of the message.</param>
-        /// <param name="message">The message that was received.</param>
-        public ServerMessageReceivedEventArgs(ushort fromClientId, ushort messageId, Message message)
+        /// <param name="message">The received message.</param>
+        public ServerMessageReceivedEventArgs(Connection fromClient, ushort messageId, Message message)
         {
-            FromClientId = fromClientId;
+            FromClient = fromClient;
             MessageId = messageId;
             Message = message;
         }
@@ -74,12 +73,12 @@ namespace Riptide
     {
         /// <summary>The ID of the message.</summary>
         public ushort MessageId { get; private set; }
-        /// <summary>The message that was received.</summary>
+        /// <summary>The received message.</summary>
         public Message Message { get; private set; }
 
         /// <summary>Initializes event data.</summary>
         /// <param name="messageId">The ID of the message.</param>
-        /// <param name="message">The message that was received.</param>
+        /// <param name="message">The received message.</param>
         public ClientMessageReceivedEventArgs(ushort messageId, Message message)
         {
             MessageId = messageId;

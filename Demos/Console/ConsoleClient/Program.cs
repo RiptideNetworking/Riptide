@@ -1,8 +1,6 @@
-﻿using Riptide.Transports.Rudp;
-using Riptide.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
@@ -20,6 +18,7 @@ namespace Riptide.Demos.Rudp.ConsoleClient
         private static List<int> remainingTestIds;
         private static Timer testEndWaitTimer;
         private static int duplicateCount;
+        private static int sendCount;
 
         private static void Main()
         {
@@ -52,13 +51,16 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             Console.ReadLine();
 
             isRunning = false;
-            
+
             Console.ReadLine();
         }
 
         private static void Loop()
         {
-            client = new Client(new RudpClient(ushort.MaxValue)); // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            client = new Client
+            {
+                TimeoutTime = ushort.MaxValue // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
+            };
             client.Connected += (s, e) => Connected();
             client.Disconnected += (s, e) => Disconnected();
             client.Connect("127.0.0.1:7777");
@@ -66,6 +68,29 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             while (isRunning)
             {
                 client.Tick();
+
+                if (isTestRunning)
+                {
+                    for (int i = 0; i < 5; i++)
+                    {
+                        if (sendCount < testIdAmount)
+                        {
+                            SendTestMessage(nextReliableTestId++);
+                            sendCount++;
+                        }
+                    }
+
+                    if (sendCount == testIdAmount)
+                    {
+                        testEndWaitTimer = new Timer(5000);
+                        testEndWaitTimer.Elapsed += (e, s) => ReliabilityTestEnded();
+                        testEndWaitTimer.AutoReset = false;
+                        testEndWaitTimer.Start();
+
+                        isTestRunning = false;
+                    }
+                }
+
                 Thread.Sleep(10);
             }
 
@@ -89,7 +114,7 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             if (isTestRunning)
             {
                 Console.WriteLine();
-                Console.WriteLine($"Cancelled reliability test ({(isRoundTripTest ? "round-trip" : "one-way")}) due to disconnection.");
+                Console.WriteLine($"Canceled {(isRoundTripTest ? "round-trip" : "one-way")} reliability test due to disconnection.");
                 Console.WriteLine();
             }
 
@@ -107,41 +132,20 @@ namespace Riptide.Demos.Rudp.ConsoleClient
             }
 
             if (!isTestRunning)
-                new Thread(new ThreadStart(StartReliabilityTest)).Start(); // StartReliabilityTest blocks the thread it runs on, so we need to put it on a different thread to avoid blocking the receive thread
+                StartReliabilityTest();
         }
 
         private static void StartReliabilityTest()
         {
             isTestRunning = true;
             duplicateCount = 0;
+            sendCount = 0;
 
             remainingTestIds = new List<int>(testIdAmount);
             for (int i = 0; i < testIdAmount; i++)
-            {
                 remainingTestIds.Add(i + 1);
-            }
 
-            Console.WriteLine($"Starting reliability test ({(isRoundTripTest ? "round-trip" : "one-way")})!");
-
-            Stopwatch sw = new Stopwatch();
-            for (int i = 0; i < testIdAmount; i++)
-            {
-                if (!isTestRunning)
-                    return;
-
-                sw.Restart();
-                while (sw.ElapsedMilliseconds < 2)
-                {
-                    // Wait
-                }
-                
-                SendTestMessage(nextReliableTestId++);
-            }
-
-            testEndWaitTimer = new Timer(20000);
-            testEndWaitTimer.Elapsed += (e, s) => ReliabilityTestEnded();
-            testEndWaitTimer.AutoReset = false;
-            testEndWaitTimer.Start();
+            Console.WriteLine($"Starting {(isRoundTripTest ? "round-trip" : "one-way")} reliability test!");
         }
 
         private static void ReliabilityTestEnded()
@@ -150,7 +154,7 @@ namespace Riptide.Demos.Rudp.ConsoleClient
 
             if (isRoundTripTest)
             {
-                Console.WriteLine("Reliability test complete (round-trip):");
+                Console.WriteLine("Round-trip reliability test complete:");
                 Console.WriteLine($"  Messages sent: {testIdAmount}");
                 Console.WriteLine($"  Messages lost: {remainingTestIds.Count}");
                 Console.WriteLine($"  Duplicates:    {duplicateCount}");
@@ -158,24 +162,25 @@ namespace Riptide.Demos.Rudp.ConsoleClient
                 if (remainingTestIds.Count > 0)
                     Console.WriteLine($"  Test IDs lost: {string.Join(",", remainingTestIds)}");
                 if (duplicateCount > 0)
-                    Console.WriteLine("\nThis demo sends a reliable message every 2-3 milliseconds during the test, which is a very extreme use case.\n" +
-                        "Riptide's duplicate filter has a limited range, and a send rate like 33-50 reliable messages per 100ms will\n" +
-                        "max it out fast once combined with any amount of packet loss.\n\n" +
-                        "Most duplicates will be filtered out even at high send rates, but any messages that need to be resent due to\n" +
-                        "packet loss (and therefore take longer to arrive) are highly likely to be missed by Riptide's filter. If you\n" +
-                        "are simulating latency & packet loss with an app like Clumsy, you'll notice that increasing those numbers\n" +
-                        "will also increase the number of duplicates that aren't filtered out.\n\n" +
+                    Console.WriteLine("\nThis demo sends 5 reliable messages every 10 milliseconds during the test, which is quite an extreme use\n" +
+                        "case. Riptide's duplicate filter has a limited range, and a very high reliable message send rate will push\n" +
+                        "it to its limit once combined with any amount of packet loss.\n\n" +
+                        "If a message is sent, received by the other end, but the corresponding ack packet is lost or delayed, the\n" +
+                        "sender will initiate a resend. While most duplicates will be filtered out even at high send rates, in the\n" +
+                        "case of an unnecessary resend like this, the second message may not be filtered out if enough other reliable\n" +
+                        "messages were sent after the first send (the duplicate filter only tracks the last 80 sequence IDs).\n\n" +
+                        "If you are simulating latency & packet loss with an app like Clumsy, you'll notice that increasing those\n" +
+                        "values will also increase the number of duplicates that aren't filtered out.\n\n" +
                         "To reduce the amount of duplicate messages that Riptide does NOT manage to filter out, applications should\n" +
-                        "send reliable messages at a reasonable rate (unlike this demo). However, applications should also be\n" +
+                        "send reliable messages at a more reasonable rate (unlike this demo). However, applications should also be\n" +
                         "prepared to handle duplicate messages. Riptide can only filter out duplicates based on sequence ID, but if\n" +
                         "(for example) a hacker modifies his client to send a message twice with different sequence IDs and your\n" +
                         "server is not prepared for that, you may end up with issues such as players being spawned multiple times.");
             }
             else
-                Console.WriteLine("Reliability test complete (one-way)! See server console for results.");
+                Console.WriteLine("One-way reliability test complete! See server console for results.");
             
             Console.WriteLine();
-            isTestRunning = false;
         }
 
         private static void SendTestMessage(int reliableTestId)

@@ -36,7 +36,7 @@ namespace Riptide
             get => MaxSize - HeaderSize;
             set
             {
-                if (Common.ActiveSocketCount > 0)
+                if (Peer.ActiveCount > 0)
                     RiptideLogger.Log(LogType.error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
                 else
                 {
@@ -55,9 +55,9 @@ namespace Riptide
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
-        public static byte InstancesPerSocket { get; set; } = 4;
+        public static byte InstancesPerPeer { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
-        private static readonly List<Message> pool = new List<Message>(InstancesPerSocket * 2);
+        private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -86,23 +86,20 @@ namespace Riptide
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
         public static void TrimPool()
         {
-            lock (pool)
+            if (Peer.ActiveCount == 0)
             {
-                if (Common.ActiveSocketCount == 0)
+                // No Servers or Clients are running, empty the list and reset the capacity
+                pool.Clear();
+                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+            }
+            else
+            {
+                // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
+                int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
+                if (pool.Count > idealInstanceAmount)
                 {
-                    // No Servers or Clients are running, empty the list and reset the capacity
-                    pool.Clear();
-                    pool.Capacity = InstancesPerSocket * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
-                }
-                else
-                {
-                    // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
-                    int idealInstanceAmount = Common.ActiveSocketCount * InstancesPerSocket;
-                    if (pool.Count > idealInstanceAmount)
-                    {
-                        pool.RemoveRange(Common.ActiveSocketCount * InstancesPerSocket, pool.Count - idealInstanceAmount);
-                        pool.Capacity = idealInstanceAmount * 2;
-                    }
+                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
+                    pool.Capacity = idealInstanceAmount * 2;
                 }
             }
         }
@@ -150,32 +147,26 @@ namespace Riptide
         /// <returns>A message instance ready to be used for sending or handling.</returns>
         private static Message RetrieveFromPool()
         {
-            lock (pool)
+            Message message;
+            if (pool.Count > 0)
             {
-                Message message;
-                if (pool.Count > 0)
-                {
-                    message = pool[0];
-                    pool.RemoveAt(0);
-                }
-                else
-                    message = new Message(MaxSize);
-
-                return message;
+                message = pool[0];
+                pool.RemoveAt(0);
             }
+            else
+                message = new Message(MaxSize);
+
+            return message;
         }
 
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
-            lock (pool)
+            if (pool.Count < pool.Capacity)
             {
-                if (pool.Count < pool.Capacity)
-                {
-                    // Pool exists and there's room
-                    if (!pool.Contains(this))
-                        pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
-                }
+                // Pool exists and there's room
+                if (!pool.Contains(this))
+                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
             }
         }
         #endregion
@@ -205,8 +196,8 @@ namespace Riptide
         /// <returns>The message, ready to be used for handling.</returns>
         internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
         {
-            SetReadWritePos(1, contentLength);
             SetHeader(messageHeader);
+            SetReadWritePos(1, SendMode >= MessageSendMode.reliable ? (ushort)(contentLength - 2) : contentLength);
             return this;
         }
 

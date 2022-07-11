@@ -108,7 +108,7 @@ A few things to note:
 - message handler methods need to be `static`
 
 ## Low-Level Transports
-- [RUDP Transport](RiptideNetworking/RiptideNetworking/Transports/Rudp) (built-in)
+- [UDP Transport](RiptideNetworking/RiptideNetworking/Transports/Udp) (built-in)
 - [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
 
 ## Donate
