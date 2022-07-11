@@ -335,6 +335,12 @@ namespace Riptide
                 string reasonString;
                 switch (reason)
                 {
+                    case DisconnectReason.neverConnected:
+                        reasonString = ReasonNeverConnected;
+                        break;
+                    case DisconnectReason.transportError:
+                        reasonString = ReasonTransportError;
+                        break;
                     case DisconnectReason.timedOut:
                         reasonString = ReasonTimedOut;
                         break;

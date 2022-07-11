@@ -36,6 +36,10 @@ namespace Riptide
     /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
     public abstract class Peer
     {
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.neverConnected"/>.</summary>
+        protected const string ReasonNeverConnected = "Never connected";
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
+        protected const string ReasonTransportError = "Transport error";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
         protected const string ReasonTimedOut = "Timed out";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.kicked"/>.</summary>

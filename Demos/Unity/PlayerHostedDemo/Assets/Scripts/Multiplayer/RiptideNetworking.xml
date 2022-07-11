@@ -1386,6 +1386,12 @@
         <member name="T:Riptide.Peer">
             <summary>Provides base functionality for <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/>.</summary>
         </member>
+        <member name="F:Riptide.Peer.ReasonNeverConnected">
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.neverConnected"/>.</summary>
+        </member>
+        <member name="F:Riptide.Peer.ReasonTransportError">
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.transportError"/>.</summary>
+        </member>
         <member name="F:Riptide.Peer.ReasonTimedOut">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.timedOut"/>.</summary>
         </member>
