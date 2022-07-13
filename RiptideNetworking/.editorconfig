@@ -6,7 +6,7 @@ root = false
 [*.{cs,vb}]
 
 # Enforce file headers
-file_header_template = This file is provided under The MIT License as part of RiptideNetworking.\nCopyright (c) Tom Weiland\nFor additional information please see the included LICENSE.md file or view it on GitHub: https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+file_header_template = This file is provided under The MIT License as part of RiptideNetworking.\nCopyright (c) Tom Weiland\nFor additional information please see the included LICENSE.md file or view it on GitHub:\nhttps://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 # IDE0073: Incorrect/missing header
 dotnet_diagnostic.IDE0073.severity = warning
