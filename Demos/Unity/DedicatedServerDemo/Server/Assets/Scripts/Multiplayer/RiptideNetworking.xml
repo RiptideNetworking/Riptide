@@ -233,6 +233,9 @@
         <member name="M:Riptide.Connection.#ctor">
             <summary>Initializes the connection.</summary>
         </member>
+        <member name="M:Riptide.Connection.ResetTimeout">
+            <summary>Resets the connection's timeout time.</summary>
+        </member>
         <member name="M:Riptide.Connection.Send(Riptide.Message,System.Boolean)">
             <summary>Sends a message.</summary>
             <param name="message">The message to send.</param>
@@ -1632,11 +1635,8 @@
         <member name="M:Riptide.Server.CreateMessageHandlersDictionary(System.Byte)">
             <inheritdoc/>
         </member>
-        <member name="M:Riptide.Server.HandleConnectionAttempt(System.Object,Riptide.Transports.ConnectingEventArgs)">
+        <member name="M:Riptide.Server.HandleConnectionAttempt(System.Object,Riptide.Transports.ConnectedEventArgs)">
             <summary>Handles an incoming connection attempt.</summary>
-        </member>
-        <member name="M:Riptide.Server.TransportConnected(System.Object,Riptide.Transports.ConnectedEventArgs)">
-            <summary>What to do when the transport establishes a connection.</summary>
         </member>
         <member name="M:Riptide.Server.Heartbeat">
             <summary>Checks if clients have timed out.</summary>
@@ -1736,16 +1736,6 @@
         <member name="M:Riptide.Server.OnClientDisconnected(System.UInt16)">
             <summary>Invokes the <see cref="E:Riptide.Server.ClientDisconnected"/> event.</summary>
             <param name="clientId">The numeric ID of the client that disconnected.</param>
-        </member>
-        <member name="T:Riptide.Transports.ConnectingEventArgs">
-            <summary>Contains event data for when a server's transport receives a connection attempt.</summary>
-        </member>
-        <member name="F:Riptide.Transports.ConnectingEventArgs.Connection">
-            <summary>The pending connection.</summary>
-        </member>
-        <member name="M:Riptide.Transports.ConnectingEventArgs.#ctor(Riptide.Connection)">
-            <summary>Initializes event data.</summary>
-            <param name="connection">The pending connection.</param>
         </member>
         <member name="T:Riptide.Transports.ConnectedEventArgs">
             <summary>Contains event data for when a server's transport successfully establishes a connection to a client.</summary>
@@ -1862,9 +1852,6 @@
         <member name="T:Riptide.Transports.IServer">
             <summary>Defines methods, properties, and events which every transport's server must implement.</summary>
         </member>
-        <member name="E:Riptide.Transports.IServer.Connecting">
-            <summary>Invoked when a new connection attempt is received by the transport.</summary>
-        </member>
         <member name="E:Riptide.Transports.IServer.Connected">
             <summary>Invoked when a connection is established at the transport level.</summary>
         </member>
@@ -1874,14 +1861,6 @@
         <member name="M:Riptide.Transports.IServer.Start(System.UInt16)">
             <summary>Starts the transport and begins listening for incoming connections.</summary>
             <param name="port">The local port on which to listen for connections.</param>
-        </member>
-        <member name="M:Riptide.Transports.IServer.Accept(Riptide.Connection)">
-            <summary>Accepts a pending connection.</summary>
-            <param name="connection">The connection to accept.</param>
-        </member>
-        <member name="M:Riptide.Transports.IServer.Reject(Riptide.Connection)">
-            <summary>Rejects a pending connection.</summary>
-            <param name="connection">The connection to reject.</param>
         </member>
         <member name="M:Riptide.Transports.IServer.Close(Riptide.Connection)">
             <summary>Closes an active connection.</summary>
@@ -2027,9 +2006,6 @@
         <member name="T:Riptide.Transports.Udp.UdpServer">
             <summary>A server which can accept connections from <see cref="T:Riptide.Transports.Udp.UdpClient"/>s.</summary>
         </member>
-        <member name="E:Riptide.Transports.Udp.UdpServer.Connecting">
-            <inheritdoc/>
-        </member>
         <member name="E:Riptide.Transports.Udp.UdpServer.Connected">
             <inheritdoc/>
         </member>
@@ -2048,21 +2024,16 @@
         <member name="M:Riptide.Transports.Udp.UdpServer.Start(System.UInt16)">
             <inheritdoc/>
         </member>
-        <member name="M:Riptide.Transports.Udp.UdpServer.Accept(Riptide.Connection)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Udp.UdpServer.Reject(Riptide.Connection)">
-            <inheritdoc/>
+        <member name="M:Riptide.Transports.Udp.UdpServer.HandleConnectionAttempt(Riptide.Transports.Udp.UdpConnection)">
+            <summary>Decides what to do with a connection attempt.</summary>
+            <param name="connection">The connection to accept or reject.</param>
+            <returns>Whether or not the connection attempt was a new connection.</returns>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpServer.Close(Riptide.Connection)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpServer.Shutdown">
             <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Udp.UdpServer.OnConnecting(Riptide.Transports.Udp.UdpConnection)">
-            <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpServer.Connecting"/> event.</summary>
-            <param name="connection">The pending connection.</param>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpServer.OnConnected(Riptide.Connection)">
             <summary>Invokes the <see cref="E:Riptide.Transports.Udp.UdpServer.Connected"/> event.</summary>

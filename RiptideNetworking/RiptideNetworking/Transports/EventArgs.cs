@@ -5,20 +5,6 @@
 
 namespace Riptide.Transports
 {
-    /// <summary>Contains event data for when a server's transport receives a connection attempt.</summary>
-    public class ConnectingEventArgs
-    {
-        /// <summary>The pending connection.</summary>
-        public readonly Connection Connection;
-
-        /// <summary>Initializes event data.</summary>
-        /// <param name="connection">The pending connection.</param>
-        public ConnectingEventArgs(Connection connection)
-        {
-            Connection = connection;
-        }
-    }
-    
     /// <summary>Contains event data for when a server's transport successfully establishes a connection to a client.</summary>
     public class ConnectedEventArgs
     {

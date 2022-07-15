@@ -39,7 +39,7 @@ namespace Riptide.Transports.Udp
             OpenSocket();
 
             connection = udpConnection = new UdpConnection(new IPEndPoint(ip.MapToIPv6(), port), this);
-            OnConnected();
+            OnConnected(); // UDP is connectionless, so from the transport POV everything is immediately ready to send/receive data
             return true;
         }
 

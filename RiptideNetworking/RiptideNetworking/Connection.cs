@@ -86,6 +86,12 @@ namespace Riptide
         protected Connection()
         {
             state = ConnectionState.connecting;
+            ResetTimeout();
+        }
+
+        /// <summary>Resets the connection's timeout time.</summary>
+        public void ResetTimeout()
+        {
             lastHeartbeat = DateTime.UtcNow;
         }
 
@@ -329,7 +335,7 @@ namespace Riptide
                 RiptideLogger.Log(LogType.error, Peer.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
             state = ConnectionState.connected;
-            lastHeartbeat = DateTime.UtcNow;
+            ResetTimeout();
         }
 
         /// <summary>Handles a heartbeat message.</summary>
@@ -339,7 +345,7 @@ namespace Riptide
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();
 
-            lastHeartbeat = DateTime.UtcNow;
+            ResetTimeout();
         }
 
         /// <summary>Sends a heartbeat message.</summary>
@@ -360,7 +366,7 @@ namespace Riptide
         {
             Id = message.GetUShort();
             state = ConnectionState.connected;
-            lastHeartbeat = DateTime.UtcNow;
+            ResetTimeout();
 
             RespondWelcome(connectBytes);
         }
@@ -399,7 +405,7 @@ namespace Riptide
             if (pendingPingId == pingId)
                 RTT = (short)Math.Max(1f, pendingPingStopwatch.ElapsedMilliseconds);
 
-            lastHeartbeat = DateTime.UtcNow;
+            ResetTimeout();
         }
         #endregion
         #endregion

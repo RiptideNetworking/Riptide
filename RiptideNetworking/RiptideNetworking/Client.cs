@@ -179,7 +179,11 @@ namespace Riptide
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
                 {
-                    Send(Message.Create(HeaderType.connect));
+                    Message message = Message.Create(HeaderType.connect);
+                    if (connectBytes != null)
+                        message.AddBytes(connectBytes);
+
+                    Send(message);
                     connectionAttempts++;
                 }
                 else
@@ -227,7 +231,7 @@ namespace Riptide
                     connection.HandleAckExtra(message);
                     break;
                 case HeaderType.connect:
-                    // Handled by transport, if at all
+                    // Client shouldn't ever receive a connect message
                     break;
                 case HeaderType.heartbeat:
                     connection.HandleHeartbeatResponse(message);

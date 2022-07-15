@@ -102,8 +102,7 @@ namespace Riptide
         /// <summary>Subscribes appropriate methods to the transport's events.</summary>
         private void SubToTransportEvents()
         {
-            transport.Connecting += HandleConnectionAttempt;
-            transport.Connected += TransportConnected;
+            transport.Connected += HandleConnectionAttempt;
             transport.DataReceived += HandleData;
             transport.Disconnected += TransportDisconnected;
         }
@@ -111,8 +110,7 @@ namespace Riptide
         /// <summary>Unsubscribes methods from all of the transport's events.</summary>
         private void UnsubFromTransportEvents()
         {
-            transport.Connecting -= HandleConnectionAttempt;
-            transport.Connected -= TransportConnected;
+            transport.Connected -= HandleConnectionAttempt;
             transport.DataReceived -= HandleData;
             transport.Disconnected -= TransportDisconnected;
         }
@@ -155,32 +153,32 @@ namespace Riptide
         }
 
         /// <summary>Handles an incoming connection attempt.</summary>
-        private void HandleConnectionAttempt(object sender, ConnectingEventArgs e)
+        private void HandleConnectionAttempt(object _, ConnectedEventArgs e)
         {
-            if (ClientCount < MaxClientCount)
+            e.Connection.Peer = this;
+        }
+
+        private void HandleConnect(Connection connection)
+        {
+            if (!clients.ContainsValue(connection))
             {
-                if (!clients.ContainsValue(e.Connection))
+                if (ClientCount < MaxClientCount)
                 {
                     ushort clientId = GetAvailableClientId();
-                    e.Connection.Id = clientId;
-                    e.Connection.Peer = this;
-                    transport.Accept(e.Connection);
+                    connection.Id = clientId;
+                    clients.Add(clientId, connection);
+                    connection.ResetTimeout();
+                    connection.SendWelcome();
                     return;
                 }
                 else
-                    RiptideLogger.Log(LogType.warning, LogName, $"{e.Connection} is already connected, rejecting connection!");
+                {
+                    RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {connection}.");
+
+                    connection.LocalDisconnect();
+                    transport.Close(connection);
+                }
             }
-            else
-                RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {e.Connection}.");
-
-            e.Connection.LocalDisconnect();
-            transport.Reject(e.Connection);
-        }
-
-        /// <summary>What to do when the transport establishes a connection.</summary>
-        private void TransportConnected(object sender, ConnectedEventArgs e)
-        {
-            e.Connection.SendWelcome();
         }
 
         /// <summary>Checks if clients have timed out.</summary>
@@ -230,7 +228,7 @@ namespace Riptide
                     connection.HandleAckExtra(message);
                     break;
                 case HeaderType.connect:
-                    // Handled by transport, if at all
+                    HandleConnect(connection);
                     break;
                 case HeaderType.heartbeat:
                     connection.HandleHeartbeat(message);
@@ -239,7 +237,6 @@ namespace Riptide
                     if (connection.IsConnecting)
                     {
                         connection.HandleWelcomeResponse(message);
-                        clients.Add(connection.Id, connection);
                         OnClientConnected(connection, message);
                     }
                     break;
@@ -341,12 +338,17 @@ namespace Riptide
         /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
         private void LocalDisconnect(Connection client, DisconnectReason reason, string customMessage = "")
         {
+            if (client.Peer != this)
+                return; // Client does not belong to this Server instance
+
             transport.Close(client);
-            client.LocalDisconnect();
             if (clients.Remove(client.Id))
-            {
-                OnClientDisconnected(client.Id);
                 availableClientIds.Add(client.Id);
+
+            if (client.IsConnected)
+            {
+                // Only run if the client was ever actually connected
+                OnClientDisconnected(client.Id);
 
                 string reasonString;
                 switch (reason)
@@ -376,6 +378,8 @@ namespace Riptide
             
                 RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) disconnected: {reasonString}.");
             }
+
+            client.LocalDisconnect();
         }
 
         /// <summary>What to do when the transport disconnects a client.</summary>
