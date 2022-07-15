@@ -40,6 +40,11 @@ namespace Riptide
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
+        /// <summary>Encapsulates a method that determines whether or not to accept a client's connection attempt.</summary>
+        public delegate bool ConnectionAttemptHandler(Connection pendingConnection, Message connectMessage);
+        /// <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
+        /// <remarks>The <see cref="Connection"/> parameter is the pending connection and the <see cref="Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
+        public ConnectionAttemptHandler DoAcceptClient;
 
         /// <summary>Currently connected clients.</summary>
         private Dictionary<ushort, Connection> clients;
@@ -158,8 +163,18 @@ namespace Riptide
             e.Connection.Peer = this;
         }
 
-        private void HandleConnect(Connection connection)
+        /// <summary>Handles a connect message.</summary>
+        /// <param name="connection">The client that sent the connect message.</param>
+        /// <param name="connectMessage">The connect message.</param>
+        private void HandleConnect(Connection connection, Message connectMessage)
         {
+            if (DoAcceptClient != null && !DoAcceptClient(connection, connectMessage))
+            {
+                connection.LocalDisconnect();
+                transport.Close(connection);
+                return;
+            }
+
             if (!clients.ContainsValue(connection))
             {
                 if (ClientCount < MaxClientCount)
@@ -228,7 +243,7 @@ namespace Riptide
                     connection.HandleAckExtra(message);
                     break;
                 case HeaderType.connect:
-                    HandleConnect(connection);
+                    HandleConnect(connection, message);
                     break;
                 case HeaderType.heartbeat:
                     connection.HandleHeartbeat(message);

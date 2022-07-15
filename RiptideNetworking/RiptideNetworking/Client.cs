@@ -181,7 +181,7 @@ namespace Riptide
                 {
                     Message message = Message.Create(HeaderType.connect);
                     if (connectBytes != null)
-                        message.AddBytes(connectBytes);
+                        message.AddBytes(connectBytes, false);
 
                     Send(message);
                     connectionAttempts++;
@@ -239,8 +239,7 @@ namespace Riptide
                 case HeaderType.welcome:
                     if (IsConnecting)
                     {
-                        connection.HandleWelcome(message, connectBytes);
-                        connectBytes = null;
+                        connection.HandleWelcome(message);
                         OnConnected();
                     }
                     break;

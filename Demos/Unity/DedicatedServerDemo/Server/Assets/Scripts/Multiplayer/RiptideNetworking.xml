@@ -308,14 +308,12 @@
         <member name="M:Riptide.Connection.RespondHeartbeat(System.Byte)">
             <summary>Sends a heartbeat message.</summary>
         </member>
-        <member name="M:Riptide.Connection.HandleWelcome(Riptide.Message,System.Byte[])">
+        <member name="M:Riptide.Connection.HandleWelcome(Riptide.Message)">
             <summary>Handles a welcome message on the client.</summary>
             <param name="message">The welcome message to handle.</param>
-            <param name="connectBytes">Custom data to include.</param>
         </member>
-        <member name="M:Riptide.Connection.RespondWelcome(System.Byte[])">
+        <member name="M:Riptide.Connection.RespondWelcome">
             <summary>Sends a welcome response message.</summary>
-            <param name="connectBytes">Custom data to include.</param>
         </member>
         <member name="M:Riptide.Connection.SendHeartbeat">
             <summary>Sends a heartbeat message.</summary>
@@ -1591,6 +1589,13 @@
             <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
             <param name="message">The message that was received.</param>
         </member>
+        <member name="T:Riptide.Server.ConnectionAttemptHandler">
+            <summary>Encapsulates a method that determines whether or not to accept a client's connection attempt.</summary>
+        </member>
+        <member name="F:Riptide.Server.DoAcceptClient">
+            <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
+            <remarks>The <see cref="T:Riptide.Connection"/> parameter is the pending connection and the <see cref="T:Riptide.Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
+        </member>
         <member name="F:Riptide.Server.clients">
             <summary>Currently connected clients.</summary>
         </member>
@@ -1637,6 +1642,11 @@
         </member>
         <member name="M:Riptide.Server.HandleConnectionAttempt(System.Object,Riptide.Transports.ConnectedEventArgs)">
             <summary>Handles an incoming connection attempt.</summary>
+        </member>
+        <member name="M:Riptide.Server.HandleConnect(Riptide.Connection,Riptide.Message)">
+            <summary>Handles a connect message.</summary>
+            <param name="connection">The client that sent the connect message.</param>
+            <param name="connectMessage">The connect message.</param>
         </member>
         <member name="M:Riptide.Server.Heartbeat">
             <summary>Checks if clients have timed out.</summary>

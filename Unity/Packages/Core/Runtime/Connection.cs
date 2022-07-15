@@ -361,24 +361,20 @@ namespace Riptide
         #region Client
         /// <summary>Handles a welcome message on the client.</summary>
         /// <param name="message">The welcome message to handle.</param>
-        /// <param name="connectBytes">Custom data to include.</param>
-        internal void HandleWelcome(Message message, byte[] connectBytes)
+        internal void HandleWelcome(Message message)
         {
             Id = message.GetUShort();
             state = ConnectionState.connected;
             ResetTimeout();
 
-            RespondWelcome(connectBytes);
+            RespondWelcome();
         }
 
         /// <summary>Sends a welcome response message.</summary>
-        /// <param name="connectBytes">Custom data to include.</param>
-        private void RespondWelcome(byte[] connectBytes)
+        private void RespondWelcome()
         {
             Message message = Message.Create(HeaderType.welcome, 25);
             message.AddUShort(Id);
-            if (connectBytes != null)
-                message.AddBytes(connectBytes, false);
 
             Send(message);
         }
