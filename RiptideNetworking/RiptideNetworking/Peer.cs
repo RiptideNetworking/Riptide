@@ -47,6 +47,9 @@ namespace Riptide
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
         internal static int ActiveCount { get; private set; }
 
+        /// <summary>The current time.</summary>
+        internal long CurrentTime { get; private set; }
+
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.neverConnected"/>.</summary>
         protected const string ReasonNeverConnected = "Never connected";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
@@ -62,12 +65,14 @@ namespace Riptide
         /// <summary>The text to log when disconnected due to an unknown reason.</summary>
         protected const string ReasonUnknown = "Unknown reason";
 
-        /// <summary>The stopwatch used to determine when it's time to send the next heartbeat.</summary>
-        private readonly System.Diagnostics.Stopwatch heartbeatSW = new System.Diagnostics.Stopwatch();
+        /// <summary>A stopwatch used to track how much time has passed.</summary>
+        private readonly System.Diagnostics.Stopwatch time = new System.Diagnostics.Stopwatch();
         /// <summary>The time at which to send the next heartbeat.</summary>
         private long nextHeartbeat;
         /// <summary>Received messages which need to be handled.</summary>
         private readonly Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
+        /// <summary>A queue of events to execute, ordered by how soon they need to be executed.</summary>
+        private readonly PriorityQueue<DelayedEvent, long> eventQueue = new PriorityQueue<DelayedEvent, long>();
 
         /// <summary>Initializes the peer.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -95,30 +100,42 @@ namespace Riptide
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to include in the dictionary.</param>
         protected abstract void CreateMessageHandlersDictionary(byte messageHandlerGroupId);
 
-        /// <summary>Starts the heart.</summary>
-        protected void StartHeartbeat()
+        /// <summary>Starts tracking how much time has passed.</summary>
+        protected void StartTime()
         {
-            heartbeatSW.Start();
+            time.Start();
         }
 
-        /// <summary>Stops the heart.</summary>
-        /// <remarks><see href="https://tenor.com/view/johnny-depp-captain-jack-sparrow-pirates-of-the-caribbean-at-worlds-end-potc-gif-17032484">More info.</see></remarks>
-        protected void StopHeartbeat()
+        /// <summary>Stops tracking how much time has passed.</summary>
+        protected void StopTime()
         {
-            heartbeatSW.Stop();
+            time.Stop();
         }
 
         /// <summary>Beats the heart.</summary>
         protected abstract void Heartbeat();
 
-        /// <summary>Calls <see cref="Heartbeat"/> every <see cref="HeartbeatInterval"/> milliseconds.</summary>
+        /// <summary>Checks if it's time for any delayed events to be invoked and invokes them.</summary>
         public virtual void Tick()
         {
-            if (heartbeatSW.ElapsedMilliseconds > nextHeartbeat)
+            CurrentTime = time.ElapsedMilliseconds;
+
+            while (eventQueue.Count > 0 && eventQueue.PeekPriority() <= CurrentTime)
+                eventQueue.Dequeue().Invoke();
+
+            if (CurrentTime > nextHeartbeat)
             {
                 nextHeartbeat += HeartbeatInterval;
                 Heartbeat();
             }
+        }
+
+        /// <summary>Sets up a delayed event to be executed after the given time has passed.</summary>
+        /// <param name="inMS">How long from now to execute the delayed event, in milliseconds.</param>
+        /// <param name="delayedEvent">The delayed event to execute later.</param>
+        internal void ExecuteLater(long inMS, DelayedEvent delayedEvent)
+        {
+            eventQueue.Enqueue(delayedEvent, CurrentTime + inMS);
         }
 
         /// <summary>Handles all queued messages.</summary>

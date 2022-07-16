@@ -99,7 +99,7 @@ namespace Riptide
             SubToTransportEvents();
             transport.Start(port);
 
-            StartHeartbeat();
+            StartTime();
             IsRunning = true;
             RiptideLogger.Log(LogType.info, LogName, $"Started on port {port}.");
         }
@@ -419,7 +419,7 @@ namespace Riptide
 
             DecreaseActiveCount();
 
-            StopHeartbeat();
+            StopTime();
             IsRunning = false;
             RiptideLogger.Log(LogType.info, LogName, "Server stopped.");
         }

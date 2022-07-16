@@ -284,7 +284,7 @@ namespace Riptide
             UnsubFromTransportEvents();
             DecreaseActiveCount();
 
-            StopHeartbeat();
+            StopTime();
             transport.Disconnect();
 
             connection.LocalDisconnect();
@@ -326,7 +326,7 @@ namespace Riptide
         /// <summary>What to do when the transport establishes a connection.</summary>
         private void TransportConnected(object sender, EventArgs e)
         {
-            StartHeartbeat();
+            StartTime();
         }
 
         /// <summary>What to do when the transport fails to connect.</summary>

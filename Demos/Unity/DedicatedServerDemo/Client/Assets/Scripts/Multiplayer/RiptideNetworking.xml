@@ -179,10 +179,10 @@
             <summary>Whether or not the connection is currently connected.</summary>
         </member>
         <member name="P:Riptide.Connection.RTT">
-            <summary>The round trip time (ping) of the connection. -1 if not calculated yet.</summary>
+            <summary>The round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         </member>
         <member name="P:Riptide.Connection.SmoothRTT">
-            <summary>The smoothed round trip time (ping) of the connection. -1 if not calculated yet.</summary>
+            <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
             <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="P:Riptide.Connection.RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         </member>
         <member name="P:Riptide.Connection.Peer">
@@ -1399,6 +1399,9 @@
         <member name="P:Riptide.Peer.ActiveCount">
             <summary>The number of currently active <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances.</summary>
         </member>
+        <member name="P:Riptide.Peer.CurrentTime">
+            <summary>The current time.</summary>
+        </member>
         <member name="F:Riptide.Peer.ReasonNeverConnected">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.neverConnected"/>.</summary>
         </member>
@@ -1420,14 +1423,17 @@
         <member name="F:Riptide.Peer.ReasonUnknown">
             <summary>The text to log when disconnected due to an unknown reason.</summary>
         </member>
-        <member name="F:Riptide.Peer.heartbeatSW">
-            <summary>The stopwatch used to determine when it's time to send the next heartbeat.</summary>
+        <member name="F:Riptide.Peer.time">
+            <summary>A stopwatch used to track how much time has passed.</summary>
         </member>
         <member name="F:Riptide.Peer.nextHeartbeat">
             <summary>The time at which to send the next heartbeat.</summary>
         </member>
         <member name="F:Riptide.Peer.messagesToHandle">
             <summary>Received messages which need to be handled.</summary>
+        </member>
+        <member name="F:Riptide.Peer.eventQueue">
+            <summary>A queue of events to execute, ordered by how soon they need to be executed.</summary>
         </member>
         <member name="M:Riptide.Peer.#ctor(System.String)">
             <summary>Initializes the peer.</summary>
@@ -1441,18 +1447,22 @@
             <summary>Builds a dictionary of message IDs and their corresponding message handler methods.</summary>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to include in the dictionary.</param>
         </member>
-        <member name="M:Riptide.Peer.StartHeartbeat">
-            <summary>Starts the heart.</summary>
+        <member name="M:Riptide.Peer.StartTime">
+            <summary>Starts tracking how much time has passed.</summary>
         </member>
-        <member name="M:Riptide.Peer.StopHeartbeat">
-            <summary>Stops the heart.</summary>
-            <remarks><see href="https://tenor.com/view/johnny-depp-captain-jack-sparrow-pirates-of-the-caribbean-at-worlds-end-potc-gif-17032484">More info.</see></remarks>
+        <member name="M:Riptide.Peer.StopTime">
+            <summary>Stops tracking how much time has passed.</summary>
         </member>
         <member name="M:Riptide.Peer.Heartbeat">
             <summary>Beats the heart.</summary>
         </member>
         <member name="M:Riptide.Peer.Tick">
-            <summary>Calls <see cref="M:Riptide.Peer.Heartbeat"/> every <see cref="P:Riptide.Peer.HeartbeatInterval"/> milliseconds.</summary>
+            <summary>Checks if it's time for any delayed events to be invoked and invokes them.</summary>
+        </member>
+        <member name="M:Riptide.Peer.ExecuteLater(System.Int64,Riptide.Utils.DelayedEvent)">
+            <summary>Sets up a delayed event to be executed after the given time has passed.</summary>
+            <param name="inMS">How long from now to execute the delayed event, in milliseconds.</param>
+            <param name="delayedEvent">The delayed event to execute later.</param>
         </member>
         <member name="M:Riptide.Peer.HandleMessages">
             <summary>Handles all queued messages.</summary>
@@ -1493,6 +1503,9 @@
         <member name="T:Riptide.PendingMessage">
             <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
         </member>
+        <member name="P:Riptide.PendingMessage.LastSendTime">
+            <summary>The time of the latest send attempt.</summary>
+        </member>
         <member name="F:Riptide.PendingMessage.RetryTimeMultiplier">
             <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         </member>
@@ -1516,12 +1529,6 @@
         </member>
         <member name="F:Riptide.PendingMessage.sendAttempts">
             <summary>How many send attempts have been made so far.</summary>
-        </member>
-        <member name="F:Riptide.PendingMessage.lastSendTime">
-            <summary>The time of the latest send attempt.</summary>
-        </member>
-        <member name="F:Riptide.PendingMessage.retryTimer">
-            <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
         </member>
         <member name="F:Riptide.PendingMessage.wasCleared">
             <summary>Whether the pending message has been cleared or not.</summary>
@@ -2172,6 +2179,29 @@
             <param name="startIndex">The position in the array at which to read the bytes.</param>
             <returns>The converted <see cref="T:System.Double"/>.</returns>
         </member>
+        <member name="T:Riptide.Utils.DelayedEvent">
+            <summary>Executes an action when invoked.</summary>
+        </member>
+        <member name="M:Riptide.Utils.DelayedEvent.Invoke">
+            <summary>Executes the action.</summary>
+        </member>
+        <member name="T:Riptide.Utils.PendingMessageResendEvent">
+            <summary>Resends a <see cref="T:Riptide.PendingMessage"/> when invoked.</summary>
+        </member>
+        <member name="F:Riptide.Utils.PendingMessageResendEvent.message">
+            <summary>The message to resend.</summary>
+        </member>
+        <member name="F:Riptide.Utils.PendingMessageResendEvent.initiatedAtTime">
+            <summary>The time at which the resend event was queued.</summary>
+        </member>
+        <member name="M:Riptide.Utils.PendingMessageResendEvent.#ctor(Riptide.PendingMessage,System.Int64)">
+            <summary>Initializes the event.</summary>
+            <param name="message">The message to resend.</param>
+            <param name="initiatedAtTime">The time at which the resend event was queued.</param>
+        </member>
+        <member name="M:Riptide.Utils.PendingMessageResendEvent.Invoke">
+            <inheritdoc/>
+        </member>
         <member name="T:Riptide.Utils.Extensions">
             <summary>Contains extension methods for various classes.</summary>
         </member>
@@ -2327,6 +2357,25 @@
             <summary>Initializes event data.</summary>
             <param name="hostIP">The IP of the discovered host.</param>
             <param name="hostPort">The port of the discovered host.</param>
+        </member>
+        <member name="T:Riptide.Utils.PriorityQueue`2">
+            <summary>Represents a collection of items that have a value and a priority. On dequeue, the item with the lowest priority value is removed.</summary>
+            <typeparam name="TElement">Specifies the type of elements in the queue.</typeparam>
+            <typeparam name="TPriority">Specifies the type of priority associated with enqueued elements.</typeparam>
+        </member>
+        <member name="P:Riptide.Utils.PriorityQueue`2.Count">
+            <summary>Gets the number of elements contained in the <see cref="T:Riptide.Utils.PriorityQueue`2"/>.</summary>
+        </member>
+        <member name="M:Riptide.Utils.PriorityQueue`2.Enqueue(`0,`1)">
+            <summary>Adds the specified element and associated priority to the <see cref="T:Riptide.Utils.PriorityQueue`2"/>.</summary>
+            <param name="element">The element to add.</param>
+            <param name="priority">The priority with which to associate the new element.</param>
+        </member>
+        <member name="M:Riptide.Utils.PriorityQueue`2.Dequeue">
+            <summary>Removes and returns the lowest priority element.</summary>
+        </member>
+        <member name="M:Riptide.Utils.PriorityQueue`2.PeekPriority">
+            <summary>Returns the priority of the lowest priority element.</summary>
         </member>
         <member name="T:Riptide.Utils.LogType">
             <summary>Defines log message types.</summary>

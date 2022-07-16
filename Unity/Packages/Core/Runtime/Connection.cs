@@ -32,7 +32,7 @@ namespace Riptide
         public bool IsConnecting => state == ConnectionState.connecting;
         /// <summary>Whether or not the connection is currently connected.</summary>
         public bool IsConnected => state == ConnectionState.connected;
-        /// <summary>The round trip time (ping) of the connection. -1 if not calculated yet.</summary>
+        /// <summary>The round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         public short RTT
         {
             get => _rtt;
@@ -43,7 +43,7 @@ namespace Riptide
             }
         }
         private short _rtt = -1;
-        /// <summary>The smoothed round trip time (ping) of the connection. -1 if not calculated yet.</summary>
+        /// <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
 

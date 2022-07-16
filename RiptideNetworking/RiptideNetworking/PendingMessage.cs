@@ -14,6 +14,9 @@ namespace Riptide
     /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
     internal class PendingMessage
     {
+        /// <summary>The time of the latest send attempt.</summary>
+        internal long LastSendTime { get; private set; }
+
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         private const float RetryTimeMultiplier = 1.2f;
 
@@ -32,10 +35,6 @@ namespace Riptide
         private int maxSendAttempts;
         /// <summary>How many send attempts have been made so far.</summary>
         private byte sendAttempts;
-        /// <summary>The time of the latest send attempt.</summary>
-        private DateTime lastSendTime;
-        /// <summary>The timer responsible for triggering a resend, if all else fails (like acks getting lost or redundant acks not being updated fast enough).</summary>
-        private readonly Timer retryTimer;
         /// <summary>Whether the pending message has been cleared or not.</summary>
         private bool wasCleared;
 
@@ -43,10 +42,6 @@ namespace Riptide
         internal PendingMessage()
         {
             data = new byte[Message.MaxSize + sizeof(ushort)]; // + ushort length because we need to add the sequence ID bytes
-
-            retryTimer = new Timer();
-            retryTimer.Elapsed += (s, e) => RetrySend();
-            retryTimer.AutoReset = false;
         }
 
         #region Pooling
@@ -69,38 +64,31 @@ namespace Riptide
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
 
-            lock (connection.PendingMessages)
-            {
-                connection.PendingMessages.Add(sequenceId, pendingMessage);
-                pendingMessage.TrySend();
-            }
+            connection.PendingMessages.Add(sequenceId, pendingMessage);
+            pendingMessage.TrySend();
         }
 
         /// <summary>Retrieves a <see cref="PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
         /// <returns>A <see cref="PendingMessage"/> instance.</returns>
         private static PendingMessage RetrieveFromPool()
         {
-            lock (pool)
+            PendingMessage message;
+            if (pool.Count > 0)
             {
-                PendingMessage message;
-                if (pool.Count > 0)
-                {
-                    message = pool[0];
-                    pool.RemoveAt(0);
-                }
-                else
-                    message = new PendingMessage();
-
-                return message;
+                message = pool[0];
+                pool.RemoveAt(0);
             }
+            else
+                message = new PendingMessage();
+
+            return message;
         }
 
         /// <summary>Returns the <see cref="PendingMessage"/> instance to the pool so it can be reused.</summary>
         private void Release()
         {
-            lock (pool)
-                if (!pool.Contains(this))
-                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+            if (!pool.Contains(this))
+                pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
 
             // TODO: consider doing something to decrease pool capacity if there are far more
             //       available instance than are needed, which could occur if a large burst of
@@ -111,18 +99,13 @@ namespace Riptide
         /// <summary>Resends the message.</summary>
         internal void RetrySend()
         {
-            lock (data)
+            if (!wasCleared)
             {
-                if (!wasCleared)
-                {
-                    if (lastSendTime.AddMilliseconds(connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT * 0.5f) <= DateTime.UtcNow) // Avoid triggering a resend if the latest resend was less than half a RTT ago
-                        TrySend();
-                    else
-                    {
-                        retryTimer.Start();
-                        retryTimer.Interval = connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier);
-                    }
-                }
+                long time = connection.Peer.CurrentTime;
+                if (LastSendTime + (connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT / 2) <= time) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                    TrySend();
+                else
+                    connection.Peer.ExecuteLater(connection.SmoothRTT < 0 ? 50 : (long)Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier), new PendingMessageResendEvent(this, time));
             }
         }
 
@@ -147,27 +130,21 @@ namespace Riptide
 
             connection.Send(data, writtenLength);
 
-            lastSendTime = DateTime.UtcNow;
+            LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;
 
-            retryTimer.Start();
-            retryTimer.Interval = connection.SmoothRTT < 0 ? 50 : Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier);
+            connection.Peer.ExecuteLater(connection.SmoothRTT < 0 ? 50 : (long)Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier), new PendingMessageResendEvent(this, connection.Peer.CurrentTime));
         }
 
         /// <summary>Clears the message.</summary>
         /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="Connection.PendingMessages"/>.</param>
         internal void Clear(bool shouldRemoveFromDictionary = true)
         {
-            lock (data)
-            {
-                if (shouldRemoveFromDictionary)
-                    lock (connection.PendingMessages)
-                        connection.PendingMessages.Remove(sequenceId);
+            if (shouldRemoveFromDictionary)
+                connection.PendingMessages.Remove(sequenceId);
 
-                retryTimer.Stop();
-                wasCleared = true;
-                Release();
-            }
+            wasCleared = true;
+            Release();
         }
     }
 }
