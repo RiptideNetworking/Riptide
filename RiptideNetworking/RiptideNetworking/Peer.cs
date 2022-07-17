@@ -42,6 +42,7 @@ namespace Riptide
         /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
         public ushort TimeoutTime { get; set; } = 5000;
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
+        /// <remarks>Changes to this value will only take effect after the next heartbeat is executed.</remarks>
         public ushort HeartbeatInterval { get; set; } = 1000;
 
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
@@ -67,8 +68,6 @@ namespace Riptide
 
         /// <summary>A stopwatch used to track how much time has passed.</summary>
         private readonly System.Diagnostics.Stopwatch time = new System.Diagnostics.Stopwatch();
-        /// <summary>The time at which to send the next heartbeat.</summary>
-        private long nextHeartbeat;
         /// <summary>Received messages which need to be handled.</summary>
         private readonly Queue<MessageToHandle> messagesToHandle = new Queue<MessageToHandle>();
         /// <summary>A queue of events to execute, ordered by how soon they need to be executed.</summary>
@@ -103,17 +102,18 @@ namespace Riptide
         /// <summary>Starts tracking how much time has passed.</summary>
         protected void StartTime()
         {
-            time.Start();
+            time.Restart();
         }
 
         /// <summary>Stops tracking how much time has passed.</summary>
         protected void StopTime()
         {
             time.Stop();
+            eventQueue.Clear();
         }
 
         /// <summary>Beats the heart.</summary>
-        protected abstract void Heartbeat();
+        internal abstract void Heartbeat();
 
         /// <summary>Checks if it's time for any delayed events to be invoked and invokes them.</summary>
         public virtual void Tick()
@@ -122,12 +122,6 @@ namespace Riptide
 
             while (eventQueue.Count > 0 && eventQueue.PeekPriority() <= CurrentTime)
                 eventQueue.Dequeue().Invoke();
-
-            if (CurrentTime > nextHeartbeat)
-            {
-                nextHeartbeat += HeartbeatInterval;
-                Heartbeat();
-            }
         }
 
         /// <summary>Sets up a delayed event to be executed after the given time has passed.</summary>

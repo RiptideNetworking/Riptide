@@ -36,4 +36,24 @@ namespace Riptide.Utils
                 message.RetrySend();
         }
     }
+
+    /// <summary>Executes a heartbeat when invoked.</summary>
+    internal class HeartbeatEvent : DelayedEvent
+    {
+        /// <summary>The peer whose heart to beat.</summary>
+        private readonly Peer peer;
+
+        /// <summary>Initializes the event.</summary>
+        /// <param name="peer">The peer whose heart to beat.</param>
+        public HeartbeatEvent(Peer peer)
+        {
+            this.peer = peer;
+        }
+
+        /// <inheritdoc/>
+        public override void Invoke()
+        {
+            peer.Heartbeat();
+        }
+    }
 }

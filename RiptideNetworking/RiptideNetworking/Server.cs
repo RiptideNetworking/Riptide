@@ -100,6 +100,7 @@ namespace Riptide
             transport.Start(port);
 
             StartTime();
+            Heartbeat();
             IsRunning = true;
             RiptideLogger.Log(LogType.info, LogName, $"Started on port {port}.");
         }
@@ -197,7 +198,7 @@ namespace Riptide
         }
 
         /// <summary>Checks if clients have timed out.</summary>
-        protected override void Heartbeat()
+        internal override void Heartbeat()
         {
             foreach (Connection connection in clients.Values)
                 if (connection.HasTimedOut)
@@ -207,6 +208,8 @@ namespace Riptide
                 LocalDisconnect(connection, DisconnectReason.timedOut);
 
             timedOutClients.Clear();
+
+            ExecuteLater(HeartbeatInterval, new HeartbeatEvent(this));
         }
 
         /// <summary>Polls the transport for received messages and then handles them.</summary>

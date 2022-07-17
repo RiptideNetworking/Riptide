@@ -51,6 +51,12 @@ namespace Riptide.Utils
             return entries[0].Priority;
         }
 
+        /// <summary>Removes all elements from the <see cref="PriorityQueue{TElement, TPriority}"/>.</summary>
+        public void Clear()
+        {
+            entries.Clear();
+        }
+
         private struct Entry<TEle, TPrio>
         {
             internal readonly TEle Element;

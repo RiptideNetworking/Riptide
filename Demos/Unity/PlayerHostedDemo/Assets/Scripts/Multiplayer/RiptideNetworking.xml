@@ -1395,6 +1395,7 @@
         </member>
         <member name="P:Riptide.Peer.HeartbeatInterval">
             <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
+            <remarks>Changes to this value will only take effect after the next heartbeat is executed.</remarks>
         </member>
         <member name="P:Riptide.Peer.ActiveCount">
             <summary>The number of currently active <see cref="T:Riptide.Server"/> and <see cref="T:Riptide.Client"/> instances.</summary>
@@ -1425,9 +1426,6 @@
         </member>
         <member name="F:Riptide.Peer.time">
             <summary>A stopwatch used to track how much time has passed.</summary>
-        </member>
-        <member name="F:Riptide.Peer.nextHeartbeat">
-            <summary>The time at which to send the next heartbeat.</summary>
         </member>
         <member name="F:Riptide.Peer.messagesToHandle">
             <summary>Received messages which need to be handled.</summary>
@@ -2202,6 +2200,19 @@
         <member name="M:Riptide.Utils.PendingMessageResendEvent.Invoke">
             <inheritdoc/>
         </member>
+        <member name="T:Riptide.Utils.HeartbeatEvent">
+            <summary>Executes a heartbeat when invoked.</summary>
+        </member>
+        <member name="F:Riptide.Utils.HeartbeatEvent.peer">
+            <summary>The peer whose heart to beat.</summary>
+        </member>
+        <member name="M:Riptide.Utils.HeartbeatEvent.#ctor(Riptide.Peer)">
+            <summary>Initializes the event.</summary>
+            <param name="peer">The peer whose heart to beat.</param>
+        </member>
+        <member name="M:Riptide.Utils.HeartbeatEvent.Invoke">
+            <inheritdoc/>
+        </member>
         <member name="T:Riptide.Utils.Extensions">
             <summary>Contains extension methods for various classes.</summary>
         </member>
@@ -2376,6 +2387,9 @@
         </member>
         <member name="M:Riptide.Utils.PriorityQueue`2.PeekPriority">
             <summary>Returns the priority of the lowest priority element.</summary>
+        </member>
+        <member name="M:Riptide.Utils.PriorityQueue`2.Clear">
+            <summary>Removes all elements from the <see cref="T:Riptide.Utils.PriorityQueue`2"/>.</summary>
         </member>
         <member name="T:Riptide.Utils.LogType">
             <summary>Defines log message types.</summary>

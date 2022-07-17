@@ -112,6 +112,7 @@ namespace Riptide
             else
                 connectBytes = null;
 
+            Heartbeat();
             RiptideLogger.Log(LogType.info, LogName, $"Connecting to {connection}...");
             return true;
         }
@@ -172,7 +173,7 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        protected override void Heartbeat()
+        internal override void Heartbeat()
         {
             if (IsConnecting)
             {
@@ -200,6 +201,8 @@ namespace Riptide
 
                 connection.SendHeartbeat();
             }
+
+            ExecuteLater(HeartbeatInterval, new HeartbeatEvent(this));
         }
 
         /// <summary>Polls the transport for received messages and then handles them.</summary>
