@@ -36,11 +36,11 @@ namespace Riptide
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
         /// <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
-        public bool IsNotConnected => connection.IsNotConnected;
+        public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
-        public bool IsConnecting => connection.IsConnecting;
+        public bool IsConnecting => !(connection is null) && connection.IsConnecting;
         /// <summary>Whether or not the client is currently connected.</summary>
-        public bool IsConnected => connection.IsConnected;
+        public bool IsConnected => !(connection is null) && connection.IsConnected;
         /// <summary>Encapsulates a method that handles a message from a server.</summary>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);
