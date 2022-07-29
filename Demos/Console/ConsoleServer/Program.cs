@@ -1,4 +1,5 @@
-﻿using Riptide.Utils;
+using RiptideNetworking;
+using RiptideNetworking.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -38,6 +39,7 @@ namespace Riptide.Demos.ConsoleServer
         {
             server = new Server
             {
+                // Error Located Here
                 TimeoutTime = ushort.MaxValue // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
             };
             server.Start(7777, 10);
