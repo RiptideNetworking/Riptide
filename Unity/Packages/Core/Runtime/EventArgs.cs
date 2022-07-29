@@ -12,16 +12,12 @@ namespace Riptide
     {
         /// <summary>The newly connected client.</summary>
         public readonly Connection Client;
-        /// <summary>A message containing any custom data the client included when it connected.</summary>
-        public readonly Message ConnectMessage;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="client">The newly connected client.</param>
-        /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
-        public ServerClientConnectedEventArgs(Connection client, Message connectMessage)
+        public ServerClientConnectedEventArgs(Connection client)
         {
             Client = client;
-            ConnectMessage = connectMessage;
         }
     }
 

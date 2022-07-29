@@ -328,13 +328,9 @@
         <member name="F:Riptide.ServerClientConnectedEventArgs.Client">
             <summary>The newly connected client.</summary>
         </member>
-        <member name="F:Riptide.ServerClientConnectedEventArgs.ConnectMessage">
-            <summary>A message containing any custom data the client included when it connected.</summary>
-        </member>
-        <member name="M:Riptide.ServerClientConnectedEventArgs.#ctor(Riptide.Connection,Riptide.Message)">
+        <member name="M:Riptide.ServerClientConnectedEventArgs.#ctor(Riptide.Connection)">
             <summary>Initializes event data.</summary>
             <param name="client">The newly connected client.</param>
-            <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
         </member>
         <member name="T:Riptide.ServerMessageReceivedEventArgs">
             <summary>Contains event data for when the server receives a message from a client.</summary>
@@ -1738,10 +1734,9 @@
             <summary>Sends a client disconnected message.</summary>
             <param name="id">The numeric ID of the client that disconnected.</param>
         </member>
-        <member name="M:Riptide.Server.OnClientConnected(Riptide.Connection,Riptide.Message)">
+        <member name="M:Riptide.Server.OnClientConnected(Riptide.Connection)">
             <summary>Invokes the <see cref="E:Riptide.Server.ClientConnected"/> event.</summary>
             <param name="client">The newly connected client.</param>
-            <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
         </member>
         <member name="M:Riptide.Server.OnMessageReceived(Riptide.Message,Riptide.Connection)">
             <summary>Invokes the <see cref="E:Riptide.Server.MessageReceived"/> event and initiates handling of the received message.</summary>

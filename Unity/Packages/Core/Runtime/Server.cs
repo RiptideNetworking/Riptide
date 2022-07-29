@@ -255,7 +255,7 @@ namespace Riptide
                     if (connection.IsConnecting)
                     {
                         connection.HandleWelcomeResponse(message);
-                        OnClientConnected(connection, message);
+                        OnClientConnected(connection);
                     }
                     break;
                 case HeaderType.clientConnected:
@@ -491,12 +491,11 @@ namespace Riptide
         #region Events
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
         /// <param name="client">The newly connected client.</param>
-        /// <param name="connectMessage">A message containing any custom data the client included when it connected.</param>
-        protected virtual void OnClientConnected(Connection client, Message connectMessage)
+        protected virtual void OnClientConnected(Connection client)
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) connected successfully!");
             SendClientConnected(client);
-            ClientConnected?.Invoke(this, new ServerClientConnectedEventArgs(client, connectMessage));
+            ClientConnected?.Invoke(this, new ServerClientConnectedEventArgs(client));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
