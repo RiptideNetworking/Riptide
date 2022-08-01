@@ -130,7 +130,7 @@ namespace Riptide.Transports.Tcp
         /// <inheritdoc/>
         protected internal override void OnDataReceived(int amount, TcpConnection fromConnection)
         {
-            DataReceived?.Invoke(this, new DataReceivedEventArgs(ReceivedData, amount, fromConnection));
+            DataReceived?.Invoke(this, new DataReceivedEventArgs(ReceiveBuffer, amount, fromConnection));
         }
     }
 }

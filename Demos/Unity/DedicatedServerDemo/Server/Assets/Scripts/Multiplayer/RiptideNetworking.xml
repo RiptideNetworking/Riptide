@@ -1937,6 +1937,12 @@
         <member name="F:Riptide.Transports.Tcp.TcpConnection.peer">
             <summary>The local peer this connection is associated with.</summary>
         </member>
+        <member name="F:Riptide.Transports.Tcp.TcpConnection.sizeBytes">
+            <summary>An array to receive message size values into.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Tcp.TcpConnection.nextMessageSize">
+            <summary>The size of the next message to be received.</summary>
+        </member>
         <member name="M:Riptide.Transports.Tcp.TcpConnection.#ctor(System.Net.Sockets.Socket,System.Net.IPEndPoint,Riptide.Transports.Tcp.TcpPeer)">
             <summary>Initializes the connection.</summary>
             <param name="socket">The socket to use for sending and receiving.</param>
@@ -1948,6 +1954,11 @@
         </member>
         <member name="M:Riptide.Transports.Tcp.TcpConnection.Receive">
             <summary>Polls the socket and checks if any data was received.</summary>
+        </member>
+        <member name="M:Riptide.Transports.Tcp.TcpConnection.TryReceiveMessage(System.Int32@)">
+            <summary>Receives a message, if all of its data is ready to be received.</summary>
+            <param name="receivedByteCount">How many bytes were received.</param>
+            <returns>Whether or not all of the message's data was ready to be received.</returns>
         </member>
         <member name="M:Riptide.Transports.Tcp.TcpConnection.Close">
             <summary>Closes the connection.</summary>
@@ -1970,8 +1981,11 @@
         <member name="E:Riptide.Transports.Tcp.TcpPeer.Disconnected">
             <inheritdoc cref="E:Riptide.Transports.IPeer.Disconnected"/>
         </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.ReceivedData">
-            <summary>The array that incoming data is received into.</summary>
+        <member name="F:Riptide.Transports.Tcp.TcpPeer.ReceiveBuffer">
+            <summary>An array that incoming data is received into.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Tcp.TcpPeer.SendBuffer">
+            <summary>An array that outgoing data is sent out of.</summary>
         </member>
         <member name="F:Riptide.Transports.Tcp.TcpPeer.DefaultSocketBufferSize">
             <summary>The default size used for the socket's send and receive buffers.</summary>

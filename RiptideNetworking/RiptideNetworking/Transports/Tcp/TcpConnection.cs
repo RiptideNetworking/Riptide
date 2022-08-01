@@ -21,6 +21,10 @@ namespace Riptide.Transports.Tcp
         private readonly Socket socket;
         /// <summary>The local peer this connection is associated with.</summary>
         private readonly TcpPeer peer;
+        /// <summary>An array to receive message size values into.</summary>
+        private readonly byte[] sizeBytes = new byte[sizeof(ushort)];
+        /// <summary>The size of the next message to be received.</summary>
+        private int nextMessageSize;
 
         /// <summary>Initializes the connection.</summary>
         /// <param name="socket">The socket to use for sending and receiving.</param>
@@ -36,8 +40,15 @@ namespace Riptide.Transports.Tcp
         /// <inheritdoc/>
         protected internal override void Send(byte[] dataBuffer, int amount)
         {
+            if (amount == 0)
+                throw new ArgumentOutOfRangeException(nameof(amount), "Sending 0 bytes is not allowed!");
+
             if (socket.Connected)
-                socket.Send(dataBuffer, amount, SocketFlags.None);
+            {
+                Converter.FromUShort((ushort)amount, peer.SendBuffer, 0);
+                Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(ushort), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
+                socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+            }
         }
 
         /// <summary>Polls the socket and checks if any data was received.</summary>
@@ -49,8 +60,20 @@ namespace Riptide.Transports.Tcp
                 int byteCount = 0;
                 try
                 {
-                    if (socket.Poll(0, SelectMode.SelectRead))
-                        byteCount = socket.Receive(peer.ReceivedData, SocketFlags.None);
+                    if (nextMessageSize > 0)
+                    {
+                        // We already have a size value
+                        tryReceiveMore = TryReceiveMessage(out byteCount);
+                    }
+                    else if (socket.Available >= sizeof(ushort))
+                    {
+                        // We have enough bytes for a complete size value
+                        socket.Receive(sizeBytes, sizeof(ushort), SocketFlags.None);
+                        nextMessageSize = Converter.ToUShort(sizeBytes, 0);
+                        
+                        if (nextMessageSize > 0)
+                            tryReceiveMore = TryReceiveMessage(out byteCount);
+                    }
                     else
                         tryReceiveMore = false;
                 }
@@ -86,10 +109,26 @@ namespace Riptide.Transports.Tcp
                     peer.OnDisconnected(this, DisconnectReason.transportError);
                 }
 
-                // TODO: probably need to address spliced & combined packets here
                 if (byteCount > 0)
                     peer.OnDataReceived(byteCount, this);
             }
+        }
+
+        /// <summary>Receives a message, if all of its data is ready to be received.</summary>
+        /// <param name="receivedByteCount">How many bytes were received.</param>
+        /// <returns>Whether or not all of the message's data was ready to be received.</returns>
+        private bool TryReceiveMessage(out int receivedByteCount)
+        {
+            if (socket.Available >= nextMessageSize)
+            {
+                // We have enough bytes to read the complete message
+                receivedByteCount = socket.Receive(peer.ReceiveBuffer, nextMessageSize, SocketFlags.None);
+                nextMessageSize = 0;
+                return true;
+            }
+
+            receivedByteCount = 0;
+            return false;
         }
 
         /// <summary>Closes the connection.</summary>
