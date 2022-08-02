@@ -35,6 +35,8 @@ namespace Riptide
         private int maxSendAttempts;
         /// <summary>How many send attempts have been made so far.</summary>
         private byte sendAttempts;
+        /// <summary>A callback for when a <b>RELIABLY</b> sent message arrives. Returns as a parameter the ID of the connection which received this message.</summary>
+        private Action<ushort> receivedCallback;
         /// <summary>Whether the pending message has been cleared or not.</summary>
         private bool wasCleared;
 
@@ -49,7 +51,8 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that is being sent reliably.</param>
         /// <param name="connection">The <see cref="Connection"/> to use to send (and resend) the pending message.</param>
-        internal static void CreateAndSend(ushort sequenceId, Message message, Connection connection)
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives. Returns as a parameter the ID of the connection which received this message.</param>
+        internal static void CreateAndSend(ushort sequenceId, Message message, Connection connection, Action<ushort> receivedCallback)
         {
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
@@ -62,6 +65,7 @@ namespace Riptide
 
             pendingMessage.maxSendAttempts = message.MaxSendAttempts;
             pendingMessage.sendAttempts = 0;
+            pendingMessage.receivedCallback = receivedCallback;
             pendingMessage.wasCleared = false;
 
             connection.PendingMessages.Add(sequenceId, pendingMessage);
@@ -124,7 +128,7 @@ namespace Riptide
                         RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
 
-                Clear();
+                Clear(false);
                 return;
             }
 
@@ -137,9 +141,13 @@ namespace Riptide
         }
 
         /// <summary>Clears the message.</summary>
+        /// <param name="wasDelivered">Whether or not the message was delivered.</param>
         /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="Connection.PendingMessages"/>.</param>
-        internal void Clear(bool shouldRemoveFromDictionary = true)
+        internal void Clear(bool wasDelivered = true, bool shouldRemoveFromDictionary = true)
         {
+            if (wasDelivered)
+                receivedCallback?.Invoke(connection.Id); // Inform the user the message arrived
+
             if (shouldRemoveFromDictionary)
                 connection.PendingMessages.Remove(sequenceId);
 

@@ -276,27 +276,36 @@ namespace Riptide
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The numeric ID of the client to send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
-        public void Send(Message message, ushort toClient, bool shouldRelease = true)
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool, Action{ushort})"/></remarks>
+        public void Send(Message message, ushort toClient, bool shouldRelease = true, Action receivedCallback = null)
         {
             if (clients.TryGetValue(toClient, out Connection connection))
-                Send(message, connection, shouldRelease);
+                Send(message, connection, shouldRelease, receivedCallback);
         }
         /// <summary>Sends a message to a given client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
-        public void Send(Message message, Connection toClient, bool shouldRelease = true) => toClient.Send(message, shouldRelease);
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool, Action{ushort})"/></remarks>
+        public void Send(Message message, Connection toClient, bool shouldRelease = true, Action receivedCallback = null)
+        {
+            if (receivedCallback != null)
+                toClient.Send(message, shouldRelease, (id) => receivedCallback.Invoke()); // Ignore the parameter since we already know the ID of the client to which the message is sent to
+            else
+                toClient.Send(message, shouldRelease);
+        }
 
         /// <summary>Sends a message to all connected clients.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
-        public void SendToAll(Message message, bool shouldRelease = true)
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives. Returns as a parameter the ID of the connection which received this message.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool, Action{ushort})"/></remarks>
+        public void SendToAll(Message message, bool shouldRelease = true, Action<ushort> receivedCallback = null)
         {
             foreach (Connection client in clients.Values)
-                client.Send(message, false);
+                client.Send(message, false, receivedCallback);
 
             if (shouldRelease)
                 message.Release();
@@ -305,12 +314,13 @@ namespace Riptide
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
-        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives. Returns as a parameter the ID of the connection which received this message.</param>
+        /// <remarks><inheritdoc cref="Connection.Send(Message, bool, Action{ushort})"/></remarks>
+        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true, Action<ushort> receivedCallback = null)
         {
             foreach (Connection client in clients.Values)
                 if (client.Id != exceptToClientId)
-                    client.Send(message, false);
+                    client.Send(message, false, receivedCallback);
 
             if (shouldRelease)
                 message.Release();

@@ -98,18 +98,19 @@ namespace Riptide
         /// <summary>Sends a message.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives. Returns as a parameter the ID of the connection which received this message.</param>
         /// <remarks>
         ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
         ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
         /// </remarks>
-        internal void Send(Message message, bool shouldRelease = true)
+        internal void Send(Message message, bool shouldRelease = true, Action<ushort> receivedCallback = null)
         {
             if (message.SendMode == MessageSendMode.unreliable)
                 Send(message.Bytes, message.WrittenLength);
             else
             {
                 ushort sequenceId = NextSequenceId; // Get the next sequence ID
-                PendingMessage.CreateAndSend(sequenceId, message, this);
+                PendingMessage.CreateAndSend(sequenceId, message, this, receivedCallback);
             }
 
             if (shouldRelease)
@@ -176,7 +177,7 @@ namespace Riptide
             state = ConnectionState.notConnected;
 
             foreach (PendingMessage pendingMessage in PendingMessages.Values)
-                pendingMessage.Clear(false);
+                pendingMessage.Clear(false, false);
 
             PendingMessages.Clear();
         }
