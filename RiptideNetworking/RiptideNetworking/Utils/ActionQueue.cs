@@ -15,7 +15,7 @@ namespace Riptide.Utils
         public readonly string LogName;
         private readonly List<Action> executionQueue = new List<Action>();
         private readonly List<Action> executionQueueCopy = new List<Action>();
-        private bool hasActionToExecute = false;
+        private bool hasActionToExecute;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -53,8 +53,8 @@ namespace Riptide.Utils
                 }
 
                 // Execute all actions from the copied queue
-                for (int i = 0; i < executionQueueCopy.Count; i++)
-                    executionQueueCopy[i]();
+                foreach (Action action in executionQueueCopy)
+                    action();
             }
         }
 

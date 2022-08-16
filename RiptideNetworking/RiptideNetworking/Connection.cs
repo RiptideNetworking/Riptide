@@ -76,7 +76,7 @@ namespace Riptide
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
         private DateTime lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
-        private byte lastPingId = 0;
+        private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>

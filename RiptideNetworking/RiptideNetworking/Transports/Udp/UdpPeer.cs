@@ -27,8 +27,9 @@ namespace Riptide.Transports.Udp
         private readonly byte[] receivedData;
         /// <summary>The socket to use for sending and receiving.</summary>
         private Socket socket;
+
         /// <summary>Whether or not the transport is running.</summary>
-        private bool isRunning = false;
+        private bool isRunning;
         /// <summary>A reusable endpoint.</summary>
         private EndPoint remoteEndPoint;
 
@@ -107,8 +108,6 @@ namespace Riptide.Transports.Udp
                         case SocketError.ConnectionReset:
                         case SocketError.MessageSize:
                         case SocketError.TimedOut:
-                            break;
-                        default:
                             break;
                     }
                 }

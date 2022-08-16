@@ -16,8 +16,8 @@ namespace Riptide.Utils
         {
             if (endPoint.Address.IsIPv4MappedToIPv6)
                 return $"{endPoint.Address.MapToIPv4()}:{endPoint.Port}";
-            else
-                return endPoint.ToString();
+            
+            return endPoint.ToString();
         }
     }
 }

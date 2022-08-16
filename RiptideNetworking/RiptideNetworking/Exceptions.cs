@@ -178,7 +178,7 @@ namespace Riptide
         /// <returns>The error message.</returns>
         private static string GetErrorMessage(ushort id, MethodInfo method1, MethodInfo method2)
         {
-            return $"Message handler methods '{method1.DeclaringType.Name}.{method1.Name}' and '{method2.DeclaringType.Name}.{method2.Name}' are both set to handle messages with ID {id}! Only one handler method is allowed per message ID!";
+            return $"Message handler methods '{method1.DeclaringType?.Name}.{method1.Name}' and '{method2.DeclaringType?.Name}.{method2.Name}' are both set to handle messages with ID {id}! Only one handler method is allowed per message ID!";
         }
     }
 }
