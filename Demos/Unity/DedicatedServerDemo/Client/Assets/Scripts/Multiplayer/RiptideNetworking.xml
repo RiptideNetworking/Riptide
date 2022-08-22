@@ -1884,191 +1884,6 @@
         <member name="M:Riptide.Transports.IServer.Shutdown">
             <summary>Closes all existing connections and stops listening for new connections.</summary>
         </member>
-        <member name="T:Riptide.Transports.Tcp.TcpClient">
-            <summary>A client which can connect to a <see cref="T:Riptide.Transports.Tcp.TcpServer"/>.</summary>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpClient.Connected">
-            <inheritdoc/>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpClient.ConnectionFailed">
-            <inheritdoc/>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpClient.DataReceived">
-            <inheritdoc/>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpClient.tcpConnection">
-            <summary>The connection to the server.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.Connect(System.String,Riptide.Connection@,System.String@)">
-            <inheritdoc/>
-            <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.ParseHostAddress(System.String,System.Net.IPAddress@,System.UInt16@)">
-            <summary>Parses <paramref name="hostAddress"/> into <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
-            <param name="hostAddress">The host address to parse.</param>
-            <param name="ip">The retrieved IP.</param>
-            <param name="port">The retrieved port.</param>
-            <returns>Whether or not <paramref name="hostAddress"/> was in a valid format.</returns>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.Tick">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.Disconnect">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.OnConnected">
-            <summary>Invokes the <see cref="E:Riptide.Transports.Tcp.TcpClient.Connected"/> event.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.OnConnectionFailed">
-            <summary>Invokes the <see cref="E:Riptide.Transports.Tcp.TcpClient.ConnectionFailed"/> event.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpClient.OnDataReceived(System.Int32,Riptide.Transports.Tcp.TcpConnection)">
-            <inheritdoc/>
-        </member>
-        <member name="T:Riptide.Transports.Tcp.TcpConnection">
-            <summary>Represents a connection to a <see cref="T:Riptide.Transports.Tcp.TcpServer"/> or <see cref="T:Riptide.Transports.Tcp.TcpClient"/>.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpConnection.RemoteEndPoint">
-            <summary>The endpoint representing the other end of the connection.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpConnection.socket">
-            <summary>The socket to use for sending and receiving.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpConnection.peer">
-            <summary>The local peer this connection is associated with.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpConnection.sizeBytes">
-            <summary>An array to receive message size values into.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpConnection.nextMessageSize">
-            <summary>The size of the next message to be received.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.#ctor(System.Net.Sockets.Socket,System.Net.IPEndPoint,Riptide.Transports.Tcp.TcpPeer)">
-            <summary>Initializes the connection.</summary>
-            <param name="socket">The socket to use for sending and receiving.</param>
-            <param name="remoteEndPoint">The endpoint representing the other end of the connection.</param>
-            <param name="peer">The local peer this connection is associated with.</param>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.Send(System.Byte[],System.Int32)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.Receive">
-            <summary>Polls the socket and checks if any data was received.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.TryReceiveMessage(System.Int32@)">
-            <summary>Receives a message, if all of its data is ready to be received.</summary>
-            <param name="receivedByteCount">How many bytes were received.</param>
-            <returns>Whether or not all of the message's data was ready to be received.</returns>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.Close">
-            <summary>Closes the connection.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.ToString">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.Equals(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.Equals(Riptide.Transports.Tcp.TcpConnection)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpConnection.GetHashCode">
-            <inheritdoc/>
-        </member>
-        <member name="T:Riptide.Transports.Tcp.TcpPeer">
-            <summary>Provides base send &#38; receive functionality for <see cref="T:Riptide.Transports.Tcp.TcpServer"/> and <see cref="T:Riptide.Transports.Tcp.TcpClient"/>.</summary>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpPeer.Disconnected">
-            <inheritdoc cref="E:Riptide.Transports.IPeer.Disconnected"/>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.ReceiveBuffer">
-            <summary>An array that incoming data is received into.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.SendBuffer">
-            <summary>An array that outgoing data is sent out of.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.DefaultSocketBufferSize">
-            <summary>The default size used for the socket's send and receive buffers.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.socketBufferSize">
-            <summary>The size to use for the socket's send and receive buffers.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.socket">
-            <summary>The main socket, either used for listening for connections or for sending and receiving data.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpPeer.MinSocketBufferSize">
-            <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpPeer.#ctor(System.Int32)">
-            <summary>Initializes the transport.</summary>
-            <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpPeer.OnDataReceived(System.Int32,Riptide.Transports.Tcp.TcpConnection)">
-            <summary>Handles received data.</summary>
-            <param name="amount">The number of bytes that were received.</param>
-            <param name="fromConnection">The connection from which the data was received.</param>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpPeer.OnDisconnected(Riptide.Connection,Riptide.DisconnectReason)">
-            <summary>Invokes the <see cref="E:Riptide.Transports.Tcp.TcpPeer.Disconnected"/> event.</summary>
-            <param name="connection">The closed connection.</param>
-            <param name="reason">The reason for the disconnection.</param>
-        </member>
-        <member name="T:Riptide.Transports.Tcp.TcpServer">
-            <summary>A server which can accept connections from <see cref="T:Riptide.Transports.Tcp.TcpClient"/>s.</summary>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpServer.Connected">
-            <inheritdoc/>
-        </member>
-        <member name="E:Riptide.Transports.Tcp.TcpServer.DataReceived">
-            <inheritdoc/>
-        </member>
-        <member name="P:Riptide.Transports.Tcp.TcpServer.Port">
-            <inheritdoc/>
-        </member>
-        <member name="P:Riptide.Transports.Tcp.TcpServer.MaxPendingConnections">
-            <summary>The maximum number of pending connections to allow at any given time.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpServer.isRunning">
-            <summary>Whether or not the server is running.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpServer.connections">
-            <summary>The currently open connections, accessible by their endpoints.</summary>
-        </member>
-        <member name="F:Riptide.Transports.Tcp.TcpServer.closedConnections">
-            <summary>Connections that need to be closed.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.#ctor(System.Int32)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.Start(System.UInt16)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.StartListening(System.UInt16)">
-            <summary>Starts listening for connections on the given port.</summary>
-            <param name="port">The port to listen on.</param>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.Tick">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.Accept">
-            <summary>Accepts any pending connections.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.StopListening">
-            <summary>Stops listening for connections.</summary>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.Close(Riptide.Connection)">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.Shutdown">
-            <inheritdoc/>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.OnConnected(Riptide.Connection)">
-            <summary>Invokes the <see cref="E:Riptide.Transports.Tcp.TcpServer.Connected"/> event.</summary>
-            <param name="connection">The successfully established connection.</param>
-        </member>
-        <member name="M:Riptide.Transports.Tcp.TcpServer.OnDataReceived(System.Int32,Riptide.Transports.Tcp.TcpConnection)">
-            <inheritdoc/>
-        </member>
         <member name="T:Riptide.Transports.Udp.UdpClient">
             <summary>A client which can connect to a <see cref="T:Riptide.Transports.Udp.UdpServer"/>.</summary>
         </member>
@@ -2240,6 +2055,191 @@
             <param name="connection">The successfully established connection.</param>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Riptide.Experimental.TcpTransport.TcpClient">
+            <summary>A client which can connect to a <see cref="T:Riptide.Experimental.TcpTransport.TcpServer"/>.</summary>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpClient.Connected">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpClient.ConnectionFailed">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpClient.DataReceived">
+            <inheritdoc/>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpClient.tcpConnection">
+            <summary>The connection to the server.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Connect(System.String,Riptide.Connection@,System.String@)">
+            <inheritdoc/>
+            <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.ParseHostAddress(System.String,System.Net.IPAddress@,System.UInt16@)">
+            <summary>Parses <paramref name="hostAddress"/> into <paramref name="ip"/> and <paramref name="port"/>, if possible.</summary>
+            <param name="hostAddress">The host address to parse.</param>
+            <param name="ip">The retrieved IP.</param>
+            <param name="port">The retrieved port.</param>
+            <returns>Whether or not <paramref name="hostAddress"/> was in a valid format.</returns>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Tick">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Disconnect">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.OnConnected">
+            <summary>Invokes the <see cref="E:Riptide.Experimental.TcpTransport.TcpClient.Connected"/> event.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.OnConnectionFailed">
+            <summary>Invokes the <see cref="E:Riptide.Experimental.TcpTransport.TcpClient.ConnectionFailed"/> event.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.OnDataReceived(System.Int32,Riptide.Experimental.TcpTransport.TcpConnection)">
+            <inheritdoc/>
+        </member>
+        <member name="T:Riptide.Experimental.TcpTransport.TcpConnection">
+            <summary>Represents a connection to a <see cref="T:Riptide.Experimental.TcpTransport.TcpServer"/> or <see cref="T:Riptide.Experimental.TcpTransport.TcpClient"/>.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpConnection.RemoteEndPoint">
+            <summary>The endpoint representing the other end of the connection.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpConnection.socket">
+            <summary>The socket to use for sending and receiving.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpConnection.peer">
+            <summary>The local peer this connection is associated with.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpConnection.sizeBytes">
+            <summary>An array to receive message size values into.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpConnection.nextMessageSize">
+            <summary>The size of the next message to be received.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.#ctor(System.Net.Sockets.Socket,System.Net.IPEndPoint,Riptide.Experimental.TcpTransport.TcpPeer)">
+            <summary>Initializes the connection.</summary>
+            <param name="socket">The socket to use for sending and receiving.</param>
+            <param name="remoteEndPoint">The endpoint representing the other end of the connection.</param>
+            <param name="peer">The local peer this connection is associated with.</param>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.Send(System.Byte[],System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.Receive">
+            <summary>Polls the socket and checks if any data was received.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.TryReceiveMessage(System.Int32@)">
+            <summary>Receives a message, if all of its data is ready to be received.</summary>
+            <param name="receivedByteCount">How many bytes were received.</param>
+            <returns>Whether or not all of the message's data was ready to be received.</returns>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.Close">
+            <summary>Closes the connection.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.Equals(Riptide.Experimental.TcpTransport.TcpConnection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpConnection.GetHashCode">
+            <inheritdoc/>
+        </member>
+        <member name="T:Riptide.Experimental.TcpTransport.TcpPeer">
+            <summary>Provides base send &#38; receive functionality for <see cref="T:Riptide.Experimental.TcpTransport.TcpServer"/> and <see cref="T:Riptide.Experimental.TcpTransport.TcpClient"/>.</summary>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpPeer.Disconnected">
+            <inheritdoc cref="E:Riptide.Transports.IPeer.Disconnected"/>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.ReceiveBuffer">
+            <summary>An array that incoming data is received into.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.SendBuffer">
+            <summary>An array that outgoing data is sent out of.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize">
+            <summary>The default size used for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize">
+            <summary>The size to use for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.socket">
+            <summary>The main socket, either used for listening for connections or for sending and receiving data.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpPeer.MinSocketBufferSize">
+            <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpPeer.#ctor(System.Int32)">
+            <summary>Initializes the transport.</summary>
+            <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived(System.Int32,Riptide.Experimental.TcpTransport.TcpConnection)">
+            <summary>Handles received data.</summary>
+            <param name="amount">The number of bytes that were received.</param>
+            <param name="fromConnection">The connection from which the data was received.</param>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected(Riptide.Connection,Riptide.DisconnectReason)">
+            <summary>Invokes the <see cref="E:Riptide.Experimental.TcpTransport.TcpPeer.Disconnected"/> event.</summary>
+            <param name="connection">The closed connection.</param>
+            <param name="reason">The reason for the disconnection.</param>
+        </member>
+        <member name="T:Riptide.Experimental.TcpTransport.TcpServer">
+            <summary>A server which can accept connections from <see cref="T:Riptide.Experimental.TcpTransport.TcpClient"/>s.</summary>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpServer.Connected">
+            <inheritdoc/>
+        </member>
+        <member name="E:Riptide.Experimental.TcpTransport.TcpServer.DataReceived">
+            <inheritdoc/>
+        </member>
+        <member name="P:Riptide.Experimental.TcpTransport.TcpServer.Port">
+            <inheritdoc/>
+        </member>
+        <member name="P:Riptide.Experimental.TcpTransport.TcpServer.MaxPendingConnections">
+            <summary>The maximum number of pending connections to allow at any given time.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpServer.isRunning">
+            <summary>Whether or not the server is running.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpServer.connections">
+            <summary>The currently open connections, accessible by their endpoints.</summary>
+        </member>
+        <member name="F:Riptide.Experimental.TcpTransport.TcpServer.closedConnections">
+            <summary>Connections that need to be closed.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.#ctor(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Start(System.UInt16)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.StartListening(System.UInt16)">
+            <summary>Starts listening for connections on the given port.</summary>
+            <param name="port">The port to listen on.</param>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Tick">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Accept">
+            <summary>Accepts any pending connections.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.StopListening">
+            <summary>Stops listening for connections.</summary>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Close(Riptide.Connection)">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Shutdown">
+            <inheritdoc/>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.OnConnected(Riptide.Connection)">
+            <summary>Invokes the <see cref="E:Riptide.Experimental.TcpTransport.TcpServer.Connected"/> event.</summary>
+            <param name="connection">The successfully established connection.</param>
+        </member>
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.OnDataReceived(System.Int32,Riptide.Experimental.TcpTransport.TcpConnection)">
             <inheritdoc/>
         </member>
         <member name="T:Riptide.Utils.ActionQueue">

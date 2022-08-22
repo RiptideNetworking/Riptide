@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Riptide.Transports.Tcp
+namespace Riptide.Experimental.TcpTransport
 {
     /// <summary>Represents a connection to a <see cref="TcpServer"/> or <see cref="TcpClient"/>.</summary>
     public class TcpConnection : Connection, IEquatable<TcpConnection>
