@@ -289,13 +289,7 @@ namespace Riptide
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
         /// <param name="receivedCallback">A callback for when a <b>RELIABLY</b> sent message arrives.</param>
         /// <remarks><inheritdoc cref="Connection.Send(Message, bool, Action{ushort})"/></remarks>
-        public void Send(Message message, Connection toClient, bool shouldRelease = true, Action receivedCallback = null)
-        {
-            if (receivedCallback != null)
-                toClient.Send(message, shouldRelease, (id) => receivedCallback.Invoke()); // Ignore the parameter since we already know the ID of the client to which the message is sent to
-            else
-                toClient.Send(message, shouldRelease);
-        }
+        public void Send(Message message, Connection toClient, bool shouldRelease = true, Action receivedCallback = null) => toClient.Send(message, shouldRelease, (id) => receivedCallback?.Invoke()); // Ignore the parameter since we already know the ID of the client to which the message is sent to
 
         /// <summary>Sends a message to all connected clients.</summary>
         /// <param name="message">The message to send.</param>
