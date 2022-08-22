@@ -43,11 +43,20 @@ namespace Riptide.Transports.Tcp
             if (amount == 0)
                 throw new ArgumentOutOfRangeException(nameof(amount), "Sending 0 bytes is not allowed!");
 
-            if (socket.Connected)
+            try
             {
-                Converter.FromUShort((ushort)amount, peer.SendBuffer, 0);
-                Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(ushort), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
-                socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+                if (socket.Connected)
+                {
+                    Converter.FromUShort((ushort)amount, peer.SendBuffer, 0);
+                    Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(ushort), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
+                    socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+                }
+            }
+            catch (SocketException)
+            {
+                // May want to consider triggering a disconnect here (perhaps depending on the type
+                // of SocketException)? Timeout should catch disconnections, but disconnecting
+                // explicitly might be better...
             }
         }
 
