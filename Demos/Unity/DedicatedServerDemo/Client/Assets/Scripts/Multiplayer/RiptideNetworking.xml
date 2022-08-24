@@ -1593,9 +1593,12 @@
         <member name="T:Riptide.Server.ConnectionAttemptHandler">
             <summary>Encapsulates a method that determines whether or not to accept a client's connection attempt.</summary>
         </member>
-        <member name="F:Riptide.Server.DoAcceptClient">
+        <member name="F:Riptide.Server.HandleConnection">
             <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
             <remarks>The <see cref="T:Riptide.Connection"/> parameter is the pending connection and the <see cref="T:Riptide.Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
+        </member>
+        <member name="F:Riptide.Server.pendingConnections">
+            <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
         </member>
         <member name="F:Riptide.Server.clients">
             <summary>Currently connected clients.</summary>
@@ -1648,6 +1651,19 @@
             <summary>Handles a connect message.</summary>
             <param name="connection">The client that sent the connect message.</param>
             <param name="connectMessage">The connect message.</param>
+        </member>
+        <member name="M:Riptide.Server.Accept(Riptide.Connection)">
+            <summary>Accepts a pending connection.</summary>
+            <param name="connection">The pending connection to accept.</param>
+        </member>
+        <member name="M:Riptide.Server.Reject(Riptide.Connection)">
+            <summary>Rejects a pending connection.</summary>
+            <param name="connection">The pending connection to reject.</param>
+        </member>
+        <member name="M:Riptide.Server.Accept(Riptide.Connection,System.Boolean)">
+            <summary>Accepts or rejects a given connection.</summary>
+            <param name="connection">The pending connection to accept or reject.</param>
+            <param name="doAccept">Whether or not to accept the pending connection.</param>
         </member>
         <member name="M:Riptide.Server.Heartbeat">
             <summary>Checks if clients have timed out.</summary>

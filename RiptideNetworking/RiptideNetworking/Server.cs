@@ -41,11 +41,13 @@ namespace Riptide
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(ushort fromClientId, Message message);
         /// <summary>Encapsulates a method that determines whether or not to accept a client's connection attempt.</summary>
-        public delegate bool ConnectionAttemptHandler(Connection pendingConnection, Message connectMessage);
+        public delegate void ConnectionAttemptHandler(Connection pendingConnection, Message connectMessage);
         /// <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
         /// <remarks>The <see cref="Connection"/> parameter is the pending connection and the <see cref="Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
-        public ConnectionAttemptHandler DoAcceptClient;
+        public ConnectionAttemptHandler HandleConnection;
 
+        /// <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
+        private List<Connection> pendingConnections;
         /// <summary>Currently connected clients.</summary>
         private Dictionary<ushort, Connection> clients;
         /// <summary>Clients that have timed out and need to be removed from <see cref="clients"/>.</summary>
@@ -92,6 +94,7 @@ namespace Riptide
             IncreaseActiveCount();
             CreateMessageHandlersDictionary(messageHandlerGroupId);
             MaxClientCount = maxClientCount;
+            pendingConnections = new List<Connection>();
             clients = new Dictionary<ushort, Connection>(maxClientCount);
             timedOutClients = new List<Connection>(maxClientCount);
             InitializeClientIds();
@@ -169,32 +172,73 @@ namespace Riptide
         /// <param name="connectMessage">The connect message.</param>
         private void HandleConnect(Connection connection, Message connectMessage)
         {
-            if (DoAcceptClient != null && !DoAcceptClient(connection, connectMessage))
+            if (HandleConnection == null)
+                Accept(connection, true);
+            else
             {
-                connection.LocalDisconnect();
-                transport.Close(connection);
-                return;
-            }
-
-            if (!clients.ContainsValue(connection))
-            {
-                if (ClientCount < MaxClientCount)
+                if (!clients.ContainsValue(connection))
                 {
-                    ushort clientId = GetAvailableClientId();
-                    connection.Id = clientId;
-                    clients.Add(clientId, connection);
-                    connection.ResetTimeout();
-                    connection.SendWelcome();
-                    return;
+                    if (ClientCount < MaxClientCount)
+                    {
+                        pendingConnections.Add(connection);
+                        HandleConnection(connection, connectMessage); // Externally determines whether to accept
+                    }
+                    else
+                        RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {connection}.");
                 }
                 else
-                {
-                    RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {connection}.");
-
-                    connection.LocalDisconnect();
-                    transport.Close(connection);
-                }
+                    RiptideLogger.Log(LogType.info, LogName, $"Rejecting duplicate connection from {connection}!");
             }
+        }
+
+        /// <summary>Accepts a pending connection.</summary>
+        /// <param name="connection">The pending connection to accept.</param>
+        public void Accept(Connection connection)
+        {
+            if (pendingConnections.Remove(connection))
+                Accept(connection, true);
+            else
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't accept connection from {connection} because no such connection was pending!");
+        }
+
+        /// <summary>Rejects a pending connection.</summary>
+        /// <param name="connection">The pending connection to reject.</param>
+        public void Reject(Connection connection)
+        {
+            if (pendingConnections.Remove(connection))
+                Accept(connection, false);
+            else
+                RiptideLogger.Log(LogType.warning, LogName, $"Couldn't reject connection from {connection} because no such connection was pending!");
+        }
+
+        /// <summary>Accepts or rejects a given connection.</summary>
+        /// <param name="connection">The pending connection to accept or reject.</param>
+        /// <param name="doAccept">Whether or not to accept the pending connection.</param>
+        private void Accept(Connection connection, bool doAccept)
+        {
+            if (doAccept)
+            {
+                if (!clients.ContainsValue(connection))
+                {
+                    if (ClientCount < MaxClientCount)
+                    {
+                        ushort clientId = GetAvailableClientId();
+                        connection.Id = clientId;
+                        clients.Add(clientId, connection);
+                        connection.ResetTimeout();
+                        connection.SendWelcome();
+                        return;
+                    }
+                    else
+                        RiptideLogger.Log(LogType.info, LogName, $"Server is full! Rejecting connection from {connection}.");
+                }
+                else
+                    RiptideLogger.Log(LogType.info, LogName, $"Rejecting duplicate connection from {connection}!");
+            }
+
+            // Reject
+            connection.LocalDisconnect();
+            transport.Close(connection);
         }
 
         /// <summary>Checks if clients have timed out.</summary>
@@ -412,6 +456,7 @@ namespace Riptide
             if (!IsRunning)
                 return;
 
+            pendingConnections.Clear(); 
             byte[] disconnectBytes = { (byte)HeaderType.disconnect, (byte)DisconnectReason.serverStopped };
             foreach (Connection client in clients.Values)
                 client.Send(disconnectBytes, disconnectBytes.Length);
