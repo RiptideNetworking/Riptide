@@ -46,5 +46,13 @@ namespace Riptide
             MessageId = messageId;
             GroupId = groupId;
         }
+
+        /// <inheritdoc cref="MessageHandlerAttribute(ushort, byte)"/>
+        /// <remarks>NOTE: <paramref name="messageId"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
+        public MessageHandlerAttribute(object messageId, byte groupId = 0)
+        {
+            MessageId = (ushort)messageId;
+            GroupId = groupId;
+        }
     }
 }
