@@ -45,6 +45,9 @@
         <member name="P:Riptide.Client.IsConnected">
             <summary>Whether or not the client is currently connected.</summary>
         </member>
+        <member name="P:Riptide.Client.Connection">
+            <inheritdoc cref="F:Riptide.Client.connection"/>
+        </member>
         <member name="T:Riptide.Client.MessageHandler">
             <summary>Encapsulates a method that handles a message from a server.</summary>
             <param name="message">The message that was received.</param>
@@ -218,6 +221,9 @@
         <member name="F:Riptide.Connection.state">
             <summary>The connection's current state.</summary>
         </member>
+        <member name="F:Riptide.Connection.canTimeout">
+            <summary>Whether or not the connection can time out.</summary>
+        </member>
         <member name="F:Riptide.Connection.lastHeartbeat">
             <summary>The time at which the last heartbeat was received from the other end.</summary>
         </member>
@@ -235,6 +241,10 @@
         </member>
         <member name="M:Riptide.Connection.ResetTimeout">
             <summary>Resets the connection's timeout time.</summary>
+        </member>
+        <member name="M:Riptide.Connection.EnableTimeout(System.Boolean)">
+            <summary>Sets whether or not the connection can time out.</summary>
+            <param name="isEnabled">Whether or not the connection can time out.</param>
         </member>
         <member name="M:Riptide.Connection.Send(Riptide.Message,System.Boolean)">
             <summary>Sends a message.</summary>

@@ -41,6 +41,11 @@ namespace Riptide
         public bool IsConnecting => !(connection is null) && connection.IsConnecting;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => !(connection is null) && connection.IsConnected;
+        /// <inheritdoc cref="connection"/>
+        // Not an auto property because properties can't be passed as ref/out parameters. Could
+        // use a local variable in the Connect method, but that's arguably not any cleaner. This
+        // property will also probably only be used rarely from outside the class/library.
+        public Connection Connection => connection;
         /// <summary>Encapsulates a method that handles a message from a server.</summary>
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);

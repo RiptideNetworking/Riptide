@@ -50,7 +50,7 @@ namespace Riptide
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
-        internal bool HasTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
+        internal bool HasTimedOut => canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -73,10 +73,12 @@ namespace Riptide
         private int _lastSequenceId;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
+        /// <summary>Whether or not the connection can time out.</summary>
+        private bool canTimeout;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
         private DateTime lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
-        private byte lastPingId = 0;
+        private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
@@ -86,6 +88,7 @@ namespace Riptide
         protected Connection()
         {
             state = ConnectionState.connecting;
+            canTimeout = true;
             ResetTimeout();
         }
 
@@ -93,6 +96,16 @@ namespace Riptide
         public void ResetTimeout()
         {
             lastHeartbeat = DateTime.UtcNow;
+        }
+
+        /// <summary>Sets whether or not the connection can time out.</summary>
+        /// <param name="isEnabled">Whether or not the connection can time out.</param>
+        public void EnableTimeout(bool isEnabled)
+        {
+            if (isEnabled)
+                ResetTimeout();
+
+            canTimeout = isEnabled;
         }
 
         /// <summary>Sends a message.</summary>
