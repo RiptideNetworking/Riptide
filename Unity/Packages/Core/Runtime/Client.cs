@@ -100,6 +100,7 @@ namespace Riptide
             }
 
             this.maxConnectionAttempts = maxConnectionAttempts;
+            connectionAttempts = 0;
             connection.Peer = this;
             IncreaseActiveCount();
             CreateMessageHandlersDictionary(messageHandlerGroupId);
