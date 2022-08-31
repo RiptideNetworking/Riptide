@@ -102,13 +102,13 @@ namespace Riptide
         /// <summary>Starts tracking how much time has passed.</summary>
         protected void StartTime()
         {
-            time.Restart();
+            time.Start();
         }
 
         /// <summary>Stops tracking how much time has passed.</summary>
         protected void StopTime()
         {
-            time.Stop();
+            time.Reset();
             eventQueue.Clear();
         }
 
