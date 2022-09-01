@@ -46,11 +46,24 @@ namespace Riptide
         /// <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
+        /// <summary>Whether or not the connection can time out.</summary>
+        public bool CanTimeout
+        {
+            get => _canTimeout;
+            set
+            {
+                if (value)
+                    ResetTimeout();
+
+                _canTimeout = value;
+            }
+        }
+        private bool _canTimeout;
 
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
-        internal bool HasTimedOut => canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
+        internal bool HasTimedOut => _canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -73,8 +86,6 @@ namespace Riptide
         private int _lastSequenceId;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
-        /// <summary>Whether or not the connection can time out.</summary>
-        private bool canTimeout;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
         private DateTime lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
@@ -88,24 +99,13 @@ namespace Riptide
         protected Connection()
         {
             state = ConnectionState.connecting;
-            canTimeout = true;
-            ResetTimeout();
+            CanTimeout = true;
         }
 
         /// <summary>Resets the connection's timeout time.</summary>
         public void ResetTimeout()
         {
             lastHeartbeat = DateTime.UtcNow;
-        }
-
-        /// <summary>Sets whether or not the connection can time out.</summary>
-        /// <param name="isEnabled">Whether or not the connection can time out.</param>
-        public void EnableTimeout(bool isEnabled)
-        {
-            if (isEnabled)
-                ResetTimeout();
-
-            canTimeout = isEnabled;
         }
 
         /// <summary>Sends a message.</summary>

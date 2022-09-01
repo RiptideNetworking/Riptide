@@ -188,6 +188,9 @@
             <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
             <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="P:Riptide.Connection.RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         </member>
+        <member name="P:Riptide.Connection.CanTimeout">
+            <summary>Whether or not the connection can time out.</summary>
+        </member>
         <member name="P:Riptide.Connection.Peer">
             <summary>The local peer this connection is associated with.</summary>
         </member>
@@ -221,9 +224,6 @@
         <member name="F:Riptide.Connection.state">
             <summary>The connection's current state.</summary>
         </member>
-        <member name="F:Riptide.Connection.canTimeout">
-            <summary>Whether or not the connection can time out.</summary>
-        </member>
         <member name="F:Riptide.Connection.lastHeartbeat">
             <summary>The time at which the last heartbeat was received from the other end.</summary>
         </member>
@@ -241,10 +241,6 @@
         </member>
         <member name="M:Riptide.Connection.ResetTimeout">
             <summary>Resets the connection's timeout time.</summary>
-        </member>
-        <member name="M:Riptide.Connection.EnableTimeout(System.Boolean)">
-            <summary>Sets whether or not the connection can time out.</summary>
-            <param name="isEnabled">Whether or not the connection can time out.</param>
         </member>
         <member name="M:Riptide.Connection.Send(Riptide.Message,System.Boolean)">
             <summary>Sends a message.</summary>
