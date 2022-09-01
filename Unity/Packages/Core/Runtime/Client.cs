@@ -226,9 +226,7 @@ namespace Riptide
             {
                 // User messages
                 case HeaderType.unreliable:
-                case HeaderType.unreliableAutoRelay:
                 case HeaderType.reliable:
-                case HeaderType.reliableAutoRelay:
                     OnMessageReceived(message);
                     break;
 

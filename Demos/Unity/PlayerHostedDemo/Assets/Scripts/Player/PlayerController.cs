@@ -94,7 +94,7 @@ namespace Riptide.Demos.PlayerHosted
         #region Messages
         private void SendMovement()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, MessageId.playerMovement, shouldAutoRelay: true);
+            Message message = Message.Create(MessageSendMode.unreliable, MessageId.playerMovement);
             message.AddUShort(player.Id);
             message.AddVector3(transform.position);
             message.AddVector3(transform.forward);

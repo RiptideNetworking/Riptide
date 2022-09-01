@@ -42,7 +42,7 @@ namespace Riptide.Demos.PlayerHosted
         #region Messages
         private void SendSpawn()
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer, shouldAutoRelay: true);
+            Message message = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer);
             message.AddUShort(Id);
             message.AddString(username);
             message.AddVector3(transform.position);
@@ -58,22 +58,10 @@ namespace Riptide.Demos.PlayerHosted
         internal void SendSpawn(ushort newPlayerId)
         {
             Message message = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer);
-            message.AddUShort(newPlayerId);
             message.AddUShort(Id);
             message.AddString(username);
             message.AddVector3(transform.position);
-            NetworkManager.Singleton.Client.Send(message);
-        }
-
-        [MessageHandler((ushort)MessageId.spawnPlayer)]
-        private static void SpawnPlayer(ushort fromClientId, Message message)
-        {
-            ushort newPlayerId = message.GetUShort();
-            Message messageToSend = Message.Create(MessageSendMode.reliable, MessageId.spawnPlayer);
-            messageToSend.AddUShort(message.GetUShort());
-            messageToSend.AddString(message.GetString());
-            messageToSend.AddVector3(message.GetVector3());
-            NetworkManager.Singleton.Server.Send(messageToSend, newPlayerId);
+            NetworkManager.Singleton.Server.Send(message, newPlayerId);
         }
 
         [MessageHandler((ushort)MessageId.playerMovement)]

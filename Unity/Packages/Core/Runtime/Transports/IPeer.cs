@@ -12,8 +12,6 @@ namespace Riptide.Transports
     {
         /// <summary>An unreliable user message.</summary>
         unreliable,
-        /// <summary>An unreliable user message which servers should automatically relay to all other clients.</summary>
-        unreliableAutoRelay = unreliable + 1,
         /// <summary>An internal unreliable ack message.</summary>
         ack,
         /// <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
@@ -27,8 +25,6 @@ namespace Riptide.Transports
 
         /// <summary>A reliable user message.</summary>
         reliable,
-        /// <summary>A reliable user message which servers should automatically relay to all other clients.</summary>
-        reliableAutoRelay = reliable + 1,
         /// <summary>An internal reliable welcome message.</summary>
         welcome,
         /// <summary>An internal reliable client connected message.</summary>

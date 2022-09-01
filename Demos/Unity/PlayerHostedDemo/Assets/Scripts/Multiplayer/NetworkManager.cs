@@ -49,12 +49,13 @@ namespace Riptide.Demos.PlayerHosted
         {
             RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
 
-            Server = new Server { AllowAutoMessageRelay = true };
+            Server = new Server();
+            Server.ClientConnected += PlayerJoined;
+            Server.RelayFilter = new MessageRelayFilter(typeof(MessageId), MessageId.spawnPlayer, MessageId.playerMovement);
 
             Client = new Client();
             Client.Connected += DidConnect;
             Client.ConnectionFailed += FailedToConnect;
-            Client.ClientConnected += PlayerJoined;
             Client.ClientDisconnected += PlayerLeft;
             Client.Disconnected += DidDisconnect;
         }
@@ -100,9 +101,11 @@ namespace Riptide.Demos.PlayerHosted
             UIManager.Singleton.BackToMain();
         }
 
-        private void PlayerJoined(object sender, ClientConnectedEventArgs e)
+        private void PlayerJoined(object sender, ServerClientConnectedEventArgs e)
         {
-            Player.List[Client.Id].SendSpawn(e.Id);
+            foreach (Player player in Player.List.Values)
+                if (player.Id != e.Client.Id)
+                    player.SendSpawn(e.Client.Id);
         }
 
         private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)

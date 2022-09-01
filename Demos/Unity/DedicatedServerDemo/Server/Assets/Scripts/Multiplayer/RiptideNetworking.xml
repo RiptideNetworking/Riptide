@@ -633,16 +633,15 @@
             <summary>Gets a usable message instance.</summary>
             <returns>A message instance ready to be used.</returns>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32,System.Boolean)">
+        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32)">
             <summary>Gets a message instance that can be used for sending.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-            <param name="shouldAutoRelay">Whether or not <see cref="T:Riptide.Server"/> instances should automatically relay this message to all other clients. This has no effect when <see cref="P:Riptide.Server.AllowAutoMessageRelay"/> is set to <see langword="false"/> and does not affect how clients handle messages.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.Enum,System.Int32,System.Boolean)">
-            <inheritdoc cref="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32,System.Boolean)"/>
+        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.Enum,System.Int32)">
+            <inheritdoc cref="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32)"/>
             <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="T:System.UInt16"/>. You should ensure that its value never exceeds that of <see cref="F:System.UInt16.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
         </member>
         <member name="M:Riptide.Message.Create(Riptide.Transports.HeaderType,System.Int32)">
@@ -1364,6 +1363,72 @@
               This method will be ignored if its signature matches neither of the valid message handler signatures.
             </remarks>
         </member>
+        <member name="T:Riptide.MessageRelayFilter">
+            <summary>Provides functionality for enabling/disabling automatic message relaying by message type.</summary>
+        </member>
+        <member name="F:Riptide.MessageRelayFilter.BitsPerInt">
+            <summary>The number of bits an int consists of.</summary>
+        </member>
+        <member name="F:Riptide.MessageRelayFilter.filter">
+            <summary>An array storing all the bits which represent whether messages of a given ID should be relayed or not.</summary>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.#ctor(System.Int32)">
+            <summary>Creates a filter of a given size.</summary>
+            <param name="size">How big to make the filter.</param>
+            <remarks>
+                <paramref name="size"/> should be set to the value of the largest message ID, plus 1. For example, if a server will
+                handle messages with IDs 1, 2, 3, 7, and 8, <paramref name="size"/> should be set to 9 (8 is the largest possible value,
+                and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the server will ever handle.
+            </remarks>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.#ctor(System.Type)">
+            <summary>Creates a filter based on an enum of message IDs.</summary>
+            <param name="idEnum">The enum type.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.#ctor(System.Int32,System.UInt16[])">
+            <summary>Creates a filter of a given size and enables relaying for the given message IDs.</summary>
+            <param name="size">How big to make the filter.</param>
+            <param name="idsToEnable">Message IDs to enable auto relaying for.</param>
+            <remarks><inheritdoc cref="M:Riptide.MessageRelayFilter.#ctor(System.Int32)"/></remarks>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.#ctor(System.Type,System.Enum[])">
+            <summary>Creates a filter based on an enum of message IDs and enables relaying for the given message IDs.</summary>
+            <param name="idEnum">The enum type.</param>
+            <param name="idsToEnable">Message IDs to enable relaying for.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.EnableIds(System.UInt16[])">
+            <summary>Enables auto relaying for the given message IDs.</summary>
+            <param name="idsToEnable">Message IDs to enable relaying for.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.GetSizeFromEnum(System.Type)">
+            <summary>Calculate the filter size necessary to manage all message IDs in the given enum.</summary>
+            <param name="idEnum">The enum type.</param>
+            <returns>The appropriate filter size.</returns>
+            <exception cref="T:System.ArgumentException"><paramref name="idEnum"/> is not an <see cref="T:System.Enum"/>.</exception>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.Set(System.Int32)">
+            <summary>Sets the filter size.</summary>
+            <param name="size">How big to make the filter.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.EnableRelay(System.UInt16)">
+            <summary>Enables auto relaying for the given message ID.</summary>
+            <param name="forMessageId">The message ID to enable relaying for.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.EnableRelay(System.Enum)">
+            <inheritdoc cref="M:Riptide.MessageRelayFilter.EnableRelay(System.UInt16)"/>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.DisableRelay(System.UInt16)">
+            <summary>Disables auto relaying for the given message ID.</summary>
+            <param name="forMessageId">The message ID to enable relaying for.</param>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.DisableRelay(System.Enum)">
+            <inheritdoc cref="M:Riptide.MessageRelayFilter.DisableRelay(System.UInt16)"/>
+        </member>
+        <member name="M:Riptide.MessageRelayFilter.ShouldRelay(System.UInt16)">
+            <summary>Checks whether or not messages with the given ID should be relayed.</summary>
+            <param name="forMessageId">The message ID to check.</param>
+            <returns>Whether or not messages with the given ID should be relayed.</returns>
+        </member>
         <member name="T:Riptide.DisconnectReason">
             <summary>The reason for a disconnection.</summary>
         </member>
@@ -1591,10 +1656,6 @@
             <summary>An array of all the currently connected clients.</summary>
             <remarks>The position of each <see cref="T:Riptide.Connection"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         </member>
-        <member name="P:Riptide.Server.AllowAutoMessageRelay">
-            <summary>Whether or not to allow messages to be automatically sent to all other connected clients.</summary>
-            <remarks>This should never be enabled if you want to maintain server authority, as it theoretically allows hacked clients to tell your <see cref="T:Riptide.Server"/> instance to automatically distribute any message to other clients. However, it's extremely handy when building client-authoritative games where the <see cref="T:Riptide.Server"/> instance acts mostly as a relay and is directly forwarding most messages to other clients anyways.</remarks>
-        </member>
         <member name="T:Riptide.Server.MessageHandler">
             <summary>Encapsulates a method that handles a message from a client.</summary>
             <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
@@ -1606,6 +1667,9 @@
         <member name="F:Riptide.Server.HandleConnection">
             <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
             <remarks>The <see cref="T:Riptide.Connection"/> parameter is the pending connection and the <see cref="T:Riptide.Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
+        </member>
+        <member name="F:Riptide.Server.RelayFilter">
+            <summary>Stores which message IDs have auto relaying enabled. Relaying is disabled entirely when this is <see langword="null"/>.</summary>
         </member>
         <member name="F:Riptide.Server.pendingConnections">
             <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
@@ -1840,9 +1904,6 @@
         <member name="F:Riptide.Transports.HeaderType.unreliable">
             <summary>An unreliable user message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.unreliableAutoRelay">
-            <summary>An unreliable user message which servers should automatically relay to all other clients.</summary>
-        </member>
         <member name="F:Riptide.Transports.HeaderType.ack">
             <summary>An internal unreliable ack message.</summary>
         </member>
@@ -1860,9 +1921,6 @@
         </member>
         <member name="F:Riptide.Transports.HeaderType.reliable">
             <summary>A reliable user message.</summary>
-        </member>
-        <member name="F:Riptide.Transports.HeaderType.reliableAutoRelay">
-            <summary>A reliable user message which servers should automatically relay to all other clients.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.welcome">
             <summary>An internal reliable welcome message.</summary>

@@ -33,9 +33,6 @@ namespace Riptide
         /// <summary>An array of all the currently connected clients.</summary>
         /// <remarks>The position of each <see cref="Connection"/> instance in the array does <i>not</i> correspond to that client's numeric ID (except by coincidence).</remarks>
         public Connection[] Clients => clients.Values.ToArray();
-        /// <summary>Whether or not to allow messages to be automatically sent to all other connected clients.</summary>
-        /// <remarks>This should never be enabled if you want to maintain server authority, as it theoretically allows hacked clients to tell your <see cref="Server"/> instance to automatically distribute any message to other clients. However, it's extremely handy when building client-authoritative games where the <see cref="Server"/> instance acts mostly as a relay and is directly forwarding most messages to other clients anyways.</remarks>
-        public bool AllowAutoMessageRelay { get; set; }
         /// <summary>Encapsulates a method that handles a message from a client.</summary>
         /// <param name="fromClientId">The numeric ID of the client from whom the message was received.</param>
         /// <param name="message">The message that was received.</param>
@@ -45,6 +42,8 @@ namespace Riptide
         /// <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
         /// <remarks>The <see cref="Connection"/> parameter is the pending connection and the <see cref="Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
         public ConnectionAttemptHandler HandleConnection;
+        /// <summary>Stores which message IDs have auto relaying enabled. Relaying is disabled entirely when this is <see langword="null"/>.</summary>
+        public MessageRelayFilter RelayFilter;
 
         /// <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
         private List<Connection> pendingConnections;
@@ -273,13 +272,6 @@ namespace Riptide
                 case HeaderType.unreliable:
                 case HeaderType.reliable:
                     OnMessageReceived(message, connection);
-                    break;
-                case HeaderType.unreliableAutoRelay:
-                case HeaderType.reliableAutoRelay:
-                    if (AllowAutoMessageRelay)
-                        SendToAll(message, connection.Id);
-                    else
-                        OnMessageReceived(message, connection);
                     break;
 
                 // Internal messages
@@ -549,6 +541,13 @@ namespace Riptide
         protected virtual void OnMessageReceived(Message message, Connection fromConnection)
         {
             ushort messageId = message.GetUShort();
+            if (RelayFilter != null && RelayFilter.ShouldRelay(messageId))
+            {
+                // The message should be automatically relayed to clients instead of being handled on the server
+                SendToAll(message, fromConnection.Id);
+                return;
+            }
+
             MessageReceived?.Invoke(this, new ServerMessageReceivedEventArgs(fromConnection, messageId, message));
 
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))

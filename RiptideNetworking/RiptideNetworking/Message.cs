@@ -115,17 +115,16 @@ namespace Riptide
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
-        /// <param name="shouldAutoRelay">Whether or not <see cref="Server"/> instances should automatically relay this message to all other clients. This has no effect when <see cref="Server.AllowAutoMessageRelay"/> is set to <see langword="false"/> and does not affect how clients handle messages.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
+        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15)
         {
-            return RetrieveFromPool().PrepareForUse(shouldAutoRelay ? (HeaderType)sendMode + 1 : (HeaderType)sendMode, maxSendAttempts).AddUShort(id);
+            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode, maxSendAttempts).AddUShort(id);
         }
-        /// <inheritdoc cref="Create(MessageSendMode, ushort, int, bool)"/>
+        /// <inheritdoc cref="Create(MessageSendMode, ushort, int)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
-        public static Message Create(MessageSendMode sendMode, Enum id, int maxSendAttempts = 15, bool shouldAutoRelay = false)
+        public static Message Create(MessageSendMode sendMode, Enum id, int maxSendAttempts = 15)
         {
-            return Create(sendMode, (ushort)(object)id, maxSendAttempts, shouldAutoRelay);
+            return Create(sendMode, (ushort)(object)id, maxSendAttempts);
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="messageHeader">The message's header type.</param>
