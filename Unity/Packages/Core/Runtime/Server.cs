@@ -324,8 +324,6 @@ namespace Riptide
                 case HeaderType.connect:
                     HandleConnect(connection, message);
                     break;
-                case HeaderType.reject:
-                    break;
                 case HeaderType.heartbeat:
                     connection.HandleHeartbeat(message);
                     break;
@@ -339,11 +337,8 @@ namespace Riptide
                         OnClientConnected(connection);
                     }
                     break;
-                case HeaderType.clientConnected:
-                case HeaderType.clientDisconnected:
-                    break;
                 default:
-                    RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {this}.");
+                    RiptideLogger.Log(LogType.warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {connection}.");
                     break;
             }
 

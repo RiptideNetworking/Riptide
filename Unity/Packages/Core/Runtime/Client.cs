@@ -278,7 +278,7 @@ namespace Riptide
                     OnClientDisconnected(message.GetUShort());
                     break;
                 default:
-                    RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    RiptideLogger.Log(LogType.warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
                     break;
             }
 

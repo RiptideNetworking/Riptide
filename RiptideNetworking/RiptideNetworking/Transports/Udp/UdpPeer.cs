@@ -21,6 +21,7 @@ namespace Riptide.Transports.Udp
         private const int MinSocketBufferSize = 256 * 1024; // 256KB
         /// <summary>How long to wait for a packet, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
+
         /// <summary>The size to use for the socket's send and receive buffers.</summary>
         private readonly int socketBufferSize;
         /// <summary>The array that incoming data is received into.</summary>
@@ -28,7 +29,7 @@ namespace Riptide.Transports.Udp
         /// <summary>The socket to use for sending and receiving.</summary>
         private Socket socket;
         /// <summary>Whether or not the transport is running.</summary>
-        private bool isRunning = false;
+        private bool isRunning;
         /// <summary>A reusable endpoint.</summary>
         private EndPoint remoteEndPoint;
 

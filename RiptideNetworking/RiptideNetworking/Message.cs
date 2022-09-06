@@ -1514,7 +1514,7 @@ namespace Riptide
         /// <summary>The name of a <see cref="byte"/> value.</summary>
         private const string ByteName        = "byte";
         /// <summary>The name of a <see cref="sbyte"/> value.</summary>
-        private const string SByteName        = "sbyte";
+        private const string SByteName       = "sbyte";
         /// <summary>The name of a <see cref="bool"/> value.</summary>
         private const string BoolName        = "bool";
         /// <summary>The name of a <see cref="short"/> value.</summary>

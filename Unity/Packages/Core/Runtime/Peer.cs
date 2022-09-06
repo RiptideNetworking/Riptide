@@ -75,23 +75,23 @@ namespace Riptide
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
         protected const string DCTransportError = "Transport error";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
-        protected const string DCTimedOut = "Timed out";
+        protected const string DCTimedOut       = "Timed out";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.kicked"/>.</summary>
-        protected const string DCKicked = "Kicked";
+        protected const string DCKicked         = "Kicked";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.serverStopped"/>.</summary>
-        protected const string DCServerStopped = "Server stopped";
+        protected const string DCServerStopped  = "Server stopped";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.disconnected"/>.</summary>
-        protected const string DCDisconnected = "Disconnected";
+        protected const string DCDisconnected   = "Disconnected";
         /// <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
-        protected const string UnknownReason = "Unknown reason";
+        protected const string UnknownReason    = "Unknown reason";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.noConnection"/>.</summary>
-        protected const string CRNoConnection = "No connection";
+        protected const string CRNoConnection   = "No connection";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.serverFull"/>.</summary>
-        protected const string CRServerFull = "Server is full";
+        protected const string CRServerFull     = "Server is full";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.rejected"/>.</summary>
-        protected const string CRRejected = "Rejected";
+        protected const string CRRejected       = "Rejected";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.custom"/>.</summary>
-        protected const string CRCustom = "Rejected with custom reason";
+        protected const string CRCustom         = "Rejected with custom reason";
 
         /// <summary>A stopwatch used to track how much time has passed.</summary>
         private readonly System.Diagnostics.Stopwatch time = new System.Diagnostics.Stopwatch();

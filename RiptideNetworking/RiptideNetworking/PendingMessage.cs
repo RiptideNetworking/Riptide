@@ -7,7 +7,6 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
-using System.Timers;
 
 namespace Riptide
 {
