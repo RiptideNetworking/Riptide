@@ -129,23 +129,23 @@ namespace Riptide
             MethodInfo[] methods = FindMessageHandlers();
 
             messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
-            for (int i = 0; i < methods.Length; i++)
+            foreach (MethodInfo method in methods)
             {
-                MessageHandlerAttribute attribute = methods[i].GetCustomAttribute<MessageHandlerAttribute>();
+                MessageHandlerAttribute attribute = method.GetCustomAttribute<MessageHandlerAttribute>();
                 if (attribute.GroupId != messageHandlerGroupId)
                     continue;
 
-                if (!methods[i].IsStatic)
-                    throw new NonStaticHandlerException(methods[i].DeclaringType, methods[i].Name);
+                if (!method.IsStatic)
+                    throw new NonStaticHandlerException(method.DeclaringType, method.Name);
 
-                Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), methods[i], false);
+                Delegate serverMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), method, false);
                 if (serverMessageHandler != null)
                 {
                     // It's a message handler for Server instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
                     {
                         MethodInfo otherMethodWithId = messageHandlers[attribute.MessageId].GetMethodInfo();
-                        throw new DuplicateHandlerException(attribute.MessageId, methods[i], otherMethodWithId);
+                        throw new DuplicateHandlerException(attribute.MessageId, method, otherMethodWithId);
                     }
                     else
                         messageHandlers.Add(attribute.MessageId, (MessageHandler)serverMessageHandler);
@@ -153,9 +153,9 @@ namespace Riptide
                 else
                 {
                     // It's not a message handler for Server instances, but it might be one for Client instances
-                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), methods[i], false);
+                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), method, false);
                     if (clientMessageHandler == null)
-                        throw new InvalidHandlerSignatureException(methods[i].DeclaringType, methods[i].Name);
+                        throw new InvalidHandlerSignatureException(method.DeclaringType, method.Name);
                 }
             }
         }
