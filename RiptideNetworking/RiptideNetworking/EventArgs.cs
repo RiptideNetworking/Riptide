@@ -54,6 +54,17 @@ namespace Riptide
         public ClientDisconnectedEventArgs(ushort id) => Id = id;
     }
 
+    /// <summary>Contains event data for when a connection attempt fails.</summary>
+    public class ConnectionFailedEventArgs : EventArgs
+    {
+        /// <summary>Additional data related to the failed connection attempt (if any).</summary>
+        public readonly Message Message;
+
+        /// <summary>Initializes event data.</summary>
+        /// <param name="message">Additional data related to the failed connection attempt (if any).</param>
+        public ConnectionFailedEventArgs(Message message) => Message = message;
+    }
+
     /// <summary>Contains event data for when a new client connects.</summary>
     public class ClientConnectedEventArgs : EventArgs
     {
@@ -88,16 +99,16 @@ namespace Riptide
     {
         /// <summary>The reason for the disconnection.</summary>
         public readonly DisconnectReason Reason;
-        /// <summary>The custom reason included with the disconnection information (if any).</summary>
-        public readonly string CustomMessage;
+        /// <summary>Additional data related to the disconnection (if any).</summary>
+        public readonly Message Message;
 
         /// <summary>Initializes event data.</summary>
         /// <param name="reason">The reason for the disconnection.</param>
-        /// <param name="customMessage">The custom reason included with the disconnection information (if any).</param>
-        public DisconnectedEventArgs(DisconnectReason reason, string customMessage = "")
+        /// <param name="message">Additional data related to the disconnection (if any).</param>
+        public DisconnectedEventArgs(DisconnectReason reason, Message message)
         {
             Reason = reason;
-            CustomMessage = customMessage;
+            Message = message;
         }
     }
 }

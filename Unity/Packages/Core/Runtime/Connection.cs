@@ -17,6 +17,8 @@ namespace Riptide
         notConnected,
         /// <summary>Connecting. Still trying to establish a connection.</summary>
         connecting,
+        /// <summary>Connection is pending. The server is still determining whether or not the connection should be allowed.</summary>
+        pending,
         /// <summary>Connected. A connection has been established successfully.</summary>
         connected,
     }
@@ -30,6 +32,8 @@ namespace Riptide
         public bool IsNotConnected => state == ConnectionState.notConnected;
         /// <summary>Whether or not the connection is currently in the process of connecting.</summary>
         public bool IsConnecting => state == ConnectionState.connecting;
+        /// <summary>Whether or not the connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
+        public bool IsPending => state == ConnectionState.pending;
         /// <summary>Whether or not the connection is currently connected.</summary>
         public bool IsConnected => state == ConnectionState.connected;
         /// <summary>The round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
@@ -64,6 +68,8 @@ namespace Riptide
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => _canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
+        /// <summary>Whether or not the connection attempt has timed out. Uses a multiple of <see cref="Peer.TimeoutTime"/> and ignores the value of <see cref="CanTimeout"/>.</summary>
+        internal bool HasConnectAttemptTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime * 2;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -289,6 +295,16 @@ namespace Riptide
         {
             if (PendingMessages.TryGetValue(seqId, out PendingMessage pendingMessage))
                 pendingMessage.Clear();
+        }
+
+        /// <summary>Puts the connection in the pending state.</summary>
+        internal void SetPending()
+        {
+            if (IsConnecting)
+            {
+                state = ConnectionState.pending;
+                ResetTimeout();
+            }
         }
 
         #region Messages

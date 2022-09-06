@@ -18,6 +18,8 @@ namespace Riptide.Transports
         ackExtra,
         /// <summary>An internal unreliable connect message.</summary>
         connect,
+        /// <summary>An internal unreliable connection rejection message.</summary>
+        reject,
         /// <summary>An internal unreliable heartbeat message.</summary>
         heartbeat,
         /// <summary>An internal unreliable disconnect message.</summary>

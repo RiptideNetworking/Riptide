@@ -18,7 +18,7 @@ namespace Riptide
         public event EventHandler Connected;
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
         /// <remarks>This occurs when a connection request fails, either because no server is listening on the on the given host address, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
-        public event EventHandler ConnectionFailed;
+        public event EventHandler<ConnectionFailedEventArgs> ConnectionFailed;
         /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when disconnected from the server.</summary>
@@ -39,6 +39,8 @@ namespace Riptide
         public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
         public bool IsConnecting => !(connection is null) && connection.IsConnecting;
+        /// <summary>Whether or not the client's connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
+        public bool IsPending => !(connection is null) && connection.IsPending;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => !(connection is null) && connection.IsConnected;
         /// <inheritdoc cref="connection"/>
@@ -88,7 +90,7 @@ namespace Riptide
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
-        /// <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         /// <remarks>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</remarks>
         /// <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
         public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null)
@@ -196,6 +198,15 @@ namespace Riptide
                 else
                     LocalDisconnect(DisconnectReason.neverConnected);
             }
+            else if (IsPending)
+            {
+                // If waiting for the server to accept/reject the connection attempt
+                if (connection.HasConnectAttemptTimedOut)
+                {
+                    LocalDisconnect(DisconnectReason.timedOut);
+                    return;
+                }
+            }
             else if (IsConnected)
             {
                 // If connected and not timed out, send heartbeats
@@ -238,13 +249,23 @@ namespace Riptide
                     connection.HandleAckExtra(message);
                     break;
                 case HeaderType.connect:
-                    // Client shouldn't ever receive a connect message
+                    connection.SetPending();
+                    break;
+                case HeaderType.reject:
+                    RejectReason reason = (RejectReason)message.GetByte();
+                    if (reason == RejectReason.pending)
+                        connection.SetPending();
+                    else if (!IsConnected) // Don't disconnect if we are connected
+                        LocalDisconnect(DisconnectReason.connectionRejected, message, reason);
                     break;
                 case HeaderType.heartbeat:
                     connection.HandleHeartbeatResponse(message);
                     break;
+                case HeaderType.disconnect:
+                    LocalDisconnect((DisconnectReason)message.GetByte(), message);
+                    break;
                 case HeaderType.welcome:
-                    if (IsConnecting)
+                    if (IsConnecting || IsPending)
                     {
                         connection.HandleWelcome(message);
                         OnConnected();
@@ -255,9 +276,6 @@ namespace Riptide
                     break;
                 case HeaderType.clientDisconnected:
                     OnClientDisconnected(message.GetUShort());
-                    break;
-                case HeaderType.disconnect:
-                    LocalDisconnect((DisconnectReason)message.GetByte(), message.UnreadLength > 0 ? message.GetString() : "");
                     break;
                 default:
                     RiptideLogger.Log(LogType.warning, LogName, $"Unknown message header type '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
@@ -285,9 +303,13 @@ namespace Riptide
 
         /// <summary>Cleans up the local side of the connection.</summary>
         /// <param name="reason">The reason why the client has disconnected.</param>
-        /// <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="DisconnectReason.kicked"/>.</param>
-        private void LocalDisconnect(DisconnectReason reason, string customMessage = "")
+        /// <param name="message">The disconnection or rejection message, potentially containing extra data to be handled externally.</param>
+        /// <param name="rejectReason">TData that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance. Unused if the connection wasn't rejected.</param>
+        private void LocalDisconnect(DisconnectReason reason, Message message = null, RejectReason rejectReason = RejectReason.noConnection)
         {
+            if (IsNotConnected)
+                return;
+
             UnsubFromTransportEvents();
             DecreaseActiveCount();
 
@@ -297,37 +319,11 @@ namespace Riptide
             connection.LocalDisconnect();
 
             if (reason == DisconnectReason.neverConnected)
-                OnConnectionFailed();
+                OnConnectionFailed(RejectReason.noConnection);
+            else if (reason == DisconnectReason.connectionRejected)
+                OnConnectionFailed(rejectReason, message);
             else
-            {
-                string reasonString;
-                switch (reason)
-                {
-                    case DisconnectReason.neverConnected:
-                        reasonString = ReasonNeverConnected;
-                        break;
-                    case DisconnectReason.transportError:
-                        reasonString = ReasonTransportError;
-                        break;
-                    case DisconnectReason.timedOut:
-                        reasonString = ReasonTimedOut;
-                        break;
-                    case DisconnectReason.kicked:
-                        reasonString = string.IsNullOrEmpty(customMessage) ? ReasonKicked : customMessage;
-                        break;
-                    case DisconnectReason.serverStopped:
-                        reasonString = ReasonServerStopped;
-                        break;
-                    case DisconnectReason.disconnected:
-                        reasonString = ReasonDisconnected;
-                        break;
-                    default:
-                        reasonString = ReasonUnknown;
-                        break;
-                }
-
-                OnDisconnected(reason, reasonString);
-            }   
+                OnDisconnected(reason, message);
         }
 
         /// <summary>What to do when the transport establishes a connection.</summary>
@@ -358,10 +354,32 @@ namespace Riptide
         }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
-        protected virtual void OnConnectionFailed()
+        /// <param name="reason">The reason for the connection failure.</param>
+        /// <param name="message">Additional data related to the failed connection attempt.</param>
+        protected virtual void OnConnectionFailed(RejectReason reason, Message message = null)
         {
-            RiptideLogger.Log(LogType.info, LogName, "Connection to server failed!");
-            ConnectionFailed?.Invoke(this, EventArgs.Empty);
+            string reasonString;
+            switch (reason)
+            {
+                case RejectReason.noConnection:
+                    reasonString = CRNoConnection;
+                    break;
+                case RejectReason.serverFull:
+                    reasonString = CRServerFull;
+                    break;
+                case RejectReason.rejected:
+                    reasonString = CRRejected;
+                    break;
+                case RejectReason.custom:
+                    reasonString = CRCustom;
+                    break;
+                default:
+                    reasonString = UnknownReason;
+                    break;
+            }
+            RiptideLogger.Log(LogType.info, LogName, $"Connection to server failed: {reasonString}.");
+            
+            ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(message));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -379,11 +397,37 @@ namespace Riptide
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
         /// <param name="reason">The reason for the disconnection.</param>
-        /// <param name="customMessage">The custom message to display for the disconnection reason.</param>
-        protected virtual void OnDisconnected(DisconnectReason reason, string customMessage)
+        /// <param name="message">Additional data related to the disconnection.</param>
+        protected virtual void OnDisconnected(DisconnectReason reason, Message message)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {customMessage}.");
-            Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, customMessage));
+            string reasonString;
+            switch (reason)
+            {
+                case DisconnectReason.neverConnected:
+                    reasonString = DCNeverConnected;
+                    break;
+                case DisconnectReason.transportError:
+                    reasonString = DCTransportError;
+                    break;
+                case DisconnectReason.timedOut:
+                    reasonString = DCTimedOut;
+                    break;
+                case DisconnectReason.kicked:
+                    reasonString = DCKicked;
+                    break;
+                case DisconnectReason.serverStopped:
+                    reasonString = DCServerStopped;
+                    break;
+                case DisconnectReason.disconnected:
+                    reasonString = DCDisconnected;
+                    break;
+                default:
+                    reasonString = UnknownReason;
+                    break;
+            }
+            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
+
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>

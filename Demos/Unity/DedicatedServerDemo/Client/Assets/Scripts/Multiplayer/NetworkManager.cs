@@ -1,4 +1,4 @@
-﻿using Riptide.Utils;
+using Riptide.Utils;
 using System;
 using UnityEngine;
 
@@ -85,7 +85,7 @@ namespace Riptide.Demos.DedicatedClient
             UIManager.Singleton.SendName();
         }
 
-        private void FailedToConnect(object sender, EventArgs e)
+        private void FailedToConnect(object sender, ConnectionFailedEventArgs e)
         {
             UIManager.Singleton.BackToMain();
         }

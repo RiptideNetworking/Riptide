@@ -42,6 +42,9 @@
         <member name="P:Riptide.Client.IsConnecting">
             <summary>Whether or not the client is currently in the process of connecting.</summary>
         </member>
+        <member name="P:Riptide.Client.IsPending">
+            <summary>Whether or not the client's connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
+        </member>
         <member name="P:Riptide.Client.IsConnected">
             <summary>Whether or not the client is currently connected.</summary>
         </member>
@@ -86,7 +89,7 @@
             <param name="hostAddress">The host address to connect to.</param>
             <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
             <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="F:Riptide.Client.messageHandlers"/>.</param>
-            <param name="message">A message containing data that should be sent to the server with the connection attempt. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
+            <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
             <remarks>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</remarks>
             <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
         </member>
@@ -117,10 +120,11 @@
         <member name="M:Riptide.Client.Disconnect">
             <summary>Disconnects from the server.</summary>
         </member>
-        <member name="M:Riptide.Client.LocalDisconnect(Riptide.DisconnectReason,System.String)">
+        <member name="M:Riptide.Client.LocalDisconnect(Riptide.DisconnectReason,Riptide.Message,Riptide.RejectReason)">
             <summary>Cleans up the local side of the connection.</summary>
             <param name="reason">The reason why the client has disconnected.</param>
-            <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="F:Riptide.DisconnectReason.kicked"/>.</param>
+            <param name="message">The disconnection or rejection message, potentially containing extra data to be handled externally.</param>
+            <param name="rejectReason">TData that should be sent to the client being disconnected. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance. Unused if the connection wasn't rejected.</param>
         </member>
         <member name="M:Riptide.Client.TransportConnected(System.Object,System.EventArgs)">
             <summary>What to do when the transport establishes a connection.</summary>
@@ -134,17 +138,19 @@
         <member name="M:Riptide.Client.OnConnected">
             <summary>Invokes the <see cref="E:Riptide.Client.Connected"/> event.</summary>
         </member>
-        <member name="M:Riptide.Client.OnConnectionFailed">
+        <member name="M:Riptide.Client.OnConnectionFailed(Riptide.RejectReason,Riptide.Message)">
             <summary>Invokes the <see cref="E:Riptide.Client.ConnectionFailed"/> event.</summary>
+            <param name="reason">The reason for the connection failure.</param>
+            <param name="message">Additional data related to the failed connection attempt.</param>
         </member>
         <member name="M:Riptide.Client.OnMessageReceived(Riptide.Message)">
             <summary>Invokes the <see cref="E:Riptide.Client.MessageReceived"/> event and initiates handling of the received message.</summary>
             <param name="message">The received message.</param>
         </member>
-        <member name="M:Riptide.Client.OnDisconnected(Riptide.DisconnectReason,System.String)">
+        <member name="M:Riptide.Client.OnDisconnected(Riptide.DisconnectReason,Riptide.Message)">
             <summary>Invokes the <see cref="E:Riptide.Client.Disconnected"/> event.</summary>
             <param name="reason">The reason for the disconnection.</param>
-            <param name="customMessage">The custom message to display for the disconnection reason.</param>
+            <param name="message">Additional data related to the disconnection.</param>
         </member>
         <member name="M:Riptide.Client.OnClientConnected(System.UInt16)">
             <summary>Invokes the <see cref="E:Riptide.Client.ClientConnected"/> event.</summary>
@@ -163,6 +169,9 @@
         <member name="F:Riptide.ConnectionState.connecting">
             <summary>Connecting. Still trying to establish a connection.</summary>
         </member>
+        <member name="F:Riptide.ConnectionState.pending">
+            <summary>Connection is pending. The server is still determining whether or not the connection should be allowed.</summary>
+        </member>
         <member name="F:Riptide.ConnectionState.connected">
             <summary>Connected. A connection has been established successfully.</summary>
         </member>
@@ -177,6 +186,9 @@
         </member>
         <member name="P:Riptide.Connection.IsConnecting">
             <summary>Whether or not the connection is currently in the process of connecting.</summary>
+        </member>
+        <member name="P:Riptide.Connection.IsPending">
+            <summary>Whether or not the connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
         </member>
         <member name="P:Riptide.Connection.IsConnected">
             <summary>Whether or not the connection is currently connected.</summary>
@@ -196,6 +208,9 @@
         </member>
         <member name="P:Riptide.Connection.HasTimedOut">
             <summary>Whether or not the connection has timed out.</summary>
+        </member>
+        <member name="P:Riptide.Connection.HasConnectAttemptTimedOut">
+            <summary>Whether or not the connection attempt has timed out. Uses a multiple of <see cref="P:Riptide.Peer.TimeoutTime"/> and ignores the value of <see cref="P:Riptide.Connection.CanTimeout"/>.</summary>
         </member>
         <member name="P:Riptide.Connection.PendingMessages">
             <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
@@ -288,6 +303,9 @@
             <summary>Immediately marks the <see cref="T:Riptide.PendingMessage"/> of a given sequence ID as delivered.</summary>
             <param name="seqId">The sequence ID that was acknowledged.</param>
         </member>
+        <member name="M:Riptide.Connection.SetPending">
+            <summary>Puts the connection in the pending state.</summary>
+        </member>
         <member name="M:Riptide.Connection.SendAck(System.UInt16)">
             <summary>Sends an ack message for the given sequence ID.</summary>
             <param name="forSeqId">The sequence ID to acknowledge.</param>
@@ -366,6 +384,16 @@
             <summary>Initializes event data.</summary>
             <param name="id">The numeric ID of the client that disconnected.</param>
         </member>
+        <member name="T:Riptide.ConnectionFailedEventArgs">
+            <summary>Contains event data for when a connection attempt fails.</summary>
+        </member>
+        <member name="F:Riptide.ConnectionFailedEventArgs.Message">
+            <summary>Additional data related to the failed connection attempt (if any).</summary>
+        </member>
+        <member name="M:Riptide.ConnectionFailedEventArgs.#ctor(Riptide.Message)">
+            <summary>Initializes event data.</summary>
+            <param name="message">Additional data related to the failed connection attempt (if any).</param>
+        </member>
         <member name="T:Riptide.ClientConnectedEventArgs">
             <summary>Contains event data for when a new client connects.</summary>
         </member>
@@ -396,13 +424,13 @@
         <member name="F:Riptide.DisconnectedEventArgs.Reason">
             <summary>The reason for the disconnection.</summary>
         </member>
-        <member name="F:Riptide.DisconnectedEventArgs.CustomMessage">
-            <summary>The custom reason included with the disconnection information (if any).</summary>
+        <member name="F:Riptide.DisconnectedEventArgs.Message">
+            <summary>Additional data related to the disconnection (if any).</summary>
         </member>
-        <member name="M:Riptide.DisconnectedEventArgs.#ctor(Riptide.DisconnectReason,System.String)">
+        <member name="M:Riptide.DisconnectedEventArgs.#ctor(Riptide.DisconnectReason,Riptide.Message)">
             <summary>Initializes event data.</summary>
             <param name="reason">The reason for the disconnection.</param>
-            <param name="customMessage">The custom reason included with the disconnection information (if any).</param>
+            <param name="message">Additional data related to the disconnection (if any).</param>
         </member>
         <member name="T:Riptide.InsufficientCapacityException">
             <summary>The exception that is thrown when a <see cref="T:Riptide.Message"/> does not contain enough unread bytes to add a certain value.</summary>
@@ -1425,11 +1453,35 @@
             <param name="forMessageId">The message ID to check.</param>
             <returns>Whether or not messages with the given ID should be relayed.</returns>
         </member>
+        <member name="T:Riptide.RejectReason">
+            <summary>The reason the connection attempt was rejected.</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.noConnection">
+            <summary>No response was received from the server (because the client has no internet connection, the server is offline, no server is listening on the target endpoint, etc.).</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.alreadyConnected">
+            <summary>The client is already connected.</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.pending">
+            <summary>A connection attempt is already pending.</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.serverFull">
+            <summary>The server is full.</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.rejected">
+            <summary>The connection attempt was rejected.</summary>
+        </member>
+        <member name="F:Riptide.RejectReason.custom">
+            <summary>The connection attempt was rejected and custom data may have been included with the rejection message.</summary>
+        </member>
         <member name="T:Riptide.DisconnectReason">
             <summary>The reason for a disconnection.</summary>
         </member>
         <member name="F:Riptide.DisconnectReason.neverConnected">
             <summary>No connection was ever established.</summary>
+        </member>
+        <member name="F:Riptide.DisconnectReason.connectionRejected">
+            <summary>The connection attempt was rejected by the server.</summary>
         </member>
         <member name="F:Riptide.DisconnectReason.transportError">
             <summary>The active transport detected a problem with the connection.</summary>
@@ -1470,26 +1522,38 @@
         <member name="P:Riptide.Peer.CurrentTime">
             <summary>The current time.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonNeverConnected">
+        <member name="F:Riptide.Peer.DCNeverConnected">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.neverConnected"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonTransportError">
+        <member name="F:Riptide.Peer.DCTransportError">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.transportError"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonTimedOut">
+        <member name="F:Riptide.Peer.DCTimedOut">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.timedOut"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonKicked">
+        <member name="F:Riptide.Peer.DCKicked">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.kicked"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonServerStopped">
+        <member name="F:Riptide.Peer.DCServerStopped">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.serverStopped"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonDisconnected">
+        <member name="F:Riptide.Peer.DCDisconnected">
             <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.disconnected"/>.</summary>
         </member>
-        <member name="F:Riptide.Peer.ReasonUnknown">
-            <summary>The text to log when disconnected due to an unknown reason.</summary>
+        <member name="F:Riptide.Peer.UnknownReason">
+            <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
+        </member>
+        <member name="F:Riptide.Peer.CRNoConnection">
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.noConnection"/>.</summary>
+        </member>
+        <member name="F:Riptide.Peer.CRServerFull">
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.serverFull"/>.</summary>
+        </member>
+        <member name="F:Riptide.Peer.CRRejected">
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.rejected"/>.</summary>
+        </member>
+        <member name="F:Riptide.Peer.CRCustom">
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.custom"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.time">
             <summary>A stopwatch used to track how much time has passed.</summary>
@@ -1723,17 +1787,23 @@
             <param name="connectMessage">The connect message.</param>
         </member>
         <member name="M:Riptide.Server.Accept(Riptide.Connection)">
-            <summary>Accepts a pending connection.</summary>
-            <param name="connection">The pending connection to accept.</param>
+            <summary>Accepts the given pending connection.</summary>
+            <param name="connection">The connection to accept.</param>
         </member>
-        <member name="M:Riptide.Server.Reject(Riptide.Connection)">
-            <summary>Rejects a pending connection.</summary>
-            <param name="connection">The pending connection to reject.</param>
+        <member name="M:Riptide.Server.Reject(Riptide.Connection,Riptide.Message)">
+            <summary>Rejects the given pending connection.</summary>
+            <param name="connection">The connection to reject.</param>
+            <param name="message">Data that should be sent to the client being rejected. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
         </member>
-        <member name="M:Riptide.Server.Accept(Riptide.Connection,System.Boolean)">
-            <summary>Accepts or rejects a given connection.</summary>
-            <param name="connection">The pending connection to accept or reject.</param>
-            <param name="doAccept">Whether or not to accept the pending connection.</param>
+        <member name="M:Riptide.Server.AcceptConnection(Riptide.Connection)">
+            <summary>Accepts the given pending connection.</summary>
+            <param name="connection">The connection to accept.</param>
+        </member>
+        <member name="M:Riptide.Server.Reject(Riptide.Connection,Riptide.RejectReason,Riptide.Message)">
+            <summary>Rejects the given pending connection.</summary>
+            <param name="connection">The connection to reject.</param>
+            <param name="reason">The reason why the connection is being rejected.</param>
+            <param name="rejectMessage">Data that should be sent to the client being rejected</param>
         </member>
         <member name="M:Riptide.Server.Heartbeat">
             <summary>Checks if clients have timed out.</summary>
@@ -1777,21 +1847,20 @@
             <param name="client">The retrieved client.</param>
             <returns><see langword="true"/> if a client with the given ID was connected; otherwise <see langword="false"/>.</returns>
         </member>
-        <member name="M:Riptide.Server.DisconnectClient(System.UInt16,System.String)">
+        <member name="M:Riptide.Server.DisconnectClient(System.UInt16,Riptide.Message)">
             <summary>Disconnects a specific client.</summary>
             <param name="id">The numeric ID of the client to disconnect.</param>
-            <param name="customMessage">An optional custom message (if any) to inform the client why it was disconnected.</param>
+            <param name="message">Data that should be sent to the client being disconnected. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
         </member>
-        <member name="M:Riptide.Server.DisconnectClient(Riptide.Connection,System.String)">
+        <member name="M:Riptide.Server.DisconnectClient(Riptide.Connection,Riptide.Message)">
             <summary>Disconnects the given client.</summary>
             <param name="client">The client to disconnect.</param>
-            <param name="customMessage">An optional custom message (if any) to inform the client why it was disconnected.</param>
+            <param name="message">Data that should be sent to the client being disconnected. Use <see cref="M:Riptide.Message.Create"/> to get an empty message instance.</param>
         </member>
-        <member name="M:Riptide.Server.LocalDisconnect(Riptide.Connection,Riptide.DisconnectReason,System.String)">
+        <member name="M:Riptide.Server.LocalDisconnect(Riptide.Connection,Riptide.DisconnectReason)">
             <summary>Cleans up the local side of the given connection.</summary>
             <param name="client">The client to disconnect.</param>
             <param name="reason">The reason why the client is being disconnected.</param>
-            <param name="customMessage">An optional custom message to display for the disconnection reason. Only used when <paramref name="reason"/> is set to <see cref="F:Riptide.DisconnectReason.kicked"/>.</param>
         </member>
         <member name="M:Riptide.Server.TransportDisconnected(System.Object,Riptide.Transports.DisconnectedEventArgs)">
             <summary>What to do when the transport disconnects a client.</summary>
@@ -1806,11 +1875,11 @@
             <summary>Retrieves an available client ID.</summary>
             <returns>The client ID. 0 if none were available.</returns>
         </member>
-        <member name="M:Riptide.Server.SendDisconnect(Riptide.Connection,Riptide.DisconnectReason,System.String)">
+        <member name="M:Riptide.Server.SendDisconnect(Riptide.Connection,Riptide.DisconnectReason,Riptide.Message)">
             <summary>Sends a disconnect message.</summary>
             <param name="client">The client to send the disconnect message to.</param>
             <param name="reason">Why the client is being disconnected.</param>
-            <param name="customMessage">A custom message which is used to inform clients why they were disconnected.</param>
+            <param name="disconnectMessage">Optional custom data that should be sent to the client being disconnected.</param>
         </member>
         <member name="M:Riptide.Server.SendClientConnected(Riptide.Connection)">
             <summary>Sends a client connected message.</summary>
@@ -1908,6 +1977,9 @@
         </member>
         <member name="F:Riptide.Transports.HeaderType.connect">
             <summary>An internal unreliable connect message.</summary>
+        </member>
+        <member name="F:Riptide.Transports.HeaderType.reject">
+            <summary>An internal unreliable connection rejection message.</summary>
         </member>
         <member name="F:Riptide.Transports.HeaderType.heartbeat">
             <summary>An internal unreliable heartbeat message.</summary>

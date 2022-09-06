@@ -12,11 +12,30 @@ using System.Reflection;
 
 namespace Riptide
 {
+    /// <summary>The reason the connection attempt was rejected.</summary>
+    public enum RejectReason : byte
+    {
+        /// <summary>No response was received from the server (because the client has no internet connection, the server is offline, no server is listening on the target endpoint, etc.).</summary>
+        noConnection,
+        /// <summary>The client is already connected.</summary>
+        alreadyConnected,
+        /// <summary>A connection attempt is already pending.</summary>
+        pending,
+        /// <summary>The server is full.</summary>
+        serverFull,
+        /// <summary>The connection attempt was rejected.</summary>
+        rejected,
+        /// <summary>The connection attempt was rejected and custom data may have been included with the rejection message.</summary>
+        custom
+    }
+
     /// <summary>The reason for a disconnection.</summary>
     public enum DisconnectReason : byte
     {
         /// <summary>No connection was ever established.</summary>
         neverConnected,
+        /// <summary>The connection attempt was rejected by the server.</summary>
+        connectionRejected,
         /// <summary>The active transport detected a problem with the connection.</summary>
         transportError,
         /// <summary>The connection timed out.</summary>
@@ -52,19 +71,27 @@ namespace Riptide
         internal long CurrentTime { get; private set; }
 
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.neverConnected"/>.</summary>
-        protected const string ReasonNeverConnected = "Never connected";
+        protected const string DCNeverConnected = "Never connected";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
-        protected const string ReasonTransportError = "Transport error";
+        protected const string DCTransportError = "Transport error";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
-        protected const string ReasonTimedOut = "Timed out";
+        protected const string DCTimedOut = "Timed out";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.kicked"/>.</summary>
-        protected const string ReasonKicked = "Kicked";
+        protected const string DCKicked = "Kicked";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.serverStopped"/>.</summary>
-        protected const string ReasonServerStopped = "Server stopped";
+        protected const string DCServerStopped = "Server stopped";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.disconnected"/>.</summary>
-        protected const string ReasonDisconnected = "Disconnected";
-        /// <summary>The text to log when disconnected due to an unknown reason.</summary>
-        protected const string ReasonUnknown = "Unknown reason";
+        protected const string DCDisconnected = "Disconnected";
+        /// <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
+        protected const string UnknownReason = "Unknown reason";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.noConnection"/>.</summary>
+        protected const string CRNoConnection = "No connection";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.serverFull"/>.</summary>
+        protected const string CRServerFull = "Server is full";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.rejected"/>.</summary>
+        protected const string CRRejected = "Rejected";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.custom"/>.</summary>
+        protected const string CRCustom = "Rejected with custom reason";
 
         /// <summary>A stopwatch used to track how much time has passed.</summary>
         private readonly System.Diagnostics.Stopwatch time = new System.Diagnostics.Stopwatch();
