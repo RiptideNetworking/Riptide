@@ -63,7 +63,7 @@ namespace Riptide.Experimental.TcpTransport
         }
 
         /// <inheritdoc/>
-        public void Tick()
+        public void Poll()
         {
             if (!isRunning)
                 return;

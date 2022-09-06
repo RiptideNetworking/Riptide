@@ -1,4 +1,4 @@
-using Riptide.Utils;
+﻿using Riptide.Utils;
 using System;
 using UnityEngine;
 
@@ -62,7 +62,7 @@ namespace Riptide.Demos.DedicatedClient
 
         private void FixedUpdate()
         {
-            Client.Tick();
+            Client.Update();
         }
 
         private void OnApplicationQuit()

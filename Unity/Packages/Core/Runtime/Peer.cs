@@ -142,8 +142,8 @@ namespace Riptide
         /// <summary>Beats the heart.</summary>
         internal abstract void Heartbeat();
 
-        /// <summary>Checks if it's time for any delayed events to be invoked and invokes them.</summary>
-        public virtual void Tick()
+        /// <summary>Handles any received messages and invokes any delayed events which need to be invoked.</summary>
+        public virtual void Update()
         {
             CurrentTime = time.ElapsedMilliseconds;
 

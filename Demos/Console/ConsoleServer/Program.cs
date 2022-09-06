@@ -44,7 +44,7 @@ namespace Riptide.Demos.ConsoleServer
 
             while (isRunning)
             {
-                server.Tick();
+                server.Update();
                 Thread.Sleep(10);
             }
 

@@ -105,8 +105,8 @@
         <member name="M:Riptide.Client.Heartbeat">
             <inheritdoc/>
         </member>
-        <member name="M:Riptide.Client.Tick">
-            <summary>Polls the transport for received messages and then handles them.</summary>
+        <member name="M:Riptide.Client.Update">
+            <inheritdoc/>
         </member>
         <member name="M:Riptide.Client.Handle(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
             <inheritdoc/>
@@ -1585,8 +1585,8 @@
         <member name="M:Riptide.Peer.Heartbeat">
             <summary>Beats the heart.</summary>
         </member>
-        <member name="M:Riptide.Peer.Tick">
-            <summary>Checks if it's time for any delayed events to be invoked and invokes them.</summary>
+        <member name="M:Riptide.Peer.Update">
+            <summary>Handles any received messages and invokes any delayed events which need to be invoked.</summary>
         </member>
         <member name="M:Riptide.Peer.ExecuteLater(System.Int64,Riptide.Utils.DelayedEvent)">
             <summary>Sets up a delayed event to be executed after the given time has passed.</summary>
@@ -1808,8 +1808,8 @@
         <member name="M:Riptide.Server.Heartbeat">
             <summary>Checks if clients have timed out.</summary>
         </member>
-        <member name="M:Riptide.Server.Tick">
-            <summary>Polls the transport for received messages and then handles them.</summary>
+        <member name="M:Riptide.Server.Update">
+            <inheritdoc/>
         </member>
         <member name="M:Riptide.Server.Handle(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
             <inheritdoc/>
@@ -2008,7 +2008,7 @@
         <member name="E:Riptide.Transports.IPeer.Disconnected">
             <summary>Invoked when a disconnection is initiated or detected by the transport.</summary>
         </member>
-        <member name="M:Riptide.Transports.IPeer.Tick">
+        <member name="M:Riptide.Transports.IPeer.Poll">
             <summary>Initiates handling of any received messages.</summary>
         </member>
         <member name="T:Riptide.Transports.IServer">
@@ -2135,8 +2135,8 @@
             <summary>Initializes the transport.</summary>
             <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
         </member>
-        <member name="M:Riptide.Transports.Udp.UdpPeer.Tick">
-            <inheritdoc cref="M:Riptide.Transports.IPeer.Tick"/>
+        <member name="M:Riptide.Transports.Udp.UdpPeer.Poll">
+            <inheritdoc cref="M:Riptide.Transports.IPeer.Poll"/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpPeer.OpenSocket(System.UInt16)">
             <summary>Opens the socket and starts the transport.</summary>
@@ -2230,7 +2230,7 @@
             <param name="port">The retrieved port.</param>
             <returns>Whether or not <paramref name="hostAddress"/> was in a valid format.</returns>
         </member>
-        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Tick">
+        <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Poll">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Experimental.TcpTransport.TcpClient.Disconnect">
@@ -2367,7 +2367,7 @@
             <summary>Starts listening for connections on the given port.</summary>
             <param name="port">The port to listen on.</param>
         </member>
-        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Tick">
+        <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Poll">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Experimental.TcpTransport.TcpServer.Accept">

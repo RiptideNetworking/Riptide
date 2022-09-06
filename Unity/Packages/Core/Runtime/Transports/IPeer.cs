@@ -44,6 +44,6 @@ namespace Riptide.Transports
         event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>Initiates handling of any received messages.</summary>
-        void Tick();
+        void Poll();
     }
 }

@@ -295,11 +295,11 @@ namespace Riptide
             ExecuteLater(HeartbeatInterval, new HeartbeatEvent(this));
         }
 
-        /// <summary>Polls the transport for received messages and then handles them.</summary>
-        public override void Tick()
+        /// <inheritdoc/>
+        public override void Update()
         {
-            base.Tick();
-            transport.Tick();
+            base.Update();
+            transport.Poll();
             HandleMessages();
         }
 

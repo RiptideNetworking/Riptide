@@ -67,7 +67,7 @@ namespace Riptide.Demos.ConsoleClient
 
             while (isRunning)
             {
-                client.Tick();
+                client.Update();
 
                 if (isTestRunning)
                 {

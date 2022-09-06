@@ -86,7 +86,7 @@ namespace Riptide.Experimental.TcpTransport
         }
 
         /// <inheritdoc/>
-        public void Tick()
+        public void Poll()
         {
             if (tcpConnection != null)
                 tcpConnection.Receive();

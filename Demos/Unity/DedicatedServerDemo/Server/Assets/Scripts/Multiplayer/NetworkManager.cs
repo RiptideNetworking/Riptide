@@ -71,7 +71,7 @@ namespace Riptide.Demos.DedicatedServer
 
         private void FixedUpdate()
         {
-            Server.Tick();
+            Server.Update();
         }
 
         private void OnApplicationQuit()

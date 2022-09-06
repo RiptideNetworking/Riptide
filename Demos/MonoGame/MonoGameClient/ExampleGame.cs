@@ -52,7 +52,7 @@ namespace Riptide.Demos.MGClient
             if (Player.List.TryGetValue(NetworkManager.Client.Id, out Player localPlayer))
                 localPlayer.Update((float)gameTime.ElapsedGameTime.TotalSeconds);
 
-            NetworkManager.Client.Tick();
+            NetworkManager.Client.Update();
             base.Update(gameTime);
         }
 

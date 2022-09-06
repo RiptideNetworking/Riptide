@@ -20,7 +20,7 @@ namespace Riptide.Demos.MGServer
 
             while (true)
             {
-                Server.Tick();
+                Server.Update();
                 Player.SendPositions();
 
                 Thread.Sleep(10);

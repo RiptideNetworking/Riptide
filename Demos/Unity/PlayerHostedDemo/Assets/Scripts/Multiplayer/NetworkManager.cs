@@ -63,9 +63,9 @@ namespace Riptide.Demos.PlayerHosted
         private void FixedUpdate()
         {
             if (Server.IsRunning)
-                Server.Tick();
+                Server.Update();
             
-            Client.Tick();
+            Client.Update();
         }
 
         private void OnApplicationQuit()

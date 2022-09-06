@@ -44,8 +44,8 @@ namespace Riptide.Transports.Udp
             receivedData = new byte[Message.MaxSize + sizeof(ushort)];
         }
 
-        /// <inheritdoc cref="IPeer.Tick"/>
-        public void Tick()
+        /// <inheritdoc cref="IPeer.Poll"/>
+        public void Poll()
         {
             Receive();
         }
