@@ -40,7 +40,7 @@ namespace Riptide
         /// <summary>Handles initial setup.</summary>
         internal PendingMessage()
         {
-            data = new byte[Message.MaxSize + sizeof(ushort)]; // + ushort length because we need to add the sequence ID bytes
+            data = new byte[Message.MaxSize];
         }
 
         #region Pooling
@@ -56,8 +56,8 @@ namespace Riptide
 
             pendingMessage.data[0] = message.Bytes[0]; // Copy message header
             Converter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
-            Array.Copy(message.Bytes, 1, pendingMessage.data, 3, message.WrittenLength - 1); // Copy the rest of the message
-            pendingMessage.writtenLength = message.WrittenLength + sizeof(ushort);
+            Array.Copy(message.Bytes, 3, pendingMessage.data, 3, message.WrittenLength - 3); // Copy the rest of the message
+            pendingMessage.writtenLength = message.WrittenLength;
 
             pendingMessage.maxSendAttempts = message.MaxSendAttempts;
             pendingMessage.sendAttempts = 0;

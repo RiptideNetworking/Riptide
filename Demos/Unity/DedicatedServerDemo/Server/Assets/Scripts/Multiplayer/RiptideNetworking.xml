@@ -601,18 +601,15 @@
         <member name="T:Riptide.Message">
             <summary>Provides functionality for converting data to bytes and vice versa.</summary>
         </member>
-        <member name="F:Riptide.Message.HeaderSize">
-            <summary>The number of bytes required for a message's header.</summary>
-            <remarks>
-                <para>1 byte for the actual header; 2 bytes for the message ID.</para>
-                <b>NOTE:</b> Various transports may add additional bytes when sending messages, so this value may not reflect the true size of the header that is actually sent. For example, Riptide's default RUDP transport inserts an extra 2 bytes for the message's sequence ID when sending reliable messages, but this is not (and should not be) reflected in this value.
-            </remarks>
+        <member name="F:Riptide.Message.MaxHeaderSize">
+            <summary>The maximum number of bytes required for a message's header.</summary>
+            <remarks>1 byte for the actual header, 2 bytes for the sequence ID (only for reliable messages), 2 bytes for the message ID. Messages sent unreliably will use 2 bytes less than this value for the header.</remarks>
         </member>
         <member name="P:Riptide.Message.MaxSize">
-            <summary>The maximum number of bytes that a message can contain, including the <see cref="F:Riptide.Message.HeaderSize"/>.</summary>
+            <summary>The maximum number of bytes that a message can contain, including the <see cref="F:Riptide.Message.MaxHeaderSize"/>.</summary>
         </member>
         <member name="P:Riptide.Message.MaxPayloadSize">
-            <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="F:Riptide.Message.HeaderSize"/>.</summary>
+            <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="F:Riptide.Message.MaxHeaderSize"/>.</summary>
         </member>
         <member name="P:Riptide.Message.InstancesPerPeer">
             <summary>How many messages to add to the pool for each <see cref="T:Riptide.Server"/> or <see cref="T:Riptide.Client"/> instance that is started.</summary>
@@ -702,13 +699,8 @@
             <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
             <returns>The message, ready to be used for handling.</returns>
         </member>
-        <member name="M:Riptide.Message.SetReadWritePos(System.UInt16,System.UInt16)">
-            <summary>Sets the message's read and write position.</summary>
-            <param name="newReadPos">The new read position.</param>
-            <param name="newWritePos">The new write position.</param>
-        </member>
         <member name="M:Riptide.Message.SetHeader(Riptide.Transports.HeaderType)">
-            <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="T:Riptide.MessageSendMode"/>.</summary>
+            <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="T:Riptide.MessageSendMode"/> and read/write positions.</summary>
             <param name="messageHeader">The header to use for this message.</param>
         </member>
         <member name="M:Riptide.Message.AddByte(System.Byte)">

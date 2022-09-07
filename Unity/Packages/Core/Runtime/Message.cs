@@ -23,18 +23,15 @@ namespace Riptide
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
-        /// <summary>The number of bytes required for a message's header.</summary>
-        /// <remarks>
-        ///     <para>1 byte for the actual header; 2 bytes for the message ID.</para>
-        ///     <b>NOTE:</b> Various transports may add additional bytes when sending messages, so this value may not reflect the true size of the header that is actually sent. For example, Riptide's default RUDP transport inserts an extra 2 bytes for the message's sequence ID when sending reliable messages, but this is not (and should not be) reflected in this value.
-        /// </remarks>
-        public const int HeaderSize = 3;
-        /// <summary>The maximum number of bytes that a message can contain, including the <see cref="HeaderSize"/>.</summary>
-        public static int MaxSize { get; private set; } = HeaderSize + 1225;
-        /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="HeaderSize"/>.</summary>
+        /// <summary>The maximum number of bytes required for a message's header.</summary>
+        /// <remarks>1 byte for the actual header, 2 bytes for the sequence ID (only for reliable messages), 2 bytes for the message ID. Messages sent unreliably will use 2 bytes less than this value for the header.</remarks>
+        public const int MaxHeaderSize = 5;
+        /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
+        public static int MaxSize { get; private set; } = MaxHeaderSize + 1225;
+        /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxPayloadSize
         {
-            get => MaxSize - HeaderSize;
+            get => MaxSize - MaxHeaderSize;
             set
             {
                 if (Peer.ActiveCount > 0)
@@ -44,10 +41,10 @@ namespace Riptide
                     if (value < 0)
                     {
                         RiptideLogger.Log(LogType.error, $"The max payload size cannot be negative! Setting it to 0 instead of the given value ({value}).");
-                        MaxSize = HeaderSize;
+                        MaxSize = MaxHeaderSize;
                     }
                     else
-                        MaxSize = HeaderSize + value;
+                        MaxSize = MaxHeaderSize + value;
 
                     TrimPool(); // When ActiveSocketCount is 0, this clears the pool
                 }
@@ -176,7 +173,8 @@ namespace Riptide
         /// <returns>The message, ready to be used.</returns>
         private Message PrepareForUse()
         {
-            SetReadWritePos(0, 0);
+            readPos = 0;
+            writePos = 0;
             return this;
         }
         /// <summary>Prepares the message to be used for sending.</summary>
@@ -186,7 +184,6 @@ namespace Riptide
         private Message PrepareForUse(HeaderType messageHeader, int maxSendAttempts)
         {
             MaxSendAttempts = maxSendAttempts;
-            SetReadWritePos(0, 1);
             SetHeader(messageHeader);
             return this;
         }
@@ -197,25 +194,27 @@ namespace Riptide
         internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
         {
             SetHeader(messageHeader);
-            SetReadWritePos(1, SendMode >= MessageSendMode.reliable ? (ushort)(contentLength - 2) : contentLength);
+            writePos = contentLength;
             return this;
         }
 
-        /// <summary>Sets the message's read and write position.</summary>
-        /// <param name="newReadPos">The new read position.</param>
-        /// <param name="newWritePos">The new write position.</param>
-        private void SetReadWritePos(ushort newReadPos, ushort newWritePos)
-        {
-            readPos = newReadPos;
-            writePos = newWritePos;
-        }
-
-        /// <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="MessageSendMode"/>.</summary>
+        /// <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
         /// <param name="messageHeader">The header to use for this message.</param>
         internal void SetHeader(HeaderType messageHeader)
         {
             Bytes[0] = (byte)messageHeader;
-            SendMode = messageHeader >= HeaderType.reliable ? MessageSendMode.reliable : MessageSendMode.unreliable;
+            if (messageHeader >= HeaderType.reliable)
+            {
+                readPos = 3;
+                writePos = 3;
+                SendMode = MessageSendMode.reliable;
+            }
+            else
+            {
+                readPos = 1;
+                writePos = 1;
+                SendMode = MessageSendMode.unreliable;
+            }
         }
         #endregion
 

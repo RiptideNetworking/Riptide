@@ -175,7 +175,7 @@ namespace Riptide
             HeaderType messageHeader = (HeaderType)e.DataBuffer[0];
 
             Message message = Message.CreateRaw();
-            message.PrepareForUse(messageHeader, (ushort)e.Amount); // Subtract 2 for reliable messages because length will include the 2 bytes used by the sequence ID that don't actually get copied to the message's byte array
+            message.PrepareForUse(messageHeader, (ushort)e.Amount);
 
             if (message.SendMode == MessageSendMode.reliable)
             {
@@ -184,9 +184,7 @@ namespace Riptide
 
                 if (e.FromConnection.ReliableHandle(Converter.ToUShort(e.DataBuffer, 1)))
                 {
-                    if (e.Amount > 3) // Only bother with the array copy if there are more than 3 bytes in the packet (just 3 means no payload for a reliably sent packet)
-                        Array.Copy(e.DataBuffer, 3, message.Bytes, 1, e.Amount - 3);
-
+                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1); // We've already established that the packet contains at least 3 bytes, and we always want to copy the sequence ID over
                     messagesToHandle.Enqueue(new MessageToHandle(message, messageHeader, e.FromConnection));
                 }
             }
