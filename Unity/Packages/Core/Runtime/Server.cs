@@ -56,7 +56,7 @@ namespace Riptide
         /// <summary>The underlying transport's server that is used for sending and receiving data.</summary>
         private IServer transport;
         /// <summary>All currently unused client IDs.</summary>
-        private List<ushort> availableClientIds;
+        private Queue<ushort> availableClientIds;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
@@ -95,7 +95,7 @@ namespace Riptide
             MaxClientCount = maxClientCount;
             pendingConnections = new List<Connection>();
             clients = new Dictionary<ushort, Connection>(maxClientCount);
-            timedOutClients = new List<Connection>(maxClientCount);
+            timedOutClients = new List<Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
@@ -433,7 +433,7 @@ namespace Riptide
 
             transport.Close(client);
             if (clients.Remove(client.Id))
-                availableClientIds.Add(client.Id);
+                availableClientIds.Enqueue(client.Id);
 
             if (client.IsConnected)
             {
@@ -503,9 +503,9 @@ namespace Riptide
         /// <summary>Initializes available client IDs.</summary>
         private void InitializeClientIds()
         {
-            availableClientIds = new List<ushort>(MaxClientCount);
+            availableClientIds = new Queue<ushort>(MaxClientCount);
             for (ushort i = 1; i <= MaxClientCount; i++)
-                availableClientIds.Add(i);
+                availableClientIds.Enqueue(i);
         }
 
         /// <summary>Retrieves an available client ID.</summary>
@@ -513,16 +513,10 @@ namespace Riptide
         private ushort GetAvailableClientId()
         {
             if (availableClientIds.Count > 0)
-            {
-                ushort id = availableClientIds[0];
-                availableClientIds.RemoveAt(0);
-                return id;
-            }
-            else
-            {
-                RiptideLogger.Log(LogType.error, LogName, "No available client IDs, assigned 0!");
-                return 0;
-            }
+                return availableClientIds.Dequeue();
+            
+            RiptideLogger.Log(LogType.error, LogName, "No available client IDs, assigned 0!");
+            return 0;
         }
 
         #region Messages
