@@ -9,6 +9,17 @@ using System.Net.Sockets;
 
 namespace Riptide.Transports.Udp
 {
+    /// <summary>The kind of socket to create.</summary>
+    public enum SocketMode
+    {
+        /// <summary>Dual-mode. Works with both IPv4 and IPv6.</summary>
+        Both,
+        /// <summary>IPv4 only mode.</summary>
+        IPv4Only,
+        /// <summary>IPv6 only mode.</summary>
+        IPv6Only
+    }
+
     /// <summary>Provides base send &#38; receive functionality for <see cref="UdpServer"/> and <see cref="UdpClient"/>.</summary>
     public abstract class UdpPeer
     {
@@ -22,6 +33,8 @@ namespace Riptide.Transports.Udp
         /// <summary>How long to wait for a packet, in microseconds.</summary>
         private const int ReceivePollingTime = 500000; // 0.5 seconds
 
+        /// <summary>Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</summary>
+        private readonly SocketMode mode;
         /// <summary>The size to use for the socket's send and receive buffers.</summary>
         private readonly int socketBufferSize;
         /// <summary>The array that incoming data is received into.</summary>
@@ -34,12 +47,14 @@ namespace Riptide.Transports.Udp
         private EndPoint remoteEndPoint;
 
         /// <summary>Initializes the transport.</summary>
+        /// <param name="mode">Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</param>
         /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        protected UdpPeer(int socketBufferSize = DefaultSocketBufferSize)
+        protected UdpPeer(SocketMode mode, int socketBufferSize)
         {
             if (socketBufferSize < MinSocketBufferSize)
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");
 
+            this.mode = mode;
             this.socketBufferSize = socketBufferSize;
             receivedData = new byte[Message.MaxSize + sizeof(ushort)];
         }
@@ -57,15 +72,19 @@ namespace Riptide.Transports.Udp
             if (isRunning)
                 CloseSocket();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
-            socket = new Socket(SocketType.Dgram, ProtocolType.Udp)
-            {
-                SendBufferSize = socketBufferSize,
-                ReceiveBufferSize = socketBufferSize,
-            };
-            socket.Bind(localEndPoint);
+            if (mode == SocketMode.IPv4Only)
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            else if (mode == SocketMode.IPv6Only)
+                socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp) { DualMode = false };
+            else
+                socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
 
-            remoteEndPoint = new IPEndPoint(socket.AddressFamily == AddressFamily.InterNetwork ? IPAddress.Any : IPAddress.IPv6Any, 0);
+            IPAddress any = socket.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any;
+            socket.SendBufferSize = socketBufferSize;
+            socket.ReceiveBufferSize = socketBufferSize;
+            socket.Bind(new IPEndPoint(any, port));
+            remoteEndPoint = new IPEndPoint(any, 0);
+
             isRunning = true;
         }
 

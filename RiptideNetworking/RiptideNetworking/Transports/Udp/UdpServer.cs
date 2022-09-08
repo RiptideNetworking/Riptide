@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -24,7 +24,7 @@ namespace Riptide.Transports.Udp
         private Dictionary<IPEndPoint, Connection> connections;
 
         /// <inheritdoc/>
-        public UdpServer(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
+        public UdpServer(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
 
         /// <inheritdoc/>
         public void Start(ushort port)

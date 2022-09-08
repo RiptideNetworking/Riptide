@@ -2038,7 +2038,7 @@
         <member name="F:Riptide.Transports.Udp.UdpClient.udpConnection">
             <summary>The connection to the server.</summary>
         </member>
-        <member name="M:Riptide.Transports.Udp.UdpClient.#ctor(System.Int32)">
+        <member name="M:Riptide.Transports.Udp.UdpClient.#ctor(Riptide.Transports.Udp.SocketMode,System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpClient.Connect(System.String,Riptide.Connection@,System.String@)">
@@ -2093,6 +2093,18 @@
         <member name="M:Riptide.Transports.Udp.UdpConnection.GetHashCode">
             <inheritdoc/>
         </member>
+        <member name="T:Riptide.Transports.Udp.SocketMode">
+            <summary>The kind of socket to create.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.SocketMode.Both">
+            <summary>Dual-mode. Works with both IPv4 and IPv6.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.SocketMode.IPv4Only">
+            <summary>IPv4 only mode.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.SocketMode.IPv6Only">
+            <summary>IPv6 only mode.</summary>
+        </member>
         <member name="T:Riptide.Transports.Udp.UdpPeer">
             <summary>Provides base send &#38; receive functionality for <see cref="T:Riptide.Transports.Udp.UdpServer"/> and <see cref="T:Riptide.Transports.Udp.UdpClient"/>.</summary>
         </member>
@@ -2107,6 +2119,9 @@
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.ReceivePollingTime">
             <summary>How long to wait for a packet, in microseconds.</summary>
+        </member>
+        <member name="F:Riptide.Transports.Udp.UdpPeer.mode">
+            <summary>Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</summary>
         </member>
         <member name="F:Riptide.Transports.Udp.UdpPeer.socketBufferSize">
             <summary>The size to use for the socket's send and receive buffers.</summary>
@@ -2123,8 +2138,9 @@
         <member name="F:Riptide.Transports.Udp.UdpPeer.remoteEndPoint">
             <summary>A reusable endpoint.</summary>
         </member>
-        <member name="M:Riptide.Transports.Udp.UdpPeer.#ctor(System.Int32)">
+        <member name="M:Riptide.Transports.Udp.UdpPeer.#ctor(Riptide.Transports.Udp.SocketMode,System.Int32)">
             <summary>Initializes the transport.</summary>
+            <param name="mode">Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</param>
             <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpPeer.Poll">
@@ -2172,7 +2188,7 @@
         <member name="F:Riptide.Transports.Udp.UdpServer.connections">
             <summary>The currently open connections, accessible by their endpoints.</summary>
         </member>
-        <member name="M:Riptide.Transports.Udp.UdpServer.#ctor(System.Int32)">
+        <member name="M:Riptide.Transports.Udp.UdpServer.#ctor(Riptide.Transports.Udp.SocketMode,System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Transports.Udp.UdpServer.Start(System.UInt16)">
