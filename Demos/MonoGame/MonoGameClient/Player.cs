@@ -41,7 +41,7 @@ namespace Riptide.Demos.MGClient
 
         private void SendPosition()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, MessageId.PlayerPosition);
+            Message message = Message.Create(MessageSendMode.Unreliable, MessageId.PlayerPosition);
             message.AddVector2(position);
 
             NetworkManager.Client.Send(message);

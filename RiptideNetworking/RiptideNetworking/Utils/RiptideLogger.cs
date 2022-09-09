@@ -12,26 +12,26 @@ namespace Riptide.Utils
     public enum LogType
     {
         /// <summary>Logs that are used for investigation during development.</summary>
-        debug,
+        Debug,
         /// <summary>Logs that provide general information about application flow.</summary>
-        info,
+        Info,
         /// <summary>Logs that highlight abnormal or unexpected events in the application flow.</summary>
-        warning,
+        Warning,
         /// <summary>Logs that highlight problematic events in the application flow which will cause unexpected behavior if not planned for.</summary>
-        error
+        Error
     }
 
     /// <summary>Provides functionality for logging messages.</summary>
     public class RiptideLogger
     {
-        /// <summary>Whether or not <see cref="LogType.debug"/> messages will be logged.</summary>
-        public static bool IsDebugLoggingEnabled => logMethods.ContainsKey(LogType.debug);
-        /// <summary>Whether or not <see cref="LogType.info"/> messages will be logged.</summary>
-        public static bool IsInfoLoggingEnabled => logMethods.ContainsKey(LogType.info);
-        /// <summary>Whether or not <see cref="LogType.warning"/> messages will be logged.</summary>
-        public static bool IsWarningLoggingEnabled => logMethods.ContainsKey(LogType.warning);
-        /// <summary>Whether or not <see cref="LogType.error"/> messages will be logged.</summary>
-        public static bool IsErrorLoggingEnabled => logMethods.ContainsKey(LogType.error);
+        /// <summary>Whether or not <see cref="LogType.Debug"/> messages will be logged.</summary>
+        public static bool IsDebugLoggingEnabled => logMethods.ContainsKey(LogType.Debug);
+        /// <summary>Whether or not <see cref="LogType.Info"/> messages will be logged.</summary>
+        public static bool IsInfoLoggingEnabled => logMethods.ContainsKey(LogType.Info);
+        /// <summary>Whether or not <see cref="LogType.Warning"/> messages will be logged.</summary>
+        public static bool IsWarningLoggingEnabled => logMethods.ContainsKey(LogType.Warning);
+        /// <summary>Whether or not <see cref="LogType.Error"/> messages will be logged.</summary>
+        public static bool IsErrorLoggingEnabled => logMethods.ContainsKey(LogType.Error);
         /// <summary>Encapsulates a method used to log messages.</summary>
         /// <param name="log">The message to log.</param>
         public delegate void LogMethod(string log);
@@ -60,13 +60,13 @@ namespace Riptide.Utils
             logMethods.Clear();
 
             if (debugMethod != null)
-                logMethods.Add(LogType.debug, debugMethod);
+                logMethods.Add(LogType.Debug, debugMethod);
             if (infoMethod != null)
-                logMethods.Add(LogType.info, infoMethod);
+                logMethods.Add(LogType.Info, infoMethod);
             if (warningMethod != null)
-                logMethods.Add(LogType.warning, warningMethod);
+                logMethods.Add(LogType.Warning, warningMethod);
             if (errorMethod != null)
-                logMethods.Add(LogType.error, errorMethod);
+                logMethods.Add(LogType.Error, errorMethod);
 
             RiptideLogger.includeTimestamps = includeTimestamps;
             RiptideLogger.timestampFormat = timestampFormat;

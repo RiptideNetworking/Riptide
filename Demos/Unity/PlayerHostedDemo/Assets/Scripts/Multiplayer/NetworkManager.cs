@@ -6,8 +6,8 @@ namespace Riptide.Demos.PlayerHosted
 {
     internal enum MessageId : ushort
     {
-        spawnPlayer = 1,
-        playerMovement
+        SpawnPlayer = 1,
+        PlayerMovement
     }
 
     public class NetworkManager : MonoBehaviour
@@ -51,7 +51,7 @@ namespace Riptide.Demos.PlayerHosted
 
             Server = new Server();
             Server.ClientConnected += PlayerJoined;
-            Server.RelayFilter = new MessageRelayFilter(typeof(MessageId), MessageId.spawnPlayer, MessageId.playerMovement);
+            Server.RelayFilter = new MessageRelayFilter(typeof(MessageId), MessageId.SpawnPlayer, MessageId.PlayerMovement);
 
             Client = new Client();
             Client.Connected += DidConnect;

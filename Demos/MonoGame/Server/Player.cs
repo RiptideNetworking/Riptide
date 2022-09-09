@@ -30,7 +30,7 @@ namespace Riptide.Demos.MGServer
 
         private Message CreateSpawnMessage()
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageId.PlayerSpawn);
+            Message message = Message.Create(MessageSendMode.Reliable, MessageId.PlayerSpawn);
             message.AddUShort(id);
             message.AddVector2(position);
             return message;
@@ -38,7 +38,7 @@ namespace Riptide.Demos.MGServer
 
         internal void SendPosition()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, MessageId.PlayerPosition);
+            Message message = Message.Create(MessageSendMode.Unreliable, MessageId.PlayerPosition);
             message.AddUShort(id);
             message.AddVector2(position);
             Program.Server.SendToAll(message, id);

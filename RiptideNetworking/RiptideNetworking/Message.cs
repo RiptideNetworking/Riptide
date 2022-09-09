@@ -15,9 +15,9 @@ namespace Riptide
     public enum MessageSendMode : byte
     {
         /// <summary>Unreliable send mode.</summary>
-        unreliable = HeaderType.unreliable,
+        Unreliable = HeaderType.Unreliable,
         /// <summary>Reliable send mode.</summary>
-        reliable = HeaderType.reliable,
+        Reliable = HeaderType.Reliable,
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -35,12 +35,12 @@ namespace Riptide
             set
             {
                 if (Peer.ActiveCount > 0)
-                    RiptideLogger.Log(LogType.error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
+                    RiptideLogger.Log(LogType.Error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
                 else
                 {
                     if (value < 0)
                     {
-                        RiptideLogger.Log(LogType.error, $"The max payload size cannot be negative! Setting it to 0 instead of the given value ({value}).");
+                        RiptideLogger.Log(LogType.Error, $"The max payload size cannot be negative! Setting it to 0 instead of the given value ({value}).");
                         MaxSize = MaxHeaderSize;
                     }
                     else
@@ -60,7 +60,7 @@ namespace Riptide
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
         /// <summary>How often to try sending the message before giving up.</summary>
-        /// <remarks>The default RUDP transport only uses this when sending messages with their <see cref="SendMode"/> set to <see cref="MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
+        /// <remarks>The default RUDP transport only uses this when sending messages with their <see cref="SendMode"/> set to <see cref="MessageSendMode.Reliable"/>. Other transports may ignore this property entirely.</remarks>
         public int MaxSendAttempts { get; set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => writePos - readPos;
@@ -203,17 +203,17 @@ namespace Riptide
         internal void SetHeader(HeaderType messageHeader)
         {
             Bytes[0] = (byte)messageHeader;
-            if (messageHeader >= HeaderType.reliable)
+            if (messageHeader >= HeaderType.Reliable)
             {
                 readPos = 3;
                 writePos = 3;
-                SendMode = MessageSendMode.reliable;
+                SendMode = MessageSendMode.Reliable;
             }
             else
             {
                 readPos = 1;
                 writePos = 1;
-                SendMode = MessageSendMode.unreliable;
+                SendMode = MessageSendMode.Unreliable;
             }
         }
         #endregion
@@ -250,7 +250,7 @@ namespace Riptide
         {
             if (UnreadLength < 1)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(ByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ByteName));
                 return 0;
             }
             
@@ -263,7 +263,7 @@ namespace Riptide
         {
             if (UnreadLength < 1)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(SByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(SByteName));
                 return 0;
             }
 
@@ -361,7 +361,7 @@ namespace Riptide
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ByteName));
                 amount = UnreadLength;
             }
 
@@ -377,7 +377,7 @@ namespace Riptide
         {
             if (UnreadLength < amount)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, SByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, SByteName));
                 amount = UnreadLength;
             }
 
@@ -405,7 +405,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(bool))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(BoolName, "false"));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(BoolName, "false"));
                 return false;
             }
             
@@ -457,7 +457,7 @@ namespace Riptide
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(array.Length, BoolName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(array.Length, BoolName));
                 byteAmount = UnreadLength;
             }
 
@@ -475,7 +475,7 @@ namespace Riptide
 
             int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
             if (UnreadLength < byteAmount)
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, BoolName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, BoolName));
 
             ReadBools(byteAmount, intoArray, startIndex);
         }
@@ -535,7 +535,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(short))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(ShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ShortName));
                 return 0;
             }
 
@@ -550,7 +550,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(ushort))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(UShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UShortName));
                 return 0;
             }
 
@@ -651,7 +651,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(short))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ShortName));
                 amount = UnreadLength / sizeof(short);
             }
 
@@ -670,7 +670,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(ushort))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, UShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, UShortName));
                 amount = UnreadLength / sizeof(short);
             }
 
@@ -715,7 +715,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(int))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(IntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(IntName));
                 return 0;
             }
 
@@ -730,7 +730,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(uint))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(UIntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UIntName));
                 return 0;
             }
 
@@ -831,7 +831,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(int))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, IntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, IntName));
                 amount = UnreadLength / sizeof(int);
             }
 
@@ -850,7 +850,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(uint))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, UIntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, UIntName));
                 amount = UnreadLength / sizeof(uint);
             }
 
@@ -895,7 +895,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(long))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(LongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(LongName));
                 return 0;
             }
 
@@ -910,7 +910,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(ulong))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(ULongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ULongName));
                 return 0;
             }
 
@@ -1011,7 +1011,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(long))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, LongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, LongName));
                 amount = UnreadLength / sizeof(long);
             }
 
@@ -1030,7 +1030,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(ulong))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, ULongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ULongName));
                 amount = UnreadLength / sizeof(ulong);
             }
 
@@ -1062,7 +1062,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(float))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(FloatName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(FloatName));
                 return 0;
             }
 
@@ -1121,7 +1121,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(float))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, FloatName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, FloatName));
                 amount = UnreadLength / sizeof(float);
             }
 
@@ -1153,7 +1153,7 @@ namespace Riptide
         {
             if (UnreadLength < sizeof(double))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(DoubleName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(DoubleName));
                 return 0;
             }
 
@@ -1212,7 +1212,7 @@ namespace Riptide
         {
             if (UnreadLength < amount * sizeof(double))
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(intoArray.Length, DoubleName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, DoubleName));
                 amount = UnreadLength / sizeof(double);
             }
 
@@ -1246,7 +1246,7 @@ namespace Riptide
             ushort length = GetArrayLength(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadLength < length)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(StringName, "shortened string"));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(StringName, "shortened string"));
                 length = (ushort)UnreadLength;
             }
             
@@ -1338,7 +1338,7 @@ namespace Riptide
         {
             if (UnreadLength < 1)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(ArrayLengthName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ArrayLengthName));
                 return 0;
             }
 
@@ -1347,7 +1347,7 @@ namespace Riptide
             
             if (UnreadLength < 2)
             {
-                RiptideLogger.Log(LogType.error, NotEnoughBytesError(ArrayLengthName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ArrayLengthName));
                 return 0;
             }
             

@@ -43,7 +43,7 @@ namespace Riptide.Demos.DedicatedClient
         #region Messages
         private void SendInput()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.playerInput);
+            Message message = Message.Create(MessageSendMode.Unreliable, ClientToServerId.PlayerInput);
             message.AddBools(inputs, false);
             message.AddVector3(camTransform.forward);
             NetworkManager.Singleton.Client.Send(message);

@@ -11,28 +11,28 @@ namespace Riptide.Transports
     public enum HeaderType : byte
     {
         /// <summary>An unreliable user message.</summary>
-        unreliable,
+        Unreliable,
         /// <summary>An internal unreliable ack message.</summary>
-        ack,
+        Ack,
         /// <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
-        ackExtra,
+        AckExtra,
         /// <summary>An internal unreliable connect message.</summary>
-        connect,
+        Connect,
         /// <summary>An internal unreliable connection rejection message.</summary>
-        reject,
+        Reject,
         /// <summary>An internal unreliable heartbeat message.</summary>
-        heartbeat,
+        Heartbeat,
         /// <summary>An internal unreliable disconnect message.</summary>
-        disconnect,
+        Disconnect,
 
         /// <summary>A reliable user message.</summary>
-        reliable,
+        Reliable,
         /// <summary>An internal reliable welcome message.</summary>
-        welcome,
+        Welcome,
         /// <summary>An internal reliable client connected message.</summary>
-        clientConnected,
+        ClientConnected,
         /// <summary>An internal reliable client disconnected message.</summary>
-        clientDisconnected,
+        ClientDisconnected,
     }
 
     /// <summary>Defines methods, properties, and events which every transport's server <i>and</i> client must implement.</summary>

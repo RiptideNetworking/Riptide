@@ -16,41 +16,41 @@ namespace Riptide
     public enum RejectReason : byte
     {
         /// <summary>No response was received from the server (because the client has no internet connection, the server is offline, no server is listening on the target endpoint, etc.).</summary>
-        noConnection,
+        NoConnection,
         /// <summary>The client is already connected.</summary>
-        alreadyConnected,
+        AlreadyConnected,
         /// <summary>A connection attempt is already pending.</summary>
-        pending,
+        Pending,
         /// <summary>The server is full.</summary>
-        serverFull,
+        ServerFull,
         /// <summary>The connection attempt was rejected.</summary>
-        rejected,
+        Rejected,
         /// <summary>The connection attempt was rejected and custom data may have been included with the rejection message.</summary>
-        custom
+        Custom
     }
 
     /// <summary>The reason for a disconnection.</summary>
     public enum DisconnectReason : byte
     {
         /// <summary>No connection was ever established.</summary>
-        neverConnected,
+        NeverConnected,
         /// <summary>The connection attempt was rejected by the server.</summary>
-        connectionRejected,
+        ConnectionRejected,
         /// <summary>The active transport detected a problem with the connection.</summary>
-        transportError,
+        TransportError,
         /// <summary>The connection timed out.</summary>
         /// <remarks>
         ///   This also acts as the fallback reason—if a client disconnects and the message containing the <i>real</i> reason is lost
         ///   in transmission, it can't be resent as the connection will have already been closed. As a result, the other end will time
         ///   out the connection after a short period of time and this will be used as the reason.
         /// </remarks>
-        timedOut,
+        TimedOut,
         /// <summary>The client was forcibly disconnected by the server.</summary>
-        kicked,
+        Kicked,
         /// <summary>The server shut down.</summary>
-        serverStopped,
+        ServerStopped,
         /// <summary>The disconnection was initiated by the client.</summary>
-        disconnected
+        Disconnected
     }
 
     /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
@@ -70,27 +70,27 @@ namespace Riptide
         /// <summary>The current time.</summary>
         internal long CurrentTime { get; private set; }
 
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.neverConnected"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.NeverConnected"/>.</summary>
         protected const string DCNeverConnected = "Never connected";
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.transportError"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.TransportError"/>.</summary>
         protected const string DCTransportError = "Transport error";
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.timedOut"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.TimedOut"/>.</summary>
         protected const string DCTimedOut       = "Timed out";
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.kicked"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.Kicked"/>.</summary>
         protected const string DCKicked         = "Kicked";
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.serverStopped"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.ServerStopped"/>.</summary>
         protected const string DCServerStopped  = "Server stopped";
-        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.disconnected"/>.</summary>
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.Disconnected"/>.</summary>
         protected const string DCDisconnected   = "Disconnected";
         /// <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
         protected const string UnknownReason    = "Unknown reason";
-        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.noConnection"/>.</summary>
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.NoConnection"/>.</summary>
         protected const string CRNoConnection   = "No connection";
-        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.serverFull"/>.</summary>
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.ServerFull"/>.</summary>
         protected const string CRServerFull     = "Server is full";
-        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.rejected"/>.</summary>
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Rejected"/>.</summary>
         protected const string CRRejected       = "Rejected";
-        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.custom"/>.</summary>
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Custom"/>.</summary>
         protected const string CRCustom         = "Rejected with custom reason";
 
         /// <summary>A stopwatch used to track how much time has passed.</summary>
@@ -177,7 +177,7 @@ namespace Riptide
             Message message = Message.CreateRaw();
             message.PrepareForUse(messageHeader, (ushort)e.Amount);
 
-            if (message.SendMode == MessageSendMode.reliable)
+            if (message.SendMode == MessageSendMode.Reliable)
             {
                 if (e.Amount < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
                     return;

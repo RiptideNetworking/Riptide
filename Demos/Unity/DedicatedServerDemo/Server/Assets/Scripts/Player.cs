@@ -98,12 +98,12 @@ namespace Riptide.Demos.DedicatedServer
         /// <param name="toClient">The client to send the message to.</param>
         public void SendSpawn(ushort toClient)
         {
-            NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.reliable, ServerToClientId.spawnPlayer)), toClient);
+            NetworkManager.Singleton.Server.Send(GetSpawnData(Message.Create(MessageSendMode.Reliable, ServerToClientId.SpawnPlayer)), toClient);
         }
         /// <summary>Sends a player's info to all clients.</summary>
         private void SendSpawn()
         {
-            NetworkManager.Singleton.Server.SendToAll(GetSpawnData(Message.Create(MessageSendMode.reliable, ServerToClientId.spawnPlayer)));
+            NetworkManager.Singleton.Server.SendToAll(GetSpawnData(Message.Create(MessageSendMode.Reliable, ServerToClientId.SpawnPlayer)));
         }
 
         private Message GetSpawnData(Message message)
@@ -116,20 +116,20 @@ namespace Riptide.Demos.DedicatedServer
 
         private void SendMovement()
         {
-            Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerMovement);
+            Message message = Message.Create(MessageSendMode.Unreliable, ServerToClientId.PlayerMovement);
             message.AddUShort(Id);
             message.AddVector3(transform.position);
             message.AddVector3(transform.forward);
             NetworkManager.Singleton.Server.SendToAll(message);
         }
 
-        [MessageHandler((ushort)ClientToServerId.playerName)]
+        [MessageHandler((ushort)ClientToServerId.PlayerName)]
         private static void PlayerName(ushort fromClientId, Message message)
         {
             Spawn(fromClientId, message.GetString());
         }
 
-        [MessageHandler((ushort)ClientToServerId.playerInput)]
+        [MessageHandler((ushort)ClientToServerId.PlayerInput)]
         private static void PlayerInput(ushort fromClientId, Message message)
         {
             Player player = List[fromClientId];

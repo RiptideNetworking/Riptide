@@ -6,13 +6,13 @@ namespace Riptide.Demos.DedicatedClient
 {
     public enum ServerToClientId : ushort
     {
-        spawnPlayer = 1,
-        playerMovement,
+        SpawnPlayer = 1,
+        PlayerMovement,
     }
     public enum ClientToServerId : ushort
     {
-        playerName = 1,
-        playerInput,
+        PlayerName = 1,
+        PlayerInput,
     }
 
     public class NetworkManager : MonoBehaviour

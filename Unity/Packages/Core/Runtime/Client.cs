@@ -101,7 +101,7 @@ namespace Riptide
 
             if (!transport.Connect(hostAddress, out connection, out string connectError))
             {
-                RiptideLogger.Log(LogType.error, LogName, connectError);
+                RiptideLogger.Log(LogType.Error, LogName, connectError);
                 UnsubFromTransportEvents();
                 return false;
             }
@@ -121,7 +121,7 @@ namespace Riptide
                 connectBytes = null;
 
             Heartbeat();
-            RiptideLogger.Log(LogType.info, LogName, $"Connecting to {connection}...");
+            RiptideLogger.Log(LogType.Info, LogName, $"Connecting to {connection}...");
             return true;
         }
 
@@ -188,7 +188,7 @@ namespace Riptide
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
                 {
-                    Message message = Message.Create(HeaderType.connect);
+                    Message message = Message.Create(HeaderType.Connect);
                     if (connectBytes != null)
                         message.AddBytes(connectBytes, false);
 
@@ -196,14 +196,14 @@ namespace Riptide
                     connectionAttempts++;
                 }
                 else
-                    LocalDisconnect(DisconnectReason.neverConnected);
+                    LocalDisconnect(DisconnectReason.NeverConnected);
             }
             else if (IsPending)
             {
                 // If waiting for the server to accept/reject the connection attempt
                 if (connection.HasConnectAttemptTimedOut)
                 {
-                    LocalDisconnect(DisconnectReason.timedOut);
+                    LocalDisconnect(DisconnectReason.TimedOut);
                     return;
                 }
             }
@@ -212,7 +212,7 @@ namespace Riptide
                 // If connected and not timed out, send heartbeats
                 if (connection.HasTimedOut)
                 {
-                    LocalDisconnect(DisconnectReason.timedOut);
+                    LocalDisconnect(DisconnectReason.TimedOut);
                     return;
                 }
 
@@ -236,49 +236,49 @@ namespace Riptide
             switch (messageHeader)
             {
                 // User messages
-                case HeaderType.unreliable:
-                case HeaderType.reliable:
+                case HeaderType.Unreliable:
+                case HeaderType.Reliable:
                     OnMessageReceived(message);
                     break;
 
                 // Internal messages
-                case HeaderType.ack:
+                case HeaderType.Ack:
                     connection.HandleAck(message);
                     break;
-                case HeaderType.ackExtra:
+                case HeaderType.AckExtra:
                     connection.HandleAckExtra(message);
                     break;
-                case HeaderType.connect:
+                case HeaderType.Connect:
                     connection.SetPending();
                     break;
-                case HeaderType.reject:
+                case HeaderType.Reject:
                     RejectReason reason = (RejectReason)message.GetByte();
-                    if (reason == RejectReason.pending)
+                    if (reason == RejectReason.Pending)
                         connection.SetPending();
                     else if (!IsConnected) // Don't disconnect if we are connected
-                        LocalDisconnect(DisconnectReason.connectionRejected, message, reason);
+                        LocalDisconnect(DisconnectReason.ConnectionRejected, message, reason);
                     break;
-                case HeaderType.heartbeat:
+                case HeaderType.Heartbeat:
                     connection.HandleHeartbeatResponse(message);
                     break;
-                case HeaderType.disconnect:
+                case HeaderType.Disconnect:
                     LocalDisconnect((DisconnectReason)message.GetByte(), message);
                     break;
-                case HeaderType.welcome:
+                case HeaderType.Welcome:
                     if (IsConnecting || IsPending)
                     {
                         connection.HandleWelcome(message);
                         OnConnected();
                     }
                     break;
-                case HeaderType.clientConnected:
+                case HeaderType.ClientConnected:
                     OnClientConnected(message.GetUShort());
                     break;
-                case HeaderType.clientDisconnected:
+                case HeaderType.ClientDisconnected:
                     OnClientDisconnected(message.GetUShort());
                     break;
                 default:
-                    RiptideLogger.Log(LogType.warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
                     break;
             }
 
@@ -297,15 +297,15 @@ namespace Riptide
             if (connection == null || IsNotConnected)
                 return;
 
-            Send(Message.Create(HeaderType.disconnect));
-            LocalDisconnect(DisconnectReason.disconnected);
+            Send(Message.Create(HeaderType.Disconnect));
+            LocalDisconnect(DisconnectReason.Disconnected);
         }
 
         /// <summary>Cleans up the local side of the connection.</summary>
         /// <param name="reason">The reason why the client has disconnected.</param>
         /// <param name="message">The disconnection or rejection message, potentially containing extra data to be handled externally.</param>
         /// <param name="rejectReason">TData that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance. Unused if the connection wasn't rejected.</param>
-        private void LocalDisconnect(DisconnectReason reason, Message message = null, RejectReason rejectReason = RejectReason.noConnection)
+        private void LocalDisconnect(DisconnectReason reason, Message message = null, RejectReason rejectReason = RejectReason.NoConnection)
         {
             if (IsNotConnected)
                 return;
@@ -318,9 +318,9 @@ namespace Riptide
 
             connection.LocalDisconnect();
 
-            if (reason == DisconnectReason.neverConnected)
-                OnConnectionFailed(RejectReason.noConnection);
-            else if (reason == DisconnectReason.connectionRejected)
+            if (reason == DisconnectReason.NeverConnected)
+                OnConnectionFailed(RejectReason.NoConnection);
+            else if (reason == DisconnectReason.ConnectionRejected)
                 OnConnectionFailed(rejectReason, message);
             else
                 OnDisconnected(reason, message);
@@ -335,7 +335,7 @@ namespace Riptide
         /// <summary>What to do when the transport fails to connect.</summary>
         private void TransportConnectionFailed(object sender, EventArgs e)
         {
-            LocalDisconnect(DisconnectReason.neverConnected);
+            LocalDisconnect(DisconnectReason.NeverConnected);
         }
 
         /// <summary>What to do when the transport disconnects.</summary>
@@ -349,7 +349,7 @@ namespace Riptide
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         protected virtual void OnConnected()
         {
-            RiptideLogger.Log(LogType.info, LogName, "Connected successfully!");
+            RiptideLogger.Log(LogType.Info, LogName, "Connected successfully!");
             Connected?.Invoke(this, EventArgs.Empty);
         }
 
@@ -361,16 +361,16 @@ namespace Riptide
             string reasonString;
             switch (reason)
             {
-                case RejectReason.noConnection:
+                case RejectReason.NoConnection:
                     reasonString = CRNoConnection;
                     break;
-                case RejectReason.serverFull:
+                case RejectReason.ServerFull:
                     reasonString = CRServerFull;
                     break;
-                case RejectReason.rejected:
+                case RejectReason.Rejected:
                     reasonString = CRRejected;
                     break;
-                case RejectReason.custom:
+                case RejectReason.Custom:
                     reasonString = CRCustom;
                     break;
                 default:
@@ -378,7 +378,7 @@ namespace Riptide
                     break;
             }
             
-            RiptideLogger.Log(LogType.info, LogName, $"Connection to server failed: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {reasonString}.");
             ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(message));
         }
 
@@ -392,7 +392,7 @@ namespace Riptide
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                 messageHandler(message);
             else
-                RiptideLogger.Log(LogType.warning, LogName, $"No message handler method found for message ID {messageId}!");
+                RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
@@ -403,22 +403,22 @@ namespace Riptide
             string reasonString;
             switch (reason)
             {
-                case DisconnectReason.neverConnected:
+                case DisconnectReason.NeverConnected:
                     reasonString = DCNeverConnected;
                     break;
-                case DisconnectReason.transportError:
+                case DisconnectReason.TransportError:
                     reasonString = DCTransportError;
                     break;
-                case DisconnectReason.timedOut:
+                case DisconnectReason.TimedOut:
                     reasonString = DCTimedOut;
                     break;
-                case DisconnectReason.kicked:
+                case DisconnectReason.Kicked:
                     reasonString = DCKicked;
                     break;
-                case DisconnectReason.serverStopped:
+                case DisconnectReason.ServerStopped:
                     reasonString = DCServerStopped;
                     break;
-                case DisconnectReason.disconnected:
+                case DisconnectReason.Disconnected:
                     reasonString = DCDisconnected;
                     break;
                 default:
@@ -426,7 +426,7 @@ namespace Riptide
                     break;
             }
 
-            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Disconnected from server: {reasonString}.");
             Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
         }
 
@@ -434,7 +434,7 @@ namespace Riptide
         /// <param name="clientId">The numeric ID of the client that connected.</param>
         protected virtual void OnClientConnected(ushort clientId)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} connected.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} connected.");
             ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
         }
 
@@ -442,7 +442,7 @@ namespace Riptide
         /// <param name="clientId">The numeric ID of the client that disconnected.</param>
         protected virtual void OnClientDisconnected(ushort clientId)
         {
-            RiptideLogger.Log(LogType.info, LogName, $"Client {clientId} disconnected.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} disconnected.");
             ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
         }
         #endregion

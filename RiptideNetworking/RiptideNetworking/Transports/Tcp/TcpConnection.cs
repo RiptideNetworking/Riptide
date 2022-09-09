@@ -93,13 +93,13 @@ namespace Riptide.Experimental.TcpTransport
                     {
                         case SocketError.Interrupted:
                         case SocketError.NotSocket:
-                            peer.OnDisconnected(this, DisconnectReason.transportError);
+                            peer.OnDisconnected(this, DisconnectReason.TransportError);
                             break;
                         case SocketError.ConnectionReset:
-                            peer.OnDisconnected(this, DisconnectReason.disconnected);
+                            peer.OnDisconnected(this, DisconnectReason.Disconnected);
                             break;
                         case SocketError.TimedOut:
-                            peer.OnDisconnected(this, DisconnectReason.timedOut);
+                            peer.OnDisconnected(this, DisconnectReason.TimedOut);
                             break;
                         case SocketError.MessageSize:
                             break;
@@ -110,12 +110,12 @@ namespace Riptide.Experimental.TcpTransport
                 catch (ObjectDisposedException)
                 {
                     tryReceiveMore = false;
-                    peer.OnDisconnected(this, DisconnectReason.transportError);
+                    peer.OnDisconnected(this, DisconnectReason.TransportError);
                 }
                 catch (NullReferenceException)
                 {
                     tryReceiveMore = false;
-                    peer.OnDisconnected(this, DisconnectReason.transportError);
+                    peer.OnDisconnected(this, DisconnectReason.TransportError);
                 }
 
                 if (byteCount > 0)

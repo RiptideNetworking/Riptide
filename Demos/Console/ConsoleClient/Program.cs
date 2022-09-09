@@ -103,7 +103,7 @@ namespace Riptide.Demos.ConsoleClient
             Console.WriteLine();
             Console.WriteLine("Press enter to disconnect at any time.");
 
-            client.Send(Message.Create(MessageSendMode.reliable, MessageId.startTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount));
+            client.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount));
         }
 
         private static void Disconnected()
@@ -121,7 +121,7 @@ namespace Riptide.Demos.ConsoleClient
             isTestRunning = false;
         }
 
-        [MessageHandler((ushort)MessageId.startTest)]
+        [MessageHandler((ushort)MessageId.StartTest)]
         private static void HandleStartTest(Message message)
         {
             if (message.GetBool() != isRoundTripTest || message.GetInt() != testIdAmount)
@@ -185,13 +185,13 @@ namespace Riptide.Demos.ConsoleClient
 
         private static void SendTestMessage(int reliableTestId)
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageId.testMessage);
+            Message message = Message.Create(MessageSendMode.Reliable, MessageId.TestMessage);
             message.AddInt(reliableTestId);
 
             client.Send(message);
         }
 
-        [MessageHandler((ushort)MessageId.testMessage)]
+        [MessageHandler((ushort)MessageId.TestMessage)]
         private static void HandleTestMessage(Message message)
         {
             int reliableTestId = message.GetInt();
@@ -209,7 +209,7 @@ namespace Riptide.Demos.ConsoleClient
 
     public enum MessageId : ushort
     {
-        startTest = 1,
-        testMessage
+        StartTest = 1,
+        TestMessage
     }
 }

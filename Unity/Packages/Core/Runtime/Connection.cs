@@ -14,13 +14,13 @@ namespace Riptide
     public enum ConnectionState : byte
     {
         /// <summary>Not connected. No connection has been established or the connection has been closed.</summary>
-        notConnected,
+        NotConnected,
         /// <summary>Connecting. Still trying to establish a connection.</summary>
-        connecting,
+        Connecting,
         /// <summary>Connection is pending. The server is still determining whether or not the connection should be allowed.</summary>
-        pending,
+        Pending,
         /// <summary>Connected. A connection has been established successfully.</summary>
-        connected,
+        Connected,
     }
 
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
@@ -29,13 +29,13 @@ namespace Riptide
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
         /// <summary>Whether or not the connection is currently <i>not</i> connected nor trying to connect.</summary>
-        public bool IsNotConnected => state == ConnectionState.notConnected;
+        public bool IsNotConnected => state == ConnectionState.NotConnected;
         /// <summary>Whether or not the connection is currently in the process of connecting.</summary>
-        public bool IsConnecting => state == ConnectionState.connecting;
+        public bool IsConnecting => state == ConnectionState.Connecting;
         /// <summary>Whether or not the connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
-        public bool IsPending => state == ConnectionState.pending;
+        public bool IsPending => state == ConnectionState.Pending;
         /// <summary>Whether or not the connection is currently connected.</summary>
-        public bool IsConnected => state == ConnectionState.connected;
+        public bool IsConnected => state == ConnectionState.Connected;
         /// <summary>The round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         public short RTT
         {
@@ -104,7 +104,7 @@ namespace Riptide
         /// <summary>Initializes the connection.</summary>
         protected Connection()
         {
-            state = ConnectionState.connecting;
+            state = ConnectionState.Connecting;
             CanTimeout = true;
         }
 
@@ -123,7 +123,7 @@ namespace Riptide
         /// </remarks>
         internal void Send(Message message, bool shouldRelease = true)
         {
-            if (message.SendMode == MessageSendMode.unreliable)
+            if (message.SendMode == MessageSendMode.Unreliable)
                 Send(message.Bytes, message.WrittenLength);
             else
             {
@@ -152,7 +152,7 @@ namespace Riptide
             {
                 // The received sequence ID is newer than the previous one
                 if (sequenceGap > 64)
-                    RiptideLogger.Log(LogType.warning, Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})! If the connection's packet loss, latency, or your send rate of reliable messages increases much further, sequence IDs may begin falling outside the bounds of the duplicate filter.");
+                    RiptideLogger.Log(LogType.Warning, Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})! If the connection's packet loss, latency, or your send rate of reliable messages increases much further, sequence IDs may begin falling outside the bounds of the duplicate filter.");
 
                 DuplicateFilterBitfield <<= sequenceGap;
                 if (sequenceGap <= 16)
@@ -192,7 +192,7 @@ namespace Riptide
         /// <summary>Cleans up the local side of the connection.</summary>
         internal void LocalDisconnect()
         {
-            state = ConnectionState.notConnected;
+            state = ConnectionState.NotConnected;
 
             foreach (PendingMessage pendingMessage in PendingMessages.Values)
                 pendingMessage.Clear(false);
@@ -302,7 +302,7 @@ namespace Riptide
         {
             if (IsConnecting)
             {
-                state = ConnectionState.pending;
+                state = ConnectionState.Pending;
                 ResetTimeout();
             }
         }
@@ -312,7 +312,7 @@ namespace Riptide
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         private void SendAck(ushort forSeqId)
         {
-            Message message = Message.Create(forSeqId == LastReceivedSeqId ? HeaderType.ack : HeaderType.ackExtra);
+            Message message = Message.Create(forSeqId == LastReceivedSeqId ? HeaderType.Ack : HeaderType.AckExtra);
             message.AddUShort(LastReceivedSeqId); // Last remote sequence ID
             message.AddUShort(AcksBitfield); // Acks
 
@@ -349,7 +349,7 @@ namespace Riptide
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.Create(HeaderType.welcome, 25);
+            Message message = Message.Create(HeaderType.Welcome, 25);
             message.AddUShort(Id);
 
             Send(message);
@@ -361,9 +361,9 @@ namespace Riptide
         {
             ushort id = message.GetUShort();
             if (Id != id)
-                RiptideLogger.Log(LogType.error, Peer.LogName, $"Client has assumed ID {id} instead of {Id}!");
+                RiptideLogger.Log(LogType.Error, Peer.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
-            state = ConnectionState.connected;
+            state = ConnectionState.Connected;
             ResetTimeout();
         }
 
@@ -380,7 +380,7 @@ namespace Riptide
         /// <summary>Sends a heartbeat message.</summary>
         private void RespondHeartbeat(byte pingId)
         {
-            Message message = Message.Create(HeaderType.heartbeat);
+            Message message = Message.Create(HeaderType.Heartbeat);
             message.AddByte(pingId);
 
             Send(message);
@@ -393,7 +393,7 @@ namespace Riptide
         internal void HandleWelcome(Message message)
         {
             Id = message.GetUShort();
-            state = ConnectionState.connected;
+            state = ConnectionState.Connected;
             ResetTimeout();
 
             RespondWelcome();
@@ -402,7 +402,7 @@ namespace Riptide
         /// <summary>Sends a welcome response message.</summary>
         private void RespondWelcome()
         {
-            Message message = Message.Create(HeaderType.welcome, 25);
+            Message message = Message.Create(HeaderType.Welcome, 25);
             message.AddUShort(Id);
 
             Send(message);
@@ -414,7 +414,7 @@ namespace Riptide
             pendingPingId = lastPingId++;
             pendingPingStopwatch.Restart();
 
-            Message message = Message.Create(HeaderType.heartbeat);
+            Message message = Message.Create(HeaderType.Heartbeat);
             message.AddByte(pendingPingId);
             message.AddShort(RTT);
 

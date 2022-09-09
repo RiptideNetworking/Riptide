@@ -117,10 +117,10 @@ namespace Riptide
                 if (RiptideLogger.IsWarningLoggingEnabled)
                 {
                     HeaderType headerType = (HeaderType)data[0];
-                    if (headerType == HeaderType.reliable)
-                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {Converter.ToUShort(data, 3)}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
+                    if (headerType == HeaderType.Reliable)
+                        RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"No ack received for {headerType} message (ID: {Converter.ToUShort(data, 3)}) after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                     else
-                        RiptideLogger.Log(LogType.warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
+                        RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"No ack received for internal {headerType} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
 
                 Clear();

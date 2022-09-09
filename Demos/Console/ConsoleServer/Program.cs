@@ -51,7 +51,7 @@ namespace Riptide.Demos.ConsoleServer
             server.Stop();
         }
 
-        [MessageHandler((ushort)MessageId.startTest)]
+        [MessageHandler((ushort)MessageId.StartTest)]
         private static void HandleStartTest(ushort fromClientId, Message message)
         {
             isRoundTripTest = message.GetBool();
@@ -65,18 +65,18 @@ namespace Riptide.Demos.ConsoleServer
                     remainingTestIds.Add(i + 1);
             }
 
-            server.Send(Message.Create(MessageSendMode.reliable, MessageId.startTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
+            server.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
         }
 
         private static void SendTestMessage(ushort fromClientId, int reliableTestId)
         {
-            Message message = Message.Create(MessageSendMode.reliable, MessageId.testMessage);
+            Message message = Message.Create(MessageSendMode.Reliable, MessageId.TestMessage);
             message.AddInt(reliableTestId);
 
             server.Send(message, fromClientId);
         }
 
-        [MessageHandler((ushort)MessageId.testMessage)]
+        [MessageHandler((ushort)MessageId.TestMessage)]
         private static void HandleTestMessage(ushort fromClientId, Message message)
         {
             int reliableTestId = message.GetInt();
@@ -142,7 +142,7 @@ namespace Riptide.Demos.ConsoleServer
 
     public enum MessageId : ushort
     {
-        startTest = 1,
-        testMessage
+        StartTest = 1,
+        TestMessage
     }
 }

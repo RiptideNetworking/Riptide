@@ -27,7 +27,7 @@ namespace Riptide.Utils
         {
             if (action == null)
             {
-                RiptideLogger.Log(LogType.error, LogName, "No action to execute!");
+                RiptideLogger.Log(LogType.Error, LogName, "No action to execute!");
                 return;
             }
 

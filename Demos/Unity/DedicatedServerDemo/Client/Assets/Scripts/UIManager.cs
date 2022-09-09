@@ -46,7 +46,7 @@ namespace Riptide.Demos.DedicatedClient
         #region Messages
         public void SendName()
         {
-            Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.playerName);
+            Message message = Message.Create(MessageSendMode.Reliable, ClientToServerId.PlayerName);
             message.AddString(usernameField.text);
             NetworkManager.Singleton.Client.Send(message);
         }

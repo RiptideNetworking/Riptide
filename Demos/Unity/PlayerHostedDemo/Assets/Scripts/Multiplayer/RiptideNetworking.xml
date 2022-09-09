@@ -163,16 +163,16 @@
         <member name="T:Riptide.ConnectionState">
             <summary>The state of a connection.</summary>
         </member>
-        <member name="F:Riptide.ConnectionState.notConnected">
+        <member name="F:Riptide.ConnectionState.NotConnected">
             <summary>Not connected. No connection has been established or the connection has been closed.</summary>
         </member>
-        <member name="F:Riptide.ConnectionState.connecting">
+        <member name="F:Riptide.ConnectionState.Connecting">
             <summary>Connecting. Still trying to establish a connection.</summary>
         </member>
-        <member name="F:Riptide.ConnectionState.pending">
+        <member name="F:Riptide.ConnectionState.Pending">
             <summary>Connection is pending. The server is still determining whether or not the connection should be allowed.</summary>
         </member>
-        <member name="F:Riptide.ConnectionState.connected">
+        <member name="F:Riptide.ConnectionState.Connected">
             <summary>Connected. A connection has been established successfully.</summary>
         </member>
         <member name="T:Riptide.Connection">
@@ -592,10 +592,10 @@
         <member name="T:Riptide.MessageSendMode">
             <summary>The send mode of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
-        <member name="F:Riptide.MessageSendMode.unreliable">
+        <member name="F:Riptide.MessageSendMode.Unreliable">
             <summary>Unreliable send mode.</summary>
         </member>
-        <member name="F:Riptide.MessageSendMode.reliable">
+        <member name="F:Riptide.MessageSendMode.Reliable">
             <summary>Reliable send mode.</summary>
         </member>
         <member name="T:Riptide.Message">
@@ -623,7 +623,7 @@
         </member>
         <member name="P:Riptide.Message.MaxSendAttempts">
             <summary>How often to try sending the message before giving up.</summary>
-            <remarks>The default RUDP transport only uses this when sending messages with their <see cref="P:Riptide.Message.SendMode"/> set to <see cref="F:Riptide.MessageSendMode.reliable"/>. Other transports may ignore this property entirely.</remarks>
+            <remarks>The default RUDP transport only uses this when sending messages with their <see cref="P:Riptide.Message.SendMode"/> set to <see cref="F:Riptide.MessageSendMode.Reliable"/>. Other transports may ignore this property entirely.</remarks>
         </member>
         <member name="P:Riptide.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
@@ -1448,37 +1448,37 @@
         <member name="T:Riptide.RejectReason">
             <summary>The reason the connection attempt was rejected.</summary>
         </member>
-        <member name="F:Riptide.RejectReason.noConnection">
+        <member name="F:Riptide.RejectReason.NoConnection">
             <summary>No response was received from the server (because the client has no internet connection, the server is offline, no server is listening on the target endpoint, etc.).</summary>
         </member>
-        <member name="F:Riptide.RejectReason.alreadyConnected">
+        <member name="F:Riptide.RejectReason.AlreadyConnected">
             <summary>The client is already connected.</summary>
         </member>
-        <member name="F:Riptide.RejectReason.pending">
+        <member name="F:Riptide.RejectReason.Pending">
             <summary>A connection attempt is already pending.</summary>
         </member>
-        <member name="F:Riptide.RejectReason.serverFull">
+        <member name="F:Riptide.RejectReason.ServerFull">
             <summary>The server is full.</summary>
         </member>
-        <member name="F:Riptide.RejectReason.rejected">
+        <member name="F:Riptide.RejectReason.Rejected">
             <summary>The connection attempt was rejected.</summary>
         </member>
-        <member name="F:Riptide.RejectReason.custom">
+        <member name="F:Riptide.RejectReason.Custom">
             <summary>The connection attempt was rejected and custom data may have been included with the rejection message.</summary>
         </member>
         <member name="T:Riptide.DisconnectReason">
             <summary>The reason for a disconnection.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.neverConnected">
+        <member name="F:Riptide.DisconnectReason.NeverConnected">
             <summary>No connection was ever established.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.connectionRejected">
+        <member name="F:Riptide.DisconnectReason.ConnectionRejected">
             <summary>The connection attempt was rejected by the server.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.transportError">
+        <member name="F:Riptide.DisconnectReason.TransportError">
             <summary>The active transport detected a problem with the connection.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.timedOut">
+        <member name="F:Riptide.DisconnectReason.TimedOut">
             <summary>The connection timed out.</summary>
             <remarks>
               This also acts as the fallback reason—if a client disconnects and the message containing the <i>real</i> reason is lost
@@ -1486,13 +1486,13 @@
               out the connection after a short period of time and this will be used as the reason.
             </remarks>
         </member>
-        <member name="F:Riptide.DisconnectReason.kicked">
+        <member name="F:Riptide.DisconnectReason.Kicked">
             <summary>The client was forcibly disconnected by the server.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.serverStopped">
+        <member name="F:Riptide.DisconnectReason.ServerStopped">
             <summary>The server shut down.</summary>
         </member>
-        <member name="F:Riptide.DisconnectReason.disconnected">
+        <member name="F:Riptide.DisconnectReason.Disconnected">
             <summary>The disconnection was initiated by the client.</summary>
         </member>
         <member name="T:Riptide.Peer">
@@ -1515,37 +1515,37 @@
             <summary>The current time.</summary>
         </member>
         <member name="F:Riptide.Peer.DCNeverConnected">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.neverConnected"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.NeverConnected"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.DCTransportError">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.transportError"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.TransportError"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.DCTimedOut">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.timedOut"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.TimedOut"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.DCKicked">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.kicked"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.Kicked"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.DCServerStopped">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.serverStopped"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.ServerStopped"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.DCDisconnected">
-            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.disconnected"/>.</summary>
+            <summary>The text to log when disconnected due to <see cref="F:Riptide.DisconnectReason.Disconnected"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.UnknownReason">
             <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
         </member>
         <member name="F:Riptide.Peer.CRNoConnection">
-            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.noConnection"/>.</summary>
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.NoConnection"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.CRServerFull">
-            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.serverFull"/>.</summary>
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.ServerFull"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.CRRejected">
-            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.rejected"/>.</summary>
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.Rejected"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.CRCustom">
-            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.custom"/>.</summary>
+            <summary>The text to log when the connection failed due to <see cref="F:Riptide.RejectReason.Custom"/>.</summary>
         </member>
         <member name="F:Riptide.Peer.time">
             <summary>A stopwatch used to track how much time has passed.</summary>
@@ -1959,37 +1959,37 @@
         <member name="T:Riptide.Transports.HeaderType">
             <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.unreliable">
+        <member name="F:Riptide.Transports.HeaderType.Unreliable">
             <summary>An unreliable user message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.ack">
+        <member name="F:Riptide.Transports.HeaderType.Ack">
             <summary>An internal unreliable ack message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.ackExtra">
+        <member name="F:Riptide.Transports.HeaderType.AckExtra">
             <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.connect">
+        <member name="F:Riptide.Transports.HeaderType.Connect">
             <summary>An internal unreliable connect message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.reject">
+        <member name="F:Riptide.Transports.HeaderType.Reject">
             <summary>An internal unreliable connection rejection message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.heartbeat">
+        <member name="F:Riptide.Transports.HeaderType.Heartbeat">
             <summary>An internal unreliable heartbeat message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.disconnect">
+        <member name="F:Riptide.Transports.HeaderType.Disconnect">
             <summary>An internal unreliable disconnect message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.reliable">
+        <member name="F:Riptide.Transports.HeaderType.Reliable">
             <summary>A reliable user message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.welcome">
+        <member name="F:Riptide.Transports.HeaderType.Welcome">
             <summary>An internal reliable welcome message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.clientConnected">
+        <member name="F:Riptide.Transports.HeaderType.ClientConnected">
             <summary>An internal reliable client connected message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.clientDisconnected">
+        <member name="F:Riptide.Transports.HeaderType.ClientDisconnected">
             <summary>An internal reliable client disconnected message.</summary>
         </member>
         <member name="T:Riptide.Transports.IPeer">
@@ -2602,32 +2602,32 @@
         <member name="T:Riptide.Utils.LogType">
             <summary>Defines log message types.</summary>
         </member>
-        <member name="F:Riptide.Utils.LogType.debug">
+        <member name="F:Riptide.Utils.LogType.Debug">
             <summary>Logs that are used for investigation during development.</summary>
         </member>
-        <member name="F:Riptide.Utils.LogType.info">
+        <member name="F:Riptide.Utils.LogType.Info">
             <summary>Logs that provide general information about application flow.</summary>
         </member>
-        <member name="F:Riptide.Utils.LogType.warning">
+        <member name="F:Riptide.Utils.LogType.Warning">
             <summary>Logs that highlight abnormal or unexpected events in the application flow.</summary>
         </member>
-        <member name="F:Riptide.Utils.LogType.error">
+        <member name="F:Riptide.Utils.LogType.Error">
             <summary>Logs that highlight problematic events in the application flow which will cause unexpected behavior if not planned for.</summary>
         </member>
         <member name="T:Riptide.Utils.RiptideLogger">
             <summary>Provides functionality for logging messages.</summary>
         </member>
         <member name="P:Riptide.Utils.RiptideLogger.IsDebugLoggingEnabled">
-            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.debug"/> messages will be logged.</summary>
+            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.Debug"/> messages will be logged.</summary>
         </member>
         <member name="P:Riptide.Utils.RiptideLogger.IsInfoLoggingEnabled">
-            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.info"/> messages will be logged.</summary>
+            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.Info"/> messages will be logged.</summary>
         </member>
         <member name="P:Riptide.Utils.RiptideLogger.IsWarningLoggingEnabled">
-            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.warning"/> messages will be logged.</summary>
+            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.Warning"/> messages will be logged.</summary>
         </member>
         <member name="P:Riptide.Utils.RiptideLogger.IsErrorLoggingEnabled">
-            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.error"/> messages will be logged.</summary>
+            <summary>Whether or not <see cref="F:Riptide.Utils.LogType.Error"/> messages will be logged.</summary>
         </member>
         <member name="T:Riptide.Utils.RiptideLogger.LogMethod">
             <summary>Encapsulates a method used to log messages.</summary>
