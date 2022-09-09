@@ -108,7 +108,7 @@
         <member name="M:Riptide.Client.Update">
             <inheritdoc/>
         </member>
-        <member name="M:Riptide.Client.Handle(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
+        <member name="M:Riptide.Client.Handle(Riptide.Message,Riptide.Transports.MessageHeader,Riptide.Connection)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Client.Send(Riptide.Message,System.Boolean)">
@@ -665,9 +665,9 @@
             <inheritdoc cref="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32)"/>
             <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="T:System.UInt16"/>. You should ensure that its value never exceeds that of <see cref="F:System.UInt16.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.Transports.HeaderType,System.Int32)">
+        <member name="M:Riptide.Message.Create(Riptide.Transports.MessageHeader,System.Int32)">
             <summary>Gets a message instance that can be used for sending.</summary>
-            <param name="messageHeader">The message's header type.</param>
+            <param name="header">The message's header type.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
@@ -687,21 +687,21 @@
             <summary>Prepares the message to be used.</summary>
             <returns>The message, ready to be used.</returns>
         </member>
-        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.HeaderType,System.Int32)">
+        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.MessageHeader,System.Int32)">
             <summary>Prepares the message to be used for sending.</summary>
-            <param name="messageHeader">The header of the message.</param>
+            <param name="header">The header of the message.</param>
             <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>The message, ready to be used for sending.</returns>
         </member>
-        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.HeaderType,System.UInt16)">
+        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.MessageHeader,System.UInt16)">
             <summary>Prepares the message to be used for handling.</summary>
-            <param name="messageHeader">The header of the message.</param>
+            <param name="header">The header of the message.</param>
             <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
             <returns>The message, ready to be used for handling.</returns>
         </member>
-        <member name="M:Riptide.Message.SetHeader(Riptide.Transports.HeaderType)">
-            <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="T:Riptide.MessageSendMode"/> and read/write positions.</summary>
-            <param name="messageHeader">The header to use for this message.</param>
+        <member name="M:Riptide.Message.SetHeader(Riptide.Transports.MessageHeader)">
+            <summary>Sets the message's header byte to the given <paramref name="header"/> and determines the appropriate <see cref="T:Riptide.MessageSendMode"/> and read/write positions.</summary>
+            <param name="header">The header to use for this message.</param>
         </member>
         <member name="M:Riptide.Message.AddByte(System.Byte)">
             <summary>Adds a single <see cref="T:System.Byte"/> to the message.</summary>
@@ -1591,10 +1591,10 @@
         <member name="M:Riptide.Peer.HandleData(System.Object,Riptide.Transports.DataReceivedEventArgs)">
             <summary>Handles data received by the transport.</summary>
         </member>
-        <member name="M:Riptide.Peer.Handle(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
+        <member name="M:Riptide.Peer.Handle(Riptide.Message,Riptide.Transports.MessageHeader,Riptide.Connection)">
             <summary>Handles a message.</summary>
             <param name="message">The message to handle.</param>
-            <param name="messageHeader">The message's header type.</param>
+            <param name="header">The message's header type.</param>
             <param name="connection">The connection which the message was received on.</param>
         </member>
         <member name="M:Riptide.Peer.IncreaseActiveCount">
@@ -1609,16 +1609,16 @@
         <member name="F:Riptide.MessageToHandle.Message">
             <summary>The message that needs to be handled.</summary>
         </member>
-        <member name="F:Riptide.MessageToHandle.MessageHeader">
+        <member name="F:Riptide.MessageToHandle.Header">
             <summary>The message's header type.</summary>
         </member>
         <member name="F:Riptide.MessageToHandle.FromConnection">
             <summary>The connection on which the message was received.</summary>
         </member>
-        <member name="M:Riptide.MessageToHandle.#ctor(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
+        <member name="M:Riptide.MessageToHandle.#ctor(Riptide.Message,Riptide.Transports.MessageHeader,Riptide.Connection)">
             <summary>Handles initialization.</summary>
             <param name="message">The message that needs to be handled.</param>
-            <param name="messageHeader">The message's header type.</param>
+            <param name="header">The message's header type.</param>
             <param name="fromConnection">The connection on which the message was received.</param>
         </member>
         <member name="T:Riptide.PendingMessage">
@@ -1803,7 +1803,7 @@
         <member name="M:Riptide.Server.Update">
             <inheritdoc/>
         </member>
-        <member name="M:Riptide.Server.Handle(Riptide.Message,Riptide.Transports.HeaderType,Riptide.Connection)">
+        <member name="M:Riptide.Server.Handle(Riptide.Message,Riptide.Transports.MessageHeader,Riptide.Connection)">
             <inheritdoc/>
         </member>
         <member name="M:Riptide.Server.Send(Riptide.Message,System.UInt16,System.Boolean)">
@@ -1956,40 +1956,40 @@
         <member name="M:Riptide.Transports.IClient.Disconnect">
             <summary>Closes the connection to the server.</summary>
         </member>
-        <member name="T:Riptide.Transports.HeaderType">
+        <member name="T:Riptide.Transports.MessageHeader">
             <summary>The header type of a <see cref="T:Riptide.Message"/>.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Unreliable">
+        <member name="F:Riptide.Transports.MessageHeader.Unreliable">
             <summary>An unreliable user message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Ack">
+        <member name="F:Riptide.Transports.MessageHeader.Ack">
             <summary>An internal unreliable ack message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.AckExtra">
+        <member name="F:Riptide.Transports.MessageHeader.AckExtra">
             <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Connect">
+        <member name="F:Riptide.Transports.MessageHeader.Connect">
             <summary>An internal unreliable connect message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Reject">
+        <member name="F:Riptide.Transports.MessageHeader.Reject">
             <summary>An internal unreliable connection rejection message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Heartbeat">
+        <member name="F:Riptide.Transports.MessageHeader.Heartbeat">
             <summary>An internal unreliable heartbeat message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Disconnect">
+        <member name="F:Riptide.Transports.MessageHeader.Disconnect">
             <summary>An internal unreliable disconnect message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Reliable">
+        <member name="F:Riptide.Transports.MessageHeader.Reliable">
             <summary>A reliable user message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.Welcome">
+        <member name="F:Riptide.Transports.MessageHeader.Welcome">
             <summary>An internal reliable welcome message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.ClientConnected">
+        <member name="F:Riptide.Transports.MessageHeader.ClientConnected">
             <summary>An internal reliable client connected message.</summary>
         </member>
-        <member name="F:Riptide.Transports.HeaderType.ClientDisconnected">
+        <member name="F:Riptide.Transports.MessageHeader.ClientDisconnected">
             <summary>An internal reliable client disconnected message.</summary>
         </member>
         <member name="T:Riptide.Transports.IPeer">

@@ -165,17 +165,17 @@ namespace Riptide
             while (messagesToHandle.Count > 0)
             {
                 MessageToHandle handle = messagesToHandle.Dequeue();
-                Handle(handle.Message, handle.MessageHeader, handle.FromConnection);
+                Handle(handle.Message, handle.Header, handle.FromConnection);
             }
         }
 
         /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
-            HeaderType messageHeader = (HeaderType)e.DataBuffer[0];
+            MessageHeader header = (MessageHeader)e.DataBuffer[0];
 
             Message message = Message.CreateRaw();
-            message.PrepareForUse(messageHeader, (ushort)e.Amount);
+            message.PrepareForUse(header, (ushort)e.Amount);
 
             if (message.SendMode == MessageSendMode.Reliable)
             {
@@ -185,7 +185,7 @@ namespace Riptide
                 if (e.FromConnection.ReliableHandle(Converter.ToUShort(e.DataBuffer, 1)))
                 {
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1); // We've already established that the packet contains at least 3 bytes, and we always want to copy the sequence ID over
-                    messagesToHandle.Enqueue(new MessageToHandle(message, messageHeader, e.FromConnection));
+                    messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
             }
             else
@@ -193,15 +193,15 @@ namespace Riptide
                 if (e.Amount > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
-                messagesToHandle.Enqueue(new MessageToHandle(message, messageHeader, e.FromConnection));
+                messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
             }
         }
 
         /// <summary>Handles a message.</summary>
         /// <param name="message">The message to handle.</param>
-        /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="header">The message's header type.</param>
         /// <param name="connection">The connection which the message was received on.</param>
-        protected abstract void Handle(Message message, HeaderType messageHeader, Connection connection);
+        protected abstract void Handle(Message message, MessageHeader header, Connection connection);
 
         /// <summary>Increases <see cref="ActiveCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
         protected static void IncreaseActiveCount()
@@ -224,18 +224,18 @@ namespace Riptide
         /// <summary>The message that needs to be handled.</summary>
         internal readonly Message Message;
         /// <summary>The message's header type.</summary>
-        internal readonly HeaderType MessageHeader;
+        internal readonly MessageHeader Header;
         /// <summary>The connection on which the message was received.</summary>
         internal readonly Connection FromConnection;
 
         /// <summary>Handles initialization.</summary>
         /// <param name="message">The message that needs to be handled.</param>
-        /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="header">The message's header type.</param>
         /// <param name="fromConnection">The connection on which the message was received.</param>
-        public MessageToHandle(Message message, HeaderType messageHeader, Connection fromConnection)
+        public MessageToHandle(Message message, MessageHeader header, Connection fromConnection)
         {
             Message = message;
-            MessageHeader = messageHeader;
+            Header = header;
             FromConnection = fromConnection;
         }
     }

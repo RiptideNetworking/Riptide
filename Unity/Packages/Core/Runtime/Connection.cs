@@ -312,7 +312,7 @@ namespace Riptide
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         private void SendAck(ushort forSeqId)
         {
-            Message message = Message.Create(forSeqId == LastReceivedSeqId ? HeaderType.Ack : HeaderType.AckExtra);
+            Message message = Message.Create(forSeqId == LastReceivedSeqId ? MessageHeader.Ack : MessageHeader.AckExtra);
             message.AddUShort(LastReceivedSeqId); // Last remote sequence ID
             message.AddUShort(AcksBitfield); // Acks
 
@@ -349,7 +349,7 @@ namespace Riptide
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.Create(HeaderType.Welcome, 25);
+            Message message = Message.Create(MessageHeader.Welcome, 25);
             message.AddUShort(Id);
 
             Send(message);
@@ -380,7 +380,7 @@ namespace Riptide
         /// <summary>Sends a heartbeat message.</summary>
         private void RespondHeartbeat(byte pingId)
         {
-            Message message = Message.Create(HeaderType.Heartbeat);
+            Message message = Message.Create(MessageHeader.Heartbeat);
             message.AddByte(pingId);
 
             Send(message);
@@ -402,7 +402,7 @@ namespace Riptide
         /// <summary>Sends a welcome response message.</summary>
         private void RespondWelcome()
         {
-            Message message = Message.Create(HeaderType.Welcome, 25);
+            Message message = Message.Create(MessageHeader.Welcome, 25);
             message.AddUShort(Id);
 
             Send(message);
@@ -414,7 +414,7 @@ namespace Riptide
             pendingPingId = lastPingId++;
             pendingPingStopwatch.Restart();
 
-            Message message = Message.Create(HeaderType.Heartbeat);
+            Message message = Message.Create(MessageHeader.Heartbeat);
             message.AddByte(pendingPingId);
             message.AddShort(RTT);
 

@@ -15,9 +15,9 @@ namespace Riptide
     public enum MessageSendMode : byte
     {
         /// <summary>Unreliable send mode.</summary>
-        Unreliable = HeaderType.Unreliable,
+        Unreliable = MessageHeader.Unreliable,
         /// <summary>Reliable send mode.</summary>
-        Reliable = HeaderType.Reliable,
+        Reliable = MessageHeader.Reliable,
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -115,7 +115,7 @@ namespace Riptide
         /// <returns>A message instance ready to be used for sending.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15)
         {
-            return RetrieveFromPool().PrepareForUse((HeaderType)sendMode, maxSendAttempts).AddUShort(id);
+            return RetrieveFromPool().PrepareForUse((MessageHeader)sendMode, maxSendAttempts).AddUShort(id);
         }
         /// <inheritdoc cref="Create(MessageSendMode, ushort, int)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
@@ -124,12 +124,12 @@ namespace Riptide
             return Create(sendMode, (ushort)(object)id, maxSendAttempts);
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
-        /// <param name="messageHeader">The message's header type.</param>
+        /// <param name="header">The message's header type.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        internal static Message Create(HeaderType messageHeader, int maxSendAttempts = 15)
+        internal static Message Create(MessageHeader header, int maxSendAttempts = 15)
         {
-            return RetrieveFromPool().PrepareForUse(messageHeader, maxSendAttempts);
+            return RetrieveFromPool().PrepareForUse(header, maxSendAttempts);
         }
 
         /// <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
@@ -178,32 +178,32 @@ namespace Riptide
             return this;
         }
         /// <summary>Prepares the message to be used for sending.</summary>
-        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="header">The header of the message.</param>
         /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>The message, ready to be used for sending.</returns>
-        private Message PrepareForUse(HeaderType messageHeader, int maxSendAttempts)
+        private Message PrepareForUse(MessageHeader header, int maxSendAttempts)
         {
             MaxSendAttempts = maxSendAttempts;
-            SetHeader(messageHeader);
+            SetHeader(header);
             return this;
         }
         /// <summary>Prepares the message to be used for handling.</summary>
-        /// <param name="messageHeader">The header of the message.</param>
+        /// <param name="header">The header of the message.</param>
         /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        internal Message PrepareForUse(HeaderType messageHeader, ushort contentLength)
+        internal Message PrepareForUse(MessageHeader header, ushort contentLength)
         {
-            SetHeader(messageHeader);
+            SetHeader(header);
             writePos = contentLength;
             return this;
         }
 
-        /// <summary>Sets the message's header byte to the given <paramref name="messageHeader"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
-        /// <param name="messageHeader">The header to use for this message.</param>
-        internal void SetHeader(HeaderType messageHeader)
+        /// <summary>Sets the message's header byte to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
+        /// <param name="header">The header to use for this message.</param>
+        internal void SetHeader(MessageHeader header)
         {
-            Bytes[0] = (byte)messageHeader;
-            if (messageHeader >= HeaderType.Reliable)
+            Bytes[0] = (byte)header;
+            if (header >= MessageHeader.Reliable)
             {
                 readPos = 3;
                 writePos = 3;

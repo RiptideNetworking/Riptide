@@ -180,7 +180,7 @@ namespace Riptide
                     if (ClientCount < MaxClientCount)
                     {
                         pendingConnections.Add(connection);
-                        Send(Message.Create(HeaderType.Connect), connection); // Inform the client we've received the connection attempt
+                        Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
                         HandleConnection(connection, connectMessage); // Externally determines whether to accept
                     }
                     else
@@ -244,7 +244,7 @@ namespace Riptide
         {
             if (reason != RejectReason.AlreadyConnected)
             {
-                Message message = Message.Create(HeaderType.Reject);
+                Message message = Message.Create(MessageHeader.Reject);
                 if (rejectMessage != null)
                 {
                     message.AddByte((byte)RejectReason.Custom);
@@ -304,33 +304,33 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        protected override void Handle(Message message, HeaderType messageHeader, Connection connection)
+        protected override void Handle(Message message, MessageHeader header, Connection connection)
         {
-            switch (messageHeader)
+            switch (header)
             {
                 // User messages
-                case HeaderType.Unreliable:
-                case HeaderType.Reliable:
+                case MessageHeader.Unreliable:
+                case MessageHeader.Reliable:
                     OnMessageReceived(message, connection);
                     break;
 
                 // Internal messages
-                case HeaderType.Ack:
+                case MessageHeader.Ack:
                     connection.HandleAck(message);
                     break;
-                case HeaderType.AckExtra:
+                case MessageHeader.AckExtra:
                     connection.HandleAckExtra(message);
                     break;
-                case HeaderType.Connect:
+                case MessageHeader.Connect:
                     HandleConnect(connection, message);
                     break;
-                case HeaderType.Heartbeat:
+                case MessageHeader.Heartbeat:
                     connection.HandleHeartbeat(message);
                     break;
-                case HeaderType.Disconnect:
+                case MessageHeader.Disconnect:
                     LocalDisconnect(connection, DisconnectReason.Disconnected);
                     break;
-                case HeaderType.Welcome:
+                case MessageHeader.Welcome:
                     if (connection.IsConnecting)
                     {
                         connection.HandleWelcomeResponse(message);
@@ -338,7 +338,7 @@ namespace Riptide
                     }
                     break;
                 default:
-                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes received from {connection}.");
+                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes received from {connection}.");
                     break;
             }
 
@@ -455,7 +455,7 @@ namespace Riptide
                 return;
 
             pendingConnections.Clear(); 
-            byte[] disconnectBytes = { (byte)HeaderType.Disconnect, (byte)DisconnectReason.ServerStopped };
+            byte[] disconnectBytes = { (byte)MessageHeader.Disconnect, (byte)DisconnectReason.ServerStopped };
             foreach (Connection client in clients.Values)
                 client.Send(disconnectBytes, disconnectBytes.Length);
             clients.Clear();
@@ -496,7 +496,7 @@ namespace Riptide
         /// <param name="disconnectMessage">Optional custom data that should be sent to the client being disconnected.</param>
         private void SendDisconnect(Connection client, DisconnectReason reason, Message disconnectMessage)
         {
-            Message message = Message.Create(HeaderType.Disconnect);
+            Message message = Message.Create(MessageHeader.Disconnect);
             message.AddByte((byte)reason);
 
             if (reason == DisconnectReason.Kicked && disconnectMessage != null)
@@ -509,7 +509,7 @@ namespace Riptide
         /// <param name="newClient">The newly connected client.</param>
         private void SendClientConnected(Connection newClient)
         {
-            Message message = Message.Create(HeaderType.ClientConnected, 25);
+            Message message = Message.Create(MessageHeader.ClientConnected, 25);
             message.AddUShort(newClient.Id);
 
             SendToAll(message, newClient.Id);
@@ -519,7 +519,7 @@ namespace Riptide
         /// <param name="id">The numeric ID of the client that disconnected.</param>
         private void SendClientDisconnected(ushort id)
         {
-            Message message = Message.Create(HeaderType.ClientDisconnected, 25);
+            Message message = Message.Create(MessageHeader.ClientDisconnected, 25);
             message.AddUShort(id);
 
             SendToAll(message);

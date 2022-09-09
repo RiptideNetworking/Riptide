@@ -8,7 +8,7 @@ using System;
 namespace Riptide.Transports
 {
     /// <summary>The header type of a <see cref="Message"/>.</summary>
-    public enum HeaderType : byte
+    public enum MessageHeader : byte
     {
         /// <summary>An unreliable user message.</summary>
         Unreliable,

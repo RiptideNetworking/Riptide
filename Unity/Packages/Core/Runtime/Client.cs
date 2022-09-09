@@ -188,7 +188,7 @@ namespace Riptide
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
                 {
-                    Message message = Message.Create(HeaderType.Connect);
+                    Message message = Message.Create(MessageHeader.Connect);
                     if (connectBytes != null)
                         message.AddBytes(connectBytes, false);
 
@@ -231,54 +231,54 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        protected override void Handle(Message message, HeaderType messageHeader, Connection connection)
+        protected override void Handle(Message message, MessageHeader header, Connection connection)
         {
-            switch (messageHeader)
+            switch (header)
             {
                 // User messages
-                case HeaderType.Unreliable:
-                case HeaderType.Reliable:
+                case MessageHeader.Unreliable:
+                case MessageHeader.Reliable:
                     OnMessageReceived(message);
                     break;
 
                 // Internal messages
-                case HeaderType.Ack:
+                case MessageHeader.Ack:
                     connection.HandleAck(message);
                     break;
-                case HeaderType.AckExtra:
+                case MessageHeader.AckExtra:
                     connection.HandleAckExtra(message);
                     break;
-                case HeaderType.Connect:
+                case MessageHeader.Connect:
                     connection.SetPending();
                     break;
-                case HeaderType.Reject:
+                case MessageHeader.Reject:
                     RejectReason reason = (RejectReason)message.GetByte();
                     if (reason == RejectReason.Pending)
                         connection.SetPending();
                     else if (!IsConnected) // Don't disconnect if we are connected
                         LocalDisconnect(DisconnectReason.ConnectionRejected, message, reason);
                     break;
-                case HeaderType.Heartbeat:
+                case MessageHeader.Heartbeat:
                     connection.HandleHeartbeatResponse(message);
                     break;
-                case HeaderType.Disconnect:
+                case MessageHeader.Disconnect:
                     LocalDisconnect((DisconnectReason)message.GetByte(), message);
                     break;
-                case HeaderType.Welcome:
+                case MessageHeader.Welcome:
                     if (IsConnecting || IsPending)
                     {
                         connection.HandleWelcome(message);
                         OnConnected();
                     }
                     break;
-                case HeaderType.ClientConnected:
+                case MessageHeader.ClientConnected:
                     OnClientConnected(message.GetUShort());
                     break;
-                case HeaderType.ClientDisconnected:
+                case MessageHeader.ClientDisconnected:
                     OnClientDisconnected(message.GetUShort());
                     break;
                 default:
-                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{messageHeader}'! Discarding {message.WrittenLength} bytes.");
+                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes.");
                     break;
             }
 
@@ -297,7 +297,7 @@ namespace Riptide
             if (connection == null || IsNotConnected)
                 return;
 
-            Send(Message.Create(HeaderType.Disconnect));
+            Send(Message.Create(MessageHeader.Disconnect));
             LocalDisconnect(DisconnectReason.Disconnected);
         }
 
