@@ -17,15 +17,14 @@ namespace Riptide
         /// <summary>Invoked when a connection to the server is established.</summary>
         public event EventHandler Connected;
         /// <summary>Invoked when a connection to the server fails to be established.</summary>
-        /// <remarks>This occurs when a connection request fails, either because no server is listening on the on the given host address, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         public event EventHandler<ConnectionFailedEventArgs> ConnectionFailed;
         /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when disconnected from the server.</summary>
         public event EventHandler<DisconnectedEventArgs> Disconnected;
-        /// <summary>Invoked when a client connects.</summary>
+        /// <summary>Invoked when another <i>non-local</i> client connects.</summary>
         public event EventHandler<ClientConnectedEventArgs> ClientConnected;
-        /// <summary>Invoked when a client disconnects.</summary>
+        /// <summary>Invoked when another <i>non-local</i> client disconnects.</summary>
         public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
 
         /// <summary>The client's numeric ID.</summary>
