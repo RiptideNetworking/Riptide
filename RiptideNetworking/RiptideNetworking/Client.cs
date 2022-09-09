@@ -20,7 +20,7 @@ namespace Riptide
         /// <remarks>This occurs when a connection request fails, either because no server is listening on the on the given host address, or because something (firewall, antivirus, no/poor internet access, etc.) is preventing the connection.</remarks>
         public event EventHandler<ConnectionFailedEventArgs> ConnectionFailed;
         /// <summary>Invoked when a message is received.</summary>
-        public event EventHandler<ClientMessageReceivedEventArgs> MessageReceived;
+        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when disconnected from the server.</summary>
         public event EventHandler<DisconnectedEventArgs> Disconnected;
         /// <summary>Invoked when a client connects.</summary>
@@ -377,8 +377,8 @@ namespace Riptide
                     reasonString = UnknownReason;
                     break;
             }
-            RiptideLogger.Log(LogType.info, LogName, $"Connection to server failed: {reasonString}.");
             
+            RiptideLogger.Log(LogType.info, LogName, $"Connection to server failed: {reasonString}.");
             ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(message));
         }
 
@@ -387,12 +387,12 @@ namespace Riptide
         protected virtual void OnMessageReceived(Message message)
         {
             ushort messageId = message.GetUShort();
-            MessageReceived?.Invoke(this, new ClientMessageReceivedEventArgs(messageId, message));
+            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
 
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                 messageHandler(message);
             else
-                RiptideLogger.Log(LogType.warning, $"No client message handler method found for message ID {messageId}!");
+                RiptideLogger.Log(LogType.warning, LogName, $"No message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
@@ -425,8 +425,8 @@ namespace Riptide
                     reasonString = UnknownReason;
                     break;
             }
-            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
 
+            RiptideLogger.Log(LogType.info, LogName, $"Disconnected from server: {reasonString}.");
             Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
         }
 

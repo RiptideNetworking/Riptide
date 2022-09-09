@@ -16,11 +16,11 @@ namespace Riptide
     public class Server : Peer
     {
         /// <summary>Invoked when a client connects.</summary>
-        public event EventHandler<ServerClientConnectedEventArgs> ClientConnected;
+        public event EventHandler<ServerConnectedEventArgs> ClientConnected;
         /// <summary>Invoked when a message is received.</summary>
-        public event EventHandler<ServerMessageReceivedEventArgs> MessageReceived;
+        public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when a client disconnects.</summary>
-        public event EventHandler<ClientDisconnectedEventArgs> ClientDisconnected;
+        public event EventHandler<ServerDisconnectedEventArgs> ClientDisconnected;
 
         /// <summary>Whether or not the server is currently running.</summary>
         public bool IsRunning { get; private set; }
@@ -432,42 +432,12 @@ namespace Riptide
                 return; // Client does not belong to this Server instance
 
             transport.Close(client);
+
             if (clients.Remove(client.Id))
                 availableClientIds.Enqueue(client.Id);
 
             if (client.IsConnected)
-            {
-                // Only run if the client was ever actually connected
-                OnClientDisconnected(client.Id);
-
-                string reasonString;
-                switch (reason)
-                {
-                    case DisconnectReason.neverConnected:
-                        reasonString = DCNeverConnected;
-                        break;
-                    case DisconnectReason.transportError:
-                        reasonString = DCTransportError;
-                        break;
-                    case DisconnectReason.timedOut:
-                        reasonString = DCTimedOut;
-                        break;
-                    case DisconnectReason.kicked:
-                        reasonString = DCKicked;
-                        break;
-                    case DisconnectReason.serverStopped:
-                        reasonString = DCServerStopped;
-                        break;
-                    case DisconnectReason.disconnected:
-                        reasonString = DCDisconnected;
-                        break;
-                    default:
-                        reasonString = UnknownReason;
-                        break;
-                }
-            
-                RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) disconnected: {reasonString}.");
-            }
+                OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
 
             client.LocalDisconnect();
         }
@@ -563,7 +533,7 @@ namespace Riptide
         {
             RiptideLogger.Log(LogType.info, LogName, $"Client {client.Id} ({client}) connected successfully!");
             SendClientConnected(client);
-            ClientConnected?.Invoke(this, new ServerClientConnectedEventArgs(client));
+            ClientConnected?.Invoke(this, new ServerConnectedEventArgs(client));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -579,20 +549,49 @@ namespace Riptide
                 return;
             }
 
-            MessageReceived?.Invoke(this, new ServerMessageReceivedEventArgs(fromConnection, messageId, message));
+            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(fromConnection, messageId, message));
 
             if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
                 messageHandler(fromConnection.Id, message);
             else
-                RiptideLogger.Log(LogType.warning, $"No server message handler method found for message ID {messageId}!");
+                RiptideLogger.Log(LogType.warning, LogName, $"No message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
-        /// <param name="clientId">The numeric ID of the client that disconnected.</param>
-        protected virtual void OnClientDisconnected(ushort clientId)
+        /// <param name="connection">The client that disconnected.</param>
+        /// <param name="reason">The reason for the disconnection.</param>
+        protected virtual void OnClientDisconnected(Connection connection, DisconnectReason reason)
         {
-            SendClientDisconnected(clientId);
-            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+            SendClientDisconnected(connection.Id);
+
+            string reasonString;
+            switch (reason)
+            {
+                case DisconnectReason.neverConnected:
+                    reasonString = DCNeverConnected;
+                    break;
+                case DisconnectReason.transportError:
+                    reasonString = DCTransportError;
+                    break;
+                case DisconnectReason.timedOut:
+                    reasonString = DCTimedOut;
+                    break;
+                case DisconnectReason.kicked:
+                    reasonString = DCKicked;
+                    break;
+                case DisconnectReason.serverStopped:
+                    reasonString = DCServerStopped;
+                    break;
+                case DisconnectReason.disconnected:
+                    reasonString = DCDisconnected;
+                    break;
+                default:
+                    reasonString = UnknownReason;
+                    break;
+            }
+
+            RiptideLogger.Log(LogType.info, LogName, $"Client {connection.Id} ({connection}) disconnected: {reasonString}.");
+            ClientDisconnected?.Invoke(this, new ServerDisconnectedEventArgs(connection, reason));
         }
         #endregion
     }

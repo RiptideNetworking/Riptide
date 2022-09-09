@@ -346,46 +346,50 @@
             <summary>Handles a heartbeat message.</summary>
             <param name="message">The heartbeat message to handle.</param>
         </member>
-        <member name="T:Riptide.ServerClientConnectedEventArgs">
+        <member name="T:Riptide.ServerConnectedEventArgs">
             <summary>Contains event data for when a client connects to the server.</summary>
         </member>
-        <member name="F:Riptide.ServerClientConnectedEventArgs.Client">
+        <member name="F:Riptide.ServerConnectedEventArgs.Client">
             <summary>The newly connected client.</summary>
         </member>
-        <member name="M:Riptide.ServerClientConnectedEventArgs.#ctor(Riptide.Connection)">
+        <member name="M:Riptide.ServerConnectedEventArgs.#ctor(Riptide.Connection)">
             <summary>Initializes event data.</summary>
             <param name="client">The newly connected client.</param>
         </member>
-        <member name="T:Riptide.ServerMessageReceivedEventArgs">
-            <summary>Contains event data for when the server receives a message from a client.</summary>
+        <member name="T:Riptide.ServerDisconnectedEventArgs">
+            <summary>Contains event data for when a client disconnects from the server.</summary>
         </member>
-        <member name="F:Riptide.ServerMessageReceivedEventArgs.FromClient">
-            <summary>The client from which the message was received.</summary>
+        <member name="F:Riptide.ServerDisconnectedEventArgs.Client">
+            <summary>The client that disconnected.</summary>
         </member>
-        <member name="F:Riptide.ServerMessageReceivedEventArgs.MessageId">
+        <member name="F:Riptide.ServerDisconnectedEventArgs.Reason">
+            <summary>The reason for the disconnection.</summary>
+        </member>
+        <member name="M:Riptide.ServerDisconnectedEventArgs.#ctor(Riptide.Connection,Riptide.DisconnectReason)">
+            <summary>Initializes event data.</summary>
+            <param name="client">The client that disconnected.</param>
+            <param name="reason">The reason for the disconnection.</param>
+        </member>
+        <member name="T:Riptide.MessageReceivedEventArgs">
+            <summary>Contains event data for when a message is received.</summary>
+        </member>
+        <member name="F:Riptide.MessageReceivedEventArgs.FromConnection">
+            <summary>The connection from which the message was received.</summary>
+        </member>
+        <member name="F:Riptide.MessageReceivedEventArgs.MessageId">
             <summary>The ID of the message.</summary>
         </member>
-        <member name="F:Riptide.ServerMessageReceivedEventArgs.Message">
+        <member name="F:Riptide.MessageReceivedEventArgs.Message">
             <summary>The received message.</summary>
         </member>
-        <member name="M:Riptide.ServerMessageReceivedEventArgs.#ctor(Riptide.Connection,System.UInt16,Riptide.Message)">
+        <member name="M:Riptide.MessageReceivedEventArgs.#ctor(Riptide.Connection,System.UInt16,Riptide.Message)">
             <summary>Initializes event data.</summary>
-            <param name="fromClient">The client from which the message was received.</param>
+            <param name="fromConnection">The connection from which the message was received.</param>
             <param name="messageId">The ID of the message.</param>
             <param name="message">The received message.</param>
         </member>
-        <member name="T:Riptide.ClientDisconnectedEventArgs">
-            <summary>Contains event data for when a client disconnects from the server.</summary>
-        </member>
-        <member name="F:Riptide.ClientDisconnectedEventArgs.Id">
-            <summary>The numeric ID of the client that disconnected.</summary>
-        </member>
-        <member name="M:Riptide.ClientDisconnectedEventArgs.#ctor(System.UInt16)">
-            <summary>Initializes event data.</summary>
-            <param name="id">The numeric ID of the client that disconnected.</param>
-        </member>
         <member name="T:Riptide.ConnectionFailedEventArgs">
-            <summary>Contains event data for when a connection attempt fails.</summary>
+            <summary>Contains event data for when a connection attempt to a server fails.</summary>
         </member>
         <member name="F:Riptide.ConnectionFailedEventArgs.Message">
             <summary>Additional data related to the failed connection attempt (if any).</summary>
@@ -393,30 +397,6 @@
         <member name="M:Riptide.ConnectionFailedEventArgs.#ctor(Riptide.Message)">
             <summary>Initializes event data.</summary>
             <param name="message">Additional data related to the failed connection attempt (if any).</param>
-        </member>
-        <member name="T:Riptide.ClientConnectedEventArgs">
-            <summary>Contains event data for when a new client connects.</summary>
-        </member>
-        <member name="F:Riptide.ClientConnectedEventArgs.Id">
-            <summary>The numeric ID of the newly connected client.</summary>
-        </member>
-        <member name="M:Riptide.ClientConnectedEventArgs.#ctor(System.UInt16)">
-            <summary>Initializes event data.</summary>
-            <param name="id">The numeric ID of the newly connected client.</param>
-        </member>
-        <member name="T:Riptide.ClientMessageReceivedEventArgs">
-            <summary>Contains event data for when the client receives a message from the server.</summary>
-        </member>
-        <member name="F:Riptide.ClientMessageReceivedEventArgs.MessageId">
-            <summary>The ID of the message.</summary>
-        </member>
-        <member name="F:Riptide.ClientMessageReceivedEventArgs.Message">
-            <summary>The received message.</summary>
-        </member>
-        <member name="M:Riptide.ClientMessageReceivedEventArgs.#ctor(System.UInt16,Riptide.Message)">
-            <summary>Initializes event data.</summary>
-            <param name="messageId">The ID of the message.</param>
-            <param name="message">The received message.</param>
         </member>
         <member name="T:Riptide.DisconnectedEventArgs">
             <summary>Contains event data for when the client disconnects from a server.</summary>
@@ -431,6 +411,26 @@
             <summary>Initializes event data.</summary>
             <param name="reason">The reason for the disconnection.</param>
             <param name="message">Additional data related to the disconnection (if any).</param>
+        </member>
+        <member name="T:Riptide.ClientConnectedEventArgs">
+            <summary>Contains event data for when a non-local client connects to the server.</summary>
+        </member>
+        <member name="F:Riptide.ClientConnectedEventArgs.Id">
+            <summary>The numeric ID of the client that connected.</summary>
+        </member>
+        <member name="M:Riptide.ClientConnectedEventArgs.#ctor(System.UInt16)">
+            <summary>Initializes event data.</summary>
+            <param name="id">The numeric ID of the client that connected.</param>
+        </member>
+        <member name="T:Riptide.ClientDisconnectedEventArgs">
+            <summary>Contains event data for when a non-local client disconnects from the server.</summary>
+        </member>
+        <member name="F:Riptide.ClientDisconnectedEventArgs.Id">
+            <summary>The numeric ID of the client that disconnected.</summary>
+        </member>
+        <member name="M:Riptide.ClientDisconnectedEventArgs.#ctor(System.UInt16)">
+            <summary>Initializes event data.</summary>
+            <param name="id">The numeric ID of the client that disconnected.</param>
         </member>
         <member name="T:Riptide.InsufficientCapacityException">
             <summary>The exception that is thrown when a <see cref="T:Riptide.Message"/> does not contain enough unread bytes to add a certain value.</summary>
@@ -1890,9 +1890,10 @@
             <param name="message">The received message.</param>
             <param name="fromConnection">The client from which the message was received.</param>
         </member>
-        <member name="M:Riptide.Server.OnClientDisconnected(System.UInt16)">
+        <member name="M:Riptide.Server.OnClientDisconnected(Riptide.Connection,Riptide.DisconnectReason)">
             <summary>Invokes the <see cref="E:Riptide.Server.ClientDisconnected"/> event.</summary>
-            <param name="clientId">The numeric ID of the client that disconnected.</param>
+            <param name="connection">The client that disconnected.</param>
+            <param name="reason">The reason for the disconnection.</param>
         </member>
         <member name="T:Riptide.Transports.ConnectedEventArgs">
             <summary>Contains event data for when a server's transport successfully establishes a connection to a client.</summary>

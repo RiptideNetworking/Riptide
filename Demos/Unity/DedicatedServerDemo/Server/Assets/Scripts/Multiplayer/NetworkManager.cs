@@ -82,7 +82,7 @@ namespace Riptide.Demos.DedicatedServer
             Server.ClientDisconnected -= PlayerLeft;
         }
 
-        private void NewPlayerConnected(object sender, ServerClientConnectedEventArgs e)
+        private void NewPlayerConnected(object sender, ServerConnectedEventArgs e)
         {
             foreach (Player player in Player.List.Values)
             {
@@ -91,9 +91,9 @@ namespace Riptide.Demos.DedicatedServer
             }
         }
 
-        private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
+        private void PlayerLeft(object sender, ServerDisconnectedEventArgs e)
         {
-            Destroy(Player.List[e.Id].gameObject);
+            Destroy(Player.List[e.Client.Id].gameObject);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Riptide.Demos.MGServer
             Server.Start(7777, 4);
 
             Server.ClientConnected += (s, e) => new Player(e.Client.Id);
-            Server.ClientDisconnected += (s, e) => Player.List.Remove(e.Id);
+            Server.ClientDisconnected += (s, e) => Player.List.Remove(e.Client.Id);
 
             while (true)
             {

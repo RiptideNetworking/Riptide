@@ -101,7 +101,7 @@ namespace Riptide.Demos.PlayerHosted
             UIManager.Singleton.BackToMain();
         }
 
-        private void PlayerJoined(object sender, ServerClientConnectedEventArgs e)
+        private void PlayerJoined(object sender, ServerConnectedEventArgs e)
         {
             foreach (Player player in Player.List.Values)
                 if (player.Id != e.Client.Id)
