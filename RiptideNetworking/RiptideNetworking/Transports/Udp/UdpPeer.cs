@@ -34,7 +34,7 @@ namespace Riptide.Transports.Udp
         private const int ReceivePollingTime = 500000; // 0.5 seconds
 
         /// <summary>Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</summary>
-        private readonly SocketMode mode;
+        protected readonly SocketMode mode;
         /// <summary>The size to use for the socket's send and receive buffers.</summary>
         private readonly int socketBufferSize;
         /// <summary>The array that incoming data is received into.</summary>

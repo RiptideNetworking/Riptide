@@ -6,6 +6,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Riptide.Transports.Udp
 {
@@ -36,9 +37,21 @@ namespace Riptide.Transports.Udp
                 return false;
             }
 
+            if ((mode == SocketMode.IPv4Only && ip.AddressFamily == AddressFamily.InterNetworkV6) || (mode == SocketMode.IPv6Only && ip.AddressFamily == AddressFamily.InterNetwork))
+            {
+                // The IP address isn't in an acceptable format for the current socket mode
+                if (mode == SocketMode.IPv4Only)
+                    connectError = "Connecting to IPv6 addresses is not allowed when running in IPv4 only mode!";
+                else
+                    connectError = "Connecting to IPv4 addresses is not allowed when running in IPv6 only mode!";
+
+                connection = null;
+                return false;
+            }
+
             OpenSocket();
 
-            connection = udpConnection = new UdpConnection(new IPEndPoint(ip.MapToIPv6(), port), this);
+            connection = udpConnection = new UdpConnection(new IPEndPoint(mode == SocketMode.IPv4Only ? ip : ip.MapToIPv6(), port), this);
             OnConnected(); // UDP is connectionless, so from the transport POV everything is immediately ready to send/receive data
             return true;
         }
