@@ -1,12 +1,12 @@
 <div align="center">
-  <a href="https://github.com/tom-weiland/RiptideNetworking">
-    <img src="https://user-images.githubusercontent.com/51303091/119734159-690afc00-be2f-11eb-9673-c1f998025a3e.png" width="20%" height="auto">
+  <a href="https://github.com/RiptideNetworking/Riptide">
+    <img src="https://user-images.githubusercontent.com/51303091/189464842-ec077ebe-e927-46da-8251-e5ea93ffbea5.png" width="150px" height="auto">
   </a>
 </div>
 <div align="center"><a href="https://tomweiland.net/youtube">YouTube</a>&emsp;<b>•</b>&emsp;<a href="https://discord.com/invite/tomweiland">Discord</a></div>
-<h1 align="center">RiptideNetworking</h1>
+<h1 align="center">Riptide Networking</h1>
 
-RiptideNetworking is a lightweight C# networking library primarily designed for use in multiplayer games. It can be used in Unity as well as in other .NET environments such as console applications.
+Riptide Networking is a lightweight C# networking library primarily designed for use in multiplayer games. It can be used in Unity as well as in other .NET environments such as console applications.
 
 Riptide provides functionality for establishing connections and sending data back and forth, leaving it up to you to decide what data you want to send and when, which is ideal if you like to be in control of your code and know what's going on under the hood.
 
@@ -20,14 +20,14 @@ Using Unity's Package Manager:
 1. Open the Package Manager (Window > Package Manager)
 2. Click the '+' (plus) button in the top left corner of the window
 3. Select the 'Add package from git URL...' option
-4. Enter the following base URL: `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` and then append the version number you'd like to install. For example, if you want to install v1.2.0, you would enter `https://github.com/tom-weiland/RiptideNetworking.git?path=/UnityPackage#v1.2.0` as the full URL
+4. Enter the following base URL: `https://github.com/RiptideNetworking/Riptide.git?path=/UnityPackage` and then append the version number you'd like to install. For example, if you want to install v1.2.0, you would enter `https://github.com/RiptideNetworking/Riptide.git?path=/UnityPackage#v1.2.0` as the full URL
 5. Click 'Add' and wait for Riptide to be installed
 
-Alternatively, you can grab the RiptideNetworking.dll file (and RiptideNetworking.xml file for intellisense documentation) from the [latest release](https://github.com/tom-weiland/RiptideNetworking/releases/latest) and simply drop it into your Unity project.
+Alternatively, you can grab the RiptideNetworking.dll file (and RiptideNetworking.xml file for intellisense documentation) from the [latest release](https://github.com/RiptideNetworking/Riptide/releases/latest) and simply drop it into your Unity project.
 
 ### Other
 If you aren't using Unity, you can add the RiptideNetworking.dll file to your project as a project reference:
-1. Download RiptideNetworking.dll file from the [latest release](https://github.com/tom-weiland/RiptideNetworking/releases/latest)
+1. Download RiptideNetworking.dll file from the [latest release](https://github.com/RiptideNetworking/Riptide/releases/latest)
 2. Right click your project in Visual Studio's Solution Explorer
 3. Select 'Add' and then select the 'Project Reference...' option
 4. Click 'Browse' in the left sidebar of the window
@@ -110,7 +110,7 @@ A few things to note:
 ## Low-Level Transports
 - [UDP Transport](RiptideNetworking/RiptideNetworking/Transports/Udp) (built-in)
 - [TCP Transport](RiptideNetworking/RiptideNetworking/Transports/Tcp) (built-in)
-- [Steam Transport](https://github.com/tom-weiland/RiptideSteamTransport) (in development)
+- [Steam Transport](https://github.com/RiptideNetworking/SteamTransport) (in development)
 
 ## Donate
 Riptide is 100% free to use, but if you'd like to financially support its development as well as the development of its various transports, you can do so via [GitHub sponsors](https://github.com/sponsors/tom-weiland) or on [Ko-fi](https://ko-fi.com/tomweiland).
