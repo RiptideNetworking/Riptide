@@ -65,7 +65,7 @@ namespace Riptide.Demos.ConsoleServer
                     remainingTestIds.Add(i + 1);
             }
 
-            server.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
+            server.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
         }
 
         private static void SendTestMessage(ushort fromClientId, int reliableTestId)

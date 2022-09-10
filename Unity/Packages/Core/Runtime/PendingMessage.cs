@@ -18,6 +18,8 @@ namespace Riptide
 
         /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         private const float RetryTimeMultiplier = 1.2f;
+        /// <summary>How often to try sending the message before giving up.</summary>
+        private const int MaxSendAttempts = 15; // TODO: get rid of this
 
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
         private static readonly List<PendingMessage> pool = new List<PendingMessage>();
@@ -30,8 +32,6 @@ namespace Riptide
         private readonly byte[] data;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         private int writtenLength;
-        /// <summary>How often to try sending the message before giving up.</summary>
-        private int maxSendAttempts;
         /// <summary>How many send attempts have been made so far.</summary>
         private byte sendAttempts;
         /// <summary>Whether the pending message has been cleared or not.</summary>
@@ -59,7 +59,6 @@ namespace Riptide
             Array.Copy(message.Bytes, 3, pendingMessage.data, 3, message.WrittenLength - 3); // Copy the rest of the message
             pendingMessage.writtenLength = message.WrittenLength;
 
-            pendingMessage.maxSendAttempts = message.MaxSendAttempts;
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
 
@@ -111,7 +110,7 @@ namespace Riptide
         /// <summary>Attempts to send the message.</summary>
         internal void TrySend()
         {
-            if (sendAttempts >= maxSendAttempts)
+            if (sendAttempts >= MaxSendAttempts)
             {
                 // Send attempts exceeds max send attempts, so give up
                 if (RiptideLogger.IsWarningLoggingEnabled)

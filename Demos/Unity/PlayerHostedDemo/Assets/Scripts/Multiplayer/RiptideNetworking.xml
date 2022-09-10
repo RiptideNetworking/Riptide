@@ -620,10 +620,6 @@
         <member name="P:Riptide.Message.SendMode">
             <summary>The message's send mode.</summary>
         </member>
-        <member name="P:Riptide.Message.MaxSendAttempts">
-            <summary>How often to try sending the message before giving up.</summary>
-            <remarks>The default RUDP transport only uses this when sending messages with their <see cref="P:Riptide.Message.SendMode"/> set to <see cref="F:Riptide.MessageSendMode.Reliable"/>. Other transports may ignore this property entirely.</remarks>
-        </member>
         <member name="P:Riptide.Message.UnreadLength">
             <summary>The length in bytes of the unread data contained in the message.</summary>
         </member>
@@ -653,21 +649,19 @@
             <summary>Gets a usable message instance.</summary>
             <returns>A message instance ready to be used.</returns>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32)">
+        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16)">
             <summary>Gets a message instance that can be used for sending.</summary>
             <param name="sendMode">The mode in which the message should be sent.</param>
             <param name="id">The message ID.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.Enum,System.Int32)">
-            <inheritdoc cref="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16,System.Int32)"/>
+        <member name="M:Riptide.Message.Create(Riptide.MessageSendMode,System.Enum)">
+            <inheritdoc cref="M:Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16)"/>
             <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="T:System.UInt16"/>. You should ensure that its value never exceeds that of <see cref="F:System.UInt16.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
         </member>
-        <member name="M:Riptide.Message.Create(Riptide.Transports.MessageHeader,System.Int32)">
+        <member name="M:Riptide.Message.Create(Riptide.Transports.MessageHeader)">
             <summary>Gets a message instance that can be used for sending.</summary>
             <param name="header">The message's header type.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>A message instance ready to be used for sending.</returns>
         </member>
         <member name="M:Riptide.Message.CreateRaw">
@@ -686,10 +680,9 @@
             <summary>Prepares the message to be used.</summary>
             <returns>The message, ready to be used.</returns>
         </member>
-        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.MessageHeader,System.Int32)">
+        <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.MessageHeader)">
             <summary>Prepares the message to be used for sending.</summary>
             <param name="header">The header of the message.</param>
-            <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
             <returns>The message, ready to be used for sending.</returns>
         </member>
         <member name="M:Riptide.Message.PrepareForUse(Riptide.Transports.MessageHeader,System.UInt16)">
@@ -1629,6 +1622,9 @@
         <member name="F:Riptide.PendingMessage.RetryTimeMultiplier">
             <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
         </member>
+        <member name="F:Riptide.PendingMessage.MaxSendAttempts">
+            <summary>How often to try sending the message before giving up.</summary>
+        </member>
         <member name="F:Riptide.PendingMessage.pool">
             <summary>A pool of reusable <see cref="T:Riptide.PendingMessage"/> instances.</summary>
         </member>
@@ -1643,9 +1639,6 @@
         </member>
         <member name="F:Riptide.PendingMessage.writtenLength">
             <summary>The length in bytes of the data that has been written to the message.</summary>
-        </member>
-        <member name="F:Riptide.PendingMessage.maxSendAttempts">
-            <summary>How often to try sending the message before giving up.</summary>
         </member>
         <member name="F:Riptide.PendingMessage.sendAttempts">
             <summary>How many send attempts have been made so far.</summary>

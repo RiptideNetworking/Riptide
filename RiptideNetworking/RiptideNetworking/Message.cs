@@ -59,9 +59,6 @@ namespace Riptide
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
-        /// <summary>How often to try sending the message before giving up.</summary>
-        /// <remarks>The default RUDP transport only uses this when sending messages with their <see cref="SendMode"/> set to <see cref="MessageSendMode.Reliable"/>. Other transports may ignore this property entirely.</remarks>
-        public int MaxSendAttempts { get; set; }
         /// <summary>The length in bytes of the unread data contained in the message.</summary>
         public int UnreadLength => writePos - readPos;
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
@@ -111,25 +108,23 @@ namespace Riptide
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        public static Message Create(MessageSendMode sendMode, ushort id, int maxSendAttempts = 15)
+        public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return RetrieveFromPool().PrepareForUse((MessageHeader)sendMode, maxSendAttempts).AddUShort(id);
+            return RetrieveFromPool().PrepareForUse((MessageHeader)sendMode).AddUShort(id);
         }
-        /// <inheritdoc cref="Create(MessageSendMode, ushort, int)"/>
+        /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
-        public static Message Create(MessageSendMode sendMode, Enum id, int maxSendAttempts = 15)
+        public static Message Create(MessageSendMode sendMode, Enum id)
         {
-            return Create(sendMode, (ushort)(object)id, maxSendAttempts);
+            return Create(sendMode, (ushort)(object)id);
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="header">The message's header type.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>A message instance ready to be used for sending.</returns>
-        internal static Message Create(MessageHeader header, int maxSendAttempts = 15)
+        internal static Message Create(MessageHeader header)
         {
-            return RetrieveFromPool().PrepareForUse(header, maxSendAttempts);
+            return RetrieveFromPool().PrepareForUse(header);
         }
 
         /// <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
@@ -179,11 +174,9 @@ namespace Riptide
         }
         /// <summary>Prepares the message to be used for sending.</summary>
         /// <param name="header">The header of the message.</param>
-        /// <param name="maxSendAttempts">How often to try sending the message before giving up.</param>
         /// <returns>The message, ready to be used for sending.</returns>
-        private Message PrepareForUse(MessageHeader header, int maxSendAttempts)
+        private Message PrepareForUse(MessageHeader header)
         {
-            MaxSendAttempts = maxSendAttempts;
             SetHeader(header);
             return this;
         }

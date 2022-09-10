@@ -349,7 +349,7 @@ namespace Riptide
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
-            Message message = Message.Create(MessageHeader.Welcome, 25);
+            Message message = Message.Create(MessageHeader.Welcome);
             message.AddUShort(Id);
 
             Send(message);
@@ -402,7 +402,7 @@ namespace Riptide
         /// <summary>Sends a welcome response message.</summary>
         private void RespondWelcome()
         {
-            Message message = Message.Create(MessageHeader.Welcome, 25);
+            Message message = Message.Create(MessageHeader.Welcome);
             message.AddUShort(Id);
 
             Send(message);

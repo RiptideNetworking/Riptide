@@ -509,7 +509,7 @@ namespace Riptide
         /// <param name="newClient">The newly connected client.</param>
         private void SendClientConnected(Connection newClient)
         {
-            Message message = Message.Create(MessageHeader.ClientConnected, 25);
+            Message message = Message.Create(MessageHeader.ClientConnected);
             message.AddUShort(newClient.Id);
 
             SendToAll(message, newClient.Id);
@@ -519,7 +519,7 @@ namespace Riptide
         /// <param name="id">The numeric ID of the client that disconnected.</param>
         private void SendClientDisconnected(ushort id)
         {
-            Message message = Message.Create(MessageHeader.ClientDisconnected, 25);
+            Message message = Message.Create(MessageHeader.ClientDisconnected);
             message.AddUShort(id);
 
             SendToAll(message);

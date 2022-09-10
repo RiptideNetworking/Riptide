@@ -103,7 +103,7 @@ namespace Riptide.Demos.ConsoleClient
             Console.WriteLine();
             Console.WriteLine("Press enter to disconnect at any time.");
 
-            client.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest, 25).AddBool(isRoundTripTest).AddInt(testIdAmount));
+            client.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest).AddBool(isRoundTripTest).AddInt(testIdAmount));
         }
 
         private static void Disconnected()
