@@ -1,0 +1,9 @@
+- name: Manual
+  href: articles/
+- name: GitHub
+  href: https://github.com/RiptideNetworking/Riptide
+- name: Discord
+  href: https://discord.gg/tomweiland
+- name: API
+  href: api/
+  homepage: api/index.md
