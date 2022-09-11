@@ -1,0 +1,38 @@
+name: Update GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Debug
+        run: |
+          cd ${{ github.workspace }}
+          ls
+
+      - name: Metadata
+        uses: nikeee/docfx-action@ba9ec988f1c0d472b4d2cd308e96620c4dbb620d
+        with:
+          args: metadata Docs/docfx.json
+
+      - name: Build
+        uses: nikeee/docfx-action@ba9ec988f1c0d472b4d2cd308e96620c4dbb620d
+        with:
+          args: build --logLevel Warning --warningsAsErrors Docs/docfx.json
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          branch: gh-pages
+          folder: Docs/_site
+          commit-message: Update site
