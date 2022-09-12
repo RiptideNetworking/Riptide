@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class UdpClient
    ">
-    <meta name="generator" content="docfx 2.59.4.0">
+    <meta name="generator" content="docfx 2.56.7.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -82,7 +82,7 @@
     <div class="level1"><a class="xref" href="Riptide.Transports.Udp.UdpPeer.html">UdpPeer</a></div>
     <div class="level2"><span class="xref">UdpClient</span></div>
   </div>
-  <div class="implements">
+  <div classs="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Riptide.Transports.IClient.html">IClient</a></div>
     <div><a class="xref" href="Riptide.Transports.IPeer.html">IPeer</a></div>
@@ -110,27 +110,6 @@
     <div>
       <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_">UdpPeer.OnDisconnected(Connection, DisconnectReason)</a>
     </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
   </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Transports.Udp.html">Riptide.Transports.Udp</a></h6>
   <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
@@ -154,7 +133,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UdpClient(SocketMode mode = SocketMode.Both, int socketBufferSize = 1048576)</code></pre>
+    <pre><code class="lang-csharp hljs">public UdpClient(SocketMode mode = SocketMode.Both, int socketBufferSize = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -297,13 +276,13 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte%5B%5D%2CSystem.Int32%2CSystem.Net.IPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_IPEndPoint_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte%5B%5D%2CSystem.Int32%2CIPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpClient.cs/#L105">View Source</a>
   </span>
   <a id="Riptide_Transports_Udp_UdpClient_OnDataReceived_" data-uid="Riptide.Transports.Udp.UdpClient.OnDataReceived*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">OnDataReceived(Byte[], Int32, IPEndPoint)</h4>
+  <h4 id="Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)">OnDataReceived(Byte[], Int32, IPEndPoint)</h4>
   <div class="markdown level1 summary"><p>Handles received data.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -334,7 +313,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="xref">IPEndPoint</span></td>
         <td><span class="parametername">fromEndPoint</span></td>
         <td><p>The endpoint from which the data was received.</p>
 </td>
@@ -342,7 +321,7 @@
     </tbody>
   </table>
   <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_">UdpPeer.OnDataReceived(Byte[], Int32, IPEndPoint)</a></div>
+  <div><a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_">UdpPeer.OnDataReceived(Byte[], Int32, IPEndPoint)</a></div>
   <h3 id="events">Events
   </h3>
   <span class="small pull-right mobile-hide">
@@ -370,7 +349,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.EventHandler</span></td>
+        <td><span class="xref">EventHandler</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -400,7 +379,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.EventHandler</span></td>
+        <td><span class="xref">EventHandler</span></td>
         <td></td>
       </tr>
     </tbody>
@@ -430,7 +409,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>

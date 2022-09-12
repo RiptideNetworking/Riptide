@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Class UdpPeer
    ">
-    <meta name="generator" content="docfx 2.59.4.0">
+    <meta name="generator" content="docfx 2.56.7.0">
     
     <link rel="shortcut icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
@@ -83,35 +83,11 @@
       <div class="level2"><a class="xref" href="Riptide.Transports.Udp.UdpClient.html">UdpClient</a></div>
       <div class="level2"><a class="xref" href="Riptide.Transports.Udp.UdpServer.html">UdpServer</a></div>
   </div>
-  <div class="inheritedMembers">
-    <h5>Inherited Members</h5>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.Equals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetHashCode()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.GetType()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.MemberwiseClone()</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ReferenceEquals(System.Object, System.Object)</span>
-    </div>
-    <div>
-      <span class="xref">System.Object.ToString()</span>
-    </div>
-  </div>
   <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Transports.Udp.html">Riptide.Transports.Udp</a></h6>
   <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
   <h5 id="Riptide_Transports_Udp_UdpPeer_syntax">Syntax</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public abstract class UdpPeer</code></pre>
+    <pre><code class="lang-csharp hljs">public abstract class UdpPeer : object</code></pre>
   </div>
   <h3 id="constructors">Constructors
   </h3>
@@ -170,7 +146,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected const int DefaultSocketBufferSize = 1048576</code></pre>
+    <pre><code class="lang-csharp hljs">protected const int DefaultSocketBufferSize = null</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -237,13 +213,13 @@
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte%5B%5D%2CSystem.Int32%2CSystem.Net.IPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte%5B%5D%2CSystem.Int32%2CIPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpPeer.cs/#L165">View Source</a>
   </span>
   <a id="Riptide_Transports_Udp_UdpPeer_OnDataReceived_" data-uid="Riptide.Transports.Udp.UdpPeer.OnDataReceived*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)">OnDataReceived(Byte[], Int32, IPEndPoint)</h4>
+  <h4 id="Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)">OnDataReceived(Byte[], Int32, IPEndPoint)</h4>
   <div class="markdown level1 summary"><p>Handles received data.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
@@ -274,7 +250,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Net.IPEndPoint</span></td>
+        <td><span class="xref">IPEndPoint</span></td>
         <td><span class="parametername">fromEndPoint</span></td>
         <td><p>The endpoint from which the data was received.</p>
 </td>
@@ -335,7 +311,7 @@
   <div class="markdown level1 conceptual"></div>
   <h5 class="decalaration">Declaration</h5>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected void OpenSocket(ushort port = 0)</code></pre>
+    <pre><code class="lang-csharp hljs">protected void OpenSocket(ushort port = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
   <table class="table table-bordered table-striped table-condensed">
@@ -398,7 +374,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a>&gt;</td>
+        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a>&gt;</td>
         <td></td>
       </tr>
     </tbody>

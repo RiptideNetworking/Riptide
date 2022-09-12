@@ -701,17 +701,17 @@ references:
   commentId: M:Riptide.DuplicateHandlerException.#ctor(System.String)
   fullName: Riptide.DuplicateHandlerException.DuplicateHandlerException(System.String)
   nameWithType: DuplicateHandlerException.DuplicateHandlerException(String)
-- uid: Riptide.DuplicateHandlerException.#ctor(System.String,System.Exception)
+- uid: Riptide.DuplicateHandlerException.#ctor(System.String,Exception)
   name: DuplicateHandlerException(String, Exception)
-  href: api/Riptide.DuplicateHandlerException.html#Riptide_DuplicateHandlerException__ctor_System_String_System_Exception_
-  commentId: M:Riptide.DuplicateHandlerException.#ctor(System.String,System.Exception)
-  fullName: Riptide.DuplicateHandlerException.DuplicateHandlerException(System.String, System.Exception)
+  href: api/Riptide.DuplicateHandlerException.html#Riptide_DuplicateHandlerException__ctor_System_String_Exception_
+  commentId: M:Riptide.DuplicateHandlerException.#ctor(System.String,Exception)
+  fullName: Riptide.DuplicateHandlerException.DuplicateHandlerException(System.String, Exception)
   nameWithType: DuplicateHandlerException.DuplicateHandlerException(String, Exception)
-- uid: Riptide.DuplicateHandlerException.#ctor(System.UInt16,System.Reflection.MethodInfo,System.Reflection.MethodInfo)
+- uid: Riptide.DuplicateHandlerException.#ctor(System.UInt16,MethodInfo,MethodInfo)
   name: DuplicateHandlerException(UInt16, MethodInfo, MethodInfo)
-  href: api/Riptide.DuplicateHandlerException.html#Riptide_DuplicateHandlerException__ctor_System_UInt16_System_Reflection_MethodInfo_System_Reflection_MethodInfo_
-  commentId: M:Riptide.DuplicateHandlerException.#ctor(System.UInt16,System.Reflection.MethodInfo,System.Reflection.MethodInfo)
-  fullName: Riptide.DuplicateHandlerException.DuplicateHandlerException(System.UInt16, System.Reflection.MethodInfo, System.Reflection.MethodInfo)
+  href: api/Riptide.DuplicateHandlerException.html#Riptide_DuplicateHandlerException__ctor_System_UInt16_MethodInfo_MethodInfo_
+  commentId: M:Riptide.DuplicateHandlerException.#ctor(System.UInt16,MethodInfo,MethodInfo)
+  fullName: Riptide.DuplicateHandlerException.DuplicateHandlerException(System.UInt16, MethodInfo, MethodInfo)
   nameWithType: DuplicateHandlerException.DuplicateHandlerException(UInt16, MethodInfo, MethodInfo)
 - uid: Riptide.DuplicateHandlerException.#ctor*
   name: DuplicateHandlerException
@@ -1226,11 +1226,11 @@ references:
   commentId: M:Riptide.InsufficientCapacityException.#ctor(System.String)
   fullName: Riptide.InsufficientCapacityException.InsufficientCapacityException(System.String)
   nameWithType: InsufficientCapacityException.InsufficientCapacityException(String)
-- uid: Riptide.InsufficientCapacityException.#ctor(System.String,System.Exception)
+- uid: Riptide.InsufficientCapacityException.#ctor(System.String,Exception)
   name: InsufficientCapacityException(String, Exception)
-  href: api/Riptide.InsufficientCapacityException.html#Riptide_InsufficientCapacityException__ctor_System_String_System_Exception_
-  commentId: M:Riptide.InsufficientCapacityException.#ctor(System.String,System.Exception)
-  fullName: Riptide.InsufficientCapacityException.InsufficientCapacityException(System.String, System.Exception)
+  href: api/Riptide.InsufficientCapacityException.html#Riptide_InsufficientCapacityException__ctor_System_String_Exception_
+  commentId: M:Riptide.InsufficientCapacityException.#ctor(System.String,Exception)
+  fullName: Riptide.InsufficientCapacityException.InsufficientCapacityException(System.String, Exception)
   nameWithType: InsufficientCapacityException.InsufficientCapacityException(String, Exception)
 - uid: Riptide.InsufficientCapacityException.#ctor*
   name: InsufficientCapacityException
@@ -1275,17 +1275,17 @@ references:
   commentId: M:Riptide.InvalidHandlerSignatureException.#ctor(System.String)
   fullName: Riptide.InvalidHandlerSignatureException.InvalidHandlerSignatureException(System.String)
   nameWithType: InvalidHandlerSignatureException.InvalidHandlerSignatureException(String)
-- uid: Riptide.InvalidHandlerSignatureException.#ctor(System.String,System.Exception)
+- uid: Riptide.InvalidHandlerSignatureException.#ctor(System.String,Exception)
   name: InvalidHandlerSignatureException(String, Exception)
-  href: api/Riptide.InvalidHandlerSignatureException.html#Riptide_InvalidHandlerSignatureException__ctor_System_String_System_Exception_
-  commentId: M:Riptide.InvalidHandlerSignatureException.#ctor(System.String,System.Exception)
-  fullName: Riptide.InvalidHandlerSignatureException.InvalidHandlerSignatureException(System.String, System.Exception)
+  href: api/Riptide.InvalidHandlerSignatureException.html#Riptide_InvalidHandlerSignatureException__ctor_System_String_Exception_
+  commentId: M:Riptide.InvalidHandlerSignatureException.#ctor(System.String,Exception)
+  fullName: Riptide.InvalidHandlerSignatureException.InvalidHandlerSignatureException(System.String, Exception)
   nameWithType: InvalidHandlerSignatureException.InvalidHandlerSignatureException(String, Exception)
-- uid: Riptide.InvalidHandlerSignatureException.#ctor(System.Type,System.String)
+- uid: Riptide.InvalidHandlerSignatureException.#ctor(Type,System.String)
   name: InvalidHandlerSignatureException(Type, String)
-  href: api/Riptide.InvalidHandlerSignatureException.html#Riptide_InvalidHandlerSignatureException__ctor_System_Type_System_String_
-  commentId: M:Riptide.InvalidHandlerSignatureException.#ctor(System.Type,System.String)
-  fullName: Riptide.InvalidHandlerSignatureException.InvalidHandlerSignatureException(System.Type, System.String)
+  href: api/Riptide.InvalidHandlerSignatureException.html#Riptide_InvalidHandlerSignatureException__ctor_Type_System_String_
+  commentId: M:Riptide.InvalidHandlerSignatureException.#ctor(Type,System.String)
+  fullName: Riptide.InvalidHandlerSignatureException.InvalidHandlerSignatureException(Type, System.String)
   nameWithType: InvalidHandlerSignatureException.InvalidHandlerSignatureException(Type, String)
 - uid: Riptide.InvalidHandlerSignatureException.#ctor*
   name: InvalidHandlerSignatureException
@@ -1903,11 +1903,11 @@ references:
   commentId: M:Riptide.Message.Create
   fullName: Riptide.Message.Create()
   nameWithType: Message.Create()
-- uid: Riptide.Message.Create(Riptide.MessageSendMode,System.Enum)
+- uid: Riptide.Message.Create(Riptide.MessageSendMode,Enum)
   name: Create(MessageSendMode, Enum)
-  href: api/Riptide.Message.html#Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_
-  commentId: M:Riptide.Message.Create(Riptide.MessageSendMode,System.Enum)
-  fullName: Riptide.Message.Create(Riptide.MessageSendMode, System.Enum)
+  href: api/Riptide.Message.html#Riptide_Message_Create_Riptide_MessageSendMode_Enum_
+  commentId: M:Riptide.Message.Create(Riptide.MessageSendMode,Enum)
+  fullName: Riptide.Message.Create(Riptide.MessageSendMode, Enum)
   nameWithType: Message.Create(MessageSendMode, Enum)
 - uid: Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16)
   name: Create(MessageSendMode, UInt16)
@@ -2663,19 +2663,19 @@ references:
   fullName.vb: Riptide.MessageRelayFilter.MessageRelayFilter(System.Int32, System.UInt16())
   nameWithType: MessageRelayFilter.MessageRelayFilter(Int32, UInt16[])
   nameWithType.vb: MessageRelayFilter.MessageRelayFilter(Int32, UInt16())
-- uid: Riptide.MessageRelayFilter.#ctor(System.Type)
+- uid: Riptide.MessageRelayFilter.#ctor(Type)
   name: MessageRelayFilter(Type)
-  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter__ctor_System_Type_
-  commentId: M:Riptide.MessageRelayFilter.#ctor(System.Type)
-  fullName: Riptide.MessageRelayFilter.MessageRelayFilter(System.Type)
+  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter__ctor_Type_
+  commentId: M:Riptide.MessageRelayFilter.#ctor(Type)
+  fullName: Riptide.MessageRelayFilter.MessageRelayFilter(Type)
   nameWithType: MessageRelayFilter.MessageRelayFilter(Type)
-- uid: Riptide.MessageRelayFilter.#ctor(System.Type,System.Enum[])
+- uid: Riptide.MessageRelayFilter.#ctor(Type,Enum[])
   name: MessageRelayFilter(Type, Enum[])
-  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter__ctor_System_Type_System_Enum___
-  commentId: M:Riptide.MessageRelayFilter.#ctor(System.Type,System.Enum[])
+  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter__ctor_Type_Enum___
+  commentId: M:Riptide.MessageRelayFilter.#ctor(Type,Enum[])
   name.vb: MessageRelayFilter(Type, Enum())
-  fullName: Riptide.MessageRelayFilter.MessageRelayFilter(System.Type, System.Enum[])
-  fullName.vb: Riptide.MessageRelayFilter.MessageRelayFilter(System.Type, System.Enum())
+  fullName: Riptide.MessageRelayFilter.MessageRelayFilter(Type, Enum[])
+  fullName.vb: Riptide.MessageRelayFilter.MessageRelayFilter(Type, Enum())
   nameWithType: MessageRelayFilter.MessageRelayFilter(Type, Enum[])
   nameWithType.vb: MessageRelayFilter.MessageRelayFilter(Type, Enum())
 - uid: Riptide.MessageRelayFilter.#ctor*
@@ -2685,11 +2685,11 @@ references:
   isSpec: "True"
   fullName: Riptide.MessageRelayFilter.MessageRelayFilter
   nameWithType: MessageRelayFilter.MessageRelayFilter
-- uid: Riptide.MessageRelayFilter.DisableRelay(System.Enum)
+- uid: Riptide.MessageRelayFilter.DisableRelay(Enum)
   name: DisableRelay(Enum)
-  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter_DisableRelay_System_Enum_
-  commentId: M:Riptide.MessageRelayFilter.DisableRelay(System.Enum)
-  fullName: Riptide.MessageRelayFilter.DisableRelay(System.Enum)
+  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter_DisableRelay_Enum_
+  commentId: M:Riptide.MessageRelayFilter.DisableRelay(Enum)
+  fullName: Riptide.MessageRelayFilter.DisableRelay(Enum)
   nameWithType: MessageRelayFilter.DisableRelay(Enum)
 - uid: Riptide.MessageRelayFilter.DisableRelay(System.UInt16)
   name: DisableRelay(UInt16)
@@ -2704,11 +2704,11 @@ references:
   isSpec: "True"
   fullName: Riptide.MessageRelayFilter.DisableRelay
   nameWithType: MessageRelayFilter.DisableRelay
-- uid: Riptide.MessageRelayFilter.EnableRelay(System.Enum)
+- uid: Riptide.MessageRelayFilter.EnableRelay(Enum)
   name: EnableRelay(Enum)
-  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter_EnableRelay_System_Enum_
-  commentId: M:Riptide.MessageRelayFilter.EnableRelay(System.Enum)
-  fullName: Riptide.MessageRelayFilter.EnableRelay(System.Enum)
+  href: api/Riptide.MessageRelayFilter.html#Riptide_MessageRelayFilter_EnableRelay_Enum_
+  commentId: M:Riptide.MessageRelayFilter.EnableRelay(Enum)
+  fullName: Riptide.MessageRelayFilter.EnableRelay(Enum)
   nameWithType: MessageRelayFilter.EnableRelay(Enum)
 - uid: Riptide.MessageRelayFilter.EnableRelay(System.UInt16)
   name: EnableRelay(UInt16)
@@ -2759,17 +2759,17 @@ references:
   commentId: M:Riptide.NonStaticHandlerException.#ctor(System.String)
   fullName: Riptide.NonStaticHandlerException.NonStaticHandlerException(System.String)
   nameWithType: NonStaticHandlerException.NonStaticHandlerException(String)
-- uid: Riptide.NonStaticHandlerException.#ctor(System.String,System.Exception)
+- uid: Riptide.NonStaticHandlerException.#ctor(System.String,Exception)
   name: NonStaticHandlerException(String, Exception)
-  href: api/Riptide.NonStaticHandlerException.html#Riptide_NonStaticHandlerException__ctor_System_String_System_Exception_
-  commentId: M:Riptide.NonStaticHandlerException.#ctor(System.String,System.Exception)
-  fullName: Riptide.NonStaticHandlerException.NonStaticHandlerException(System.String, System.Exception)
+  href: api/Riptide.NonStaticHandlerException.html#Riptide_NonStaticHandlerException__ctor_System_String_Exception_
+  commentId: M:Riptide.NonStaticHandlerException.#ctor(System.String,Exception)
+  fullName: Riptide.NonStaticHandlerException.NonStaticHandlerException(System.String, Exception)
   nameWithType: NonStaticHandlerException.NonStaticHandlerException(String, Exception)
-- uid: Riptide.NonStaticHandlerException.#ctor(System.Type,System.String)
+- uid: Riptide.NonStaticHandlerException.#ctor(Type,System.String)
   name: NonStaticHandlerException(Type, String)
-  href: api/Riptide.NonStaticHandlerException.html#Riptide_NonStaticHandlerException__ctor_System_Type_System_String_
-  commentId: M:Riptide.NonStaticHandlerException.#ctor(System.Type,System.String)
-  fullName: Riptide.NonStaticHandlerException.NonStaticHandlerException(System.Type, System.String)
+  href: api/Riptide.NonStaticHandlerException.html#Riptide_NonStaticHandlerException__ctor_Type_System_String_
+  commentId: M:Riptide.NonStaticHandlerException.#ctor(Type,System.String)
+  fullName: Riptide.NonStaticHandlerException.NonStaticHandlerException(Type, System.String)
   nameWithType: NonStaticHandlerException.NonStaticHandlerException(Type, String)
 - uid: Riptide.NonStaticHandlerException.#ctor*
   name: NonStaticHandlerException
@@ -3921,13 +3921,13 @@ references:
   isSpec: "True"
   fullName: Riptide.Transports.Udp.UdpClient.OnConnectionFailed
   nameWithType: UdpClient.OnConnectionFailed
-- uid: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+- uid: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name: OnDataReceived(Byte[], Int32, IPEndPoint)
-  href: api/Riptide.Transports.Udp.UdpClient.html#Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_
-  commentId: M:Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+  href: api/Riptide.Transports.Udp.UdpClient.html#Riptide_Transports_Udp_UdpClient_OnDataReceived_System_Byte___System_Int32_IPEndPoint_
+  commentId: M:Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name.vb: OnDataReceived(Byte(), Int32, IPEndPoint)
-  fullName: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[], System.Int32, System.Net.IPEndPoint)
-  fullName.vb: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte(), System.Int32, System.Net.IPEndPoint)
+  fullName: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte[], System.Int32, IPEndPoint)
+  fullName.vb: Riptide.Transports.Udp.UdpClient.OnDataReceived(System.Byte(), System.Int32, IPEndPoint)
   nameWithType: UdpClient.OnDataReceived(Byte[], Int32, IPEndPoint)
   nameWithType.vb: UdpClient.OnDataReceived(Byte(), Int32, IPEndPoint)
 - uid: Riptide.Transports.Udp.UdpClient.OnDataReceived*
@@ -4086,13 +4086,13 @@ references:
   commentId: F:Riptide.Transports.Udp.UdpPeer.mode
   fullName: Riptide.Transports.Udp.UdpPeer.mode
   nameWithType: UdpPeer.mode
-- uid: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+- uid: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name: OnDataReceived(Byte[], Int32, IPEndPoint)
-  href: api/Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_
-  commentId: M:Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+  href: api/Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_
+  commentId: M:Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name.vb: OnDataReceived(Byte(), Int32, IPEndPoint)
-  fullName: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[], System.Int32, System.Net.IPEndPoint)
-  fullName.vb: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte(), System.Int32, System.Net.IPEndPoint)
+  fullName: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte[], System.Int32, IPEndPoint)
+  fullName.vb: Riptide.Transports.Udp.UdpPeer.OnDataReceived(System.Byte(), System.Int32, IPEndPoint)
   nameWithType: UdpPeer.OnDataReceived(Byte[], Int32, IPEndPoint)
   nameWithType.vb: UdpPeer.OnDataReceived(Byte(), Int32, IPEndPoint)
 - uid: Riptide.Transports.Udp.UdpPeer.OnDataReceived*
@@ -4198,13 +4198,13 @@ references:
   isSpec: "True"
   fullName: Riptide.Transports.Udp.UdpServer.OnConnected
   nameWithType: UdpServer.OnConnected
-- uid: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+- uid: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name: OnDataReceived(Byte[], Int32, IPEndPoint)
-  href: api/Riptide.Transports.Udp.UdpServer.html#Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_System_Net_IPEndPoint_
-  commentId: M:Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,System.Net.IPEndPoint)
+  href: api/Riptide.Transports.Udp.UdpServer.html#Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_
+  commentId: M:Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)
   name.vb: OnDataReceived(Byte(), Int32, IPEndPoint)
-  fullName: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[], System.Int32, System.Net.IPEndPoint)
-  fullName.vb: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte(), System.Int32, System.Net.IPEndPoint)
+  fullName: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[], System.Int32, IPEndPoint)
+  fullName.vb: Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte(), System.Int32, IPEndPoint)
   nameWithType: UdpServer.OnDataReceived(Byte[], Int32, IPEndPoint)
   nameWithType.vb: UdpServer.OnDataReceived(Byte(), Int32, IPEndPoint)
 - uid: Riptide.Transports.Udp.UdpServer.OnDataReceived*
@@ -4278,11 +4278,11 @@ references:
   isSpec: "True"
   fullName: Riptide.Utils.ActionQueue.ActionQueue
   nameWithType: ActionQueue.ActionQueue
-- uid: Riptide.Utils.ActionQueue.Add(System.Action)
+- uid: Riptide.Utils.ActionQueue.Add(Action)
   name: Add(Action)
-  href: api/Riptide.Utils.ActionQueue.html#Riptide_Utils_ActionQueue_Add_System_Action_
-  commentId: M:Riptide.Utils.ActionQueue.Add(System.Action)
-  fullName: Riptide.Utils.ActionQueue.Add(System.Action)
+  href: api/Riptide.Utils.ActionQueue.html#Riptide_Utils_ActionQueue_Add_Action_
+  commentId: M:Riptide.Utils.ActionQueue.Add(Action)
+  fullName: Riptide.Utils.ActionQueue.Add(Action)
   nameWithType: ActionQueue.Add(Action)
 - uid: Riptide.Utils.ActionQueue.Add*
   name: Add
@@ -4591,11 +4591,11 @@ references:
   commentId: T:Riptide.Utils.Extensions
   fullName: Riptide.Utils.Extensions
   nameWithType: Extensions
-- uid: Riptide.Utils.Extensions.ToStringBasedOnIPFormat(System.Net.IPEndPoint)
+- uid: Riptide.Utils.Extensions.ToStringBasedOnIPFormat(IPEndPoint)
   name: ToStringBasedOnIPFormat(IPEndPoint)
-  href: api/Riptide.Utils.Extensions.html#Riptide_Utils_Extensions_ToStringBasedOnIPFormat_System_Net_IPEndPoint_
-  commentId: M:Riptide.Utils.Extensions.ToStringBasedOnIPFormat(System.Net.IPEndPoint)
-  fullName: Riptide.Utils.Extensions.ToStringBasedOnIPFormat(System.Net.IPEndPoint)
+  href: api/Riptide.Utils.Extensions.html#Riptide_Utils_Extensions_ToStringBasedOnIPFormat_IPEndPoint_
+  commentId: M:Riptide.Utils.Extensions.ToStringBasedOnIPFormat(IPEndPoint)
+  fullName: Riptide.Utils.Extensions.ToStringBasedOnIPFormat(IPEndPoint)
   nameWithType: Extensions.ToStringBasedOnIPFormat(IPEndPoint)
 - uid: Riptide.Utils.Extensions.ToStringBasedOnIPFormat*
   name: ToStringBasedOnIPFormat
