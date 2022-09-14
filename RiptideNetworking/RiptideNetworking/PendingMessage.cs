@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Riptide
 {
     /// <summary>Represents a currently pending reliably sent message whose delivery has not been acknowledged yet.</summary>
-    internal class PendingMessage
+    internal sealed class PendingMessage
     {
         /// <summary>The time of the latest send attempt.</summary>
         internal long LastSendTime { get; private set; }

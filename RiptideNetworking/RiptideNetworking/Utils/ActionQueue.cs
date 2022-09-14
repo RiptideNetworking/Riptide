@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace Riptide.Utils
 {
     /// <summary>Provides functionality for queueing methods for later execution from a chosen thread.</summary>
-    public class ActionQueue
+    public sealed class ActionQueue
     {
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;

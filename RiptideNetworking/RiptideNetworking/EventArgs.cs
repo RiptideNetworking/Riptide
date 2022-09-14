@@ -8,7 +8,7 @@ using System;
 namespace Riptide
 {
     /// <summary>Contains event data for when a client connects to the server.</summary>
-    public class ServerConnectedEventArgs : EventArgs
+    public sealed class ServerConnectedEventArgs : EventArgs
     {
         /// <summary>The newly connected client.</summary>
         public readonly Connection Client;
@@ -22,7 +22,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when a client disconnects from the server.</summary>
-    public class ServerDisconnectedEventArgs : EventArgs
+    public sealed class ServerDisconnectedEventArgs : EventArgs
     {
         /// <summary>The client that disconnected.</summary>
         public readonly Connection Client;
@@ -40,7 +40,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when a message is received.</summary>
-    public class MessageReceivedEventArgs : EventArgs
+    public sealed class MessageReceivedEventArgs : EventArgs
     {
         /// <summary>The connection from which the message was received.</summary>
         public readonly Connection FromConnection;
@@ -62,7 +62,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when a connection attempt to a server fails.</summary>
-    public class ConnectionFailedEventArgs : EventArgs
+    public sealed class ConnectionFailedEventArgs : EventArgs
     {
         /// <summary>Additional data related to the failed connection attempt (if any).</summary>
         public readonly Message Message;
@@ -73,7 +73,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when the client disconnects from a server.</summary>
-    public class DisconnectedEventArgs : EventArgs
+    public sealed class DisconnectedEventArgs : EventArgs
     {
         /// <summary>The reason for the disconnection.</summary>
         public readonly DisconnectReason Reason;
@@ -91,7 +91,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when a non-local client connects to the server.</summary>
-    public class ClientConnectedEventArgs : EventArgs
+    public sealed class ClientConnectedEventArgs : EventArgs
     {
         /// <summary>The numeric ID of the client that connected.</summary>
         public readonly ushort Id;
@@ -102,7 +102,7 @@ namespace Riptide
     }
 
     /// <summary>Contains event data for when a non-local client disconnects from the server.</summary>
-    public class ClientDisconnectedEventArgs : EventArgs
+    public sealed class ClientDisconnectedEventArgs : EventArgs
     {
         /// <summary>The numeric ID of the client that disconnected.</summary>
         public readonly ushort Id;

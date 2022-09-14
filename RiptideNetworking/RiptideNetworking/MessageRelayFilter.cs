@@ -9,7 +9,7 @@ using System.Linq;
 namespace Riptide
 {
     /// <summary>Provides functionality for enabling/disabling automatic message relaying by message type.</summary>
-    public class MessageRelayFilter
+    public sealed class MessageRelayFilter
     {
         /// <summary>The number of bits an int consists of.</summary>
         private const int BitsPerInt = sizeof(int) * 8;

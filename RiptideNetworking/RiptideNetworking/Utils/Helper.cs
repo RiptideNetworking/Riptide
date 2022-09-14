@@ -8,7 +8,7 @@ using System;
 namespace Riptide.Utils
 {
     /// <summary>Contains miscellaneous helper methods.</summary>
-    internal class Helper
+    internal sealed class Helper
     {
         /// <summary>Determines whether <paramref name="singular"/> or <paramref name="plural"/> form should be used based on the <paramref name="amount"/>.</summary>
         /// <param name="amount">The amount that <paramref name="singular"/> and <paramref name="plural"/> refer to.</param>

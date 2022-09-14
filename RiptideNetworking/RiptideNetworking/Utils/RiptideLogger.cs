@@ -22,7 +22,7 @@ namespace Riptide.Utils
     }
 
     /// <summary>Provides functionality for logging messages.</summary>
-    public class RiptideLogger
+    public sealed class RiptideLogger
     {
         /// <summary>Whether or not <see cref="LogType.Debug"/> messages will be logged.</summary>
         public static bool IsDebugLoggingEnabled => logMethods.ContainsKey(LogType.Debug);

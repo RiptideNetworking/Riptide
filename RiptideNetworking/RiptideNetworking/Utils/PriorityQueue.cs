@@ -12,7 +12,7 @@ namespace Riptide.Utils
     /// <summary>Represents a collection of items that have a value and a priority. On dequeue, the item with the lowest priority value is removed.</summary>
     /// <typeparam name="TElement">Specifies the type of elements in the queue.</typeparam>
     /// <typeparam name="TPriority">Specifies the type of priority associated with enqueued elements.</typeparam>
-    internal class PriorityQueue<TElement, TPriority> where TPriority : IComparable<TPriority>
+    internal sealed class PriorityQueue<TElement, TPriority> where TPriority : IComparable<TPriority>
     {
         /// <summary>Gets the number of elements contained in the <see cref="PriorityQueue{TElement, TPriority}"/>.</summary>
         public int Count => entries.Count;

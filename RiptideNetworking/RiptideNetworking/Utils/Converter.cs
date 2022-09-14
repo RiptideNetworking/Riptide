@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 namespace Riptide.Utils
 {
     /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
-    public class Converter
+    public sealed class Converter
     {
         #region Short/UShort
         /// <summary>Converts a given <see cref="short"/> to bytes and writes them into the given array.</summary>

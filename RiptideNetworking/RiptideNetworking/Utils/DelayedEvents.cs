@@ -13,7 +13,7 @@ namespace Riptide.Utils
     }
 
     /// <summary>Resends a <see cref="PendingMessage"/> when invoked.</summary>
-    internal class PendingMessageResendEvent : DelayedEvent
+    internal sealed class PendingMessageResendEvent : DelayedEvent
     {
         /// <summary>The message to resend.</summary>
         private readonly PendingMessage message;

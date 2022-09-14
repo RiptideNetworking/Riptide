@@ -21,7 +21,7 @@ namespace Riptide
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
-    public class Message
+    public sealed class Message
     {
         /// <summary>The maximum number of bytes required for a message's header.</summary>
         /// <remarks>1 byte for the actual header, 2 bytes for the sequence ID (only for reliable messages), 2 bytes for the message ID. Messages sent unreliably will use 2 bytes less than this value for the header.</remarks>

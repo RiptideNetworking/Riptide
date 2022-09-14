@@ -10,7 +10,7 @@ using System.Reflection;
 namespace Riptide
 {
     /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unread bytes to add a certain value.</summary>
-    public class InsufficientCapacityException : Exception
+    public sealed class InsufficientCapacityException : Exception
     {
         /// <summary>The message with insufficient remaining capacity.</summary>
         public readonly Message RiptideMessage;
