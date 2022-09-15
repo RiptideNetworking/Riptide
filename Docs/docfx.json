@@ -34,8 +34,7 @@
     "resource": [
       {
         "files": [
-          "images/**",
-          "logo.png"
+          "images/**"
         ]
       }
     ],
@@ -51,12 +50,28 @@
       }
     ],
     "dest": "_site",
+    "globalMetadata": {
+        "_appTitle": "Riptide Docs",
+        "_appFooter": "Copyright © Tom Weiland",
+        "_appLogoPath": "images/logo.png",
+        "_appFaviconPath": "images/favicon.ico",
+        "_enableNewTab": true,
+        "_enableSearch": true,
+        "_gitContribute": {
+          "repo": "https://github.com/RiptideNetworking/Riptide",
+          "branch": "main",
+          "apiSpecFolder": "Docs/apidoc"
+        }
+    },
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
       "default",
       "templates/riptide"
     ],
+    "sitemap": {
+      "baseUrl": "https://riptidenetworking.github.io/Riptide/"
+    },
     "postProcessors": [],
     "markdownEngineName": "markdig",
     "noLangKeyword": false,
