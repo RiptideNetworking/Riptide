@@ -69,6 +69,9 @@
       "default",
       "templates/riptide"
     ],
+    "xrefService": [
+      "https://xref.docs.microsoft.com/query?uid={uid}"
+    ],
     "sitemap": {
       "baseUrl": "https://riptidenetworking.github.io/Riptide/"
     },
