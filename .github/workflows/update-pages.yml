@@ -3,7 +3,7 @@ name: Update GitHub Pages
 on:
   push:
     branches:
-      - main
+      - docs
 
 permissions:
   contents: write
@@ -15,20 +15,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Debug
-        run: |
-          cd ${{ github.workspace }}
-          ls
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.7
 
-      - name: Metadata
-        uses: nikeee/docfx-action@ba9ec988f1c0d472b4d2cd308e96620c4dbb620d
-        with:
-          args: metadata Docs/docfx.json
+      - name: Install docfx
+        run: nuget install docfx.console -version 2.59.0
 
       - name: Build
-        uses: nikeee/docfx-action@ba9ec988f1c0d472b4d2cd308e96620c4dbb620d
-        with:
-          args: build --logLevel Warning --warningsAsErrors Docs/docfx.json
+        run: |
+          docfx.console.2.59.0/tools/docfx.exe metadata Docs/docfx.json
+          docfx.console.2.59.0/tools/docfx.exe build --logLevel Warning --warningsAsErrors Docs/docfx.json
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v4
