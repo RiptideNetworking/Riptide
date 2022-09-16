@@ -5,22 +5,23 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class Client
-   </title>
+    <title>Client Class
+   | Riptide Docs </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class Client
-   ">
-    <meta name="generator" content="docfx 2.56.7.0">
+    <meta name="title" content="Client Class
+   | Riptide Docs ">
+    <meta name="generator" content="docfx 2.59.0.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
-    
-    
+    <meta property="docfx:rel" content="../">
+    <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
@@ -37,7 +38,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.png" alt="">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -49,15 +50,17 @@
             </div>
           </div>
         </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
-        </div>
       </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
       <div role="main" class="container body-content hide-when-search">
         
         <div class="sidenav hide-when-search">
@@ -68,17 +71,31 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
+            
+            <div class="subnav navbar navbar-default">
+              <div class="hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Client">
   
   
-  <h1 id="Riptide_Client" data-uid="Riptide.Client" class="text-break">Class Client
+  <h1 id="Riptide_Client" data-uid="Riptide.Client" class="text-break">Client Class
   </h1>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a></h6>
+  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
   <div class="markdown level0 summary"><p>A client that can connect to a <a class="xref" href="Riptide.Server.html">Server</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
+  <!--h5 id="Riptide_Client_syntax">Syntax</h5-->
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class Client : Peer</code></pre>
+  </div>
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><a class="xref" href="Riptide.Peer.html">Peer</a></div>
     <div class="level2"><span class="xref">Client</span></div>
   </div>
@@ -148,17 +165,11 @@
       <a class="xref" href="Riptide.Peer.html#Riptide_Peer_DecreaseActiveCount">Peer.DecreaseActiveCount()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a></h6>
-  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
-  <h5 id="Riptide_Client_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Client : Peer</code></pre>
-  </div>
   <h3 id="constructors">Constructors
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client__ctor_Riptide_Transports_IClient_System_String_.md&amp;value=---%0Auid%3A%20Riptide.Client.%23ctor(Riptide.Transports.IClient%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client__ctor_Riptide_Transports_IClient_System_String_.md&amp;value=---%0Auid%3A%20Riptide.Client.%23ctor(Riptide.Transports.IClient%2CSystem.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L68">View Source</a>
@@ -167,12 +178,12 @@
   <h4 id="Riptide_Client__ctor_Riptide_Transports_IClient_System_String_" data-uid="Riptide.Client.#ctor(Riptide.Transports.IClient,System.String)">Client(IClient, String)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Client(IClient transport, string logName = &quot;CLIENT&quot;)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -187,7 +198,7 @@
         <td></td>
       </tr>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">logName</span></td>
         <td></td>
       </tr>
@@ -195,7 +206,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client__ctor_System_String_.md&amp;value=---%0Auid%3A%20Riptide.Client.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client__ctor_System_String_.md&amp;value=---%0Auid%3A%20Riptide.Client.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L74">View Source</a>
@@ -205,12 +216,12 @@
   <div class="markdown level1 summary"><p>Initializes the peer.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Client(string logName = &quot;CLIENT&quot;)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -220,7 +231,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">logName</span></td>
         <td><p>The name to use when logging messages via <a class="xref" href="Riptide.Utils.RiptideLogger.html">RiptideLogger</a>.</p>
 </td>
@@ -231,7 +242,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Connection.md&amp;value=---%0Auid%3A%20Riptide.Client.Connection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Connection.md&amp;value=---%0Auid%3A%20Riptide.Client.Connection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L49">View Source</a>
@@ -240,12 +251,12 @@
   <h4 id="Riptide_Client_Connection" data-uid="Riptide.Client.Connection">Connection</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public Connection Connection { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -261,7 +272,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Id.md&amp;value=---%0Auid%3A%20Riptide.Client.Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Id.md&amp;value=---%0Auid%3A%20Riptide.Client.Id%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L31">View Source</a>
@@ -271,12 +282,12 @@
   <div class="markdown level1 summary"><p>The client's numeric ID.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public ushort Id { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -285,14 +296,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.UInt16</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_IsConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.IsConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_IsConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.IsConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L44">View Source</a>
@@ -302,12 +313,12 @@
   <div class="markdown level1 summary"><p>Whether or not the client is currently connected.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsConnected { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -316,14 +327,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_IsConnecting.md&amp;value=---%0Auid%3A%20Riptide.Client.IsConnecting%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_IsConnecting.md&amp;value=---%0Auid%3A%20Riptide.Client.IsConnecting%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L40">View Source</a>
@@ -333,12 +344,12 @@
   <div class="markdown level1 summary"><p>Whether or not the client is currently in the process of connecting.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsConnecting { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -347,14 +358,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_IsNotConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.IsNotConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_IsNotConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.IsNotConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L38">View Source</a>
@@ -364,12 +375,12 @@
   <div class="markdown level1 summary"><p>Whether or not the client is currently <em>not</em> connected nor trying to connect.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsNotConnected { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -378,14 +389,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_IsPending.md&amp;value=---%0Auid%3A%20Riptide.Client.IsPending%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_IsPending.md&amp;value=---%0Auid%3A%20Riptide.Client.IsPending%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L42">View Source</a>
@@ -395,12 +406,12 @@
   <div class="markdown level1 summary"><p>Whether or not the client's connection is currently pending (will only be <span class="xref">true</span> when a server doesn't immediately accept the connection request).</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool IsPending { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -409,14 +420,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_RTT.md&amp;value=---%0Auid%3A%20Riptide.Client.RTT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_RTT.md&amp;value=---%0Auid%3A%20Riptide.Client.RTT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L33">View Source</a>
@@ -426,12 +437,12 @@
   <div class="markdown level1 summary"><p>The round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public short RTT { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -440,14 +451,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int16</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int16">Int16</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_SmoothRTT.md&amp;value=---%0Auid%3A%20Riptide.Client.SmoothRTT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_SmoothRTT.md&amp;value=---%0Auid%3A%20Riptide.Client.SmoothRTT%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L36">View Source</a>
@@ -457,12 +468,12 @@
   <div class="markdown level1 summary"><p><inheritdoc cref="P:Riptide.Connection.SmoothRTT"></inheritdoc></p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public short SmoothRTT { get; }</code></pre>
   </div>
   <h5 class="propertyValue">Property Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -471,7 +482,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int16</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int16">Int16</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -483,7 +494,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_ChangeTransport_Riptide_Transports_IClient_.md&amp;value=---%0Auid%3A%20Riptide.Client.ChangeTransport(Riptide.Transports.IClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_ChangeTransport_Riptide_Transports_IClient_.md&amp;value=---%0Auid%3A%20Riptide.Client.ChangeTransport(Riptide.Transports.IClient)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L82">View Source</a>
@@ -493,12 +504,12 @@
   <div class="markdown level1 summary"><p>Disconnects the client if it's connected and swaps out the transport it's using.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void ChangeTransport(IClient newTransport)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -520,7 +531,7 @@
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Connect_System_String_System_Int32_System_Byte_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.Connect(System.String%2CSystem.Int32%2CSystem.Byte%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Connect_System_String_System_Int32_System_Byte_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.Connect(System.String%2CSystem.Int32%2CSystem.Byte%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L95">View Source</a>
@@ -530,12 +541,12 @@
   <div class="markdown level1 summary"><p>Attempts to connect to a server at the given host address.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = null, Message message = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -545,19 +556,19 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">hostAddress</span></td>
         <td><p>The host address to connect to.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td><span class="parametername">maxConnectionAttempts</span></td>
         <td><p>How many connection attempts to make before giving up.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Byte</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td><span class="parametername">messageHandlerGroupId</span></td>
         <td><p>The ID of the group of message handler methods to use when building <span class="xref">Riptide.Client.messageHandlers</span>.</p>
 </td>
@@ -571,7 +582,7 @@
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -580,7 +591,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><p><span class="xref">true</span> if a connection attempt will be made. <span class="xref">false</span> if an issue occurred (such as <code data-dev-comment-type="paramref" class="paramref">hostAddress</code> being in an invalid format) and a connection attempt will <em>not</em> be made.</p>
 </td>
       </tr>
@@ -591,7 +602,7 @@
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_CreateMessageHandlersDictionary_System_Byte_.md&amp;value=---%0Auid%3A%20Riptide.Client.CreateMessageHandlersDictionary(System.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_CreateMessageHandlersDictionary_System_Byte_.md&amp;value=---%0Auid%3A%20Riptide.Client.CreateMessageHandlersDictionary(System.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L146">View Source</a>
@@ -601,12 +612,12 @@
   <div class="markdown level1 summary"><p>Builds a dictionary of message IDs and their corresponding message handler methods.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override void CreateMessageHandlersDictionary(byte messageHandlerGroupId)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -616,7 +627,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Byte</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
         <td><span class="parametername">messageHandlerGroupId</span></td>
         <td><p>The ID of the group of message handler methods to include in the dictionary.</p>
 </td>
@@ -627,7 +638,7 @@
   <div><a class="xref" href="Riptide.Peer.html#Riptide_Peer_CreateMessageHandlersDictionary_System_Byte_">Peer.CreateMessageHandlersDictionary(Byte)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Disconnect.md&amp;value=---%0Auid%3A%20Riptide.Client.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Disconnect.md&amp;value=---%0Auid%3A%20Riptide.Client.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L294">View Source</a>
@@ -637,13 +648,13 @@
   <div class="markdown level1 summary"><p>Disconnects from the server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Disconnect()</code></pre>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Handle_Riptide_Message_Riptide_Transports_MessageHeader_Riptide_Connection_.md&amp;value=---%0Auid%3A%20Riptide.Client.Handle(Riptide.Message%2CRiptide.Transports.MessageHeader%2CRiptide.Connection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Handle_Riptide_Message_Riptide_Transports_MessageHeader_Riptide_Connection_.md&amp;value=---%0Auid%3A%20Riptide.Client.Handle(Riptide.Message%2CRiptide.Transports.MessageHeader%2CRiptide.Connection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L233">View Source</a>
@@ -653,12 +664,12 @@
   <div class="markdown level1 summary"><p>Handles a message.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override void Handle(Message message, MessageHeader header, Connection connection)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -691,7 +702,7 @@
   <div><a class="xref" href="Riptide.Peer.html#Riptide_Peer_Handle_Riptide_Message_Riptide_Transports_MessageHeader_Riptide_Connection_">Peer.Handle(Message, MessageHeader, Connection)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnClientConnected_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnClientConnected(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnClientConnected_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnClientConnected(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L434">View Source</a>
@@ -701,12 +712,12 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_ClientConnected">ClientConnected</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnClientConnected(ushort clientId)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -716,7 +727,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.UInt16</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
         <td><span class="parametername">clientId</span></td>
         <td><p>The numeric ID of the client that connected.</p>
 </td>
@@ -725,7 +736,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnClientDisconnected_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnClientDisconnected(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnClientDisconnected_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnClientDisconnected(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L442">View Source</a>
@@ -735,12 +746,12 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_ClientDisconnected">ClientDisconnected</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnClientDisconnected(ushort clientId)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -750,7 +761,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.UInt16</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
         <td><span class="parametername">clientId</span></td>
         <td><p>The numeric ID of the client that disconnected.</p>
 </td>
@@ -759,7 +770,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.OnConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.OnConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L349">View Source</a>
@@ -769,13 +780,13 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_Connected">Connected</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnConnected()</code></pre>
   </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnConnectionFailed_Riptide_RejectReason_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnConnectionFailed(Riptide.RejectReason%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnConnectionFailed_Riptide_RejectReason_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnConnectionFailed(Riptide.RejectReason%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L358">View Source</a>
@@ -785,12 +796,12 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_ConnectionFailed">ConnectionFailed</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnConnectionFailed(RejectReason reason, Message message = null)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -815,7 +826,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnDisconnected_Riptide_DisconnectReason_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnDisconnected(Riptide.DisconnectReason%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnDisconnected_Riptide_DisconnectReason_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnDisconnected(Riptide.DisconnectReason%2CRiptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L400">View Source</a>
@@ -825,12 +836,12 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_Disconnected">Disconnected</a> event.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnDisconnected(DisconnectReason reason, Message message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -855,7 +866,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_OnMessageReceived_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnMessageReceived(Riptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_OnMessageReceived_Riptide_Message_.md&amp;value=---%0Auid%3A%20Riptide.Client.OnMessageReceived(Riptide.Message)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L386">View Source</a>
@@ -865,12 +876,12 @@
   <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Client.html#Riptide_Client_MessageReceived">MessageReceived</a> event and initiates handling of the received message.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected virtual void OnMessageReceived(Message message)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -889,7 +900,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Send_Riptide_Message_System_Boolean_.md&amp;value=---%0Auid%3A%20Riptide.Client.Send(Riptide.Message%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Send_Riptide_Message_System_Boolean_.md&amp;value=---%0Auid%3A%20Riptide.Client.Send(Riptide.Message%2CSystem.Boolean)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L291">View Source</a>
@@ -899,12 +910,12 @@
   <div class="markdown level1 summary"><p>Sends a message to the server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public void Send(Message message, bool shouldRelease = true)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -920,7 +931,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><span class="parametername">shouldRelease</span></td>
         <td><p>Whether or not to return the message to the pool after it is sent.</p>
 </td>
@@ -932,7 +943,7 @@
 </div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Update.md&amp;value=---%0Auid%3A%20Riptide.Client.Update%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Update.md&amp;value=---%0Auid%3A%20Riptide.Client.Update%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L225">View Source</a>
@@ -942,7 +953,7 @@
   <div class="markdown level1 summary"><p>Handles any received messages and invokes any delayed events which need to be invoked.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override void Update()</code></pre>
   </div>
@@ -952,7 +963,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_ClientConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.ClientConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_ClientConnected.md&amp;value=---%0Auid%3A%20Riptide.Client.ClientConnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L26">View Source</a>
@@ -961,12 +972,12 @@
   <div class="markdown level1 summary"><p>Invoked when another <em>non-local</em> client connects.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;ClientConnectedEventArgs&gt; ClientConnected</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -982,7 +993,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_ClientDisconnected.md&amp;value=---%0Auid%3A%20Riptide.Client.ClientDisconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_ClientDisconnected.md&amp;value=---%0Auid%3A%20Riptide.Client.ClientDisconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L28">View Source</a>
@@ -991,12 +1002,12 @@
   <div class="markdown level1 summary"><p>Invoked when another <em>non-local</em> client disconnects.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;ClientDisconnectedEventArgs&gt; ClientDisconnected</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -1012,7 +1023,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Connected.md&amp;value=---%0Auid%3A%20Riptide.Client.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Connected.md&amp;value=---%0Auid%3A%20Riptide.Client.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L18">View Source</a>
@@ -1021,12 +1032,12 @@
   <div class="markdown level1 summary"><p>Invoked when a connection to the server is established.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler Connected</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -1042,7 +1053,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_ConnectionFailed.md&amp;value=---%0Auid%3A%20Riptide.Client.ConnectionFailed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_ConnectionFailed.md&amp;value=---%0Auid%3A%20Riptide.Client.ConnectionFailed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L20">View Source</a>
@@ -1051,12 +1062,12 @@
   <div class="markdown level1 summary"><p>Invoked when a connection to the server fails to be established.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConnectionFailedEventArgs&gt; ConnectionFailed</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -1072,7 +1083,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_Disconnected.md&amp;value=---%0Auid%3A%20Riptide.Client.Disconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_Disconnected.md&amp;value=---%0Auid%3A%20Riptide.Client.Disconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L24">View Source</a>
@@ -1081,12 +1092,12 @@
   <div class="markdown level1 summary"><p>Invoked when disconnected from the server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;DisconnectedEventArgs&gt; Disconnected</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -1102,7 +1113,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client_MessageReceived.md&amp;value=---%0Auid%3A%20Riptide.Client.MessageReceived%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client_MessageReceived.md&amp;value=---%0Auid%3A%20Riptide.Client.MessageReceived%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L22">View Source</a>
@@ -1111,12 +1122,12 @@
   <div class="markdown level1 summary"><p>Invoked when a message is received.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public event EventHandler&lt;MessageReceivedEventArgs&gt; MessageReceived</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -1138,7 +1149,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Client.md&amp;value=---%0Auid%3A%20Riptide.Client%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client.md&amp;value=---%0Auid%3A%20Riptide.Client%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L15" class="contribution-link">View Source</a>
@@ -1161,8 +1172,12 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            
-            <span>Copyright © Tom Weiland.<br>Generated by <strong>DocFX</strong></span>
+            Copyright © Tom Weiland
+            <br>
+            <span>
+              Generated by 
+              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
+            </span>
           </div>
         </div>
       </footer>

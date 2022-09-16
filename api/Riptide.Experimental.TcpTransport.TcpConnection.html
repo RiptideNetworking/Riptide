@@ -5,22 +5,23 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Class TcpConnection
-   </title>
+    <title>TcpConnection Class
+   | Riptide Docs </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Class TcpConnection
-   ">
-    <meta name="generator" content="docfx 2.56.7.0">
+    <meta name="title" content="TcpConnection Class
+   | Riptide Docs ">
+    <meta name="generator" content="docfx 2.59.0.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
-    
-    
+    <meta property="docfx:rel" content="../">
+    <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
@@ -37,7 +38,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.png" alt="">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -49,15 +50,17 @@
             </div>
           </div>
         </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
-        </div>
       </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
       <div role="main" class="container body-content hide-when-search">
         
         <div class="sidenav hide-when-search">
@@ -68,21 +71,35 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
+            
+            <div class="subnav navbar navbar-default">
+              <div class="hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Experimental.TcpTransport.TcpConnection">
   
   
-  <h1 id="Riptide_Experimental_TcpTransport_TcpConnection" data-uid="Riptide.Experimental.TcpTransport.TcpConnection" class="text-break">Class TcpConnection
+  <h1 id="Riptide_Experimental_TcpTransport_TcpConnection" data-uid="Riptide.Experimental.TcpTransport.TcpConnection" class="text-break">TcpConnection Class
   </h1>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Experimental.TcpTransport.html">Riptide.Experimental.TcpTransport</a></h6>
+  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
   <div class="markdown level0 summary"><p>Represents a connection to a <a class="xref" href="Riptide.Experimental.TcpTransport.TcpServer.html">TcpServer</a> or <a class="xref" href="Riptide.Experimental.TcpTransport.TcpClient.html">TcpClient</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
+  <!--h5 id="Riptide_Experimental_TcpTransport_TcpConnection_syntax">Syntax</h5-->
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public class TcpConnection : Connection</code></pre>
+  </div>
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><span class="xref">System.Object</span></div>
+    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><a class="xref" href="Riptide.Connection.html">Connection</a></div>
     <div class="level2"><span class="xref">TcpConnection</span></div>
   </div>
-  <div classs="implements">
+  <div class="implements">
     <h5>Implements</h5>
     <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="Riptide.Experimental.TcpTransport.TcpConnection.html">TcpConnection</a>&gt;</div>
   </div>
@@ -116,17 +133,11 @@
       <a class="xref" href="Riptide.Connection.html#Riptide_Connection_ResetTimeout">Connection.ResetTimeout()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Experimental.TcpTransport.html">Riptide.Experimental.TcpTransport</a></h6>
-  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
-  <h5 id="Riptide_Experimental_TcpTransport_TcpConnection_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TcpConnection : Connection, IEquatable&lt;TcpConnection&gt;</code></pre>
-  </div>
   <h3 id="fields">Fields
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_RemoteEndPoint.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.RemoteEndPoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_RemoteEndPoint.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.RemoteEndPoint%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L18">View Source</a>
@@ -135,12 +146,12 @@
   <div class="markdown level1 summary"><p>The endpoint representing the other end of the connection.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public readonly IPEndPoint RemoteEndPoint</code></pre>
   </div>
   <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -158,7 +169,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Equals_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Equals(Riptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Equals_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Equals(Riptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L155">View Source</a>
@@ -167,12 +178,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_Equals_Riptide_Experimental_TcpTransport_TcpConnection_" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.Equals(Riptide.Experimental.TcpTransport.TcpConnection)">Equals(TcpConnection)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public bool Equals(TcpConnection other)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -189,7 +200,7 @@
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -198,14 +209,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Equals_System_Object_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Equals(System.Object)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L153">View Source</a>
@@ -214,12 +225,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_Equals_System_Object_" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.Equals(System.Object)">Equals(Object)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override bool Equals(object obj)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -229,14 +240,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Object</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></td>
         <td><span class="parametername">obj</span></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -245,14 +256,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_GetHashCode.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_GetHashCode.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.GetHashCode%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L167">View Source</a>
@@ -261,12 +272,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_GetHashCode" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.GetHashCode">GetHashCode()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override int GetHashCode()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -275,14 +286,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Send_System_Byte___System_Int32_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Send(System.Byte%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_Send_System_Byte___System_Int32_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.Send(System.Byte%5B%5D%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L41">View Source</a>
@@ -292,12 +303,12 @@
   <div class="markdown level1 summary"><p>Sends data.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">protected override void Send(byte[] dataBuffer, int amount)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -307,13 +318,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Byte</span>[]</td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
         <td><span class="parametername">dataBuffer</span></td>
         <td><p>The array containing the data.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.Int32</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
         <td><span class="parametername">amount</span></td>
         <td><p>The number of bytes in the array which should be sent.</p>
 </td>
@@ -324,7 +335,7 @@
   <div><a class="xref" href="Riptide.Connection.html#Riptide_Connection_Send_System_Byte___System_Int32_">Connection.Send(Byte[], Int32)</a></div>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_ToString.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_ToString.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.ToString%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L150">View Source</a>
@@ -333,12 +344,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_ToString" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.ToString">ToString()</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public override string ToString()</code></pre>
   </div>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -347,7 +358,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td></td>
       </tr>
     </tbody>
@@ -356,7 +367,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_op_Equality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.op_Equality(Riptide.Experimental.TcpTransport.TcpConnection%2CRiptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_op_Equality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.op_Equality(Riptide.Experimental.TcpTransport.TcpConnection%2CRiptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L173">View Source</a>
@@ -365,12 +376,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_op_Equality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.op_Equality(Riptide.Experimental.TcpTransport.TcpConnection,Riptide.Experimental.TcpTransport.TcpConnection)">Equality(TcpConnection, TcpConnection)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static bool operator ==(TcpConnection left, TcpConnection right)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -392,7 +403,7 @@
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -401,14 +412,14 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_op_Inequality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.op_Inequality(Riptide.Experimental.TcpTransport.TcpConnection%2CRiptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection_op_Inequality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection.op_Inequality(Riptide.Experimental.TcpTransport.TcpConnection%2CRiptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L189">View Source</a>
@@ -417,12 +428,12 @@
   <h4 id="Riptide_Experimental_TcpTransport_TcpConnection_op_Inequality_Riptide_Experimental_TcpTransport_TcpConnection_Riptide_Experimental_TcpTransport_TcpConnection_" data-uid="Riptide.Experimental.TcpTransport.TcpConnection.op_Inequality(Riptide.Experimental.TcpTransport.TcpConnection,Riptide.Experimental.TcpTransport.TcpConnection)">Inequality(TcpConnection, TcpConnection)</h4>
   <div class="markdown level1 summary"></div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public static bool operator !=(TcpConnection left, TcpConnection right)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -444,7 +455,7 @@
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -453,15 +464,11 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td></td>
       </tr>
     </tbody>
   </table>
-  <h3 id="implements">Implements</h3>
-  <div>
-      <span class="xref">IEquatable&lt;&gt;</span>
-  </div>
 </article>
           </div>
           
@@ -470,7 +477,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Experimental_TcpTransport_TcpConnection.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpConnection.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L15" class="contribution-link">View Source</a>
@@ -493,8 +500,12 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            
-            <span>Copyright © Tom Weiland.<br>Generated by <strong>DocFX</strong></span>
+            Copyright © Tom Weiland
+            <br>
+            <span>
+              Generated by 
+              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
+            </span>
           </div>
         </div>
       </footer>

@@ -5,22 +5,23 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Interface IClient
-   </title>
+    <title>IClient Interface
+   | Riptide Docs </title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Interface IClient
-   ">
-    <meta name="generator" content="docfx 2.56.7.0">
+    <meta name="title" content="IClient Interface
+   | Riptide Docs ">
+    <meta name="generator" content="docfx 2.59.0.0">
     
-    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="shortcut icon" href="../images/favicon.ico">
+    <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
     
-    
-    
+    <meta property="docfx:rel" content="../">
+    <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
@@ -37,7 +38,7 @@
               </button>
               
               <a class="navbar-brand" href="../index.html">
-                <img id="logo" class="svg" src="../logo.png" alt="">
+                <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
             </div>
             <div class="collapse navbar-collapse" id="navbar">
@@ -49,15 +50,17 @@
             </div>
           </div>
         </nav>
-        
-        <div class="subnav navbar navbar-default">
-          <div class="container hide-when-search" id="breadcrumb">
-            <ul class="breadcrumb">
-              <li></li>
-            </ul>
-          </div>
-        </div>
       </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
       <div role="main" class="container body-content hide-when-search">
         
         <div class="sidenav hide-when-search">
@@ -68,14 +71,28 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
+            
+            <div class="subnav navbar navbar-default">
+              <div class="hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Transports.IClient">
   
   
-  <h1 id="Riptide_Transports_IClient" data-uid="Riptide.Transports.IClient" class="text-break">Interface IClient
+  <h1 id="Riptide_Transports_IClient" data-uid="Riptide.Transports.IClient" class="text-break">IClient Interface
   </h1>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Transports.html">Riptide.Transports</a></h6>
+  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
   <div class="markdown level0 summary"><p>Defines methods, properties, and events which every transport's client must implement.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
+  <!--h5 id="Riptide_Transports_IClient_syntax">Syntax</h5-->
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public interface IClient : IPeer</code></pre>
+  </div>
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
@@ -88,17 +105,11 @@
       <a class="xref" href="Riptide.Transports.IPeer.html#Riptide_Transports_IPeer_Poll">IPeer.Poll()</a>
     </div>
   </div>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Transports.html">Riptide.Transports</a></h6>
-  <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
-  <h5 id="Riptide_Transports_IClient_syntax">Syntax</h5>
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public interface IClient : IPeer</code></pre>
-  </div>
   <h3 id="methods">Methods
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_IClient_Connect_System_String_Riptide_Connection__System_String__.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Connect(System.String%2CRiptide.Connection%40%2CSystem.String%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IClient_Connect_System_String_Riptide_Connection__System_String__.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Connect(System.String%2CRiptide.Connection%40%2CSystem.String%40)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IClient.cs/#L23">View Source</a>
@@ -108,12 +119,12 @@
   <div class="markdown level1 summary"><p>Starts the transport and attempts to connect to the given host address.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">bool Connect(string hostAddress, out Connection connection, out string connectError)</code></pre>
   </div>
   <h5 class="parameters">Parameters</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -123,7 +134,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">hostAddress</span></td>
         <td><p>The host address to connect to.</p>
 </td>
@@ -135,7 +146,7 @@
 </td>
       </tr>
       <tr>
-        <td><span class="xref">System.String</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
         <td><span class="parametername">connectError</span></td>
         <td><p>The error message associated with the issue that occurred, if any.</p>
 </td>
@@ -143,7 +154,7 @@
     </tbody>
   </table>
   <h5 class="returns">Returns</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -152,7 +163,7 @@
     </thead>
     <tbody>
       <tr>
-        <td><span class="xref">System.Boolean</span></td>
+        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.boolean">Boolean</a></td>
         <td><p><span class="xref">true</span> if a connection attempt will be made. <span class="xref">false</span> if an issue occurred (such as <code data-dev-comment-type="paramref" class="paramref">hostAddress</code> being in an invalid format) and a connection attempt will <em>not</em> be made.</p>
 </td>
       </tr>
@@ -160,7 +171,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_IClient_Disconnect.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IClient_Disconnect.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Disconnect%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IClient.cs/#L26">View Source</a>
@@ -170,7 +181,7 @@
   <div class="markdown level1 summary"><p>Closes the connection to the server.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">void Disconnect()</code></pre>
   </div>
@@ -178,7 +189,7 @@
   </h3>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_IClient_Connected.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IClient_Connected.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IClient.cs/#L14">View Source</a>
@@ -187,12 +198,12 @@
   <div class="markdown level1 summary"><p>Invoked when a connection is established at the transport level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">event EventHandler Connected</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -208,7 +219,7 @@
   </table>
   <span class="small pull-right mobile-hide">
     <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_IClient_ConnectionFailed.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.ConnectionFailed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
+    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IClient_ConnectionFailed.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient.ConnectionFailed%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
   </span>
   <span class="small pull-right mobile-hide">
     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IClient.cs/#L16">View Source</a>
@@ -217,12 +228,12 @@
   <div class="markdown level1 summary"><p>Invoked when a connection attempt fails at the transport level.</p>
 </div>
   <div class="markdown level1 conceptual"></div>
-  <h5 class="decalaration">Declaration</h5>
+  <!--h5 class="decalaration">Declaration</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">event EventHandler ConnectionFailed</code></pre>
   </div>
   <h5 class="eventType">Event Type</h5>
-  <table class="table table-bordered table-striped table-condensed">
+  <table class="table table-condensed">
     <thead>
       <tr>
         <th>Type</th>
@@ -244,7 +255,7 @@
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/docs/apiSpec/new?filename=Riptide_Transports_IClient.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IClient.md&amp;value=---%0Auid%3A%20Riptide.Transports.IClient%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IClient.cs/#L11" class="contribution-link">View Source</a>
@@ -267,8 +278,12 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            
-            <span>Copyright © Tom Weiland.<br>Generated by <strong>DocFX</strong></span>
+            Copyright © Tom Weiland
+            <br>
+            <span>
+              Generated by 
+              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
+            </span>
           </div>
         </div>
       </footer>

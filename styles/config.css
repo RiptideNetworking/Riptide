@@ -1,0 +1,25 @@
+:root {
+    --text: #e4e4f1;
+    --text-subtle: #bcbcdc;
+    --secondary-background: #162127;
+    --main-background: #1d2c34;
+    --main-background-active: #344d5b;
+    --border: #344d5b;
+    --nth-table-row: #253741;
+    --table-border: #344d5b;
+    --link: #2bbade;
+    --link-hover: #1c93b0;
+    
+    --code-text: #dad2da;
+    --code-class: #01cfff;
+    --code-symbol: #569cd6;
+    --code-keyword: #569cd6;
+    --code-string: #d69d85;
+
+    --search-mark: #acf39d;
+    --search-href: #bcbcdc;
+
+    --pagination-background: var(--main-background);
+    --pagination-background-active: var(--main-background-active);
+    --pagination-border: var(--border);
+}
