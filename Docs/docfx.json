@@ -67,6 +67,7 @@
     "fileMetadataFiles": [],
     "template": [
       "default",
+      "plugins/memberpage.2.59.0/content",
       "templates/riptide"
     ],
     "xrefService": [
