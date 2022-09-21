@@ -4,22 +4,17 @@
 {{#children}}
 <h3 id="{{id}}">{{>partials/classSubtitle}}</h3>
 <table class="table table-condensed">
-  <thead>
-    <tr>
-      <th>{{__global.name}}</th>
-      <th>{{__global.description}}</th>
-    </tr>
-  <thead>
   <tbody>
   {{#children}}
     <tr>
-      <td id="{{id}}">{{name.0.value}}</td>
+      <td id="{{id}}"><code>{{name.0.value}}</code></td>
       <td>{{{summary}}}</td>
     </tr>
   {{/children}}
   </tbody>
 </table>
 {{/children}}
+
 {{#seealso.0}}
 <h5 id="{{id}}_seealso">{{__global.seealso}}</h5>
 <div class="seealso">
@@ -35,6 +30,7 @@
 {{#seealso.0}}
 </div>
 {{/seealso.0}}
+
 {{#extensionMethods.0}}
 <h3 id="extensionmethods">{{__global.extensionMethods}}</h3>
 {{/extensionMethods.0}}

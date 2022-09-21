@@ -70,11 +70,39 @@ body {
     color: var(--text-subtle);
 }
 
-.nav .level2 {
+.toc .nav > li > .expand-stub::before,
+.toc .nav > li.active > .expand-stub::before
+{
+    content: " " !important;
+    background-repeat: no-repeat;
+    background: url(../images/down-arrow.svg);
+    position: absolute;
+    transition: transform .15s ease-in-out;
+    transform: rotate(-90deg);
+    width: 0.55em;
+    height: 0.55em;
+    top: 6px;
+    left: 4px;
+    margin: 2px 0;
+}
+
+.toc .nav > li.in > .expand-stub::before,
+.toc .nav > li.filtered > .expand-stub::before {
+    transform: none;
+}
+
+.toc .nav > li.tree-leaf > a:hover,
+.toc .nav > li.tree-leaf > a:focus {
+    text-decoration: underline;
+}
+
+.nav .level2,
+.nav .level3,
+.nav .level4 {
     margin-left: 1em;
 }
 
-.nav .level2 > li.active {
+.nav .level2 .tree-leaf.active {
     background-color: var(--main-background-active);
 }
 
@@ -87,6 +115,10 @@ body {
     background-color: var(--main-background);
     border: none;
     min-height: auto;
+}
+
+.one-third-width {
+    width: 33%;
 }
 
 .table-striped > tbody > tr:nth-of-type(odd) {

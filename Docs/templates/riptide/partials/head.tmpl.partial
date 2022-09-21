@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="{{_rel}}styles/config.css">
   <link rel="stylesheet" href="{{_rel}}styles/docfx.vendor.css">
   <link rel="stylesheet" href="{{_rel}}styles/docfx.css">
+  <link rel="stylesheet" href="{{_rel}}styles/riptide.css">
   <link rel="stylesheet" href="{{_rel}}styles/main.css">
   <meta property="docfx:navrel" content="{{_navRel}}">
   <meta property="docfx:tocrel" content="{{_tocRel}}">
