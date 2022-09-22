@@ -61,7 +61,10 @@
           "repo": "https://github.com/RiptideNetworking/Riptide",
           "branch": "main",
           "apiSpecFolder": "Docs/apidoc"
-        }
+        },
+        "_logoAltText": "Riptide Logo",
+        "_baseUrl": "https://riptidenetworking.github.io/Riptide/",
+        "_description": "Documentation for Riptide Networking."
     },
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
