@@ -41,7 +41,7 @@ $(function () {
   // window.addEventListener('content-update', contentUpdate);
 
   function breakText() {
-    $(".xref").addClass("text-break");
+    $(".xref").not(".parameter-table > tr > td > a").addClass("text-break");
     var texts = $(".text-break");
     texts.each(function () {
       $(this).breakWord();
@@ -587,12 +587,32 @@ $(function () {
         name: e.innerHTML
       });
     })
-    $('#toc a.active').each(function (i, e) {
-      breadcrumb.push({
-        href: e.href,
-        name: e.innerHTML
-      });
-    })
+    // Structures breadcrumbs properly for API docs, but may not be correct for articles
+    var activeFoldouts = $('#toc a.active').toArray();
+    if (activeFoldouts[0]) {
+      var activeLeaf = $('#toc .tree-leaf.active > a')[0];
+      if (activeLeaf && activeFoldouts[0].textContent !== activeLeaf.title) {
+        // Only want to show namespace in breadcrumb if NOT looking at the namespace's page
+        var namespaceLeaf = $('#toc > .level1 > li.active .tree-leaf > a')[0];
+        if (namespaceLeaf) {
+          breadcrumb.push({
+            href: namespaceLeaf.href,
+            name: namespaceLeaf.innerHTML
+          });
+          
+          if (activeFoldouts[1] && activeFoldouts[1].textContent !== activeLeaf.title) {
+            // Only want to show class in breadcrumb if NOT looking at the class's page
+            var classLeaf = $('#toc > .level1 > li.active > .level2 > li.active .tree-leaf > a')[0];
+            if (classLeaf) {
+              breadcrumb.push({
+                href: classLeaf.href,
+                name: classLeaf.innerHTML
+              });
+            }
+          }
+        }
+      }
+    }
 
     var html = util.formList(breadcrumb, 'breadcrumb');
     $('#breadcrumb').html(html);

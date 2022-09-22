@@ -6,16 +6,25 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Riptide.Transports Namespace
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Riptide.Transports Namespace
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="Riptide.Transports Namespace
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="Riptide.Transports.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -86,33 +95,73 @@
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
+  <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="Riptide.Transports.ConnectedEventArgs.html">ConnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a server's transport successfully establishes a connection to a client.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a></h4>
-      <section><p>Contains event data for when a server's or client's transport receives data.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a server's or client's transport initiates or detects a disconnection.</p>
-</section>
-    <h3 id="interfaces">Interfaces
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Transports_ConnectedEventArgs" data-uid="Riptide.Transports.ConnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.ConnectedEventArgs.html">ConnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a server's transport successfully establishes a connection to a client.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_DataReceivedEventArgs" data-uid="Riptide.Transports.DataReceivedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a server's or client's transport receives data.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_DisconnectedEventArgs" data-uid="Riptide.Transports.DisconnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a server's or client's transport initiates or detects a disconnection.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="interfaces">Interfaces
   </h3>
-      <h4><a class="xref" href="Riptide.Transports.IClient.html">IClient</a></h4>
-      <section><p>Defines methods, properties, and events which every transport's client must implement.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Transports.IPeer.html">IPeer</a></h4>
-      <section><p>Defines methods, properties, and events which every transport's server <em>and</em> client must implement.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Transports.IServer.html">IServer</a></h4>
-      <section><p>Defines methods, properties, and events which every transport's server must implement.</p>
-</section>
-    <h3 id="enums">Enums
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Transports_IClient" data-uid="Riptide.Transports.IClient" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IClient.html">IClient</a>
+        </td>
+        <td class="markdown level1 summary"><p>Defines methods, properties, and events which every transport's client must implement.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_IPeer" data-uid="Riptide.Transports.IPeer" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IPeer.html">IPeer</a>
+        </td>
+        <td class="markdown level1 summary"><p>Defines methods, properties, and events which every transport's server <em>and</em> client must implement.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_IServer" data-uid="Riptide.Transports.IServer" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.html">IServer</a>
+        </td>
+        <td class="markdown level1 summary"><p>Defines methods, properties, and events which every transport's server must implement.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="enums">Enums
   </h3>
-      <h4><a class="xref" href="Riptide.Transports.MessageHeader.html">MessageHeader</a></h4>
-      <section><p>The header type of a <a class="xref" href="Riptide.Message.html">Message</a>.</p>
-</section>
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Transports_MessageHeader" data-uid="Riptide.Transports.MessageHeader" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.MessageHeader.html">MessageHeader</a>
+        </td>
+        <td class="markdown level1 summary"><p>The header type of a <a class="xref" href="Riptide.Message.html">Message</a>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -152,5 +201,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

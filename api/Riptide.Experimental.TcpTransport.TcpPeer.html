@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>TcpPeer Class
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="TcpPeer Class
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="TcpPeer Class
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.Experimental.TcpTransport.TcpPeer.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;Provides base send &amp;amp; receive functionality for &lt;xref href=&quot;Riptide.Experimental.TcpTransport.TcpServer&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt; and &lt;xref href=&quot;Riptide.Experimental.TcpTransport.TcpClient&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.Experimental.TcpTransport.TcpPeer.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,259 +99,107 @@
   <div class="markdown level0 summary"><p>Provides base send &amp; receive functionality for <a class="xref" href="Riptide.Experimental.TcpTransport.TcpServer.html">TcpServer</a> and <a class="xref" href="Riptide.Experimental.TcpTransport.TcpClient.html">TcpClient</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_Experimental_TcpTransport_TcpPeer_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public abstract class TcpPeer : object</code></pre>
   </div>
+
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">TcpPeer</span></div>
       <div class="level2"><a class="xref" href="Riptide.Experimental.TcpTransport.TcpClient.html">TcpClient</a></div>
       <div class="level2"><a class="xref" href="Riptide.Experimental.TcpTransport.TcpServer.html">TcpServer</a></div>
   </div>
+  
+  
+  
+  
+  
+  
+  
   <h3 id="constructors">Constructors
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer__ctor_System_Int32_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.%23ctor(System.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L34">View Source</a>
-  </span>
-  <a id="Riptide_Experimental_TcpTransport_TcpPeer__ctor_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.#ctor*"></a>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer__ctor_System_Int32_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.#ctor(System.Int32)">TcpPeer(Int32)</h4>
-  <div class="markdown level1 summary"><p>Initializes the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected TcpPeer(int socketBufferSize = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">socketBufferSize</span></td>
-        <td><p>How big the socket's send and receive buffers should be.</p>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer__ctor_System_Int32_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.#ctor(System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.-ctor.html#Riptide_Experimental_TcpTransport_TcpPeer__ctor_System_Int32_">TcpPeer(Int32)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes the transport.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="fields">Fields
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_DefaultSocketBufferSize.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L24">View Source</a>
-  </span>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_DefaultSocketBufferSize" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize">DefaultSocketBufferSize</h4>
-  <div class="markdown level1 summary"><p>The default size used for the socket's send and receive buffers.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected const int DefaultSocketBufferSize = null</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_DefaultSocketBufferSize" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize.html">DefaultSocketBufferSize</a>
+        </td>
+        <td class="markdown level1 summary"><p>The default size used for the socket's send and receive buffers.</p>
+</td>
       </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_socket.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.socket%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L28">View Source</a>
-  </span>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_socket" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.socket">socket</h4>
-  <div class="markdown level1 summary"><p>The main socket, either used for listening for connections or for sending and receiving data.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected Socket socket</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-condensed">
-    <thead>
       <tr>
-        <th>Type</th>
-        <th>Description</th>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_socket" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.socket" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.socket.html">socket</a>
+        </td>
+        <td class="markdown level1 summary"><p>The main socket, either used for listening for connections or for sending and receiving data.</p>
+</td>
       </tr>
-    </thead>
-    <tbody>
       <tr>
-        <td><span class="xref">Socket</span></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_socketBufferSize.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L26">View Source</a>
-  </span>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_socketBufferSize" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize">socketBufferSize</h4>
-  <div class="markdown level1 summary"><p>The size to use for the socket's send and receive buffers.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected readonly int socketBufferSize</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td></td>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_socketBufferSize" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize.html">socketBufferSize</a>
+        </td>
+        <td class="markdown level1 summary"><p>The size to use for the socket's send and receive buffers.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_OnDataReceived_System_Int32_Riptide_Experimental_TcpTransport_TcpConnection_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived(System.Int32%2CRiptide.Experimental.TcpTransport.TcpConnection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L48">View Source</a>
-  </span>
-  <a id="Riptide_Experimental_TcpTransport_TcpPeer_OnDataReceived_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived*"></a>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_OnDataReceived_System_Int32_Riptide_Experimental_TcpTransport_TcpConnection_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived(System.Int32,Riptide.Experimental.TcpTransport.TcpConnection)">OnDataReceived(Int32, TcpConnection)</h4>
-  <div class="markdown level1 summary"><p>Handles received data.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected abstract void OnDataReceived(int amount, TcpConnection fromConnection)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">amount</span></td>
-        <td><p>The number of bytes that were received.</p>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_OnDataReceived_System_Int32_Riptide_Experimental_TcpTransport_TcpConnection_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived(System.Int32,Riptide.Experimental.TcpTransport.TcpConnection)" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived.html#Riptide_Experimental_TcpTransport_TcpPeer_OnDataReceived_System_Int32_Riptide_Experimental_TcpTransport_TcpConnection_">OnDataReceived(Int32, TcpConnection)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Handles received data.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="Riptide.Experimental.TcpTransport.TcpConnection.html">TcpConnection</a></td>
-        <td><span class="parametername">fromConnection</span></td>
-        <td><p>The connection from which the data was received.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected(Riptide.Connection%2CRiptide.DisconnectReason)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L53">View Source</a>
-  </span>
-  <a id="Riptide_Experimental_TcpTransport_TcpPeer_OnDisconnected_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected*"></a>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected(Riptide.Connection,Riptide.DisconnectReason)">OnDisconnected(Connection, DisconnectReason)</h4>
-  <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.html#Riptide_Experimental_TcpTransport_TcpPeer_Disconnected">Disconnected</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnDisconnected(Connection connection, DisconnectReason reason)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Riptide.Connection.html">Connection</a></td>
-        <td><span class="parametername">connection</span></td>
-        <td><p>The closed connection.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="Riptide.DisconnectReason.html">DisconnectReason</a></td>
-        <td><span class="parametername">reason</span></td>
-        <td><p>The reason for the disconnection.</p>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected(Riptide.Connection,Riptide.DisconnectReason)" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected.html#Riptide_Experimental_TcpTransport_TcpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_">OnDisconnected(Connection, DisconnectReason)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.Disconnected.html">Disconnected</a> event.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="events">Events
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Experimental_TcpTransport_TcpPeer_Disconnected.md&amp;value=---%0Auid%3A%20Riptide.Experimental.TcpTransport.TcpPeer.Disconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpPeer.cs/#L16">View Source</a>
-  </span>
-  <h4 id="Riptide_Experimental_TcpTransport_TcpPeer_Disconnected" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.Disconnected">Disconnected</h4>
-  <div class="markdown level1 summary"><p>Invoked when a disconnection is initiated or detected by the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DisconnectedEventArgs&gt; Disconnected</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a>&gt;</td>
-        <td></td>
+        <td id="Riptide_Experimental_TcpTransport_TcpPeer_Disconnected" data-uid="Riptide.Experimental.TcpTransport.TcpPeer.Disconnected" class="one-third-width">
+          <a class="xref" href="Riptide.Experimental.TcpTransport.TcpPeer.Disconnected.html">Disconnected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when a disconnection is initiated or detected by the transport.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  
+  
 </article>
           </div>
           
@@ -387,5 +245,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

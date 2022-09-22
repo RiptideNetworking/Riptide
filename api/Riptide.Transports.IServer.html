@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>IServer Interface
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="IServer Interface
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="IServer Interface
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.Transports.IServer.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;Defines methods, properties, and events which every transport's server must implement.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.Transports.IServer.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,173 +99,90 @@
   <div class="markdown level0 summary"><p>Defines methods, properties, and events which every transport's server must implement.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_Transports_IServer_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public interface IServer : IPeer</code></pre>
   </div>
+
+  
+  
+  
+  
+  
+  
+  
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Riptide.Transports.IPeer.html#Riptide_Transports_IPeer_DataReceived">IPeer.DataReceived</a>
+      <a class="xref" href="Riptide.Transports.IPeer.DataReceived.html">IPeer.DataReceived</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.IPeer.html#Riptide_Transports_IPeer_Disconnected">IPeer.Disconnected</a>
+      <a class="xref" href="Riptide.Transports.IPeer.Disconnected.html">IPeer.Disconnected</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.IPeer.html#Riptide_Transports_IPeer_Poll">IPeer.Poll()</a>
+      <a class="xref" href="Riptide.Transports.IPeer.Poll.html#Riptide_Transports_IPeer_Poll">IPeer.Poll()</a>
     </div>
   </div>
   <h3 id="properties">Properties
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IServer_Port.md&amp;value=---%0Auid%3A%20Riptide.Transports.IServer.Port%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IServer.cs/#L17">View Source</a>
-  </span>
-  <a id="Riptide_Transports_IServer_Port_" data-uid="Riptide.Transports.IServer.Port*"></a>
-  <h4 id="Riptide_Transports_IServer_Port" data-uid="Riptide.Transports.IServer.Port">Port</h4>
-  <div class="markdown level1 summary"><p>The local port that the server is running on.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">ushort Port { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td></td>
+        <td id="Riptide_Transports_IServer_Port" data-uid="Riptide.Transports.IServer.Port" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.Port.html#Riptide_Transports_IServer_Port">Port</a>
+        </td>
+        <td class="markdown level1 summary"><p>The local port that the server is running on.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IServer_Close_Riptide_Connection_.md&amp;value=---%0Auid%3A%20Riptide.Transports.IServer.Close(Riptide.Connection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IServer.cs/#L25">View Source</a>
-  </span>
-  <a id="Riptide_Transports_IServer_Close_" data-uid="Riptide.Transports.IServer.Close*"></a>
-  <h4 id="Riptide_Transports_IServer_Close_Riptide_Connection_" data-uid="Riptide.Transports.IServer.Close(Riptide.Connection)">Close(Connection)</h4>
-  <div class="markdown level1 summary"><p>Closes an active connection.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Close(Connection connection)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Riptide.Connection.html">Connection</a></td>
-        <td><span class="parametername">connection</span></td>
-        <td><p>The connection to close.</p>
+        <td id="Riptide_Transports_IServer_Close_Riptide_Connection_" data-uid="Riptide.Transports.IServer.Close(Riptide.Connection)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.Close.html#Riptide_Transports_IServer_Close_Riptide_Connection_">Close(Connection)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Closes an active connection.</p>
 </td>
       </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IServer_Shutdown.md&amp;value=---%0Auid%3A%20Riptide.Transports.IServer.Shutdown%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IServer.cs/#L28">View Source</a>
-  </span>
-  <a id="Riptide_Transports_IServer_Shutdown_" data-uid="Riptide.Transports.IServer.Shutdown*"></a>
-  <h4 id="Riptide_Transports_IServer_Shutdown" data-uid="Riptide.Transports.IServer.Shutdown">Shutdown()</h4>
-  <div class="markdown level1 summary"><p>Closes all existing connections and stops listening for new connections.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Shutdown()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IServer_Start_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Transports.IServer.Start(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IServer.cs/#L21">View Source</a>
-  </span>
-  <a id="Riptide_Transports_IServer_Start_" data-uid="Riptide.Transports.IServer.Start*"></a>
-  <h4 id="Riptide_Transports_IServer_Start_System_UInt16_" data-uid="Riptide.Transports.IServer.Start(System.UInt16)">Start(UInt16)</h4>
-  <div class="markdown level1 summary"><p>Starts the transport and begins listening for incoming connections.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Start(ushort port)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-condensed">
-    <thead>
       <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
+        <td id="Riptide_Transports_IServer_Shutdown" data-uid="Riptide.Transports.IServer.Shutdown" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.Shutdown.html#Riptide_Transports_IServer_Shutdown">Shutdown()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Closes all existing connections and stops listening for new connections.</p>
+</td>
       </tr>
-    </thead>
-    <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td><span class="parametername">port</span></td>
-        <td><p>The local port on which to listen for connections.</p>
+        <td id="Riptide_Transports_IServer_Start_System_UInt16_" data-uid="Riptide.Transports.IServer.Start(System.UInt16)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.Start.html#Riptide_Transports_IServer_Start_System_UInt16_">Start(UInt16)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starts the transport and begins listening for incoming connections.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="events">Events
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IServer_Connected.md&amp;value=---%0Auid%3A%20Riptide.Transports.IServer.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IServer.cs/#L14">View Source</a>
-  </span>
-  <h4 id="Riptide_Transports_IServer_Connected" data-uid="Riptide.Transports.IServer.Connected">Connected</h4>
-  <div class="markdown level1 summary"><p>Invoked when a connection is established at the transport level.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;ConnectedEventArgs&gt; Connected</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.ConnectedEventArgs.html">ConnectedEventArgs</a>&gt;</td>
-        <td></td>
+        <td id="Riptide_Transports_IServer_Connected" data-uid="Riptide.Transports.IServer.Connected" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IServer.Connected.html">Connected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when a connection is established at the transport level.</p>
+</td>
       </tr>
     </tbody>
   </table>
+  
+  
 </article>
           </div>
           
@@ -301,5 +228,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

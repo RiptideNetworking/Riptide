@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>UdpServer Class
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="UdpServer Class
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="UdpServer Class
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.Transports.Udp.UdpServer.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;A server which can accept connections from &lt;xref href=&quot;Riptide.Transports.Udp.UdpClient&quot; data-throw-if-not-resolved=&quot;false&quot;&gt;&lt;/xref&gt;s.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.Transports.Udp.UdpServer.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,350 +99,149 @@
   <div class="markdown level0 summary"><p>A server which can accept connections from <a class="xref" href="Riptide.Transports.Udp.UdpClient.html">UdpClient</a>s.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_Transports_Udp_UdpServer_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class UdpServer : UdpPeer, IServer, IPeer</code></pre>
   </div>
+
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><a class="xref" href="Riptide.Transports.Udp.UdpPeer.html">UdpPeer</a></div>
     <div class="level2"><span class="xref">UdpServer</span></div>
   </div>
+  
   <div class="implements">
     <h5>Implements</h5>
     <div><a class="xref" href="Riptide.Transports.IServer.html">IServer</a></div>
     <div><a class="xref" href="Riptide.Transports.IPeer.html">IPeer</a></div>
   </div>
+  
+  
+  
+  
+  
+  
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_Disconnected">UdpPeer.Disconnected</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.Disconnected.html">UdpPeer.Disconnected</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_DefaultSocketBufferSize">UdpPeer.DefaultSocketBufferSize</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html">UdpPeer.DefaultSocketBufferSize</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_mode">UdpPeer.mode</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.mode.html">UdpPeer.mode</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_Poll">UdpPeer.Poll()</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.Poll.html#Riptide_Transports_Udp_UdpPeer_Poll">UdpPeer.Poll()</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OpenSocket_System_UInt16_">UdpPeer.OpenSocket(UInt16)</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.OpenSocket.html#Riptide_Transports_Udp_UdpPeer_OpenSocket_System_UInt16_">UdpPeer.OpenSocket(UInt16)</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_CloseSocket">UdpPeer.CloseSocket()</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.CloseSocket.html#Riptide_Transports_Udp_UdpPeer_CloseSocket">UdpPeer.CloseSocket()</a>
     </div>
     <div>
-      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_">UdpPeer.OnDisconnected(Connection, DisconnectReason)</a>
+      <a class="xref" href="Riptide.Transports.Udp.UdpPeer.OnDisconnected.html#Riptide_Transports_Udp_UdpPeer_OnDisconnected_Riptide_Connection_Riptide_DisconnectReason_">UdpPeer.OnDisconnected(Connection, DisconnectReason)</a>
     </div>
   </div>
   <h3 id="constructors">Constructors
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer__ctor_Riptide_Transports_Udp_SocketMode_System_Int32_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.%23ctor(Riptide.Transports.Udp.SocketMode%2CSystem.Int32)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L27">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer__ctor_" data-uid="Riptide.Transports.Udp.UdpServer.#ctor*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer__ctor_Riptide_Transports_Udp_SocketMode_System_Int32_" data-uid="Riptide.Transports.Udp.UdpServer.#ctor(Riptide.Transports.Udp.SocketMode,System.Int32)">UdpServer(SocketMode, Int32)</h4>
-  <div class="markdown level1 summary"><p>Initializes the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public UdpServer(SocketMode mode = SocketMode.Both, int socketBufferSize = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Riptide.Transports.Udp.SocketMode.html">SocketMode</a></td>
-        <td><span class="parametername">mode</span></td>
-        <td><p>Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">socketBufferSize</span></td>
-        <td><p>How big the socket's send and receive buffers should be.</p>
+        <td id="Riptide_Transports_Udp_UdpServer__ctor_Riptide_Transports_Udp_SocketMode_System_Int32_" data-uid="Riptide.Transports.Udp.UdpServer.#ctor(Riptide.Transports.Udp.SocketMode,System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.-ctor.html#Riptide_Transports_Udp_UdpServer__ctor_Riptide_Transports_Udp_SocketMode_System_Int32_">UdpServer(SocketMode, Int32)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes the transport.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="properties">Properties
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_Port.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.Port%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L21">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_Port_" data-uid="Riptide.Transports.Udp.UdpServer.Port*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_Port" data-uid="Riptide.Transports.Udp.UdpServer.Port">Port</h4>
-  <div class="markdown level1 summary"><p>The local port that the server is running on.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ushort Port { get; }</code></pre>
-  </div>
-  <h5 class="propertyValue">Property Value</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td></td>
+        <td id="Riptide_Transports_Udp_UdpServer_Port" data-uid="Riptide.Transports.Udp.UdpServer.Port" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.Port.html#Riptide_Transports_Udp_UdpServer_Port">Port</a>
+        </td>
+        <td class="markdown level1 summary"><p>The local port that the server is running on.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_Close_Riptide_Connection_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.Close(Riptide.Connection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L52">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_Close_" data-uid="Riptide.Transports.Udp.UdpServer.Close*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_Close_Riptide_Connection_" data-uid="Riptide.Transports.Udp.UdpServer.Close(Riptide.Connection)">Close(Connection)</h4>
-  <div class="markdown level1 summary"><p>Closes an active connection.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Close(Connection connection)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="Riptide.Connection.html">Connection</a></td>
-        <td><span class="parametername">connection</span></td>
-        <td><p>The connection to close.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_OnConnected_Riptide_Connection_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.OnConnected(Riptide.Connection)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L67">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_OnConnected_" data-uid="Riptide.Transports.Udp.UdpServer.OnConnected*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_OnConnected_Riptide_Connection_" data-uid="Riptide.Transports.Udp.UdpServer.OnConnected(Riptide.Connection)">OnConnected(Connection)</h4>
-  <div class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Transports.Udp.UdpServer.html#Riptide_Transports_Udp_UdpServer_Connected">Connected</a> event.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected virtual void OnConnected(Connection connection)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="Riptide.Connection.html">Connection</a></td>
-        <td><span class="parametername">connection</span></td>
-        <td><p>The successfully established connection.</p>
-</td>
-      </tr>
-    </tbody>
-  </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte%5B%5D%2CSystem.Int32%2CIPEndPoint)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L73">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_OnDataReceived_" data-uid="Riptide.Transports.Udp.UdpServer.OnDataReceived*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)">OnDataReceived(Byte[], Int32, IPEndPoint)</h4>
-  <div class="markdown level1 summary"><p>Handles received data.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a>[]</td>
-        <td><span class="parametername">dataBuffer</span></td>
-        <td><p>A byte array containing the received data.</p>
+        <td id="Riptide_Transports_Udp_UdpServer_Close_Riptide_Connection_" data-uid="Riptide.Transports.Udp.UdpServer.Close(Riptide.Connection)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.Close.html#Riptide_Transports_Udp_UdpServer_Close_Riptide_Connection_">Close(Connection)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Closes an active connection.</p>
 </td>
       </tr>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.int32">Int32</a></td>
-        <td><span class="parametername">amount</span></td>
-        <td><p>The number of bytes in <code data-dev-comment-type="paramref" class="paramref">dataBuffer</code> used by the received data.</p>
+        <td id="Riptide_Transports_Udp_UdpServer_OnConnected_Riptide_Connection_" data-uid="Riptide.Transports.Udp.UdpServer.OnConnected(Riptide.Connection)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.OnConnected.html#Riptide_Transports_Udp_UdpServer_OnConnected_Riptide_Connection_">OnConnected(Connection)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invokes the <a class="xref" href="Riptide.Transports.Udp.UdpServer.Connected.html">Connected</a> event.</p>
 </td>
       </tr>
       <tr>
-        <td><span class="xref">IPEndPoint</span></td>
-        <td><span class="parametername">fromEndPoint</span></td>
-        <td><p>The endpoint from which the data was received.</p>
+        <td id="Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_" data-uid="Riptide.Transports.Udp.UdpServer.OnDataReceived(System.Byte[],System.Int32,IPEndPoint)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.OnDataReceived.html#Riptide_Transports_Udp_UdpServer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_">OnDataReceived(Byte[], Int32, IPEndPoint)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Handles received data.</p>
 </td>
       </tr>
-    </tbody>
-  </table>
-  <h5 class="overrides">Overrides</h5>
-  <div><a class="xref" href="Riptide.Transports.Udp.UdpPeer.html#Riptide_Transports_Udp_UdpPeer_OnDataReceived_System_Byte___System_Int32_IPEndPoint_">UdpPeer.OnDataReceived(Byte[], Int32, IPEndPoint)</a></div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_Shutdown.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.Shutdown%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L59">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_Shutdown_" data-uid="Riptide.Transports.Udp.UdpServer.Shutdown*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_Shutdown" data-uid="Riptide.Transports.Udp.UdpServer.Shutdown">Shutdown()</h4>
-  <div class="markdown level1 summary"><p>Closes all existing connections and stops listening for new connections.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Shutdown()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_Start_System_UInt16_.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.Start(System.UInt16)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L30">View Source</a>
-  </span>
-  <a id="Riptide_Transports_Udp_UdpServer_Start_" data-uid="Riptide.Transports.Udp.UdpServer.Start*"></a>
-  <h4 id="Riptide_Transports_Udp_UdpServer_Start_System_UInt16_" data-uid="Riptide.Transports.Udp.UdpServer.Start(System.UInt16)">Start(UInt16)</h4>
-  <div class="markdown level1 summary"><p>Starts the transport and begins listening for incoming connections.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Start(ushort port)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
-  <table class="table table-condensed">
-    <thead>
       <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
+        <td id="Riptide_Transports_Udp_UdpServer_Shutdown" data-uid="Riptide.Transports.Udp.UdpServer.Shutdown" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.Shutdown.html#Riptide_Transports_Udp_UdpServer_Shutdown">Shutdown()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Closes all existing connections and stops listening for new connections.</p>
+</td>
       </tr>
-    </thead>
-    <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td><span class="parametername">port</span></td>
-        <td><p>The local port on which to listen for connections.</p>
+        <td id="Riptide_Transports_Udp_UdpServer_Start_System_UInt16_" data-uid="Riptide.Transports.Udp.UdpServer.Start(System.UInt16)" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.Start.html#Riptide_Transports_Udp_UdpServer_Start_System_UInt16_">Start(UInt16)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starts the transport and begins listening for incoming connections.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="events">Events
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_Connected.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.Connected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L16">View Source</a>
-  </span>
-  <h4 id="Riptide_Transports_Udp_UdpServer_Connected" data-uid="Riptide.Transports.Udp.UdpServer.Connected">Connected</h4>
-  <div class="markdown level1 summary"><p>Invoked when a connection is established at the transport level.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;ConnectedEventArgs&gt; Connected</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.ConnectedEventArgs.html">ConnectedEventArgs</a>&gt;</td>
-        <td></td>
+        <td id="Riptide_Transports_Udp_UdpServer_Connected" data-uid="Riptide.Transports.Udp.UdpServer.Connected" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.Connected.html">Connected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when a connection is established at the transport level.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_Udp_UdpServer_DataReceived" data-uid="Riptide.Transports.Udp.UdpServer.DataReceived" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.Udp.UdpServer.DataReceived.html">DataReceived</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when data is received by the transport.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Udp_UdpServer_DataReceived.md&amp;value=---%0Auid%3A%20Riptide.Transports.Udp.UdpServer.DataReceived%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/Udp/UdpServer.cs/#L18">View Source</a>
-  </span>
-  <h4 id="Riptide_Transports_Udp_UdpServer_DataReceived" data-uid="Riptide.Transports.Udp.UdpServer.DataReceived">DataReceived</h4>
-  <div class="markdown level1 summary"><p>Invoked when data is received by the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public event EventHandler&lt;DataReceivedEventArgs&gt; DataReceived</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  
+  
 </article>
           </div>
           
@@ -478,5 +287,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

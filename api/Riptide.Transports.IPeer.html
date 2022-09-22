@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>IPeer Interface
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="IPeer Interface
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="IPeer Interface
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.Transports.IPeer.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;Defines methods, properties, and events which every transport's server &lt;em&gt;and&lt;/em&gt; client must implement.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.Transports.IPeer.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,90 +99,56 @@
   <div class="markdown level0 summary"><p>Defines methods, properties, and events which every transport's server <em>and</em> client must implement.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_Transports_IPeer_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public interface IPeer</code></pre>
   </div>
+
+  
+  
+  
+  
+  
+  
+  
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IPeer_Poll.md&amp;value=---%0Auid%3A%20Riptide.Transports.IPeer.Poll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IPeer.cs/#L47">View Source</a>
-  </span>
-  <a id="Riptide_Transports_IPeer_Poll_" data-uid="Riptide.Transports.IPeer.Poll*"></a>
-  <h4 id="Riptide_Transports_IPeer_Poll" data-uid="Riptide.Transports.IPeer.Poll">Poll()</h4>
-  <div class="markdown level1 summary"><p>Initiates handling of any received messages.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">void Poll()</code></pre>
-  </div>
+  
+  
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Transports_IPeer_Poll" data-uid="Riptide.Transports.IPeer.Poll" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IPeer.Poll.html#Riptide_Transports_IPeer_Poll">Poll()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initiates handling of any received messages.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
   <h3 id="events">Events
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IPeer_DataReceived.md&amp;value=---%0Auid%3A%20Riptide.Transports.IPeer.DataReceived%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IPeer.cs/#L42">View Source</a>
-  </span>
-  <h4 id="Riptide_Transports_IPeer_DataReceived" data-uid="Riptide.Transports.IPeer.DataReceived">DataReceived</h4>
-  <div class="markdown level1 summary"><p>Invoked when data is received by the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;DataReceivedEventArgs&gt; DataReceived</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DataReceivedEventArgs.html">DataReceivedEventArgs</a>&gt;</td>
-        <td></td>
+        <td id="Riptide_Transports_IPeer_DataReceived" data-uid="Riptide.Transports.IPeer.DataReceived" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IPeer.DataReceived.html">DataReceived</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when data is received by the transport.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Transports_IPeer_Disconnected" data-uid="Riptide.Transports.IPeer.Disconnected" class="one-third-width">
+          <a class="xref" href="Riptide.Transports.IPeer.Disconnected.html">Disconnected</a>
+        </td>
+        <td class="markdown level1 summary"><p>Invoked when a disconnection is initiated or detected by the transport.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_IPeer_Disconnected.md&amp;value=---%0Auid%3A%20Riptide.Transports.IPeer.Disconnected%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Transports/IPeer.cs/#L44">View Source</a>
-  </span>
-  <h4 id="Riptide_Transports_IPeer_Disconnected" data-uid="Riptide.Transports.IPeer.Disconnected">Disconnected</h4>
-  <div class="markdown level1 summary"><p>Invoked when a disconnection is initiated or detected by the transport.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">event EventHandler&lt;DisconnectedEventArgs&gt; Disconnected</code></pre>
-  </div>
-  <h5 class="eventType">Event Type</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><span class="xref">EventHandler</span>&lt;<a class="xref" href="Riptide.Transports.DisconnectedEventArgs.html">DisconnectedEventArgs</a>&gt;</td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  
+  
 </article>
           </div>
           
@@ -218,5 +194,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

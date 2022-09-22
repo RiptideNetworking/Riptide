@@ -6,16 +6,25 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Riptide Namespace
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="Riptide Namespace
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="Riptide Namespace
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="">
+    <meta property="og:url" content="Riptide.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -86,92 +95,212 @@
   <div class="markdown level0 summary"></div>
   <div class="markdown level0 conceptual"></div>
   <div class="markdown level0 remarks"></div>
-    <h3 id="classes">Classes
+  <h3 id="classes">Classes
   </h3>
-      <h4><a class="xref" href="Riptide.Client.html">Client</a></h4>
-      <section><p>A client that can connect to a <a class="xref" href="Riptide.Server.html">Server</a>.</p>
-</section>
-      <h4><a class="xref" href="Riptide.ClientConnectedEventArgs.html">ClientConnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a non-local client connects to the server.</p>
-</section>
-      <h4><a class="xref" href="Riptide.ClientDisconnectedEventArgs.html">ClientDisconnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a non-local client disconnects from the server.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Connection.html">Connection</a></h4>
-      <section><p>Represents a connection to a <a class="xref" href="Riptide.Server.html">Server</a> or <a class="xref" href="Riptide.Client.html">Client</a>.</p>
-</section>
-      <h4><a class="xref" href="Riptide.ConnectionFailedEventArgs.html">ConnectionFailedEventArgs</a></h4>
-      <section><p>Contains event data for when a connection attempt to a server fails.</p>
-</section>
-      <h4><a class="xref" href="Riptide.DisconnectedEventArgs.html">DisconnectedEventArgs</a></h4>
-      <section><p>Contains event data for when the client disconnects from a server.</p>
-</section>
-      <h4><a class="xref" href="Riptide.DuplicateHandlerException.html">DuplicateHandlerException</a></h4>
-      <section><p>The exception that is thrown when multiple methods with <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a>s are set to handle messages with the same ID <em>and</em> have the same method signature.</p>
-</section>
-      <h4><a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a></h4>
-      <section><p>The exception that is thrown when a <a class="xref" href="Riptide.Message.html">Message</a> does not contain enough unread bytes to add a certain value.</p>
-</section>
-      <h4><a class="xref" href="Riptide.InvalidHandlerSignatureException.html">InvalidHandlerSignatureException</a></h4>
-      <section><p>The exception that is thrown when a method with a <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> does not have an acceptable message handler method signature (either <a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a> or <a class="xref" href="Riptide.Client.MessageHandler.html">Client.MessageHandler</a>).</p>
-</section>
-      <h4><a class="xref" href="Riptide.Message.html">Message</a></h4>
-      <section><p>Provides functionality for converting data to bytes and vice versa.</p>
-</section>
-      <h4><a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a></h4>
-      <section><p>Specifies a method as the message handler for messages with the given ID.</p>
-</section>
-      <h4><a class="xref" href="Riptide.MessageReceivedEventArgs.html">MessageReceivedEventArgs</a></h4>
-      <section><p>Contains event data for when a message is received.</p>
-</section>
-      <h4><a class="xref" href="Riptide.MessageRelayFilter.html">MessageRelayFilter</a></h4>
-      <section><p>Provides functionality for enabling/disabling automatic message relaying by message type.</p>
-</section>
-      <h4><a class="xref" href="Riptide.NonStaticHandlerException.html">NonStaticHandlerException</a></h4>
-      <section><p>The exception that is thrown when a method with a <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> is not marked as <span class="xref">static</span>.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Peer.html">Peer</a></h4>
-      <section><p>Provides base functionality for <a class="xref" href="Riptide.Server.html">Server</a> and <a class="xref" href="Riptide.Client.html">Client</a>.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Server.html">Server</a></h4>
-      <section><p>A server that can accept connections from <a class="xref" href="Riptide.Client.html">Client</a>s.</p>
-</section>
-      <h4><a class="xref" href="Riptide.ServerConnectedEventArgs.html">ServerConnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a client connects to the server.</p>
-</section>
-      <h4><a class="xref" href="Riptide.ServerDisconnectedEventArgs.html">ServerDisconnectedEventArgs</a></h4>
-      <section><p>Contains event data for when a client disconnects from the server.</p>
-</section>
-    <h3 id="interfaces">Interfaces
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Client" data-uid="Riptide.Client" class="one-third-width">
+          <a class="xref" href="Riptide.Client.html">Client</a>
+        </td>
+        <td class="markdown level1 summary"><p>A client that can connect to a <a class="xref" href="Riptide.Server.html">Server</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_ClientConnectedEventArgs" data-uid="Riptide.ClientConnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.ClientConnectedEventArgs.html">ClientConnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a non-local client connects to the server.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_ClientDisconnectedEventArgs" data-uid="Riptide.ClientDisconnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.ClientDisconnectedEventArgs.html">ClientDisconnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a non-local client disconnects from the server.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Connection" data-uid="Riptide.Connection" class="one-third-width">
+          <a class="xref" href="Riptide.Connection.html">Connection</a>
+        </td>
+        <td class="markdown level1 summary"><p>Represents a connection to a <a class="xref" href="Riptide.Server.html">Server</a> or <a class="xref" href="Riptide.Client.html">Client</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_ConnectionFailedEventArgs" data-uid="Riptide.ConnectionFailedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.ConnectionFailedEventArgs.html">ConnectionFailedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a connection attempt to a server fails.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_DisconnectedEventArgs" data-uid="Riptide.DisconnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.DisconnectedEventArgs.html">DisconnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when the client disconnects from a server.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_DuplicateHandlerException" data-uid="Riptide.DuplicateHandlerException" class="one-third-width">
+          <a class="xref" href="Riptide.DuplicateHandlerException.html">DuplicateHandlerException</a>
+        </td>
+        <td class="markdown level1 summary"><p>The exception that is thrown when multiple methods with <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a>s are set to handle messages with the same ID <em>and</em> have the same method signature.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_InsufficientCapacityException" data-uid="Riptide.InsufficientCapacityException" class="one-third-width">
+          <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a>
+        </td>
+        <td class="markdown level1 summary"><p>The exception that is thrown when a <a class="xref" href="Riptide.Message.html">Message</a> does not contain enough unread bytes to add a certain value.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_InvalidHandlerSignatureException" data-uid="Riptide.InvalidHandlerSignatureException" class="one-third-width">
+          <a class="xref" href="Riptide.InvalidHandlerSignatureException.html">InvalidHandlerSignatureException</a>
+        </td>
+        <td class="markdown level1 summary"><p>The exception that is thrown when a method with a <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> does not have an acceptable message handler method signature (either <a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a> or <a class="xref" href="Riptide.Client.MessageHandler.html">Client.MessageHandler</a>).</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Message" data-uid="Riptide.Message" class="one-third-width">
+          <a class="xref" href="Riptide.Message.html">Message</a>
+        </td>
+        <td class="markdown level1 summary"><p>Provides functionality for converting data to bytes and vice versa.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_MessageHandlerAttribute" data-uid="Riptide.MessageHandlerAttribute" class="one-third-width">
+          <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a>
+        </td>
+        <td class="markdown level1 summary"><p>Specifies a method as the message handler for messages with the given ID.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_MessageReceivedEventArgs" data-uid="Riptide.MessageReceivedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.MessageReceivedEventArgs.html">MessageReceivedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a message is received.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_MessageRelayFilter" data-uid="Riptide.MessageRelayFilter" class="one-third-width">
+          <a class="xref" href="Riptide.MessageRelayFilter.html">MessageRelayFilter</a>
+        </td>
+        <td class="markdown level1 summary"><p>Provides functionality for enabling/disabling automatic message relaying by message type.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_NonStaticHandlerException" data-uid="Riptide.NonStaticHandlerException" class="one-third-width">
+          <a class="xref" href="Riptide.NonStaticHandlerException.html">NonStaticHandlerException</a>
+        </td>
+        <td class="markdown level1 summary"><p>The exception that is thrown when a method with a <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> is not marked as <span class="xref">static</span>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Peer" data-uid="Riptide.Peer" class="one-third-width">
+          <a class="xref" href="Riptide.Peer.html">Peer</a>
+        </td>
+        <td class="markdown level1 summary"><p>Provides base functionality for <a class="xref" href="Riptide.Server.html">Server</a> and <a class="xref" href="Riptide.Client.html">Client</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Server" data-uid="Riptide.Server" class="one-third-width">
+          <a class="xref" href="Riptide.Server.html">Server</a>
+        </td>
+        <td class="markdown level1 summary"><p>A server that can accept connections from <a class="xref" href="Riptide.Client.html">Client</a>s.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_ServerConnectedEventArgs" data-uid="Riptide.ServerConnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.ServerConnectedEventArgs.html">ServerConnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a client connects to the server.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_ServerDisconnectedEventArgs" data-uid="Riptide.ServerDisconnectedEventArgs" class="one-third-width">
+          <a class="xref" href="Riptide.ServerDisconnectedEventArgs.html">ServerDisconnectedEventArgs</a>
+        </td>
+        <td class="markdown level1 summary"><p>Contains event data for when a client disconnects from the server.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="interfaces">Interfaces
   </h3>
-      <h4><a class="xref" href="Riptide.IMessageSerializable.html">IMessageSerializable</a></h4>
-      <section><p>Represents a type that can be added to and retrieved from messages using the <a class="xref" href="Riptide.Message.html#Riptide_Message_AddSerializable__1___0_">AddSerializable&lt;T&gt;(T)</a> and <a class="xref" href="Riptide.Message.html#Riptide_Message_GetSerializable__1">GetSerializable&lt;T&gt;()</a> methods.</p>
-</section>
-    <h3 id="enums">Enums
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_IMessageSerializable" data-uid="Riptide.IMessageSerializable" class="one-third-width">
+          <a class="xref" href="Riptide.IMessageSerializable.html">IMessageSerializable</a>
+        </td>
+        <td class="markdown level1 summary"><p>Represents a type that can be added to and retrieved from messages using the <a class="xref" href="Riptide.Message.AddSerializable.html#Riptide_Message_AddSerializable__1___0_">AddSerializable&lt;T&gt;(T)</a> and <a class="xref" href="Riptide.Message.GetSerializable.html#Riptide_Message_GetSerializable__1">GetSerializable&lt;T&gt;()</a> methods.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="enums">Enums
   </h3>
-      <h4><a class="xref" href="Riptide.ConnectionState.html">ConnectionState</a></h4>
-      <section><p>The state of a connection.</p>
-</section>
-      <h4><a class="xref" href="Riptide.DisconnectReason.html">DisconnectReason</a></h4>
-      <section><p>The reason for a disconnection.</p>
-</section>
-      <h4><a class="xref" href="Riptide.MessageSendMode.html">MessageSendMode</a></h4>
-      <section><p>The send mode of a <a class="xref" href="Riptide.Message.html">Message</a>.</p>
-</section>
-      <h4><a class="xref" href="Riptide.RejectReason.html">RejectReason</a></h4>
-      <section><p>The reason the connection attempt was rejected.</p>
-</section>
-    <h3 id="delegates">Delegates
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_ConnectionState" data-uid="Riptide.ConnectionState" class="one-third-width">
+          <a class="xref" href="Riptide.ConnectionState.html">ConnectionState</a>
+        </td>
+        <td class="markdown level1 summary"><p>The state of a connection.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_DisconnectReason" data-uid="Riptide.DisconnectReason" class="one-third-width">
+          <a class="xref" href="Riptide.DisconnectReason.html">DisconnectReason</a>
+        </td>
+        <td class="markdown level1 summary"><p>The reason for a disconnection.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_MessageSendMode" data-uid="Riptide.MessageSendMode" class="one-third-width">
+          <a class="xref" href="Riptide.MessageSendMode.html">MessageSendMode</a>
+        </td>
+        <td class="markdown level1 summary"><p>The send mode of a <a class="xref" href="Riptide.Message.html">Message</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_RejectReason" data-uid="Riptide.RejectReason" class="one-third-width">
+          <a class="xref" href="Riptide.RejectReason.html">RejectReason</a>
+        </td>
+        <td class="markdown level1 summary"><p>The reason the connection attempt was rejected.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+  <h3 id="delegates">Delegates
   </h3>
-      <h4><a class="xref" href="Riptide.Client.MessageHandler.html">Client.MessageHandler</a></h4>
-      <section><p>Encapsulates a method that handles a message from a server.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Server.ConnectionAttemptHandler.html">Server.ConnectionAttemptHandler</a></h4>
-      <section><p>Encapsulates a method that determines whether or not to accept a client's connection attempt.</p>
-</section>
-      <h4><a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a></h4>
-      <section><p>Encapsulates a method that handles a message from a client.</p>
-</section>
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Client_MessageHandler" data-uid="Riptide.Client.MessageHandler" class="one-third-width">
+          <a class="xref" href="Riptide.Client.MessageHandler.html">Client.MessageHandler</a>
+        </td>
+        <td class="markdown level1 summary"><p>Encapsulates a method that handles a message from a server.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Server_ConnectionAttemptHandler" data-uid="Riptide.Server.ConnectionAttemptHandler" class="one-third-width">
+          <a class="xref" href="Riptide.Server.ConnectionAttemptHandler.html">Server.ConnectionAttemptHandler</a>
+        </td>
+        <td class="markdown level1 summary"><p>Encapsulates a method that determines whether or not to accept a client's connection attempt.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Server_MessageHandler" data-uid="Riptide.Server.MessageHandler" class="one-third-width">
+          <a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a>
+        </td>
+        <td class="markdown level1 summary"><p>Encapsulates a method that handles a message from a client.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
 </article>
           </div>
           
@@ -211,5 +340,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

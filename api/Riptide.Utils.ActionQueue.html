@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>ActionQueue Class
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="ActionQueue Class
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="ActionQueue Class
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.Utils.ActionQueue.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;Provides functionality for queueing methods for later execution from a chosen thread.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.Utils.ActionQueue.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,154 +99,83 @@
   <div class="markdown level0 summary"><p>Provides functionality for queueing methods for later execution from a chosen thread.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_Utils_ActionQueue_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public class ActionQueue : object</code></pre>
   </div>
+
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">ActionQueue</span></div>
   </div>
+  
+  
+  
+  
+  
+  
+  
   <h3 id="constructors">Constructors
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_ActionQueue__ctor_System_String_.md&amp;value=---%0Auid%3A%20Riptide.Utils.ActionQueue.%23ctor(System.String)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Utils/ActionQueue.cs/#L22">View Source</a>
-  </span>
-  <a id="Riptide_Utils_ActionQueue__ctor_" data-uid="Riptide.Utils.ActionQueue.#ctor*"></a>
-  <h4 id="Riptide_Utils_ActionQueue__ctor_System_String_" data-uid="Riptide.Utils.ActionQueue.#ctor(System.String)">ActionQueue(String)</h4>
-  <div class="markdown level1 summary"><p>Handles initial setup.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public ActionQueue(string logName = &quot;ACTION QUEUE&quot;)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td><span class="parametername">logName</span></td>
-        <td><p>The name to use when logging messages via <a class="xref" href="Riptide.Utils.RiptideLogger.html">RiptideLogger</a>.</p>
+        <td id="Riptide_Utils_ActionQueue__ctor_System_String_" data-uid="Riptide.Utils.ActionQueue.#ctor(System.String)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.ActionQueue.-ctor.html#Riptide_Utils_ActionQueue__ctor_System_String_">ActionQueue(String)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Handles initial setup.</p>
 </td>
       </tr>
     </tbody>
   </table>
   <h3 id="fields">Fields
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_ActionQueue_LogName.md&amp;value=---%0Auid%3A%20Riptide.Utils.ActionQueue.LogName%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Utils/ActionQueue.cs/#L15">View Source</a>
-  </span>
-  <h4 id="Riptide_Utils_ActionQueue_LogName" data-uid="Riptide.Utils.ActionQueue.LogName">LogName</h4>
-  <div class="markdown level1 summary"><p>The name to use when logging messages via <a class="xref" href="Riptide.Utils.RiptideLogger.html">RiptideLogger</a>.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly string LogName</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.string">String</a></td>
-        <td></td>
+        <td id="Riptide_Utils_ActionQueue_LogName" data-uid="Riptide.Utils.ActionQueue.LogName" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.ActionQueue.LogName.html">LogName</a>
+        </td>
+        <td class="markdown level1 summary"><p>The name to use when logging messages via <a class="xref" href="Riptide.Utils.RiptideLogger.html">RiptideLogger</a>.</p>
+</td>
       </tr>
     </tbody>
   </table>
   <h3 id="methods">Methods
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_ActionQueue_Add_Action_.md&amp;value=---%0Auid%3A%20Riptide.Utils.ActionQueue.Add(Action)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Utils/ActionQueue.cs/#L26">View Source</a>
-  </span>
-  <a id="Riptide_Utils_ActionQueue_Add_" data-uid="Riptide.Utils.ActionQueue.Add*"></a>
-  <h4 id="Riptide_Utils_ActionQueue_Add_Action_" data-uid="Riptide.Utils.ActionQueue.Add(Action)">Add(Action)</h4>
-  <div class="markdown level1 summary"><p>Adds an action to the queue.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Add(Action action)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><span class="xref">Action</span></td>
-        <td><span class="parametername">action</span></td>
-        <td><p>The action to be added to the queue.</p>
+        <td id="Riptide_Utils_ActionQueue_Add_Action_" data-uid="Riptide.Utils.ActionQueue.Add(Action)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.ActionQueue.Add.html#Riptide_Utils_ActionQueue_Add_Action_">Add(Action)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Adds an action to the queue.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_ActionQueue_Clear" data-uid="Riptide.Utils.ActionQueue.Clear" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.ActionQueue.Clear.html#Riptide_Utils_ActionQueue_Clear">Clear()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Clears all actions in the queue without executing them.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_ActionQueue_ExecuteAll" data-uid="Riptide.Utils.ActionQueue.ExecuteAll" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.ActionQueue.ExecuteAll.html#Riptide_Utils_ActionQueue_ExecuteAll">ExecuteAll()</a>
+        </td>
+        <td class="markdown level1 summary"><p>Executes all actions in the queue on the calling thread.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_ActionQueue_Clear.md&amp;value=---%0Auid%3A%20Riptide.Utils.ActionQueue.Clear%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Utils/ActionQueue.cs/#L62">View Source</a>
-  </span>
-  <a id="Riptide_Utils_ActionQueue_Clear_" data-uid="Riptide.Utils.ActionQueue.Clear*"></a>
-  <h4 id="Riptide_Utils_ActionQueue_Clear" data-uid="Riptide.Utils.ActionQueue.Clear">Clear()</h4>
-  <div class="markdown level1 summary"><p>Clears all actions in the queue without executing them.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void Clear()</code></pre>
-  </div>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_ActionQueue_ExecuteAll.md&amp;value=---%0Auid%3A%20Riptide.Utils.ActionQueue.ExecuteAll%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Utils/ActionQueue.cs/#L43">View Source</a>
-  </span>
-  <a id="Riptide_Utils_ActionQueue_ExecuteAll_" data-uid="Riptide.Utils.ActionQueue.ExecuteAll*"></a>
-  <h4 id="Riptide_Utils_ActionQueue_ExecuteAll" data-uid="Riptide.Utils.ActionQueue.ExecuteAll">ExecuteAll()</h4>
-  <div class="markdown level1 summary"><p>Executes all actions in the queue on the calling thread.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public void ExecuteAll()</code></pre>
-  </div>
-  <h5 id="Riptide_Utils_ActionQueue_ExecuteAll_remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p>This method should only be called from a single thread in the application.</p>
-</div>
+  
+  
 </article>
           </div>
           
@@ -282,5 +221,6 @@
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>

@@ -154,7 +154,7 @@ h3,
 .h3 {
   margin-top: 15px;
   margin-bottom: 10px;
-  font-weight: 400;
+  font-weight: 600;
 }
 h4,
 .h4,
@@ -220,7 +220,7 @@ header .navbar {
 
 .inheritance h5, .inheritedMembers h5{
   padding-bottom: 5px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid var(--border);
 }
 
 article h1, article h2, article h3, article h4{
@@ -230,7 +230,7 @@ article h1, article h2, article h3, article h4{
 article h4{
   border: 0;
   font-weight: bold;
-  margin-top: 2em;
+  margin-top: 1.5em;
 }
 
 article span.small.pull-right{
@@ -514,21 +514,20 @@ body .toc{
 .toc .nav > li > a {
   color: var(--text);
   display: block;
-  padding: 0 0 0 1em;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  padding-left: 1em;
+  padding-right: 0px;
 }
 .toc .nav > li > a:hover,
 .toc .nav > li > a:focus {
   color: var(--text);
   background: none;
-  text-decoration: underline;
 }
-.toc .nav > li.active > a {
-  color: var(--text);
-}
+.toc .nav > li.active > a,
 .toc .nav > li.active > a:hover,
 .toc .nav > li.active > a:focus {
   color: var(--text);
-  text-decoration: underline;
 }
 
 .toc .nav > li> .expand-stub {
@@ -556,19 +555,13 @@ body .toc{
   display: none;
 }
 
-.toc ul {
-  font-size: 12px;
-}
-
 .toc .level1 > li {
   font-weight: bold;
-  margin-top: 10px;
   position: relative;
-  font-size: 16px;
+  font-size: 14px;
 }
 .toc .level2 {
   font-weight: normal;
-  margin-top: 5px;
   font-size: 14px;
 }
 .toc-toggle {
@@ -1036,14 +1029,15 @@ div.embeddedvideo iframe {
 .fieldValue,
 .parameters,
 .returns {
-  color: var(--text-subtle);
+  color: var(--text);
 }
 
 /* Major sections, increase visibility **/
+#constructors,
 #fields,
 #properties,
 #methods,
 #events {
     font-weight: bold;
-    margin-top: 2em;
+    margin-top: 1em;
 }

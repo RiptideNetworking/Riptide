@@ -6,16 +6,26 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>MessageHandlerAttribute Class
-   | Riptide Docs </title>
+   | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
     <meta name="title" content="MessageHandlerAttribute Class
-   | Riptide Docs ">
+   | Riptide Docs">
     <meta name="generator" content="docfx 2.59.0.0">
-    
+    <meta property="og:title" content="MessageHandlerAttribute Class
+   | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="&lt;p sourcefile=&quot;api/Riptide.MessageHandlerAttribute.yml&quot; sourcestartlinenumber=&quot;1&quot;&gt;Specifies a method as the message handler for messages with the given ID.&lt;/p&gt;
+">
+    <meta property="og:url" content="Riptide.MessageHandlerAttribute.html">
+    <meta property="og:image" content="../images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -89,16 +99,21 @@
   <div class="markdown level0 summary"><p>Specifies a method as the message handler for messages with the given ID.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
-  <!--h5 id="Riptide_MessageHandlerAttribute_syntax">Syntax</h5-->
   <div class="codewrapper">
     <pre><code class="lang-csharp hljs">public sealed class MessageHandlerAttribute : Attribute</code></pre>
   </div>
+
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
     <div class="level1"><span class="xref">MessageHandlerAttribute</span></div>
   </div>
-  <h5 id="Riptide_MessageHandlerAttribute_remarks"><strong>Remarks</strong></h5>
+  
+  
+  
+  
+  
+  <h4 id="Riptide_MessageHandlerAttribute_remarks"><strong>Remarks</strong></h4>
   <div class="markdown level0 remarks"><p>
   In order for a method to qualify as a message handler, it <em>must</em> match a valid message handler method signature. <a class="xref" href="Riptide.Server.html">Server</a>s
   will only use methods marked with this attribute if they match the <a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a> signature, and <a class="xref" href="Riptide.Client.html">Client</a>s
@@ -110,120 +125,52 @@
 </p>
 <p>
   If you want a <a class="xref" href="Riptide.Server.html">Server</a> or <a class="xref" href="Riptide.Client.html">Client</a> to only use a subset of all message handler methods, you can do so by setting up
-  custom message handler groups. Simply set the group ID in the <a class="xref" href="Riptide.MessageHandlerAttribute.html#Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_">MessageHandlerAttribute(UInt16, Byte)</a> constructor and pass the
-  same value to the <a class="xref" href="Riptide.Server.html#Riptide_Server_Start_System_UInt16_System_UInt16_System_Byte_">Start(UInt16, UInt16, Byte)</a> or <a class="xref" href="Riptide.Client.html#Riptide_Client_Connect_System_String_System_Int32_System_Byte_Riptide_Message_">Connect(String, Int32, Byte, Message)</a> method. This
+  custom message handler groups. Simply set the group ID in the <a class="xref" href="Riptide.MessageHandlerAttribute.-ctor.html#Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_">MessageHandlerAttribute(UInt16, Byte)</a> constructor and pass the
+  same value to the <a class="xref" href="Riptide.Server.Start.html#Riptide_Server_Start_System_UInt16_System_UInt16_System_Byte_">Start(UInt16, UInt16, Byte)</a> or <a class="xref" href="Riptide.Client.Connect.html#Riptide_Client_Connect_System_String_System_Int32_System_Byte_Riptide_Message_">Connect(String, Int32, Byte, Message)</a> method. This
   will make that <a class="xref" href="Riptide.Server.html">Server</a> or <a class="xref" href="Riptide.Client.html">Client</a> only use message handlers which have the same group ID.
 </p>
 </div>
+  
+  
   <h3 id="constructors">Constructors
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_.md&amp;value=---%0Auid%3A%20Riptide.MessageHandlerAttribute.%23ctor(System.UInt16%2CSystem.Byte)%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/MessageHandlerAttribute.cs/#L44">View Source</a>
-  </span>
-  <a id="Riptide_MessageHandlerAttribute__ctor_" data-uid="Riptide.MessageHandlerAttribute.#ctor*"></a>
-  <h4 id="Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_" data-uid="Riptide.MessageHandlerAttribute.#ctor(System.UInt16,System.Byte)">MessageHandlerAttribute(UInt16, Byte)</h4>
-  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> class with the <code data-dev-comment-type="paramref" class="paramref">messageId</code> and <code data-dev-comment-type="paramref" class="paramref">groupId</code> values.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public MessageHandlerAttribute(ushort messageId, byte groupId = null)</code></pre>
-  </div>
-  <h5 class="parameters">Parameters</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Name</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td><span class="parametername">messageId</span></td>
-        <td><p>The ID of the message type which this method is meant to handle.</p>
-</td>
-      </tr>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
-        <td><span class="parametername">groupId</span></td>
-        <td><p>The ID of the group of message handlers which this method belongs to.</p>
+        <td id="Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_" data-uid="Riptide.MessageHandlerAttribute.#ctor(System.UInt16,System.Byte)" class="one-third-width">
+          <a class="xref" href="Riptide.MessageHandlerAttribute.-ctor.html#Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte_">MessageHandlerAttribute(UInt16, Byte)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Riptide.MessageHandlerAttribute.html">MessageHandlerAttribute</a> class with the <code data-dev-comment-type="paramref" class="paramref">messageId</code> and <code data-dev-comment-type="paramref" class="paramref">groupId</code> values.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  <h5 id="Riptide_MessageHandlerAttribute__ctor_System_UInt16_System_Byte__remarks">Remarks</h5>
-  <div class="markdown level1 remarks"><p><a class="xref" href="Riptide.Server.html">Server</a>s will only use this method if its signature matches the <a class="xref" href="Riptide.Server.MessageHandler.html">Server.MessageHandler</a> signature.
-<a class="xref" href="Riptide.Client.html">Client</a>s will only use this method if its signature matches the <a class="xref" href="Riptide.Client.MessageHandler.html">Client.MessageHandler</a> signature.
-This method will be ignored if its signature matches neither of the valid message handler signatures.</p>
-</div>
   <h3 id="fields">Fields
   </h3>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_MessageHandlerAttribute_GroupId.md&amp;value=---%0Auid%3A%20Riptide.MessageHandlerAttribute.GroupId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/MessageHandlerAttribute.cs/#L34">View Source</a>
-  </span>
-  <h4 id="Riptide_MessageHandlerAttribute_GroupId" data-uid="Riptide.MessageHandlerAttribute.GroupId">GroupId</h4>
-  <div class="markdown level1 summary"><p>The ID of the group of message handlers which this method belongs to.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly byte GroupId</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
+  
+  
   <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
     <tbody>
       <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.byte">Byte</a></td>
-        <td></td>
+        <td id="Riptide_MessageHandlerAttribute_GroupId" data-uid="Riptide.MessageHandlerAttribute.GroupId" class="one-third-width">
+          <a class="xref" href="Riptide.MessageHandlerAttribute.GroupId.html">GroupId</a>
+        </td>
+        <td class="markdown level1 summary"><p>The ID of the group of message handlers which this method belongs to.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_MessageHandlerAttribute_MessageId" data-uid="Riptide.MessageHandlerAttribute.MessageId" class="one-third-width">
+          <a class="xref" href="Riptide.MessageHandlerAttribute.MessageId.html">MessageId</a>
+        </td>
+        <td class="markdown level1 summary"><p>The ID of the message type which this method is meant to handle.</p>
+</td>
       </tr>
     </tbody>
   </table>
-  <span class="small pull-right mobile-hide">
-    <span class="divider">|</span>
-    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_MessageHandlerAttribute_MessageId.md&amp;value=---%0Auid%3A%20Riptide.MessageHandlerAttribute.MessageId%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">Improve this Doc</a>
-  </span>
-  <span class="small pull-right mobile-hide">
-    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/MessageHandlerAttribute.cs/#L32">View Source</a>
-  </span>
-  <h4 id="Riptide_MessageHandlerAttribute_MessageId" data-uid="Riptide.MessageHandlerAttribute.MessageId">MessageId</h4>
-  <div class="markdown level1 summary"><p>The ID of the message type which this method is meant to handle.</p>
-</div>
-  <div class="markdown level1 conceptual"></div>
-  <!--h5 class="decalaration">Declaration</h5-->
-  <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public readonly ushort MessageId</code></pre>
-  </div>
-  <h5 class="fieldValue">Field Value</h5>
-  <table class="table table-condensed">
-    <thead>
-      <tr>
-        <th>Type</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><a class="xref" href="https://docs.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
+  
+  
 </article>
           </div>
           
@@ -269,5 +216,6 @@ This method will be ignored if its signature matches neither of the valid messag
     <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
+    <script type="text/javascript" src="../styles/embedmeta.js"></script>
   </body>
 </html>
