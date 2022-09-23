@@ -21,7 +21,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.MessageHandler.html",
-          "hash": "u8hKMubfL0nb5TGhIZb0UN9JAy8sNxCuy++BRVzY/A4="
+          "hash": "Aj56f/ghapLPschiCvc8ob6PcbJa8/hsm1XllubfZm4="
         }
       },
       "is_incremental": false,
@@ -33,7 +33,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.Connected.html",
-          "hash": "uRWqDsDlAgRMD8DJRa+rwaw9VBJUlchQV7Wj1C0oauk="
+          "hash": "3GJJW/OpnsFR+ImdyeoMt6RGHl/D5hvtGGlFxMXaICA="
         }
       },
       "is_incremental": false,
@@ -45,7 +45,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.ConnectionFailed.html",
-          "hash": "0lQlx3eS0DZzZ0FM7TEGURcI0hLVM7JaQgu1g3KjXUs="
+          "hash": "PoCpAbg3BPJX0cA0oyL0koL+ip2Y0FfHOHQN9JRDUeo="
         }
       },
       "is_incremental": false,
@@ -57,7 +57,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.MessageReceived.html",
-          "hash": "y8BlzpVWc3hergOpX0Sba8hVKcirc1pgV7df3JWL/OQ="
+          "hash": "hIUug2+AcIbr3+gfo4dmYhOGAx9Hq4Eb8F7OhpOEd7c="
         }
       },
       "is_incremental": false,
@@ -69,7 +69,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.Disconnected.html",
-          "hash": "AF8y2An1Qqtw8p1TBCwc+SkpTxGbDnD287IHV97ntSs="
+          "hash": "m6IdDhWTB+uhDgb53XTj/yI+XNXA1knnhjQQOT/UkXw="
         }
       },
       "is_incremental": false,
@@ -81,7 +81,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.ClientConnected.html",
-          "hash": "6xDq/iI1x/yPpZD8va3Kz4bmxbHjk0K5FXVZJBIStHg="
+          "hash": "Ec8H+NfjGgF8I4rZik6PLscgHsmHJy42V1DMaoUxxN4="
         }
       },
       "is_incremental": false,
@@ -93,7 +93,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.ClientDisconnected.html",
-          "hash": "eDSPwrzI1jDWI68QMaTzP6P1US4r8LELI2ReP/oS3pE="
+          "hash": "uchvhbsqrGitgRWn9eO2GHMiXs7hB06rHVc7Oer9g+o="
         }
       },
       "is_incremental": false,
@@ -105,199 +105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.Id.html",
-          "hash": "qr+o0zGBbB3jUISLXICcVuYRvOv8spmF88NhVGaiyL0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.RTT.html",
-          "hash": "pbPev5cIOl7sxdw9J6DEFS8m5F6g+vBJPm2YiLV55Xk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.SmoothRTT.html",
-          "hash": "r2nZKDyGXqbAYKRzpSu/6pG1PpgaW6Bts7jq49AXx4Y="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.IsNotConnected.html",
-          "hash": "G6XBx3cFUiFI8zE3Oo7JkATgIpijVXWKlFaClw697Uk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.IsConnecting.html",
-          "hash": "RQ/tD/3SZnKeyGu9DR8SJin+Law6NbToNWb3jXQZ9CU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.IsPending.html",
-          "hash": "C89ZoE/7Hw7mFcbpJc9jfQIs3S5mJJDNXv0/W5M/68s="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.IsConnected.html",
-          "hash": "pjjjiljaF1SIVs51aUwGLbAZPXVKElHd3qJTmzcHn+c="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Connection.html",
-          "hash": "8HACqzIFpg6IO0W7ril0XExoprkS8WL5zJgharB3Tlw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.-ctor.html",
-          "hash": "vzf/GcOrpVLVti3nPBKHYGlyzp0ZbEp7Ma8cZ69/ZVM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.ChangeTransport.html",
-          "hash": "Om7TJrmkGTXlTFM2U9FZa80hu5r5M+WdM4cZDNX4/Q4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Connect.html",
-          "hash": "5zBW5am/wXvOmABDVb5nX41sNczPq3o5sYQ9SBBFBZc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.CreateMessageHandlersDictionary.html",
-          "hash": "QM02XryDmTSAK3x5p0ossrLEZpRZI/Woprn4X7VPYhk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Update.html",
-          "hash": "iyRNqdTmFNTGQsoFEXtk1/Omx+DyMZotAEyFhyXIWkE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Handle.html",
-          "hash": "kByZvllkxnELGgTdbdcqVd1b+ChNVqg4YPdqnvzokl4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Send.html",
-          "hash": "kLV0NNVJHXUmaypaufp0yvVKN+hccgzWATqW4Vz57sQ="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.Disconnect.html",
-          "hash": "6VPU+pDFglXxriMwB3WKe5CivH5cjSwywfpEO0UIOq8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Client.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Client.OnConnected.html",
-          "hash": "+qlSC10mLc3YyliYJtxIe+WSTo5cZ5F9jZt9zFDFPGY="
+          "hash": "gQ6DvJNMLV1x0B43Qjm84dBKTq5caxIdN9kOHH2IjYo="
         }
       },
       "is_incremental": false,
@@ -309,7 +117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.OnConnectionFailed.html",
-          "hash": "wQ+IT7L0CdxSRB49XfAwvuEdaVqBfsEQ4/jKX59LT60="
+          "hash": "pbPIkar+WMhSGFGJ3huucvuQnE74LOhTD8tbFfuwb5w="
         }
       },
       "is_incremental": false,
@@ -321,7 +129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.OnMessageReceived.html",
-          "hash": "+ar5ukYlJLFj/tcuDiGpcvTmSBbMmuwxpKuKIgPAG1k="
+          "hash": "VtfEf6jL0cn7vWAfX56EGA0Aa24dspMLfv7Ha0wWr8E="
         }
       },
       "is_incremental": false,
@@ -333,7 +141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.OnDisconnected.html",
-          "hash": "ULEe/exh66k6koeTKP6YtJZFYOZ/gTsPCqXTSUnjn4w="
+          "hash": "95iCcWfoPyH4c4fGHdZbFAX84bGOkZ+stoEkhWUODG4="
         }
       },
       "is_incremental": false,
@@ -345,7 +153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.OnClientConnected.html",
-          "hash": "wIRO4Wd2FNReQmSw53MqfbWchktJJdC3+4Iu76u7I5A="
+          "hash": "fIAa/qxq1+0eH8kiExpl12EeljLU0ZzSE7RDbEqrFqc="
         }
       },
       "is_incremental": false,
@@ -357,7 +165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.OnClientDisconnected.html",
-          "hash": "/MrFeGaKhj170R8KOjDfJJpzEDYwcdSaP5yQ4q8+uaM="
+          "hash": "z7hZP+2wijDUqEeiTvzE7XRg54jww9muJ/N+UeujH+0="
         }
       },
       "is_incremental": false,
@@ -369,7 +177,199 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Client.html",
-          "hash": "vF076BiAgA+Xgh99UAfuQJJGzgTOCX2ClPY03dnBVOY="
+          "hash": "szx4c7wg4EmAhzzvuRyJWEFluBjKHGqc1do8FTar3k8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.RTT.html",
+          "hash": "QI7YGUPqBjYAMJYU4XjPxqTs6EDU6j/wgGs3FdpiDCY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.SmoothRTT.html",
+          "hash": "2ch5SVga9k3+bnOHLkYopD5jEGhhPNo1/rsn+qVASWc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.IsNotConnected.html",
+          "hash": "d3yD5YU6wZ2vX+vovzusINzu2XZgG0zbA0+CH++77tY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.IsConnecting.html",
+          "hash": "AxxNjTIDTfy3fYfyk+orAgZolasX7kekFl/wyMPwdv0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.IsPending.html",
+          "hash": "NnbhuSHo8P0HDOTOFWyszFANAZyUA29DoVzrqXTiYFk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.IsConnected.html",
+          "hash": "6rX0tJJJRpRFF8/RgHASAlV/Jxc9w/f+mEvMcySc7S4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Connection.html",
+          "hash": "mZEtF9y/iiKGbwwpGdIZDGvrd8Zlx78/tLIY8S6UKho="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.-ctor.html",
+          "hash": "q96zVS0C8rj7JGMa1gGMqQZ8SFcxiYGWzAN+NN88nq0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.ChangeTransport.html",
+          "hash": "ofYVZNIPSNgmBNvGPkxy1OjcM9RM9eEdwX3+PA5LC58="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Connect.html",
+          "hash": "jFCvTGgT70tagzN81N4gEwVvVcCfnRDDGLOW6V7trq0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.CreateMessageHandlersDictionary.html",
+          "hash": "NBmfeW5fWdkj4vOk1PXSD75gjpCj7xZkMTcKpsTL7xo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Update.html",
+          "hash": "fgb+noW7F028SjmocLnSgGVqiP/DO4jdAsXBSF17v48="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Handle.html",
+          "hash": "Yz6XOTWPzkwhBoWlGCAHVHjeqs10FwD1Qb/OkOUAB7U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Send.html",
+          "hash": "ximNz9wWvoYPWKFsASqGJ6UrzBF1MdzlbSVByvC51ZA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.Disconnect.html",
+          "hash": "WYXPFJzG17qeruXYOCoT1RrrhoGJjBUzqc9Hpxc6Z5M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.OnConnected.html",
+          "hash": "CJkIDEgQeBOinbjzf1D5MG3w1C0g00I6UOUUwcog4oY="
         }
       },
       "is_incremental": false,
@@ -381,7 +381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientConnectedEventArgs.Id.html",
-          "hash": "yN1I+hFIHdEXlOoCnMbfx6qo9W4pKrAziMge7LzIE+A="
+          "hash": "y3WDccG+PdBKzBhnjXCVj/8swdLKniZz7NRRGtCkfkU="
         }
       },
       "is_incremental": false,
@@ -393,7 +393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientConnectedEventArgs.-ctor.html",
-          "hash": "ZuWDYK34tvWFBcxur7I1qI3PmGad2x5Jnb5m2fTdClA="
+          "hash": "3QaaoIZPmN3qYysI0XyLinarCHY5vVxb5ljBkNONjB0="
         }
       },
       "is_incremental": false,
@@ -405,7 +405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientConnectedEventArgs.html",
-          "hash": "wB6Ih+357ZKXX4hOxQ/zz/kpm9k3GYBiUVpQjAJRypk="
+          "hash": "IQKg8z5O0Kt06wM2boHV6vJce1uzwSi1VxAoCIpxFTc="
         }
       },
       "is_incremental": false,
@@ -417,7 +417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientDisconnectedEventArgs.Id.html",
-          "hash": "R15ggnqRa2cKXtBfyAdEJrdk7xkCzjfjpO5THJ5O2Mk="
+          "hash": "9gZayl1ql0PP0qNIDEZ/Ycb+PxVaD4rw1TZLQCZdjVo="
         }
       },
       "is_incremental": false,
@@ -429,7 +429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientDisconnectedEventArgs.-ctor.html",
-          "hash": "UwnD/Z6ix9k0j65adFQD6zAJHmT3YH9fwVoiWujakRE="
+          "hash": "ooH3jQHyySaHzpnOTdJljFR1d7X4PigQau4z4PILEhk="
         }
       },
       "is_incremental": false,
@@ -441,127 +441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ClientDisconnectedEventArgs.html",
-          "hash": "DgaPUoqxTnoOmtlgPpywBx30MS+pJ6w/pvGkU9jYD7M="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.Id.html",
-          "hash": "s9he7sA1fZc48mbivLyrmuCTydGCANZUhqjKnW8kjtY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.IsNotConnected.html",
-          "hash": "26UcVvwOBOE2ihv/OVp4ohvINi50+1QDB1jBkcRp4tw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.IsConnecting.html",
-          "hash": "UOiSMl/2KE/mt1he0jcI/wtVmhsrSNbzg/9YnLF2eTY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.IsPending.html",
-          "hash": "LVuhEZd/uxK9hOG82MSMA0fpv7bwV0WuiuPhVA2jO7E="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.IsConnected.html",
-          "hash": "BKjx2JvpYwzFsB05Z1WKcLK6vBmXKpCNI0yEmi6Eq6w="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.RTT.html",
-          "hash": "zrnWlWriR4cQEHWe7g9mRu/pbY9rc7nOtaMk9ZCDngQ="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.SmoothRTT.html",
-          "hash": "nxmlO/hmk1qOWr8hJZZkzfZR8XPU9pROitrIMb57ryI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.CanTimeout.html",
-          "hash": "xUObywxrgxZEqJ9CrQXbgBAv6g6TgSMGCOFtQbs4/Ps="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.-ctor.html",
-          "hash": "jL0KD6fhPhslRAvnYRlGlfSlbM7hKdVs/fQVU324QFc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Connection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Connection.ResetTimeout.html",
-          "hash": "6oSwU2rrjV0r2oF8bP7ZbObo+sY1C+5Wvz7X96mahUs="
+          "hash": "JFTssBnLwA02r+7VbKqIx4Mp1TnXuYpjL8WzhLJHgUg="
         }
       },
       "is_incremental": false,
@@ -573,7 +453,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Connection.Send.html",
-          "hash": "y470cTSErk3Fr11fihZmGQwMxpX+yfbaT50KL84kjAo="
+          "hash": "K1rxZzc0NRKY4yEwFIarMMzW7+n6UwNSOptG8TjyOAY="
         }
       },
       "is_incremental": false,
@@ -585,7 +465,127 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Connection.html",
-          "hash": "O9P0/AI4Troho+ys8ruFxypzcfLIkFp6MyRoRueTcyc="
+          "hash": "6AcOZbaAb9TIO2PjjaonFRhBgEo0B6C76N2XbrH/UyY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.Id.html",
+          "hash": "ODJITX6+xWbZO4nR4eR+ByHfwbHynv60A1zvjRDeJGg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsNotConnected.html",
+          "hash": "X5MGNmP3jMVz9xoEV56buNpPY9zxrjw558HUdECFBrg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsConnecting.html",
+          "hash": "GP+fWIABynN55HmUvPWdnDJqSzMG7k+a0txq1Zefat0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsPending.html",
+          "hash": "OuB1CftlXn16cgyqnGO4PX5VZir5syVWSZFL1i0A2ks="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsConnected.html",
+          "hash": "qUTzpiSsyalo8joTboukqAlIqnD0DrdMPxyPoqs5RTE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.RTT.html",
+          "hash": "V6mktTz0bIN3eYC8EeptEHQssUjZYniPMrZjm3PyEaY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.SmoothRTT.html",
+          "hash": "0gvqyIxILzjpFIeyFd8cuGFk4MwoElulbLSJEZQ0Zdg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.CanTimeout.html",
+          "hash": "Mru45DVb8tReZIEmv5eQL+leOOJPzDHWng2R2H7k4Ns="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.-ctor.html",
+          "hash": "ydsEDcOY4ZpJcT07X13BP9FtXqOKfkjL79dO8D3PQFw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.ResetTimeout.html",
+          "hash": "59cDqxBbYZAiUpCwyT/w2gUGlt19q22jxsgHEmW8NtA="
         }
       },
       "is_incremental": false,
@@ -597,7 +597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ConnectionFailedEventArgs.Message.html",
-          "hash": "tIUTkE1jMj1H0zfSv3HLhzXlI3xp38Dl1EIcL4RvzkY="
+          "hash": "vA/z5UKVMjFBPPTdnT2Wm3dKmvbnuCPZozRzW0fqn00="
         }
       },
       "is_incremental": false,
@@ -609,7 +609,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ConnectionFailedEventArgs.-ctor.html",
-          "hash": "6KhSiUM87BYgouSTjfQS5nO1EGS0NQZz5a5VOr1KyWo="
+          "hash": "1/1HkK3AqFMVh6xZIXHRTB+CuSr4LGYCxESXLgfsceU="
         }
       },
       "is_incremental": false,
@@ -621,7 +621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ConnectionFailedEventArgs.html",
-          "hash": "Um2OsUB6QeF/Rc/GIHVKnSmZmVWnyNq8jDC7nemU/Og="
+          "hash": "++obs7ygt3yihNuYf8bFPJWYD+B59bGDQt8qthO7yXY="
         }
       },
       "is_incremental": false,
@@ -633,7 +633,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ConnectionState.html",
-          "hash": "Lfi6pBCJIMwkzoJXSkKxFS86qn9V8WPHKRNhYbGCT+s="
+          "hash": "Wr187qdGL3JR1Evtk4Q4mSchjFXCmOwMFj5CkJDU8wk="
         }
       },
       "is_incremental": false,
@@ -645,7 +645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DisconnectReason.html",
-          "hash": "n1OIfPrsD5PpjmHU7XcMlZQDmOa4DgWqlYnakSEpNWo="
+          "hash": "Q0TYvi7VqQMJewXMiAFx4+WtA7GumH1Bw3qbP8X1wPA="
         }
       },
       "is_incremental": false,
@@ -657,7 +657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DisconnectedEventArgs.Reason.html",
-          "hash": "HuvqGHSUMulCa+1trzypQaB4UglcYpnSqn2jxb1MM3E="
+          "hash": "1jdoNNS3jxBYj6Lf4lw87TCbeV0x0ebpl6cswB95we8="
         }
       },
       "is_incremental": false,
@@ -669,7 +669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DisconnectedEventArgs.Message.html",
-          "hash": "yexJi6J/9f4nXZOoHyTqqq0XrvEKGue2P9egzVR+PjU="
+          "hash": "UN0GLRTJufCWQcJy+WnaNveYLZKEycejbEmB3Ui4/XI="
         }
       },
       "is_incremental": false,
@@ -681,7 +681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DisconnectedEventArgs.-ctor.html",
-          "hash": "BPivUjvRQkxscZXvud/cFEOQvbv0Pk/hzqOiL0d2xKU="
+          "hash": "giSHIFpBwBCPbkEqbInpqoXVNyGUKC8355mWbgG0uvk="
         }
       },
       "is_incremental": false,
@@ -693,7 +693,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DisconnectedEventArgs.html",
-          "hash": "JW3nAViSLY87BuzhRX+58LA97a9ulZDBwXEPiYwDOyQ="
+          "hash": "QW+vw2cJy5iGiMGuS2OYBjJZ+dE2+jd5m7laZVNRF/A="
         }
       },
       "is_incremental": false,
@@ -705,7 +705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.Id.html",
-          "hash": "qE7RKUfck33E2N3a47bKPe03LE5xeQIo4/ZJXKcwVeo="
+          "hash": "7AwtHPAGefQCvnmg7edA8cuEDjXG7IF683AZb+nVAwI="
         }
       },
       "is_incremental": false,
@@ -717,7 +717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType1.html",
-          "hash": "r27UjiZVLfKTrILfcbBYq8u3Lq+zWu3QcfFRnT0WmXk="
+          "hash": "wK5qjDT90eAMI2lynmswY54EkL/YolI0RVENYovoHog="
         }
       },
       "is_incremental": false,
@@ -729,7 +729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName1.html",
-          "hash": "Mi8wF2XK091xQbQIjzzmRKJQAJG9/lEQEw04I4dj69U="
+          "hash": "b/2cfTEbKXSZZnzdQCnmWzLqSMYCwbmPmlmt9Hv/Mtg="
         }
       },
       "is_incremental": false,
@@ -741,7 +741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType2.html",
-          "hash": "HeoHSQ6nF9sabsR8p20f4tY2DT0kRtX2OG9oMn/RC3s="
+          "hash": "om+qlOBs4K2MaHqIVQQZrEMfCI0oQgAWIT7fBGBcl00="
         }
       },
       "is_incremental": false,
@@ -753,7 +753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName2.html",
-          "hash": "8Ld9GeLPkbi56F4e6VgZnUPyteLczA02LJ6WSaHzXjU="
+          "hash": "NFCP+BIPr3g1wrSy7tqoKfuFkOfKuhTDzVQUE2C1hWM="
         }
       },
       "is_incremental": false,
@@ -765,7 +765,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.-ctor.html",
-          "hash": "+SbGeNNly1QbP3GTqdch/nB7D8tz4Ry1V/v9gYlfXik="
+          "hash": "90M9GUW+k0A0U9RMTQIPU6dJUYxvIEX/Wov3zD7/2FA="
         }
       },
       "is_incremental": false,
@@ -777,91 +777,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.DuplicateHandlerException.html",
-          "hash": "WjWYEfK+T0+hM584c7vCrlhxGl4XfM6rqSkkvElcHmI="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Connect.html",
-          "hash": "Z4AExE85W5Sud/VKCIVyYL4N8FK1vM9PIgqFNtFF9Nw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Poll.html",
-          "hash": "IDCTUB3JZwReS4imCIkB/8OIC2YCnW4VCpi1txKbhwE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Disconnect.html",
-          "hash": "qXAiZht5t6ZJm8bmiRYuLmIViI7Z2OS+qnhimLMJVyo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnConnected.html",
-          "hash": "iVD3p7n4jsbEyYkNH+Jj9ICBHYkDzRuORTfVzo3k4oQ="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnConnectionFailed.html",
-          "hash": "/pk5ep1DINqpoCqGQOKHweGoxgQDrDleR1RcJ3zz9oc="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnDataReceived.html",
-          "hash": "mWcVDzGSP1b2OCpum3j6nshFaSrLeNs76M8pW7p6iZM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.html",
-          "hash": "ih4WgoUABjqNqteBg3kvZHxyGndAedxZyl0AVNb6bnI="
+          "hash": "oDPz+BWdYbkZltws5T6hwGdJXDs9V5elG+nKxGblIE4="
         }
       },
       "is_incremental": false,
@@ -873,7 +789,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Connected.html",
-          "hash": "YQva+HVXwerpRX9pU8bS5GSq52KpEeH7v6p/IgxRd7Y="
+          "hash": "Wl7+3Ko+frW2aNE0uFzluy8NHj2v74vmkWAeBB7DKa8="
         }
       },
       "is_incremental": false,
@@ -885,7 +801,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.ConnectionFailed.html",
-          "hash": "1w6WasElN4Iak3cc0a8a+ClDWQxtouR1R4H6kiv+vXQ="
+          "hash": "nK5HHAlWlD09qPrHLnWMeagaQlUjez/rKZKIK+fT9rY="
         }
       },
       "is_incremental": false,
@@ -897,7 +813,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.DataReceived.html",
-          "hash": "6QLaT9yNDDI6t8T4DQ8Lv+1mHlM5gqnIQSrsJAj9JKk="
+          "hash": "5i5VSoYEKPDmo0D3MqdSfAqRkl6EgNv0mV4V0ga/8oI="
         }
       },
       "is_incremental": false,
@@ -905,11 +821,83 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.yml",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.html",
-          "hash": "FCOPTUz07OIB5BguNA6EpLB38wb3JTJoS2yu3bqGueo="
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Connect.html",
+          "hash": "clJr7hMluH26F/PFJDpFiiNJ7IX4fqOOQsXYPOst1qw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Poll.html",
+          "hash": "vNrULESG0DRtF0iws7Mvh6DndpqEPeFPrpG1+GrOQMk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.Disconnect.html",
+          "hash": "aIq5I3Rar2/TdWze4oTohyoSxCPXQwP6TqAlyQDH420="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnConnected.html",
+          "hash": "zmvToBmNd0BUPUcoleQoUCWBnHp8cooTX5VkYoYYXtE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnConnectionFailed.html",
+          "hash": "c5XkNHWxCbrU8IUzv/KRSPYw1x/lMslMNc+xf5Lppuc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.OnDataReceived.html",
+          "hash": "O/Lrt13vLtlde3nTLt9fFNnSlDJAjD2y1s6CdB0rzyw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpClient.html",
+          "hash": "TAaMpUMcN6FcOo0XC/oWdFUZMfEET4Uj6nOMnE1wQn4="
         }
       },
       "is_incremental": false,
@@ -921,7 +909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.RemoteEndPoint.html",
-          "hash": "BmNf+VN+uRLLeVXzdSDsaLqfi74ilWLFi4rTuaAHFlo="
+          "hash": "jcUZMvY4jjFjfdET98X38SwCjXF8zEaUQghHXOqxWk0="
         }
       },
       "is_incremental": false,
@@ -933,7 +921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.Send.html",
-          "hash": "U4BRPJ1pjtJ6VeV2Ot6h6Kt3dyxSOCi15crkMNpxI9w="
+          "hash": "QZJy5RiQD8vFEDwcA4WIGDOJETSiTqsoS7Iq319eCvs="
         }
       },
       "is_incremental": false,
@@ -945,7 +933,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.ToString.html",
-          "hash": "d5A5ZpizOwlT/jPbC6bQlqNwisMMSVbh2KkrLSEg8sQ="
+          "hash": "wxUP0S58wU8fzSax4SSA1y6Sqps9Pt3+0ucjduqKd/E="
         }
       },
       "is_incremental": false,
@@ -957,7 +945,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.Equals.html",
-          "hash": "yiAALQ/RVPjT4YKsVCifD2uMny9WYLJ1f0nwsK+40+4="
+          "hash": "a5yu0muh+dgp+UqSpkib9q35zI72bTF8yeT0qgKGZvA="
         }
       },
       "is_incremental": false,
@@ -969,7 +957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.GetHashCode.html",
-          "hash": "IODbBsSLExKw4ztpKvXT9Sf6Ket4QYCIqTi3xKLpYFQ="
+          "hash": "Jn9G3lvKJQIZWZHjUB/qhZuZWvhgWok8kwixjRj2ppI="
         }
       },
       "is_incremental": false,
@@ -981,7 +969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.op_Equality.html",
-          "hash": "lfzgEJUT6GhbAvSyf9wItZkyo+oQvv0UEs2nMAlnECE="
+          "hash": "RnlM3XfRnpZ/YdWTo8tDMJTzfZD4zS6Pkcrxm4SVMUk="
         }
       },
       "is_incremental": false,
@@ -993,7 +981,19 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.op_Inequality.html",
-          "hash": "tvsZuZiv4V9iJxB9rsp9CbQrqdqzfsZvxYdnphvretU="
+          "hash": "0ehbxDLo2+7vnS9gor+WBNfFRfBTWsNKN/9qSwi80yY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Experimental.TcpTransport.TcpConnection.html",
+          "hash": "WlFDnYiIXCtRhSSWLOhEFxUIOeFQE1ZtedARHdu6Yi0="
         }
       },
       "is_incremental": false,
@@ -1005,7 +1005,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.Disconnected.html",
-          "hash": "5vdrtP7GDXS0ZdlfeNHocPfrEZbNuBpELsuz7tGtqQQ="
+          "hash": "kOk6eIhwxzfdV9K9f/vr9wcvfxZYlpoo7OWESCc3hl0="
         }
       },
       "is_incremental": false,
@@ -1017,7 +1017,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.DefaultSocketBufferSize.html",
-          "hash": "OD5pi40zJ5IjX+DbFPBCodliLCkwDAF5OCOZ9nsd2RU="
+          "hash": "VqcYUPWhJ7UocuT27OS/K67Ul1WeIXhzHvnkR737nig="
         }
       },
       "is_incremental": false,
@@ -1029,7 +1029,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.socketBufferSize.html",
-          "hash": "45DNeAJAuF/55PKzX6mRET99EwGhpxDgcoWpui9ltso="
+          "hash": "JWhyfkvJUkGECx3qsZA/iX31uGF1JWIGdj82sxUG25E="
         }
       },
       "is_incremental": false,
@@ -1041,7 +1041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.socket.html",
-          "hash": "izRSQRIbjrIB6OxfPrmoS+qw2FacH5zu/Ce0wjiJFFo="
+          "hash": "Oxh6h1HYPqia+OZDlpcDDBvOIU+H3l1s4i2rF1EwMjc="
         }
       },
       "is_incremental": false,
@@ -1053,7 +1053,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.-ctor.html",
-          "hash": "N13psD2qy8ragxv7MknkE5UvpeGsyZ1MOykKL6+K8so="
+          "hash": "qN8Z6i5Odi3NnmrcGg57sRihZ4M00iu/lsQeJQMvmYY="
         }
       },
       "is_incremental": false,
@@ -1065,7 +1065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.OnDataReceived.html",
-          "hash": "PRTdvi0UAT7bQNHRWorQoY/oE8qIYAu1f7ZpJqgEsHc="
+          "hash": "vbW9hJkNWmhhmme/oc5e8GK05qtXMqX4BbM8V+TC49I="
         }
       },
       "is_incremental": false,
@@ -1077,7 +1077,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.OnDisconnected.html",
-          "hash": "jnZtSUXDKwQSfrsXdhi2k0pAOTdiDGsHtaDmY2U6XdU="
+          "hash": "u37396MvKuGArBLNV+khHXwmOXUhEj75D7SwtUE+zGU="
         }
       },
       "is_incremental": false,
@@ -1089,7 +1089,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpPeer.html",
-          "hash": "Jl6mAkKu468xvcrM/wCXxNGOAHOT1jgl05WVskIm5KQ="
+          "hash": "IIkvfBeHDuIYbx+U/G7XbOHjxHP3PkEU9j13z4j39wc="
         }
       },
       "is_incremental": false,
@@ -1101,7 +1101,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Connected.html",
-          "hash": "jZIeer0rOo/XOgK98w+Z8oXyqzRc37FdjgwkVeaaeOw="
+          "hash": "ZGEMg69IqByM5517CV/5uOlGJDJsNyS05afN+T4p5lg="
         }
       },
       "is_incremental": false,
@@ -1113,7 +1113,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.DataReceived.html",
-          "hash": "yLjwTm4M3LnNd/UATudOhV6Q7ttoOgNnAgBrYfvd+Zo="
+          "hash": "44g/670G0oBC9U+Ls/bv44nQqnBbRRxv9M48IMx/LTQ="
         }
       },
       "is_incremental": false,
@@ -1125,7 +1125,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Port.html",
-          "hash": "sAaH+oGTJ3WveINhxxSfi1xOEVcsxKmbhfEU50cHQXc="
+          "hash": "cS47luDwQp9IHnLgZ9UBixClwpyEuomdHIDDX+dcNSM="
         }
       },
       "is_incremental": false,
@@ -1137,7 +1137,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.MaxPendingConnections.html",
-          "hash": "9x/lYvmjK32f6yUoJsJTls6Ii1AltM2M+ipOW5kt2Ok="
+          "hash": "kTrumXSOdhhKwOS0OE5P9DC0imQxwnTzaw+eaAzz9U4="
         }
       },
       "is_incremental": false,
@@ -1149,7 +1149,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.-ctor.html",
-          "hash": "PheY9BISisqFw4NKxNtoIDnx9T7BwgqcW45YMx7wrvw="
+          "hash": "04LVir0eybjOqP0CD8LfjBoOg5IT0fxGnkO8vBEQzTM="
         }
       },
       "is_incremental": false,
@@ -1161,7 +1161,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Start.html",
-          "hash": "iKc9Y9ygIlKL9205Qw39D/Y9Z0FTSKYJs508fcJAwnI="
+          "hash": "6E6Ml6yRPliJ77PMnU0o+5pTcYS8MkQOD877L0Y5FGo="
         }
       },
       "is_incremental": false,
@@ -1173,7 +1173,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Poll.html",
-          "hash": "kBRi4TWLXgSJYMreksFNe5ewvk5+PUzl/dA9/1lW2w8="
+          "hash": "g8shBe2/n1iavrjOrInOzj9LSpT075PwF0e5orCLvfs="
         }
       },
       "is_incremental": false,
@@ -1185,7 +1185,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Close.html",
-          "hash": "tApnHZe3Gmu2wPuCwjJhgyafLP+zg/01sREdDsMWEfI="
+          "hash": "HfDJk8EUALwF7Iq3rXQehQDrbCd43Gd+8XgyOC7nE+w="
         }
       },
       "is_incremental": false,
@@ -1197,7 +1197,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.Shutdown.html",
-          "hash": "T/ZSd4U8k6zkBOEsw6KDkfm+561DqKrjbioUgbsDQco="
+          "hash": "0AuxNGM4T4VD2ywLrZtnTMPnopzUuETeV5QKgG8uJRM="
         }
       },
       "is_incremental": false,
@@ -1209,7 +1209,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.OnConnected.html",
-          "hash": "VschwZG5TOzZj2k1VUsdkiPDqIY3rR4QRzr9r/pPneI="
+          "hash": "jI66tugA5o5aaDaLZ57f/7OH7DUTW7Y1Lhgjk0C3ZjI="
         }
       },
       "is_incremental": false,
@@ -1221,7 +1221,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.OnDataReceived.html",
-          "hash": "jOIFeXGeEC1r54pmIBY/HleOso4bfJhi8QqWnmaMJlE="
+          "hash": "JnxsEvw0sXVRjyh9tJmSac+heVn/vZ9dA+YlL4nkYuc="
         }
       },
       "is_incremental": false,
@@ -1233,7 +1233,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.TcpServer.html",
-          "hash": "IhBcUoTnVBkvy6ekbOBvmM0fUCsEMWz9929Y+HjSoas="
+          "hash": "P6hayGaaTnTLn0kQPj+veFAe2GrTnOYenNmYzDQQGM8="
         }
       },
       "is_incremental": false,
@@ -1245,7 +1245,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Experimental.TcpTransport.html",
-          "hash": "3HkUYw8yYoIjf57jkkoFzH/lsbeBH4Q/DW79LkLv4jA="
+          "hash": "8X5Se17vX+HX5gAQDmjtMs+dCaBTQELIs4FvhgtbnbI="
         }
       },
       "is_incremental": false,
@@ -1257,7 +1257,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.IMessageSerializable.Serialize.html",
-          "hash": "YG9XoBa3nbYSzjPPd5hWFBQI39oobk/uICbi/ZdLglM="
+          "hash": "h+BwvShnl3CxUTpLhYb5ZDBxqeObJrzYnHdw5SEw8xA="
         }
       },
       "is_incremental": false,
@@ -1269,7 +1269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.IMessageSerializable.Deserialize.html",
-          "hash": "D9CjUbV4+3wDgQ2034TKG3IXNWtLdRTj5qv8NKVdZls="
+          "hash": "kfbGWJEaZpTWsRcqoNAF0n1XrPFob7UxMuzeQBbxuGw="
         }
       },
       "is_incremental": false,
@@ -1281,7 +1281,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.IMessageSerializable.html",
-          "hash": "o1y508pBe96mryMk4+ARWETw7N0Ahbya4lYNCIzFueU="
+          "hash": "Ne4D1xUIbjXuyJHxrYcmrI0X7o2Oc2qUNNZVyiB5K2U="
         }
       },
       "is_incremental": false,
@@ -1293,7 +1293,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InsufficientCapacityException.RiptideMessage.html",
-          "hash": "Gyd/XKtaRHnCyDGEXVP1iR1kBffmEd7QpHiCTyEDEtg="
+          "hash": "wn68fvsX3Kl56WzigUX8BGTH/FJN38CWpidfU38YNKA="
         }
       },
       "is_incremental": false,
@@ -1305,7 +1305,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InsufficientCapacityException.TypeName.html",
-          "hash": "Ceo4CYjK/MUfN0pjY7mPqKrS+duNL5+8tgOxMhMSZsA="
+          "hash": "4tiom6lG0C/wCs1QdgiZlLe1EgG3BUM6wp1EqsScVP4="
         }
       },
       "is_incremental": false,
@@ -1317,7 +1317,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InsufficientCapacityException.RequiredBytes.html",
-          "hash": "fcorUw5ffUFIaybaURpsUzDLUSGNeor6CfEPbfZpakQ="
+          "hash": "y4XX8sRuvyxg92QFa/kmn2lmfjA9GTpJDpQDJ9Pu7Z8="
         }
       },
       "is_incremental": false,
@@ -1329,7 +1329,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InsufficientCapacityException.-ctor.html",
-          "hash": "7pRQ5rgRSSM1RawUxLN2itmEwsFrde3KAhJJxA3biVQ="
+          "hash": "hzB3RI+6Y1n9oWJuQWySvXXrCqwsYOHMbapc8+IK5Vg="
         }
       },
       "is_incremental": false,
@@ -1341,7 +1341,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InsufficientCapacityException.html",
-          "hash": "+2t+V1a0yki6rdJJQdiH/6NV5kwD/G6oLeyLRbNL3Ec="
+          "hash": "hghdtpspZ5319XRtQsyJBzORHxHs0KrQ4vZYHEV6Cpw="
         }
       },
       "is_incremental": false,
@@ -1353,7 +1353,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InvalidHandlerSignatureException.DeclaringType.html",
-          "hash": "MQUaBVL+ko4fAoQbjob6d4k6Fq9z9dI+rodVGMQclYg="
+          "hash": "8CsesmR7kIQ1iHsirpZPkFn0c/wYdyR1G4ethn9rRjg="
         }
       },
       "is_incremental": false,
@@ -1365,7 +1365,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InvalidHandlerSignatureException.HandlerMethodName.html",
-          "hash": "7+abkyxQLvmY1XJJzCTKKFacwxLin1q2rDLJC2V621A="
+          "hash": "b8Yi9e/dTX9fvvfbOHA75UZ0eRoxu91p06Kqv2lCKBU="
         }
       },
       "is_incremental": false,
@@ -1377,7 +1377,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InvalidHandlerSignatureException.-ctor.html",
-          "hash": "LfrVkS7YQkSPi5X4sS+nXC6caFaTU29qH1Z2QRO4dfw="
+          "hash": "S1dRieHZaSWbHz2beLXa/c5DLGcpF1RTvqGcUdzZdOE="
         }
       },
       "is_incremental": false,
@@ -1389,7 +1389,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.InvalidHandlerSignatureException.html",
-          "hash": "Q5TiEKoHJf1C4ZvHI1ErfmnermURjekcwe0dcm3WOqo="
+          "hash": "5BXIDBlIfIYeO2m9IpgTey2ZHAcsly1FagTh1JEUU08="
         }
       },
       "is_incremental": false,
@@ -1401,7 +1401,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.MaxHeaderSize.html",
-          "hash": "WV9rfSwdUCTjwpjL5YDh1Lyy6atieN4vy+GAyRwQSoU="
+          "hash": "h4p45yY277JsBUQneowgniqYogrm3yVebzRuXoSaEYY="
         }
       },
       "is_incremental": false,
@@ -1413,7 +1413,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.MaxSize.html",
-          "hash": "SyRaf6yqD1/PcBeVLu61qy0fMy7rT9Ke61F+BiOfT50="
+          "hash": "pIxodSILGtyaoHWv6r1xFKMdCc4CDE5Di9zp84gtWrM="
         }
       },
       "is_incremental": false,
@@ -1425,7 +1425,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.MaxPayloadSize.html",
-          "hash": "mr/IswH7hoJXOivVmPcfR081QofV8PdlEKvJf/zUnvU="
+          "hash": "wW4qVHcwgxsPK3y16NuMCDkPnpY79Pcm1rYQ//OoB78="
         }
       },
       "is_incremental": false,
@@ -1437,7 +1437,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.InstancesPerPeer.html",
-          "hash": "4WTtqlcw09CvPd7acxcv1cd3ralsGr1U7jdEmYvrCnc="
+          "hash": "Yz6xrCMOZh3A2vSijU2RobWiCX7EJ/MLA4NiDo0ucQw="
         }
       },
       "is_incremental": false,
@@ -1449,7 +1449,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.SendMode.html",
-          "hash": "Ud4J0G+OeazTKABATXhOVOIs0ActkTOIOpaoYgPo07Y="
+          "hash": "BvCI1M0R/GemsXWRVBNQwR94ksNQPoK8fHLgc8wV+e4="
         }
       },
       "is_incremental": false,
@@ -1461,7 +1461,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.UnreadLength.html",
-          "hash": "hQLrLAzOAbC0ZHp+lZKqDBzSCh3I0ZG8nY72T80Mp40="
+          "hash": "5PnC6tFOSrtj+fY8+L78VKxbGaZd/ew7VQcVUjyVjO4="
         }
       },
       "is_incremental": false,
@@ -1473,7 +1473,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.WrittenLength.html",
-          "hash": "PskwF9qrrkwFkJGMSy0TayhinpA7hywAjb5S44l2iV0="
+          "hash": "4ve0YAGwcj1KSWu6SJ7oYH/2EATsIpPcbHRqRcHt0hA="
         }
       },
       "is_incremental": false,
@@ -1485,7 +1485,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.TrimPool.html",
-          "hash": "caGJjYAzk5CCt3ib4dsCdPXbjbprZUt84jlGDWMb7mk="
+          "hash": "GSzl2UChDlN/4Y93xU12YG4YWnIG7A97tV/UgtM3KLo="
         }
       },
       "is_incremental": false,
@@ -1497,7 +1497,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.Create.html",
-          "hash": "qwPgSWjgy1IAngzvgBNJO6NFCDT3OD8mpY6ZgqOt9JQ="
+          "hash": "TUjwRfX4sUCyq/F8L6aiIOgwhmgVKZ3RzZ4eljYpbSA="
         }
       },
       "is_incremental": false,
@@ -1509,7 +1509,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.Release.html",
-          "hash": "qbPlvn+kHE8nbxRmlStrKsvLQlyR8JCu8aYnzopSzMY="
+          "hash": "xnFbAvXYVHuGwyGpGFnIhsEmWB5zHQfoaeOn+Vkon0Q="
         }
       },
       "is_incremental": false,
@@ -1521,7 +1521,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddByte.html",
-          "hash": "ba4TQqHNWUiyGnMicQM/2XqoGeYdGha3iu5kMHmvP+U="
+          "hash": "3YpBW938DipBm3t/hsaB3lsR+ikjAEgRYH53CH9bD7s="
         }
       },
       "is_incremental": false,
@@ -1533,7 +1533,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddSByte.html",
-          "hash": "UM+Eh7A4nHlfUDi1Nege1oKJvRgzRyZmL16rFa1hf7I="
+          "hash": "pAqlHfrXVmhAYACV6M/OBc39hoXVTK4jnQClVGnDaBc="
         }
       },
       "is_incremental": false,
@@ -1545,7 +1545,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetByte.html",
-          "hash": "E83xoNTgkAkhVfgbrH6IM1aJZ8s8/3oNo1XlPCqPnSs="
+          "hash": "79KDER6Nrz9ptiCMXs+FnewVRiJVGBf7421TGacBNcI="
         }
       },
       "is_incremental": false,
@@ -1557,7 +1557,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetSByte.html",
-          "hash": "/pOzulPx2HkteJ9vWy4LL+TnbFfobJ3yWJpIlU4iB3g="
+          "hash": "q0wLF0oaU+eZbP0ylR3Ck8fZie8H7Z8KGOGaK+eOVhI="
         }
       },
       "is_incremental": false,
@@ -1569,7 +1569,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddBytes.html",
-          "hash": "URsIfPzbu/IaEDmszvD3AtIX9wzpseK34+RwYKId98k="
+          "hash": "9g/6u0MFupgsLauYt+dd3E+raeBl68H9LaTm4cD9Pgs="
         }
       },
       "is_incremental": false,
@@ -1581,7 +1581,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddSBytes.html",
-          "hash": "AvZUUYnVrQop2DgkItGFflSgRfXkHcOpvLb2K/yr2mI="
+          "hash": "CQVTmcqaLvwnUlhwSa9w+6y9uExC2K3gXdu9GFvIBvI="
         }
       },
       "is_incremental": false,
@@ -1593,7 +1593,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetBytes.html",
-          "hash": "n6CgQSe6HXWKDxN1Nr1YssMpYTd2oqFQUPYPN/C1qUE="
+          "hash": "nNFbnp/k/FkreNifBeZmhCUyeU3HTX2LlGxrQdHh2qA="
         }
       },
       "is_incremental": false,
@@ -1605,7 +1605,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetSBytes.html",
-          "hash": "wlgfpAY5MhHk4Rq9M43O/3dziNUDrwdL7jFg4DatwuM="
+          "hash": "zZ6Y60H0F2jBGz9zzcTc47Aa8sx1ycM/a1OSq7Dvmto="
         }
       },
       "is_incremental": false,
@@ -1617,7 +1617,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddBool.html",
-          "hash": "lyLgoDBk/Q9iXLtKVtf/3NfeURQCophnwybqZovTcsM="
+          "hash": "BBqOo+cDgG9xmafIGL8gk0UcbY888Idl9bu3jxqyOB4="
         }
       },
       "is_incremental": false,
@@ -1629,7 +1629,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetBool.html",
-          "hash": "k6e9eRhHu+DbucTb3nA70sOCowqVbsPgqG8l2odIv6s="
+          "hash": "wToc8TI/daa1MaOtLdE+yfuWMyqlki+yxo/j4rYtxWE="
         }
       },
       "is_incremental": false,
@@ -1641,7 +1641,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddBools.html",
-          "hash": "Xf0yAznIJf0Zyeikng6A5OUCKRSmZodnrFwEwAazPGY="
+          "hash": "JK8JEU5gkA8kEcT1f3ZMeDB4ai9v/SofTUwnoNGRcn0="
         }
       },
       "is_incremental": false,
@@ -1653,7 +1653,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetBools.html",
-          "hash": "DWb5TPYHqVH3XfRv345w3/0meF42UOWYH6KoJuRgGH4="
+          "hash": "qqMtSlf9ak2tdfnF3QFhFV/ayrVUfAJuaksOWnU6ejI="
         }
       },
       "is_incremental": false,
@@ -1665,7 +1665,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddShort.html",
-          "hash": "/WH01wsILnEAxpUNLIb88FAXZqk0AEaK9Lo0BMhyKew="
+          "hash": "Zs9s7PVhqoV5gLrvcaLJMpN7REq1V7PqQ7NPxGh34Jk="
         }
       },
       "is_incremental": false,
@@ -1677,7 +1677,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddUShort.html",
-          "hash": "iJ8wFeiTyymplDSsRU3xO8EIi5KumBOufjauMJcaE0I="
+          "hash": "/Zxdpw/N10rB6m7lJ76it3Nk84kXI4cdLfuUHChctWQ="
         }
       },
       "is_incremental": false,
@@ -1689,7 +1689,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetShort.html",
-          "hash": "k3wrCqAtNyPacKqbsLkSyzzUsVmQ9u74Ht7cdegVDUo="
+          "hash": "xDR/IdgdolkQWAEQ/cobmM87ll2h2yz4DQ6nVTyup3s="
         }
       },
       "is_incremental": false,
@@ -1701,7 +1701,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetUShort.html",
-          "hash": "PUxXxyPRLIAzNmDCMMMWci9jPZai13gu9pV1R5R4BBE="
+          "hash": "djkC8N7ttBMknclyzIeHWJBCck6fGQuiz2LNwRR//38="
         }
       },
       "is_incremental": false,
@@ -1713,7 +1713,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddShorts.html",
-          "hash": "qw/xGsX0K6fNSyKYxwyBncyq3FxTjCw6rrrdRQKEmNE="
+          "hash": "uxPFJxDAFVz82Z5y/YYeI97H0VxW2t/XUPqkRJWG6v0="
         }
       },
       "is_incremental": false,
@@ -1725,7 +1725,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddUShorts.html",
-          "hash": "5cXBkEaWA1kGzI3/NZ7HstXzIeDKeExo0OAxkiCBXW0="
+          "hash": "qvovLrpQVMuu9Su7c2cITl+OMkFjo0zbp8xsFLBgUzk="
         }
       },
       "is_incremental": false,
@@ -1737,7 +1737,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetShorts.html",
-          "hash": "ovHoryXGXxQg7aSiqSflMXIz4btUU7rbIrX7FvFuhYA="
+          "hash": "+z7NFNHOEbT156nUaqNlROGvuSuzRofz8+Dhh+UgiVY="
         }
       },
       "is_incremental": false,
@@ -1749,7 +1749,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetUShorts.html",
-          "hash": "sSFoKH3h6eF1LfFNNo+kTPYwUz+T4me34KbYskpgVwA="
+          "hash": "5+gkryLkmuLgOm3YVgUYmLVwyRSd0OM7xXomXDbnpDs="
         }
       },
       "is_incremental": false,
@@ -1761,7 +1761,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddInt.html",
-          "hash": "8Ruk1MHCIraJf3dPb1uUXqJj1jSXnPmCo2vbMkVjfLM="
+          "hash": "V4KbtTt4zTl+/VqrP2cx3okRav3mGQJtBuOlJMvX3g0="
         }
       },
       "is_incremental": false,
@@ -1773,7 +1773,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddUInt.html",
-          "hash": "yQXS973jYiXDrXii2xZuY8Td4SxHIdEUTrl62y1L9Pk="
+          "hash": "UExJY2eQxHrorzMOEYl3TIbw9vFIlBRj6KkWQwP2tOg="
         }
       },
       "is_incremental": false,
@@ -1785,7 +1785,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetInt.html",
-          "hash": "WOADjjJyDGI830NgzfEQwmGjumgvDjx6CzOqUKDEUwE="
+          "hash": "ngxLPMY+kWFl0cOBfdIB2rZ0/zgxOAoIzS24UGgfXmM="
         }
       },
       "is_incremental": false,
@@ -1797,7 +1797,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetUInt.html",
-          "hash": "NCCA+Zk8bROyfbq2741KhU/TuRzLYOf21bTsIXcigOA="
+          "hash": "8GNzV4ILB6UdaWhNw1Cxae6g8rduKTCz2gSThUMzcjQ="
         }
       },
       "is_incremental": false,
@@ -1809,7 +1809,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddInts.html",
-          "hash": "MSb8ogk3Gz9YyvxgtL3d7JjYHSGbGARfulY5Fs6Wo6M="
+          "hash": "Vc2Ep/O75oBKX06ZYceMAygdHetjsrXLHa8ZLsH0ktg="
         }
       },
       "is_incremental": false,
@@ -1821,7 +1821,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddUInts.html",
-          "hash": "wt/cqBvbL/DIay/cSjjCT67sc4aINFWlN3M1PWSJfxk="
+          "hash": "dMoKN/wXq89PW34498rL/ZHA5WFXOwWDIUYDYk5jlK4="
         }
       },
       "is_incremental": false,
@@ -1833,7 +1833,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetInts.html",
-          "hash": "A+XgVePB0XYSVGG4mu85GKgsdi6+4ULGWO+XOiYJDs8="
+          "hash": "8WWO5EDkjepAjt/SOpzO7AuUNAUu2OWvpQYZiKaMPN0="
         }
       },
       "is_incremental": false,
@@ -1845,7 +1845,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetUInts.html",
-          "hash": "ya7cSKi06EQjnHHAbV2yz3dAafWBBcpstsq8GSeNDQ8="
+          "hash": "Y8oNfLg2L58xcG4RJGJHYRbSo0cNY6yLEjJgMsh82pc="
         }
       },
       "is_incremental": false,
@@ -1857,7 +1857,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddLong.html",
-          "hash": "THO0pIybuFY34htVEeoXV5sYe3p0AyyFdHCMktSZZqM="
+          "hash": "d4eFA0xEPWHqxXjj43J1nXuX5+Mmi4/5gswFoxWS5Wg="
         }
       },
       "is_incremental": false,
@@ -1869,7 +1869,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddULong.html",
-          "hash": "LhkGqY/4YhCARm9mgct30jJxzC7fTMLy1or//1PGeW4="
+          "hash": "gQkp+miQi0f7LMqTemELpqOl++m16KQxv0FyCOBSSsY="
         }
       },
       "is_incremental": false,
@@ -1881,7 +1881,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetLong.html",
-          "hash": "oDNhu0FGHalrJSwlrVNPaU/w5/ZER165peVdIAhYHXM="
+          "hash": "VqvujzzUrQg7fm0xvxfCyG6/UalBdKX7xsnhe2ef5H0="
         }
       },
       "is_incremental": false,
@@ -1893,7 +1893,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetULong.html",
-          "hash": "gYlQ/UEEFnI4xPu43p0l8wkY3V2Bf1/IQmVvZMa98ak="
+          "hash": "hgEUMkEEghmZOTQHqut2z+9nIkqdhzNb7sUygx7XJ7U="
         }
       },
       "is_incremental": false,
@@ -1905,7 +1905,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddLongs.html",
-          "hash": "VJV0PHiOTWGR2pVQcuFB77J5Gkx5ahFG3ifa5eWGw7c="
+          "hash": "UlVSDdB9ovfyaXgM8fTIF3TMZWjaxR8QIK+U43UwFmE="
         }
       },
       "is_incremental": false,
@@ -1917,7 +1917,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddULongs.html",
-          "hash": "1JKAB9zMQgFJ6ZlFYlvrO9xlOKzeWAVo7cI7nu0r9nk="
+          "hash": "d6WDvCKrPlBFvcmpcYkdTextDgKldW9CtQNdsHriL3w="
         }
       },
       "is_incremental": false,
@@ -1929,7 +1929,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetLongs.html",
-          "hash": "5nrCaELx1ZsQ4dKH/U3XuuLPfIPeOAwVAaUd5roqTe8="
+          "hash": "5k9QS8yRUi1HdPpQ0PtlXJyjTXO8CHANKrX5pwM6XuE="
         }
       },
       "is_incremental": false,
@@ -1941,7 +1941,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetULongs.html",
-          "hash": "aLnXYSD1jQOjWuLHGrwAvAz/kUh130oGg5Y3Zoc4xCc="
+          "hash": "CxclcpiMu1/GvQMC38yUVxGpYXChTssSh348/M+AdQg="
         }
       },
       "is_incremental": false,
@@ -1953,7 +1953,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddFloat.html",
-          "hash": "C0BGy68An0grlH3EyR57/KTCvitW2tcyiCQK2rc92jc="
+          "hash": "MSQTMBixFBTnbnkHCFPMjEl28GKSbccr6Zb97Ia4jbg="
         }
       },
       "is_incremental": false,
@@ -1965,7 +1965,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetFloat.html",
-          "hash": "cbzdsEqUfIslXfUN169v/4c1FTtdSRCo8qR/EL3a2aY="
+          "hash": "yxSGfdklCU2FpsU8VulPjZZYUK+DbWOYsICQR2r52FA="
         }
       },
       "is_incremental": false,
@@ -1977,7 +1977,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddFloats.html",
-          "hash": "9yL1Lgbqih+8tJl4JScOqU20cuYr/57FgHN3yEr4pJA="
+          "hash": "7tPs4ydsq2Q358h2snMjGThv0byVZtrm8iqU+HszN+M="
         }
       },
       "is_incremental": false,
@@ -1989,7 +1989,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetFloats.html",
-          "hash": "ErpGbZ0/KFmd0v9pbsXHQI2L0cjZ9jqYJaxsJp5DLu8="
+          "hash": "K32mIN5WZIipdfMRj9fFeMV9smucYbQcvPpcWQnOZw8="
         }
       },
       "is_incremental": false,
@@ -2001,7 +2001,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddDouble.html",
-          "hash": "knU434apLkaU+5ficwR+NijRD0Zg4Hlz2tLWEG6brBA="
+          "hash": "SuPQv2zV88bo9lgMUIRq1WJMJP3kqtrE/CYKjJ180cw="
         }
       },
       "is_incremental": false,
@@ -2013,7 +2013,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetDouble.html",
-          "hash": "CYCrPK3ZEPMvvz3ctazsPJLuKXmbl4EHtfDXCxJ49ho="
+          "hash": "SXNIZH7iuiGgIoxp5hBP0FVpZleNCaFdRHlLz5xDtGE="
         }
       },
       "is_incremental": false,
@@ -2025,7 +2025,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddDoubles.html",
-          "hash": "v7D6h/kn+lPXYcmeNTqgndEsFqPi5FL8DUkUgUgkOBY="
+          "hash": "lunvNv9BWuDaCDG2nIWgZnPJ6qABEcRYj6P9l81Av4k="
         }
       },
       "is_incremental": false,
@@ -2037,7 +2037,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetDoubles.html",
-          "hash": "j1t4kCMDL1o1zCoBqK1Xu9KMlFEFRAHOXV2mH+Z9v28="
+          "hash": "1TgZpKaZnOmJVxkw0/71PEGGFm6zQBSSL6zX0Z6xiFI="
         }
       },
       "is_incremental": false,
@@ -2049,7 +2049,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddString.html",
-          "hash": "aBbADLPfABb3NI/xtvZEqrD0ZZ2nTst7C5A3OMOgXJA="
+          "hash": "6i9jH6X6oOxUhA+CgC5NiXRlYS6T5epcuX10EnnoPDA="
         }
       },
       "is_incremental": false,
@@ -2061,7 +2061,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetString.html",
-          "hash": "iWaxKMeYdPBpzj+vLmbQTMEfMRK19G3eQzBGbbTmA14="
+          "hash": "w23C3Pxk5gY+qKdT+Dq96F/JX6KALafolWMwS1EhdQk="
         }
       },
       "is_incremental": false,
@@ -2073,7 +2073,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddStrings.html",
-          "hash": "7Rk2J+OqtBohbx1vuyhJ7CWaSnaAaVtfpSCw1uXwmx8="
+          "hash": "ARTsYAe45khAz6oZ6elF/s00LZypnYgc+ThaXwCzh20="
         }
       },
       "is_incremental": false,
@@ -2085,7 +2085,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetStrings.html",
-          "hash": "8XtDsoq7BXMJU5mFsvswjqLkjX4alAHutfuc6ssnHT4="
+          "hash": "W35Qn9+GsHfBJMb4h9SH33Cl07Y8ITCOiGe/cAsLATc="
         }
       },
       "is_incremental": false,
@@ -2097,7 +2097,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddSerializable.html",
-          "hash": "F+g/yHm51KjoJtaAgXAVpD5LsxC//6NpXcCMSngsF74="
+          "hash": "8sur3eRVQV42VFscjF1ODevuo4xy50zlyFGgBhLwfhA="
         }
       },
       "is_incremental": false,
@@ -2109,7 +2109,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetSerializable.html",
-          "hash": "jQBpSen7BUA9RtvU3Py2BaStBRQ1jzrWFTbYS+iMeBg="
+          "hash": "DijjJ+QIp6V9cPmNUmUg0In8ADQ8wC5x1J8QxwKM+bw="
         }
       },
       "is_incremental": false,
@@ -2121,7 +2121,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.AddSerializables.html",
-          "hash": "O8qfZQTlQxSQntGo6sAV5dmC9mOsrWVa1KAxC3sf6k4="
+          "hash": "0Jlcm7C4w7r427G9MdzgjOt/Q/pP28EFy4+1c8JxedE="
         }
       },
       "is_incremental": false,
@@ -2133,7 +2133,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.GetSerializables.html",
-          "hash": "MwIR70WC7BHXjqrdXPFmgo7RazxMhTM0otzxCgdpG8w="
+          "hash": "UNj0BRfLkmjf/iub15QRQ+cKcvXH/V5FJtwGCq02ZCY="
         }
       },
       "is_incremental": false,
@@ -2145,7 +2145,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.Add.html",
-          "hash": "0gICul0bgLyglumAGATDjP4+6T5ap0OsccoGbhWk2fI="
+          "hash": "dRDfNL83ILghzVYiP3d5ocj/G7JxrFtr9jynWYgY5vg="
         }
       },
       "is_incremental": false,
@@ -2157,7 +2157,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Message.html",
-          "hash": "fIUE72Eh8AJ8GRQrh6zPsuzOZpDfUPCDj9JZLlNkCcY="
+          "hash": "u8NZLrFcRppEluqtpV6iIucSnoZ+51tGP9bDBfh6sQg="
         }
       },
       "is_incremental": false,
@@ -2169,7 +2169,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageHandlerAttribute.MessageId.html",
-          "hash": "fG5D6Vf9i2R1H9PY7pOMPmFTQQVppS8BKhZMZpXwGEw="
+          "hash": "IeNDOzkur7qDJ+WG+2T4rizlvHFFQQQ6DQsFTCqSZjk="
         }
       },
       "is_incremental": false,
@@ -2181,7 +2181,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageHandlerAttribute.GroupId.html",
-          "hash": "dNouKSUfvILyJGIy3bQr7uele78yy3YdvuwAvua0JYY="
+          "hash": "9ult+gutXlE7R5OgoFzXnfltnJM5+VqNdwJN5qPMew8="
         }
       },
       "is_incremental": false,
@@ -2193,7 +2193,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageHandlerAttribute.-ctor.html",
-          "hash": "TeDVV0A/D/vcH06CgNvy3rFjACmKYohwYxv2nL2gL1o="
+          "hash": "F2eCBvhsFHAzrhRSsViKbs+RYFHnYkgR5KIzojuU2EA="
         }
       },
       "is_incremental": false,
@@ -2205,7 +2205,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageHandlerAttribute.html",
-          "hash": "UvqTFMt7fU5ZExYd/kqlatm/rPyeTaLlPnOr+7zhmfo="
+          "hash": "ARDWlLVzOdknBrDumJLu2qIrAegg76XkdJzXKnW1TWE="
         }
       },
       "is_incremental": false,
@@ -2217,7 +2217,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageReceivedEventArgs.FromConnection.html",
-          "hash": "cYvMcLQjHlk+MljpPEdljRovSzhNYJii35iUPez7Fbk="
+          "hash": "ARH5dYcMUHLmKYn1qiFeQPX0PaWTPIAI9p/9GD+dYOE="
         }
       },
       "is_incremental": false,
@@ -2229,7 +2229,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageReceivedEventArgs.MessageId.html",
-          "hash": "bjgT28sFxaur0voYuplebEqa4OhZ0yyT3HBY3phdFTk="
+          "hash": "iiIEk6ExzKWXbkh4QvlqqzpKuj7waO3HsqzmY0uDwaE="
         }
       },
       "is_incremental": false,
@@ -2241,7 +2241,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageReceivedEventArgs.Message.html",
-          "hash": "4Yu5vMwB7GULq1sH+7zzPM11ZVVj1qBtydm/HBWEVdM="
+          "hash": "rFxSs3fu6iftYBSph0D993FAdO1k4GSpPlPVOSyO1ac="
         }
       },
       "is_incremental": false,
@@ -2253,7 +2253,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageReceivedEventArgs.-ctor.html",
-          "hash": "OeKl7+6UPvi63tRsbMVlyK4eULUPEwpwZM6ulEy7N2g="
+          "hash": "MoLvp8BGolg4jQqJZLL1dB4yzvYjv0LW6o6FL7ueQ/o="
         }
       },
       "is_incremental": false,
@@ -2265,7 +2265,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageReceivedEventArgs.html",
-          "hash": "bhcaGJofICUB33bqQ5MNi6t2DTidGWoALrSHZz25Npg="
+          "hash": "uynGX8iRFp8kSQLGz85PzvKNFbH6XHg8f4JOl1A86Fg="
         }
       },
       "is_incremental": false,
@@ -2277,7 +2277,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html",
-          "hash": "TbjplI9r5VAaqIKLyFQOXGq94yOyIFZYeAZR7pFCFfc="
+          "hash": "SInin8SSoGrSVdjHakTjln2HtIHc28lnhpcXi9p5VOE="
         }
       },
       "is_incremental": false,
@@ -2289,7 +2289,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.EnableRelay.html",
-          "hash": "Rao3QXcG8i5unQcP+S7DtFULwp2D2x3KjkvzNvVCP18="
+          "hash": "EyB86jrZHjQaL73eb1ZOOQ9LDmg2Fr0IZCrHdnfeI18="
         }
       },
       "is_incremental": false,
@@ -2301,7 +2301,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.DisableRelay.html",
-          "hash": "/8Fca4V2VNmiGKspVO+uI2DEY8bHBz2dhEbdYtgL3tE="
+          "hash": "SfFVA0PdCUQ8w4c/QKftwqkjXGx/W0stU6Iax7J4exM="
         }
       },
       "is_incremental": false,
@@ -2313,7 +2313,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.html",
-          "hash": "ZkgwEfQ9pBdLbyoYHJ08pIk8eR+Gg7WUC5Fe1kz6BUg="
+          "hash": "6PULNy/USLiqRQ96avU3fu5QMR5tuG7Ymu9zbTCz/gI="
         }
       },
       "is_incremental": false,
@@ -2325,31 +2325,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageSendMode.html",
-          "hash": "fw7/RLb7bl+DP53iUNJ17+rf2LiqmWo5+IMf2eRVerM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.DeclaringType.html",
-          "hash": "m51+olKnS6lpeOHulACCHJxxURcJOEieyPuFqx9UqZY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.HandlerMethodName.html",
-          "hash": "MpZYr7IaTbZiDrn0WDabJHNZyQgEjPekxKzOu9Jt5g8="
+          "hash": "yqdA14EoKAq0wGJiYF/yetUgct9OUcE0wyg7WuG+sp0="
         }
       },
       "is_incremental": false,
@@ -2361,7 +2337,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.NonStaticHandlerException.-ctor.html",
-          "hash": "AnctQJpOFVPUJc8Bp2Kl3ezW0YtNse2UcsjR+cI0kNQ="
+          "hash": "iKJMkbD2yC+r2i89J63dMomy1zjUlNiLhcVFYdLcvA0="
         }
       },
       "is_incremental": false,
@@ -2373,7 +2349,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.NonStaticHandlerException.html",
-          "hash": "XaQjiPrG6eOI7rwNSxs8V7PcC/rfErJPzuWKJeI29fk="
+          "hash": "uyEAO/m/padMVNYV/T8AvNYYvRYqyY6G53Z5NY06A3A="
         }
       },
       "is_incremental": false,
@@ -2381,11 +2357,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
+      "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.StartTime.html",
-          "hash": "HxLvcIK7KKA83WVGOJe4d9SJ+ICXVelr7e/YqgNuSmk="
+          "relative_path": "api/Riptide.NonStaticHandlerException.DeclaringType.html",
+          "hash": "c1z81Qxl93ebBzsIyuzUFoclWRJt/+nUezpN2gsVOmw="
         }
       },
       "is_incremental": false,
@@ -2393,287 +2369,11 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
+      "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.StopTime.html",
-          "hash": "w2OdoRTLvK9ValQ89jzK0pW4VJ4WCnLmxhpeo+bR8zA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.Update.html",
-          "hash": "ZJxDxZeBKlaRlzD3saLqMvtumKfFuxj19YwMmmG1cZw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.HandleMessages.html",
-          "hash": "CZudPgyNOa2P7z4OMZP71Hbhsnmk7jb52Q6YzF3Vw7M="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.HandleData.html",
-          "hash": "/Eib7++sneXvszAJTHZm6tFyjxacf7kceiVF0LAMtE4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.Handle.html",
-          "hash": "qgMFQYqW5lEiSXpEigjfiWalQp3FyH28OyJ3wH+TykA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.IncreaseActiveCount.html",
-          "hash": "bhmt2F1cDhUG1OXwhvlxSJMAmuq8bd2H6J7wINcO9xE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DecreaseActiveCount.html",
-          "hash": "32OF3Q+YaF0qFMuCXD8m3j/h23vYgwl1E3SXTOKOc74="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.html",
-          "hash": "SdT9X/KNISoQhBCWmXKPdr9Y6EUiXOKUkuiPvJ1MNgM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCNeverConnected.html",
-          "hash": "4CDCTSU/BxguEuWkvk2EUsao1+lUqWXPWNNVA17I+CA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCTransportError.html",
-          "hash": "lVXvL7wHSUh/k6B/YACVoX8qZ8c5xuW35E5gXipezG4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCTimedOut.html",
-          "hash": "CYfN1nH5W3Pik53YyJF7s9fw83Kwi1sLI/ftIDjVI3c="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCKicked.html",
-          "hash": "zddjJCAf7LCxCYAqnhomuWgCIT9OXbXvTgaRV9cDdUw="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCServerStopped.html",
-          "hash": "jNIBRwM/uBVlkgzoUFmAbIIbcOiBzyqex+SrRTe1a1A="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DCDisconnected.html",
-          "hash": "fw1SUZHFEmnvHleMK9pnxXTsL6suBtfq5i1S71QeweY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.UnknownReason.html",
-          "hash": "VT2H6FTYzj3IqbbKVyJJfsdcuLR8Y9aSj0TV0CGBxx0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.CRNoConnection.html",
-          "hash": "jj+THb7HsDc5+p6rNymGHCHkFtWh2vvTHp9qQ7u9EKM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.CRServerFull.html",
-          "hash": "f/8GNs0AlU6w8nr4H2e6HRngdAmq7SjACC3H/ZV/CKg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.CRRejected.html",
-          "hash": "XzbRmwRTGAqyr6sf+oU44W+T0oShDBk4yAYQf/XSi7w="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.CRCustom.html",
-          "hash": "TGXYQW0OW99l8xN99e9RsnuWSBCI/6Ci4f8Hj/MQe8A="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.TimeoutTime.html",
-          "hash": "10VIV/3lyUQ+2mA2KlfFmdBtLlFV8hz6PFP7+wbGA0c="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.HeartbeatInterval.html",
-          "hash": "BMKbem+5NJgRpOpKTvFWodC5Nv0LlcT/KEiVY97g9Vk="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.-ctor.html",
-          "hash": "0exRfIbereQpzXQXSmRZ9yO6N8Cr3/FOva9xGS/e3TE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.FindMessageHandlers.html",
-          "hash": "b+1+Ayd6mM/9A+CsFz5m71Ka/b+Cp4ZJBTsr/HeJFFM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.CreateMessageHandlersDictionary.html",
-          "hash": "GU7D9OAX+f5q2+bRTIxEjIZ9DYlAWUCClSxlTbGJ2Ms="
+          "relative_path": "api/Riptide.NonStaticHandlerException.HandlerMethodName.html",
+          "hash": "Z4ggGgflEoX8RCHBKawZTTx9f3FtG6ujs0u1uT3BEqI="
         }
       },
       "is_incremental": false,
@@ -2685,7 +2385,307 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Peer.LogName.html",
-          "hash": "PxWFAhBlo5zJTk3AJYUSrtnggowrvpZxBqYB7OO+XDs="
+          "hash": "AXUnVVUqRdpS2q9pSLksuotYjOjjbuTbcvqAsWQKK+M="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCNeverConnected.html",
+          "hash": "+ynQ4a12alg3BLGzHPjUApBFY4S3wP/5kwG1P7RCZ7k="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCTransportError.html",
+          "hash": "j2DNOuvMoCxL6LWw8hh2Uf9GodRNb1C2gauKIoCVVds="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCTimedOut.html",
+          "hash": "DAColQBDhKJb3sMO6qBBy6bQuBbxezGAs2EtCUqSA30="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCKicked.html",
+          "hash": "C9YjpH77sD4+zIjEcQBB180GmHReW8KPPlnxt+FbxWg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCServerStopped.html",
+          "hash": "WxPJ4FcbPKQaa/4+L3Bf2HgVLR6yOb06cLPYyss/+iw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DCDisconnected.html",
+          "hash": "vMKcYX555jcd0QzFXrxd9ZlJ+Fsw4lTeTwbS9BH+kcg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.UnknownReason.html",
+          "hash": "93ZAE76LFgZ2fJWXIiSLKufFZYMcqFuhu8+nDzWJlOE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.CRNoConnection.html",
+          "hash": "AfZKCBdprEZKdFJprO3ttifdQl2EvcaSAwrs3UuMnqw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.CRServerFull.html",
+          "hash": "D1Xs3uNXEJ9iUaZf4+lpkqNihtaDQFZOQ+zYlMsPV/U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.CRRejected.html",
+          "hash": "7/ltkcLQxm3Q3lRve3pkskC/yMDPoj3Al8998dSX5b8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.CRCustom.html",
+          "hash": "vdxEv6UMJtMZEcCO6dAGxw5XRe851FAgkO3gyogIjPI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.TimeoutTime.html",
+          "hash": "Y5tdkxSU+MOofzGjWYnBSEl6aI8pW1Ri6CQtRpJnQBE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.HeartbeatInterval.html",
+          "hash": "h6/uKQh8qJREb+fYbQsAjOHzyI/XZ6GJvo4cRnAijwM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.-ctor.html",
+          "hash": "Vu90yQHkpRuidjO7Uc7bd/xyWEia94qdoedruymlVvg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.FindMessageHandlers.html",
+          "hash": "61Au/rhEsKzgOLWkzG8m0gw7ERaz0F5Y1nJ9m6Yszx8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.CreateMessageHandlersDictionary.html",
+          "hash": "6XphPBcNPhWvejQSggeBwSfTcQRExWBrCs1ZEX18lrk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.StartTime.html",
+          "hash": "Hkrv3eyFtzvIkIQ9RT9JeigCaTOtTE8PFDDUD6j6JFE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.StopTime.html",
+          "hash": "Ky+3KbZHIv8HCAMrN+Je3DNVAM0sHZJbeIe60EpD6Xg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.Update.html",
+          "hash": "pHOk/mb0FWNDUDv9Q0cqEK1/yPuj8S6zTUrAKZbn+i4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.HandleMessages.html",
+          "hash": "SbXutzQZZ4lfVEevyJoiUS0RYR80sgK0kk/KTyXWB78="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.HandleData.html",
+          "hash": "KiBKE45Yk3AqWN0lqlFtVXcvjs+IePPLtv+WWKzv2vw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.Handle.html",
+          "hash": "z4irwhwj0SHgkDmGwFR82et8IIjDanTd4CzRiXBMQSI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.IncreaseActiveCount.html",
+          "hash": "aFCUNBFs0Dl36Nqdan5adk8tRgoBj9c2bXsZ+kj4JWw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.DecreaseActiveCount.html",
+          "hash": "qsguSDHZprjNLXDWfh/7aFDFBH1KN8IDQNdwjhCL7/Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Peer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Peer.html",
+          "hash": "6Yb3L3ANdt578dONYxDOm6Zq6XWTeTEMbgyCixN72ZU="
         }
       },
       "is_incremental": false,
@@ -2697,7 +2697,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.RejectReason.html",
-          "hash": "iWsfFxiP3KS0x6v925d2Oz5djg2yRZjKOL9YVeMt4rQ="
+          "hash": "DGBorVkE4OlsIFsmx0MJl3IIzK5/q1v/+vErIzxuh6c="
         }
       },
       "is_incremental": false,
@@ -2709,7 +2709,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.ConnectionAttemptHandler.html",
-          "hash": "LvucflyuxjTvahw4rLl/OOoE1MCgoeEI+Y1c0kJDWJk="
+          "hash": "6Z425oDtB4fmr5lrMirfP1LAr3xElFRPLpRuf36hwHg="
         }
       },
       "is_incremental": false,
@@ -2721,7 +2721,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.MessageHandler.html",
-          "hash": "2MLGpFyDcQKa662nFA7Nqf5Bd9XA359FlKbH0E2ALQE="
+          "hash": "w5O/0Y+f5nodxEA9RV+jm4/ZvOdk07ioj620MPBxL90="
         }
       },
       "is_incremental": false,
@@ -2733,7 +2733,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.ClientConnected.html",
-          "hash": "CGx12Xkz75zODNt8r3Tgxl6rJdDbwuB3w3DdPB/KUgg="
+          "hash": "86QjeQTlNy6Ld2h+XTAmmL5HbsU01Z1EGbK7MvpHkRs="
         }
       },
       "is_incremental": false,
@@ -2745,7 +2745,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.MessageReceived.html",
-          "hash": "VjJBSiNWBy4Rh4dDeWT4FGu+F2EaSs5bOLU8X26U6w0="
+          "hash": "mDVHEMyEGuPv23Hm2HlZWMDlIeXzqR3ffggCpl8XMxU="
         }
       },
       "is_incremental": false,
@@ -2757,7 +2757,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.ClientDisconnected.html",
-          "hash": "bwqq94949nwbD4ezqu/AiRH7/Qg9gX+lfKZ7f2TYCiY="
+          "hash": "mif/BTn9hOQCrAe2QdRcpB8uv7DfwqLv74TltCVRpNs="
         }
       },
       "is_incremental": false,
@@ -2769,7 +2769,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.HandleConnection.html",
-          "hash": "7nKVJmnx4WQwkV4zvd41stmYjDrsK+NnD2VzQdsEMxM="
+          "hash": "lQOFBuMrQ4uk8Wjq/G5rAl6nEPAMYeh7sAK0AiJaXk8="
         }
       },
       "is_incremental": false,
@@ -2781,7 +2781,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.RelayFilter.html",
-          "hash": "bBbdoWiRpWK3MHaewL7uJ/vcCmu11Sm1iTYoiEWZlJc="
+          "hash": "4ZZTc0amjtPg7c6jme7SF8ftvlTzTG38Gv40no18Y+4="
         }
       },
       "is_incremental": false,
@@ -2793,7 +2793,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.IsRunning.html",
-          "hash": "rXbnCt42LvYRtJuyNtNpl1PUo/Qvs6kdWPkcmO0T9RE="
+          "hash": "t+0/0by6HYSfpwFdRAzY4W5q3qAW+9akN5P49nKn1RM="
         }
       },
       "is_incremental": false,
@@ -2805,7 +2805,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Port.html",
-          "hash": "OjBiCXYmr9sdcuoXRgt0c9vn4EYUFeHxjPEHMCSPFvw="
+          "hash": "oveeXW8paQpjI+Ms593oHI5aHyPgNdCSh/Xjs6vpOO4="
         }
       },
       "is_incremental": false,
@@ -2817,7 +2817,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.MaxClientCount.html",
-          "hash": "qT0vd77nY6WZvMsv1QKdjd23pw2NGfUj8e91tddoskc="
+          "hash": "yHoCwFQTfyjQLJkvK8TFcNmCaxtph2xTu6kRuH0/8XY="
         }
       },
       "is_incremental": false,
@@ -2829,7 +2829,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.ClientCount.html",
-          "hash": "dsPLVBReVP84hCG7bJ1NGhScUiDfsmCQ6G5E0m4ruHc="
+          "hash": "49MyoJIOibRUUZWE9C59B8E6qTUKAtwkcefEf3s9QR4="
         }
       },
       "is_incremental": false,
@@ -2841,7 +2841,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Clients.html",
-          "hash": "4j0JoOijJmaGaJiRivd3Uh7rxdIQh5Iaz4VWGqYPep0="
+          "hash": "Vs7kCsdGHQ9wk+FDrozjM2Jm1pxljsMaD8ul08V0TJ4="
         }
       },
       "is_incremental": false,
@@ -2853,7 +2853,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.-ctor.html",
-          "hash": "RkkNy0W76mSnK8TZizAbSoKPvR/sz0EUwrnIgGotVQU="
+          "hash": "zJUs43a32UH5MuEWc7Rr0cdnmz/MZK2PFrf6Bj2m4wU="
         }
       },
       "is_incremental": false,
@@ -2865,7 +2865,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.ChangeTransport.html",
-          "hash": "LnHTqQdvlhu7O8AB3FTrWZxL+vqW9MxGansYTKmFr9o="
+          "hash": "F+uLFuWjE8XBxB6ybvDNfedJYFkOhWlOeTvpIK6H5/g="
         }
       },
       "is_incremental": false,
@@ -2877,7 +2877,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Start.html",
-          "hash": "bqTrpgDnNOlZty5AwAHR3u+9Xi8ZEy6CrMMabjF3mHs="
+          "hash": "Dtp1JabIV8W8ZY/dBbYtcpCroLG0EDq5HmRrpS0vn88="
         }
       },
       "is_incremental": false,
@@ -2889,7 +2889,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.CreateMessageHandlersDictionary.html",
-          "hash": "52Ai9lZdaDwNJy4iq7bcJhtXmYJwuOttYi/rPMCilhQ="
+          "hash": "/7nN/148gZnzVKDTR9Ag8I0xq13/dDfqA/dL77KhCps="
         }
       },
       "is_incremental": false,
@@ -2901,7 +2901,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Accept.html",
-          "hash": "1MG046ea87g1QZTvE9ZAXmGc/V2qcZvNU3dpBsPSPEk="
+          "hash": "xCWVvZgTQah0gDxrb/a0Eez+rWRJmkYw3damJt2yXYs="
         }
       },
       "is_incremental": false,
@@ -2913,7 +2913,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Reject.html",
-          "hash": "0okNiK66rHwLVk2fTVhsYknViG2TvKfCunO2ksf/ZHg="
+          "hash": "KO3KSwfOqIO5ei9ddwd+qkLCVjWky0ACzol0t6phQ2M="
         }
       },
       "is_incremental": false,
@@ -2925,7 +2925,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Update.html",
-          "hash": "UtCzf6iD+v5ATNUlR3O/NbkWFAm4+b0UBReDJAKiOC8="
+          "hash": "FgnrDVMxTHvvV1slHR9jLaw9TBxQP6Bb+h/b4r2dw3U="
         }
       },
       "is_incremental": false,
@@ -2937,7 +2937,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Handle.html",
-          "hash": "Ch+eJPnyXT/AHJhsh9P4JGo14+shs8JMZH2ysfNY6bM="
+          "hash": "4dQ3h7S68UlD0c3nUxfVO7kTBTEsh+bGbA/mKekxbsY="
         }
       },
       "is_incremental": false,
@@ -2949,7 +2949,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Send.html",
-          "hash": "sQOjRDQ1c2M1YJWsvik3Ql2eF1HVfqRHRMCLDspnT10="
+          "hash": "1nfrCa1sTSqjKzfqjU6eHiL1AB+qg8saatkZzmU+E1A="
         }
       },
       "is_incremental": false,
@@ -2961,7 +2961,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.SendToAll.html",
-          "hash": "50E+czfmAHP6D23A4Q+mN2qQSneArKWcTEJYYQeROd4="
+          "hash": "KosASbK1EyZRYQjj1Q3sDIf9ucpsIMHGLQYRAJxKt+Y="
         }
       },
       "is_incremental": false,
@@ -2973,7 +2973,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.TryGetClient.html",
-          "hash": "3ItD4Ze4S7XqdRYRZvfpEqK8JXOpJdWCHhs7L4j1oNY="
+          "hash": "/OjAElL4PCsX1rA0l29IGcdaVBZdOZAWcfMIDmKPrj8="
         }
       },
       "is_incremental": false,
@@ -2985,7 +2985,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.DisconnectClient.html",
-          "hash": "GDJOHYvWsN/N3vVFVSf+Ayi7E27TTMW6XPOloN85nnw="
+          "hash": "Q6OSqeqzt8Uw+9rq6BsoR5JYHZQyVuVTflJhxEY9260="
         }
       },
       "is_incremental": false,
@@ -2997,7 +2997,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.Stop.html",
-          "hash": "15I+g5JJDZ85t5UiSaGL4L0ayKxuRFTG/HgKNRQSWek="
+          "hash": "km1Kg54EyTBU+FrPu8MHtBQIc7dE5cqWsk7VtUbQJxg="
         }
       },
       "is_incremental": false,
@@ -3009,7 +3009,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.OnClientConnected.html",
-          "hash": "LUU4ahoATgAxlfdl7ttxSMU2rwn5n5Di7J/JQngRVL0="
+          "hash": "8D7DeR2LLk1TSTHbXUpte6vOoxlqLAC7cUEGE/ceDLc="
         }
       },
       "is_incremental": false,
@@ -3021,7 +3021,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.OnMessageReceived.html",
-          "hash": "EmOk615c6eQo5KttQaO0AyIm1GpFSBRgeRzqlz1bpC4="
+          "hash": "asBNgCbtCdSL+x2fyHZOPm7W5YeLVi/Rz4ciLVcUwYw="
         }
       },
       "is_incremental": false,
@@ -3033,7 +3033,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.OnClientDisconnected.html",
-          "hash": "5CqQANPjkcmuXia5wxNFc4y7hxlKM8kNkr5XrpKG20g="
+          "hash": "Xy5UJu6lPTliIE4PYinZu6ujDexcBahpq/NYpgKRZe0="
         }
       },
       "is_incremental": false,
@@ -3045,7 +3045,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.html",
-          "hash": "hYiL30ctQVk7jLig+i10kyi2oIrLK+uyBZk3wu02DtI="
+          "hash": "HRwGzsr7KrvtM00Ej6UERCUCwTmq+9ozg8x6StPzdRw="
         }
       },
       "is_incremental": false,
@@ -3057,7 +3057,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerConnectedEventArgs.Client.html",
-          "hash": "uyNk7FCsuq9fZ4A781GBqhkT/98KW5LKHsBbR0P8HGY="
+          "hash": "MB9H2gFaEaKz5rlgM2XLu5v98kdTkJLHODy4JgCucWM="
         }
       },
       "is_incremental": false,
@@ -3069,7 +3069,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerConnectedEventArgs.-ctor.html",
-          "hash": "FWVx/Y0DnxLqz/IZE/LjRtkOgD+VNaHVg8+qKGu+HyU="
+          "hash": "liqLUhc4qJ66nLEKln7WzP8NpLsNmkrLjGCE1lG3GF8="
         }
       },
       "is_incremental": false,
@@ -3081,7 +3081,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerConnectedEventArgs.html",
-          "hash": "xQD2CkbcjcahJSRNC2CPrrbGxsbMbUv05mvXIuJu+G4="
+          "hash": "T0M57cHQigVwZD6fqy81NrHKN4YTlg/SQxaIXMdWJMY="
         }
       },
       "is_incremental": false,
@@ -3093,7 +3093,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Client.html",
-          "hash": "IU2CSJExbhiim+Hcsz5On3Jcdkk1tlkcHokBLR6pXH4="
+          "hash": "k6sq/NLQk1FPKrtw+r5jB6zctoZ9BEJO5/4ap4VHf6A="
         }
       },
       "is_incremental": false,
@@ -3105,7 +3105,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Reason.html",
-          "hash": "f6bg0iPIAjsrCZC0u0BrbXHZ2lc+yCqng7lMF8v8EPE="
+          "hash": "pc+ZTIzwzxkUU8gjzl4rw/q8l+dsX7otBKVmzPX6104="
         }
       },
       "is_incremental": false,
@@ -3117,7 +3117,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerDisconnectedEventArgs.-ctor.html",
-          "hash": "ZUk9fmZIr96yai+PlzPoNSnmA1mg93b740C8Eex0w8w="
+          "hash": "uGLkQjtj1cG2aYbrJtjzDfg9V5quQFAThVunoMIhkEU="
         }
       },
       "is_incremental": false,
@@ -3129,7 +3129,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.ServerDisconnectedEventArgs.html",
-          "hash": "09pmxdw5RhGNRNwd3SWuxDxKnbxOxA7qGN19VezXIxE="
+          "hash": "6aJg57qJ9CtbTrYByA87OdvWbhNp2YbEAL8Z9JGFl/w="
         }
       },
       "is_incremental": false,
@@ -3141,7 +3141,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.ConnectedEventArgs.Connection.html",
-          "hash": "+MJuDR2krB3FwEFZFrsfMPmbNIHrGekVCbCsOKMZ+KM="
+          "hash": "IwwBpSR0dbdBI1bZtQJgfvZcSiew+eB4nS4mHWV8+wI="
         }
       },
       "is_incremental": false,
@@ -3153,7 +3153,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.ConnectedEventArgs.-ctor.html",
-          "hash": "jPqurjJT/JbJFPnyHN7v4lz/lOjmQSYeCdaAhChqez0="
+          "hash": "++3lLcL31DUstmb8EA2yTqQPDJh/6bCtBlviPjLvLC8="
         }
       },
       "is_incremental": false,
@@ -3165,43 +3165,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.ConnectedEventArgs.html",
-          "hash": "naVGyERrBtWxyl53yT4frPUG25gel0wy6CWbKOwUMjs="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.DataBuffer.html",
-          "hash": "5zZDy0keZngxpHoA0hue7SMSago/MUC2x1aw7rYmkog="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.Amount.html",
-          "hash": "0Jc1xJoGLm78Pkt9nmnn90yvgQwEMiO1wHCZOIBK6jg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.FromConnection.html",
-          "hash": "wWITL0Fdq+H66+ndyfjObvH3Lc9wbLaaCIbN58xuuM8="
+          "hash": "s1A1IhutPLwotpWBFfoP7Ao+KW1u6Pk7f9UNILvooPc="
         }
       },
       "is_incremental": false,
@@ -3213,7 +3177,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.-ctor.html",
-          "hash": "5GFWTQ4ljS+4XKfe79ndqukGlN7f5OaieLDBzzFCS7w="
+          "hash": "AY8a4wvtlh3WIkedv/MZMKQRtLPQepmakNv6Iq2VaYE="
         }
       },
       "is_incremental": false,
@@ -3225,7 +3189,43 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.html",
-          "hash": "t0C4sXAgCuarbKPPkyW6eNr4o9Pty3obf8Tl07tYrtU="
+          "hash": "X5VaWffBoQSgkQr078xXdLwdFupBjE4ESZfLqSQDbF8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.DataBuffer.html",
+          "hash": "hLDwWTY38tYl0aylGZtXdghOu1f53khAzTfX1lEvq7Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.Amount.html",
+          "hash": "mNgdCxG7DkHellBDQ+PIgPkgqBRPEZ16q6VRI4gSVfM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.FromConnection.html",
+          "hash": "gZJYYjVelN6w3sNTqtcf+YxXw+dAX+WJsarreLHjkzg="
         }
       },
       "is_incremental": false,
@@ -3237,7 +3237,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Connection.html",
-          "hash": "QfHKcKmfCduphj54N2CIVD3aDuecoibG1p3gmRmlaC8="
+          "hash": "yo1griQC2G1m3yintHDkA3W10g+ne2fBYrL9Cv5sTRk="
         }
       },
       "is_incremental": false,
@@ -3249,7 +3249,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Reason.html",
-          "hash": "FatzIrwyaXv5i7org2lrJO7FmNqq4blCV7wXARfVK+c="
+          "hash": "rOv9rScgrljupRANYiMaK+yuh05EP2xxHk43B0vMUdA="
         }
       },
       "is_incremental": false,
@@ -3261,7 +3261,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.-ctor.html",
-          "hash": "aYTEEDv2ef03qVkqB9afiam6qMEfLBNuVJhdhZv60WU="
+          "hash": "9P8cAshviJL/U5ynmGFWQMik6Z4CX7nss8di1fEelos="
         }
       },
       "is_incremental": false,
@@ -3273,7 +3273,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.html",
-          "hash": "N45N2G+MxGX4OKX4p/j25cjHOSb0KJBC+NNieogHs78="
+          "hash": "cFLgaj2viuA70k06bLE/9tdp2qUrF5KK1eTB+01k4Zw="
         }
       },
       "is_incremental": false,
@@ -3285,7 +3285,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IClient.Connected.html",
-          "hash": "niVbBN4Lw0VXbSQbNsRoxNvlrdztcSdbdqXXzn7kLM8="
+          "hash": "61x7Whog/uj4k3ww13BsaDW9tV9mth5lvBuK8eo9RUk="
         }
       },
       "is_incremental": false,
@@ -3297,7 +3297,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IClient.ConnectionFailed.html",
-          "hash": "QqyNBo008GRvFnyf6kvp1CYOlZ5Wy6LHJwYI74JMUkg="
+          "hash": "5WaBEFNXqPZgchh0IkMI/8K/AOLJ4dSKk6OgNTVhkFY="
         }
       },
       "is_incremental": false,
@@ -3309,7 +3309,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IClient.Connect.html",
-          "hash": "Y/l2cb+6pTsuptuJYGAge/6pxxx+q21J3DBnkZLdvck="
+          "hash": "kyq5SIprZl72kOE7jM/QfuSMhMBhJHlGFv7QQe3+jeE="
         }
       },
       "is_incremental": false,
@@ -3321,7 +3321,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IClient.Disconnect.html",
-          "hash": "tzKAmI9NCSqibwFemajSILh9Yun+FD7W1ZJUAB8EB68="
+          "hash": "F1mu+Mmcb95oo+iQ9iVnAJvzUW6KlbSBMTxA/jLNb0Y="
         }
       },
       "is_incremental": false,
@@ -3333,7 +3333,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IClient.html",
-          "hash": "CKpY/o7xn5KXUwNfREpUK/HOYy8UhvKyawUr0kxmb1g="
+          "hash": "W/yD2eIhoouMdGSHd5svT6tzxA5YE8NXYExBdOMy1Uo="
         }
       },
       "is_incremental": false,
@@ -3345,7 +3345,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.DataReceived.html",
-          "hash": "oUkim0MGg2DWqEQf95DEsQFFFzrLxsFxWESV4QcL9QQ="
+          "hash": "D653mbAaWj2caI2KPfb+03QsK0/CrUCsfPU+yfLpXsE="
         }
       },
       "is_incremental": false,
@@ -3357,7 +3357,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.Disconnected.html",
-          "hash": "21gQB4ZQC1eoZtt4kraNUk8abJGwivO02KANt5aFZsk="
+          "hash": "D0d2RRoWpoJinv0R8tH8erJWhcG1t5Pi2tx6XPOTK8g="
         }
       },
       "is_incremental": false,
@@ -3369,7 +3369,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.Poll.html",
-          "hash": "M3ZNohlPj1JCsNyRA7bZdDqk+fvet9lk7bW1n4SylPk="
+          "hash": "LFDfTBBCl9qxZRoFZpKTMS9tF5YQun/Xe4ceuNpzg7s="
         }
       },
       "is_incremental": false,
@@ -3381,7 +3381,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.html",
-          "hash": "DqsVnW/P76RUC1akmMAzrG9xcmCogDW1UVnQYxP+Zxo="
+          "hash": "rTkP4R7oTt57rDLCKez6oiTX3kWTDK9cVbcQ/x4WHew="
         }
       },
       "is_incremental": false,
@@ -3393,7 +3393,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.Connected.html",
-          "hash": "jtGJwBGAaGAVUPRYLMXkVEPrD4LcqGUR6fdyCPkk7AY="
+          "hash": "4+IdeQCy4heIBRpISiLk9Tmqe0MwLOD6u3YO8zC7WH8="
         }
       },
       "is_incremental": false,
@@ -3405,7 +3405,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.Port.html",
-          "hash": "SwHPGxgfDtEsvXQJ5rpBk0j/4CEbgOY9dJ7/OdSfXMU="
+          "hash": "i+FSM2spqLyduDFoXjPRMKNq+twBMj0QiJgclixfjJU="
         }
       },
       "is_incremental": false,
@@ -3417,7 +3417,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.Start.html",
-          "hash": "Ok8WGVctQIY2h6NgpQgFLpnKS9l/2ObAoWgxkwNK8Ao="
+          "hash": "ae+qxwCvSEHa2ozTxdWBs7wQS/ZVkAAFuKlQq0FcFZ0="
         }
       },
       "is_incremental": false,
@@ -3429,7 +3429,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.Close.html",
-          "hash": "uTwO2yDxzyp2k9uANxSRAMIAQOPdRgp8g5TLMrKaJrg="
+          "hash": "4fOcL5Ualt/zDPKc0aROAsFiKo2lvnZ7567dzRIGV9s="
         }
       },
       "is_incremental": false,
@@ -3441,7 +3441,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.Shutdown.html",
-          "hash": "PJRUk2EZmxaWHve+qE00oAGRmM1bnpmcOY2NZMAqFP0="
+          "hash": "lTkbzb9fy9aahF7+tT+/4T2XyVSDsuZ85/LfWNtgo/8="
         }
       },
       "is_incremental": false,
@@ -3453,7 +3453,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IServer.html",
-          "hash": "VVo1yVWxNXfnx+kewIqH/oZcuNLWy/oUk3lHf5mNYYs="
+          "hash": "VWRPFCjntsN5BkFfE6OnZ8OJQT2EA6GdwkJxeM5jCbo="
         }
       },
       "is_incremental": false,
@@ -3465,7 +3465,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.MessageHeader.html",
-          "hash": "XKW6wzx5qlPFalp6VP3lj//nRRJRS0+FbEl8Dy8fURI="
+          "hash": "2SrcXtIumT4oY2KnGi2ltNsm0qW62z4gZPt08L/Efhg="
         }
       },
       "is_incremental": false,
@@ -3477,7 +3477,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.SocketMode.html",
-          "hash": "D4n8uzBI6NQsJit1PY0OqiN8Fh7L1tJjGLlgTwau+yI="
+          "hash": "TLpj3s7UZCOjtkkGDbcvXsZeEmEMpeK/UG/YTEDrCKI="
         }
       },
       "is_incremental": false,
@@ -3489,7 +3489,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connected.html",
-          "hash": "vGt2FL3MoOv6PeODqiN+jSfGWPHnfpAyo6jAk5gJDqg="
+          "hash": "F52t6ttwVbdrdubXGf5iYwjVNrumY323nNHNDHwPDq0="
         }
       },
       "is_incremental": false,
@@ -3501,7 +3501,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.ConnectionFailed.html",
-          "hash": "na5nQpJ42o2lm28Jbwu3VKxxMKyCNF0TsR2coCBN0tA="
+          "hash": "cMfDOmA0E+XwJGMXVIKxyCHv2Yryx2QVEwySHb7rBVo="
         }
       },
       "is_incremental": false,
@@ -3513,7 +3513,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.DataReceived.html",
-          "hash": "Ym1F6dE1wcAdVWDGh2joYQ16EbBb28adH03lhof6OLc="
+          "hash": "DsDaBys5gwbdgs6IXP6xQ0BTCnJ3p4Xg5cqn5grz438="
         }
       },
       "is_incremental": false,
@@ -3525,7 +3525,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.-ctor.html",
-          "hash": "1Xy0rR3BEqXwj5AtmGFRkzRoEUp+qepZwGKSouDBs/k="
+          "hash": "1iQJ+HWfrR9Nit1kN6s4fKgN4418Aqw+8gM8kh5204o="
         }
       },
       "is_incremental": false,
@@ -3537,7 +3537,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connect.html",
-          "hash": "BQh/fp+CGwDK0o8LGtU0qVOvfO8M5GFK+NMEJKix6XE="
+          "hash": "SxTu/AinKgniwqgt5s56KhazI2u43sEq31c6OqdM0WQ="
         }
       },
       "is_incremental": false,
@@ -3549,7 +3549,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.Disconnect.html",
-          "hash": "CXXDeQ8/Kx1EKTL1YiGAIGVEQZ95xxEbJduZzeA4VeY="
+          "hash": "eSYkASvapzFlQU+twETWyJDhmtxTBkFiof/PTvwcjYs="
         }
       },
       "is_incremental": false,
@@ -3561,7 +3561,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnected.html",
-          "hash": "tQmk3T1OyGhj0l12W4dDJ+ARcGA7Gmzb1GvbI0CmefQ="
+          "hash": "K2tR0RasTkpQhPqOwzOiO1v4iDP2U0OcOzQlvP6Lnkk="
         }
       },
       "is_incremental": false,
@@ -3573,7 +3573,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnectionFailed.html",
-          "hash": "Sqxw7NAJGtkrZt3QNcgD1jHqtgMH1wmCIaCwp/eU03E="
+          "hash": "it6pNs0vonnOyXC9KHaYIB26JKmrQu0DtSMfBGkAi8w="
         }
       },
       "is_incremental": false,
@@ -3585,7 +3585,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnDataReceived.html",
-          "hash": "sHuh8kjpdWhXjX/C0ETV0hmq5WelNPBvcMCnabk0I0g="
+          "hash": "0pz8rtfmy8Qp35tX1RCPV7fyGrFjHpER/YvLBBph920="
         }
       },
       "is_incremental": false,
@@ -3597,7 +3597,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpClient.html",
-          "hash": "vgQpgNh19fFL72low1RgYenqrfHoa+fZyJnfcTFfq18="
+          "hash": "ZwklsI/I/YI0r8MZ7EKQlKMSPYEw8da1wio+oFKgQQk="
         }
       },
       "is_incremental": false,
@@ -3609,7 +3609,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html",
-          "hash": "a2CzFoKwBeOrS8nlyWP+dKU3copdhkLrbtdzECp8n0c="
+          "hash": "L1KWYHBr112tDSH9DC84BHR7lExP1OkUqD2VNw89kYM="
         }
       },
       "is_incremental": false,
@@ -3621,7 +3621,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Send.html",
-          "hash": "n4NL+9PSlnbCJHDKD2+quOHsox6neTDWwoqpVLcmw9U="
+          "hash": "90YRzp1wOxYOacfUbw+dyO5Zdx+ZTRxUFhdggEvAsYM="
         }
       },
       "is_incremental": false,
@@ -3633,7 +3633,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.ToString.html",
-          "hash": "TqXE5lI1qg+YUkSrMO2qnemZxmWPsCRN7lzNa8AbW3c="
+          "hash": "nfq1f63jRdvZER3IJnDRsiJmYYURRrXAtniZ8FeIozI="
         }
       },
       "is_incremental": false,
@@ -3645,7 +3645,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Equals.html",
-          "hash": "usxnalLnwOvmsZhKXeeYURs61tHIZHpaXwDCeGDGUuo="
+          "hash": "CQuAx9YiHzRJFsvO5G9Jaln+3PyAr6jKzd6BzdHhqtw="
         }
       },
       "is_incremental": false,
@@ -3657,7 +3657,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.GetHashCode.html",
-          "hash": "nbgXAon8xREOpty0tEC9RywpOLO3iJb1DCZffSytkzA="
+          "hash": "fMb9Sgx0DIDYQQtRFJIA25wpH+qSgBIVUtKPKwTiik0="
         }
       },
       "is_incremental": false,
@@ -3669,7 +3669,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Equality.html",
-          "hash": "kBgugRK0liLYkzWBXUE8JiCJH3PlOXp7c64JnSuAQH4="
+          "hash": "jy0ysRUXl4bsPX7OJ19umIBPRIRGbGjmpyUeDgJCyAs="
         }
       },
       "is_incremental": false,
@@ -3681,7 +3681,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html",
-          "hash": "rx9M5CljmnXGJjq4bd+kT6dh2dNqlK2RyjZWNUoGNuo="
+          "hash": "s9vZh0fglN6IdrSARcShSQp/WyFJ8usor7uCcSQvAMM="
         }
       },
       "is_incremental": false,
@@ -3693,55 +3693,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.html",
-          "hash": "p321GOOtLpWGAIN1abq4OrfU2kf+5PZHiSt4i5aBFrU="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html",
-          "hash": "OrqGBwDYR7D0mkHsmGbexcempC2G9ZPkrTgijWqmqy4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html",
-          "hash": "LTgjYIyQai8ufcOZNFHnP/9tKqd/WfJ4LIYLHz1jKnQ="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html",
-          "hash": "ETkpnby8VtaqyQS8v4BSCsgZ/BFOo+FTBBJ+lnu9AL0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html",
-          "hash": "HLWV+sdwPjN7Q9Im/OjN8jRIJcER8tMWDCftdsoKFS8="
+          "hash": "FXS+vHrEPyD6e4nggFLo2bdghWyfKyqi6dyBK6aV2cg="
         }
       },
       "is_incremental": false,
@@ -3753,7 +3705,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Disconnected.html",
-          "hash": "AP8aSoxdfVXwTTmtsREPZzqvOq4+sQd2TGNkZ7UFLo8="
+          "hash": "yTyp+0hrhYLRYV22ZJnjMQ4IXFjzLIZuYkGbaR6euZQ="
         }
       },
       "is_incremental": false,
@@ -3765,7 +3717,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html",
-          "hash": "js+FFyrN7c03Biefa2ITfzofgBmQOu55Z4M1DmPNs4k="
+          "hash": "9H2S7a/mowkKYAcBLKQK09KUB0VnfW5G09qiEbXvj0Y="
         }
       },
       "is_incremental": false,
@@ -3777,7 +3729,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.mode.html",
-          "hash": "NcDu3+gFpFWrLo/jFiu7nwUb8xq1Le9k2MBlqNQOv94="
+          "hash": "cL//bFobo+ocdwrRDYQm2yM9dnDMYoYpm0m2HVWxwWI="
         }
       },
       "is_incremental": false,
@@ -3789,7 +3741,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.-ctor.html",
-          "hash": "0bER8sVPHv4hORf1ilub+j5rPiN9hcUiJDlYEUBtlRU="
+          "hash": "5Wzi629cJNBe4AEEVNrzVX2Fl+XojzRzUR9HXc4L5Yo="
         }
       },
       "is_incremental": false,
@@ -3801,7 +3753,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Poll.html",
-          "hash": "Pje6TkbBLn1I/MmAOcOD65FkAwj7L4tHy1jITFF/nPY="
+          "hash": "g1NKwZwFoD6BcAB09b3QdBoYaiOKSfQhWR48HqNquW8="
         }
       },
       "is_incremental": false,
@@ -3813,7 +3765,55 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OpenSocket.html",
-          "hash": "Y/klawWy9Spo3ZdfbnLwD1J1iFFWmQT1oWqY1LzOiOg="
+          "hash": "AvhxQId6LjZF3CHX8VnI/AVH5raOT0sT8Mfd7m1SPbQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html",
+          "hash": "1v/dYjIPWa0uF5Mee4fHaeSyFMODfIUfOfrRQFrMvks="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html",
+          "hash": "dimpSNOgsdYj1bu2o1YAK3oU42o8xRCCS1gGuo0XZXI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html",
+          "hash": "fB1yub0dyGOW92BflfkEIz+BYoPgBECkmHYSqZ6k2zU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html",
+          "hash": "S9XTQsML79p/aDmk6Fh5v1vcI15PJixRQta7Tkoh+Fc="
         }
       },
       "is_incremental": false,
@@ -3825,7 +3825,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.Connected.html",
-          "hash": "YG+BLaxTw75nqtCjCmnaTSSmZCVSi0VRfkO1xkuEtlo="
+          "hash": "5IA+rhNeBLg9koLK4FfwIu/5j5kyLqgwSu9e9SYiqZM="
         }
       },
       "is_incremental": false,
@@ -3837,7 +3837,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.DataReceived.html",
-          "hash": "7sV5tmBHui4m5j/GgWuG3P2XirgQHhCoEwq1dM89WRU="
+          "hash": "XN7T6RS9kW33teknmyMHP5W//Y9aUZ1AK+0As1FIOT8="
         }
       },
       "is_incremental": false,
@@ -3849,7 +3849,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.Port.html",
-          "hash": "4yt462hzBILbKSEidrexQ0McSWcnQ7RPDsMlj5C/i0A="
+          "hash": "X1QRgXYuWoHljRFpQd44bNQFMmYaBZ7sdwXp63vO/vY="
         }
       },
       "is_incremental": false,
@@ -3861,7 +3861,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.-ctor.html",
-          "hash": "YQv9vRJ4SSEGrFhJ4K0zbyS2HIrsXItyxfR+03p21ZQ="
+          "hash": "artcSbl7cdkGG2c6hiJHyc3C2Er1DrjTVMXFkhrD60k="
         }
       },
       "is_incremental": false,
@@ -3873,7 +3873,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.Start.html",
-          "hash": "4xAZBW7NqoXg7QBE/nobbmiDy0yEeZfF+cDqvNjjsjI="
+          "hash": "qUDLu8d0FRJdL2Z0Dq5CiI1lTV7YjXhzkJDUbXEauiA="
         }
       },
       "is_incremental": false,
@@ -3885,7 +3885,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.Close.html",
-          "hash": "FnYnPmMTqUc/MNY32ZZgPiYbxlYMubChPx496VbBPAw="
+          "hash": "Z6SGOq85JkPA+j34kipZeybEw93BAl3AoUCnP4DLX/A="
         }
       },
       "is_incremental": false,
@@ -3897,7 +3897,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.Shutdown.html",
-          "hash": "aBBGNJc1WZaJ8Wg1+P0DeWqnIEtdXbPlVZqRMot2x0A="
+          "hash": "M7Bw5VAd66MBUS7NYF46Bl6GtSxDfX/6StRY1D5QGhA="
         }
       },
       "is_incremental": false,
@@ -3909,7 +3909,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnConnected.html",
-          "hash": "7OHTOSaRDz06t+0Y0jzbe5h6DjFiLAvgBO+nxqHKoO8="
+          "hash": "DmwEfyKKHm9YXgtq2srNHPc6EwW1DnI2LGeqDyIeCYU="
         }
       },
       "is_incremental": false,
@@ -3921,7 +3921,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnDataReceived.html",
-          "hash": "6s8CpC1Lo8+N3YVDTVVSWBcAZHMsddGbL+CZnzgGlZ8="
+          "hash": "qtSp9y3/gEcrZngg/kUcWwz7t1e2R2hIY5lj79c7czs="
         }
       },
       "is_incremental": false,
@@ -3933,7 +3933,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpServer.html",
-          "hash": "VEWs5xymru2z5TKPBZaxWoh2MMDI4Or+2Xg2osHr1SY="
+          "hash": "QhLEdxxtqmSKKlreBt6SVQefat/z7DM0r6Dxwrc4sCk="
         }
       },
       "is_incremental": false,
@@ -3945,7 +3945,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.html",
-          "hash": "mdv9Lh9pkRxJff++4th8u3o/Gn7kFATU0ZQ7NJUp/uU="
+          "hash": "DojITF1+gYza404ux4Qo5JV2w0Dj1ypK6qoJcTnRQxk="
         }
       },
       "is_incremental": false,
@@ -3957,7 +3957,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.html",
-          "hash": "DRZUp8VF3iVXu5pJ8PxBHPlM0dhalZGUYAOGXsxCq+M="
+          "hash": "0C22dgqaHiNzP5S2U7nXjVYWOL9lw37cP6SWr0bi604="
         }
       },
       "is_incremental": false,
@@ -3969,7 +3969,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.LogName.html",
-          "hash": "4KGvRJc3U6iNfc2A80Tdec8qIFIVDQ2OIFdgDzTVZYw="
+          "hash": "DAs53qA5q7CO7SkFj42SHOLPAdjCsLNv80Bsn9T0PSs="
         }
       },
       "is_incremental": false,
@@ -3981,7 +3981,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.-ctor.html",
-          "hash": "W6nSHWMRC2od6XOeKsopKWfKnfWKiB0+RVJFfR0Q67E="
+          "hash": "7+T4aE5khzVgCtzG86rEq1f1cTWAVEtLRUrf+BmT3Lg="
         }
       },
       "is_incremental": false,
@@ -3993,7 +3993,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.Add.html",
-          "hash": "R66+w8MOh6Fm4AU1ApfEPQgyVjnWUBTbUxvIpKDCUcQ="
+          "hash": "pe8gCYMLY+VoncWzpYQBAzfjSyyuugU1U/sQY6t3vSM="
         }
       },
       "is_incremental": false,
@@ -4005,7 +4005,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.ExecuteAll.html",
-          "hash": "I3uXdFAq22hflzmBzN06Lj1Q0E1jO4dseMpLU63Heo4="
+          "hash": "1HOCo3Wh7bgvOrwBgw6JRE9iAsZnkeq2h/3zPwsm+F0="
         }
       },
       "is_incremental": false,
@@ -4017,7 +4017,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.Clear.html",
-          "hash": "HTY1FleQhqnuztJWkVpaE5hzKbWA8ZPEZdGSZiRnDvI="
+          "hash": "zACoCjOfRryUJeZ6mqe1O2H3sJHSgie4lRA9+S70pOo="
         }
       },
       "is_incremental": false,
@@ -4029,139 +4029,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.ActionQueue.html",
-          "hash": "zCKUoeyoTUCWH4DGlYtCJqe9eIKd2X8/LbK6E/UIpT0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromShort.html",
-          "hash": "e961FVBp5WySdSVyynqyU4lH+0aLTl5NX1el18wlmq0="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromUShort.html",
-          "hash": "btanUbhI8bfgAm93YqgGn79dizZGAugI5aetZL3U1/A="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToShort.html",
-          "hash": "HV3sHwgAQp03GtGjnAh8mMcyXEOUO4H7u6mvKRV1pyA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToUShort.html",
-          "hash": "YJ/dMj/KMrXnD+o4a9D4jLCdwpxdwSxnOEzE4rY8NGs="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromInt.html",
-          "hash": "yOAPDY+IKJgHUhIUIemLxOSKzzHAWsTEps/eWsLCVNY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromUInt.html",
-          "hash": "6zvWOBymH2ZTQKrPKFfT/DvITYJ4WTM6GjHhzVxiMFE="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToInt.html",
-          "hash": "yy3N1MSh9HBOsDvd04uROFsbh0VyeSUgVinDgZSGCgo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html",
-          "hash": "V3Fgqbj27k8zjYG1h1DpLDMy7fn7+6LFuQmp/T7459k="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromLong.html",
-          "hash": "sVymmmauktW9NSEkLp8/4EOT0lLDslgKPPn431Qh2Fg="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromULong.html",
-          "hash": "Bi+MQPeb5JDSsW/sx5CUvXlLOT6lfzUD+HDxrWf0sD4="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToLong.html",
-          "hash": "JT0Wyt84h3w4+LdGm5Li4UtNm55RKphMUnKbS0xNh0k="
+          "hash": "SsYWUYA90cnThbViyN3vuUl9GFxSKvTLhUzCbdUpEK0="
         }
       },
       "is_incremental": false,
@@ -4173,7 +4041,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.ToULong.html",
-          "hash": "leSglX2Hdh3BRQ9Zaq0mjvOIbjIRrrDAmyweCILWDo0="
+          "hash": "bRjXQF6y3dWfWSjsDc9fYOJZToRE0xS7CIYkTCrf3l0="
         }
       },
       "is_incremental": false,
@@ -4185,7 +4053,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.FromFloat.html",
-          "hash": "4/ZDbiU6GS+H5jqSaHwb79S4tkM/TNrXqtnjFjC5uWs="
+          "hash": "6dTWKcjt7RWHzkcmZRLdgt2LSPpDRMrL9QdXf3QrTP0="
         }
       },
       "is_incremental": false,
@@ -4197,7 +4065,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.ToFloat.html",
-          "hash": "e0lfptgkQ7RL37tzrShiOINt/6w8YiztnRBY2xMv58c="
+          "hash": "YNd4W8I2o4pgL6xntYpvTfDLbHfAirsNOS9n+Y/iQwc="
         }
       },
       "is_incremental": false,
@@ -4209,7 +4077,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.FromDouble.html",
-          "hash": "VFBSjTHHYLFpqwWDMz2pCa4Yz6zyVqFYIuDduLotdgc="
+          "hash": "rhmLlCtBzcYTcbTCwkR4OMCrXN1Xu5U8FQGS3C3UIMw="
         }
       },
       "is_incremental": false,
@@ -4221,7 +4089,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.ToDouble.html",
-          "hash": "fw41vkZyrez3eFicS4xrlhJrJ7vP1A96ASVKfvdX8UE="
+          "hash": "xrk+zOnRIgF9Nd83gG+Qz0tSQF6rB3xCKCjfoG/O+Mw="
         }
       },
       "is_incremental": false,
@@ -4233,7 +4101,139 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.html",
-          "hash": "wXfGwGuo2G6U+xixByF32rhKKCKvFNiClKYk2DwtxwY="
+          "hash": "AFCKLR5UhNL+CQ2ORgciPKpQliIMAQkPTV9YFXSY7QI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromShort.html",
+          "hash": "PIv+Z+GlNO/PlzSBcuzz8aj9QMgrA9Ad6WT0tTEXGSQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromUShort.html",
+          "hash": "BBJFNBFT4XojqfoatLeAbPLR+AEd6VdQg++RDuYbolM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToShort.html",
+          "hash": "QSLCuWv09U0WCm7dgQr8EqDIlguEm/WPaPy2SFDSua0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToUShort.html",
+          "hash": "6GjORqvqGzXKQKYUGcPuoSRXfNhQZ5+1FDzgO2wj4Cs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromInt.html",
+          "hash": "oH1KONMGDowsuvKODm1Z4X/umCAna1KWLyRcsOkqMtA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromUInt.html",
+          "hash": "kGZ17X15XeAYmpJxMzh8fGTAYxVbUEVjC6Y3EdiWBKU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToInt.html",
+          "hash": "pizMmIwdjOSg/z8QSjPbbFvIhYFdbpay/52Z+EUoBpE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html",
+          "hash": "37FN7d20feVAxu8nx4DeXUIMAxEzqd8+FhDtIq5g2bI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromLong.html",
+          "hash": "p59H2T8ot6Ga41+mChk7lgHrpp2IpY30HW6fp0IlsYY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromULong.html",
+          "hash": "xj50La1/d/GwajMg7oS+hRsSmBIQDE6wQPtZOSTWskQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToLong.html",
+          "hash": "zzEvKEIxlVaifWQ4ssGnhbzHvTFpw1VVWHL7Ssyqsvs="
         }
       },
       "is_incremental": false,
@@ -4245,7 +4245,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Extensions.ToStringBasedOnIPFormat.html",
-          "hash": "bWibegkhlDDaS3oqOlxdiv8WUJJIBBG6P1tZp2SBiXk="
+          "hash": "h3UCz6ognoCKm91Bk7WAVOq838BL9vvLEmFQE4HH5ic="
         }
       },
       "is_incremental": false,
@@ -4257,7 +4257,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Extensions.html",
-          "hash": "p5KxxvU0Etqc3mO6rcw4HCMMWPWzjK/TnB3BAvg02IM="
+          "hash": "MW8xuKrINdPXjU3hSvR4eP2zmvbCPwRNtzLYlSXs72A="
         }
       },
       "is_incremental": false,
@@ -4269,7 +4269,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.LogType.html",
-          "hash": "oQdQxBpEMNRsUOqc21ueypLXlb5mnVl/NtwBFEJgURg="
+          "hash": "C6BkCooOvIZ4E0hKYrG4Rd/Zm2gaGJWVkK2+P4bT+n0="
         }
       },
       "is_incremental": false,
@@ -4281,7 +4281,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.html",
-          "hash": "7gpE9yzIhAyoM59dLm9yG7D510TrLUzw57fsz4/ThFs="
+          "hash": "gcDBM+RD00r84ZYz4/TQDfqXmB9afA++wt7ErxdJTZo="
         }
       },
       "is_incremental": false,
@@ -4293,7 +4293,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.IsDebugLoggingEnabled.html",
-          "hash": "69tORhhw+cE7d/puGVsR6IaZRvEahGQHP5RYFHsx+vo="
+          "hash": "IKsMQMB5p9VFnea7OMrgSpmlRyU+B9ejgB1KHJB082w="
         }
       },
       "is_incremental": false,
@@ -4305,7 +4305,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.IsInfoLoggingEnabled.html",
-          "hash": "K4yM8Di+3CZG0rY0hO2kPdPf8nn5tXsK9zUalvQIPAQ="
+          "hash": "wZabU0EhOMpsMdmtftrdHpiBWG2hbnl8jPKxfMGuedc="
         }
       },
       "is_incremental": false,
@@ -4317,7 +4317,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.IsWarningLoggingEnabled.html",
-          "hash": "XQsx9SsotAFr4TzFbK0wa8GMuXdtlGMHOf6Gjuzc3j0="
+          "hash": "oWqEJlVw588HZ2qJ7ju4gRxUjius/z7q0BzAYd1rzl8="
         }
       },
       "is_incremental": false,
@@ -4329,7 +4329,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.IsErrorLoggingEnabled.html",
-          "hash": "/AcxinD623fgo5YiPooV8kH0xAEWts43NJlwjpYUId8="
+          "hash": "66aq760tq7JschhKRYbqopmSFqPOiZmV82fGewNxJjI="
         }
       },
       "is_incremental": false,
@@ -4341,7 +4341,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.Initialize.html",
-          "hash": "cxW2PJHDdUh01LyLAIyK7obadwU7b8oSIk49e/8V98Y="
+          "hash": "5eA65drvNifKUE5zGX6A7z1p2HWD5DP0eOW66uykZ8w="
         }
       },
       "is_incremental": false,
@@ -4353,7 +4353,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.EnableLoggingFor.html",
-          "hash": "mOqYfB4+0bzurCaV/zb/bDwlRvkJQaB1aM/eJovAdXw="
+          "hash": "pIQyNh7tkBX9CYWWMUv3k6dtyqwaztxPM8Wu8kYxljk="
         }
       },
       "is_incremental": false,
@@ -4365,7 +4365,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.DisableLoggingFor.html",
-          "hash": "wC/XFa5BE5wONov7Ye/sIEo4K1h+KaQGq31JOWf0DoU="
+          "hash": "5aACVBJNVlXVPKw/eY0zcIU9NfBiLNhkmY7LIKb3rEU="
         }
       },
       "is_incremental": false,
@@ -4377,7 +4377,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.Log.html",
-          "hash": "QOoS3udo/FgI9r15dzZOiYJTuvzqNHKDKC3JHwu9kyw="
+          "hash": "QhPF0Gpzo+tnsG3nbHzpi+WAF7UntJYNmtBsHB5ij1o="
         }
       },
       "is_incremental": false,
@@ -4389,7 +4389,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.html",
-          "hash": "j2LEW1uy4dgZjcx7UK4p6GElaNxEXanGJR8yErVSwCs="
+          "hash": "fVL+lnlN7TYXj6IUsrqS9FhU2mTJqFzaQ6OzpUcszAU="
         }
       },
       "is_incremental": false,
@@ -4401,7 +4401,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.html",
-          "hash": "oVbOnwhiiUSG5Hs+WARL9jh7hfjclyBI06FjhtLblyo="
+          "hash": "Shw8Vtuxp/0BS8zJufNTZoNtQfkxmJIsf77iJXqOu8k="
         }
       },
       "is_incremental": false,
@@ -4413,7 +4413,7 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.html",
-          "hash": "qWwMV3UVx81bvwQ2El9EyV7mdXWZ8Ys+OSmtw3Ga5GY="
+          "hash": "RTKrQ3ilgS9qcvrpY/ctxZ+Hl7Ef8sd8L05ZPg6hTCg="
         }
       },
       "is_incremental": false,
@@ -4425,7 +4425,7 @@
       "output": {
         ".html": {
           "relative_path": "api/index.html",
-          "hash": "OKXk8ZUbHbJPaDQYueFQjpk+xFlnYZjNwzK355t0A0Y="
+          "hash": "3trrqkbQO6/3GJRq23O3DW9JGWygGDAa6PFFMLTANss="
         }
       },
       "is_incremental": false,
@@ -4449,7 +4449,7 @@
       "output": {
         ".html": {
           "relative_path": "articles/intro.html",
-          "hash": "jt8IWyB+bHvxLqPc+19A7swWCnCwnEKTOqwoeiyD9VQ="
+          "hash": "Rq7rxm67yQajdkVlyDcl1IU9TjNfRsK2ZdDh/6MOTXQ="
         }
       },
       "is_incremental": false,
@@ -4506,7 +4506,7 @@
       "output": {
         ".html": {
           "relative_path": "index.html",
-          "hash": "3mfeudx2tR/hQ9ZjFtjRXXLFswgLiO2ErpgRtc/T1Yc="
+          "hash": "QM/ww5FaBmF+kDPB8whG+rNuvNDnO6KuxokF/6PtB0w="
         }
       },
       "is_incremental": false,
