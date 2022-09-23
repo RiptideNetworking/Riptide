@@ -10,6 +10,7 @@
         }
       ],
       "dest": "api",
+      "filter": "apifilter.yml",
       "disableGitFeatures": false,
       "disableDefaultFilter": false
     }
