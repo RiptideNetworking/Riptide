@@ -1,0 +1,69 @@
+name: Update Unity Package
+
+on:
+  push:
+    branches:
+      - main
+      - package-change
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v2.1.0
+        with:
+          dotnet-version: 3.1
+
+      - name: Build Riptide
+        run: dotnet build RiptideNetworking/RiptideNetworking.sln
+
+      - name: Checkout package branch # Committing here is necessary to avoid the "Git LFS pull" step from nuking the changes to the Packages folder
+        run: |
+          git fetch
+          git checkout unity-package
+          git config --global user.email "51303091+tom-weiland@users.noreply.github.com"
+          git config --global user.name "Tom Weiland"
+          git add Packages
+          git commit -m "Update package"
+
+      - name: Create LFS file list
+        run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v3
+        id: lfs-cache
+        with:
+          path: .git/lfs
+          key: ${{ runner.os }}-lfs-${{ hashFiles('.lfs-assets-id') }}
+
+      - name: Git LFS pull
+        run: |
+          git lfs pull
+          git add .
+          git reset --hard
+
+      - name: Restore Library cache
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: unity-package-project-library
+
+      - name: Unity builder
+        uses: game-ci/unity-builder@v2.1.1
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          targetPlatform: StandaloneWindows # This field is required, but won't actually be used because the build method doesn't do anything
+          buildMethod: MetaGenerator.Build.GenerateMetaFiles
+
+      - name: Commit changes
+        run: |
+          git add Packages
+          git commit --amend --no-edit
+          git push
