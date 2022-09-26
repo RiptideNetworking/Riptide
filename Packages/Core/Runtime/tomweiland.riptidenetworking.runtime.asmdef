@@ -1,6 +1,6 @@
 {
     "name": "RiptideNetworking",
-    "rootNamespace": "RiptideNetworking",
+    "rootNamespace": "Riptide",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
