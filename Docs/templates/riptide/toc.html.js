@@ -66,8 +66,8 @@ exports.transform = function (model) {
                 item.topicHref = item.items[0].topicHref;
                 item.items = [];
                 item.leaf = true;
-            } else if (item.level == 2 || item.level == 3) {
-                // Add a child with a link to the namespace or class, instead of using the foldout
+            } else if (item.topicHref) {
+                // Add a child with a link to what the foldout was linking to, instead of using the foldout as the link
                 item.items.unshift({
                     topicHref: item.topicHref,
                     name: item.name,
