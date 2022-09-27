@@ -1,90 +1,97 @@
 {
-  "metadata": [
-    {
-      "src": [
+    "metadata": [
         {
-          "files": [
-            "**.csproj"
-          ],
-          "src": "../RiptideNetworking/"
+            "src": [
+                {
+                    "files": [
+                        "**.csproj"
+                    ],
+                    "src": "../RiptideNetworking/"
+                }
+            ],
+            "dest": "api",
+            "filter": "apifilter.yml",
+            "disableGitFeatures": false,
+            "disableDefaultFilter": false
         }
-      ],
-      "dest": "api",
-      "filter": "apifilter.yml",
-      "disableGitFeatures": false,
-      "disableDefaultFilter": false
-    }
-  ],
-  "build": {
-    "content": [
-      {
-        "files": [
-          "api/**.yml",
-          "api/index.md"
-        ]
-      },
-      {
-        "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
-          "toc.yml",
-          "*.md"
-        ]
-      }
     ],
-    "resource": [
-      {
-        "files": [
-          "images/**"
-        ]
-      }
-    ],
-    "overwrite": [
-      {
-        "files": [
-          "apidoc/**.md"
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "api/**.yml",
+                    "api/index.md"
+                ]
+            },
+            {
+                "files": [
+                    "articles/**.md",
+                    "articles/**/toc.yml",
+                    "toc.yml",
+                    "*.md"
+                ]
+            }
         ],
-        "exclude": [
-          "obj/**",
-          "_site/**"
-        ]
-      }
-    ],
-    "dest": "_site",
-    "globalMetadata": {
-        "_appTitle": "Riptide Docs",
-        "_appFooter": "Copyright © Tom Weiland",
-        "_appLogoPath": "images/logo.png",
-        "_appFaviconPath": "images/favicon.ico",
-        "_enableNewTab": true,
-        "_enableSearch": true,
-        "_gitContribute": {
-          "repo": "https://github.com/RiptideNetworking/Riptide",
-          "branch": "main",
-          "apiSpecFolder": "Docs/apidoc"
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ]
+            }
+        ],
+        "overwrite": [
+            {
+                "files": [
+                    "apidoc/**.md"
+                ],
+                "exclude": [
+                    "obj/**",
+                    "_site/**"
+                ]
+            }
+        ],
+        "dest": "_site",
+        "globalMetadata": {
+            "_appTitle": "Riptide Docs",
+            "_appFooter": "Copyright © Tom Weiland",
+            "_appLogoPath": "images/logo.png",
+            "_appFaviconPath": "images/favicon.ico",
+            "_enableNewTab": true,
+            "_enableSearch": true,
+            "_gitContribute": {
+                "repo": "https://github.com/RiptideNetworking/Riptide",
+                "branch": "main",
+                "apiSpecFolder": "Docs/apidoc"
+            },
+            "_logoAltText": "Riptide Logo",
+            "_baseUrl": "https://riptidenetworking.github.io/Riptide/",
+            "_description": "Documentation for Riptide Networking.",
+            "_donateUrl": "https://github.com/sponsors/tom-weiland",
+            "_donateText": "Support Riptide"
         },
-        "_logoAltText": "Riptide Logo",
-        "_baseUrl": "https://riptidenetworking.github.io/Riptide/",
-        "_description": "Documentation for Riptide Networking."
-    },
-    "globalMetadataFiles": [],
-    "fileMetadataFiles": [],
-    "template": [
-      "default",
-      "plugins/memberpage.2.59.0/content",
-      "templates/riptide"
-    ],
-    "xrefService": [
-      "https://xref.docs.microsoft.com/query?uid={uid}"
-    ],
-    "sitemap": {
-      "baseUrl": "https://riptidenetworking.github.io/Riptide/"
-    },
-    "postProcessors": [],
-    "markdownEngineName": "markdig",
-    "noLangKeyword": false,
-    "keepFileLink": false,
-    "cleanupCacheHistory": false,
-    "disableGitFeatures": false
-  }
+        "fileMetadata": {
+            "redirectUrl": {
+                "index.md": "articles/intro.html"
+            }
+        },
+        "globalMetadataFiles": [],
+        "fileMetadataFiles": [],
+        "template": [
+            "default",
+            "plugins/memberpage.2.59.0/content",
+            "templates/riptide"
+        ],
+        "xrefService": [
+            "https://xref.docs.microsoft.com/query?uid={uid}"
+        ],
+        "sitemap": {
+            "baseUrl": "https://riptidenetworking.github.io/Riptide/"
+        },
+        "postProcessors": [],
+        "markdownEngineName": "markdig",
+        "noLangKeyword": false,
+        "keepFileLink": false,
+        "cleanupCacheHistory": false,
+        "disableGitFeatures": false
+    }
 }

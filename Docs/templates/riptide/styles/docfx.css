@@ -130,6 +130,7 @@ svg:hover path {
   margin-top: 5px;
 }
 .table {
+  font-size: 14px;
   margin-bottom: 10px;
   width: 100%;
   max-width: 100%;
@@ -479,7 +480,6 @@ article section {
 body .toc{
   background-color: var(--main-background);
   overflow-x: hidden;
-  border-right: 1px solid var(--border);
 }
 
 .sidetoggle.ng-hide {
@@ -609,6 +609,7 @@ body .toc{
   right: 5px;
 }
 .article {
+  font-size: 16px;
   margin-top: 75px;
   margin-bottom: 100px;
 }
@@ -682,7 +683,7 @@ body .toc{
 .affix ul > li.active > a,
 .affix ul > li.active > a:before {
   color: var(--text-subtle);
-  background-color: var(--main-background-active);
+  background-color: var(--main-background);
 }
 .affix ul > li > a {
   padding: 5px 12px;

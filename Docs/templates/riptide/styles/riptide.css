@@ -1,3 +1,19 @@
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-background); 
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-background); 
+    border: 3px solid var(--scrollbar-background);
+    border-radius: 9999px;
+    background-clip: padding-box;
+}
+
 #logo {
     height: 100%;
     padding: 10%;
@@ -6,6 +22,10 @@
 body {
     background-color: var(--main-background);
     color: var(--text);
+}
+
+article h1 {
+    margin-top: 0.5em;
 }
 
 .navbar-inverse {
@@ -70,6 +90,10 @@ body {
     color: var(--text-subtle);
 }
 
+.sidetoc {
+    border-right: 1px solid var(--border);
+}
+
 .toc .nav > li > .expand-stub::before,
 .toc .nav > li.active > .expand-stub::before
 {
@@ -104,10 +128,17 @@ body {
 
 .nav .level2 .tree-leaf.active {
     background-color: var(--main-background-active);
+    border-radius: 4px 0 0 4px;
 }
 
 #breadcrumb {
     padding-left: 0px;
+    font-size: 14px;
+}
+
+.inheritance > div,
+.inheritedMembers > div {
+    font-size: 14px;
 }
 
 .navbar-default {
@@ -152,20 +183,12 @@ body {
 }
 
 /* CODE BLOCKS */
-.hljs-attr,
-.hljs-selector-attr,
-.hljs-selector-class,
-.hljs-selector-id,
-.hljs-selector-pseudo,
-.hljs-title {
-    color: var(--code-class);
+pre {
+    font-size: 14px;
 }
 
-.hljs-attribute,
-.hljs-bullet,
-.hljs-literal,
-.hljs-symbol {
-    color: var(--code-symbol);
+pre code {
+    white-space: pre;
 }
 
 /* SEARCH */
@@ -199,4 +222,39 @@ mark,
     background-color: var(--pagination-background-active);
     color: var(--text);
     border-color: var(--pagination-border);
+}
+
+/* ALERTS */
+.alert {
+    margin: 1em 0 0 0;
+}
+
+.NOTE {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-background);
+    border-color: transparent;
+}
+
+.TIP {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-background);
+    border-color: transparent;
+}
+
+.IMPORTANT {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-background);
+    border-color: transparent;
+}
+
+.CAUTION {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-background);
+    border-color: transparent;
+}
+
+.WARNING {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-background);
+    border-color: transparent;
 }
