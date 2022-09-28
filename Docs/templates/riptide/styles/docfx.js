@@ -587,27 +587,39 @@ $(function () {
         name: e.innerHTML
       });
     })
-    // Structures breadcrumbs properly for API docs, but may not be correct for articles
+    
     var activeFoldouts = $('#toc a.active').toArray();
     if (activeFoldouts[0]) {
-      var activeLeaf = $('#toc .tree-leaf.active > a')[0];
-      if (activeLeaf && activeFoldouts[0].textContent !== activeLeaf.title) {
-        // Only want to show namespace in breadcrumb if NOT looking at the namespace's page
-        var namespaceLeaf = $('#toc > .level1 > li.active .tree-leaf > a')[0];
-        if (namespaceLeaf) {
+      var firstLeaf = $('#toc .tree-leaf > a')[0];
+      if (firstLeaf && activeFoldouts[0].textContent !== firstLeaf.title) {
+        // The first leaf is different from the foldout, meaning this isn't an API table of contents
+        $('#toc li:not(.tree-leaf) > a.active').each(function (i, e) {
           breadcrumb.push({
-            href: namespaceLeaf.href,
-            name: namespaceLeaf.innerHTML
+            href: e.href,
+            name: e.innerHTML
           });
-          
-          if (activeFoldouts[1] && activeFoldouts[1].textContent !== activeLeaf.title) {
-            // Only want to show class in breadcrumb if NOT looking at the class's page
-            var classLeaf = $('#toc > .level1 > li.active > .level2 > li.active .tree-leaf > a')[0];
-            if (classLeaf) {
-              breadcrumb.push({
-                href: classLeaf.href,
-                name: classLeaf.innerHTML
-              });
+        })
+      } else {
+        // The first leaf is the same as the foldout, meaning this is an API table of contents
+        var activeLeaf = $('#toc .tree-leaf.active > a')[0];
+        if (activeLeaf && activeFoldouts[0].textContent !== activeLeaf.title) {
+          // Only want to show namespace in breadcrumb if NOT looking at the namespace's page
+          var namespaceLeaf = $('#toc > .level1 > li.active .tree-leaf > a')[0];
+          if (namespaceLeaf) {
+            breadcrumb.push({
+              href: namespaceLeaf.href,
+              name: namespaceLeaf.innerHTML
+            });
+            
+            if (activeFoldouts[1] && activeFoldouts[1].textContent !== activeLeaf.title) {
+              // Only want to show class in breadcrumb if NOT looking at the class's page
+              var classLeaf = $('#toc > .level1 > li.active > .level2 > li.active .tree-leaf > a')[0];
+              if (classLeaf) {
+                breadcrumb.push({
+                  href: classLeaf.href,
+                  name: classLeaf.innerHTML
+                });
+              }
             }
           }
         }
