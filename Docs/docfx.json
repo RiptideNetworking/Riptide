@@ -25,8 +25,8 @@
             },
             {
                 "files": [
-                    "articles/**.md",
-                    "articles/**/toc.yml",
+                    "manual/**.md",
+                    "manual/**/toc.yml",
                     "toc.yml",
                     "*.md"
                 ]
@@ -71,7 +71,7 @@
         },
         "fileMetadata": {
             "redirectUrl": {
-                "index.md": "articles/intro.html"
+                "index.md": "manual/overview/what-is-riptide.html"
             }
         },
         "globalMetadataFiles": [],

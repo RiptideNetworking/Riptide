@@ -1,6 +1,6 @@
 - name: Manual
-  href: articles/
-  homepage: articles/intro.md
+  href: manual/
+  homepage: manual/overview/what-is-riptide.md
 - name: GitHub
   href: https://github.com/RiptideNetworking/Riptide
 - name: Discord
