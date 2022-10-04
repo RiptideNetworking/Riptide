@@ -593,7 +593,7 @@ $(function () {
     
     var activeFoldouts = $('#toc a.active').toArray();
     if (activeFoldouts[0]) {
-      var firstLeaf = $('#toc .tree-leaf > a')[0];
+      var firstLeaf = $('#toc li.active .tree-leaf > a')[0];
       if (firstLeaf && activeFoldouts[0].textContent !== firstLeaf.title) {
         // The first leaf is different from the foldout, meaning this isn't an API table of contents
         $('#toc li:not(.tree-leaf) > a.active').each(function (i, e) {
