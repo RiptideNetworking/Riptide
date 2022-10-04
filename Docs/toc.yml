@@ -8,3 +8,5 @@
 - name: API
   href: api/
   homepage: api/Riptide.yml
+- name: Support Riptide
+  href: https://github.com/sponsors/tom-weiland

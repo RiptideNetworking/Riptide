@@ -28,6 +28,14 @@ article h1 {
     margin-top: 0.5em;
 }
 
+p {
+    margin-bottom: 1em;
+}
+
+#sponsorIcon {
+    max-height: 16px;
+}
+
 .navbar-inverse {
     background-color: var(--main-background);
     border-color: var(--border);
@@ -183,6 +191,12 @@ article h1 {
 }
 
 /* CODE BLOCKS */
+code a,
+code a:hover,
+code a:focus {
+    text-decoration: underline;
+}
+
 pre {
     font-size: 14px;
 }
@@ -225,14 +239,24 @@ mark,
 }
 
 /* ALERTS */
-.alert {
-    margin: 1em 0 0 0;
-}
-
 .NOTE {
     color: var(--alert-note-text);
     background-color: var(--alert-note-background);
     border-color: transparent;
+}
+
+.NOTE code {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-code-background);
+}
+
+.NOTE a {
+    color: var(--alert-note-link);
+}
+
+.NOTE a:hover,
+.NOTE a:focus {
+    color: var(--alert-note-link-hover);
 }
 
 .TIP {
@@ -241,10 +265,38 @@ mark,
     border-color: transparent;
 }
 
+.TIP code {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-code-background);
+}
+
+.TIP a {
+    color: var(--alert-tip-link);
+}
+
+.TIP a:hover,
+.TIP a:focus {
+    color: var(--alert-tip-link-hover);
+}
+
 .IMPORTANT {
     color: var(--alert-important-text);
     background-color: var(--alert-important-background);
     border-color: transparent;
+}
+
+.IMPORTANT code {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-code-background);
+}
+
+.IMPORTANT a {
+    color: var(--alert-important-link);
+}
+
+.IMPORTANT a:hover,
+.IMPORTANT a:focus {
+    color: var(--alert-important-link-hover);
 }
 
 .CAUTION {
@@ -253,8 +305,36 @@ mark,
     border-color: transparent;
 }
 
+.CAUTION code {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-code-background);
+}
+
+.CAUTION a {
+    color: var(--alert-caution-link);
+}
+
+.CAUTION a:hover,
+.CAUTION a:focus {
+    color: var(--alert-caution-link-hover);
+}
+
 .WARNING {
     color: var(--alert-warning-text);
     background-color: var(--alert-warning-background);
     border-color: transparent;
+}
+
+.WARNING code {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-code-background);
+}
+
+.WARNING a {
+    color: var(--alert-warning-link);
+}
+
+.WARNING a:hover,
+.WARNING a:focus {
+    color: var(--alert-warning-link-hover);
 }

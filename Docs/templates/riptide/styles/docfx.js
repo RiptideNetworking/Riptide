@@ -407,6 +407,9 @@ $(function () {
             }
           }
         });
+
+        $("#navbar").find("a[title='Support Riptide']").html('<img id="sponsorIcon" src="/images/sponsor-heart.png" alt="Support Riptide"/>');
+
         renderNavbar();
       });
     }
