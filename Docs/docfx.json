@@ -53,7 +53,7 @@
         "dest": "_site",
         "globalMetadata": {
             "_appTitle": "Riptide Docs",
-            "_appFooter": "Copyright © Tom Weiland",
+            "_appFooter": "Copyright © Tom Weiland 2022",
             "_appLogoPath": "images/logo.png",
             "_appFaviconPath": "images/favicon.ico",
             "_enableNewTab": true,
