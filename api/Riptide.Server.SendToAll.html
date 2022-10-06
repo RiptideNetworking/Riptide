@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta name="description" content="Documentation for Riptide Networking.">
     <meta property="og:description" content="Documentation for Riptide Networking.">
-    <meta property="og:image" content="https://riptidenetworking.github.io/Riptide/images/logo.png">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
+    <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -95,9 +96,29 @@
 <div class="markdown level0 summary"></div>
 <div class="markdown level0 conceptual"></div>
 
+<h2 class="overloads">Overloads</h2>
+<table class="table table-condensed">
+  <tbody class="parameter-table">
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Server.SendToAll.html#Riptide_Server_SendToAll_Riptide_Message_System_Boolean_">SendToAll(Message, Boolean)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Sends a message to all connected clients.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Server.SendToAll.html#Riptide_Server_SendToAll_Riptide_Message_System_UInt16_System_Boolean_">SendToAll(Message, UInt16, Boolean)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Sends a message to all connected clients except the given one.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
 <a id="Riptide_Server_SendToAll_" data-uid="Riptide.Server.SendToAll*"></a>
 
-<h4 id="Riptide_Server_SendToAll_Riptide_Message_System_Boolean_" data-uid="Riptide.Server.SendToAll(Riptide.Message,System.Boolean)">SendToAll(Message, Boolean)</h4>
+<h2 id="Riptide_Server_SendToAll_Riptide_Message_System_Boolean_" data-uid="Riptide.Server.SendToAll(Riptide.Message,System.Boolean)">SendToAll(Message, Boolean)</h2>
 <div class="markdown level1 summary"><p>Sends a message to all connected clients.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -132,14 +153,15 @@
 
 
 <h4 id="Riptide_Server_SendToAll_Riptide_Message_System_Boolean__remarks">Remarks</h4>
-<div class="markdown level1 remarks"><p><inheritdoc cref="M:Riptide.Connection.Send(Riptide.Message,System.Boolean)"></inheritdoc></p>
+<div class="markdown level1 remarks"><p>If you intend to continue using the message instance after calling this method, you <em>must</em> set <code data-dev-comment-type="paramref" class="paramref">shouldRelease</code>
+to <span class="xref">false</span>. <a class="xref" href="Riptide.Message.Release.html#Riptide_Message_Release">Release()</a> can be used to manually return the message to the pool at a later time.</p>
 </div>
 
 
 
 <a id="Riptide_Server_SendToAll_" data-uid="Riptide.Server.SendToAll*"></a>
 
-<h4 id="Riptide_Server_SendToAll_Riptide_Message_System_UInt16_System_Boolean_" data-uid="Riptide.Server.SendToAll(Riptide.Message,System.UInt16,System.Boolean)">SendToAll(Message, UInt16, Boolean)</h4>
+<h2 id="Riptide_Server_SendToAll_Riptide_Message_System_UInt16_System_Boolean_" data-uid="Riptide.Server.SendToAll(Riptide.Message,System.UInt16,System.Boolean)">SendToAll(Message, UInt16, Boolean)</h2>
 <div class="markdown level1 summary"><p>Sends a message to all connected clients except the given one.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -180,7 +202,8 @@
 
 
 <h4 id="Riptide_Server_SendToAll_Riptide_Message_System_UInt16_System_Boolean__remarks">Remarks</h4>
-<div class="markdown level1 remarks"><p><inheritdoc cref="M:Riptide.Connection.Send(Riptide.Message,System.Boolean)"></inheritdoc></p>
+<div class="markdown level1 remarks"><p>If you intend to continue using the message instance after calling this method, you <em>must</em> set <code data-dev-comment-type="paramref" class="paramref">shouldRelease</code>
+to <span class="xref">false</span>. <a class="xref" href="Riptide.Message.Release.html#Riptide_Message_Release">Release()</a> can be used to manually return the message to the pool at a later time.</p>
 </div>
 
 
@@ -199,6 +222,9 @@
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Server.cs/#L369" class="contribution-link">View Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
                   </li>
                 </ul>
               </div>

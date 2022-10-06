@@ -1,0 +1,166 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>FAQ | Riptide Docs</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="FAQ | Riptide Docs">
+    <meta name="generator" content="docfx">
+    <meta property="og:title" content="FAQ | Riptide Docs">
+    <meta property="og:type" content="website">
+    <meta name="description" content="Documentation for Riptide Networking.">
+    <meta property="og:description" content="Documentation for Riptide Networking.">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta property="og:image:width" content="50">
+    <meta property="og:image:height" content="50">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+  
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/config.css">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/riptide.css">
+    <link rel="stylesheet" href="../../styles/codehighlighting.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+    
+    <meta property="docfx:rel" content="../../">
+    <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="container body-content">
+        
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            
+            <div class="subnav navbar navbar-default">
+              <div class="hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="faq">FAQ</h1>
+
+<p>Below are some frequently asked questions as well as common issues which you may face when getting started with Riptide. If you can't find your question or the provided answer/solution is insufficient, feel free to join the <a href="https://discord.gg/tomweiland">Discord server</a> and ask there!</p>
+<h4 id="whats-the-difference-between-riptide-and-other-networking-solutions">What's the difference between Riptide and other networking solutions?</h4>
+<p>Riptide is a relatively low level networking solution—it gives you the tools to manage connections and send data, while leaving the rest up to you. This means you have full control over what happens, how it happens, and when it happens, but it also means you have to do more yourself. That might sound scary if you're just getting started with multiplayer game development, but it can actually be hugely beneficial for your learning process.</p>
+<p>This is in stark contrast to higher-level, more abstracted solutions, which provide more features and do more for you. However, this typically means you have less control over what your code is doing, and it may make learning how multiplayer games actually work more difficult because you're not exposed to what's going on under the hood.</p>
+<p>Whether you should use an abstracted, high-level solution or something lower-level like Riptide depends on what your needs and goals are. Do you want to see and be in charge of what's going on under the hood? Riptide is likely better for you. Do you just want to quickly build a multiplayer game without having to decide what happens and when? Then you may want to consider using something higher-level.</p>
+<h4 id="does-riptide-cost-money-to-use">Does Riptide cost money to use?</h4>
+<p>No. Riptide is completely free to use, and it imposes no arbitrary concurrent user limits. You can connect as many players as you like, as long as the hardware your server is running on can handle it and you have sufficient available bandwidth.</p>
+<p>However, if you'd like to financially support Riptide's development and get early access to new features, you can do so through <a href="https://github.com/sponsors/tom-weiland">GitHub Sponsors</a>.</p>
+<h4 id="can-i-use-riptide-outside-of-unity">Can I use Riptide outside of Unity?</h4>
+<p>Yes! Riptide is not dependent on Unity in any way, meaning you can use it pretty much anywhere you can run C# code. This includes .NET applications such as console apps as well as other engines like Flax Engine and Godot.</p>
+<h4 id="what-platforms-can-i-use-riptide-on">What platforms can I use Riptide on?</h4>
+<p>This varies depending on which low level transport you're using. Riptide's default transport uses UDP sockets and works on PC, Mac, Linux, iOS and Android. VR and consoles have not been officially tested to determine whether Riptide works on them, and at this point in time there is no web transport, meaning Riptide does <em>not</em> work in browser-based games.</p>
+<p>If you end up using Riptide's <a href="https://github.com/RiptideNetworking/SteamTransport">Steam transport</a>, that obviously only works on platforms supported by Steam.</p>
+<h4 id="how-many-players-does-riptide-support">How many players does Riptide support?</h4>
+<p>This <em>heavily</em> depends on how much data your game needs to send per second per player and how that compares to the hardware and bandwidth available to your server. A turn-based card game would likely be able to support hundreds of times as many players as a fast-paced shooter while using the same resources.</p>
+<p>A big part of developing multiplayer games is choosing what data to send and when to send it. Riptide leaves that part up to you, so you're the one making those much more performance-relevant decisions of <em>what</em> and <em>when</em>. As a result, Riptide itself is highly unlikely to be your performance bottleneck.</p>
+<h4 id="does-riptide-support-player-hosted-and-lobby-based-games">Does Riptide support player-hosted and lobby-based games?</h4>
+<p>Yes! Riptide gives you the tools to manage connections and send data, but doesn't really impose any restrictions on how you do that. You can set up a dedicated server with full authority, a relay server which just passes on data it receives, a client that also acts as the host (server), or pretty much anything inbetween.</p>
+<p>The only architecture that would require some tweaks to Riptide's source is true peer-to-peer, where all clients in a lobby are connected to all other clients in the same lobby.</p>
+<h4 id="why-am-i-not-receiving-any-messages">Why am I not receiving any messages?</h4>
+<p>Make sure that you're calling the server's and/or client's <code>Update()</code> method regularly.</p>
+<h4 id="why-am-i-getting-a-warning-about-no-server-sideclient-side-method-handler-being-found">Why am I getting a warning about no server-side/client-side method handler being found?</h4>
+<p>If you're getting this warning, make sure you actually have a handler method set up for the message ID mentioned in the warning. If that doesn't help, chances are your handler method has the wrong parameters for what you intended it to be used for.</p>
+<p>Remember, server-side handler methods (which handle messages coming from clients) should have two parameters—a <code>ushort</code> and a <code>Message</code> instance. Client-side handler methods (which handles messages coming from a server) should have only one parameter—a <code>Message</code> instance.</p>
+<h4 id="do-i-have-to-use-debuglog-with-riptides-log-system">Do I have to use <code>Debug.Log()</code> with Riptide's log system?</h4>
+<p>No. You can use whatever log method you like, including <code>Console.WriteLine()</code>, other engine-specific log methods, and your own custom log methods. All you have to do is pass your chosen log method to <code>RiptideLogger</code>'s <code><a class="xref" href="../../api/Riptide.Utils.RiptideLogger.Initialize.html">Initialize()</a></code> method.</p>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Docs/manual/overview/faq.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            Copyright © Tom Weiland
+            <br>
+            <span>
+              Generated by 
+              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
+            </span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

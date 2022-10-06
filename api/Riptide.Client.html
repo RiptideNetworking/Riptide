@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta name="description" content="Documentation for Riptide Networking.">
     <meta property="og:description" content="Documentation for Riptide Networking.">
-    <meta property="og:image" content="https://riptidenetworking.github.io/Riptide/images/logo.png">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
+    <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -189,13 +190,14 @@
         <td id="Riptide_Client__ctor_Riptide_Transports_IClient_System_String_" data-uid="Riptide.Client.#ctor(Riptide.Transports.IClient,System.String)" class="one-third-width">
           <a class="xref" href="Riptide.Client.-ctor.html#Riptide_Client__ctor_Riptide_Transports_IClient_System_String_">Client(IClient, String)</a>
         </td>
-        <td class="markdown level1 summary"></td>
+        <td class="markdown level1 summary"><p>Handles initial setup.</p>
+</td>
       </tr>
       <tr>
         <td id="Riptide_Client__ctor_System_String_" data-uid="Riptide.Client.#ctor(System.String)" class="one-third-width">
           <a class="xref" href="Riptide.Client.-ctor.html#Riptide_Client__ctor_System_String_">Client(String)</a>
         </td>
-        <td class="markdown level1 summary"><p>Initializes the peer.</p>
+        <td class="markdown level1 summary"><p>Handles initial setup using the built-in UDP transport.</p>
 </td>
       </tr>
     </tbody>
@@ -210,7 +212,8 @@
         <td id="Riptide_Client_Connection" data-uid="Riptide.Client.Connection" class="one-third-width">
           <a class="xref" href="Riptide.Client.Connection.html#Riptide_Client_Connection">Connection</a>
         </td>
-        <td class="markdown level1 summary"></td>
+        <td class="markdown level1 summary"><p>The client's connection to a server.</p>
+</td>
       </tr>
       <tr>
         <td id="Riptide_Client_Id" data-uid="Riptide.Client.Id" class="one-third-width">
@@ -258,7 +261,7 @@
         <td id="Riptide_Client_SmoothRTT" data-uid="Riptide.Client.SmoothRTT" class="one-third-width">
           <a class="xref" href="Riptide.Client.SmoothRTT.html#Riptide_Client_SmoothRTT">SmoothRTT</a>
         </td>
-        <td class="markdown level1 summary"><p><inheritdoc cref="P:Riptide.Connection.SmoothRTT"></inheritdoc></p>
+        <td class="markdown level1 summary"><p>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</p>
 </td>
       </tr>
     </tbody>
@@ -426,6 +429,9 @@
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L15" class="contribution-link">View Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
                   </li>
                 </ul>
               </div>

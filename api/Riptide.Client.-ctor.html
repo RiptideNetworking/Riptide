@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta name="description" content="Documentation for Riptide Networking.">
     <meta property="og:description" content="Documentation for Riptide Networking.">
-    <meta property="og:image" content="https://riptidenetworking.github.io/Riptide/images/logo.png">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
+    <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -95,10 +96,31 @@
 <div class="markdown level0 summary"></div>
 <div class="markdown level0 conceptual"></div>
 
+<h2 class="overloads">Overloads</h2>
+<table class="table table-condensed">
+  <tbody class="parameter-table">
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Client.-ctor.html#Riptide_Client__ctor_Riptide_Transports_IClient_System_String_">Client(IClient, String)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Handles initial setup.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Client.-ctor.html#Riptide_Client__ctor_System_String_">Client(String)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Handles initial setup using the built-in UDP transport.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
 <a id="Riptide_Client__ctor_" data-uid="Riptide.Client.#ctor*"></a>
 
-<h4 id="Riptide_Client__ctor_Riptide_Transports_IClient_System_String_" data-uid="Riptide.Client.#ctor(Riptide.Transports.IClient,System.String)">Client(IClient, String)</h4>
-<div class="markdown level1 summary"></div>
+<h2 id="Riptide_Client__ctor_Riptide_Transports_IClient_System_String_" data-uid="Riptide.Client.#ctor(Riptide.Transports.IClient,System.String)">Client(IClient, String)</h2>
+<div class="markdown level1 summary"><p>Handles initial setup.</p>
+</div>
 <div class="markdown level1 conceptual"></div>
 
 <div class="codewrapper">
@@ -111,12 +133,14 @@
     <tr>
       <td><a class="xref" href="Riptide.Transports.IClient.html">IClient</a></td>
       <td><code>transport</code></td>
-      <td></td>
+      <td><p>The transport to use for sending and receiving data.</p>
+</td>
     </tr>
     <tr>
       <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.string">String</a></td>
       <td><code>logName</code></td>
-      <td></td>
+      <td><p>The name to use when logging messages via <a class="xref" href="Riptide.Utils.RiptideLogger.html">RiptideLogger</a>.</p>
+</td>
     </tr>
   </tbody>
 </table>
@@ -133,8 +157,8 @@
 
 <a id="Riptide_Client__ctor_" data-uid="Riptide.Client.#ctor*"></a>
 
-<h4 id="Riptide_Client__ctor_System_String_" data-uid="Riptide.Client.#ctor(System.String)">Client(String)</h4>
-<div class="markdown level1 summary"><p>Initializes the peer.</p>
+<h2 id="Riptide_Client__ctor_System_String_" data-uid="Riptide.Client.#ctor(System.String)">Client(String)</h2>
+<div class="markdown level1 summary"><p>Handles initial setup using the built-in UDP transport.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
 
@@ -177,7 +201,10 @@
                     <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Client__ctor_.md&amp;value=---%0Auid%3A%20Riptide.Client.%23ctor*%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L68" class="contribution-link">View Source</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/Client.cs/#L70" class="contribution-link">View Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
                   </li>
                 </ul>
               </div>

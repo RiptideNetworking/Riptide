@@ -1,3 +1,19 @@
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-background); 
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-background); 
+    border: 3px solid var(--scrollbar-background);
+    border-radius: 9999px;
+    background-clip: padding-box;
+}
+
 #logo {
     height: 100%;
     padding: 10%;
@@ -6,6 +22,18 @@
 body {
     background-color: var(--main-background);
     color: var(--text);
+}
+
+article h1 {
+    margin-top: 0.5em;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+#sponsorIcon {
+    max-height: 16px;
 }
 
 .navbar-inverse {
@@ -70,6 +98,10 @@ body {
     color: var(--text-subtle);
 }
 
+.sidetoc {
+    border-right: 1px solid var(--border);
+}
+
 .toc .nav > li > .expand-stub::before,
 .toc .nav > li.active > .expand-stub::before
 {
@@ -104,10 +136,17 @@ body {
 
 .nav .level2 .tree-leaf.active {
     background-color: var(--main-background-active);
+    border-radius: 4px 0 0 4px;
 }
 
 #breadcrumb {
     padding-left: 0px;
+    font-size: 14px;
+}
+
+.inheritance > div,
+.inheritedMembers > div {
+    font-size: 14px;
 }
 
 .navbar-default {
@@ -152,20 +191,18 @@ body {
 }
 
 /* CODE BLOCKS */
-.hljs-attr,
-.hljs-selector-attr,
-.hljs-selector-class,
-.hljs-selector-id,
-.hljs-selector-pseudo,
-.hljs-title {
-    color: var(--code-class);
+code a,
+code a:hover,
+code a:focus {
+    text-decoration: underline;
 }
 
-.hljs-attribute,
-.hljs-bullet,
-.hljs-literal,
-.hljs-symbol {
-    color: var(--code-symbol);
+pre {
+    font-size: 14px;
+}
+
+pre code {
+    white-space: pre;
 }
 
 /* SEARCH */
@@ -199,4 +236,105 @@ mark,
     background-color: var(--pagination-background-active);
     color: var(--text);
     border-color: var(--pagination-border);
+}
+
+/* ALERTS */
+.NOTE {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-background);
+    border-color: transparent;
+}
+
+.NOTE code {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-code-background);
+}
+
+.NOTE a {
+    color: var(--alert-note-link);
+}
+
+.NOTE a:hover,
+.NOTE a:focus {
+    color: var(--alert-note-link-hover);
+}
+
+.TIP {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-background);
+    border-color: transparent;
+}
+
+.TIP code {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-code-background);
+}
+
+.TIP a {
+    color: var(--alert-tip-link);
+}
+
+.TIP a:hover,
+.TIP a:focus {
+    color: var(--alert-tip-link-hover);
+}
+
+.IMPORTANT {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-background);
+    border-color: transparent;
+}
+
+.IMPORTANT code {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-code-background);
+}
+
+.IMPORTANT a {
+    color: var(--alert-important-link);
+}
+
+.IMPORTANT a:hover,
+.IMPORTANT a:focus {
+    color: var(--alert-important-link-hover);
+}
+
+.CAUTION {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-background);
+    border-color: transparent;
+}
+
+.CAUTION code {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-code-background);
+}
+
+.CAUTION a {
+    color: var(--alert-caution-link);
+}
+
+.CAUTION a:hover,
+.CAUTION a:focus {
+    color: var(--alert-caution-link-hover);
+}
+
+.WARNING {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-background);
+    border-color: transparent;
+}
+
+.WARNING code {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-code-background);
+}
+
+.WARNING a {
+    color: var(--alert-warning-link);
+}
+
+.WARNING a:hover,
+.WARNING a:focus {
+    color: var(--alert-warning-link-hover);
 }

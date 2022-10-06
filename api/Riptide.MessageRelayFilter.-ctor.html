@@ -13,7 +13,7 @@
     <meta property="og:type" content="website">
     <meta name="description" content="Documentation for Riptide Networking.">
     <meta property="og:description" content="Documentation for Riptide Networking.">
-    <meta property="og:image" content="https://riptidenetworking.github.io/Riptide/images/logo.png">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="../styles/docfx.vendor.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
+    <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
@@ -95,9 +96,43 @@
 <div class="markdown level0 summary"></div>
 <div class="markdown level0 conceptual"></div>
 
+<h2 class="overloads">Overloads</h2>
+<table class="table table-condensed">
+  <tbody class="parameter-table">
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.MessageRelayFilter.-ctor.html#Riptide_MessageRelayFilter__ctor_System_Int32_">MessageRelayFilter(Int32)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Creates a filter of a given size.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.MessageRelayFilter.-ctor.html#Riptide_MessageRelayFilter__ctor_Type_">MessageRelayFilter(Type)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Creates a filter based on an enum of message IDs.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.MessageRelayFilter.-ctor.html#Riptide_MessageRelayFilter__ctor_System_Int32_System_UInt16___">MessageRelayFilter(Int32, UInt16[])</a>
+      </td>
+      <td class="markdown level1 summary"><p>Creates a filter of a given size and enables relaying for the given message IDs.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.MessageRelayFilter.-ctor.html#Riptide_MessageRelayFilter__ctor_Type_Enum___">MessageRelayFilter(Type, Enum[])</a>
+      </td>
+      <td class="markdown level1 summary"><p>Creates a filter based on an enum of message IDs and enables relaying for the given message IDs.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
 <a id="Riptide_MessageRelayFilter__ctor_" data-uid="Riptide.MessageRelayFilter.#ctor*"></a>
 
-<h4 id="Riptide_MessageRelayFilter__ctor_System_Int32_" data-uid="Riptide.MessageRelayFilter.#ctor(System.Int32)">MessageRelayFilter(Int32)</h4>
+<h2 id="Riptide_MessageRelayFilter__ctor_System_Int32_" data-uid="Riptide.MessageRelayFilter.#ctor(System.Int32)">MessageRelayFilter(Int32)</h2>
 <div class="markdown level1 summary"><p>Creates a filter of a given size.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -135,7 +170,7 @@ and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the ser
 
 <a id="Riptide_MessageRelayFilter__ctor_" data-uid="Riptide.MessageRelayFilter.#ctor*"></a>
 
-<h4 id="Riptide_MessageRelayFilter__ctor_Type_" data-uid="Riptide.MessageRelayFilter.#ctor(Type)">MessageRelayFilter(Type)</h4>
+<h2 id="Riptide_MessageRelayFilter__ctor_Type_" data-uid="Riptide.MessageRelayFilter.#ctor(Type)">MessageRelayFilter(Type)</h2>
 <div class="markdown level1 summary"><p>Creates a filter based on an enum of message IDs.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -168,7 +203,7 @@ and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the ser
 
 <a id="Riptide_MessageRelayFilter__ctor_" data-uid="Riptide.MessageRelayFilter.#ctor*"></a>
 
-<h4 id="Riptide_MessageRelayFilter__ctor_System_Int32_System_UInt16___" data-uid="Riptide.MessageRelayFilter.#ctor(System.Int32,System.UInt16[])">MessageRelayFilter(Int32, UInt16[])</h4>
+<h2 id="Riptide_MessageRelayFilter__ctor_System_Int32_System_UInt16___" data-uid="Riptide.MessageRelayFilter.#ctor(System.Int32,System.UInt16[])">MessageRelayFilter(Int32, UInt16[])</h2>
 <div class="markdown level1 summary"><p>Creates a filter of a given size and enables relaying for the given message IDs.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -203,14 +238,16 @@ and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the ser
 
 
 <h4 id="Riptide_MessageRelayFilter__ctor_System_Int32_System_UInt16____remarks">Remarks</h4>
-<div class="markdown level1 remarks"><p><inheritdoc cref="M:Riptide.MessageRelayFilter.#ctor(System.Int32)"></inheritdoc></p>
+<div class="markdown level1 remarks"><p><code data-dev-comment-type="paramref" class="paramref">size</code> should be set to the value of the largest message ID, plus 1. For example, if a server will
+handle messages with IDs 1, 2, 3, 7, and 8, <code data-dev-comment-type="paramref" class="paramref">size</code> should be set to 9 (8 is the largest possible value,
+and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the server will ever handle.</p>
 </div>
 
 
 
 <a id="Riptide_MessageRelayFilter__ctor_" data-uid="Riptide.MessageRelayFilter.#ctor*"></a>
 
-<h4 id="Riptide_MessageRelayFilter__ctor_Type_Enum___" data-uid="Riptide.MessageRelayFilter.#ctor(Type,Enum[])">MessageRelayFilter(Type, Enum[])</h4>
+<h2 id="Riptide_MessageRelayFilter__ctor_Type_Enum___" data-uid="Riptide.MessageRelayFilter.#ctor(Type,Enum[])">MessageRelayFilter(Type, Enum[])</h2>
 <div class="markdown level1 summary"><p>Creates a filter based on an enum of message IDs and enables relaying for the given message IDs.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -261,6 +298,9 @@ and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the ser
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/docs/RiptideNetworking/RiptideNetworking/MessageRelayFilter.cs/#L27" class="contribution-link">View Source</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
                   </li>
                 </ul>
               </div>

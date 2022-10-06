@@ -1,0 +1,83 @@
+.line-highlight {
+    background-color: #344d5b;
+}
+
+.hljs {
+    color: #e4e4f1;
+}
+
+.hljs-comment {
+    color: #4e6d6d;
+}
+
+.hljs-number {
+    color: #b5cea8;
+}
+
+.hljs-pscommand,
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-built_in,
+.hljs-name,
+.hljs-tag {
+    color: #569cd6;
+}
+
+.hljs-literal {
+    color: #569cd6;
+}
+
+.hljs-string .hljs-subst,
+.hljs-attr {
+    color: #9cdcfe;
+}
+
+.hljs-string,
+.hljs-string .hljs-subst .hljs-string,
+.hljs-section,
+.hljs-attribute,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-deletion,
+.hljs-type,
+.hljs-code {
+    color: #ce9178;
+}
+
+.hljs-addition,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-meta {
+    color: #2b91af;
+}
+
+.hljs-parameter,
+.hljs-type,
+.hljs-attribute,
+.hljs-title,
+.hljs-addition,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-meta {
+    color: #4ec9b0;
+}
+
+.hljs-control {
+    color: #c586c0;
+}
+
+.hljs-helper {
+    color: #dcdcaa;
+}
+
+.hljs-doctag,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link {
+    color: #368585;
+}
+
+.hljs-reserved,
+.hljs-constant {
+    color: #f44747;
+}
