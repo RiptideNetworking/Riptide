@@ -64,7 +64,7 @@
                 "apiSpecFolder": "Docs/apidoc"
             },
             "_logoAltText": "Riptide Logo",
-            "_baseUrl": "https://riptidenetworking.github.io/Riptide/",
+            "_baseUrl": "https://riptide.tomweiland.net/",
             "_description": "Documentation for Riptide Networking.",
             "_donateUrl": "https://github.com/sponsors/tom-weiland",
             "_donateText": "Support Riptide"
@@ -85,7 +85,7 @@
             "https://xref.docs.microsoft.com/query?uid={uid}"
         ],
         "sitemap": {
-            "baseUrl": "https://riptidenetworking.github.io/Riptide/"
+            "baseUrl": "https://riptide.tomweiland.net/"
         },
         "postProcessors": [],
         "markdownEngineName": "markdig",
