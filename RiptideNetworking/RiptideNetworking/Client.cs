@@ -31,7 +31,7 @@ namespace Riptide
         public ushort Id => connection.Id;
         /// <inheritdoc cref="Connection.RTT"/>
         public short RTT => connection.RTT;
-        /// <summary><inheritdoc cref="Connection.SmoothRTT"/></summary>
+        /// <inheritdoc cref="Connection.SmoothRTT"/>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
         /// <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
@@ -42,7 +42,7 @@ namespace Riptide
         public bool IsPending => !(connection is null) && connection.IsPending;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => !(connection is null) && connection.IsConnected;
-        /// <inheritdoc cref="connection"/>
+        /// <summary>The client's connection to a server.</summary>
         // Not an auto property because properties can't be passed as ref/out parameters. Could
         // use a local variable in the Connect method, but that's arguably not any cleaner. This
         // property will also probably only be used rarely from outside the class/library.
@@ -51,7 +51,7 @@ namespace Riptide
         /// <param name="message">The message that was received.</param>
         public delegate void MessageHandler(Message message);
 
-        /// <summary>The client's connection to a server.</summary>
+        /// <inheritdoc cref="Connection"/>
         private Connection connection;
         /// <summary>How many connection attempts have been made so far.</summary>
         private int connectionAttempts;
@@ -64,13 +64,16 @@ namespace Riptide
         /// <summary>Custom data to include when connecting.</summary>
         private byte[] connectBytes;
 
-        /// <inheritdoc cref="Server(IServer, string)"/>
+        /// <summary>Handles initial setup.</summary>
+        /// <param name="transport">The transport to use for sending and receiving data.</param>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Client(IClient transport, string logName = "CLIENT") : base(logName)
         {
             this.transport = transport;
         }
 
-        /// <inheritdoc cref="Server(string)"/>
+        /// <summary>Handles initial setup using the built-in UDP transport.</summary>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
         public Client(string logName = "CLIENT") : base(logName)
         {
             transport = new Transports.Udp.UdpClient();
@@ -287,7 +290,10 @@ namespace Riptide
         /// <summary>Sends a message to the server.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        /// <remarks>
+        ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
+        ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
+        /// </remarks>
         public void Send(Message message, bool shouldRelease = true) => connection.Send(message, shouldRelease);
 
         /// <summary>Disconnects from the server.</summary>

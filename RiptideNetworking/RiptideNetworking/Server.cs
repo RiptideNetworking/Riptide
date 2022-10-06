@@ -349,7 +349,7 @@ namespace Riptide
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The numeric ID of the client to send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        /// <inheritdoc cref="Client.Send(Message, bool)"/>
         public void Send(Message message, ushort toClient, bool shouldRelease = true)
         {
             if (clients.TryGetValue(toClient, out Connection connection))
@@ -359,13 +359,13 @@ namespace Riptide
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        /// <inheritdoc cref="Client.Send(Message, bool)"/>
         public void Send(Message message, Connection toClient, bool shouldRelease = true) => toClient.Send(message, shouldRelease);
 
         /// <summary>Sends a message to all connected clients.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        /// <inheritdoc cref="Client.Send(Message, bool)"/>
         public void SendToAll(Message message, bool shouldRelease = true)
         {
             foreach (Connection client in clients.Values)
@@ -378,7 +378,7 @@ namespace Riptide
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks><inheritdoc cref="Connection.Send(Message, bool)"/></remarks>
+        /// <inheritdoc cref="Client.Send(Message, bool)"/>
         public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
         {
             foreach (Connection client in clients.Values)
