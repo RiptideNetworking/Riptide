@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Release&#xD;&#xA;then&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Server\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Server\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Client\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\DedicatedServerDemo\Client\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).dll $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).dll /y&#xD;&#xA;xcopy $(ProjectDir)$(OutDir)$(TargetName).xml $(SolutionDir)..\Demos\Unity\PlayerHostedDemo\Assets\Scripts\Multiplayer\$(TargetName).xml /y&#xD;&#xA;fi" />
     <Copy Condition="'$(SolutionName)'=='RiptideNetworking'" SourceFiles="@(UPMSourceFiles)" DestinationFiles="@(UPMSourceFiles->'$(SolutionDir)..\Packages\Core\Runtime\Core\%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>
 
