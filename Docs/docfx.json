@@ -1,0 +1,97 @@
+{
+    "metadata": [
+        {
+            "src": [
+                {
+                    "files": [
+                        "**.csproj"
+                    ],
+                    "src": "../RiptideNetworking/"
+                }
+            ],
+            "dest": "api",
+            "filter": "apifilter.yml",
+            "disableGitFeatures": false,
+            "disableDefaultFilter": false
+        }
+    ],
+    "build": {
+        "content": [
+            {
+                "files": [
+                    "api/**.yml",
+                    "api/index.md"
+                ]
+            },
+            {
+                "files": [
+                    "manual/**.md",
+                    "manual/**/toc.yml",
+                    "toc.yml",
+                    "*.md"
+                ]
+            }
+        ],
+        "resource": [
+            {
+                "files": [
+                    "images/**"
+                ]
+            }
+        ],
+        "overwrite": [
+            {
+                "files": [
+                    "apidoc/**.md"
+                ],
+                "exclude": [
+                    "obj/**",
+                    "_site/**"
+                ]
+            }
+        ],
+        "dest": "_site",
+        "globalMetadata": {
+            "_appTitle": "Riptide Docs",
+            "_appFooter": "Copyright © Tom Weiland 2022",
+            "_appLogoPath": "images/logo.png",
+            "_appFaviconPath": "images/favicon.ico",
+            "_enableNewTab": true,
+            "_enableSearch": true,
+            "_gitContribute": {
+                "repo": "https://github.com/RiptideNetworking/Riptide",
+                "branch": "main",
+                "apiSpecFolder": "Docs/apidoc"
+            },
+            "_logoAltText": "Riptide Logo",
+            "_baseUrl": "https://riptide.tomweiland.net/",
+            "_description": "Documentation for Riptide Networking.",
+            "_donateUrl": "https://github.com/sponsors/tom-weiland",
+            "_donateText": "Support Riptide"
+        },
+        "fileMetadata": {
+            "redirectUrl": {
+                "index.md": "manual/overview/about-riptide.html"
+            }
+        },
+        "globalMetadataFiles": [],
+        "fileMetadataFiles": [],
+        "template": [
+            "default",
+            "plugins/memberpage.2.59.0/content",
+            "templates/riptide"
+        ],
+        "xrefService": [
+            "https://xref.docs.microsoft.com/query?uid={uid}"
+        ],
+        "sitemap": {
+            "baseUrl": "https://riptide.tomweiland.net/"
+        },
+        "postProcessors": [],
+        "markdownEngineName": "markdig",
+        "noLangKeyword": false,
+        "keepFileLink": false,
+        "cleanupCacheHistory": false,
+        "disableGitFeatures": false
+    }
+}

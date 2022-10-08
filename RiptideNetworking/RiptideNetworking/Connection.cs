@@ -115,12 +115,7 @@ namespace Riptide
         }
 
         /// <summary>Sends a message.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <remarks>
-        ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
-        ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
-        /// </remarks>
+        /// <inheritdoc cref="Client.Send(Message, bool)"/>
         internal void Send(Message message, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.Unreliable)

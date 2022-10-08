@@ -1,0 +1,34 @@
+name: Update GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup NuGet
+        uses: NuGet/setup-nuget@v1.0.7
+
+      - name: Install docfx
+        run: nuget install docfx.console -version 2.59.0
+
+      - name: Build
+        run: |
+          docfx.console.2.59.0/tools/docfx.exe metadata Docs/docfx.json
+          docfx.console.2.59.0/tools/docfx.exe build --logLevel Warning --warningsAsErrors Docs/docfx.json
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          branch: gh-pages
+          folder: Docs/_site
+          commit-message: Update site

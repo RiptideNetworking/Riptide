@@ -1,0 +1,20 @@
+- name: Overview
+  items:
+    - name: About Riptide
+      href: overview/about-riptide.md
+    - name: Installation
+      href: overview/installation.md
+    - name: Getting Started
+      href: overview/getting-started.md
+    - name: FAQ
+      href: overview/faq.md
+- name: Updates
+  items:
+    - name: Release Notes
+      items:
+      - name: v2.0.0
+        href: updates/release-notes/v2.0.0.md
+    - name: Upgrade Guides
+      items:
+      - name: Updating to v2
+        href: updates/guides/updating-to-v2.md

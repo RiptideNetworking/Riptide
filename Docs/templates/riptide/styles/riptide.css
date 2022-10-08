@@ -1,0 +1,340 @@
+::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--scrollbar-background); 
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-background); 
+    border: 3px solid var(--scrollbar-background);
+    border-radius: 9999px;
+    background-clip: padding-box;
+}
+
+#logo {
+    height: 100%;
+    padding: 10%;
+}
+
+body {
+    background-color: var(--main-background);
+    color: var(--text);
+}
+
+article h1 {
+    margin-top: 0.5em;
+}
+
+p {
+    margin-bottom: 1em;
+}
+
+#sponsorIcon {
+    max-height: 16px;
+}
+
+.navbar-inverse {
+    background-color: var(--main-background);
+    border-color: var(--border);
+}
+
+.navbar-inverse .navbar-text {
+    color: var(--text);
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: var(--link);
+}
+
+.navbar-inverse .navbar-nav > li > a:hover,
+.navbar-inverse .navbar-nav > li > a:focus,
+.navbar-inverse .navbar-nav > .active > a,
+.navbar-inverse .navbar-nav > .active > a:focus,
+.navbar-inverse .navbar-nav > .active > a:hover {
+    color: var(--link);
+    border-bottom: 2px solid;
+    background-color: var(--main-background-active);
+}
+
+.form-control {
+    background-color: inherit;
+    color: var(--text);
+    border: 1px solid var(--border);
+}
+
+.form-control::-moz-placeholder
+{
+    color: var(--text-subtle);
+    opacity: 1
+}
+.form-control:-ms-input-placeholder {
+    color: var(--text-subtle);
+}
+.form-control::-webkit-input-placeholder {
+    color: var(--text-subtle);
+}
+
+.form-control:hover,
+.form-control:focus {
+    border: 1px solid var(--link);
+}
+
+.toc-filter:hover,
+.toc-filter:focus {
+    border-color: var(--link);
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: var(--text-subtle);
+    opacity: 1; /* Firefox */
+} 
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: var(--text-subtle);
+}
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: var(--text-subtle);
+}
+
+.sidetoc {
+    border-right: 1px solid var(--border);
+}
+
+.toc .nav > li > .expand-stub::before,
+.toc .nav > li.active > .expand-stub::before
+{
+    content: " " !important;
+    background-repeat: no-repeat;
+    background: url(../images/down-arrow.svg);
+    position: absolute;
+    transition: transform .15s ease-in-out;
+    transform: rotate(-90deg);
+    width: 0.55em;
+    height: 0.55em;
+    top: 6px;
+    left: 4px;
+    margin: 2px 0;
+}
+
+.toc .nav > li.in > .expand-stub::before,
+.toc .nav > li.filtered > .expand-stub::before {
+    transform: none;
+}
+
+.toc .nav > li.tree-leaf > a:hover,
+.toc .nav > li.tree-leaf > a:focus {
+    text-decoration: underline;
+}
+
+.nav .level2,
+.nav .level3,
+.nav .level4 {
+    margin-left: 1em;
+}
+
+.nav .level2 .tree-leaf.active {
+    background-color: var(--main-background-active);
+    border-radius: 4px 0 0 4px;
+}
+
+#breadcrumb {
+    padding-left: 0px;
+    font-size: 14px;
+}
+
+.inheritance > div,
+.inheritedMembers > div {
+    font-size: 14px;
+}
+
+.navbar-default {
+    /* Breadcrumb menu */
+    background-color: var(--main-background);
+    border: none;
+    min-height: auto;
+}
+
+.one-third-width {
+    width: 33%;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: var(--nth-table-row);
+}
+
+.table > thead > tr > th {
+    border-bottom: 2px solid var(--table-border);
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+    border-top: 1px solid var(--table-border);
+}
+
+.affix ul > li > a:hover,
+.affix ul > li > a:focus,
+.affix ul > li.active > a:hover,
+.affix ul > li.active > a:focus {
+    text-decoration: underline;
+}
+
+.footer span:not(.pull-right) a,
+.footer span:not(.pull-right) a:hover,
+.footer span:not(.pull-right) a:focus {
+    color: inherit;
+}
+
+/* CODE BLOCKS */
+code a,
+code a:hover,
+code a:focus {
+    text-decoration: underline;
+}
+
+pre {
+    font-size: 14px;
+}
+
+pre code {
+    white-space: pre;
+}
+
+/* SEARCH */
+mark,
+.mark {
+    padding: 0px;
+    background-color: var(--search-mark);
+    color: var(--main-background);
+}
+
+.pagination > .disabled > a,
+.pagination > .disabled > a:focus,
+.pagination > .disabled > a:hover,
+.pagination > .disabled > span,
+.pagination > .disabled > span:focus,
+.pagination > .disabled > span:hover {
+    color: var(--text-subtle);
+    cursor: not-allowed;
+    background-color: var(--pagination-background);
+    border-color: var(--pagination-border);
+}
+
+.pagination > li > a,
+.pagination > li > span {
+    background-color: var(--pagination-background);
+    border: 1px solid var(--pagination-border);
+}
+
+.pagination > li > a:hover,
+.pagination > li > a:focus {
+    background-color: var(--pagination-background-active);
+    color: var(--text);
+    border-color: var(--pagination-border);
+}
+
+/* ALERTS */
+.NOTE {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-background);
+    border-color: transparent;
+}
+
+.NOTE code {
+    color: var(--alert-note-text);
+    background-color: var(--alert-note-code-background);
+}
+
+.NOTE a {
+    color: var(--alert-note-link);
+}
+
+.NOTE a:hover,
+.NOTE a:focus {
+    color: var(--alert-note-link-hover);
+}
+
+.TIP {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-background);
+    border-color: transparent;
+}
+
+.TIP code {
+    color: var(--alert-tip-text);
+    background-color: var(--alert-tip-code-background);
+}
+
+.TIP a {
+    color: var(--alert-tip-link);
+}
+
+.TIP a:hover,
+.TIP a:focus {
+    color: var(--alert-tip-link-hover);
+}
+
+.IMPORTANT {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-background);
+    border-color: transparent;
+}
+
+.IMPORTANT code {
+    color: var(--alert-important-text);
+    background-color: var(--alert-important-code-background);
+}
+
+.IMPORTANT a {
+    color: var(--alert-important-link);
+}
+
+.IMPORTANT a:hover,
+.IMPORTANT a:focus {
+    color: var(--alert-important-link-hover);
+}
+
+.CAUTION {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-background);
+    border-color: transparent;
+}
+
+.CAUTION code {
+    color: var(--alert-caution-text);
+    background-color: var(--alert-caution-code-background);
+}
+
+.CAUTION a {
+    color: var(--alert-caution-link);
+}
+
+.CAUTION a:hover,
+.CAUTION a:focus {
+    color: var(--alert-caution-link-hover);
+}
+
+.WARNING {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-background);
+    border-color: transparent;
+}
+
+.WARNING code {
+    color: var(--alert-warning-text);
+    background-color: var(--alert-warning-code-background);
+}
+
+.WARNING a {
+    color: var(--alert-warning-link);
+}
+
+.WARNING a:hover,
+.WARNING a:focus {
+    color: var(--alert-warning-link-hover);
+}

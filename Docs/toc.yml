@@ -1,0 +1,12 @@
+- name: Manual
+  href: manual/
+  homepage: manual/overview/about-riptide.md
+- name: GitHub
+  href: https://github.com/RiptideNetworking/Riptide
+- name: Discord
+  href: https://discord.gg/tomweiland
+- name: API
+  href: api/
+  homepage: api/Riptide.yml
+- name: Support Riptide
+  href: https://github.com/sponsors/tom-weiland

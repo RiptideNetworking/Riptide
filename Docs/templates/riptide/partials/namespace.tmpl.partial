@@ -1,0 +1,25 @@
+{{!Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license. See LICENSE file in the project root for full license information.}}
+
+<h1 id="{{id}}" data-uid="{{uid}}" class="text-break">{{>partials/title}}</h1>
+<div class="markdown level0 summary">{{{summary}}}</div>
+<div class="markdown level0 conceptual">{{{conceptual}}}</div>
+<div class="markdown level0 remarks">{{{remarks}}}</div>
+{{#children}}
+<h3 id="{{id}}">{{>partials/namespaceSubtitle}}</h3>
+{{#children.0}}
+<table class="table table-condensed">
+  <tbody>
+  {{/children.0}}
+    {{#children}}
+    <tr>
+      <td id="{{id}}" data-uid="{{uid}}" class="one-third-width">
+        <xref uid="{{uid}}" altProperty="fullName" displayProperty="name"/>
+      </td>
+      <td class="markdown level1 summary">{{{summary}}}</td>
+    </tr>
+    {{/children}}    
+  {{#children.0}}
+  </tbody>
+</table>
+{{/children.0}}
+{{/children}}
