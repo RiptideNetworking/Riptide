@@ -3,7 +3,7 @@ name: Update GitHub Pages
 on:
   push:
     branches:
-      - docs
+      - main
 
 permissions:
   contents: write
