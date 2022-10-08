@@ -3,13 +3,12 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using Riptide.Transports;
 using System;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 
-namespace Riptide.Experimental.TcpTransport
+namespace Riptide.Transports.Tcp
 {
     /// <summary>A client which can connect to a <see cref="TcpServer"/>.</summary>
     public class TcpClient : TcpPeer, IClient

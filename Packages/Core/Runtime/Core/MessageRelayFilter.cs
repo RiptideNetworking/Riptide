@@ -31,7 +31,11 @@ namespace Riptide
         /// <summary>Creates a filter of a given size and enables relaying for the given message IDs.</summary>
         /// <param name="size">How big to make the filter.</param>
         /// <param name="idsToEnable">Message IDs to enable auto relaying for.</param>
-        /// <remarks><inheritdoc cref="MessageRelayFilter(int)"/></remarks>
+        /// <remarks>
+        ///     <paramref name="size"/> should be set to the value of the largest message ID, plus 1. For example, if a server will
+        ///     handle messages with IDs 1, 2, 3, 7, and 8, <paramref name="size"/> should be set to 9 (8 is the largest possible value,
+        ///     and 8 + 1 = 9) despite the fact that there are only 5 unique message IDs the server will ever handle.
+        /// </remarks>
         public MessageRelayFilter(int size, params ushort[] idsToEnable)
         {
             Set(size);

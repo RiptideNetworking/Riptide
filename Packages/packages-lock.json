@@ -82,7 +82,7 @@
         "com.unity.modules.imgui": "1.0.0"
       }
     },
-    "net.tomweiland.riptidenetworking": {
+    "net.tomweiland.riptide": {
       "version": "file:Core",
       "depth": 0,
       "source": "embedded",

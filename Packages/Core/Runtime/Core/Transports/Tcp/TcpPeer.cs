@@ -3,17 +3,16 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
-using Riptide.Transports;
 using System;
 using System.Net.Sockets;
 
-namespace Riptide.Experimental.TcpTransport
+namespace Riptide.Transports.Tcp
 {
     /// <summary>Provides base send &#38; receive functionality for <see cref="TcpServer"/> and <see cref="TcpClient"/>.</summary>
     public abstract class TcpPeer
     {
         /// <inheritdoc cref="IPeer.Disconnected"/>
-        public event EventHandler<Transports.DisconnectedEventArgs> Disconnected;
+        public event EventHandler<DisconnectedEventArgs> Disconnected;
 
         /// <summary>An array that incoming data is received into.</summary>
         internal readonly byte[] ReceiveBuffer;
@@ -52,7 +51,7 @@ namespace Riptide.Experimental.TcpTransport
         /// <param name="reason">The reason for the disconnection.</param>
         protected internal virtual void OnDisconnected(Connection connection, DisconnectReason reason)
         {
-            Disconnected?.Invoke(this, new Transports.DisconnectedEventArgs(connection, reason));
+            Disconnected?.Invoke(this, new DisconnectedEventArgs(connection, reason));
         }
     }
 }
