@@ -1,7 +1,7 @@
 - name: Overview
   items:
-    - name: What is Riptide?
-      href: overview/what-is-riptide.md
+    - name: About Riptide
+      href: overview/about-riptide.md
     - name: Installation
       href: overview/installation.md
     - name: Getting Started

@@ -71,7 +71,7 @@
         },
         "fileMetadata": {
             "redirectUrl": {
-                "index.md": "manual/overview/what-is-riptide.html"
+                "index.md": "manual/overview/about-riptide.html"
             }
         },
         "globalMetadataFiles": [],
