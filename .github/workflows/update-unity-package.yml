@@ -12,22 +12,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Export triggering branch name
+        id: trigger_branch
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+
+      - name: Delete .cs files from package branch
+        run: |
+          git fetch
+          git checkout unity-package
+          find Packages/Core/Runtime/Core -name "*.cs" -type f -delete
+          git config --global user.email "51303091+tom-weiland@users.noreply.github.com"
+          git config --global user.name "Tom Weiland"
+          git add Packages
+          git commit -m "Update package"
+
       - name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v2.1.0
         with:
           dotnet-version: 3.1
 
       - name: Build Riptide
-        run: dotnet build RiptideNetworking/RiptideNetworking.sln
-
-      - name: Checkout package branch # Committing here is necessary to avoid the "Git LFS pull" step from nuking the changes to the Packages folder
         run: |
-          git fetch
+          git checkout ${{ steps.trigger_branch.outputs.branch }}
+          dotnet build RiptideNetworking/RiptideNetworking.sln
+
+      - name: Checkout package branch
+        run: |
           git checkout unity-package
-          git config --global user.email "51303091+tom-weiland@users.noreply.github.com"
-          git config --global user.name "Tom Weiland"
           git add Packages
-          git commit -m "Update package"
+          git commit --amend --no-edit
 
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
@@ -61,7 +75,7 @@ jobs:
           targetPlatform: StandaloneWindows # This field is required, but won't actually be used because the build method doesn't do anything
           buildMethod: MetaGenerator.Build.GenerateMetaFiles
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git add Packages
           git commit --amend --no-edit
