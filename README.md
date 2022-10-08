@@ -22,6 +22,10 @@ For a video tutorial on how to set up Riptide (using v1.1.0) in your project, se
 - [TCP Transport](RiptideNetworking/RiptideNetworking/Transports/Tcp) (built-in)
 - [Steam Transport](https://github.com/RiptideNetworking/SteamTransport) (in development)
 
+## Contributions
+
+Community bug reports, feature requests, and pull requests are welcome and appreciated, but please read the [contribution guidelines](CONTRIBUTING.md) before submitting one 🙂
+
 ## Donate
 
 Riptide is 100% free to use, but if you'd like to financially support Riptide's development and get early access to new features, you can do so through [GitHub Sponsors](https://github.com/sponsors/tom-weiland).
