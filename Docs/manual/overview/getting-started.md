@@ -16,7 +16,7 @@ RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError,
 Obviously this is using Unity's logging methods, so if you're not using Unity for your project you'll need to replace the four log methods with `Console.WriteLine` or your engine's equivalent.
 
 > [!IMPORTANT]
-> This article explains the basics and includes various code snippets, but if you'd like to see these snippets in the context of a working demo, take a look at the `NetworkManager` classes in the [dedicated server demo](https://github.com/RiptideNetworking/Riptide/tree/main/Demos/Unity/DedicatedServerDemo)'s [server](https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Server/Assets/Scripts/Multiplayer/NetworkManager.cs) and [client](https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Client/Assets/Scripts/Multiplayer/NetworkManager.cs) projects.
+> This article explains the basics and includes various code snippets, but if you'd like to see these snippets in the context of a working demo, take a look at the `NetworkManager` classes in the [dedicated server demo](https://github.com/RiptideNetworking/Riptide/tree/main/Demos/Unity/DedicatedServerDemo)'s [server](https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Server/Assets/Scripts/NetworkManager.cs) and [client](https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Client/Assets/Scripts/NetworkManager.cs) projects.
 
 ### Starting a Server
 
