@@ -5,11 +5,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Coming Soon! | Riptide Docs</title>
+    <title>v2.0.0 Release Notes | Riptide Docs</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Coming Soon! | Riptide Docs">
+    <meta name="title" content="v2.0.0 Release Notes | Riptide Docs">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="Coming Soon! | Riptide Docs">
+    <meta property="og:title" content="v2.0.0 Release Notes | Riptide Docs">
     <meta property="og:type" content="website">
     <meta name="description" content="Documentation for Riptide Networking.">
     <meta property="og:description" content="Documentation for Riptide Networking.">
@@ -89,8 +89,50 @@
               </div>
             </div>
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="coming-soon">Coming Soon!</h1>
+<h1 id="v200-release-notes">v2.0.0 Release Notes</h1>
 
+<p>Install this version with Unity's Package Manager using the following URL (<a href="../../overview/installation.html#option-1-unity-package-manager">step-by-step instructions</a>): <code>https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.0.0</code></p>
+<p>It can also be installed a number of <a href="../../overview/installation.html#net-projects">other ways</a> for use outside of Unity.</p>
+<p>For a full list of source code changes, check out the <a href="https://github.com/RiptideNetworking/Riptide/compare/v1.2.0...v2.0.0">version comparison</a> on GitHub.</p>
+<h2 id="additions">Additions</h2>
+<ul>
+<li>Added a documentation site.</li>
+<li>Made a <a href="https://www.nuget.org/packages/RiptideNetworking.Riptide">NuGet package</a> (<a href="https://github.com/RiptideNetworking/Riptide/issues/12">#12</a>).</li>
+<li>Made it possible to accept or reject connections by setting <code><a class="xref" href="../../../api/Riptide.Server.HandleConnection.html">Server.HandleConnection</a></code>.</li>
+<li>Made it possible to send custom data when kicking a client (<a href="https://github.com/RiptideNetworking/Riptide/issues/20">#20</a>).</li>
+<li>Made it possible to retrieve connected clients by their ID using <code><a class="xref" href="../../../api/Riptide.Server.TryGetClient.html">Server.TryGetClient()</a></code>.</li>
+<li>Added disconnect reasons.</li>
+<li>Added support for adding <code>sbyte</code>s to messages.</li>
+<li>Added support for adding custom types to the messages class, as long as they implement <code><a class="xref" href="../../../api/Riptide.IMessageSerializable.html">IMessageSerializable</a></code>.</li>
+<li>Added an option to disable the timeout system for individual connections using <code><a class="xref" href="../../../api/Riptide.Connection.CanTimeout.html#Riptide_Connection_CanTimeout">Connection.CanTimeout</a></code>.</li>
+<li>Made it possible to change the maximum message payload size using <code><a class="xref" href="../../../api/Riptide.Message.MaxPayloadSize.html#Riptide_Message_MaxPayloadSize">Message.MaxPayloadSize</a></code>.</li>
+<li>Added an option to disable dual-mode sockets for the UDP transport.</li>
+<li>Made the default transport's socket buffer size configurable.</li>
+<li>Added a <a class="xref" href="../../../api/Riptide.Transports.Tcp.html">TCP transport</a> (primarily for use as a fallback in situations where UDP doesn't work).</li>
+</ul>
+<h2 id="changes">Changes</h2>
+<ul>
+<li>Renamed a lot of things (including the base <code>RiptideNetworking</code> namespace—now it's just <code>Riptide</code>). For a list of what was renamed, see the <a href="../guides/updating-to-v2.html#renames-and-replacements">updating to v2 guide</a>.</li>
+<li>Made calling <code><a class="xref" href="../../../api/Riptide.Client.Disconnect.html">Client.Disconnect()</a></code> invoke the <code><a class="xref" href="../../../api/Riptide.Client.Disconnected.html">Client.Disconnected</a></code> event. Previously, this event was only invoked when the disconnection was not initiated by the client.</li>
+<li>Removed the <code>isBigArray</code> parameter from the <code><a class="xref" href="../../../api/Riptide.Message.html">Message</a></code> class's <code>Add</code>/<code>Get</code> methods. This is now determined automatically.</li>
+<li>Reduced the default maximum message payload size to 1225 bytes (from 1247 bytes) to ensure messages are smaller than the <a href="https://en.wikipedia.org/wiki/Maximum_transmission_unit">MTU</a>.</li>
+<li>Made <code><a class="xref" href="../../../api/Riptide.Client.Connect.html">Client.Connect()</a></code> return a <code>bool</code> to indicate whether a connection attempt will be made or an issue occurred (<a href="https://github.com/RiptideNetworking/Riptide/issues/39">#39</a>).</li>
+<li>Completely overhauled the transport system (which resulted in the removal of the <code>RudpListener</code>, <code>RudpServer</code>, <code>RudpClient</code>, and <code>RudpConnection</code> classes). For more information on the transport rework and all of the changes involved, see <a href="https://github.com/RiptideNetworking/Riptide/pull/56">pull request #56</a>.</li>
+<li>Made the default transport single-threaded, as the multithreading didn't provide much benefit but caused difficult-to-debug issues.</li>
+<li>Improved error handling.</li>
+<li>Made error messages more descriptive.</li>
+<li>Gave servers authority over which messages are automatically relayed. This is customizable via <code><a class="xref" href="../../../api/Riptide.Server.RelayFilter.html">Server.RelayFilter</a></code>.</li>
+<li>Removed customizable maximum send attempts for messages. In a future update, this system will be replaced by a system which disconnects clients if their connection health deteriorates too much.</li>
+<li>Removed <code>LanDiscovery</code> class. It will be overhauled and re-added in a future update.</li>
+<li>Removed unused <code>DoubleKeyDictionary</code> class.</li>
+<li>Removed unused <code>ActionQueue</code> class.</li>
+<li>Removed unnecessary custom type size constants.</li>
+<li>Made event args' properties readonly fields.</li>
+</ul>
+<h2 id="fixes">Fixes</h2>
+<ul>
+<li>Fixed some message handler methods not being found (<a href="https://github.com/RiptideNetworking/Riptide/issues/44">#44</a>).</li>
+</ul>
 </article>
           </div>
           
