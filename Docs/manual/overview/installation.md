@@ -36,7 +36,18 @@ If you prefer not to use Unity's Package Manager or that option doesn't work for
 
 The following installation steps are for Visual Studio users and may differ if you use a different IDE.
 
-### Option 1: DLL File
+### Option 1: NuGet Package
+
+1. Right click your solution in the Solution Explorer.
+2. Select *Manage NuGet Packages for Solution...*
+3. Click the *Browse* tab.
+4. Search for the `RiptideNetworking.Riptide` package and select it.
+5. Check the box next to the project(s) you want to add the package to.
+6. Choose the version you want to install from the dropdown.
+7. Click *Install* and then click *OK* when prompted.
+8. Click *I Accept* to accept the license terms.
+
+### Option 2: DLL File
 
 1. Either
     - download the `RiptideNetworking.dll` file from [the latest release](https://github.com/RiptideNetworking/Riptide/releases/latest) (or choose [a previous version](https://github.com/RiptideNetworking/Riptide/releases)), or
@@ -48,7 +59,7 @@ The following installation steps are for Visual Studio users and may differ if y
 6. Navigate to the folder where you saved the `RiptideNetworking.dll` file and add it.
 7. Click *OK*.
 
-### Option 2: Direct Project Reference
+### Option 3: Direct Project Reference
 
 1. Either
     - download the `RiptideNetworking.dll` file from [the latest release](https://github.com/RiptideNetworking/Riptide/releases/latest) (or choose [a previous version](https://github.com/RiptideNetworking/Riptide/releases)), or
