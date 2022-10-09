@@ -4,6 +4,23 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <RootNamespace>Riptide</RootNamespace>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>RiptideNetworking.Riptide</PackageId>
+    <Authors>Tom Weiland</Authors>
+    <Product>Riptide Networking</Product>
+    <VersionPrefix>2.0.0</VersionPrefix>
+    <PackageTags>riptide;networking;multiplayer;game development;server;client;multiplayer games;udp;rudp</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <PackageProjectUrl>https://riptide.tomweiland.net/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/RiptideNetworking/Riptide</RepositoryUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Description>Riptide Networking is a lightweight C# networking library primarily designed for use in multiplayer games.</Description>
+    <Copyright>Copyright © Tom Weiland 2022</Copyright>
+    <RepositoryType>git</RepositoryType>
+    <PackageIcon>package-icon.png</PackageIcon>
+    <PackageReleaseNotes>Release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html
+Update guide: https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,6 +37,17 @@
 
   <ItemGroup>
     <UPMSourceFiles Include="$(ProjectDir)\**\*.cs" Exclude="$(ProjectDir)\obj\**\*.*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\package-icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
