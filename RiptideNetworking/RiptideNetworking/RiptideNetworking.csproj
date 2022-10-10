@@ -14,13 +14,13 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://riptide.tomweiland.net/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/RiptideNetworking/Riptide</RepositoryUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>nuget-readme.md</PackageReadmeFile>
     <Description>Riptide Networking is a lightweight C# networking library primarily designed for use in multiplayer games.</Description>
     <Copyright>Copyright © Tom Weiland 2022</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>package-icon.png</PackageIcon>
-    <PackageReleaseNotes>Release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html
-Update guide: https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html</PackageReleaseNotes>
+    <PackageReleaseNotes>[Release Notes](https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html)
+[Update Guide](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html)</PackageReleaseNotes>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -40,7 +40,7 @@ Update guide: https://riptide.tomweiland.net/manual/updates/guides/updating-to-v
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="..\..\README.md">
+    <None Include="..\nuget-readme.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
     </None>
