@@ -17,7 +17,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="short"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromShort(short value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -32,7 +34,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="ushort"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromUShort(ushort value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -48,7 +52,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="short"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static short ToShort(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -61,7 +67,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="ushort"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static ushort ToUShort(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -77,7 +85,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="int"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromInt(int value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -96,7 +106,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="uint"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromUInt(uint value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -116,7 +128,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="int"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static int ToInt(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -129,7 +143,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="uint"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static uint ToUInt(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -145,7 +161,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="long"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromLong(long value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -172,7 +190,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="ulong"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromULong(ulong value, byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -200,7 +220,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="long"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static long ToLong(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -213,7 +235,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="ulong"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static ulong ToULong(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -228,7 +252,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="float"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromFloat(float value, byte[] array, int startIndex)
         {
             FloatConverter converter = new FloatConverter { FloatValue = value };
@@ -249,7 +275,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="float"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static float ToFloat(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN
@@ -265,7 +293,9 @@ namespace Riptide.Utils
         /// <param name="value">The <see cref="double"/> to convert.</param>
         /// <param name="array">The array to write the bytes into.</param>
         /// <param name="startIndex">The position in the array at which to write the bytes.</param>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static void FromDouble(double value, byte[] array, int startIndex)
         {
             DoubleConverter converter = new DoubleConverter { DoubleValue = value };
@@ -294,7 +324,9 @@ namespace Riptide.Utils
         /// <param name="array">The array to read the bytes from.</param>
         /// <param name="startIndex">The position in the array at which to read the bytes.</param>
         /// <returns>The converted <see cref="double"/>.</returns>
+#if !NET35
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+#endif
         public static double ToDouble(byte[] array, int startIndex)
         {
 #if BIG_ENDIAN

@@ -35,11 +35,14 @@ namespace Riptide.Transports.Tcp
             }
 
             IPEndPoint remoteEndPoint = new IPEndPoint(ip, port);
-            socket = new Socket(SocketType.Stream, ProtocolType.Tcp)
+
+
+            socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)
             {
                 SendBufferSize = socketBufferSize,
                 ReceiveBufferSize = socketBufferSize,
             };
+
             
             try
             {
@@ -70,7 +73,7 @@ namespace Riptide.Transports.Tcp
             if (ipAndPort.Length > 2)
             {
                 // There was more than one ':' in the host address, might be IPv6
-                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
+                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1).ToArray());
                 portString = ipAndPort[ipAndPort.Length - 1];
             }
             else if (ipAndPort.Length == 2)

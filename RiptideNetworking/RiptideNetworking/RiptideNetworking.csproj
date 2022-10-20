@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net35</TargetFramework>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <RootNamespace>Riptide</RootNamespace>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
@@ -21,18 +20,19 @@
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageReleaseNotes>[Release Notes](https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html)
 [Update Guide](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html)</PackageReleaseNotes>
+    <LangVersion>default</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>bin\Debug\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
-    <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
+    <DocumentationFile>bin\Debug\net35\RiptideNetworking.xml</DocumentationFile>
+    <OutputPath>bin\Debug\net35\</OutputPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <OutputPath>bin\Release\netstandard2.0\</OutputPath>
-    <DocumentationFile>bin\Release\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
+    <OutputPath>bin\Release\net35\</OutputPath>
+    <DocumentationFile>bin\Release\net35\RiptideNetworking.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

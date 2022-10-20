@@ -3,10 +3,12 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using System;
+
 namespace Riptide.Transports
 {
     /// <summary>Contains event data for when a server's transport successfully establishes a connection to a client.</summary>
-    public class ConnectedEventArgs
+    public class ConnectedEventArgs : EventArgs
     {
         /// <summary>The newly established connection.</summary>
         public readonly Connection Connection;
@@ -20,7 +22,7 @@ namespace Riptide.Transports
     }
 
     /// <summary>Contains event data for when a server's or client's transport receives data.</summary>
-    public class DataReceivedEventArgs
+    public class DataReceivedEventArgs : EventArgs
     {
         /// <summary>An array containing the received data.</summary>
         public readonly byte[] DataBuffer;
@@ -42,7 +44,7 @@ namespace Riptide.Transports
     }
 
     /// <summary>Contains event data for when a server's or client's transport initiates or detects a disconnection.</summary>
-    public class DisconnectedEventArgs
+    public class DisconnectedEventArgs : EventArgs
     {
         /// <summary>The closed connection.</summary>
         public readonly Connection Connection;

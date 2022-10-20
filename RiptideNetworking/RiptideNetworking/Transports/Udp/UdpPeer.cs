@@ -75,9 +75,15 @@ namespace Riptide.Transports.Udp
             if (mode == SocketMode.IPv4Only)
                 socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             else if (mode == SocketMode.IPv6Only)
+#if NET35
+                //DualMode doesn't actually seem to do anything important unless you use UNIX sockets (source .NET 6 source code: https://source.dot.net/#System.Net.Sockets/System/Net/Sockets/UDPClient.cs,207)
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+#else
                 socket = new Socket(AddressFamily.InterNetworkV6, SocketType.Dgram, ProtocolType.Udp) { DualMode = false };
+#endif
+                
             else
-                socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
+                socket = new Socket(AddressFamily.Unspecified, SocketType.Dgram, ProtocolType.Udp);
 
             IPAddress any = socket.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any;
             socket.SendBufferSize = socketBufferSize;

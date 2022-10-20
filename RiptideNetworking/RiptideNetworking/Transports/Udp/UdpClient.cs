@@ -3,6 +3,7 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
+using Riptide.Utils;
 using System;
 using System.Linq;
 using System.Net;
@@ -69,7 +70,7 @@ namespace Riptide.Transports.Udp
             if (ipAndPort.Length > 2)
             {
                 // There was more than one ':' in the host address, might be IPv6
-                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1));
+                ipString = string.Join(":", ipAndPort.Take(ipAndPort.Length - 1).ToArray());
                 portString = ipAndPort[ipAndPort.Length - 1];
             }
             else if (ipAndPort.Length == 2)

@@ -14,7 +14,11 @@ namespace Riptide.Utils
         /// <returns>A string containing the IP address and port number of the endpoint.</returns>
         public static string ToStringBasedOnIPFormat(this IPEndPoint endPoint)
         {
+#if NET35
+            if (endPoint.Address.IsIPv4MappedToIPv6())
+#else
             if (endPoint.Address.IsIPv4MappedToIPv6)
+#endif
                 return $"{endPoint.Address.MapToIPv4()}:{endPoint.Port}";
             
             return endPoint.ToString();
