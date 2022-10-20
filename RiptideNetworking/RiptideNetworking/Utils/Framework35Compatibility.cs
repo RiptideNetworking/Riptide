@@ -5,6 +5,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
@@ -71,18 +72,12 @@ namespace Riptide.Utils
         /// Taken and adapted from https://github.com/microsoft/referencesource/blob/dae14279dd0672adead5de00ac8f117dcf74c184/System/net/System/Net/IPAddress.cs#L738
         /// </summary>
         /// <inheritdoc cref="IPAddress.MapToIPv4()"/>
-        public static IPAddress MapToIPv4(this IPAddress self)
-        {
-            if (self.AddressFamily == AddressFamily.InterNetwork)
-                return self;
-
-            byte[] addr = self.GetAddressBytes();
-            ushort[] numbers = new ushort[IPAddressParserStatics.IPv6AddressShorts];
-            for (int i = 0, byte_i = 0; i < IPAddressParserStatics.IPv6AddressShorts; i++, byte_i += 2)
-                numbers[i] = (ushort)((addr[byte_i + 1] << 8) & addr[byte_i]);
-            
-            return new IPAddress(((numbers[6] & 0x0000FF00u) >> 8) | ((numbers[6] & 0x000000FFu) << 8) | ((((numbers[7] & 0x0000FF00u) >> 8) | ((numbers[7] & 0x000000FFu) << 8)) << 16));
-        }
+        public static IPAddress MapToIPv4(this IPAddress self) => self.AddressFamily == AddressFamily.InterNetwork
+                                                                      ? self
+                                                                      : new IPAddress(self.GetAddressBytes()
+                                                                                          .Skip(IPAddressParserStatics.IPv6AddressBytes - IPAddressParserStatics.IPv4AddressBytes)
+                                                                                          .ToArray());
+        
 
         /// <summary>
         /// Taken and adapted from https://github.com/microsoft/referencesource/blob/dae14279dd0672adead5de00ac8f117dcf74c184/System/net/System/Net/IPAddress.cs#L624
