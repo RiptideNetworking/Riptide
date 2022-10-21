@@ -25,7 +25,11 @@ namespace Riptide.Transports.Udp
         private UdpConnection udpConnection;
 
         /// <inheritdoc/>
+#if NET35
         public UdpClient(SocketMode mode = SocketMode.IPv4Only, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+#else
+        public UdpClient(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+#endif
 
         /// <inheritdoc/>
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
