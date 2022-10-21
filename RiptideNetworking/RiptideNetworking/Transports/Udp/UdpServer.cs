@@ -32,6 +32,7 @@ namespace Riptide.Transports.Udp
             Port = port;
             connections = new Dictionary<IPEndPoint, Connection>();
 
+
             OpenSocket(port);
         }
 
