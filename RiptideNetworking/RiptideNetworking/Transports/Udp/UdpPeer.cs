@@ -91,8 +91,8 @@ namespace Riptide.Transports.Udp
             IPAddress any = socket.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any;
             socket.SendBufferSize = socketBufferSize;
             socket.ReceiveBufferSize = socketBufferSize;
-            socket.Bind(new IPEndPoint(any, port));
-            remoteEndPoint = new IPEndPoint(any, 0);
+            socket.Bind(new IPEndPoint(address: any, port));
+            remoteEndPoint = new IPEndPoint(address: any, 0);
 
             isRunning = true;
         }

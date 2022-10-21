@@ -34,7 +34,7 @@ namespace Riptide.Transports.Tcp
                 return false;
             }
 
-            IPEndPoint remoteEndPoint = new IPEndPoint(ip, port);
+            IPEndPoint remoteEndPoint = new IPEndPoint(address: ip, port);
 
 
             socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)

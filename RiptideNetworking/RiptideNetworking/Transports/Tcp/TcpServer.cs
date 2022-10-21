@@ -49,7 +49,7 @@ namespace Riptide.Transports.Tcp
             if (isRunning)
                 StopListening();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
+            IPEndPoint localEndPoint = new IPEndPoint(address: IPAddress.IPv6Any, port);
             socket = new Socket(AddressFamily.Unspecified, SocketType.Stream, ProtocolType.Tcp)
             {
                 SendBufferSize = socketBufferSize,

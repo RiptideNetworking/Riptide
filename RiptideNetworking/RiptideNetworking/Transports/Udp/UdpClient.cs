@@ -25,7 +25,7 @@ namespace Riptide.Transports.Udp
         private UdpConnection udpConnection;
 
         /// <inheritdoc/>
-        public UdpClient(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+        public UdpClient(SocketMode mode = SocketMode.IPv4Only, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
 
         /// <inheritdoc/>
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
@@ -52,7 +52,7 @@ namespace Riptide.Transports.Udp
 
             OpenSocket();
 
-            connection = udpConnection = new UdpConnection(new IPEndPoint(mode == SocketMode.IPv4Only ? ip : ip.MapToIPv6(), port), this);
+            connection = udpConnection = new UdpConnection(new IPEndPoint(address: mode == SocketMode.IPv4Only ? ip : ip.MapToIPv6(), port), this);
             OnConnected(); // UDP is connectionless, so from the transport POV everything is immediately ready to send/receive data
             return true;
         }

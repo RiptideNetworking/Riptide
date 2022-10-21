@@ -21,6 +21,7 @@
     <PackageReleaseNotes>[Release Notes](https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html)
 [Update Guide](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html)</PackageReleaseNotes>
     <LangVersion>default</LangVersion>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
