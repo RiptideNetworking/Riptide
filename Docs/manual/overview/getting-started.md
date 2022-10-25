@@ -20,6 +20,9 @@ Obviously this is using Unity's logging methods, so if you're not using Unity fo
 
 ### Starting a Server
 
+> [!IMPORTANT]
+> To test the server and the client using the Unity Editor, make sure Unity Editor is allowed to run in the background by going to Edit -> Project Settings -> Player -> Resolution and Presentation, and in there, find the "Run In Background" and enable it.
+
 To start a server, we need to create a new <code><a href="xref:Riptide.Server">Server</a></code> instance and then call its <code><a href="xref:Riptide.Server.Start*">Start()</a></code> method, which takes in the port we want it to run on and the maximum number of clients we want to allow to be connected at any given time. You'll likely want to run this code as soon as your server application starts up.
 
 ```cs
@@ -48,6 +51,7 @@ client.Connect("127.0.0.1:7777");
 ```
 
 > [!TIP]
+
 > Connecting to `127.0.0.1` will only work if your server and client applications are running on the same computer. To connect from a computer on a different network you need to connect to your host computer's public IP address instead, and you'll need to portforward to allow traffic from your clients to reach your server.
 
 Finally, we need to call the client's <code><a href="xref:Riptide.Client.Update*">Update()</a></code> method on a regular basis, just like we did with the server.
