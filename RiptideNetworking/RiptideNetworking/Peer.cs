@@ -92,6 +92,8 @@ namespace Riptide
         protected const string CRRejected       = "Rejected";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Custom"/>.</summary>
         protected const string CRCustom         = "Rejected with custom reason";
+        /// <summary>Whether or not the peer should use the built-in message handler system.</summary>
+        protected bool useMessageHandlers;
 
         /// <summary>A stopwatch used to track how much time has passed.</summary>
         private readonly System.Diagnostics.Stopwatch time = new System.Diagnostics.Stopwatch();

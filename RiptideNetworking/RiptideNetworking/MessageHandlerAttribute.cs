@@ -21,7 +21,7 @@ namespace Riptide
     ///   <para>
     ///     If you want a <see cref="Server"/> or <see cref="Client"/> to only use a subset of all message handler methods, you can do so by setting up
     ///     custom message handler groups. Simply set the group ID in the <see cref="MessageHandlerAttribute(ushort, byte)"/> constructor and pass the
-    ///     same value to the <see cref="Server.Start(ushort, ushort, byte)"/> or <see cref="Client.Connect(string, int, byte, Message)"/> method. This
+    ///     same value to the <see cref="Server.Start(ushort, ushort, byte, bool)"/> or <see cref="Client.Connect(string, int, byte, Message, bool)"/> method. This
     ///     will make that <see cref="Server"/> or <see cref="Client"/> only use message handlers which have the same group ID.
     ///   </para>
     /// </remarks>
