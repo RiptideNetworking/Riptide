@@ -14,7 +14,7 @@ It provides functionality for establishing connections and sending data back and
 
 Check out the documentation for [installation instructions](https://riptide.tomweiland.net/manual/overview/installation.html) and a [guide on setting up the basics](https://riptide.tomweiland.net/manual/overview/getting-started.html).
 
-For a video tutorial on how to set up Riptide (using v1.1.0) in your project, see [this video](https://youtu.be/6kWNZOFcFQw). You can use the [upgrade guides](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.md) to update your project to newer versions afterwards.
+For a video tutorial on how to set up Riptide (using v1.1.0) in your project, see [this video](https://youtu.be/6kWNZOFcFQw). You can use the [upgrade guides](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html) to update your project to newer versions afterwards.
 
 ## Low-Level Transports
 
