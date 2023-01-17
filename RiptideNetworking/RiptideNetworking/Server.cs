@@ -64,6 +64,9 @@ namespace Riptide
         public Server(IServer transport, string logName = "SERVER") : base(logName)
         {
             this.transport = transport;
+            pendingConnections = new List<Connection>();
+            clients = new Dictionary<ushort, Connection>();
+            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
@@ -71,6 +74,9 @@ namespace Riptide
         public Server(string logName = "SERVER") : base(logName)
         {
             transport = new Transports.Udp.UdpServer();
+            pendingConnections = new List<Connection>();
+            clients = new Dictionary<ushort, Connection>();
+            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
@@ -98,9 +104,7 @@ namespace Riptide
                 CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             MaxClientCount = maxClientCount;
-            pendingConnections = new List<Connection>();
             clients = new Dictionary<ushort, Connection>(maxClientCount);
-            timedOutClients = new List<Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
