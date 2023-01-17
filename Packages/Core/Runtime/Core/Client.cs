@@ -385,7 +385,7 @@ namespace Riptide
                     reasonString = CRCustom;
                     break;
                 default:
-                    reasonString = UnknownReason;
+                    reasonString = $"{UnknownReason} '{reason}'";
                     break;
             }
             
@@ -436,7 +436,7 @@ namespace Riptide
                     reasonString = DCDisconnected;
                     break;
                 default:
-                    reasonString = UnknownReason;
+                    reasonString = $"{UnknownReason} '{reason}'";
                     break;
             }
 

@@ -64,6 +64,9 @@ namespace Riptide
         public Server(IServer transport, string logName = "SERVER") : base(logName)
         {
             this.transport = transport;
+            pendingConnections = new List<Connection>();
+            clients = new Dictionary<ushort, Connection>();
+            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
@@ -71,6 +74,9 @@ namespace Riptide
         public Server(string logName = "SERVER") : base(logName)
         {
             transport = new Transports.Udp.UdpServer();
+            pendingConnections = new List<Connection>();
+            clients = new Dictionary<ushort, Connection>();
+            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
@@ -98,9 +104,7 @@ namespace Riptide
                 CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             MaxClientCount = maxClientCount;
-            pendingConnections = new List<Connection>();
             clients = new Dictionary<ushort, Connection>(maxClientCount);
-            timedOutClients = new List<Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
@@ -244,7 +248,7 @@ namespace Riptide
         /// <summary>Rejects the given pending connection.</summary>
         /// <param name="connection">The connection to reject.</param>
         /// <param name="reason">The reason why the connection is being rejected.</param>
-        /// <param name="rejectMessage">Data that should be sent to the client being rejected</param>
+        /// <param name="rejectMessage">Data that should be sent to the client being rejected.</param>
         private void Reject(Connection connection, RejectReason reason, Message rejectMessage = null)
         {
             if (reason != RejectReason.AlreadyConnected)
@@ -269,6 +273,12 @@ namespace Riptide
             string reasonString;
             switch (reason)
             {
+                case RejectReason.AlreadyConnected:
+                    reasonString = CRAlreadyConnected;
+                    break;
+                case RejectReason.Pending:
+                    reasonString = CRPending;
+                    break;
                 case RejectReason.ServerFull:
                     reasonString = CRServerFull;
                     break;
@@ -279,7 +289,7 @@ namespace Riptide
                     reasonString = CRCustom;
                     break;
                 default:
-                    reasonString = UnknownReason;
+                    reasonString = $"{UnknownReason} '{reason}'";
                     break;
             }
             RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {reasonString}.");
@@ -594,7 +604,7 @@ namespace Riptide
                     reasonString = DCDisconnected;
                     break;
                 default:
-                    reasonString = UnknownReason;
+                    reasonString = $"{UnknownReason} '{reason}'";
                     break;
             }
 
