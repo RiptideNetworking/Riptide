@@ -68,11 +68,16 @@ namespace Riptide
         }
 
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
+        /// <param name="listenAddress">The <see cref="IPAddress"/> for the server to listen on.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(IPAddress listenAddress = null, string logName = "SERVER") : base(logName)
+        public Server(IPAddress listenAddress, string logName = "SERVER") : base(logName)
         {
             transport = new Transports.Udp.UdpServer(listenAddress);
         }
+
+        /// <summary>Handles initial setup using the built-in UDP transport.</summary>
+        /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
+        public Server(string logName = "SERVER") : this(IPAddress.Any, logName) { }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
@@ -455,7 +460,7 @@ namespace Riptide
             if (!IsRunning)
                 return;
 
-            pendingConnections.Clear(); 
+            pendingConnections.Clear();
             byte[] disconnectBytes = { (byte)MessageHeader.Disconnect, (byte)DisconnectReason.ServerStopped };
             foreach (Connection client in clients.Values)
                 client.Send(disconnectBytes, disconnectBytes.Length);
@@ -485,7 +490,7 @@ namespace Riptide
         {
             if (availableClientIds.Count > 0)
                 return availableClientIds.Dequeue();
-            
+
             RiptideLogger.Log(LogType.Error, LogName, "No available client IDs, assigned 0!");
             return 0;
         }

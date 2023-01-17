@@ -24,23 +24,35 @@ namespace Riptide.Transports.Tcp
         protected const int DefaultSocketBufferSize = 1024 * 1024; // 1MB
         /// <summary>The size to use for the socket's send and receive buffers.</summary>
         protected readonly int socketBufferSize;
+        /// <summary>
+        /// the ip the socket is bound to.
+        /// </summary>
+        protected readonly IPAddress _listenAddress;
+
         /// <summary>The main socket, either used for listening for connections or for sending and receiving data.</summary>
         protected Socket socket;
         /// <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
         private const int MinSocketBufferSize = 256 * 1024; // 256KB
 
         /// <summary>Initializes the transport.</summary>
+        /// <param name="listenAddress">Which ip to bind the socket to.</param>
         /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        protected TcpPeer(IPAddress listenAddress = null, int socketBufferSize = DefaultSocketBufferSize)
+        protected TcpPeer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize)
         {
             if (socketBufferSize < MinSocketBufferSize)
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");
-
+            
+            _listenAddress = listenAddress;
             this.socketBufferSize = socketBufferSize;
             // Need room for the entire message plus the message length (since this is TCP)
             ReceiveBuffer = new byte[Message.MaxSize + sizeof(ushort)];
             SendBuffer = new byte[Message.MaxSize + sizeof(ushort)];
         }
+
+        /// <summary>Initializes the transport.</summary>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        /// <remarks>Listen ip defaults to <see cref="IPAddress.Any"/>.</remarks>
+        protected TcpPeer(int socketBufferSize = DefaultSocketBufferSize) : this(IPAddress.Any, socketBufferSize) { }
 
         /// <summary>Handles received data.</summary>
         /// <param name="amount">The number of bytes that were received.</param>

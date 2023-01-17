@@ -25,6 +25,10 @@ namespace Riptide.Transports.Udp
     {
         /// <inheritdoc cref="IPeer.Disconnected"/>
         public event EventHandler<DisconnectedEventArgs> Disconnected;
+        /// <summary>
+        /// the ip the socket is bound to.
+        /// </summary>
+        protected readonly IPAddress _listenAddress;
 
         /// <summary>The default size used for the socket's send and receive buffers.</summary>
         protected const int DefaultSocketBufferSize = 1024 * 1024; // 1MB
@@ -47,17 +51,24 @@ namespace Riptide.Transports.Udp
         private EndPoint remoteEndPoint;
 
         /// <summary>Initializes the transport.</summary>
+        /// <param name="listenAddress">Which ip to bind the socket to.</param>
         /// <param name="mode">Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</param>
         /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
         protected UdpPeer(IPAddress listenAddress, SocketMode mode, int socketBufferSize)
         {
             if (socketBufferSize < MinSocketBufferSize)
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");
-
+            _listenAddress = listenAddress;
             this.mode = mode;
             this.socketBufferSize = socketBufferSize;
             receivedData = new byte[Message.MaxSize + sizeof(ushort)];
         }
+
+        /// <summary>Initializes the transport.</summary>
+        /// <param name="mode">Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</param>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        /// <remarks>Listen ip defaults to <see cref="IPAddress.Any"/>.</remarks>
+        protected UdpPeer(SocketMode mode, int socketBufferSize) : this(IPAddress.Any, mode, socketBufferSize) { }
 
         /// <inheritdoc cref="IPeer.Poll"/>
         public void Poll()
@@ -79,11 +90,10 @@ namespace Riptide.Transports.Udp
             else
                 socket = new Socket(SocketType.Dgram, ProtocolType.Udp);
 
-            IPAddress any = socket.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any;
             socket.SendBufferSize = socketBufferSize;
             socket.ReceiveBufferSize = socketBufferSize;
-            socket.Bind(new IPEndPoint(any, port));
-            remoteEndPoint = new IPEndPoint(any, 0);
+            socket.Bind(new IPEndPoint(_listenAddress, port));
+            remoteEndPoint = new IPEndPoint(_listenAddress, 0);
 
             isRunning = true;
         }

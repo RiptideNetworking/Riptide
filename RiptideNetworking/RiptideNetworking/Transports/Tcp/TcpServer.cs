@@ -34,6 +34,9 @@ namespace Riptide.Transports.Tcp
         public TcpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(listenAddress, socketBufferSize) { }
 
         /// <inheritdoc/>
+        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : this(IPAddress.Any, socketBufferSize) {}
+
+        /// <inheritdoc/>
         public void Start(ushort port)
         {
             Port = port;
@@ -49,7 +52,7 @@ namespace Riptide.Transports.Tcp
             if (isRunning)
                 StopListening();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
+            IPEndPoint localEndPoint = new IPEndPoint(_listenAddress, port);
             socket = new Socket(SocketType.Stream, ProtocolType.Tcp)
             {
                 SendBufferSize = socketBufferSize,
