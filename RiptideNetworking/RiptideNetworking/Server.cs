@@ -8,6 +8,7 @@ using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace Riptide
@@ -68,9 +69,9 @@ namespace Riptide
 
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(string logName = "SERVER") : base(logName)
+        public Server(IPAddress listenAddress = null, string logName = "SERVER") : base(logName)
         {
-            transport = new Transports.Udp.UdpServer();
+            transport = new Transports.Udp.UdpServer(listenAddress);
         }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>

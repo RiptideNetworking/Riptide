@@ -49,7 +49,7 @@ namespace Riptide.Transports.Udp
         /// <summary>Initializes the transport.</summary>
         /// <param name="mode">Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</param>
         /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        protected UdpPeer(SocketMode mode, int socketBufferSize)
+        protected UdpPeer(IPAddress listenAddress, SocketMode mode, int socketBufferSize)
         {
             if (socketBufferSize < MinSocketBufferSize)
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");

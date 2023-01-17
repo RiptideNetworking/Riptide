@@ -24,7 +24,7 @@ namespace Riptide.Transports.Udp
         private Dictionary<IPEndPoint, Connection> connections;
 
         /// <inheritdoc/>
-        public UdpServer(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+        public UdpServer(IPAddress listenAddress, SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(listenAddress, mode, socketBufferSize) { }
 
         /// <inheritdoc/>
         public void Start(ushort port)

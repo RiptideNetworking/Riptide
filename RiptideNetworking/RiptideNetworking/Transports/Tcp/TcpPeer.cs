@@ -4,6 +4,7 @@
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
 
 using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace Riptide.Transports.Tcp
@@ -30,7 +31,7 @@ namespace Riptide.Transports.Tcp
 
         /// <summary>Initializes the transport.</summary>
         /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        protected TcpPeer(int socketBufferSize = DefaultSocketBufferSize)
+        protected TcpPeer(IPAddress listenAddress = null, int socketBufferSize = DefaultSocketBufferSize)
         {
             if (socketBufferSize < MinSocketBufferSize)
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");

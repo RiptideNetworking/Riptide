@@ -31,7 +31,7 @@ namespace Riptide.Transports.Tcp
         private readonly List<IPEndPoint> closedConnections = new List<IPEndPoint>();
 
         /// <inheritdoc/>
-        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
+        public TcpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(listenAddress, socketBufferSize) { }
 
         /// <inheritdoc/>
         public void Start(ushort port)
