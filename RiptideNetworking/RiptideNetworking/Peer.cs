@@ -71,27 +71,31 @@ namespace Riptide
         internal long CurrentTime { get; private set; }
 
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.NeverConnected"/>.</summary>
-        protected const string DCNeverConnected = "Never connected";
+        protected const string DCNeverConnected   = "Never connected";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.TransportError"/>.</summary>
-        protected const string DCTransportError = "Transport error";
+        protected const string DCTransportError   = "Transport error";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.TimedOut"/>.</summary>
-        protected const string DCTimedOut       = "Timed out";
+        protected const string DCTimedOut         = "Timed out";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.Kicked"/>.</summary>
-        protected const string DCKicked         = "Kicked";
+        protected const string DCKicked           = "Kicked";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.ServerStopped"/>.</summary>
-        protected const string DCServerStopped  = "Server stopped";
+        protected const string DCServerStopped    = "Server stopped";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.Disconnected"/>.</summary>
-        protected const string DCDisconnected   = "Disconnected";
+        protected const string DCDisconnected     = "Disconnected";
         /// <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
-        protected const string UnknownReason    = "Unknown reason";
+        protected const string UnknownReason      = "Unknown reason";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.NoConnection"/>.</summary>
-        protected const string CRNoConnection   = "No connection";
+        protected const string CRNoConnection     = "No connection";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.AlreadyConnected"/>.</summary>
+        protected const string CRAlreadyConnected = "This client is already connected";
+        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Pending"/>.</summary>
+        protected const string CRPending          = "A connection from this client is already pending";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.ServerFull"/>.</summary>
-        protected const string CRServerFull     = "Server is full";
+        protected const string CRServerFull       = "Server is full";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Rejected"/>.</summary>
-        protected const string CRRejected       = "Rejected";
+        protected const string CRRejected         = "Rejected";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Custom"/>.</summary>
-        protected const string CRCustom         = "Rejected with custom reason";
+        protected const string CRCustom           = "Rejected (with custom data)";
         /// <summary>Whether or not the peer should use the built-in message handler system.</summary>
         protected bool useMessageHandlers;
 
