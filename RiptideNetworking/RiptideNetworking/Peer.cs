@@ -59,10 +59,10 @@ namespace Riptide
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
         /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public ushort TimeoutTime { get; set; } = 5000;
+        public int TimeoutTime { get; set; } = 5000;
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
         /// <remarks>Changes to this value will only take effect after the next heartbeat is executed.</remarks>
-        public ushort HeartbeatInterval { get; set; } = 1000;
+        public int HeartbeatInterval { get; set; } = 1000;
 
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
         internal static int ActiveCount { get; private set; }
