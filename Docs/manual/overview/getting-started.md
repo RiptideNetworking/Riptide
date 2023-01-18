@@ -61,6 +61,9 @@ private void FixedUpdate()
 
 At this point, if you run the server and the client you should see log messages informing you that the server started and the client connected!
 
+> [!IMPORTANT]
+> Make sure you have the `Run in Background` option enabled (found under Edit > Project Settings > Player > Resolution and Presentation), otherwise your server and client will only be able to communicate with each other when their window is active/in-focus! This used to be enabled by default, but that appears to have changed in newer versions of Unity.
+
 ## Hooking Into Events
 
 Riptide's <code><a href="xref:Riptide.Server">Server</a></code> and <code><a href="xref:Riptide.Client">Client</a></code> classes both have several events to allow you to run your own code when various things happen.

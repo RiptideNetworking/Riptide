@@ -40,7 +40,9 @@ namespace Riptide
         /// <summary>Encapsulates a method that determines whether or not to accept a client's connection attempt.</summary>
         public delegate void ConnectionAttemptHandler(Connection pendingConnection, Message connectMessage);
         /// <summary>An optional method which determines whether or not to accept a client's connection attempt.</summary>
-        /// <remarks>The <see cref="Connection"/> parameter is the pending connection and the <see cref="Message"/> parameter is a message containing any additional data the client included with the connection attempt.</remarks>
+        /// <remarks>The <see cref="Connection"/> parameter is the pending connection and the <see cref="Message"/> parameter is a message containing any additional data the
+        /// client included with the connection attempt. If you choose to subscribe a method to this delegate, you should use it to call either <see cref="Accept(Connection)"/>
+        /// or <see cref="Reject(Connection, Message)"/>. Not doing so will result in the connection hanging until the client times out.</remarks>
         public ConnectionAttemptHandler HandleConnection;
         /// <summary>Stores which message IDs have auto relaying enabled. Relaying is disabled entirely when this is <see langword="null"/>.</summary>
         public MessageRelayFilter RelayFilter;
