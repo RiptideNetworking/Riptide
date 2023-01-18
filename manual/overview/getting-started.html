@@ -133,6 +133,10 @@ client.Connect(&quot;127.0.0.1:7777&quot;);
 }
 </code></pre>
 <p>At this point, if you run the server and the client you should see log messages informing you that the server started and the client connected!</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Make sure you have the <code>Run in Background</code> option enabled (found under Edit &gt; Project Settings &gt; Player &gt; Resolution and Presentation), otherwise your server and client will only be able to communicate with each other when their window is active/in-focus! This used to be enabled by default, but that appears to have changed in newer versions of Unity.</p>
+</div>
 <h2 id="hooking-into-events">Hooking Into Events</h2>
 <p>Riptide's <code><a class="xref" href="../../api/Riptide.Server.html">Server</a></code> and <code><a class="xref" href="../../api/Riptide.Client.html">Client</a></code> classes both have several events to allow you to run your own code when various things happen.</p>
 <p>For example, you'll likely want your server to spawn a player object when a client connects and destroy it again when they disconnect. You can do this by subscribing your spawn and despawn methods to the <code><a class="xref" href="../../api/Riptide.Server.ClientConnected.html">ClientConnected</a></code> and <code><a class="xref" href="../../api/Riptide.Server.ClientDisconnected.html">ClientDisconnected</a></code> events.</p>

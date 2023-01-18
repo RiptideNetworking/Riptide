@@ -110,7 +110,9 @@
 
 
 <h4 id="Riptide_Server_HandleConnection_remarks"><strong>Remarks</strong></h4>
-<div class="markdown level0 remarks"><p>The <a class="xref" href="Riptide.Connection.html">Connection</a> parameter is the pending connection and the <a class="xref" href="Riptide.Message.html">Message</a> parameter is a message containing any additional data the client included with the connection attempt.</p>
+<div class="markdown level0 remarks"><p>The <a class="xref" href="Riptide.Connection.html">Connection</a> parameter is the pending connection and the <a class="xref" href="Riptide.Message.html">Message</a> parameter is a message containing any additional data the
+client included with the connection attempt. If you choose to subscribe a method to this delegate, you should use it to call either <a class="xref" href="Riptide.Server.Accept.html#Riptide_Server_Accept_Riptide_Connection_">Accept(Connection)</a>
+or <a class="xref" href="Riptide.Server.Reject.html#Riptide_Server_Reject_Riptide_Connection_Riptide_Message_">Reject(Connection, Message)</a>. Not doing so will result in the connection hanging until the client times out.</p>
 </div>
 
 
@@ -125,7 +127,7 @@
                     <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Server_HandleConnection.md&amp;value=---%0Auid%3A%20Riptide.Server.HandleConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Server.cs/#L44" class="contribution-link">View Source</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Server.cs/#L46" class="contribution-link">View Source</a>
                   </li>
                   <li>
                     <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>

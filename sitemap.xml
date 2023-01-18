@@ -2,2209 +2,2209 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.MessageHandler.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.ConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.MessageReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Disconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.ClientConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.ClientDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Id.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.RTT.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.SmoothRTT.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.IsNotConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.IsConnecting.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.IsPending.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.IsConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Connection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.ChangeTransport.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Connect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.CreateMessageHandlersDictionary.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Update.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Handle.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Send.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.Disconnect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnMessageReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnClientConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.OnClientDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Client.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientConnectedEventArgs.Id.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientConnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientConnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientDisconnectedEventArgs.Id.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientDisconnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ClientDisconnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsPending.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.RTT.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.SmoothRTT.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.CanTimeout.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.ResetTimeout.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.Send.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Connection.Id.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsNotConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsConnecting.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsPending.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.IsConnected.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.RTT.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.SmoothRTT.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.CanTimeout.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.-ctor.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.ResetTimeout.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.Send.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Connection.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ConnectionFailedEventArgs.Message.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ConnectionFailedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ConnectionFailedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ConnectionState.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DisconnectedEventArgs.Reason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DisconnectedEventArgs.Message.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DisconnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DisconnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DisconnectReason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.Id.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.DeclaringType1.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.HandlerMethodName1.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.DeclaringType2.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.HandlerMethodName2.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.DuplicateHandlerException.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.IMessageSerializable.Serialize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.IMessageSerializable.Deserialize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.IMessageSerializable.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InsufficientCapacityException.RiptideMessage.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InsufficientCapacityException.TypeName.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InsufficientCapacityException.RequiredBytes.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InsufficientCapacityException.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InsufficientCapacityException.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InvalidHandlerSignatureException.DeclaringType.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InvalidHandlerSignatureException.HandlerMethodName.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InvalidHandlerSignatureException.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.InvalidHandlerSignatureException.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxHeaderSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxPayloadSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.InstancesPerPeer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.SendMode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.UnreadLength.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.WrittenLength.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.TrimPool.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Create.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Release.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddByte.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSByte.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetByte.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSByte.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddBytes.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSBytes.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetBytes.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSBytes.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddBool.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetBool.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddBools.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetDoubles.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddString.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetString.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddStrings.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetStrings.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSerializable.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSerializable.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSerializables.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSerializables.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Add.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Message.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetBools.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddUShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetUShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddShorts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddUShorts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxHeaderSize.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxSize.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.MaxPayloadSize.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.InstancesPerPeer.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.SendMode.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.UnreadLength.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.WrittenLength.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.TrimPool.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Create.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Release.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddByte.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSByte.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetShorts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetUShorts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddUInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetUInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddInts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddUInts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetInts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetUInts.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddLong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddULong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetLong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetULong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddLongs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddULongs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetLongs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetULongs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddFloat.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetFloat.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddFloats.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetFloats.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddDouble.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetDouble.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddDoubles.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetDoubles.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddString.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetString.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddStrings.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetStrings.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSerializable.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSerializable.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.AddSerializables.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.GetSerializables.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.Add.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Message.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageHandlerAttribute.MessageId.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageHandlerAttribute.GroupId.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageHandlerAttribute.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageHandlerAttribute.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageReceivedEventArgs.FromConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageReceivedEventArgs.MessageId.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageReceivedEventArgs.Message.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageReceivedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageReceivedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageRelayFilter.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageRelayFilter.EnableRelay.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageRelayFilter.DisableRelay.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageRelayFilter.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.MessageSendMode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.NonStaticHandlerException.DeclaringType.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.NonStaticHandlerException.HandlerMethodName.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.NonStaticHandlerException.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.NonStaticHandlerException.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CRCustom.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.TimeoutTime.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HeartbeatInterval.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.FindMessageHandlers.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CreateMessageHandlersDictionary.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.StartTime.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.StopTime.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.Update.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HandleMessages.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HandleData.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.Handle.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.IncreaseActiveCount.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DecreaseActiveCount.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.LogName.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCNeverConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCTransportError.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCTimedOut.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCKicked.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCServerStopped.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DCDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.UnknownReason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CRNoConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CRServerFull.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CRRejected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CRCustom.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.TimeoutTime.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HeartbeatInterval.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.-ctor.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.FindMessageHandlers.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.CreateMessageHandlersDictionary.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.StartTime.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.StopTime.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.Update.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HandleMessages.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.HandleData.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.Handle.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.IncreaseActiveCount.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.DecreaseActiveCount.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Peer.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.RejectReason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.ConnectionAttemptHandler.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.MessageHandler.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.ClientConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.MessageReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.ClientDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.HandleConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.RelayFilter.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.IsRunning.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Port.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.MaxClientCount.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.ClientCount.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Clients.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.ChangeTransport.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Start.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.CreateMessageHandlersDictionary.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Accept.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Reject.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Update.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Handle.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Send.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.SendToAll.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.TryGetClient.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.DisconnectClient.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.Stop.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.OnClientConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.OnMessageReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.OnClientDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Server.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerConnectedEventArgs.Client.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerConnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerConnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerDisconnectedEventArgs.Client.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerDisconnectedEventArgs.Reason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerDisconnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.ServerDisconnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.ConnectedEventArgs.Connection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.ConnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.ConnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DataReceivedEventArgs.DataBuffer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DataReceivedEventArgs.Amount.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DataReceivedEventArgs.FromConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DataReceivedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DataReceivedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DisconnectedEventArgs.Connection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DisconnectedEventArgs.Reason.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DisconnectedEventArgs.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.DisconnectedEventArgs.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IClient.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IClient.ConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IClient.Connect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IClient.Disconnect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IClient.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IPeer.DataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IPeer.Disconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IPeer.Poll.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IPeer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.Port.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.Start.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.Close.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.Shutdown.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.IServer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.MessageHeader.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.ConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.DataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Connect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Poll.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Disconnect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.OnConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.OnConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Connected.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.ConnectionFailed.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.DataReceived.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Connect.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Poll.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.Disconnect.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.OnConnected.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpClient.OnConnectionFailed.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.RemoteEndPoint.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.Send.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.ToString.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.Equals.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.GetHashCode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.op_Equality.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.op_Inequality.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.Disconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.DefaultSocketBufferSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.socketBufferSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.socket.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.OnDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpPeer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.DataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Port.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.MaxPendingConnections.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Start.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Poll.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Close.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.Shutdown.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.OnConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.TcpServer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Tcp.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.SocketMode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.ConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.DataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.Connect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.Disconnect.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnConnectionFailed.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.ConnectionFailed.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.DataReceived.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.-ctor.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.Connect.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.Disconnect.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnConnected.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnConnectionFailed.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.OnDataReceived.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpClient.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.Send.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.ToString.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.Equals.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.GetHashCode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.op_Equality.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpConnection.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.Disconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.mode.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.Poll.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.OpenSocket.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.Disconnected.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.mode.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.-ctor.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.Poll.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.OpenSocket.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html</loc>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.Connected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.DataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.Port.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.-ctor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.Start.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.Close.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.Shutdown.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.OnConnected.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.OnDataReceived.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.UdpServer.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.Udp.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Transports.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromUShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToUShort.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromUInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToUInt.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromLong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromULong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToLong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToULong.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromFloat.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToFloat.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.FromDouble.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.ToDouble.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Converter.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Extensions.ToStringBasedOnIPFormat.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.Extensions.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.LogType.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.LogMethod.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.IsDebugLoggingEnabled.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.IsInfoLoggingEnabled.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.IsWarningLoggingEnabled.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.IsErrorLoggingEnabled.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.Initialize.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.EnableLoggingFor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.DisableLoggingFor.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.Log.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.RiptideLogger.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.Utils.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/api/Riptide.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/index.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/overview/about-riptide.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/overview/faq.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/overview/getting-started.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/overview/installation.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
     <loc>https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html</loc>
-    <lastmod>2023-01-18T10:28:10+00:00</lastmod>
+    <lastmod>2023-01-18T11:46:43+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.5</priority>
   </url>
