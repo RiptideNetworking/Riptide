@@ -81,7 +81,7 @@ namespace Riptide
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new transport to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, int, byte, Message, bool)"/> must be called again.</remarks>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, int, byte, Message)"/> must be called again.</remarks>
         public void ChangeTransport(IClient newTransport)
         {
             Disconnect();
@@ -93,13 +93,9 @@ namespace Riptide
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
-        /// <param name="useMessageHandlers">Whether or not the client should use the built-in message handler system.</param>
-        /// <remarks>
-        ///   <para>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</para>
-        ///   <para>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</para>
-        /// </remarks>
+        /// <remarks>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</remarks>
         /// <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
-        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null, bool useMessageHandlers = true)
+        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null)
         {
             Disconnect();
 
@@ -116,9 +112,7 @@ namespace Riptide
             connectionAttempts = 0;
             connection.Peer = this;
             IncreaseActiveCount();
-            this.useMessageHandlers = useMessageHandlers;
-            if (useMessageHandlers)
-                CreateMessageHandlersDictionary(messageHandlerGroupId);
+            CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             if (message != null)
             {
@@ -385,7 +379,7 @@ namespace Riptide
                     reasonString = CRCustom;
                     break;
                 default:
-                    reasonString = $"{UnknownReason} '{reason}'";
+                    reasonString = UnknownReason;
                     break;
             }
             
@@ -400,13 +394,10 @@ namespace Riptide
             ushort messageId = message.GetUShort();
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
 
-            if (useMessageHandlers)
-            {
-                if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
-                    messageHandler(message);
-                else
-                    RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
-            }
+            if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                messageHandler(message);
+            else
+                RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="Disconnected"/> event.</summary>
@@ -436,7 +427,7 @@ namespace Riptide
                     reasonString = DCDisconnected;
                     break;
                 default:
-                    reasonString = $"{UnknownReason} '{reason}'";
+                    reasonString = UnknownReason;
                     break;
             }
 

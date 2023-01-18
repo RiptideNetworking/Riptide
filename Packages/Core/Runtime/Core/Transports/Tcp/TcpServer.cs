@@ -29,19 +29,9 @@ namespace Riptide.Transports.Tcp
         private Dictionary<IPEndPoint, TcpConnection> connections;
         /// <summary>Connections that need to be closed.</summary>
         private readonly List<IPEndPoint> closedConnections = new List<IPEndPoint>();
-        /// <summary>The IP address to bind the socket to.</summary>
-        private readonly IPAddress listenAddress;
 
         /// <inheritdoc/>
-        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : this(IPAddress.IPv6Any, socketBufferSize) { }
-        
-        /// <summary>Initializes the transport, binding the socket to a specific IP address.</summary>
-        /// <param name="listenAddress">The IP address to bind the socket to.</param>
-        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
-        public TcpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize)
-        {
-            this.listenAddress = listenAddress;
-        }
+        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
 
         /// <inheritdoc/>
         public void Start(ushort port)
@@ -59,7 +49,7 @@ namespace Riptide.Transports.Tcp
             if (isRunning)
                 StopListening();
 
-            IPEndPoint localEndPoint = new IPEndPoint(listenAddress, port);
+            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
             socket = new Socket(SocketType.Stream, ProtocolType.Tcp)
             {
                 SendBufferSize = socketBufferSize,

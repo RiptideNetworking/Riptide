@@ -64,9 +64,6 @@ namespace Riptide
         public Server(IServer transport, string logName = "SERVER") : base(logName)
         {
             this.transport = transport;
-            pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
-            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
@@ -74,14 +71,11 @@ namespace Riptide
         public Server(string logName = "SERVER") : base(logName)
         {
             transport = new Transports.Udp.UdpServer();
-            pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
-            timedOutClients = new List<Connection>();
         }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, bool)"/> must be called again.</remarks>
+        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte)"/> must be called again.</remarks>
         public void ChangeTransport(IServer newTransport)
         {
             Stop();
@@ -92,19 +86,16 @@ namespace Riptide
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
-        /// <param name="useMessageHandlers">Whether or not the server should use the built-in message handler system.</param>
-        /// <remarks>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</remarks>
-        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, bool useMessageHandlers = true)
+        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0)
         {
             Stop();
 
             IncreaseActiveCount();
-            this.useMessageHandlers = useMessageHandlers;
-            if (useMessageHandlers)
-                CreateMessageHandlersDictionary(messageHandlerGroupId);
-
+            CreateMessageHandlersDictionary(messageHandlerGroupId);
             MaxClientCount = maxClientCount;
+            pendingConnections = new List<Connection>();
             clients = new Dictionary<ushort, Connection>(maxClientCount);
+            timedOutClients = new List<Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
@@ -248,7 +239,7 @@ namespace Riptide
         /// <summary>Rejects the given pending connection.</summary>
         /// <param name="connection">The connection to reject.</param>
         /// <param name="reason">The reason why the connection is being rejected.</param>
-        /// <param name="rejectMessage">Data that should be sent to the client being rejected.</param>
+        /// <param name="rejectMessage">Data that should be sent to the client being rejected</param>
         private void Reject(Connection connection, RejectReason reason, Message rejectMessage = null)
         {
             if (reason != RejectReason.AlreadyConnected)
@@ -273,12 +264,6 @@ namespace Riptide
             string reasonString;
             switch (reason)
             {
-                case RejectReason.AlreadyConnected:
-                    reasonString = CRAlreadyConnected;
-                    break;
-                case RejectReason.Pending:
-                    reasonString = CRPending;
-                    break;
                 case RejectReason.ServerFull:
                     reasonString = CRServerFull;
                     break;
@@ -289,7 +274,7 @@ namespace Riptide
                     reasonString = CRCustom;
                     break;
                 default:
-                    reasonString = $"{UnknownReason} '{reason}'";
+                    reasonString = UnknownReason;
                     break;
             }
             RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {reasonString}.");
@@ -566,13 +551,10 @@ namespace Riptide
 
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(fromConnection, messageId, message));
 
-            if (useMessageHandlers)
-            {
-                if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
-                    messageHandler(fromConnection.Id, message);
-                else
-                    RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
-            }
+            if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                messageHandler(fromConnection.Id, message);
+            else
+                RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
@@ -604,7 +586,7 @@ namespace Riptide
                     reasonString = DCDisconnected;
                     break;
                 default:
-                    reasonString = $"{UnknownReason} '{reason}'";
+                    reasonString = UnknownReason;
                     break;
             }
 
