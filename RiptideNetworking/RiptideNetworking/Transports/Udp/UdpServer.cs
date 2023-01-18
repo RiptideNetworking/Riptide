@@ -22,9 +22,19 @@ namespace Riptide.Transports.Udp
 
         /// <summary>The currently open connections, accessible by their endpoints.</summary>
         private Dictionary<IPEndPoint, Connection> connections;
+        /// <summary>The IP address to bind the socket to, if any.</summary>
+        private readonly IPAddress listenAddress;
 
         /// <inheritdoc/>
         public UdpServer(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+
+        /// <summary>Initializes the transport, binding the socket to a specific IP address.</summary>
+        /// <param name="listenAddress">The IP address to bind the socket to.</param>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        public UdpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(SocketMode.Both, socketBufferSize)
+        {
+            this.listenAddress = listenAddress;
+        }
 
         /// <inheritdoc/>
         public void Start(ushort port)
@@ -32,7 +42,7 @@ namespace Riptide.Transports.Udp
             Port = port;
             connections = new Dictionary<IPEndPoint, Connection>();
 
-            OpenSocket(port);
+            OpenSocket(listenAddress, port);
         }
 
         /// <summary>Decides what to do with a connection attempt.</summary>

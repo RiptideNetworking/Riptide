@@ -66,8 +66,9 @@ namespace Riptide.Transports.Udp
         }
 
         /// <summary>Opens the socket and starts the transport.</summary>
+        /// <param name="listenAddress">The IP address to bind the socket to, if any.</param>
         /// <param name="port">The port to bind the socket to.</param>
-        protected void OpenSocket(ushort port = 0)
+        protected void OpenSocket(IPAddress listenAddress = null, ushort port = 0)
         {
             if (isRunning)
                 CloseSocket();
@@ -82,7 +83,7 @@ namespace Riptide.Transports.Udp
             IPAddress any = socket.AddressFamily == AddressFamily.InterNetworkV6 ? IPAddress.IPv6Any : IPAddress.Any;
             socket.SendBufferSize = socketBufferSize;
             socket.ReceiveBufferSize = socketBufferSize;
-            socket.Bind(new IPEndPoint(any, port));
+            socket.Bind(new IPEndPoint(listenAddress == null ? any : listenAddress, port));
             remoteEndPoint = new IPEndPoint(any, 0);
 
             isRunning = true;
