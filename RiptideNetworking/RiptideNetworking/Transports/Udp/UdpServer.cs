@@ -46,14 +46,15 @@ namespace Riptide.Transports.Udp
         }
 
         /// <summary>Decides what to do with a connection attempt.</summary>
-        /// <param name="connection">The connection to accept or reject.</param>
-        /// <returns>Whether or not the connection attempt was a new connection.</returns>
-        private bool HandleConnectionAttempt(UdpConnection connection)
+        /// <param name="fromEndPoint">The endpoint the connection attempt is coming from.</param>
+        /// <returns>Whether or not the connection attempt was from a new connection.</returns>
+        private bool HandleConnectionAttempt(IPEndPoint fromEndPoint)
         {
-            if (connections.ContainsKey(connection.RemoteEndPoint))
+            if (connections.ContainsKey(fromEndPoint))
                 return false;
 
-            connections.Add(connection.RemoteEndPoint, connection);
+            UdpConnection connection = new UdpConnection(fromEndPoint, this);
+            connections.Add(fromEndPoint, connection);
             OnConnected(connection);
             return true;
         }
@@ -82,10 +83,10 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
-            if ((MessageHeader)dataBuffer[0] == MessageHeader.Connect && !HandleConnectionAttempt(new UdpConnection(fromEndPoint, this)))
+            if ((MessageHeader)dataBuffer[0] == MessageHeader.Connect && !HandleConnectionAttempt(fromEndPoint))
                 return;
 
-            if (connections.TryGetValue(fromEndPoint, out Connection connection))
+            if (connections.TryGetValue(fromEndPoint, out Connection connection) && !connection.IsNotConnected)
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(dataBuffer, amount, connection));
         }
     }

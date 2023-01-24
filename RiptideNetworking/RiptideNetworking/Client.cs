@@ -34,11 +34,11 @@ namespace Riptide
         /// <inheritdoc cref="Connection.SmoothRTT"/>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
-        /// <summary>Whether or not the client is currently <i>not</i> connected nor trying to connect.</summary>
+        /// <summary>Whether or not the client is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
         public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
         public bool IsConnecting => !(connection is null) && connection.IsConnecting;
-        /// <summary>Whether or not the client's connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
+        /// <summary>Whether or not the client's connection is currently pending (waiting to be accepted/rejected by the server).</summary>
         public bool IsPending => !(connection is null) && connection.IsPending;
         /// <summary>Whether or not the client is currently connected.</summary>
         public bool IsConnected => !(connection is null) && connection.IsConnected;
@@ -260,11 +260,8 @@ namespace Riptide
                     connection.SetPending();
                     break;
                 case MessageHeader.Reject:
-                    RejectReason reason = (RejectReason)message.GetByte();
-                    if (reason == RejectReason.Pending)
-                        connection.SetPending();
-                    else if (!IsConnected) // Don't disconnect if we are connected
-                        LocalDisconnect(DisconnectReason.ConnectionRejected, message, reason);
+                    if (!IsConnected) // Don't disconnect if we are connected
+                        LocalDisconnect(DisconnectReason.ConnectionRejected, message, (RejectReason)message.GetByte());
                     break;
                 case MessageHeader.Heartbeat:
                     connection.HandleHeartbeatResponse(message);

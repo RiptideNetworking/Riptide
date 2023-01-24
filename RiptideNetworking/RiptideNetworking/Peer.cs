@@ -19,8 +19,6 @@ namespace Riptide
         NoConnection,
         /// <summary>The client is already connected.</summary>
         AlreadyConnected,
-        /// <summary>A connection attempt is already pending.</summary>
-        Pending,
         /// <summary>The server is full.</summary>
         ServerFull,
         /// <summary>The connection attempt was rejected.</summary>
@@ -67,6 +65,8 @@ namespace Riptide
         /// <summary>The number of currently active <see cref="Server"/> and <see cref="Client"/> instances.</summary>
         internal static int ActiveCount { get; private set; }
 
+        /// <summary>The time (in milliseconds) for which to wait before giving up on a connection attempt.</summary>
+        internal int ConnectTimeoutTime { get; set; } = 10000;
         /// <summary>The current time.</summary>
         internal long CurrentTime { get; private set; }
 
@@ -88,8 +88,6 @@ namespace Riptide
         protected const string CRNoConnection     = "No connection";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.AlreadyConnected"/>.</summary>
         protected const string CRAlreadyConnected = "This client is already connected";
-        /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Pending"/>.</summary>
-        protected const string CRPending          = "A connection from this client is already pending";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.ServerFull"/>.</summary>
         protected const string CRServerFull       = "Server is full";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.Rejected"/>.</summary>

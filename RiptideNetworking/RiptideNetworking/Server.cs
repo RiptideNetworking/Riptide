@@ -180,26 +180,23 @@ namespace Riptide
         /// <param name="connectMessage">The connect message.</param>
         private void HandleConnect(Connection connection, Message connectMessage)
         {
+            connection.SetPending();
+
             if (HandleConnection == null)
                 AcceptConnection(connection);
-            else if (!clients.ContainsValue(connection))
+            else if (ClientCount < MaxClientCount)
             {
-                if (!pendingConnections.Contains(connection))
+                if (!clients.ContainsValue(connection) && !pendingConnections.Contains(connection))
                 {
-                    if (ClientCount < MaxClientCount)
-                    {
-                        pendingConnections.Add(connection);
-                        Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
-                        HandleConnection(connection, connectMessage); // Externally determines whether to accept
-                    }
-                    else
-                        Reject(connection, RejectReason.ServerFull);
+                    pendingConnections.Add(connection);
+                    Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
+                    HandleConnection(connection, connectMessage); // Externally determines whether to accept
                 }
                 else
-                    Reject(connection, RejectReason.Pending);
+                    Reject(connection, RejectReason.AlreadyConnected);
             }
             else
-                Reject(connection, RejectReason.AlreadyConnected);
+                Reject(connection, RejectReason.ServerFull);
         }
 
         /// <summary>Accepts the given pending connection.</summary>
@@ -227,9 +224,9 @@ namespace Riptide
         /// <param name="connection">The connection to accept.</param>
         private void AcceptConnection(Connection connection)
         {
-            if (!clients.ContainsValue(connection))
+            if (ClientCount < MaxClientCount)
             {
-                if (ClientCount < MaxClientCount)
+                if (!clients.ContainsValue(connection))
                 {
                     ushort clientId = GetAvailableClientId();
                     connection.Id = clientId;
@@ -239,10 +236,10 @@ namespace Riptide
                     return;
                 }
                 else
-                    Reject(connection, RejectReason.ServerFull);
+                    Reject(connection, RejectReason.AlreadyConnected);
             }
             else
-                Reject(connection, RejectReason.AlreadyConnected);
+                Reject(connection, RejectReason.ServerFull);
         }
 
         /// <summary>Rejects the given pending connection.</summary>
@@ -253,6 +250,10 @@ namespace Riptide
         {
             if (reason != RejectReason.AlreadyConnected)
             {
+                // Sending a reject message about the client already being connected could theoretically be exploited to obtain information
+                // on other connected clients, although in practice that seems very unlikely. However, under normal circumstances, clients
+                // should never actually encounter a scenario where they are "already connected".
+
                 Message message = Message.Create(MessageHeader.Reject);
                 if (rejectMessage != null)
                 {
@@ -262,22 +263,20 @@ namespace Riptide
                 else
                     message.AddByte((byte)reason);
 
-                connection.Send(message);
+                for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
+                    connection.Send(message, false);
+
+                message.Release();
             }
 
-            // Need to close the connection on the server since we're dealing with a separate Connection instance
-            // even if the client connecting already has a connection pending or is already connected
-            connection.LocalDisconnect();
-            transport.Close(connection);
+            connection.LocalDisconnect(true);
+            ExecuteLater(ConnectTimeoutTime, new CloseRejectedConnectionEvent(transport, connection));
 
             string reasonString;
             switch (reason)
             {
                 case RejectReason.AlreadyConnected:
                     reasonString = CRAlreadyConnected;
-                    break;
-                case RejectReason.Pending:
-                    reasonString = CRPending;
                     break;
                 case RejectReason.ServerFull:
                     reasonString = CRServerFull;
@@ -346,7 +345,7 @@ namespace Riptide
                     LocalDisconnect(connection, DisconnectReason.Disconnected);
                     break;
                 case MessageHeader.Welcome:
-                    if (connection.IsConnecting)
+                    if (connection.IsPending)
                     {
                         connection.HandleWelcomeResponse(message);
                         OnClientConnected(connection);
