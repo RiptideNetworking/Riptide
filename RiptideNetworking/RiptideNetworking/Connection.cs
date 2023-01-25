@@ -11,7 +11,7 @@ using System.Collections.Generic;
 namespace Riptide
 {
     /// <summary>The state of a connection.</summary>
-    public enum ConnectionState : byte
+    internal enum ConnectionState : byte
     {
         /// <summary>Not connected. No connection has been established or the connection has been closed.</summary>
         NotConnected,
@@ -21,6 +21,8 @@ namespace Riptide
         Pending,
         /// <summary>Connected. A connection has been established successfully.</summary>
         Connected,
+        /// <summary>Not connected. A connection attempt was made but was rejected.</summary>
+        Rejected,
     }
 
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
@@ -28,11 +30,11 @@ namespace Riptide
     {
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
-        /// <summary>Whether or not the connection is currently <i>not</i> connected nor trying to connect.</summary>
-        public bool IsNotConnected => state == ConnectionState.NotConnected;
+        /// <summary>Whether or not the connection is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
+        public bool IsNotConnected => state == ConnectionState.NotConnected || state == ConnectionState.Rejected;
         /// <summary>Whether or not the connection is currently in the process of connecting.</summary>
         public bool IsConnecting => state == ConnectionState.Connecting;
-        /// <summary>Whether or not the connection is currently pending (will only be <see langword="true"/> when a server doesn't immediately accept the connection request).</summary>
+        /// <summary>Whether or not the connection is currently pending (waiting to be accepted/rejected by the server).</summary>
         public bool IsPending => state == ConnectionState.Pending;
         /// <summary>Whether or not the connection is currently connected.</summary>
         public bool IsConnected => state == ConnectionState.Connected;
@@ -69,7 +71,7 @@ namespace Riptide
         /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => _canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out. Uses a multiple of <see cref="Peer.TimeoutTime"/> and ignores the value of <see cref="CanTimeout"/>.</summary>
-        internal bool HasConnectAttemptTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime * 2;
+        internal bool HasConnectAttemptTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.ConnectTimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -185,9 +187,10 @@ namespace Riptide
         }
 
         /// <summary>Cleans up the local side of the connection.</summary>
-        internal void LocalDisconnect()
+        /// <param name="wasRejected">Whether or not the connection was rejected.</param>
+        internal void LocalDisconnect(bool wasRejected = false)
         {
-            state = ConnectionState.NotConnected;
+            state = wasRejected ? ConnectionState.Rejected : ConnectionState.NotConnected;
 
             foreach (PendingMessage pendingMessage in PendingMessages.Values)
                 pendingMessage.Clear(false);

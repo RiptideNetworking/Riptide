@@ -27,11 +27,21 @@ namespace Riptide.Transports.Tcp
         private bool isRunning = false;
         /// <summary>The currently open connections, accessible by their endpoints.</summary>
         private Dictionary<IPEndPoint, TcpConnection> connections;
-        /// <summary>Connections that need to be closed.</summary>
+        /// <summary>Connections that have been closed and need to be removed from <see cref="connections"/>.</summary>
         private readonly List<IPEndPoint> closedConnections = new List<IPEndPoint>();
+        /// <summary>The IP address to bind the socket to.</summary>
+        private readonly IPAddress listenAddress;
 
         /// <inheritdoc/>
-        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
+        public TcpServer(int socketBufferSize = DefaultSocketBufferSize) : this(IPAddress.IPv6Any, socketBufferSize) { }
+        
+        /// <summary>Initializes the transport, binding the socket to a specific IP address.</summary>
+        /// <param name="listenAddress">The IP address to bind the socket to.</param>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        public TcpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize)
+        {
+            this.listenAddress = listenAddress;
+        }
 
         /// <inheritdoc/>
         public void Start(ushort port)
@@ -49,7 +59,7 @@ namespace Riptide.Transports.Tcp
             if (isRunning)
                 StopListening();
 
-            IPEndPoint localEndPoint = new IPEndPoint(IPAddress.IPv6Any, port);
+            IPEndPoint localEndPoint = new IPEndPoint(listenAddress, port);
             socket = new Socket(SocketType.Stream, ProtocolType.Tcp)
             {
                 SendBufferSize = socketBufferSize,
@@ -90,6 +100,8 @@ namespace Riptide.Transports.Tcp
                     connections.Add(fromEndPoint, newConnection);
                     OnConnected(newConnection);
                 }
+                else
+                    acceptedSocket.Close();
             }
         }
 
@@ -130,6 +142,9 @@ namespace Riptide.Transports.Tcp
         /// <inheritdoc/>
         protected internal override void OnDataReceived(int amount, TcpConnection fromConnection)
         {
+            if ((MessageHeader)ReceiveBuffer[0] == MessageHeader.Connect && !fromConnection.IsConnecting)
+                return;
+
             DataReceived?.Invoke(this, new DataReceivedEventArgs(ReceiveBuffer, amount, fromConnection));
         }
     }

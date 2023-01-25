@@ -22,9 +22,19 @@ namespace Riptide.Transports.Udp
 
         /// <summary>The currently open connections, accessible by their endpoints.</summary>
         private Dictionary<IPEndPoint, Connection> connections;
+        /// <summary>The IP address to bind the socket to, if any.</summary>
+        private readonly IPAddress listenAddress;
 
         /// <inheritdoc/>
         public UdpServer(SocketMode mode = SocketMode.Both, int socketBufferSize = DefaultSocketBufferSize) : base(mode, socketBufferSize) { }
+
+        /// <summary>Initializes the transport, binding the socket to a specific IP address.</summary>
+        /// <param name="listenAddress">The IP address to bind the socket to.</param>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        public UdpServer(IPAddress listenAddress, int socketBufferSize = DefaultSocketBufferSize) : base(SocketMode.Both, socketBufferSize)
+        {
+            this.listenAddress = listenAddress;
+        }
 
         /// <inheritdoc/>
         public void Start(ushort port)
@@ -32,18 +42,19 @@ namespace Riptide.Transports.Udp
             Port = port;
             connections = new Dictionary<IPEndPoint, Connection>();
 
-            OpenSocket(port);
+            OpenSocket(listenAddress, port);
         }
 
         /// <summary>Decides what to do with a connection attempt.</summary>
-        /// <param name="connection">The connection to accept or reject.</param>
-        /// <returns>Whether or not the connection attempt was a new connection.</returns>
-        private bool HandleConnectionAttempt(UdpConnection connection)
+        /// <param name="fromEndPoint">The endpoint the connection attempt is coming from.</param>
+        /// <returns>Whether or not the connection attempt was from a new connection.</returns>
+        private bool HandleConnectionAttempt(IPEndPoint fromEndPoint)
         {
-            if (connections.ContainsKey(connection.RemoteEndPoint))
+            if (connections.ContainsKey(fromEndPoint))
                 return false;
 
-            connections.Add(connection.RemoteEndPoint, connection);
+            UdpConnection connection = new UdpConnection(fromEndPoint, this);
+            connections.Add(fromEndPoint, connection);
             OnConnected(connection);
             return true;
         }
@@ -72,10 +83,10 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
-            if ((MessageHeader)dataBuffer[0] == MessageHeader.Connect && !HandleConnectionAttempt(new UdpConnection(fromEndPoint, this)))
+            if ((MessageHeader)dataBuffer[0] == MessageHeader.Connect && !HandleConnectionAttempt(fromEndPoint))
                 return;
 
-            if (connections.TryGetValue(fromEndPoint, out Connection connection))
+            if (connections.TryGetValue(fromEndPoint, out Connection connection) && !connection.IsNotConnected)
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(dataBuffer, amount, connection));
         }
     }
