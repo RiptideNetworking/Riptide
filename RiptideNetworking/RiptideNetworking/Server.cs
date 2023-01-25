@@ -46,11 +46,11 @@ namespace Riptide
         public MessageRelayFilter RelayFilter;
 
         /// <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
-        private List<Connection> pendingConnections;
+        private readonly List<Connection> pendingConnections;
         /// <summary>Currently connected clients.</summary>
         private Dictionary<ushort, Connection> clients;
         /// <summary>Clients that have timed out and need to be removed from <see cref="clients"/>.</summary>
-        private List<Connection> timedOutClients;
+        private readonly List<Connection> timedOutClients;
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
         private Dictionary<ushort, MessageHandler> messageHandlers;
         /// <summary>The underlying transport's server that is used for sending and receiving data.</summary>
