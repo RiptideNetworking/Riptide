@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - dev
 
 jobs:
   build:
@@ -12,11 +11,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Export triggering branch name
-        id: trigger_branch
-        shell: bash
-        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
 
       - name: Delete .cs files from package branch
         run: |
@@ -35,7 +29,7 @@ jobs:
 
       - name: Build Riptide
         run: |
-          git checkout ${{ steps.trigger_branch.outputs.branch }}
+          git checkout main
           dotnet build RiptideNetworking/RiptideNetworking.sln
 
       - name: Checkout package branch
