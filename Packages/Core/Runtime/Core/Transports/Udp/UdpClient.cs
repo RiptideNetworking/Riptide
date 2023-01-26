@@ -104,7 +104,7 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
-            if (udpConnection.RemoteEndPoint.Equals(fromEndPoint))
+            if (udpConnection.RemoteEndPoint.Equals(fromEndPoint) && !udpConnection.IsNotConnected)
                 DataReceived?.Invoke(this, new DataReceivedEventArgs(dataBuffer, amount, udpConnection));
         }
     }
