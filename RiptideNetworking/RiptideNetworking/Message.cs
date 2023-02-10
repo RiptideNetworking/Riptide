@@ -64,7 +64,7 @@ namespace Riptide
         /// <summary>The length in bytes of the data that has been written to the message.</summary>
         public int WrittenLength => writePos;
         /// <summary>How many more bytes can be written into the packet.</summary>
-        internal int UnwrittenLength => Bytes.Length - writePos;
+        public int UnwrittenLength => Bytes.Length - writePos;
         /// <summary>The message's data.</summary>
         internal byte[] Bytes { get; private set; }
 
