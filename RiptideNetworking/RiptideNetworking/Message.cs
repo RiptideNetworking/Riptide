@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -59,12 +59,14 @@ namespace Riptide
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
-        /// <summary>The length in bytes of the unread data contained in the message.</summary>
+        /// <summary>How many bytes have been retrieved from the message.</summary>
+        public int ReadLength => readPos;
+        /// <summary>How many more bytes can be retrieved from the message.</summary>
         public int UnreadLength => writePos - readPos;
-        /// <summary>The length in bytes of the data that has been written to the message.</summary>
+        /// <summary>How many bytes have been added to the message.</summary>
         public int WrittenLength => writePos;
-        /// <summary>How many more bytes can be written into the packet.</summary>
-        internal int UnwrittenLength => Bytes.Length - writePos;
+        /// <summary>How many more bytes can be added to the message.</summary>
+        public int UnwrittenLength => Bytes.Length - writePos;
         /// <summary>The message's data.</summary>
         internal byte[] Bytes { get; private set; }
 
