@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -69,9 +69,9 @@ namespace Riptide
         internal byte[] Bytes { get; private set; }
 
         /// <summary>The position in the byte array that the next bytes will be written to.</summary>
-        private ushort writePos = 0;
+        private int writePos;
         /// <summary>The position in the byte array that the next bytes will be read from.</summary>
-        private ushort readPos = 0;
+        private int readPos;
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
@@ -184,7 +184,7 @@ namespace Riptide
         /// <param name="header">The header of the message.</param>
         /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        internal Message PrepareForUse(MessageHeader header, ushort contentLength)
+        internal Message PrepareForUse(MessageHeader header, int contentLength)
         {
             SetHeader(header);
             writePos = contentLength;
@@ -276,7 +276,7 @@ namespace Riptide
                 throw new InsufficientCapacityException(this, array.Length, ByteName, 1);
 
             Array.Copy(array, 0, Bytes, writePos, array.Length);
-            writePos += (ushort)array.Length;
+            writePos += array.Length;
             return this;
         }
 
@@ -359,7 +359,7 @@ namespace Riptide
             }
 
             Array.Copy(Bytes, readPos, intoArray, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
-            readPos += (ushort)amount;
+            readPos += amount;
         }
 
         /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
@@ -414,7 +414,7 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            ushort byteLength = (ushort)(array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1));
+            int byteLength = array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1);
             if (UnwrittenLength < byteLength)
                 throw new InsufficientCapacityException(this, array.Length, BoolName, sizeof(bool), byteLength);
 
@@ -491,7 +491,7 @@ namespace Riptide
                     intoArray[startIndex + (i * 8 + bit)] = (Bytes[readPos + i] >> bit & 1) == 1;
             }
 
-            readPos += (ushort)byteAmount;
+            readPos += byteAmount;
         }
         #endregion
 
@@ -1236,11 +1236,11 @@ namespace Riptide
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
         public string GetString()
         {
-            ushort length = GetArrayLength(); // Get the length of the string (in bytes, NOT characters)
+            int length = GetArrayLength(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadLength < length)
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(StringName, "shortened string"));
-                length = (ushort)UnreadLength;
+                length = UnreadLength;
             }
             
             string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
@@ -1327,7 +1327,7 @@ namespace Riptide
 
         /// <summary>Retrieves the length of an array from the message, using either 1 or 2 bytes depending on how large the array is.</summary>
         /// <returns>The length of the array.</returns>
-        private ushort GetArrayLength()
+        private int GetArrayLength()
         {
             if (UnreadLength < 1)
             {
@@ -1344,7 +1344,7 @@ namespace Riptide
                 return 0;
             }
             
-            return (ushort)(((Bytes[readPos++] << 8) | Bytes[readPos++]) & 0b_0111_1111_1111_1111); // Read the byte with the big array flag bit first, using GetUShort would add it second
+            return ((Bytes[readPos++] << 8) | Bytes[readPos++]) & 0b_0111_1111_1111_1111; // Read the byte with the big array flag bit first, using GetUShort would add it second
         }
         #endregion
 

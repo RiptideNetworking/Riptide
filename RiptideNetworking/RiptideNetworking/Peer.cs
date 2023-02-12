@@ -179,7 +179,7 @@ namespace Riptide
             MessageHeader header = (MessageHeader)e.DataBuffer[0];
 
             Message message = Message.CreateRaw();
-            message.PrepareForUse(header, (ushort)e.Amount);
+            message.PrepareForUse(header, e.Amount);
 
             if (message.SendMode == MessageSendMode.Reliable)
             {
