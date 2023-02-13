@@ -253,7 +253,7 @@ namespace Riptide
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
         private void SendAck(ushort forSeqId)
         {
-            Message message = Message.Create(forSeqId == lastReceivedSeqId ? MessageHeader.Ack : MessageHeader.AckExtra);
+            Message message = Message.Create(MessageHeader.Ack);
             message.AddUShort(lastReceivedSeqId);
             message.AddUShort(receivedSeqIds.First16);
 
@@ -270,17 +270,7 @@ namespace Riptide
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
 
-            ClearMessage(remoteLastReceivedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
-            UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
-        }
-
-        /// <summary>Handles an ack message for a sequence ID other than the last received one.</summary>
-        /// <param name="message">The ack message to handle.</param>
-        internal void HandleAckExtra(Message message)
-        {
-            ushort remoteLastReceivedSeqId = message.GetUShort();
-            ushort remoteAcksBitField = message.GetUShort();
-            ushort ackedSeqId = message.GetUShort();
+            ushort ackedSeqId = message.UnreadLength > 0 ? message.GetUShort() : remoteLastReceivedSeqId;
 
             ClearMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
             UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
