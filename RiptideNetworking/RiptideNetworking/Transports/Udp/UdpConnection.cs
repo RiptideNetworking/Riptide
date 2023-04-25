@@ -31,7 +31,9 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected internal override void Send(byte[] dataBuffer, int amount)
         {
-            peer.Send(dataBuffer, amount, RemoteEndPoint);
+            int numberOfBytesSent = 0;
+            peer.Send(dataBuffer, amount, RemoteEndPoint, out numberOfBytesSent);
+            bandwidthOutAccumulator += numberOfBytesSent;
         }
 
         /// <inheritdoc/>

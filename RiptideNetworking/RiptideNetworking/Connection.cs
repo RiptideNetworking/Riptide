@@ -103,6 +103,71 @@ namespace Riptide
         /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
         private readonly System.Diagnostics.Stopwatch pendingPingStopwatch = new System.Diagnostics.Stopwatch();
 
+        #region bandwidth-related-properties-and-fields
+        /// <summary>
+        /// Bandwidth out, in bytes. This is the measured bandwidth out value.
+        /// -1 if uninitialized.
+        /// </summary>
+        private int bandwidthOut = -1;
+
+        /// <summary>
+        /// Measured bandwidth out, in bytes
+        /// </summary>
+        public int BandwidthOut
+        {
+            get => bandwidthOut;
+            private set
+            {
+                bandwidthOut = value;
+            }
+        }
+
+        /// <summary>
+        /// This is used to calculate out bandwidth, in bytes
+        /// </summary>
+        protected int bandwidthOutAccumulator = 0;
+
+        /// <summary>
+        /// Bandwidth in, in bytes  This is the measured bandwidth in value.
+        /// -1 if uninitialized.
+        /// </summary>
+        public int bandwidthIn = -1;
+
+        /// <summary>
+        /// Measured bandwidth in, in bytes
+        /// </summary>
+        public int BandwidthIn
+        {
+            get => bandwidthIn;
+            protected set
+            {
+                bandwidthIn = value;
+            }
+        }
+
+        /// <summary>
+        /// This is ised to calculate in bandwidth, in bytes
+        /// </summary>
+        public int bandwidthInAccumulator = 0;
+
+        ///// <summary>
+        ///// property that exposes bandwidthInAccumulator as public
+        ///// </summary>
+        //public int BandwidthInAccumulator
+        //{
+        //    get => bandwidthInAccumulator;
+        //    set
+        //    {
+        //        bandwidthInAccumulator = value;
+        //    }
+        //}
+
+        /// <summary>
+        /// In milliseconds
+        /// </summary>
+        private long bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        #endregion
+
         /// <summary>Initializes the connection.</summary>
         protected Connection()
         {
@@ -302,6 +367,26 @@ namespace Riptide
             {
                 state = ConnectionState.Pending;
                 ResetTimeout();
+            }
+        }
+
+        /// <summary>
+        /// Should be called periodically to measure up/down bandwidth.
+        /// </summary>
+        public void BandwidthMeasurementTick()
+        {
+            // do bandwidth measurements
+            // basically bandwidth is bytes / second
+            if (DateTimeOffset.Now.ToUnixTimeMilliseconds() - bandwidthMeasurementStartTime >= 1000) // magic number is 1s = 1000ms
+            {   
+                bandwidthOut = bandwidthOutAccumulator;
+                bandwidthIn = bandwidthInAccumulator;
+
+                // reset accumulator & time point
+                bandwidthOutAccumulator = 0;
+                bandwidthInAccumulator = 0;
+
+                bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             }
         }
 

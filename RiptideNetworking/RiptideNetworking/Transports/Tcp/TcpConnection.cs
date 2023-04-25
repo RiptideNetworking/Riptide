@@ -49,7 +49,10 @@ namespace Riptide.Transports.Tcp
                 {
                     Converter.FromUShort((ushort)amount, peer.SendBuffer, 0);
                     Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(ushort), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
-                    socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+                    int bytesSent = socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+
+                    // update bandwidth accumulator
+                    bandwidthOutAccumulator += bytesSent;
                 }
             }
             catch (SocketException)
@@ -77,7 +80,8 @@ namespace Riptide.Transports.Tcp
                     else if (socket.Available >= sizeof(ushort))
                     {
                         // We have enough bytes for a complete size value
-                        socket.Receive(sizeBytes, sizeof(ushort), SocketFlags.None);
+                        int bytesReceived = socket.Receive(sizeBytes, sizeof(ushort), SocketFlags.None);
+
                         nextMessageSize = Converter.ToUShort(sizeBytes, 0);
                         
                         if (nextMessageSize > 0)

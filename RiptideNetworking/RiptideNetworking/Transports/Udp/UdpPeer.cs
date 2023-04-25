@@ -153,10 +153,12 @@ namespace Riptide.Transports.Udp
         /// <param name="dataBuffer">The array containing the data.</param>
         /// <param name="numBytes">The number of bytes in the array which should be sent.</param>
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
-        internal void Send(byte[] dataBuffer, int numBytes, IPEndPoint toEndPoint)
+        /// <param name="sentBytes">Number of bytes sent</param>
+        internal void Send(byte[] dataBuffer, int numBytes, IPEndPoint toEndPoint, out int sentBytes)
         {
+            sentBytes = 0;
             if (isRunning)
-                socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
+                sentBytes = socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
         }
 
         /// <summary>Handles received data.</summary>

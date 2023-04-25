@@ -60,6 +60,25 @@ namespace Riptide
         /// <summary>All currently unused client IDs.</summary>
         private Queue<ushort> availableClientIds;
 
+        /// <summary>
+        /// Whether to enable or disable bandwidth measurements. Set to true if you wish
+        /// to measure bandwidth per <see cref="Connection"/>.
+        /// 
+        /// For now set it to disabled by default because I am bit worried
+        /// it might cause lag on huge number of connections since we iterate
+        /// all clients in every call of Update()
+        /// </summary>
+        private bool bandwidthMeasurementsEnabled = false;
+
+        /// <summary>
+        /// Use this to enable/disable bandwidth measurements.
+        /// </summary>
+        /// <param name="newValue">Set to true to enable bandwidth measurements, false to disable.</param>
+        public void SetBandwidthMeasurementsActive(bool newValue)
+        {
+            bandwidthMeasurementsEnabled = newValue;
+        }
+
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -102,6 +121,7 @@ namespace Riptide
 
             IncreaseActiveCount();
             this.useMessageHandlers = useMessageHandlers;
+            
             if (useMessageHandlers)
                 CreateMessageHandlersDictionary(messageHandlerGroupId);
 
@@ -123,6 +143,7 @@ namespace Riptide
         {
             transport.Connected += HandleConnectionAttempt;
             transport.DataReceived += HandleData;
+            transport.DataReceived += CalculateInBandwidthFromDataReceived;
             transport.Disconnected += TransportDisconnected;
         }
 
@@ -131,6 +152,7 @@ namespace Riptide
         {
             transport.Connected -= HandleConnectionAttempt;
             transport.DataReceived -= HandleData;
+            transport.DataReceived -= CalculateInBandwidthFromDataReceived;
             transport.Disconnected -= TransportDisconnected;
         }
 
@@ -317,6 +339,22 @@ namespace Riptide
             base.Update();
             transport.Poll();
             HandleMessages();
+            
+            // this probably should be moved to it's own function
+            if (bandwidthMeasurementsEnabled)
+            {
+                // call Update() on each client connected
+                foreach (var kvp in clients)
+                {
+                    Connection connection = kvp.Value;
+
+                    // sanity check
+                    if (connection == null)
+                        continue;
+
+                    connection.BandwidthMeasurementTick();
+                }
+            }
         }
 
         /// <inheritdoc/>
@@ -503,6 +541,32 @@ namespace Riptide
             
             RiptideLogger.Log(LogType.Error, LogName, "No available client IDs, assigned 0!");
             return 0;
+        }
+
+        /// <summary>
+        /// Event handler for <see cref="IPeer.DataReceived"/>.
+        /// That means this will work with both UdpServer and TcpServer as transports.
+        /// </summary>
+        /// <param name="_"></param>
+        /// <param name="e"></param>
+        private void CalculateInBandwidthFromDataReceived(object _, DataReceivedEventArgs e)
+        {
+            if (!bandwidthMeasurementsEnabled)
+                return;
+
+            // sanity check
+            if (e.DataBuffer == null || e.Amount == 0)
+                return;
+
+            int receivedDataLength = e.Amount;
+
+            Connection connection = e.FromConnection;
+
+            // sanity check
+            if (connection == null)
+                return;
+
+            connection.bandwidthInAccumulator += receivedDataLength;
         }
 
         #region Messages
