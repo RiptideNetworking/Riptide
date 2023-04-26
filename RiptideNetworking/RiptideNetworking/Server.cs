@@ -79,6 +79,11 @@ namespace Riptide
             bandwidthMeasurementsEnabled = newValue;
         }
 
+        /// <summary>
+        /// In milliseconds
+        /// </summary>
+        private long bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -339,22 +344,7 @@ namespace Riptide
             base.Update();
             transport.Poll();
             HandleMessages();
-            
-            // this probably should be moved to it's own function
-            if (bandwidthMeasurementsEnabled)
-            {
-                // call Update() on each client connected
-                foreach (var kvp in clients)
-                {
-                    Connection connection = kvp.Value;
-
-                    // sanity check
-                    if (connection == null)
-                        continue;
-
-                    connection.BandwidthMeasurementTick();
-                }
-            }
+            UpdateBandwidthMetricsForAllClients();
         }
 
         /// <inheritdoc/>
@@ -569,6 +559,23 @@ namespace Riptide
             connection.bandwidthInAccumulator += receivedDataLength;
         }
 
+        /// <summary>
+        /// Will only update if <see cref="bandwidthMeasurementsEnabled"/> is set to true.
+        /// And 1s has elapsed.
+        /// </summary>
+        private void UpdateBandwidthMetricsForAllClients()
+        {
+            if (!bandwidthMeasurementsEnabled ||
+                DateTimeOffset.Now.ToUnixTimeMilliseconds() - bandwidthMeasurementStartTime < 1000) return;
+            
+            foreach (var kvp in clients)
+            {
+                Connection connection = kvp.Value;
+                connection?.UpdateBandwidthMeasurements();
+            }
+                
+            bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
         #region Messages
         /// <summary>Sends a disconnect message.</summary>
         /// <param name="client">The client to send the disconnect message to.</param>

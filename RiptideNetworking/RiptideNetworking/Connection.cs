@@ -161,11 +161,6 @@ namespace Riptide
         //        bandwidthInAccumulator = value;
         //    }
         //}
-
-        /// <summary>
-        /// In milliseconds
-        /// </summary>
-        private long bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         #endregion
 
         /// <summary>Initializes the connection.</summary>
@@ -371,23 +366,19 @@ namespace Riptide
         }
 
         /// <summary>
-        /// Should be called periodically to measure up/down bandwidth.
+        /// Call this when <see cref="bandwidthOut"/> and <see cref="bandwidthIn"/> should be
+        /// updated to match <see cref="bandwidthOutAccumulator"/> and <see cref="bandwidthInAccumulator"/>.
         /// </summary>
-        public void BandwidthMeasurementTick()
+        public void UpdateBandwidthMeasurements()
         {
             // do bandwidth measurements
             // basically bandwidth is bytes / second
-            if (DateTimeOffset.Now.ToUnixTimeMilliseconds() - bandwidthMeasurementStartTime >= 1000) // magic number is 1s = 1000ms
-            {   
-                bandwidthOut = bandwidthOutAccumulator;
-                bandwidthIn = bandwidthInAccumulator;
+            bandwidthOut = bandwidthOutAccumulator;
+            bandwidthIn = bandwidthInAccumulator;
 
-                // reset accumulator & time point
-                bandwidthOutAccumulator = 0;
-                bandwidthInAccumulator = 0;
-
-                bandwidthMeasurementStartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-            }
+            // reset accumulator & time point
+            bandwidthOutAccumulator = 0;
+            bandwidthInAccumulator = 0;
         }
 
         #region Messages
