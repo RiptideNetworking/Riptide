@@ -65,7 +65,15 @@ namespace Riptide
             }
         }
         private bool _canTimeout;
-
+        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
+        public int TimeoutTime
+        {
+            get => Peer.TimeoutTime;
+            set
+            {
+                Peer.TimeoutTime = value;
+            }
+        }
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
