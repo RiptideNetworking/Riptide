@@ -22,6 +22,11 @@ For a video tutorial on how to set up Riptide (using v1.1.0) in your project, se
 - [TCP Transport](RiptideNetworking/RiptideNetworking/Transports/Tcp) (built-in)
 - [Steam Transport](https://github.com/RiptideNetworking/SteamTransport) (in development)
 
+## Compatible libraries in other languages
+
+- Python: [Pytide](https://github.com/ebosseck/PytideNetworking/tree/main)
+- Dart/Flutter: [Riptide Dart Port](https://github.com/JayKay135/Riptide-Dart-Port)
+
 ## Contributions
 
 Community bug reports, feature requests, and pull requests are welcome and appreciated, but please read the [contribution guidelines](CONTRIBUTING.md) before submitting one 🙂
