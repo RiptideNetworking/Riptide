@@ -34,6 +34,8 @@ namespace Riptide
         /// <inheritdoc cref="Connection.SmoothRTT"/>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
+        /// <summary>Sets the client's <see cref="Connection.TimeoutTime"/>.</summary>
+        public override int TimeoutTime { set => connection.TimeoutTime = value; }
         /// <summary>Whether or not the client is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
         public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>

@@ -56,8 +56,8 @@ namespace Riptide
     {
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
-        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public int TimeoutTime { get; set; } = 5000;
+        /// <summary>Sets the relevant connections' <see cref="Connection.TimeoutTime"/>s.</summary>
+        public abstract int TimeoutTime { set; }
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
         /// <remarks>Changes to this value will only take effect after the next heartbeat is executed.</remarks>
         public int HeartbeatInterval { get; set; } = 1000;

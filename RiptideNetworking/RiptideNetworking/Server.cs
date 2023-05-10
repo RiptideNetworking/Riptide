@@ -26,6 +26,15 @@ namespace Riptide
         public bool IsRunning { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => transport.Port;
+        /// <summary>Sets the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
+        public override int TimeoutTime
+        {
+            set
+            {
+                foreach (Connection connection in clients.Values)
+                    connection.TimeoutTime = value;
+            }
+        }
         /// <summary>The maximum number of concurrent connections.</summary>
         public ushort MaxClientCount { get; private set; }
         /// <summary>The number of currently connected clients.</summary>
