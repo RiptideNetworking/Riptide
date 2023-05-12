@@ -226,7 +226,7 @@ namespace Riptide
         public void Reject(Connection connection, Message message = null)
         {
             if (pendingConnections.Remove(connection))
-                Reject(connection, RejectReason.Rejected, message);
+                Reject(connection, message == null ? RejectReason.Rejected : RejectReason.Custom, message);
             else
                 RiptideLogger.Log(LogType.Warning, LogName, $"Couldn't reject connection from {connection} because no such connection was pending!");
         }
@@ -266,13 +266,9 @@ namespace Riptide
                 // should never actually encounter a scenario where they are "already connected".
 
                 Message message = Message.Create(MessageHeader.Reject);
-                if (rejectMessage != null)
-                {
-                    message.AddByte((byte)RejectReason.Custom);
+                message.AddByte((byte)reason);
+                if (reason == RejectReason.Custom)
                     message.AddBytes(rejectMessage.GetBytes(rejectMessage.WrittenLength), false);
-                }
-                else
-                    message.AddByte((byte)reason);
 
                 for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
                     connection.Send(message, false);
