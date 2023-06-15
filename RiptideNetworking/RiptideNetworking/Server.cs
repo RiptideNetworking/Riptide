@@ -457,8 +457,8 @@ namespace Riptide
             if (clients.Remove(client.Id))
                 availableClientIds.Enqueue(client.Id);
 
-            if (client.IsConnected)
-                OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
+            if (client.IsConnected || client.IsPending)
+                OnClientDisconnected(client, reason); // Only run if the client was ever actually connected or in pending state (Accepted by the server AcceptConnection())
 
             client.LocalDisconnect();
         }
