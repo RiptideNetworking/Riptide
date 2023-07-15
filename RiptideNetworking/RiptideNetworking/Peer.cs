@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -48,7 +48,11 @@ namespace Riptide
         /// <summary>The server shut down.</summary>
         ServerStopped,
         /// <summary>The disconnection was initiated by the client.</summary>
-        Disconnected
+        Disconnected,
+        /// <summary>
+        /// Client sent too many packets within given time period.
+        /// </summary>
+        TooManyPackets,
     }
 
     /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>

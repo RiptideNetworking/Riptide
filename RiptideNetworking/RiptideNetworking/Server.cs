@@ -8,6 +8,7 @@ using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 
 namespace Riptide
@@ -549,7 +550,6 @@ namespace Riptide
             if (!bandwidthMeasurementsEnabled)
                 return;
 
-            // sanity check
             if (e.DataBuffer == null || e.Amount == 0)
                 return;
 
@@ -557,7 +557,6 @@ namespace Riptide
 
             Connection connection = e.FromConnection;
 
-            // sanity check
             if (connection == null)
                 return;
 
