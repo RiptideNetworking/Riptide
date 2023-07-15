@@ -22,7 +22,7 @@ namespace Riptide.Transports.Tcp
         /// <summary>The local peer this connection is associated with.</summary>
         private readonly TcpPeer peer;
         /// <summary>An array to receive message size values into.</summary>
-        private readonly byte[] sizeBytes = new byte[sizeof(ushort)];
+        private readonly byte[] sizeBytes = new byte[sizeof(int)];
         /// <summary>The size of the next message to be received.</summary>
         private int nextMessageSize;
 
@@ -47,9 +47,9 @@ namespace Riptide.Transports.Tcp
             {
                 if (socket.Connected)
                 {
-                    Converter.FromUShort((ushort)amount, peer.SendBuffer, 0);
-                    Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(ushort), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
-                    socket.Send(peer.SendBuffer, amount + sizeof(ushort), SocketFlags.None);
+                    Converter.FromInt(amount, peer.SendBuffer, 0);
+                    Array.Copy(dataBuffer, 0, peer.SendBuffer, sizeof(int), amount); // TODO: consider sending length separately with an extra socket.Send call instead of copying the data an extra time
+                    socket.Send(peer.SendBuffer, amount + sizeof(int), SocketFlags.None);
                 }
             }
             catch (SocketException)
@@ -74,11 +74,11 @@ namespace Riptide.Transports.Tcp
                         // We already have a size value
                         tryReceiveMore = TryReceiveMessage(out byteCount);
                     }
-                    else if (socket.Available >= sizeof(ushort))
+                    else if (socket.Available >= sizeof(int))
                     {
                         // We have enough bytes for a complete size value
-                        socket.Receive(sizeBytes, sizeof(ushort), SocketFlags.None);
-                        nextMessageSize = Converter.ToUShort(sizeBytes, 0);
+                        socket.Receive(sizeBytes, sizeof(int), SocketFlags.None);
+                        nextMessageSize = Converter.ToInt(sizeBytes, 0);
                         
                         if (nextMessageSize > 0)
                             tryReceiveMore = TryReceiveMessage(out byteCount);
