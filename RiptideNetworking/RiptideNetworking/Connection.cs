@@ -109,7 +109,7 @@ namespace Riptide
         protected Connection()
         {
             state = ConnectionState.Connecting;
-            CanTimeout = true;
+            _canTimeout = true;
         }
 
         /// <summary>Resets the connection's timeout time.</summary>
