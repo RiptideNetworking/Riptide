@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -133,12 +133,14 @@ namespace Riptide
         /// <summary>Starts tracking how much time has passed.</summary>
         protected void StartTime()
         {
-            time.Start();
+            CurrentTime = 0;
+            time.Restart();
         }
 
         /// <summary>Stops tracking how much time has passed.</summary>
         protected void StopTime()
         {
+            CurrentTime = 0;
             time.Reset();
             eventQueue.Clear();
         }

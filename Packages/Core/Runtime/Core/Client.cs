@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -130,6 +130,7 @@ namespace Riptide
             else
                 connectBytes = null;
 
+            StartTime();
             Heartbeat();
             RiptideLogger.Log(LogType.Info, LogName, $"Connecting to {connection}...");
             return true;
@@ -337,10 +338,7 @@ namespace Riptide
         }
 
         /// <summary>What to do when the transport establishes a connection.</summary>
-        private void TransportConnected(object sender, EventArgs e)
-        {
-            StartTime();
-        }
+        private void TransportConnected(object sender, EventArgs e) { }
 
         /// <summary>What to do when the transport fails to connect.</summary>
         private void TransportConnectionFailed(object sender, EventArgs e)

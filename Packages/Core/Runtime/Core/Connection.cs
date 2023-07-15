@@ -71,9 +71,9 @@ namespace Riptide
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
-        internal bool HasTimedOut => _canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > TimeoutTime;
+        internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out.</summary>
-        internal bool HasConnectAttemptTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.ConnectTimeoutTime;
+        internal bool HasConnectAttemptTimedOut => Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -97,7 +97,7 @@ namespace Riptide
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
-        private DateTime lastHeartbeat;
+        private long lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
         private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
@@ -115,7 +115,7 @@ namespace Riptide
         /// <summary>Resets the connection's timeout time.</summary>
         public void ResetTimeout()
         {
-            lastHeartbeat = DateTime.UtcNow;
+            lastHeartbeat = Peer.CurrentTime;
         }
 
         /// <summary>Sends a message.</summary>
