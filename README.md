@@ -22,6 +22,15 @@ For a video tutorial on how to set up Riptide (using v1.1.0) in your project, se
 - [TCP Transport](RiptideNetworking/RiptideNetworking/Transports/Tcp) (built-in)
 - [Steam Transport](https://github.com/RiptideNetworking/SteamTransport) (in development)
 
+## Implementations in Other Languages
+
+The following is a list of Riptide implementations in other programming languages. These ports are managed and maintained separately and independently by their respective owners, and are not affiliated with Riptide in any official capacity. As such, they may not function interchangeably with all versions of Riptide or with each other.
+
+However, if you need to use Riptide with/in a language other than C# on one end, these implementations may provide a starting point:
+
+- Python: [Pytide](https://github.com/ebosseck/PytideNetworking/tree/main)
+- Dart/Flutter: [Riptide Dart Port](https://github.com/JayKay135/Riptide-Dart-Port)
+
 ## Contributions
 
 Community bug reports, feature requests, and pull requests are welcome and appreciated, but please read the [contribution guidelines](CONTRIBUTING.md) before submitting one 🙂

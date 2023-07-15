@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -56,8 +56,8 @@ namespace Riptide
     {
         /// <summary>The name to use when logging messages via <see cref="RiptideLogger"/>.</summary>
         public readonly string LogName;
-        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public int TimeoutTime { get; set; } = 5000;
+        /// <summary>Sets the relevant connections' <see cref="Connection.TimeoutTime"/>s.</summary>
+        public abstract int TimeoutTime { set; }
         /// <summary>The interval (in milliseconds) at which to send and expect heartbeats to be received.</summary>
         /// <remarks>Changes to this value will only take effect after the next heartbeat is executed.</remarks>
         public int HeartbeatInterval { get; set; } = 1000;
@@ -133,12 +133,14 @@ namespace Riptide
         /// <summary>Starts tracking how much time has passed.</summary>
         protected void StartTime()
         {
-            time.Start();
+            CurrentTime = 0;
+            time.Restart();
         }
 
         /// <summary>Stops tracking how much time has passed.</summary>
         protected void StopTime()
         {
+            CurrentTime = 0;
             time.Reset();
             eventQueue.Clear();
         }

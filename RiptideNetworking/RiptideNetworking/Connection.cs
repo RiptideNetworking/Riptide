@@ -52,7 +52,9 @@ namespace Riptide
         /// <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
-        /// <summary>Whether or not the connection can time out.</summary>
+        /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
+        public int TimeoutTime { get; set; } = 5000;
+        /// <summary>Whether or not the connection can time out. This value has no effect until the connection is fully established—connection attempts can still time out even when this is set to false.</summary>
         public bool CanTimeout
         {
             get => _canTimeout;
@@ -69,9 +71,9 @@ namespace Riptide
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
-        internal bool HasTimedOut => _canTimeout && (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.TimeoutTime;
-        /// <summary>Whether or not the connection attempt has timed out. Uses a multiple of <see cref="Peer.TimeoutTime"/> and ignores the value of <see cref="CanTimeout"/>.</summary>
-        internal bool HasConnectAttemptTimedOut => (DateTime.UtcNow - lastHeartbeat).TotalMilliseconds > Peer.ConnectTimeoutTime;
+        internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
+        /// <summary>Whether or not the connection attempt has timed out.</summary>
+        internal bool HasConnectAttemptTimedOut => Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
         internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
 
@@ -95,7 +97,7 @@ namespace Riptide
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
-        private DateTime lastHeartbeat;
+        private long lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
         private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
@@ -173,7 +175,7 @@ namespace Riptide
         /// <summary>Resets the connection's timeout time.</summary>
         public void ResetTimeout()
         {
-            lastHeartbeat = DateTime.UtcNow;
+            lastHeartbeat = Peer.CurrentTime;
         }
 
         /// <summary>Sends a message.</summary>

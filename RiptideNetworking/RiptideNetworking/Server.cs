@@ -26,6 +26,15 @@ namespace Riptide
         public bool IsRunning { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => transport.Port;
+        /// <summary>Sets the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
+        public override int TimeoutTime
+        {
+            set
+            {
+                foreach (Connection connection in clients.Values)
+                    connection.TimeoutTime = value;
+            }
+        }
         /// <summary>The maximum number of concurrent connections.</summary>
         public ushort MaxClientCount { get; private set; }
         /// <summary>The number of currently connected clients.</summary>
@@ -244,7 +253,7 @@ namespace Riptide
         public void Reject(Connection connection, Message message = null)
         {
             if (pendingConnections.Remove(connection))
-                Reject(connection, RejectReason.Rejected, message);
+                Reject(connection, message == null ? RejectReason.Rejected : RejectReason.Custom, message);
             else
                 RiptideLogger.Log(LogType.Warning, LogName, $"Couldn't reject connection from {connection} because no such connection was pending!");
         }
@@ -284,13 +293,9 @@ namespace Riptide
                 // should never actually encounter a scenario where they are "already connected".
 
                 Message message = Message.Create(MessageHeader.Reject);
-                if (rejectMessage != null)
-                {
-                    message.AddByte((byte)RejectReason.Custom);
+                message.AddByte((byte)reason);
+                if (reason == RejectReason.Custom)
                     message.AddBytes(rejectMessage.GetBytes(rejectMessage.WrittenLength), false);
-                }
-                else
-                    message.AddByte((byte)reason);
 
                 for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
                     connection.Send(message, false);
