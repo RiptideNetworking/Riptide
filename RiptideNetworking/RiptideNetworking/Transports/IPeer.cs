@@ -23,6 +23,9 @@ namespace Riptide.Transports
         /// <summary>An internal unreliable disconnect message.</summary>
         Disconnect,
 
+        /// <summary>A notify message.</summary>
+        Notify,
+
         /// <summary>A reliable user message.</summary>
         Reliable,
         /// <summary>An internal reliable welcome message.</summary>

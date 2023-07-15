@@ -11,6 +11,8 @@ namespace Riptide.Utils
     /// <summary>Provides functionality for managing and manipulating a collection of bits.</summary>
     internal class Bitfield
     {
+        /// <summary>The first 8 bits stored in the bitfield.</summary>
+        internal byte First8 => (byte)segments[0];
         /// <summary>The first 16 bits stored in the bitfield.</summary>
         internal ushort First16 => (ushort)segments[0];
 
