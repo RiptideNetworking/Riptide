@@ -7,9 +7,12 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+
+using DataReceivedEventArgs = Riptide.Transports.DataReceivedEventArgs;
 
 namespace Riptide
 {
@@ -88,6 +91,17 @@ namespace Riptide
         {
             bandwidthMeasurementsEnabled = newValue;
         }
+
+        /// <summary>
+        /// Enable this to kick clients that send too much data.
+        /// </summary>
+        public bool KickClientForSendingTooMuchData { get; set; } = false;
+
+        /// <summary>
+        /// Max amount of bytes per second a client can send before getting kicked.
+        /// </summary>
+        public int KickTresholdBytesPerSecond { get; set; } = 10000;
+
 
         /// <summary>
         /// In milliseconds
@@ -333,8 +347,16 @@ namespace Riptide
         internal override void Heartbeat()
         {
             foreach (Connection connection in clients.Values)
+            {
+                //RiptideLogger.Log(LogType.Debug, LogName, $"Client {connection}, PrintDebugTimeoutVariables(): {connection.PrintDebugTimeoutVariables()}");
+
                 if (connection.HasTimedOut)
+                {
+                    RiptideLogger.Log(LogType.Debug, LogName, $"Client {connection} timed out.");
                     timedOutClients.Add(connection);
+                }
+            }
+
 
             foreach (Connection connection in timedOutClients)
                 LocalDisconnect(connection, DisconnectReason.TimedOut);
@@ -462,12 +484,13 @@ namespace Riptide
         /// <summary>Disconnects the given client.</summary>
         /// <param name="client">The client to disconnect.</param>
         /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
-        public void DisconnectClient(Connection client, Message message = null)
+        /// <param name="disconnectReason">Reason of disconnection</param>
+        public void DisconnectClient(Connection client, Message message = null, DisconnectReason disconnectReason = DisconnectReason.Kicked)
         {
             if (clients.ContainsKey(client.Id))
             {
-                SendDisconnect(client, DisconnectReason.Kicked, message);
-                LocalDisconnect(client, DisconnectReason.Kicked);
+                SendDisconnect(client, disconnectReason, message);
+                LocalDisconnect(client, disconnectReason);
             }
             else
                 RiptideLogger.Log(LogType.Warning, LogName, $"Couldn't disconnect client {client.Id} because it wasn't connected!");
@@ -561,6 +584,11 @@ namespace Riptide
                 return;
 
             connection.bandwidthInAccumulator += receivedDataLength;
+
+            if (KickClientForSendingTooMuchData && connection.bandwidthInAccumulator > KickTresholdBytesPerSecond)
+            {
+                DisconnectClient(connection, null, DisconnectReason.TooManyPackets);
+            }
         }
 
         /// <summary>

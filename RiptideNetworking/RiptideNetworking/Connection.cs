@@ -7,6 +7,7 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Riptide
 {
@@ -72,6 +73,11 @@ namespace Riptide
         internal Peer Peer { get; set; }
         /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
+        //public string PrintDebugTimeoutVariables()
+        //{
+        //    return $"_canTimeout: {_canTimeout}, lastHeartbeat: {lastHeartbeat}, TimeoutTime: {TimeoutTime}, Peer.CurrentTime: {Peer.CurrentTime}";
+        //}
+
         /// <summary>Whether or not the connection attempt has timed out.</summary>
         internal bool HasConnectAttemptTimedOut => Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
@@ -169,13 +175,17 @@ namespace Riptide
         protected Connection()
         {
             state = ConnectionState.Connecting;
+
             CanTimeout = true;
         }
 
         /// <summary>Resets the connection's timeout time.</summary>
         public void ResetTimeout()
         {
-            lastHeartbeat = Peer.CurrentTime;
+            if (Peer != null)
+            {
+                lastHeartbeat = Peer.CurrentTime;
+            }
         }
 
         /// <summary>Sends a message.</summary>
