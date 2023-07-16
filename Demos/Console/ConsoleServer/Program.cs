@@ -1,4 +1,4 @@
-﻿using Riptide.Utils;
+using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -36,10 +36,8 @@ namespace Riptide.Demos.ConsoleServer
 
         private static void Loop()
         {
-            server = new Server
-            {
-                TimeoutTime = ushort.MaxValue // Max value timeout to avoid getting timed out for as long as possible when testing with very high loss rates (if all heartbeat messages are lost during this period of time, it will trigger a disconnection)
-            };
+            server = new Server();
+            server.ClientConnected += (s, e) => e.Client.CanTimeout = false; // Avoid clients getting timed out due to too many consecutive heartbeat messages being lost (which is possible when testing with very high loss rates)
             server.Start(7777, 10);
 
             while (isRunning)

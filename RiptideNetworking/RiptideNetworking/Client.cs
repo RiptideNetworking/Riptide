@@ -256,9 +256,6 @@ namespace Riptide
                 case MessageHeader.Ack:
                     connection.HandleAck(message);
                     break;
-                case MessageHeader.AckExtra:
-                    connection.HandleAckExtra(message);
-                    break;
                 case MessageHeader.Connect:
                     connection.SetPending();
                     break;

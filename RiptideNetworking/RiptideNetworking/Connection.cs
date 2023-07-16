@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -28,6 +28,13 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
+        /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
+        public Action<ushort> NotifyDelivered;
+        /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
+        public Action<ushort> NotifyLost;
+        /// <summary>Invoked when a notify message is received.</summary>
+        public Action<Message> NotifyReceived;
+
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
         /// <summary>Whether or not the connection is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
@@ -74,26 +81,13 @@ namespace Riptide
         internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out.</summary>
         internal bool HasConnectAttemptTimedOut => Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
+
+        /// <summary>The sequencer for notify messages.</summary>
+        private readonly NotifySequencer notify;
+        /// <summary>The sequencer for reliable messages.</summary>
+        private readonly ReliableSequencer reliable;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
-        internal Dictionary<ushort, PendingMessage> PendingMessages { get; private set; } = new Dictionary<ushort, PendingMessage>();
-
-        /// <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
-        private ushort LastReceivedSeqId { get; set; }
-        /// <summary>Messages that we have received and want to acknowledge.</summary>
-        private ushort AcksBitfield { get; set; }
-        /// <summary>Messages that we have received whose sequence IDs no longer fall into <see cref="AcksBitfield"/>'s range. Used to improve duplicate message filtering capabilities.</summary>
-        private ulong DuplicateFilterBitfield { get; set; }
-
-        /// <summary>The sequence ID of the latest message that we've received an ack for.</summary>
-        private ushort LastAckedSeqId { get; set; }
-        /// <summary>Messages that we sent which have been acknoweledged.</summary>
-        private ushort AckedMessagesBitfield { get; set; }
-        
-        /// <summary>A <see cref="ushort"/> with the left-most bit set to 1.</summary>
-        private const ushort LeftBit = 0b_1000_0000_0000_0000;
-        /// <summary>The next sequence ID to use.</summary>
-        private ushort NextSequenceId => (ushort)++_lastSequenceId;
-        private int _lastSequenceId;
+        private readonly Dictionary<ushort, PendingMessage> pendingMessages = new Dictionary<ushort, PendingMessage>();
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
@@ -108,6 +102,8 @@ namespace Riptide
         /// <summary>Initializes the connection.</summary>
         protected Connection()
         {
+            notify = new NotifySequencer(this);
+            reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
             _canTimeout = true;
         }
@@ -126,66 +122,57 @@ namespace Riptide
                 Send(message.Bytes, message.WrittenLength);
             else
             {
-                ushort sequenceId = NextSequenceId; // Get the next sequence ID
-                PendingMessage.CreateAndSend(sequenceId, message, this);
+                ushort sequenceId = reliable.NextSequenceId;
+                PendingMessage pendingMessage = PendingMessage.Create(sequenceId, message, this);
+                pendingMessages.Add(sequenceId, pendingMessage);
+                pendingMessage.TrySend();
             }
 
             if (shouldRelease)
                 message.Release();
         }
 
+        /// <summary>Sends a notify message.</summary>
+        /// <param name="message">The message to send.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <returns>The sequence ID of the sent message.</returns>
+        public ushort SendNotify(Message message, bool shouldRelease = true)
+        {
+            ushort sequenceId = notify.InsertHeader(message);
+            Send(message.Bytes, message.WrittenLength);
+
+            if (shouldRelease)
+                message.Release();
+
+            return sequenceId;
+        }
+
         /// <summary>Sends data.</summary>
         /// <param name="dataBuffer">The array containing the data.</param>
         /// <param name="amount">The number of bytes in the array which should be sent.</param>
         protected internal abstract void Send(byte[] dataBuffer, int amount);
+        
+        /// <summary>Processes a notify message.</summary>
+        /// <param name="dataBuffer">The received data.</param>
+        /// <param name="amount">The number of bytes that were received.</param>
+        /// <param name="message">The message instance to use.</param>
+        internal void ProcessNotify(byte[] dataBuffer, int amount, Message message)
+        {
+            notify.UpdateReceivedAcks(Converter.ToUShort(dataBuffer, 1), dataBuffer[3]);
 
-        /// <summary>Updates acks and determines whether the message is a duplicate.</summary>
+            if (notify.ShouldHandle(Converter.ToUShort(dataBuffer, 4)))
+            {
+                Array.Copy(dataBuffer, 1, message.Bytes, 1, amount - 1); // Copy payload
+                NotifyReceived?.Invoke(message);
+            }
+        }
+
+        /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
         /// <param name="sequenceId">The message's sequence ID.</param>
         /// <returns>Whether or not the message should be handled.</returns>
-        internal bool ReliableHandle(ushort sequenceId)
+        internal bool ShouldHandle(ushort sequenceId)
         {
-            bool doHandle = true;
-            // Update acks
-            int sequenceGap = Helper.GetSequenceGap(sequenceId, LastReceivedSeqId);
-            if (sequenceGap > 0)
-            {
-                // The received sequence ID is newer than the previous one
-                if (sequenceGap > 64)
-                    RiptideLogger.Log(LogType.Warning, Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})! If the connection's packet loss, latency, or your send rate of reliable messages increases much further, sequence IDs may begin falling outside the bounds of the duplicate filter.");
-
-                DuplicateFilterBitfield <<= sequenceGap;
-                if (sequenceGap <= 16)
-                {
-                    ulong shiftedBits = (ulong)AcksBitfield << sequenceGap;
-                    AcksBitfield = (ushort)shiftedBits; // Give the acks bitfield the first 2 bytes of the shifted bits
-                    DuplicateFilterBitfield |= shiftedBits >> 16; // OR the last 6 bytes worth of the shifted bits into the duplicate filter bitfield
-
-                    doHandle = UpdateAcksBitfield(sequenceGap);
-                    LastReceivedSeqId = sequenceId;
-                }
-                else if (sequenceGap <= 80)
-                {
-                    ulong shiftedBits = (ulong)AcksBitfield << (sequenceGap - 16);
-                    AcksBitfield = 0; // Reset the acks bitfield as all its bits are being moved to the duplicate filter bitfield
-                    DuplicateFilterBitfield |= shiftedBits; // OR the shifted bits into the duplicate filter bitfield
-
-                    doHandle = UpdateDuplicateFilterBitfield(sequenceGap);
-                }
-            }
-            else if (sequenceGap < 0)
-            {
-                // The received sequence ID is older than the previous one (out of order message)
-                sequenceGap = -sequenceGap; // Make sequenceGap positive
-                if (sequenceGap <= 16) // If the message's sequence ID still falls within the ack bitfield's value range
-                    doHandle = UpdateAcksBitfield(sequenceGap);
-                else if (sequenceGap <= 80) // If it's an "old" message and its sequence ID doesn't fall within the ack bitfield's value range anymore (but it falls in the range of the duplicate filter)
-                    doHandle = UpdateDuplicateFilterBitfield(sequenceGap);
-            }
-            else // The received sequence ID is the same as the previous one (duplicate message)
-                doHandle = false;
-
-            SendAck(sequenceId);
-            return doHandle;
+            return reliable.ShouldHandle(sequenceId);
         }
 
         /// <summary>Cleans up the local side of the connection.</summary>
@@ -194,107 +181,29 @@ namespace Riptide
         {
             state = wasRejected ? ConnectionState.Rejected : ConnectionState.NotConnected;
 
-            foreach (PendingMessage pendingMessage in PendingMessages.Values)
-                pendingMessage.Clear(false);
-
-            PendingMessages.Clear();
-        }
-
-        /// <summary>Updates the acks bitfield and determines whether or not to handle the message.</summary>
-        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
-        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
-        private bool UpdateAcksBitfield(int sequenceGap)
-        {
-            ushort seqIdBit = (ushort)(1 << sequenceGap - 1); // Calculate which bit corresponds to the sequence ID and set it to 1
-            if ((AcksBitfield & seqIdBit) == 0)
-            {
-                // If we haven't received this message before
-                AcksBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
-                return true; // Message was "new", handle it
-            }
-            else // If we have received this message before
-                return false; // Message was a duplicate, don't handle it
-        }
-
-        /// <summary>Updates the duplicate filter bitfield and determines whether or not to handle the message.</summary>
-        /// <param name="sequenceGap">The gap between the newly received sequence ID and the previously last received sequence ID.</param>
-        /// <returns>Whether or not the message should be handled, based on whether or not it's a duplicate.</returns>
-        private bool UpdateDuplicateFilterBitfield(int sequenceGap)
-        {
-            ulong seqIdBit = (ulong)1 << (sequenceGap - 1 - 16); // Calculate which bit corresponds to the sequence ID and set it to 1
-            if ((DuplicateFilterBitfield & seqIdBit) == 0)
-            {
-                // If we haven't received this message before
-                DuplicateFilterBitfield |= seqIdBit; // Set the bit corresponding to the sequence ID to 1 because we received that ID
-                return true; // Message was "new", handle it
-            }
-            else // If we have received this message before
-                return false; // Message was a duplicate, don't handle it
-        }
-
-        /// <summary>Updates which messages we've received acks for.</summary>
-        /// <param name="remoteLastReceivedSeqId">The latest sequence ID that the other end has received.</param>
-        /// <param name="remoteAcksBitField">A redundant list of sequence IDs that the other end has (or has not) received.</param>
-        internal void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteAcksBitField)
-        {
-            int sequenceGap = Helper.GetSequenceGap(remoteLastReceivedSeqId, LastAckedSeqId);
-            if (sequenceGap > 0)
-            {
-                // The latest sequence ID that the other end has received is newer than the previous one
-                for (int i = 1; i < sequenceGap; i++) // NOTE: loop starts at 1, meaning it only runs if the gap in sequence IDs is greater than 1
-                {
-                    AckedMessagesBitfield <<= 1; // Shift the bits left to make room for a previous ack
-                    CheckMessageAckStatus((ushort)(LastAckedSeqId - 16 + i), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield (before it's removed)
-                }
-                AckedMessagesBitfield <<= 1; // Shift the bits left to make room for the latest ack
-                AckedMessagesBitfield |= (ushort)(remoteAcksBitField | (1 << sequenceGap - 1)); // Combine the bit fields and ensure that the bit corresponding to the ack is set to 1
-                LastAckedSeqId = remoteLastReceivedSeqId;
-
-                CheckMessageAckStatus((ushort)(LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
-            }
-            else if (sequenceGap < 0)
-            {
-                // TODO: remove? I don't think this case ever executes
-                // The latest sequence ID that the other end has received is older than the previous one (out of order ack)
-                sequenceGap = (ushort)(-sequenceGap - 1); // Because bit shifting is 0-based
-                ushort ackedBit = (ushort)(1 << sequenceGap); // Calculate which bit corresponds to the sequence ID and set it to 1
-                AckedMessagesBitfield |= ackedBit; // Set the bit corresponding to the sequence ID
-                if (PendingMessages.TryGetValue(remoteLastReceivedSeqId, out PendingMessage pendingMessage))
-                    pendingMessage.Clear(); // Message was successfully delivered, remove it from the pending messages.
-            }
-            else
-            {
-                // The latest sequence ID that the other end has received is the same as the previous one (duplicate ack)
-                AckedMessagesBitfield |= remoteAcksBitField; // Combine the bit fields
-                CheckMessageAckStatus((ushort)(LastAckedSeqId - 16), LeftBit); // Check the ack status of the oldest sequence ID in the bitfield
-            }
-        }
-
-        /// <summary>Check the ack status of the given sequence ID.</summary>
-        /// <param name="sequenceId">The sequence ID whose ack status to check.</param>
-        /// <param name="bit">The bit corresponding to the sequence ID's position in the bit field.</param>
-        private void CheckMessageAckStatus(ushort sequenceId, ushort bit)
-        {
-            if ((AckedMessagesBitfield & bit) == 0)
-            {
-                // Message was lost
-                if (PendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
-                    pendingMessage.RetrySend();
-            }
-            else
-            {
-                // Message was successfully delivered
-                if (PendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
-                    pendingMessage.Clear();
-            }
-        }
-
-        /// <summary>Immediately marks the <see cref="PendingMessage"/> of a given sequence ID as delivered.</summary>
-        /// <param name="seqId">The sequence ID that was acknowledged.</param>
-        internal void AckMessage(ushort seqId)
-        {
-            if (PendingMessages.TryGetValue(seqId, out PendingMessage pendingMessage))
+            foreach (PendingMessage pendingMessage in pendingMessages.Values)
                 pendingMessage.Clear();
+
+            pendingMessages.Clear();
+        }
+
+        /// <summary>Resends the <see cref="PendingMessage"/> with the given sequence ID.</summary>
+        /// <param name="sequenceId">The sequence ID of the message to resend.</param>
+        private void ResendMessage(ushort sequenceId)
+        {
+            if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+                pendingMessage.RetrySend();
+        }
+        
+        /// <summary>Clears the <see cref="PendingMessage"/> with the given sequence ID.</summary>
+        /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
+        internal void ClearMessage(ushort sequenceId)
+        {
+            if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+            {
+                pendingMessage.Clear();
+                pendingMessages.Remove(sequenceId);
+            }
         }
 
         /// <summary>Puts the connection in the pending state.</summary>
@@ -310,13 +219,15 @@ namespace Riptide
         #region Messages
         /// <summary>Sends an ack message for the given sequence ID.</summary>
         /// <param name="forSeqId">The sequence ID to acknowledge.</param>
-        private void SendAck(ushort forSeqId)
+        /// <param name="lastReceivedSeqId">The sequence ID of the latest message we've received.</param>
+        /// <param name="receivedSeqIds">Sequence IDs of previous messages that we have (or have not received).</param>
+        private void SendAck(ushort forSeqId, ushort lastReceivedSeqId, Bitfield receivedSeqIds)
         {
-            Message message = Message.Create(forSeqId == LastReceivedSeqId ? MessageHeader.Ack : MessageHeader.AckExtra);
-            message.AddUShort(LastReceivedSeqId); // Last remote sequence ID
-            message.AddUShort(AcksBitfield); // Acks
+            Message message = Message.Create(MessageHeader.Ack);
+            message.AddUShort(lastReceivedSeqId);
+            message.AddUShort(receivedSeqIds.First16);
 
-            if (forSeqId != LastReceivedSeqId)
+            if (forSeqId != lastReceivedSeqId)
                 message.AddUShort(forSeqId);
             
             Send(message);
@@ -328,21 +239,10 @@ namespace Riptide
         {
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
+            ushort ackedSeqId = message.UnreadLength > 0 ? message.GetUShort() : remoteLastReceivedSeqId;
 
-            AckMessage(remoteLastReceivedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
-            UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
-        }
-
-        /// <summary>Handles an ack message for a sequence ID other than the last received one.</summary>
-        /// <param name="message">The ack message to handle.</param>
-        internal void HandleAckExtra(Message message)
-        {
-            ushort remoteLastReceivedSeqId = message.GetUShort();
-            ushort remoteAcksBitField = message.GetUShort();
-            ushort ackedSeqId = message.GetUShort();
-
-            AckMessage(ackedSeqId); // Immediately mark it as delivered so no resends are triggered while waiting for the sequence ID's bit to reach the end of the bit field
-            UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
+            ClearMessage(ackedSeqId);
+            reliable.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
         #region Server
@@ -433,6 +333,207 @@ namespace Riptide
             ResetTimeout();
         }
         #endregion
+        #endregion
+
+        #region Message Sequencing
+        /// <summary>Provides functionality for filtering out duplicate messages and determining delivery/loss status.</summary>
+        private abstract class Sequencer
+        {
+            /// <summary>The next sequence ID to use.</summary>
+            internal ushort NextSequenceId => _nextSequenceId++;
+            private ushort _nextSequenceId = 1;
+
+            /// <summary>The connection this sequencer belongs to.</summary>
+            protected readonly Connection connection;
+            /// <summary>The sequence ID of the latest message that we want to acknowledge.</summary>
+            protected ushort lastReceivedSeqId;
+            /// <summary>Sequence IDs of messages which we have (or have not) received and want to acknowledge.</summary>
+            protected readonly Bitfield receivedSeqIds = new Bitfield();
+            /// <summary>The sequence ID of the latest message that we've received an ack for.</summary>
+            protected ushort lastAckedSeqId;
+            /// <summary>Sequence IDs of messages we sent and which we have (or have not) received acks for.</summary>
+            protected readonly Bitfield ackedSeqIds = new Bitfield(false);
+
+            /// <summary>Initializes the sequencer.</summary>
+            /// <param name="connection">The connection this sequencer belongs to.</param>
+            protected Sequencer(Connection connection)
+            {
+                this.connection = connection;
+            }
+
+            /// <summary>Determines whether or not to handle a message with the given sequence ID.</summary>
+            /// <param name="sequenceId">The sequence ID in question.</param>
+            /// <returns>Whether or not to handle the message.</returns>
+            internal abstract bool ShouldHandle(ushort sequenceId);
+
+            /// <summary>Updates which messages we've received acks for.</summary>
+            /// <param name="remoteLastReceivedSeqId">The latest sequence ID that the other end has received.</param>
+            /// <param name="remoteReceivedSeqIds">Sequence IDs which the other end has (or has not) received.</param>
+            internal abstract void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteReceivedSeqIds);
+        }
+
+        /// <inheritdoc/>
+        private class NotifySequencer : Sequencer
+        {
+            /// <inheritdoc/>
+            internal NotifySequencer(Connection connection) : base(connection) { }
+
+            /// <summary>Inserts the notify header into the given message.</summary>
+            /// <param name="message">The message to insert the header into.</param>
+            /// <returns>The sequence ID of the message.</returns>
+            internal ushort InsertHeader(Message message)
+            {
+                ushort sequenceId = NextSequenceId;
+                Converter.FromUShort(lastReceivedSeqId, message.Bytes, 1); // Ack sequence ID
+                message.Bytes[3] = receivedSeqIds.First8;                  // Acks bitfield
+                Converter.FromUShort(sequenceId, message.Bytes, 4);        // Insert sequence ID
+                return sequenceId;
+            }
+
+            /// <inheritdoc/>
+            /// <remarks>Duplicate and out of order messages are filtered out and not handled.</remarks>
+            internal override bool ShouldHandle(ushort sequenceId)
+            {
+                int sequenceGap = Helper.GetSequenceGap(sequenceId, lastReceivedSeqId);
+
+                if (sequenceGap > 0)
+                {
+                    // The received sequence ID is newer than the previous one
+                    receivedSeqIds.ShiftBy(sequenceGap);
+                    lastReceivedSeqId = sequenceId;
+
+                    if (receivedSeqIds.IsSet(sequenceGap))
+                        return false;
+
+                    receivedSeqIds.Set(sequenceGap);
+                    return true;
+                }
+                else
+                {
+                    // The received sequence ID is older than or the same as the previous one (out of order or duplicate message)
+                    return false;
+                }
+            }
+
+            /// <inheritdoc/>
+            internal override void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteReceivedSeqIds)
+            {
+                int sequenceGap = Helper.GetSequenceGap(remoteLastReceivedSeqId, lastAckedSeqId);
+
+                if (sequenceGap > 0)
+                {
+                    if (sequenceGap > 1)
+                    {
+                        // Deal with messages in the gap
+                        while (sequenceGap > 9) // 9 because a gap of 1 means sequence IDs are consecutive, and notify uses 8 bits for the bitfield. 9 means all 8 bits are in use
+                        {
+                            lastAckedSeqId++;
+                            sequenceGap--;
+                            connection.NotifyLost?.Invoke(lastAckedSeqId);
+                        }
+
+                        int bitCount = sequenceGap - 1;
+                        int bit = 1 << bitCount;
+                        for (int i = 0; i < bitCount; i++)
+                        {
+                            lastAckedSeqId++;
+                            bit >>= 1;
+                            if ((remoteReceivedSeqIds & bit) == 0)
+                                connection.NotifyLost?.Invoke(lastAckedSeqId);
+                            else
+                                connection.NotifyDelivered?.Invoke(lastAckedSeqId);
+                        }
+                    }
+
+                    lastAckedSeqId = remoteLastReceivedSeqId;
+                    connection.NotifyDelivered?.Invoke(lastAckedSeqId);
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        private class ReliableSequencer : Sequencer
+        {
+            /// <inheritdoc/>
+            internal ReliableSequencer(Connection connection) : base(connection) { }
+
+            /// <inheritdoc/>
+            /// <remarks>Duplicate messages are filtered out while out of order messages are handled.</remarks>
+            internal override bool ShouldHandle(ushort sequenceId)
+            {
+                bool doHandle = false;
+                int sequenceGap = Helper.GetSequenceGap(sequenceId, lastReceivedSeqId);
+
+                if (sequenceGap != 0)
+                {
+                    // The received sequence ID is different from the previous one
+                    if (sequenceGap > 0)
+                    {
+                        // The received sequence ID is newer than the previous one
+                        if (sequenceGap > 64)
+                            RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})!");
+
+                        receivedSeqIds.ShiftBy(sequenceGap);
+                        lastReceivedSeqId = sequenceId;
+                    }
+                    else // The received sequence ID is older than the previous one (out of order message)
+                        sequenceGap = -sequenceGap;
+
+                    doHandle = !receivedSeqIds.IsSet(sequenceGap);
+                    receivedSeqIds.Set(sequenceGap);
+                }
+
+                connection.SendAck(sequenceId, lastReceivedSeqId, receivedSeqIds);
+                return doHandle;
+            }
+
+            /// <summary>Updates which messages we've received acks for.</summary>
+            /// <param name="remoteLastReceivedSeqId">The latest sequence ID that the other end has received.</param>
+            /// <param name="remoteReceivedSeqIds">Sequence IDs which the other end has (or has not) received.</param>
+            internal override void UpdateReceivedAcks(ushort remoteLastReceivedSeqId, ushort remoteReceivedSeqIds)
+            {
+                int sequenceGap = Helper.GetSequenceGap(remoteLastReceivedSeqId, lastAckedSeqId);
+
+                if (sequenceGap > 0)
+                {
+                    // The latest sequence ID that the other end has received is newer than the previous one
+                    for (int i = 0; i < 16; i++)
+                    {
+                        // Clear any messages that have been newly acknowledged
+                        if (!ackedSeqIds.IsSet(i + 1) && (remoteReceivedSeqIds & (1 << (sequenceGap + i))) != 0)
+                            connection.ClearMessage((ushort)(lastAckedSeqId - (i + 1)));
+                    }
+
+                    if (!ackedSeqIds.HasCapacityFor(sequenceGap, out int overflow))
+                    {
+                        for (int i = 0; i < overflow; i++)
+                        {
+                            // Resend those messages which haven't been acked and whose sequence IDs are about to be pushed out of the bitfield
+                            if (!ackedSeqIds.CheckAndTrimLast(out int checkedPosition))
+                                connection.ResendMessage((ushort)(lastAckedSeqId - checkedPosition));
+                            else
+                                connection.ClearMessage((ushort)(lastAckedSeqId - checkedPosition));
+                        }
+                    }
+
+                    ackedSeqIds.ShiftBy(sequenceGap);
+                    ackedSeqIds.Combine(remoteReceivedSeqIds);
+                    ackedSeqIds.Set(sequenceGap); // Ensure that the bit corresponding to the previous ack is set
+                    lastAckedSeqId = remoteLastReceivedSeqId;
+                    connection.ClearMessage(remoteLastReceivedSeqId);
+                }
+                else if (sequenceGap < 0)
+                {
+                    // The latest sequence ID that the other end has received is older than the previous one (out of order ack)
+                    ackedSeqIds.Set(-sequenceGap);
+                }
+                else
+                {
+                    // The latest sequence ID that the other end has received is the same as the previous one (duplicate ack)
+                    ackedSeqIds.Combine(remoteReceivedSeqIds);
+                }
+            }
+        }
         #endregion
     }
 }

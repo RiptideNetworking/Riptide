@@ -182,24 +182,31 @@ namespace Riptide
 
             Message message = Message.CreateRaw();
             message.PrepareForUse(header, e.Amount);
-
-            if (message.SendMode == MessageSendMode.Reliable)
+            
+            if (header == MessageHeader.Notify)
             {
-                if (e.Amount < 3) // Reliable messages have a 3 byte header, if there aren't that many bytes in the packet don't handle it
+                if (e.Amount < Message.NotifyHeaderSize)
                     return;
 
-                if (e.FromConnection.ReliableHandle(Converter.ToUShort(e.DataBuffer, 1)))
-                {
-                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1); // We've already established that the packet contains at least 3 bytes, and we always want to copy the sequence ID over
-                    messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
-                }
+                e.FromConnection.ProcessNotify(e.DataBuffer, e.Amount, message);
             }
-            else
+            else if (message.SendMode == MessageSendMode.Unreliable)
             {
-                if (e.Amount > 1) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
+                if (e.Amount > Message.UnreliableHeaderSize) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
+            }
+            else
+            {
+                if (e.Amount < Message.ReliableHeaderSize)
+                    return;
+
+                if (e.FromConnection.ShouldHandle(Converter.ToUShort(e.DataBuffer, 1)))
+                {
+                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
+                    messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
+                }
             }
         }
 

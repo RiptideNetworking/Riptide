@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -23,9 +23,17 @@ namespace Riptide
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        /// <summary>The header size for unreliable messages. Does not count the 2 bytes used for the message ID.</summary>
+        /// <remarks>1 byte - header.</remarks>
+        internal const int UnreliableHeaderSize = 1;
+        /// <summary>The header size for reliable messages. Does not count the 2 bytes used for the message ID.</summary>
+        /// <remarks>1 byte - header, 2 bytes - sequence ID.</remarks>
+        internal const int ReliableHeaderSize = 3;
+        /// <summary>The header size for notify messages.</summary>
+        /// <remarks>1 byte - header, 3 bytes - ack, 2 bytes - sequence ID.</remarks>
+        internal const int NotifyHeaderSize = 6;
         /// <summary>The maximum number of bytes required for a message's header.</summary>
-        /// <remarks>1 byte for the actual header, 2 bytes for the sequence ID (only for reliable messages), 2 bytes for the message ID. Messages sent unreliably will use 2 bytes less than this value for the header.</remarks>
-        public const int MaxHeaderSize = 5;
+        public const int MaxHeaderSize = NotifyHeaderSize;
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; } = MaxHeaderSize + 1225;
         /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="MaxHeaderSize"/>.</summary>
@@ -137,6 +145,13 @@ namespace Riptide
             return RetrieveFromPool();
         }
 
+        /// <summary>Gets a notify message instance that can be used for sending.</summary>
+        /// <returns>A notify message instance ready to be sent.</returns>
+        public static Message CreateNotify()
+        {
+            return RetrieveFromPool().PrepareForUse(MessageHeader.Notify);
+        }
+
         /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
         /// <returns>A message instance ready to be used for sending or handling.</returns>
         private static Message RetrieveFromPool()
@@ -198,16 +213,22 @@ namespace Riptide
         internal void SetHeader(MessageHeader header)
         {
             Bytes[0] = (byte)header;
-            if (header >= MessageHeader.Reliable)
+            if (header == MessageHeader.Notify)
             {
-                readPos = 3;
-                writePos = 3;
+                readPos = NotifyHeaderSize;
+                writePos = NotifyHeaderSize;
+                SendMode = MessageSendMode.Unreliable; // Technically it's different but notify messages *are* still unreliable
+            }
+            else if (header >= MessageHeader.Reliable)
+            {
+                readPos = ReliableHeaderSize;
+                writePos = ReliableHeaderSize;
                 SendMode = MessageSendMode.Reliable;
             }
             else
             {
-                readPos = 1;
-                writePos = 1;
+                readPos = UnreliableHeaderSize;
+                writePos = UnreliableHeaderSize;
                 SendMode = MessageSendMode.Unreliable;
             }
         }

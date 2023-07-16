@@ -14,8 +14,6 @@ namespace Riptide.Transports
         Unreliable,
         /// <summary>An internal unreliable ack message.</summary>
         Ack,
-        /// <summary>An internal unreliable ack message, used when acknowledging a sequence ID other than the last received one.</summary>
-        AckExtra,
         /// <summary>An internal unreliable connect message.</summary>
         Connect,
         /// <summary>An internal unreliable connection rejection message.</summary>
@@ -24,6 +22,9 @@ namespace Riptide.Transports
         Heartbeat,
         /// <summary>An internal unreliable disconnect message.</summary>
         Disconnect,
+
+        /// <summary>A notify message.</summary>
+        Notify,
 
         /// <summary>A reliable user message.</summary>
         Reliable,
