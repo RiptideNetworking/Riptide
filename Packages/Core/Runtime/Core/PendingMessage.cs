@@ -44,11 +44,12 @@ namespace Riptide
         }
 
         #region Pooling
-        /// <summary>Retrieves a <see cref="PendingMessage"/> instance, initializes it and then sends it.</summary>
+        /// <summary>Retrieves a <see cref="PendingMessage"/> instance and initializes it.</summary>
         /// <param name="sequenceId">The sequence ID of the message.</param>
         /// <param name="message">The message that is being sent reliably.</param>
         /// <param name="connection">The <see cref="Connection"/> to use to send (and resend) the pending message.</param>
-        internal static void CreateAndSend(ushort sequenceId, Message message, Connection connection)
+        /// <returns>An intialized <see cref="PendingMessage"/> instance.</returns>
+        internal static PendingMessage Create(ushort sequenceId, Message message, Connection connection)
         {
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
@@ -61,9 +62,7 @@ namespace Riptide
 
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
-
-            connection.PendingMessages.Add(sequenceId, pendingMessage);
-            pendingMessage.TrySend();
+            return pendingMessage;
         }
 
         /// <summary>Retrieves a <see cref="PendingMessage"/> instance from the pool. If none is available, a new instance is created.</summary>
@@ -122,7 +121,7 @@ namespace Riptide
                         RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"No ack received for internal {header} message after {sendAttempts} {Helper.CorrectForm(sendAttempts, "attempt")}, delivery may have failed!");
                 }
 
-                Clear();
+                connection.ClearMessage(sequenceId);
                 return;
             }
 
@@ -135,12 +134,8 @@ namespace Riptide
         }
 
         /// <summary>Clears the message.</summary>
-        /// <param name="shouldRemoveFromDictionary">Whether or not to remove the message from <see cref="Connection.PendingMessages"/>.</param>
-        internal void Clear(bool shouldRemoveFromDictionary = true)
+        internal void Clear()
         {
-            if (shouldRemoveFromDictionary)
-                connection.PendingMessages.Remove(sequenceId);
-
             wasCleared = true;
             Release();
         }
