@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -179,9 +179,7 @@ namespace Riptide
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
             MessageHeader header = (MessageHeader)e.DataBuffer[0];
-
-            Message message = Message.CreateRaw();
-            message.PrepareForUse(header, e.Amount);
+            Message message = Message.Create(header, e.Amount);
             
             if (header == MessageHeader.Notify)
             {
