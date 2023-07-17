@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -109,8 +109,8 @@ namespace Riptide
             }
         }
 
-        /// <summary>Gets a usable message instance.</summary>
-        /// <returns>A message instance ready to be used.</returns>
+        /// <summary>Gets a completely empty message instance with no header.</summary>
+        /// <returns>An empty message instance.</returns>
         public static Message Create()
         {
             return RetrieveFromPool().PrepareForUse();
@@ -118,7 +118,7 @@ namespace Riptide
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
+        /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
             return RetrieveFromPool().PrepareForUse((MessageHeader)sendMode).AddUShort(id);
@@ -131,18 +131,18 @@ namespace Riptide
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="header">The message's header type.</param>
-        /// <returns>A message instance ready to be used for sending.</returns>
+        /// <returns>A message instance ready to be sent.</returns>
         internal static Message Create(MessageHeader header)
         {
             return RetrieveFromPool().PrepareForUse(header);
         }
-
-        /// <summary>Gets a message instance directly from the pool without doing any extra setup.</summary>
-        /// <remarks>As this message instance is returned straight from the pool, it will contain all previous data and settings. Using this instance without preparing it properly will likely result in unexpected behaviour.</remarks>
-        /// <returns>A message instance.</returns>
-        internal static Message CreateRaw()
+        /// <summary>Gets a message instance that can be used for receiving/handling.</summary>
+        /// <param name="header">The message's header type.</param>
+        /// <param name="contentLength">The number of bytes which this message will contain.</param>
+        /// <returns>A message instance ready to be populated with received data.</returns>
+        internal static Message Create(MessageHeader header, int contentLength)
         {
-            return RetrieveFromPool();
+            return RetrieveFromPool().PrepareForUse(header, contentLength);
         }
 
         /// <summary>Gets a notify message instance that can be used for sending.</summary>
@@ -199,9 +199,9 @@ namespace Riptide
         }
         /// <summary>Prepares the message to be used for handling.</summary>
         /// <param name="header">The header of the message.</param>
-        /// <param name="contentLength">The number of bytes that this message contains and which can be retrieved.</param>
+        /// <param name="contentLength">The number of bytes that this message will contain and which can be retrieved.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        internal Message PrepareForUse(MessageHeader header, int contentLength)
+        private Message PrepareForUse(MessageHeader header, int contentLength)
         {
             SetHeader(header);
             writePos = contentLength;
@@ -210,7 +210,7 @@ namespace Riptide
 
         /// <summary>Sets the message's header byte to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
         /// <param name="header">The header to use for this message.</param>
-        internal void SetHeader(MessageHeader header)
+        private void SetHeader(MessageHeader header)
         {
             Bytes[0] = (byte)header;
             if (header == MessageHeader.Notify)

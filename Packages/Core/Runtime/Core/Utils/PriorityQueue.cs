@@ -12,14 +12,14 @@ namespace Riptide.Utils
     /// <summary>Represents a collection of items that have a value and a priority. On dequeue, the item with the lowest priority value is removed.</summary>
     /// <typeparam name="TElement">Specifies the type of elements in the queue.</typeparam>
     /// <typeparam name="TPriority">Specifies the type of priority associated with enqueued elements.</typeparam>
-    internal class PriorityQueue<TElement, TPriority>
+    public class PriorityQueue<TElement, TPriority>
     {
         /// <summary>Gets the number of elements contained in the <see cref="PriorityQueue{TElement, TPriority}"/>.</summary>
         public int Count { get; private set; }
 
         private const int DefaultCapacity = 8;
         private Entry<TElement, TPriority>[] heap;
-        private IComparer<TPriority> comparer;
+        private readonly IComparer<TPriority> comparer;
 
         /// <summary>Initializes a new instance of the <see cref="PriorityQueue{TElement, TPriority}"/> class.</summary>
         /// <param name="capacity">Initial capacity to allocate for the underlying heap array.</param>
@@ -143,7 +143,7 @@ namespace Riptide.Utils
             return (index * 2) + 1;
         }
 
-        private struct Entry<TEle, TPrio>
+        private readonly struct Entry<TEle, TPrio>
         {
             internal readonly TEle Element;
             internal readonly TPrio Priority;
