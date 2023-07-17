@@ -36,9 +36,8 @@ namespace Riptide.Transports.Tcp
                 throw new ArgumentOutOfRangeException(nameof(socketBufferSize), $"The minimum socket buffer size is {MinSocketBufferSize}!");
 
             this.socketBufferSize = socketBufferSize;
-            // Need room for the entire message plus the message length (since this is TCP)
-            ReceiveBuffer = new byte[Message.MaxSize + sizeof(ushort)];
-            SendBuffer = new byte[Message.MaxSize + sizeof(ushort)];
+            ReceiveBuffer = new byte[Message.MaxSize];
+            SendBuffer = new byte[Message.MaxSize + sizeof(int)]; // Need room for the entire message plus the message length (since this is TCP)
         }
 
         /// <summary>Handles received data.</summary>

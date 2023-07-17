@@ -56,7 +56,7 @@ namespace Riptide.Transports.Udp
 
             this.mode = mode;
             this.socketBufferSize = socketBufferSize;
-            receivedData = new byte[Message.MaxSize + sizeof(ushort)];
+            receivedData = new byte[Message.MaxSize];
         }
 
         /// <inheritdoc cref="IPeer.Poll"/>
