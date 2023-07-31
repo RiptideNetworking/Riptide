@@ -80,16 +80,9 @@ namespace Riptide
             clients = new Dictionary<ushort, Connection>();
             timedOutClients = new List<Connection>();
         }
-
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(string logName = "SERVER") : base(logName)
-        {
-            transport = new Transports.Udp.UdpServer();
-            pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
-            timedOutClients = new List<Connection>();
-        }
+        public Server(string logName = "SERVER") : this(new Transports.Udp.UdpServer(), logName) { }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>

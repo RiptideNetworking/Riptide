@@ -80,13 +80,9 @@ namespace Riptide
         {
             this.transport = transport;
         }
-
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Client(string logName = "CLIENT") : base(logName)
-        {
-            transport = new Transports.Udp.UdpClient();
-        }
+        public Client(string logName = "CLIENT") : this(new Transports.Udp.UdpClient(), logName) { }
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new transport to use for sending and receiving data.</param>
