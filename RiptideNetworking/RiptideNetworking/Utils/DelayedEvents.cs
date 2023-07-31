@@ -58,28 +58,4 @@ namespace Riptide.Utils
             peer.Heartbeat();
         }
     }
-
-    /// <summary>Closes the given connection when invoked.</summary>
-    internal class CloseRejectedConnectionEvent : DelayedEvent
-    {
-        /// <summary>The transport which the connection belongs to.</summary>
-        private readonly IServer transport;
-        /// <summary>The connection to close.</summary>
-        private readonly Connection connection;
-
-        /// <summary>Initializes the event.</summary>
-        /// <param name="transport">The transport which the connection belongs to.</param>
-        /// <param name="connection">The connection to close.</param>
-        public CloseRejectedConnectionEvent(IServer transport, Connection connection)
-        {
-            this.connection = connection;
-            this.transport = transport;
-        }
-
-        /// <inheritdoc/>
-        public override void Invoke()
-        {
-            transport.Close(connection);
-        }
-    }
 }

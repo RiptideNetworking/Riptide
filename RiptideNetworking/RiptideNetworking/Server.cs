@@ -270,8 +270,8 @@ namespace Riptide
                 message.Release();
             }
 
-            connection.LocalDisconnect(true);
-            ExecuteLater(ConnectTimeoutTime, new CloseRejectedConnectionEvent(transport, connection));
+            connection.ResetTimeout(); // Keep the connection alive for a moment so the same client can't immediately attempt to connect again
+            connection.LocalDisconnect();
 
             string reasonString;
             switch (reason)
@@ -300,6 +300,10 @@ namespace Riptide
         {
             foreach (Connection connection in clients.Values)
                 if (connection.HasTimedOut)
+                    timedOutClients.Add(connection);
+
+            foreach (Connection connection in pendingConnections)
+                if (connection.HasConnectAttemptTimedOut)
                     timedOutClients.Add(connection);
 
             foreach (Connection connection in timedOutClients)
@@ -343,11 +347,8 @@ namespace Riptide
                     LocalDisconnect(connection, DisconnectReason.Disconnected);
                     break;
                 case MessageHeader.Welcome:
-                    if (connection.IsPending)
-                    {
-                        connection.HandleWelcomeResponse(message);
+                    if (connection.HandleWelcomeResponse(message))
                         OnClientConnected(connection);
-                    }
                     break;
                 default:
                     RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes received from {connection}.");
