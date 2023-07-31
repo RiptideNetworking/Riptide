@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -21,8 +21,6 @@ namespace Riptide
         Pending,
         /// <summary>Connected. A connection has been established successfully.</summary>
         Connected,
-        /// <summary>Not connected. A connection attempt was made but was rejected.</summary>
-        Rejected,
     }
 
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
@@ -38,7 +36,7 @@ namespace Riptide
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
         /// <summary>Whether or not the connection is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
-        public bool IsNotConnected => state == ConnectionState.NotConnected || state == ConnectionState.Rejected;
+        public bool IsNotConnected => state == ConnectionState.NotConnected;
         /// <summary>Whether or not the connection is currently in the process of connecting.</summary>
         public bool IsConnecting => state == ConnectionState.Connecting;
         /// <summary>Whether or not the connection is currently pending (waiting to be accepted/rejected by the server).</summary>
@@ -60,8 +58,8 @@ namespace Riptide
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
         /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public int TimeoutTime { get; set; } = 5000;
-        /// <summary>Whether or not the connection can time out. This value has no effect until the connection is fully established—connection attempts can still time out even when this is set to false.</summary>
+        public int TimeoutTime { get; set; }
+        /// <summary>Whether or not the connection can time out.</summary>
         public bool CanTimeout
         {
             get => _canTimeout;
@@ -76,11 +74,11 @@ namespace Riptide
         private bool _canTimeout;
 
         /// <summary>The local peer this connection is associated with.</summary>
-        internal Peer Peer { get; set; }
+        internal Peer Peer { get; private set; }
         /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out.</summary>
-        internal bool HasConnectAttemptTimedOut => Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
+        internal bool HasConnectAttemptTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
 
         /// <summary>The sequencer for notify messages.</summary>
         private readonly NotifySequencer notify;
@@ -106,6 +104,15 @@ namespace Riptide
             reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
             _canTimeout = true;
+        }
+
+        /// <summary>Initializes connection data.</summary>
+        /// <param name="peer">The <see cref="Riptide.Peer"/> which this connection belongs to.</param>
+        /// <param name="timeoutTime">The timeout time.</param>
+        internal void Initialize(Peer peer, int timeoutTime)
+        {
+            Peer = peer;
+            TimeoutTime = timeoutTime;
         }
 
         /// <summary>Resets the connection's timeout time.</summary>
@@ -176,10 +183,9 @@ namespace Riptide
         }
 
         /// <summary>Cleans up the local side of the connection.</summary>
-        /// <param name="wasRejected">Whether or not the connection was rejected.</param>
-        internal void LocalDisconnect(bool wasRejected = false)
+        internal void LocalDisconnect()
         {
-            state = wasRejected ? ConnectionState.Rejected : ConnectionState.NotConnected;
+            state = ConnectionState.NotConnected;
 
             foreach (PendingMessage pendingMessage in pendingMessages.Values)
                 pendingMessage.Clear();
@@ -257,20 +263,28 @@ namespace Riptide
 
         /// <summary>Handles a welcome message on the server.</summary>
         /// <param name="message">The welcome message to handle.</param>
-        internal void HandleWelcomeResponse(Message message)
+        /// <returns>Whether or not the connection is now connected.</returns>
+        internal bool HandleWelcomeResponse(Message message)
         {
+            if (!IsPending)
+                return false;
+
             ushort id = message.GetUShort();
             if (Id != id)
                 RiptideLogger.Log(LogType.Error, Peer.LogName, $"Client has assumed ID {id} instead of {Id}!");
 
             state = ConnectionState.Connected;
             ResetTimeout();
+            return true;
         }
 
         /// <summary>Handles a heartbeat message.</summary>
         /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeat(Message message)
         {
+            if (!IsConnected)
+                return; // A client that is not yet fully connected should not be sending heartbeats
+
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();
 

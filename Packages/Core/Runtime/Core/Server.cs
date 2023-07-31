@@ -17,6 +17,8 @@ namespace Riptide
     {
         /// <summary>Invoked when a client connects.</summary>
         public event EventHandler<ServerConnectedEventArgs> ClientConnected;
+        /// <summary>Invoked when a connection fails to be fully established.</summary>
+        public event EventHandler<ServerConnectionFailedEventArgs> ConnectionFailed;
         /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when a client disconnects.</summary>
@@ -26,13 +28,14 @@ namespace Riptide
         public bool IsRunning { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => transport.Port;
-        /// <summary>Sets the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
+        /// <summary>Sets the default timeout time for future connections and updates the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
         public override int TimeoutTime
         {
             set
             {
+                defaultTimeout = value;
                 foreach (Connection connection in clients.Values)
-                    connection.TimeoutTime = value;
+                    connection.TimeoutTime = defaultTimeout;
             }
         }
         /// <summary>The maximum number of concurrent connections.</summary>
@@ -79,16 +82,9 @@ namespace Riptide
             clients = new Dictionary<ushort, Connection>();
             timedOutClients = new List<Connection>();
         }
-
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
-        public Server(string logName = "SERVER") : base(logName)
-        {
-            transport = new Transports.Udp.UdpServer();
-            pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
-            timedOutClients = new List<Connection>();
-        }
+        public Server(string logName = "SERVER") : this(new Transports.Udp.UdpServer(), logName) { }
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
@@ -183,7 +179,7 @@ namespace Riptide
         /// <summary>Handles an incoming connection attempt.</summary>
         private void HandleConnectionAttempt(object _, ConnectedEventArgs e)
         {
-            e.Connection.Peer = this;
+            e.Connection.Initialize(this, defaultTimeout);
         }
 
         /// <summary>Handles a connect message.</summary>
@@ -276,29 +272,10 @@ namespace Riptide
                 message.Release();
             }
 
-            connection.LocalDisconnect(true);
-            ExecuteLater(ConnectTimeoutTime, new CloseRejectedConnectionEvent(transport, connection));
+            connection.ResetTimeout(); // Keep the connection alive for a moment so the same client can't immediately attempt to connect again
+            connection.LocalDisconnect();
 
-            string reasonString;
-            switch (reason)
-            {
-                case RejectReason.AlreadyConnected:
-                    reasonString = CRAlreadyConnected;
-                    break;
-                case RejectReason.ServerFull:
-                    reasonString = CRServerFull;
-                    break;
-                case RejectReason.Rejected:
-                    reasonString = CRRejected;
-                    break;
-                case RejectReason.Custom:
-                    reasonString = CRCustom;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-            RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {Helper.GetReasonString(reason)}.");
         }
 
         /// <summary>Checks if clients have timed out.</summary>
@@ -306,6 +283,10 @@ namespace Riptide
         {
             foreach (Connection connection in clients.Values)
                 if (connection.HasTimedOut)
+                    timedOutClients.Add(connection);
+
+            foreach (Connection connection in pendingConnections)
+                if (connection.HasConnectAttemptTimedOut)
                     timedOutClients.Add(connection);
 
             foreach (Connection connection in timedOutClients)
@@ -349,11 +330,8 @@ namespace Riptide
                     LocalDisconnect(connection, DisconnectReason.Disconnected);
                     break;
                 case MessageHeader.Welcome:
-                    if (connection.IsPending)
-                    {
-                        connection.HandleWelcomeResponse(message);
+                    if (connection.HandleWelcomeResponse(message))
                         OnClientConnected(connection);
-                    }
                     break;
                 default:
                     RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes received from {connection}.");
@@ -456,6 +434,8 @@ namespace Riptide
 
             if (client.IsConnected)
                 OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
+            else if (client.IsPending)
+                OnConnectionFailed(client);
 
             client.LocalDisconnect();
         }
@@ -554,6 +534,14 @@ namespace Riptide
             ClientConnected?.Invoke(this, new ServerConnectedEventArgs(client));
         }
 
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
+        /// <param name="connection">The connection that failed to be fully established.</param>
+        protected virtual void OnConnectionFailed(Connection connection)
+        {
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection} stopped responding before the connection was fully established!");
+            ConnectionFailed?.Invoke(this, new ServerConnectionFailedEventArgs(connection));
+        }
+
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         /// <param name="message">The received message.</param>
         /// <param name="fromConnection">The client from which the message was received.</param>
@@ -583,35 +571,8 @@ namespace Riptide
         /// <param name="reason">The reason for the disconnection.</param>
         protected virtual void OnClientDisconnected(Connection connection, DisconnectReason reason)
         {
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection.Id} ({connection}) disconnected: {Helper.GetReasonString(reason)}.");
             SendClientDisconnected(connection.Id);
-
-            string reasonString;
-            switch (reason)
-            {
-                case DisconnectReason.NeverConnected:
-                    reasonString = DCNeverConnected;
-                    break;
-                case DisconnectReason.TransportError:
-                    reasonString = DCTransportError;
-                    break;
-                case DisconnectReason.TimedOut:
-                    reasonString = DCTimedOut;
-                    break;
-                case DisconnectReason.Kicked:
-                    reasonString = DCKicked;
-                    break;
-                case DisconnectReason.ServerStopped:
-                    reasonString = DCServerStopped;
-                    break;
-                case DisconnectReason.Disconnected:
-                    reasonString = DCDisconnected;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-
-            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection.Id} ({connection}) disconnected: {reasonString}.");
             ClientDisconnected?.Invoke(this, new ServerDisconnectedEventArgs(connection, reason));
         }
         #endregion
