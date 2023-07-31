@@ -208,7 +208,7 @@ namespace Riptide
     }
 
     /// <summary>Stores information about a message that needs to be handled.</summary>
-    internal struct MessageToHandle
+    internal readonly struct MessageToHandle
     {
         /// <summary>The message that needs to be handled.</summary>
         internal readonly Message Message;

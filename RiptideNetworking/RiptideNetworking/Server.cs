@@ -169,8 +169,7 @@ namespace Riptide
                 else
                 {
                     // It's not a message handler for Server instances, but it might be one for Client instances
-                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), method, false);
-                    if (clientMessageHandler == null)
+                    if (Delegate.CreateDelegate(typeof(Client.MessageHandler), method, false) == null)
                         throw new InvalidHandlerSignatureException(method.DeclaringType, method.Name);
                 }
             }
