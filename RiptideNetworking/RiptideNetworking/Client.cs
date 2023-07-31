@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -35,7 +35,14 @@ namespace Riptide
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
         /// <summary>Sets the client's <see cref="Connection.TimeoutTime"/>.</summary>
-        public override int TimeoutTime { set => connection.TimeoutTime = value; }
+        public override int TimeoutTime
+        {
+            set
+            {
+                defaultTimeout = value;
+                connection.TimeoutTime = defaultTimeout;
+            }
+        }
         /// <summary>Whether or not the client is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
         public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
@@ -116,7 +123,7 @@ namespace Riptide
 
             this.maxConnectionAttempts = maxConnectionAttempts;
             connectionAttempts = 0;
-            connection.Peer = this;
+            connection.Initialize(this, defaultTimeout);
             IncreaseActiveCount();
             this.useMessageHandlers = useMessageHandlers;
             if (useMessageHandlers)

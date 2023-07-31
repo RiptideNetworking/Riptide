@@ -26,13 +26,14 @@ namespace Riptide
         public bool IsRunning { get; private set; }
         /// <summary>The local port that the server is running on.</summary>
         public ushort Port => transport.Port;
-        /// <summary>Sets the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
+        /// <summary>Sets the default timeout time for future connections and updates the <see cref="Connection.TimeoutTime"/> of all connected clients.</summary>
         public override int TimeoutTime
         {
             set
             {
+                defaultTimeout = value;
                 foreach (Connection connection in clients.Values)
-                    connection.TimeoutTime = value;
+                    connection.TimeoutTime = defaultTimeout;
             }
         }
         /// <summary>The maximum number of concurrent connections.</summary>
@@ -183,7 +184,7 @@ namespace Riptide
         /// <summary>Handles an incoming connection attempt.</summary>
         private void HandleConnectionAttempt(object _, ConnectedEventArgs e)
         {
-            e.Connection.Peer = this;
+            e.Connection.Initialize(this, defaultTimeout);
         }
 
         /// <summary>Handles a connect message.</summary>

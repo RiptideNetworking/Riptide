@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
@@ -60,7 +60,7 @@ namespace Riptide
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT { get; private set; } = -1;
         /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
-        public int TimeoutTime { get; set; } = 5000;
+        public int TimeoutTime { get; set; }
         /// <summary>Whether or not the connection can time out. This value has no effect until the connection is fully established—connection attempts can still time out even when this is set to false.</summary>
         public bool CanTimeout
         {
@@ -76,7 +76,7 @@ namespace Riptide
         private bool _canTimeout;
 
         /// <summary>The local peer this connection is associated with.</summary>
-        internal Peer Peer { get; set; }
+        internal Peer Peer { get; private set; }
         /// <summary>Whether or not the connection has timed out.</summary>
         internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out.</summary>
@@ -106,6 +106,15 @@ namespace Riptide
             reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
             _canTimeout = true;
+        }
+
+        /// <summary>Initializes connection data.</summary>
+        /// <param name="peer">The <see cref="Riptide.Peer"/> which this connection belongs to.</param>
+        /// <param name="timeoutTime">The timeout time.</param>
+        internal void Initialize(Peer peer, int timeoutTime)
+        {
+            Peer = peer;
+            TimeoutTime = timeoutTime;
         }
 
         /// <summary>Resets the connection's timeout time.</summary>
