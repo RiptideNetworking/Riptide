@@ -33,8 +33,8 @@ namespace Riptide.Demos.DedicatedClient
             float mouseVertical = -Input.GetAxis("Mouse Y");
             float mouseHorizontal = Input.GetAxis("Mouse X");
 
-            verticalRotation += mouseVertical * sensitivity * Time.deltaTime;
-            horizontalRotation += mouseHorizontal * sensitivity * Time.deltaTime;
+            verticalRotation += mouseVertical * sensitivity;
+            horizontalRotation += mouseHorizontal * sensitivity;
 
             verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
 
