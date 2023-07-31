@@ -17,6 +17,8 @@ namespace Riptide
     {
         /// <summary>Invoked when a client connects.</summary>
         public event EventHandler<ServerConnectedEventArgs> ClientConnected;
+        /// <summary>Invoked when a connection fails to be fully established.</summary>
+        public event EventHandler<ServerConnectionFailedEventArgs> ConnectionFailed;
         /// <summary>Invoked when a message is received.</summary>
         public event EventHandler<MessageReceivedEventArgs> MessageReceived;
         /// <summary>Invoked when a client disconnects.</summary>
@@ -432,6 +434,8 @@ namespace Riptide
 
             if (client.IsConnected)
                 OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
+            else if (client.IsPending)
+                OnConnectionFailed(client);
 
             client.LocalDisconnect();
         }
@@ -528,6 +532,14 @@ namespace Riptide
             RiptideLogger.Log(LogType.Info, LogName, $"Client {client.Id} ({client}) connected successfully!");
             SendClientConnected(client);
             ClientConnected?.Invoke(this, new ServerConnectedEventArgs(client));
+        }
+
+        /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
+        /// <param name="connection">The connection that failed to be fully established.</param>
+        protected virtual void OnConnectionFailed(Connection connection)
+        {
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection} stopped responding before the connection was fully established!");
+            ConnectionFailed?.Invoke(this, new ServerConnectionFailedEventArgs(connection));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>

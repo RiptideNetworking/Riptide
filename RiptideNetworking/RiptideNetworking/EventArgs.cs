@@ -21,6 +21,20 @@ namespace Riptide
         }
     }
 
+    /// <summary>Contains event data for when a connection fails to be fully established.</summary>
+    public class ServerConnectionFailedEventArgs : EventArgs
+    {
+        /// <summary>The connection that failed to be established.</summary>
+        public readonly Connection Client;
+
+        /// <summary>Initializes event data.</summary>
+        /// <param name="client">The connection that failed to be established.</param>
+        public ServerConnectionFailedEventArgs(Connection client)
+        {
+            Client = client;
+        }
+    }
+
     /// <summary>Contains event data for when a client disconnects from the server.</summary>
     public class ServerDisconnectedEventArgs : EventArgs
     {
