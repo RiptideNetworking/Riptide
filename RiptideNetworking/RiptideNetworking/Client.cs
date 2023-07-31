@@ -366,27 +366,7 @@ namespace Riptide
         /// <param name="message">Additional data related to the failed connection attempt.</param>
         protected virtual void OnConnectionFailed(RejectReason reason, Message message = null)
         {
-            string reasonString;
-            switch (reason)
-            {
-                case RejectReason.NoConnection:
-                    reasonString = CRNoConnection;
-                    break;
-                case RejectReason.ServerFull:
-                    reasonString = CRServerFull;
-                    break;
-                case RejectReason.Rejected:
-                    reasonString = CRRejected;
-                    break;
-                case RejectReason.Custom:
-                    reasonString = CRCustom;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-            
-            RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {Helper.GetReasonString(reason)}.");
             ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(message));
         }
 
@@ -411,33 +391,7 @@ namespace Riptide
         /// <param name="message">Additional data related to the disconnection.</param>
         protected virtual void OnDisconnected(DisconnectReason reason, Message message)
         {
-            string reasonString;
-            switch (reason)
-            {
-                case DisconnectReason.NeverConnected:
-                    reasonString = DCNeverConnected;
-                    break;
-                case DisconnectReason.TransportError:
-                    reasonString = DCTransportError;
-                    break;
-                case DisconnectReason.TimedOut:
-                    reasonString = DCTimedOut;
-                    break;
-                case DisconnectReason.Kicked:
-                    reasonString = DCKicked;
-                    break;
-                case DisconnectReason.ServerStopped:
-                    reasonString = DCServerStopped;
-                    break;
-                case DisconnectReason.Disconnected:
-                    reasonString = DCDisconnected;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-
-            RiptideLogger.Log(LogType.Info, LogName, $"Disconnected from server: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Disconnected from server: {Helper.GetReasonString(reason)}.");
             Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
         }
 

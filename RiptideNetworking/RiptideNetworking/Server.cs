@@ -273,26 +273,7 @@ namespace Riptide
             connection.ResetTimeout(); // Keep the connection alive for a moment so the same client can't immediately attempt to connect again
             connection.LocalDisconnect();
 
-            string reasonString;
-            switch (reason)
-            {
-                case RejectReason.AlreadyConnected:
-                    reasonString = CRAlreadyConnected;
-                    break;
-                case RejectReason.ServerFull:
-                    reasonString = CRServerFull;
-                    break;
-                case RejectReason.Rejected:
-                    reasonString = CRRejected;
-                    break;
-                case RejectReason.Custom:
-                    reasonString = CRCustom;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-            RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {reasonString}.");
+            RiptideLogger.Log(LogType.Info, LogName, $"Rejected connection from {connection}: {Helper.GetReasonString(reason)}.");
         }
 
         /// <summary>Checks if clients have timed out.</summary>
@@ -578,35 +559,8 @@ namespace Riptide
         /// <param name="reason">The reason for the disconnection.</param>
         protected virtual void OnClientDisconnected(Connection connection, DisconnectReason reason)
         {
+            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection.Id} ({connection}) disconnected: {Helper.GetReasonString(reason)}.");
             SendClientDisconnected(connection.Id);
-
-            string reasonString;
-            switch (reason)
-            {
-                case DisconnectReason.NeverConnected:
-                    reasonString = DCNeverConnected;
-                    break;
-                case DisconnectReason.TransportError:
-                    reasonString = DCTransportError;
-                    break;
-                case DisconnectReason.TimedOut:
-                    reasonString = DCTimedOut;
-                    break;
-                case DisconnectReason.Kicked:
-                    reasonString = DCKicked;
-                    break;
-                case DisconnectReason.ServerStopped:
-                    reasonString = DCServerStopped;
-                    break;
-                case DisconnectReason.Disconnected:
-                    reasonString = DCDisconnected;
-                    break;
-                default:
-                    reasonString = $"{UnknownReason} '{reason}'";
-                    break;
-            }
-
-            RiptideLogger.Log(LogType.Info, LogName, $"Client {connection.Id} ({connection}) disconnected: {reasonString}.");
             ClientDisconnected?.Invoke(this, new ServerDisconnectedEventArgs(connection, reason));
         }
         #endregion
