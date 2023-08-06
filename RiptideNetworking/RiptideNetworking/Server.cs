@@ -470,6 +470,9 @@ namespace Riptide
         /// <summary>Initializes available client IDs.</summary>
         private void InitializeClientIds()
         {
+            if (MaxClientCount > ushort.MaxValue - 1)
+                throw new Exception($"A server's max client count may not exceed {ushort.MaxValue - 1}!");
+
             availableClientIds = new Queue<ushort>(MaxClientCount);
             for (ushort i = 1; i <= MaxClientCount; i++)
                 availableClientIds.Enqueue(i);
