@@ -169,8 +169,7 @@ namespace Riptide
                 else
                 {
                     // It's not a message handler for Server instances, but it might be one for Client instances
-                    Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(Client.MessageHandler), method, false);
-                    if (clientMessageHandler == null)
+                    if (Delegate.CreateDelegate(typeof(Client.MessageHandler), method, false) == null)
                         throw new InvalidHandlerSignatureException(method.DeclaringType, method.Name);
                 }
             }
@@ -471,6 +470,9 @@ namespace Riptide
         /// <summary>Initializes available client IDs.</summary>
         private void InitializeClientIds()
         {
+            if (MaxClientCount > ushort.MaxValue - 1)
+                throw new Exception($"A server's max client count may not exceed {ushort.MaxValue - 1}!");
+
             availableClientIds = new Queue<ushort>(MaxClientCount);
             for (ushort i = 1; i <= MaxClientCount; i++)
                 availableClientIds.Enqueue(i);
