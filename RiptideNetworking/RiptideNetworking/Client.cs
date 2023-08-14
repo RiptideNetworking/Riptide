@@ -127,6 +127,9 @@ namespace Riptide
 
             if (message != null)
             {
+                if (message.WrittenLength != message.UnreadLength)
+                    RiptideLogger.Log(LogType.Error, LogName, $"Message for connection {connection} already have read data. Please make sure empty message instance without {nameof(MessageSendMode)} or message ID is used.");
+                
                 connectBytes = message.GetBytes(message.WrittenLength);
                 message.Release();
             }
