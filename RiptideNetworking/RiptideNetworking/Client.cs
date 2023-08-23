@@ -314,7 +314,7 @@ namespace Riptide
         /// <summary>Cleans up the local side of the connection.</summary>
         /// <param name="reason">The reason why the client has disconnected.</param>
         /// <param name="message">The disconnection or rejection message, potentially containing extra data to be handled externally.</param>
-        /// <param name="rejectReason">TData that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance. Unused if the connection wasn't rejected.</param>
+        /// <param name="rejectReason">The reason why the connection was rejected (<i>if</i> it was rejected).</param>
         private void LocalDisconnect(DisconnectReason reason, Message message = null, RejectReason rejectReason = RejectReason.NoConnection)
         {
             if (IsNotConnected)
@@ -366,7 +366,7 @@ namespace Riptide
         protected virtual void OnConnectionFailed(RejectReason reason, Message message = null)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {Helper.GetReasonString(reason)}.");
-            ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(message));
+            ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
