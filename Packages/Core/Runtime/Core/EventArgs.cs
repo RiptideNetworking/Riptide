@@ -78,12 +78,19 @@ namespace Riptide
     /// <summary>Contains event data for when a connection attempt to a server fails.</summary>
     public class ConnectionFailedEventArgs : EventArgs
     {
+        /// <summary>The reason for the connection failure.</summary>
+        public readonly RejectReason Reason;
         /// <summary>Additional data related to the failed connection attempt (if any).</summary>
         public readonly Message Message;
 
         /// <summary>Initializes event data.</summary>
+        /// <param name="reason">The reason for the connection failure.</param>
         /// <param name="message">Additional data related to the failed connection attempt (if any).</param>
-        public ConnectionFailedEventArgs(Message message) => Message = message;
+        public ConnectionFailedEventArgs(RejectReason reason, Message message)
+        {
+            Reason = reason;
+            Message = message;
+        }
     }
 
     /// <summary>Contains event data for when the client disconnects from a server.</summary>
