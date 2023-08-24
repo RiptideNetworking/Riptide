@@ -127,6 +127,9 @@ namespace Riptide
 
             if (message != null)
             {
+                if (message.ReadLength != 0)
+                    RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when including data with a connection attempt!");
+                
                 connectBytes = message.GetBytes(message.WrittenLength);
                 message.Release();
             }
