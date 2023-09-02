@@ -64,6 +64,7 @@ namespace Riptide.Transports.Tcp
             {
                 SendBufferSize = socketBufferSize,
                 ReceiveBufferSize = socketBufferSize,
+                NoDelay = true,
             };
             socket.Bind(localEndPoint);
             socket.Listen(MaxPendingConnections);

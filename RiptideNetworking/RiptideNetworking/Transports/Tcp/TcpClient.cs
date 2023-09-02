@@ -39,6 +39,7 @@ namespace Riptide.Transports.Tcp
             {
                 SendBufferSize = socketBufferSize,
                 ReceiveBufferSize = socketBufferSize,
+                NoDelay = true,
             };
             
             try
