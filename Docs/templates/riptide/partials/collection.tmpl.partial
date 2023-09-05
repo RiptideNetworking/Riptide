@@ -9,7 +9,7 @@
 {{^isOnlyChild}}
 <h2 class="overloads">Overloads</h2>
 <table class="table table-condensed">
-  <tbody class="parameter-table">
+  <tbody>
 {{#children}}
 {{#children}}
     <tr>
@@ -42,7 +42,7 @@
 {{#parameters.0}}
 <h4 class="parameters">{{__global.parameters}}</h4>
 <table class="table table-condensed">
-  <tbody class="parameter-table">
+  <tbody>
 {{/parameters.0}}
 {{#parameters}}
     <tr>
@@ -58,8 +58,14 @@
 
 {{#return}}
 <h4 class="returns">{{__global.returns}}</h4>
-<span>{{{type.specName.0.value}}}</span>
-<span>{{{description}}}</span>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td>{{{type.specName.0.value}}}</td>
+      <td>{{{description}}}</td>
+    </tr>
+  </tbody>
+</table>
 {{/return}}
 
 {{#typeParameters.0}}

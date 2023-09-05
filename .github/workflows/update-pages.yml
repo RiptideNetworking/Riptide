@@ -1,4 +1,4 @@
-name: Update GitHub Pages
+name: Update Documentation Site
 
 on: workflow_dispatch
 
@@ -6,22 +6,22 @@ permissions:
   contents: write
 
 jobs:
-  deploy:
+  publish-docs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup NuGet
-        uses: NuGet/setup-nuget@v1.0.7
+      - name: Dotnet Setup
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 7.x
 
       - name: Install docfx
-        run: nuget install docfx.console -version 2.59.0
+        run: dotnet tool install -g docfx --version 2.70.1
 
       - name: Build
-        run: |
-          docfx.console.2.59.0/tools/docfx.exe metadata Docs/docfx.json
-          docfx.console.2.59.0/tools/docfx.exe build --logLevel Warning --warningsAsErrors Docs/docfx.json
+        run: docfx Docs/docfx.json
 
       - name: Deploy
         uses: JamesIves/github-pages-deploy-action@releases/v4

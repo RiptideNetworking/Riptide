@@ -57,7 +57,7 @@
 {{/syntax.return}}
 
 {{#syntax.typeParameters.0}}
-<h4 class="typeParameters">{{__global.typeParameters}}</h4>
+<h5 class="typeParameters">{{__global.typeParameters}}</h5>
 <table class="table table-condensed">
   <tbody>
 {{/syntax.typeParameters.0}}

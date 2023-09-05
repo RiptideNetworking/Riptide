@@ -12,7 +12,9 @@
             "dest": "api",
             "filter": "apifilter.yml",
             "disableGitFeatures": false,
-            "disableDefaultFilter": false
+            "disableDefaultFilter": false,
+            "memberLayout": "separatePages",
+            "enumSortOrder": "declaringOrder"
         }
     ],
     "build": {
@@ -67,7 +69,8 @@
             "_baseUrl": "https://riptide.tomweiland.net/",
             "_description": "Documentation for Riptide Networking.",
             "_donateUrl": "https://github.com/sponsors/tom-weiland",
-            "_donateText": "Support Riptide"
+            "_donateText": "Support Riptide",
+            "_lang": "csharp"
         },
         "fileMetadata": {
             "redirectUrl": {
@@ -78,7 +81,6 @@
         "fileMetadataFiles": [],
         "template": [
             "default",
-            "plugins/memberpage.2.59.0/content",
             "templates/riptide"
         ],
         "xrefService": [

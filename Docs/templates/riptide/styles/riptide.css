@@ -140,8 +140,9 @@ p {
 }
 
 #breadcrumb {
-    padding-left: 0px;
+    padding: 0px;
     font-size: 14px;
+    width: auto;
 }
 
 .inheritance > div,
