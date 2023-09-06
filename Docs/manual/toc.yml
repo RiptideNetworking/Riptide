@@ -18,3 +18,7 @@
       items:
       - name: Updating to v2
         href: updates/guides/updating-to-v2.md
+- name: Guides
+  items:
+  - name: Build Docs Locally
+    href: guides/build-docs.md
