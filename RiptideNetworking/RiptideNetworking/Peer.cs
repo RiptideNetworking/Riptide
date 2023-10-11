@@ -172,17 +172,21 @@ namespace Riptide
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
+                e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
             }
             else
             {
                 if (e.Amount < Message.ReliableHeaderSize)
                     return;
 
+                e.FromConnection.Metrics.ReceivedReliable(e.Amount);
                 if (e.FromConnection.ShouldHandle(Converter.ToUShort(e.DataBuffer, 1)))
                 {
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
+                else
+                    e.FromConnection.Metrics.ReliableDiscarded++;
             }
         }
 

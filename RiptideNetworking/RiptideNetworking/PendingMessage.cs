@@ -126,6 +126,7 @@ namespace Riptide
             }
 
             connection.Send(data, writtenLength);
+            connection.Metrics.SentReliable(writtenLength);
 
             LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;
@@ -136,6 +137,7 @@ namespace Riptide
         /// <summary>Clears the message.</summary>
         internal void Clear()
         {
+            connection.Metrics.RollingReliableSends.Add(sendAttempts);
             wasCleared = true;
             Release();
         }
