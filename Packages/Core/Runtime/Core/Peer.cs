@@ -1,7 +1,7 @@
 ﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
-// https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+// https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using Riptide.Transports;
 using Riptide.Utils;
@@ -172,17 +172,21 @@ namespace Riptide
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
 
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
+                e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
             }
             else
             {
                 if (e.Amount < Message.ReliableHeaderSize)
                     return;
 
+                e.FromConnection.Metrics.ReceivedReliable(e.Amount);
                 if (e.FromConnection.ShouldHandle(Converter.ToUShort(e.DataBuffer, 1)))
                 {
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
+                else
+                    e.FromConnection.Metrics.ReliableDiscarded++;
             }
         }
 

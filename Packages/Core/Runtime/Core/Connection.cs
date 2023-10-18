@@ -1,7 +1,7 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
-// https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+// https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using Riptide.Transports;
 using Riptide.Utils;
@@ -72,6 +72,8 @@ namespace Riptide
             }
         }
         private bool _canTimeout;
+        /// <summary>The connection's metrics.</summary>
+        public readonly ConnectionMetrics Metrics;
 
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; private set; }
@@ -100,6 +102,7 @@ namespace Riptide
         /// <summary>Initializes the connection.</summary>
         protected Connection()
         {
+            Metrics = new ConnectionMetrics();
             notify = new NotifySequencer(this);
             reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
@@ -126,13 +129,17 @@ namespace Riptide
         internal void Send(Message message, bool shouldRelease = true)
         {
             if (message.SendMode == MessageSendMode.Unreliable)
+            {
                 Send(message.Bytes, message.WrittenLength);
+                Metrics.SentUnreliable(message.WrittenLength);
+            }
             else
             {
                 ushort sequenceId = reliable.NextSequenceId;
                 PendingMessage pendingMessage = PendingMessage.Create(sequenceId, message, this);
                 pendingMessages.Add(sequenceId, pendingMessage);
                 pendingMessage.TrySend();
+                Metrics.ReliableUniques++;
             }
 
             if (shouldRelease)
@@ -147,6 +154,7 @@ namespace Riptide
         {
             ushort sequenceId = notify.InsertHeader(message);
             Send(message.Bytes, message.WrittenLength);
+            Metrics.SentNotify(message.WrittenLength);
 
             if (shouldRelease)
                 message.Release();
@@ -167,11 +175,14 @@ namespace Riptide
         {
             notify.UpdateReceivedAcks(Converter.ToUShort(dataBuffer, 1), dataBuffer[3]);
 
+            Metrics.ReceivedNotify(amount);
             if (notify.ShouldHandle(Converter.ToUShort(dataBuffer, 4)))
             {
                 Array.Copy(dataBuffer, 1, message.Bytes, 1, amount - 1); // Copy payload
                 NotifyReceived?.Invoke(message);
             }
+            else
+                Metrics.NotifyDiscarded++;
         }
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
@@ -349,6 +360,24 @@ namespace Riptide
         #endregion
         #endregion
 
+        #region Events
+        /// <summary>Invokes the <see cref="NotifyDelivered"/> event.</summary>
+        /// <param name="sequenceId">The sequence ID of the delivered message.</param>
+        protected virtual void OnNotifyDelivered(ushort sequenceId)
+        {
+            Metrics.DeliveredNotify();
+            NotifyDelivered?.Invoke(sequenceId);
+        }
+        
+        /// <summary>Invokes the <see cref="NotifyLost"/> event.</summary>
+        /// <param name="sequenceId">The sequence ID of the lost message.</param>
+        protected virtual void OnNotifyLost(ushort sequenceId)
+        {
+            Metrics.LostNotify();
+            NotifyLost?.Invoke(sequenceId);
+        }
+        #endregion
+
         #region Message Sequencing
         /// <summary>Provides functionality for filtering out duplicate messages and determining delivery/loss status.</summary>
         private abstract class Sequencer
@@ -453,14 +482,14 @@ namespace Riptide
                             lastAckedSeqId++;
                             bit >>= 1;
                             if ((remoteReceivedSeqIds & bit) == 0)
-                                connection.NotifyLost?.Invoke(lastAckedSeqId);
+                                connection.OnNotifyLost(lastAckedSeqId);
                             else
-                                connection.NotifyDelivered?.Invoke(lastAckedSeqId);
+                                connection.OnNotifyDelivered(lastAckedSeqId);
                         }
                     }
 
                     lastAckedSeqId = remoteLastReceivedSeqId;
-                    connection.NotifyDelivered?.Invoke(lastAckedSeqId);
+                    connection.OnNotifyDelivered(lastAckedSeqId);
                 }
             }
         }

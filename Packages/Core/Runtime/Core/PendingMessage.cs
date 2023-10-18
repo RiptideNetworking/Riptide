@@ -1,7 +1,7 @@
 ﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
-// https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+// https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using Riptide.Transports;
 using Riptide.Utils;
@@ -126,6 +126,7 @@ namespace Riptide
             }
 
             connection.Send(data, writtenLength);
+            connection.Metrics.SentReliable(writtenLength);
 
             LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;
@@ -136,6 +137,7 @@ namespace Riptide
         /// <summary>Clears the message.</summary>
         internal void Clear()
         {
+            connection.Metrics.RollingReliableSends.Add(sendAttempts);
             wasCleared = true;
             Release();
         }
