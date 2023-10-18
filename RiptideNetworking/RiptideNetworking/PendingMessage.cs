@@ -1,7 +1,7 @@
 ﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
-// https://github.com/tom-weiland/RiptideNetworking/blob/main/LICENSE.md
+// https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using Riptide.Transports;
 using Riptide.Utils;
