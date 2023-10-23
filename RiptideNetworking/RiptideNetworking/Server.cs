@@ -427,6 +427,13 @@ namespace Riptide
                 RiptideLogger.Log(LogType.Warning, LogName, $"Couldn't disconnect client {client.Id} because it wasn't connected!");
         }
 
+        /// <inheritdoc/>
+        internal override void Disconnect(Connection connection, DisconnectReason reason)
+        {
+            if (connection.IsConnected)
+                LocalDisconnect(connection, reason);
+        }
+
         /// <summary>Cleans up the local side of the given connection.</summary>
         /// <param name="client">The client to disconnect.</param>
         /// <param name="reason">The reason why the client is being disconnected.</param>

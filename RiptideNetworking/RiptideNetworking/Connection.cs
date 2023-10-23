@@ -74,6 +74,12 @@ namespace Riptide
         private bool _canTimeout;
         /// <summary>The connection's metrics.</summary>
         public readonly ConnectionMetrics Metrics;
+        /// <summary>The maximum acceptable average number of send attempts it takes to deliver a reliable message, above which the connection will be closed.</summary>
+        public int MaxAvgSendAttempts;
+        /// <summary>The absolute maximum number of times a reliable message may be sent. A single message reaching this threshold will cause a disconnection.</summary>
+        public int MaxSendAttempts;
+        /// <summary>The maximum acceptable loss rate of notify messages, above which the connection will be closed.</summary>
+        public float MaxNotifyLoss;
 
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; private set; }
@@ -107,6 +113,10 @@ namespace Riptide
             reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
             _canTimeout = true;
+
+            MaxAvgSendAttempts = 5;
+            MaxSendAttempts = 15;
+            MaxNotifyLoss = 0.05f; // 5%
         }
 
         /// <summary>Initializes connection data.</summary>
@@ -220,6 +230,8 @@ namespace Riptide
             {
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
+                if (Metrics.RollingReliableSends.Mean > MaxAvgSendAttempts)
+                    Peer.Disconnect(this, DisconnectReason.PoorConnection);
             }
         }
 
@@ -367,6 +379,7 @@ namespace Riptide
         {
             Metrics.DeliveredNotify();
             NotifyDelivered?.Invoke(sequenceId);
+            // Don't bother checking the loss rate because if we delivered a message, the loss rate will have decreased
         }
         
         /// <summary>Invokes the <see cref="NotifyLost"/> event.</summary>
@@ -375,6 +388,8 @@ namespace Riptide
         {
             Metrics.LostNotify();
             NotifyLost?.Invoke(sequenceId);
+            if (Metrics.RollingNotifyLossRate > MaxNotifyLoss)
+                Peer.Disconnect(this, DisconnectReason.PoorConnection);
         }
         #endregion
 
