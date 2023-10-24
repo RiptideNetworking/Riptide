@@ -110,8 +110,8 @@ namespace Riptide
         private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
         private byte pendingPingId;
-        /// <summary>The stopwatch that tracks the time since the currently pending ping was sent.</summary>
-        private readonly System.Diagnostics.Stopwatch pendingPingStopwatch = new System.Diagnostics.Stopwatch();
+        /// <summary>The time at which the currently pending ping was sent.</summary>
+        private long pendingPingSendTime;
 
         /// <summary>Initializes the connection.</summary>
         protected Connection()
@@ -384,7 +384,7 @@ namespace Riptide
         internal void SendHeartbeat()
         {
             pendingPingId = lastPingId++;
-            pendingPingStopwatch.Restart();
+            pendingPingSendTime = Peer.CurrentTime;
 
             Message message = Message.Create(MessageHeader.Heartbeat);
             message.AddByte(pendingPingId);
@@ -400,7 +400,7 @@ namespace Riptide
             byte pingId = message.GetByte();
 
             if (pendingPingId == pingId)
-                RTT = (short)Math.Max(1f, pendingPingStopwatch.ElapsedMilliseconds);
+                RTT = (short)Math.Max(1, Peer.CurrentTime - pendingPingSendTime);
 
             ResetTimeout();
         }
