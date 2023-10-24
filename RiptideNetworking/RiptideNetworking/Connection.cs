@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -74,12 +74,16 @@ namespace Riptide
         private bool _canTimeout;
         /// <summary>The connection's metrics.</summary>
         public readonly ConnectionMetrics Metrics;
-        /// <summary>The maximum acceptable average number of send attempts it takes to deliver a reliable message, above which the connection will be closed.</summary>
+        /// <summary>The maximum acceptable average number of send attempts it takes to deliver a reliable message. The connection will be closed if this is exceeded more than <see cref="AvgSendAttemptsResilience"/> times in a row.</summary>
         public int MaxAvgSendAttempts;
+        /// <summary>How many consecutive times <see cref="MaxAvgSendAttempts"/> can be exceeded before triggering a disconnect.</summary>
+        public int AvgSendAttemptsResilience;
         /// <summary>The absolute maximum number of times a reliable message may be sent. A single message reaching this threshold will cause a disconnection.</summary>
         public int MaxSendAttempts;
-        /// <summary>The maximum acceptable loss rate of notify messages, above which the connection will be closed.</summary>
+        /// <summary>The maximum acceptable loss rate of notify messages. The connection will be closed if this is exceeded more than <see cref="NotifyLossResilience"/> times in a row.</summary>
         public float MaxNotifyLoss;
+        /// <summary>How many consecutive times <see cref="MaxNotifyLoss"/> can be exceeded before triggering a disconnect.</summary>
+        public int NotifyLossResilience;
 
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; private set; }
@@ -96,6 +100,10 @@ namespace Riptide
         private readonly Dictionary<ushort, PendingMessage> pendingMessages = new Dictionary<ushort, PendingMessage>();
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
+        /// <summary>The number of consecutive times that the <see cref="MaxAvgSendAttempts"/> threshold was exceeded.</summary>
+        private int sendAttemptsViolations;
+        /// <summary>The number of consecutive times that the <see cref="MaxNotifyLoss"/> threshold was exceeded.</summary>
+        private int lossRateViolations;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
         private long lastHeartbeat;
         /// <summary>The ID of the last ping that was sent.</summary>
@@ -115,8 +123,10 @@ namespace Riptide
             _canTimeout = true;
 
             MaxAvgSendAttempts = 5;
+            AvgSendAttemptsResilience = 64;
             MaxSendAttempts = 15;
             MaxNotifyLoss = 0.05f; // 5%
+            NotifyLossResilience = 64;
         }
 
         /// <summary>Initializes connection data.</summary>
@@ -230,8 +240,7 @@ namespace Riptide
             {
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
-                if (Metrics.RollingReliableSends.Mean > MaxAvgSendAttempts)
-                    Peer.Disconnect(this, DisconnectReason.PoorConnection);
+                UpdateSendAttemptsViolations();
             }
         }
 
@@ -243,6 +252,32 @@ namespace Riptide
                 state = ConnectionState.Pending;
                 ResetTimeout();
             }
+        }
+
+        /// <summary>Checks the average send attempts (of reliable messages) and updates <see cref="sendAttemptsViolations"/> accordingly.</summary>
+        private void UpdateSendAttemptsViolations()
+        {
+            if (Metrics.RollingReliableSends.Mean > MaxAvgSendAttempts)
+            {
+                sendAttemptsViolations++;
+                if (sendAttemptsViolations >= AvgSendAttemptsResilience)
+                    Peer.Disconnect(this, DisconnectReason.PoorConnection);
+            }
+            else
+                sendAttemptsViolations = 0;
+        }
+
+        /// <summary>Checks the loss rate (of notify messages) and updates <see cref="lossRateViolations"/> accordingly.</summary>
+        private void UpdateLossViolations()
+        {
+            if (Metrics.RollingNotifyLossRate > MaxNotifyLoss)
+            {
+                lossRateViolations++;
+                if (lossRateViolations >= NotifyLossResilience)
+                    Peer.Disconnect(this, DisconnectReason.PoorConnection);
+            }
+            else
+                lossRateViolations = 0;
         }
 
         #region Messages
@@ -379,7 +414,7 @@ namespace Riptide
         {
             Metrics.DeliveredNotify();
             NotifyDelivered?.Invoke(sequenceId);
-            // Don't bother checking the loss rate because if we delivered a message, the loss rate will have decreased
+            UpdateLossViolations();
         }
         
         /// <summary>Invokes the <see cref="NotifyLost"/> event.</summary>
@@ -388,8 +423,7 @@ namespace Riptide
         {
             Metrics.LostNotify();
             NotifyLost?.Invoke(sequenceId);
-            if (Metrics.RollingNotifyLossRate > MaxNotifyLoss)
-                Peer.Disconnect(this, DisconnectReason.PoorConnection);
+            UpdateLossViolations();
         }
         #endregion
 

@@ -106,7 +106,7 @@ namespace Riptide
         {
             if (sendAttempts >= connection.MaxSendAttempts)
             {
-                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)data[0]} message after {connection.MaxSendAttempts} attempts!");
+                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)data[0]} message after {sendAttempts} attempts! Disconnecting...");
                 connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection);
                 return;
             }
