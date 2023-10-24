@@ -17,7 +17,7 @@ There are a number of ways to install Riptide, depending on what you're working 
 If you have errors in your project after installation or intellisense isn't working for Riptide's classes, go to Edit > Preferences > External Tools, make sure the box next to *Git packages* is checked, and then click *Regenerate project files*.
 
 > [!TIP]
-> If you'd like to use the latest in-development version of Riptide (from the dev branch) instead of an official release, enter `https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#unity-package` in the git URL field. Keep in mind that doing this will get you the latest state of the repository, **which may include bugs and incomplete features!**
+> If you'd like to use the latest in-development version of Riptide instead of an official release, enter `https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#unity-package` in the git URL field. Keep in mind that doing this will get you the latest state of the repository, **which may include bugs and incomplete features!**
 
 ### Option 2: DLL File
 
