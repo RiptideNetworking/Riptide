@@ -20,7 +20,7 @@ namespace Riptide.Demos.ConsoleServer
         private static void Main()
         {
             Console.Title = "Server";
-            
+
             RiptideLogger.Initialize(Console.WriteLine, true);
             isRunning = true;
 
@@ -66,12 +66,12 @@ namespace Riptide.Demos.ConsoleServer
             server.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest).AddBool(isRoundTripTest).AddInt(testIdAmount), fromClientId);
         }
 
-        private static void SendTestMessage(ushort fromClientId, int reliableTestId)
+        private static void SendTestMessage(ushort toClientId, int reliableTestId)
         {
             Message message = Message.Create(MessageSendMode.Reliable, MessageId.TestMessage);
             message.AddInt(reliableTestId);
 
-            server.Send(message, fromClientId);
+            server.Send(message, toClientId);
         }
 
         [MessageHandler((ushort)MessageId.TestMessage)]
