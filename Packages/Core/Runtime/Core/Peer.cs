@@ -48,7 +48,9 @@ namespace Riptide
         /// <summary>The server shut down.</summary>
         ServerStopped,
         /// <summary>The disconnection was initiated by the client.</summary>
-        Disconnected
+        Disconnected,
+        /// <summary>The connection's loss and/or resend rates exceeded the maximum acceptable thresholds, or a reliably sent message could not be delivered.</summary>
+        PoorConnection
     }
 
     /// <summary>Provides base functionality for <see cref="Server"/> and <see cref="Client"/>.</summary>
@@ -195,6 +197,11 @@ namespace Riptide
         /// <param name="header">The message's header type.</param>
         /// <param name="connection">The connection which the message was received on.</param>
         protected abstract void Handle(Message message, MessageHeader header, Connection connection);
+
+        /// <summary>Disconnects the connection in question. Necessary for connections to be able to initiate disconnections (like in the case of poor connection quality).</summary>
+        /// <param name="connection">The connection to disconnect.</param>
+        /// <param name="reason">The reason why the connection is being disconnected.</param>
+        internal abstract void Disconnect(Connection connection, DisconnectReason reason);
 
         /// <summary>Increases <see cref="ActiveCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
         protected static void IncreaseActiveCount()

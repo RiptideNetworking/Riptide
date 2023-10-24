@@ -314,6 +314,13 @@ namespace Riptide
             LocalDisconnect(DisconnectReason.Disconnected);
         }
 
+        /// <inheritdoc/>
+        internal override void Disconnect(Connection connection, DisconnectReason reason)
+        {
+            if (connection.IsConnected)
+                LocalDisconnect(reason);
+        }
+
         /// <summary>Cleans up the local side of the connection.</summary>
         /// <param name="reason">The reason why the client has disconnected.</param>
         /// <param name="message">The disconnection or rejection message, potentially containing extra data to be handled externally.</param>

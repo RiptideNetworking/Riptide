@@ -22,6 +22,8 @@ namespace Riptide.Utils
         private const string DCServerStopped = "Server stopped";
         /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.Disconnected"/>.</summary>
         private const string DCDisconnected = "Disconnected";
+        /// <summary>The text to log when disconnected due to <see cref="DisconnectReason.PoorConnection"/>.</summary>
+        private const string DCPoorConnection = "Poor connection";
         /// <summary>The text to log when disconnected or rejected due to an unknown reason.</summary>
         private const string UnknownReason = "Unknown reason";
         /// <summary>The text to log when the connection failed due to <see cref="RejectReason.NoConnection"/>.</summary>
@@ -80,6 +82,8 @@ namespace Riptide.Utils
                     return DCServerStopped;
                 case DisconnectReason.Disconnected:
                     return DCDisconnected;
+                case DisconnectReason.PoorConnection:
+                    return DCPoorConnection;
                 default:
                     return $"{UnknownReason} '{forReason}'";
             }

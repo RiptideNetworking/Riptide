@@ -79,9 +79,11 @@ namespace Riptide.Utils
         public ConnectionMetrics()
         {
             Reset();
-            RollingReliableSends = new RollingStat(64);
+            RollingNotifyDelivered = 0;
+            RollingNotifyLost = 0;
             notifyLossTracker = 0;
             notifyBufferCount = 0;
+            RollingReliableSends = new RollingStat(64);
         }
 
         /// <summary>Resets all non-rolling metrics to 0.</summary>

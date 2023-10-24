@@ -15,7 +15,7 @@ namespace Riptide.Utils
     }
 
     /// <summary>Resends a <see cref="PendingMessage"/> when invoked.</summary>
-    internal class PendingMessageResendEvent : DelayedEvent
+    internal class ResendEvent : DelayedEvent
     {
         /// <summary>The message to resend.</summary>
         private readonly PendingMessage message;
@@ -25,7 +25,7 @@ namespace Riptide.Utils
         /// <summary>Initializes the event.</summary>
         /// <param name="message">The message to resend.</param>
         /// <param name="initiatedAtTime">The time at which the resend event was queued.</param>
-        public PendingMessageResendEvent(PendingMessage message, long initiatedAtTime)
+        public ResendEvent(PendingMessage message, long initiatedAtTime)
         {
             this.message = message;
             this.initiatedAtTime = initiatedAtTime;
