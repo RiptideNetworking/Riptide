@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -43,19 +43,13 @@ namespace Riptide
             set
             {
                 if (Peer.ActiveCount > 0)
-                    RiptideLogger.Log(LogType.Error, $"Changing the max message size is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
-                else
-                {
-                    if (value < 0)
-                    {
-                        RiptideLogger.Log(LogType.Error, $"The max payload size cannot be negative! Setting it to 0 instead of the given value ({value}).");
-                        MaxSize = MaxHeaderSize;
-                    }
-                    else
-                        MaxSize = MaxHeaderSize + value;
+                    throw new InvalidOperationException($"Changing the '{nameof(MaxPayloadSize)}' is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
+                
+                if (value < 0)
+                    throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
-                    TrimPool(); // When ActiveSocketCount is 0, this clears the pool
-                }
+                MaxSize = MaxHeaderSize + value;
+                TrimPool(); // When ActiveSocketCount is 0, this clears the pool
             }
         }
 
