@@ -9,12 +9,20 @@ using System.Runtime.InteropServices;
 
 namespace Riptide.Utils
 {
-    /// <summary>Provides functionality for converting bytes to various value types and vice versa.</summary>
+    /// <summary>Provides functionality for converting bits and bytes to various value types and vice versa.</summary>
     public class Converter
     {
         #region Byte/SByte
+        /// <summary>Converts <paramref name="value"/> to 8 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="sbyte"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void SByteToBits(sbyte value, byte[] array, int startBit) => ByteToBits((byte)value, array, startBit);
+        /// <summary>Converts <paramref name="value"/> to 8 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="byte"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ByteToBits(byte value, byte[] array, int startBit)
         {
@@ -29,8 +37,16 @@ namespace Riptide.Utils
             }
         }
 
+        /// <summary>Converts the 8 bits at <paramref name="startBit"/> in <paramref name="array"/> to an <see cref="sbyte"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="sbyte"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static sbyte SByteFromBits(byte[] array, int startBit) => (sbyte)ByteFromBits(array, startBit);
+        /// <summary>Converts the 8 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="byte"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="byte"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static byte ByteFromBits(byte[] array, int startBit)
         {
@@ -46,6 +62,10 @@ namespace Riptide.Utils
         #endregion
 
         #region Bool
+        /// <summary>Converts <paramref name="value"/> to a bit and writes it into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="bool"/> to convert.</param>
+        /// <param name="array">The array to write the bit into.</param>
+        /// <param name="startBit">The position in the array at which to write the bit.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void BoolToBit(bool value, byte[] array, int startBit)
         {
@@ -58,6 +78,10 @@ namespace Riptide.Utils
                 array[pos] |= (byte)(1 << bit);
         }
 
+        /// <summary>Converts the bit at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="bool"/>.</summary>
+        /// <param name="array">The array to convert the bit from.</param>
+        /// <param name="startBit">The position in the array from which to read the bit.</param>
+        /// <returns>The converted <see cref="bool"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool BoolFromBit(byte[] array, int startBit)
         {
@@ -110,8 +134,16 @@ namespace Riptide.Utils
 #endif
         }
 
+        /// <summary>Converts <paramref name="value"/> to 16 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="short"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ShortToBits(short value, byte[] array, int startBit) => UShortToBits((ushort)value, array, startBit);
+        /// <summary>Converts <paramref name="value"/> to 16 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="ushort"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void UShortToBits(ushort value, byte[] array, int startBit)
         {
@@ -130,8 +162,16 @@ namespace Riptide.Utils
             }
         }
 
+        /// <summary>Converts the 16 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="short"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="short"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static short ShortFromBits(byte[] array, int startBit) => (short)UShortFromBits(array, startBit);
+        /// <summary>Converts the 16 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="ushort"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="ushort"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ushort UShortFromBits(byte[] array, int startBit)
         {
@@ -193,8 +233,16 @@ namespace Riptide.Utils
 #endif
         }
 
+        /// <summary>Converts <paramref name="value"/> to 32 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="int"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void IntToBits(int value, byte[] array, int startBit) => UIntToBits((uint)value, array, startBit);
+        /// <summary>Converts <paramref name="value"/> to 32 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="uint"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void UIntToBits(uint value, byte[] array, int startBit)
         {
@@ -217,8 +265,16 @@ namespace Riptide.Utils
             }
         }
 
+        /// <summary>Converts the 32 bits at <paramref name="startBit"/> in <paramref name="array"/> to an <see cref="int"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="int"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static int IntFromBits(byte[] array, int startBit) => (int)UIntFromBits(array, startBit);
+        /// <summary>Converts the 32 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="uint"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="uint"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static uint UIntFromBits(byte[] array, int startBit)
         {
@@ -293,8 +349,16 @@ namespace Riptide.Utils
             return BitConverter.ToUInt64(array, startIndex);
         }
 
+        /// <summary>Converts <paramref name="value"/> to 64 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="long"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LongToBits(long value, byte[] array, int startBit) => ULongToBits((ulong)value, array, startBit);
+        /// <summary>Converts <paramref name="value"/> to 64 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="ulong"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ULongToBits(ulong value, byte[] array, int startBit)
         {
@@ -325,8 +389,16 @@ namespace Riptide.Utils
             }
         }
 
+        /// <summary>Converts the 64 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="long"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="long"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long LongFromBits(byte[] array, int startBit) => (long)ULongFromBits(array, startBit);
+        /// <summary>Converts the 64 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="ulong"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="ulong"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ulong ULongFromBits(byte[] array, int startBit)
         {
@@ -376,13 +448,21 @@ namespace Riptide.Utils
             return new FloatConverter { Byte0 = array[startIndex], Byte1 = array[startIndex + 1], Byte2 = array[startIndex + 2], Byte3 = array[startIndex + 3] }.FloatValue;
 #endif
         }
-        
+
+        /// <summary>Converts <paramref name="value"/> to 32 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="float"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void FloatToBits(float value, byte[] array, int startBit)
         {
             UIntToBits(new FloatConverter { FloatValue = value }.UIntValue, array, startBit);
         }
 
+        /// <summary>Converts the 32 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="float"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="float"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static float FloatFromBits(byte[] array, int startBit)
         {
@@ -433,12 +513,20 @@ namespace Riptide.Utils
             return BitConverter.ToDouble(array, startIndex);
         }
 
+        /// <summary>Converts <paramref name="value"/> to 64 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
+        /// <param name="value">The <see cref="double"/> to convert.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The position in the array at which to write the bits.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DoubleToBits(double value, byte[] array, int startBit)
         {
             ULongToBits(new DoubleConverter { DoubleValue = value }.ULongValue, array, startBit);
         }
 
+        /// <summary>Converts the 64 bits at <paramref name="startBit"/> in <paramref name="array"/> to a <see cref="double"/>.</summary>
+        /// <param name="array">The array to convert the bits from.</param>
+        /// <param name="startBit">The position in the array from which to read the bits.</param>
+        /// <returns>The converted <see cref="double"/>.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static double DoubleFromBits(byte[] array, int startBit)
         {

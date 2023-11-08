@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -23,9 +23,13 @@ namespace Riptide
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
         internal const int MinUnreliableBytes = 1;
+        /// <summary>The minimum number of bytes contained in a reliable message.</summary>
         internal const int MinReliableBytes = 3;
+        /// <summary>The minimum number of bytes contained in a notify message.</summary>
         internal const int MinNotifyBytes = 6;
+        /// <summary>The number of bits in a byte.</summary>
         internal const int BitsPerByte = 8;
         /// <summary>The header size for unreliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>1 byte - header.</remarks>
@@ -57,6 +61,7 @@ namespace Riptide
                 TrimPool(); // When ActiveSocketCount is 0, this clears the pool
             }
         }
+        /// <summary>The maximum number of bits a message can contain.</summary>
         private static int maxBitCount = MaxSize * BitsPerByte;
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
@@ -67,10 +72,15 @@ namespace Riptide
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
+        /// <summary>How many bits have been retrieved from the message.</summary>
         public int ReadBits => readBit;
+        /// <summary>How many unretrieved bits remain in the message.</summary>
         public int UnreadBits => writeBit - readBit;
+        /// <summary>How many bits have been added to the message.</summary>
         public int WrittenBits => writeBit;
+        /// <summary>How many more bits can be added to the message.</summary>
         public int UnwrittenBits => maxBitCount - writeBit;
+        /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
         public int BytesInUse => writeBit / BitsPerByte + (writeBit % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many bytes have been retrieved from the message.</summary>
         [Obsolete("Use ReadBits instead.")] public int ReadLength => ReadBits / BitsPerByte + (ReadBits % BitsPerByte == 0 ? 0 : 1);
@@ -213,7 +223,7 @@ namespace Riptide
             return this;
         }
 
-        /// <summary>Sets the message's header byte to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
+        /// <summary>Sets the message's header bits to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
         /// <param name="header">The header to use for this message.</param>
         private void SetHeader(MessageHeader header)
         {
@@ -1357,7 +1367,7 @@ namespace Riptide
         /// <summary>The maximum number of elements an array can contain where the length still fits into two byte2.</summary>
         private const int TwoByteLengthThreshold = 0b_0111_1111_1111_1111;
 
-        /// <summary>Adds the length of an array to the message, using either 1 or 2 bytes depending on how large the array is. Does not support arrays with more than 32,767 elements.</summary>
+        /// <summary>Adds the length of an array to the message, using either 8 or 16 bits depending on how large the array is. Does not support arrays with more than 32,767 elements.</summary>
         /// <param name="length">The length of the array.</param>
         private void AddArrayLength(int length)
         {
@@ -1383,7 +1393,7 @@ namespace Riptide
             }
         }
 
-        /// <summary>Retrieves the length of an array from the message, using either 1 or 2 bytes depending on how large the array is.</summary>
+        /// <summary>Retrieves the length of an array from the message, using either 8 or 16 bits depending on how large the array is.</summary>
         /// <returns>The length of the array.</returns>
         private int GetArrayLength()
         {
