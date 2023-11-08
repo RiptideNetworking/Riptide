@@ -26,8 +26,8 @@ namespace Riptide
         private Connection connection;
         /// <summary>The contents of the message.</summary>
         private readonly byte[] data;
-        /// <summary>The length in bytes of the data that has been written to the message.</summary>
-        private int writtenLength;
+        /// <summary>The length in bytes of the message.</summary>
+        private int size;
         /// <summary>How many send attempts have been made so far.</summary>
         private byte sendAttempts;
         /// <summary>Whether the pending message has been cleared or not.</summary>
@@ -51,9 +51,9 @@ namespace Riptide
             pendingMessage.connection = connection;
 
             pendingMessage.data[0] = message.Bytes[0]; // Copy message header
-            Converter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
-            Array.Copy(message.Bytes, 3, pendingMessage.data, 3, message.WrittenLength - 3); // Copy the rest of the message
-            pendingMessage.writtenLength = message.WrittenLength;
+            Converter.UShortToBits(sequenceId, pendingMessage.data, 8); // Insert sequence ID
+            pendingMessage.size = message.BytesInUse;
+            Array.Copy(message.Bytes, 3, pendingMessage.data, 3, pendingMessage.size - 3); // Copy the rest of the message
 
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
@@ -111,8 +111,8 @@ namespace Riptide
                 return;
             }
 
-            connection.Send(data, writtenLength);
-            connection.Metrics.SentReliable(writtenLength);
+            connection.Send(data, size);
+            connection.Metrics.SentReliable(size);
 
             LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;

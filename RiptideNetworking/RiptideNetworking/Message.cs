@@ -23,23 +23,27 @@ namespace Riptide
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
+        internal const int MinUnreliableBytes = 1;
+        internal const int MinReliableBytes = 3;
+        internal const int MinNotifyBytes = 6;
+        internal const int BitsPerByte = 8;
         /// <summary>The header size for unreliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>1 byte - header.</remarks>
-        internal const int UnreliableHeaderSize = 1;
+        internal const int UnreliableHeaderBits = 1 * BitsPerByte;
         /// <summary>The header size for reliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>1 byte - header, 2 bytes - sequence ID.</remarks>
-        internal const int ReliableHeaderSize = 3;
+        internal const int ReliableHeaderBits = 3 * BitsPerByte;
         /// <summary>The header size for notify messages.</summary>
         /// <remarks>1 byte - header, 3 bytes - ack, 2 bytes - sequence ID.</remarks>
-        internal const int NotifyHeaderSize = 6;
-        /// <summary>The maximum number of bytes required for a message's header.</summary>
-        public const int MaxHeaderSize = NotifyHeaderSize;
+        internal const int NotifyHeaderBits = 6 * BitsPerByte;
+        /// <summary>The maximum number of bits required for a message's header.</summary>
+        public const int MaxHeaderSize = NotifyHeaderBits;
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
-        public static int MaxSize { get; private set; } = MaxHeaderSize + 1225;
+        public static int MaxSize { get; private set; } = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + 1225;
         /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxPayloadSize
         {
-            get => MaxSize - MaxHeaderSize;
+            get => MaxSize - (MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1));
             set
             {
                 if (Peer.ActiveCount > 0)
@@ -48,10 +52,12 @@ namespace Riptide
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
-                MaxSize = MaxHeaderSize + value;
+                MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + value;
+                maxBitCount = MaxSize * BitsPerByte;
                 TrimPool(); // When ActiveSocketCount is 0, this clears the pool
             }
         }
+        private static int maxBitCount = MaxSize * BitsPerByte;
 
         /// <summary>How many messages to add to the pool for each <see cref="Server"/> or <see cref="Client"/> instance that is started.</summary>
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
@@ -61,21 +67,26 @@ namespace Riptide
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
+        public int ReadBits => readBit;
+        public int UnreadBits => writeBit - readBit;
+        public int WrittenBits => writeBit;
+        public int UnwrittenBits => maxBitCount - writeBit;
+        public int BytesInUse => writeBit / BitsPerByte + (writeBit % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many bytes have been retrieved from the message.</summary>
-        public int ReadLength => readPos;
+        [Obsolete("Use ReadBits instead.")] public int ReadLength => ReadBits / BitsPerByte + (ReadBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many more bytes can be retrieved from the message.</summary>
-        public int UnreadLength => writePos - readPos;
+        [Obsolete("Use UnreadBits instead.")] public int UnreadLength => UnreadBits / BitsPerByte + (UnreadBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many bytes have been added to the message.</summary>
-        public int WrittenLength => writePos;
+        [Obsolete("Use WrittenBits instead.")] public int WrittenLength => WrittenBits / BitsPerByte + (WrittenBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many more bytes can be added to the message.</summary>
-        public int UnwrittenLength => Bytes.Length - writePos;
+        [Obsolete("Use UnwrittenBits instead.")] public int UnwrittenLength => UnwrittenBits / BitsPerByte + (UnwrittenBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The message's data.</summary>
         internal byte[] Bytes { get; private set; }
 
-        /// <summary>The position in the byte array that the next bytes will be written to.</summary>
-        private int writePos;
-        /// <summary>The position in the byte array that the next bytes will be read from.</summary>
-        private int readPos;
+        /// <summary>The next bit to be read.</summary>
+        private int readBit;
+        /// <summary>The next bit to be written.</summary>
+        private int writeBit;
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
@@ -179,8 +190,8 @@ namespace Riptide
         /// <returns>The message, ready to be used.</returns>
         private Message PrepareForUse()
         {
-            readPos = 0;
-            writePos = 0;
+            readBit = 0;
+            writeBit = 0;
             return this;
         }
         /// <summary>Prepares the message to be used for sending.</summary>
@@ -198,7 +209,7 @@ namespace Riptide
         private Message PrepareForUse(MessageHeader header, int contentLength)
         {
             SetHeader(header);
-            writePos = contentLength;
+            writeBit = contentLength * BitsPerByte;
             return this;
         }
 
@@ -209,20 +220,20 @@ namespace Riptide
             Bytes[0] = (byte)header;
             if (header == MessageHeader.Notify)
             {
-                readPos = NotifyHeaderSize;
-                writePos = NotifyHeaderSize;
+                readBit = NotifyHeaderBits;
+                writeBit = NotifyHeaderBits;
                 SendMode = MessageSendMode.Unreliable; // Technically it's different but notify messages *are* still unreliable
             }
             else if (header >= MessageHeader.Reliable)
             {
-                readPos = ReliableHeaderSize;
-                writePos = ReliableHeaderSize;
+                readBit = ReliableHeaderBits;
+                writeBit = ReliableHeaderBits;
                 SendMode = MessageSendMode.Reliable;
             }
             else
             {
-                readPos = UnreliableHeaderSize;
-                writePos = UnreliableHeaderSize;
+                readBit = UnreliableHeaderBits;
+                writeBit = UnreliableHeaderBits;
                 SendMode = MessageSendMode.Unreliable;
             }
         }
@@ -230,54 +241,60 @@ namespace Riptide
 
         #region Add & Retrieve Data
         #region Byte & SByte
-        /// <summary>Adds a single <see cref="byte"/> to the message.</summary>
+        /// <summary>Adds a <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
         public Message AddByte(byte value)
         {
-            if (UnwrittenLength < 1)
-                throw new InsufficientCapacityException(this, ByteName, 1);
+            if (UnwrittenBits < BitsPerByte)
+                throw new InsufficientCapacityException(this, ByteName, BitsPerByte);
 
-            Bytes[writePos++] = value;
+            Converter.ByteToBits(value, Bytes, writeBit);
+            writeBit += BitsPerByte;
             return this;
         }
 
-        /// <summary>Adds a single <see cref="sbyte"/> to the message.</summary>
+        /// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
         /// <param name="value">The <see cref="sbyte"/> to add.</param>
         /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
         public Message AddSByte(sbyte value)
         {
-            if (UnwrittenLength < 1)
-                throw new InsufficientCapacityException(this, SByteName, 1);
+            if (UnwrittenBits < BitsPerByte)
+                throw new InsufficientCapacityException(this, SByteName, BitsPerByte);
 
-            Bytes[writePos++] = (byte)value;
+            Converter.SByteToBits(value, Bytes, writeBit);
+            writeBit += BitsPerByte;
             return this;
         }
 
-        /// <summary>Retrieves a single <see cref="byte"/> from the message.</summary>
+        /// <summary>Retrieves a <see cref="byte"/> from the message.</summary>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
         public byte GetByte()
         {
-            if (UnreadLength < 1)
+            if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName));
                 return 0;
             }
-            
-            return Bytes[readPos++]; // Get the byte at readPos' position
+
+            byte value = Converter.ByteFromBits(Bytes, readBit);
+            readBit += BitsPerByte;
+            return value;
         }
 
-        /// <summary>Retrieves a single <see cref="sbyte"/> from the message.</summary>
+        /// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
         public sbyte GetSByte()
         {
-            if (UnreadLength < 1)
+            if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(SByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName));
                 return 0;
             }
 
-            return (sbyte)Bytes[readPos++]; // Get the sbyte at readPos' position
+            sbyte value = Converter.SByteFromBits(Bytes, readBit);
+            readBit += BitsPerByte;
+            return value;
         }
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
@@ -289,11 +306,23 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length)
-                throw new InsufficientCapacityException(this, array.Length, ByteName, 1);
+            if (UnwrittenBits < array.Length * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, ByteName, BitsPerByte);
 
-            Array.Copy(array, 0, Bytes, writePos, array.Length);
-            writePos += array.Length;
+            if (writeBit % BitsPerByte == 0)
+            {
+                Array.Copy(array, 0, Bytes, writeBit / BitsPerByte, array.Length);
+                writeBit += array.Length * BitsPerByte;
+            }
+            else
+            {
+                for (int i = 0; i < array.Length; i++)
+                {
+                    Converter.ByteToBits(array[i], Bytes, writeBit);
+                    writeBit += BitsPerByte;
+                }
+            }
+            
             return this;
         }
 
@@ -306,11 +335,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length)
-                throw new InsufficientCapacityException(this, array.Length, SByteName, 1);
+            if (UnwrittenBits < array.Length * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, SByteName, BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                Bytes[writePos++] = (byte)array[i];
+            {
+                Converter.SByteToBits(array[i], Bytes, writeBit);
+                writeBit += BitsPerByte;
+            }
             
             return this;
         }
@@ -369,14 +401,25 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount)
+            if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ByteName));
-                amount = UnreadLength;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ByteName));
+                amount = UnreadBits / BitsPerByte;
             }
 
-            Array.Copy(Bytes, readPos, intoArray, startIndex, amount); // Copy the bytes at readPos' position to the array that will be returned
-            readPos += amount;
+            if (readBit % BitsPerByte == 0)
+            {
+                Array.Copy(Bytes, readBit / BitsPerByte, intoArray, startIndex, amount);
+                readBit += amount * BitsPerByte;
+            }
+            else
+            {
+                for (int i = 0; i < amount; i++)
+                {
+                    intoArray[startIndex + i] = Converter.ByteFromBits(Bytes, readBit);
+                    readBit += BitsPerByte;
+                }
+            }
         }
 
         /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
@@ -385,14 +428,17 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount)
+            if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, SByteName));
-                amount = UnreadLength;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, SByteName));
+                amount = UnreadBits / BitsPerByte;
             }
 
             for (int i = 0; i < amount; i++)
-                intoArray[startIndex + i] = (sbyte)Bytes[readPos++];
+            {
+                intoArray[startIndex + i] = Converter.SByteFromBits(Bytes, readBit);
+                readBit += BitsPerByte;
+            }
         }
         #endregion
 
@@ -402,10 +448,10 @@ namespace Riptide
         /// <returns>The message that the <see cref="bool"/> was added to.</returns>
         public Message AddBool(bool value)
         {
-            if (UnwrittenLength < sizeof(bool))
-                throw new InsufficientCapacityException(this, BoolName, sizeof(bool));
+            if (UnwrittenBits < 1)
+                throw new InsufficientCapacityException(this, BoolName, 1);
 
-            Bytes[writePos++] = (byte)(value ? 1 : 0);
+            Converter.BoolToBit(value, Bytes, writeBit++);
             return this;
         }
 
@@ -413,13 +459,13 @@ namespace Riptide
         /// <returns>The <see cref="bool"/> that was retrieved.</returns>
         public bool GetBool()
         {
-            if (UnreadLength < sizeof(bool))
+            if (UnreadBits < 1)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(BoolName, "false"));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, "false"));
                 return false;
             }
-            
-            return Bytes[readPos++] == 1; // Convert the byte at readPos' position to a bool
+
+            return Converter.BoolFromBit(Bytes, readBit++);
         }
 
         /// <summary>Adds a <see cref="bool"/> array to the message.</summary>
@@ -431,26 +477,12 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            int byteLength = array.Length / 8 + (array.Length % 8 == 0 ? 0 : 1);
-            if (UnwrittenLength < byteLength)
-                throw new InsufficientCapacityException(this, array.Length, BoolName, sizeof(bool), byteLength);
+            if (UnwrittenBits < array.Length)
+                throw new InsufficientCapacityException(this, array.Length, BoolName, 1);
 
-            // Pack 8 bools into each byte
-            bool isLengthMultipleOf8 = array.Length % 8 == 0;
-            for (int i = 0; i < byteLength; i++)
-            {
-                byte nextByte = 0;
-                int bitsToWrite = 8;
-                if ((i + 1) == byteLength && !isLengthMultipleOf8)
-                    bitsToWrite = array.Length % 8;
+            for (int i = 0; i < array.Length; i++)
+                Converter.BoolToBit(array[i], Bytes, writeBit++);
 
-                for (int bit = 0; bit < bitsToWrite; bit++)
-                    nextByte |= (byte)((array[i * 8 + bit] ? 1 : 0) << bit);
-
-                Bytes[writePos + i] = nextByte;
-            }
-
-            writePos += byteLength;
             return this;
         }
 
@@ -463,15 +495,7 @@ namespace Riptide
         public bool[] GetBools(int amount)
         {
             bool[] array = new bool[amount];
-
-            int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
-            if (UnreadLength < byteAmount)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(array.Length, BoolName));
-                byteAmount = UnreadLength;
-            }
-
-            ReadBools(byteAmount, array);
+            ReadBools(amount, array);
             return array;
         }
         /// <summary>Populates a <see cref="bool"/> array with bools retrieved from the message.</summary>
@@ -483,32 +507,23 @@ namespace Riptide
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, BoolName));
 
-            int byteAmount = amount / 8 + (amount % 8 == 0 ? 0 : 1);
-            if (UnreadLength < byteAmount)
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, BoolName));
-
-            ReadBools(byteAmount, intoArray, startIndex);
+            ReadBools(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of bools from the message and writes them into the given array.</summary>
-        /// <param name="byteAmount">The number of bytes the bools are being stored in.</param>
+        /// <param name="amount">The amount of bools to read.</param>
         /// <param name="intoArray">The array to write the bools into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadBools(int byteAmount, bool[] intoArray, int startIndex = 0)
+        private void ReadBools(int amount, bool[] intoArray, int startIndex = 0)
         {
-            // Read 8 bools from each byte
-            bool isLengthMultipleOf8 = intoArray.Length % 8 == 0;
-            for (int i = 0; i < byteAmount; i++)
+            if (UnreadBits < amount)
             {
-                int bitsToRead = 8;
-                if ((i + 1) == byteAmount && !isLengthMultipleOf8)
-                    bitsToRead = intoArray.Length % 8;
-
-                for (int bit = 0; bit < bitsToRead; bit++)
-                    intoArray[startIndex + (i * 8 + bit)] = (Bytes[readPos + i] >> bit & 1) == 1;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, BoolName));
+                amount = UnreadBits;
             }
-
-            readPos += byteAmount;
+            
+            for (int i = 0; i < amount; i++)
+                intoArray[startIndex + i] = Converter.BoolFromBit(Bytes, readBit++);
         }
         #endregion
 
@@ -518,11 +533,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
         public Message AddShort(short value)
         {
-            if (UnwrittenLength < sizeof(short))
-                throw new InsufficientCapacityException(this, ShortName, sizeof(short));
+            if (UnwrittenBits < sizeof(short) * BitsPerByte)
+                throw new InsufficientCapacityException(this, ShortName, sizeof(short) * BitsPerByte);
 
-            Converter.FromShort(value, Bytes, writePos);
-            writePos += sizeof(short);
+            Converter.ShortToBits(value, Bytes, writeBit);
+            writeBit += sizeof(short) * BitsPerByte;
             return this;
         }
 
@@ -531,11 +546,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
         public Message AddUShort(ushort value)
         {
-            if (UnwrittenLength < sizeof(ushort))
-                throw new InsufficientCapacityException(this, UShortName, sizeof(ushort));
+            if (UnwrittenBits < sizeof(ushort) * BitsPerByte)
+                throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
 
-            Converter.FromUShort(value, Bytes, writePos);
-            writePos += sizeof(ushort);
+            Converter.UShortToBits(value, Bytes, writeBit);
+            writeBit += sizeof(ushort) * BitsPerByte;
             return this;
         }
 
@@ -543,14 +558,14 @@ namespace Riptide
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
         public short GetShort()
         {
-            if (UnreadLength < sizeof(short))
+            if (UnreadBits < sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName));
                 return 0;
             }
 
-            short value = Converter.ToShort(Bytes, readPos);
-            readPos += sizeof(short);
+            short value = Converter.ShortFromBits(Bytes, readBit);
+            readBit += sizeof(short) * BitsPerByte;
             return value;
         }
 
@@ -558,14 +573,14 @@ namespace Riptide
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
         public ushort GetUShort()
         {
-            if (UnreadLength < sizeof(ushort))
+            if (UnreadBits < sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName));
                 return 0;
             }
 
-            ushort value = Converter.ToUShort(Bytes, readPos);
-            readPos += sizeof(ushort);
+            ushort value = Converter.UShortFromBits(Bytes, readBit);
+            readBit += sizeof(ushort) * BitsPerByte;
             return value;
         }
         
@@ -578,11 +593,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(short))
-                throw new InsufficientCapacityException(this, array.Length, ShortName, sizeof(short));
+            if (UnwrittenBits < array.Length * sizeof(short) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, ShortName, sizeof(short) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddShort(array[i]);
+            {
+                array[i] = Converter.ShortFromBits(Bytes, readBit);
+                readBit += sizeof(short) * BitsPerByte;
+            }
 
             return this;
         }
@@ -596,11 +614,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(ushort))
-                throw new InsufficientCapacityException(this, array.Length, UShortName, sizeof(ushort));
+            if (UnwrittenBits < array.Length * sizeof(ushort) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, UShortName, sizeof(ushort) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddUShort(array[i]);
+            {
+                array[i] = Converter.UShortFromBits(Bytes, readBit);
+                readBit += sizeof(ushort) * BitsPerByte;
+            }
 
             return this;
         }
@@ -659,16 +680,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadShorts(int amount, short[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(short))
+            if (UnreadBits < amount * sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ShortName));
-                amount = UnreadLength / sizeof(short);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ShortName));
+                amount = UnreadBits / (sizeof(short) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToShort(Bytes, readPos);
-                readPos += sizeof(short);
+                intoArray[startIndex + i] = Converter.ShortFromBits(Bytes, readBit);
+                readBit += sizeof(short) * BitsPerByte;
             }
         }
 
@@ -678,16 +699,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadUShorts(int amount, ushort[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(ushort))
+            if (UnreadBits < amount * sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, UShortName));
-                amount = UnreadLength / sizeof(short);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, UShortName));
+                amount = UnreadBits / (sizeof(ushort) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToUShort(Bytes, readPos);
-                readPos += sizeof(ushort);
+                intoArray[startIndex + i] = Converter.UShortFromBits(Bytes, readBit);
+                readBit += sizeof(ushort) * BitsPerByte;
             }
         }
         #endregion
@@ -698,11 +719,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
         public Message AddInt(int value)
         {
-            if (UnwrittenLength < sizeof(int))
-                throw new InsufficientCapacityException(this, IntName, sizeof(int));
+            if (UnwrittenBits < sizeof(int) * BitsPerByte)
+                throw new InsufficientCapacityException(this, IntName, sizeof(int) * BitsPerByte);
 
-            Converter.FromInt(value, Bytes, writePos);
-            writePos += sizeof(int);
+            Converter.IntToBits(value, Bytes, writeBit);
+            writeBit += sizeof(int) * BitsPerByte;
             return this;
         }
 
@@ -711,11 +732,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
         public Message AddUInt(uint value)
         {
-            if (UnwrittenLength < sizeof(uint))
-                throw new InsufficientCapacityException(this, UIntName, sizeof(uint));
+            if (UnwrittenBits < sizeof(uint) * BitsPerByte)
+                throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 
-            Converter.FromUInt(value, Bytes, writePos);
-            writePos += sizeof(uint);
+            Converter.UIntToBits(value, Bytes, writeBit);
+            writeBit += sizeof(uint) * BitsPerByte;
             return this;
         }
 
@@ -723,14 +744,14 @@ namespace Riptide
         /// <returns>The <see cref="int"/> that was retrieved.</returns>
         public int GetInt()
         {
-            if (UnreadLength < sizeof(int))
+            if (UnreadBits < sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(IntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName));
                 return 0;
             }
 
-            int value = Converter.ToInt(Bytes, readPos);
-            readPos += sizeof(int);
+            int value = Converter.IntFromBits(Bytes, readBit);
+            readBit += sizeof(int) * BitsPerByte;
             return value;
         }
 
@@ -738,14 +759,14 @@ namespace Riptide
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
         public uint GetUInt()
         {
-            if (UnreadLength < sizeof(uint))
+            if (UnreadBits < sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UIntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName));
                 return 0;
             }
 
-            uint value = Converter.ToUInt(Bytes, readPos);
-            readPos += sizeof(uint);
+            uint value = Converter.UIntFromBits(Bytes, readBit);
+            readBit += sizeof(uint) * BitsPerByte;
             return value;
         }
 
@@ -758,11 +779,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(int))
-                throw new InsufficientCapacityException(this, array.Length, IntName, sizeof(int));
+            if (UnwrittenBits < array.Length * sizeof(int) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, IntName, sizeof(int) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddInt(array[i]);
+            {
+                Converter.IntToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(int) * BitsPerByte;
+            }
 
             return this;
         }
@@ -776,11 +800,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(uint))
-                throw new InsufficientCapacityException(this, array.Length, UIntName, sizeof(uint));
+            if (UnwrittenBits < array.Length * sizeof(uint) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, UIntName, sizeof(uint) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddUInt(array[i]);
+            {
+                Converter.UIntToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(uint) * BitsPerByte;
+            }
 
             return this;
         }
@@ -839,16 +866,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadInts(int amount, int[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(int))
+            if (UnreadBits < amount * sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, IntName));
-                amount = UnreadLength / sizeof(int);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, IntName));
+                amount = UnreadBits / (sizeof(int) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToInt(Bytes, readPos);
-                readPos += sizeof(int);
+                intoArray[startIndex + i] = Converter.IntFromBits(Bytes, readBit);
+                readBit += sizeof(int) * BitsPerByte;
             }
         }
 
@@ -858,16 +885,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadUInts(int amount, uint[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(uint))
+            if (UnreadBits < amount * sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, UIntName));
-                amount = UnreadLength / sizeof(uint);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, UIntName));
+                amount = UnreadBits / (sizeof(uint) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToUInt(Bytes, readPos);
-                readPos += sizeof(uint);
+                intoArray[startIndex + i] = Converter.UIntFromBits(Bytes, readBit);
+                readBit += sizeof(uint) * BitsPerByte;
             }
         }
         #endregion
@@ -878,11 +905,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
         public Message AddLong(long value)
         {
-            if (UnwrittenLength < sizeof(long))
-                throw new InsufficientCapacityException(this, LongName, sizeof(long));
+            if (UnwrittenBits < sizeof(long) * BitsPerByte)
+                throw new InsufficientCapacityException(this, LongName, sizeof(long) * BitsPerByte);
 
-            Converter.FromLong(value, Bytes, writePos);
-            writePos += sizeof(long);
+            Converter.LongToBits(value, Bytes, writeBit);
+            writeBit += sizeof(long) * BitsPerByte;
             return this;
         }
 
@@ -891,11 +918,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
         public Message AddULong(ulong value)
         {
-            if (UnwrittenLength < sizeof(ulong))
-                throw new InsufficientCapacityException(this, ULongName, sizeof(ulong));
+            if (UnwrittenBits < sizeof(ulong) * BitsPerByte)
+                throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
 
-            Converter.FromULong(value, Bytes, writePos);
-            writePos += sizeof(ulong);
+            Converter.ULongToBits(value, Bytes, writeBit);
+            writeBit += sizeof(ulong) * BitsPerByte;
             return this;
         }
 
@@ -903,14 +930,14 @@ namespace Riptide
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
         public long GetLong()
         {
-            if (UnreadLength < sizeof(long))
+            if (UnreadBits < sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(LongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName));
                 return 0;
             }
 
-            long value = Converter.ToLong(Bytes, readPos);
-            readPos += sizeof(long);
+            long value = Converter.LongFromBits(Bytes, readBit);
+            readBit += sizeof(long) * BitsPerByte;
             return value;
         }
 
@@ -918,14 +945,14 @@ namespace Riptide
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
         public ulong GetULong()
         {
-            if (UnreadLength < sizeof(ulong))
+            if (UnreadBits < sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ULongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName));
                 return 0;
             }
 
-            ulong value = Converter.ToULong(Bytes, readPos);
-            readPos += sizeof(ulong);
+            ulong value = Converter.ULongFromBits(Bytes, readBit);
+            readBit += sizeof(ulong) * BitsPerByte;
             return value;
         }
 
@@ -938,11 +965,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(long))
-                throw new InsufficientCapacityException(this, array.Length, LongName, sizeof(long));
+            if (UnwrittenBits < array.Length * sizeof(long) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, LongName, sizeof(long) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddLong(array[i]);
+            {
+                Converter.LongToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(long) * BitsPerByte;
+            }
 
             return this;
         }
@@ -956,11 +986,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(ulong))
-                throw new InsufficientCapacityException(this, array.Length, ULongName, sizeof(ulong));
+            if (UnwrittenBits < array.Length * sizeof(ulong) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, ULongName, sizeof(ulong) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddULong(array[i]);
+            {
+                Converter.ULongToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(ulong) * BitsPerByte;
+            }
 
             return this;
         }
@@ -1019,16 +1052,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadLongs(int amount, long[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(long))
+            if (UnreadBits < amount * sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, LongName));
-                amount = UnreadLength / sizeof(long);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, LongName));
+                amount = UnreadBits / (sizeof(long) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToLong(Bytes, readPos);
-                readPos += sizeof(long);
+                intoArray[startIndex + i] = Converter.LongFromBits(Bytes, readBit);
+                readBit += sizeof(long) * BitsPerByte;
             }
         }
 
@@ -1038,16 +1071,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadULongs(int amount, ulong[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(ulong))
+            if (UnreadBits < amount * sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, ULongName));
-                amount = UnreadLength / sizeof(ulong);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ULongName));
+                amount = UnreadBits / (sizeof(ulong) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToULong(Bytes, readPos);
-                readPos += sizeof(ulong);
+                intoArray[startIndex + i] = Converter.ULongFromBits(Bytes, readBit);
+                readBit += sizeof(ulong) * BitsPerByte;
             }
         }
         #endregion
@@ -1058,11 +1091,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="float"/> was added to.</returns>
         public Message AddFloat(float value)
         {
-            if (UnwrittenLength < sizeof(float))
-                throw new InsufficientCapacityException(this, FloatName, sizeof(float));
+            if (UnwrittenBits < sizeof(float) * BitsPerByte)
+                throw new InsufficientCapacityException(this, FloatName, sizeof(float) * BitsPerByte);
 
-            Converter.FromFloat(value, Bytes, writePos);
-            writePos += sizeof(float);
+            Converter.FloatToBits(value, Bytes, writeBit);
+            writeBit += sizeof(float) * BitsPerByte;
             return this;
         }
 
@@ -1070,14 +1103,14 @@ namespace Riptide
         /// <returns>The <see cref="float"/> that was retrieved.</returns>
         public float GetFloat()
         {
-            if (UnreadLength < sizeof(float))
+            if (UnreadBits < sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(FloatName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName));
                 return 0;
             }
 
-            float value = Converter.ToFloat(Bytes, readPos);
-            readPos += sizeof(float);
+            float value = Converter.FloatFromBits(Bytes, readBit);
+            readBit += sizeof(float) * BitsPerByte;
             return value;
         }
 
@@ -1090,11 +1123,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(float))
-                throw new InsufficientCapacityException(this, array.Length, FloatName, sizeof(float));
+            if (UnwrittenBits < array.Length * sizeof(float) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, FloatName, sizeof(float) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddFloat(array[i]);
+            {
+                Converter.FloatToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(float) * BitsPerByte;
+            }
 
             return this;
         }
@@ -1129,16 +1165,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadFloats(int amount, float[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(float))
+            if (UnreadBits < amount * sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, FloatName));
-                amount = UnreadLength / sizeof(float);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, FloatName));
+                amount = UnreadBits / (sizeof(float) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToFloat(Bytes, readPos);
-                readPos += sizeof(float);
+                intoArray[startIndex + i] = Converter.FloatFromBits(Bytes, readBit);
+                readBit += sizeof(float) * BitsPerByte;
             }
         }
         #endregion
@@ -1149,11 +1185,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="double"/> was added to.</returns>
         public Message AddDouble(double value)
         {
-            if (UnwrittenLength < sizeof(double))
-                throw new InsufficientCapacityException(this, DoubleName, sizeof(double));
+            if (UnwrittenBits < sizeof(double) * BitsPerByte)
+                throw new InsufficientCapacityException(this, DoubleName, sizeof(double) * BitsPerByte);
 
-            Converter.FromDouble(value, Bytes, writePos);
-            writePos += sizeof(double);
+            Converter.DoubleToBits(value, Bytes, writeBit);
+            writeBit += sizeof(double) * BitsPerByte;
             return this;
         }
 
@@ -1161,14 +1197,14 @@ namespace Riptide
         /// <returns>The <see cref="double"/> that was retrieved.</returns>
         public double GetDouble()
         {
-            if (UnreadLength < sizeof(double))
+            if (UnreadBits < sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(DoubleName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(DoubleName));
                 return 0;
             }
 
-            double value = Converter.ToDouble(Bytes, readPos);
-            readPos += sizeof(double);
+            double value = Converter.DoubleFromBits(Bytes, readBit);
+            readBit += sizeof(double) * BitsPerByte;
             return value;
         }
 
@@ -1181,11 +1217,14 @@ namespace Riptide
             if (includeLength)
                 AddArrayLength(array.Length);
 
-            if (UnwrittenLength < array.Length * sizeof(double))
-                throw new InsufficientCapacityException(this, array.Length, DoubleName, sizeof(double));
+            if (UnwrittenBits < array.Length * sizeof(double) * BitsPerByte)
+                throw new InsufficientCapacityException(this, array.Length, DoubleName, sizeof(double) * BitsPerByte);
 
             for (int i = 0; i < array.Length; i++)
-                AddDouble(array[i]);
+            {
+                Converter.DoubleToBits(array[i], Bytes, writeBit);
+                writeBit += sizeof(double) * BitsPerByte;
+            }
 
             return this;
         }
@@ -1220,16 +1259,16 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
         private void ReadDoubles(int amount, double[] intoArray, int startIndex = 0)
         {
-            if (UnreadLength < amount * sizeof(double))
+            if (UnreadBits < amount * sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(intoArray.Length, DoubleName));
-                amount = UnreadLength / sizeof(double);
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, DoubleName));
+                amount = UnreadBits / (sizeof(double) * BitsPerByte);
             }
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ToDouble(Bytes, readPos);
-                readPos += sizeof(double);
+                intoArray[startIndex + i] = Converter.DoubleFromBits(Bytes, readBit);
+                readBit += sizeof(double) * BitsPerByte;
             }
         }
         #endregion
@@ -1242,8 +1281,8 @@ namespace Riptide
         {
             byte[] stringBytes = Encoding.UTF8.GetBytes(value);
             int requiredBytes = stringBytes.Length + (stringBytes.Length <= OneByteLengthThreshold ? 1 : 2);
-            if (UnwrittenLength < requiredBytes)
-                throw new InsufficientCapacityException(this, StringName, requiredBytes);
+            if (UnwrittenBits < requiredBytes * BitsPerByte)
+                throw new InsufficientCapacityException(this, StringName, requiredBytes * BitsPerByte);
 
             AddBytes(stringBytes);
             return this;
@@ -1254,14 +1293,13 @@ namespace Riptide
         public string GetString()
         {
             int length = GetArrayLength(); // Get the length of the string (in bytes, NOT characters)
-            if (UnreadLength < length)
+            if (UnreadBits < length * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(StringName, "shortened string"));
-                length = UnreadLength;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(StringName, "shortened string"));
+                length = UnreadBits / BitsPerByte;
             }
-            
-            string value = Encoding.UTF8.GetString(Bytes, readPos, length); // Convert the bytes at readPos' position to a string
-            readPos += length;
+
+            string value = Encoding.UTF8.GetString(GetBytes(length), 0, length);
             return value;
         }
 
@@ -1323,22 +1361,25 @@ namespace Riptide
         /// <param name="length">The length of the array.</param>
         private void AddArrayLength(int length)
         {
-            if (UnwrittenLength < 1)
-                throw new InsufficientCapacityException(this, ArrayLengthName, length <= OneByteLengthThreshold ? 1 : 2);
+            if (UnwrittenBits < BitsPerByte)
+                throw new InsufficientCapacityException(this, ArrayLengthName, (length <= OneByteLengthThreshold ? 1 : 2) * BitsPerByte);
 
             if (length <= OneByteLengthThreshold)
-                Bytes[writePos++] = (byte)length;
+            {
+                Converter.ByteToBits((byte)(length << 1), Bytes, writeBit);
+                writeBit += BitsPerByte;
+            }
             else
             {
                 if (length > TwoByteLengthThreshold)
                     throw new ArgumentOutOfRangeException(nameof(length), $"Messages do not support auto-inclusion of array lengths for arrays with more than {TwoByteLengthThreshold} elements! Either send a smaller array or set the 'includeLength' paremeter to false in the Add method and manually pass the array length to the Get method.");
                 
-                if (UnwrittenLength < 2)
-                    throw new InsufficientCapacityException(this, ArrayLengthName, 2);
+                if (UnwrittenBits < sizeof(ushort) * BitsPerByte)
+                    throw new InsufficientCapacityException(this, ArrayLengthName, sizeof(ushort) * BitsPerByte);
 
-                length |= 0b_1000_0000_0000_0000;
-                Bytes[writePos++] = (byte)(length >> 8); // Add the byte with the big array flag bit first, using AddUShort would add it second
-                Bytes[writePos++] = (byte)length;
+                length = (length << 1) | 1; // OR in the big array flag
+                Converter.UShortToBits((ushort)length, Bytes, writeBit);
+                writeBit += sizeof(ushort) * BitsPerByte;
             }
         }
 
@@ -1346,22 +1387,31 @@ namespace Riptide
         /// <returns>The length of the array.</returns>
         private int GetArrayLength()
         {
-            if (UnreadLength < 1)
+            if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ArrayLengthName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName));
                 return 0;
             }
 
-            if ((Bytes[readPos] & 0b_1000_0000) == 0)
-                return GetByte();
-            
-            if (UnreadLength < 2)
+            int pos = readBit / BitsPerByte;
+            int bit = readBit % BitsPerByte;
+            int value;
+            if ((Bytes[pos] & (1 << bit)) == 0)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ArrayLengthName));
-                return 0;
+                value = Converter.ByteFromBits(Bytes, readBit);
+                readBit += BitsPerByte;
+                return value >> 1; // Get rid of the flag bit
             }
             
-            return ((Bytes[readPos++] << 8) | Bytes[readPos++]) & 0b_0111_1111_1111_1111; // Read the byte with the big array flag bit first, using GetUShort would add it second
+            if (UnreadBits < sizeof(ushort) * BitsPerByte)
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName));
+                return 0;
+            }
+
+            value = Converter.UShortFromBits(Bytes, readBit);
+            readBit += sizeof(ushort) * BitsPerByte;
+            return value >> 1; // Get rid of the flag bit
         }
         #endregion
 
@@ -1547,21 +1597,21 @@ namespace Riptide
         /// <summary>The name of an array length value.</summary>
         private const string ArrayLengthName = "array length";
 
-        /// <summary>Constructs an error message for when a message contains insufficient unread bytes to retrieve a certain value.</summary>
+        /// <summary>Constructs an error message for when a message contains insufficient unread bits to retrieve a certain value.</summary>
         /// <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
         /// <param name="defaultReturn">Text describing the value which will be returned.</param>
         /// <returns>The error message.</returns>
-        private string NotEnoughBytesError(string valueName, string defaultReturn = "0")
+        private string NotEnoughBitsError(string valueName, string defaultReturn = "0")
         {
-            return $"Message only contains {UnreadLength} unread {Helper.CorrectForm(UnreadLength, "byte")}, which is not enough to retrieve a value of type '{valueName}'! Returning {defaultReturn}.";
+            return $"Message only contains {UnreadBits} unread {Helper.CorrectForm(UnreadBits, "bit")}, which is not enough to retrieve a value of type '{valueName}'! Returning {defaultReturn}.";
         }
-        /// <summary>Constructs an error message for when a message contains insufficient unread bytes to retrieve an array of values.</summary>
+        /// <summary>Constructs an error message for when a message contains insufficient unread bits to retrieve an array of values.</summary>
         /// <param name="arrayLength">The expected length of the array.</param>
         /// <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
         /// <returns>The error message.</returns>
-        private string NotEnoughBytesError(int arrayLength, string valueName)
+        private string NotEnoughBitsError(int arrayLength, string valueName)
         {
-            return $"Message only contains {UnreadLength} unread {Helper.CorrectForm(UnreadLength, "byte")}, which is not enough to retrieve {arrayLength} {Helper.CorrectForm(arrayLength, valueName)}! Returned array will contain default elements.";
+            return $"Message only contains {UnreadBits} unread {Helper.CorrectForm(UnreadBits, "bit")}, which is not enough to retrieve {arrayLength} {Helper.CorrectForm(arrayLength, valueName)}! Returned array will contain default elements.";
         }
 
         /// <summary>Constructs an error message for when a number of retrieved values do not fit inside the bounds of the provided array.</summary>

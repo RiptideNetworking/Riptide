@@ -150,8 +150,9 @@ namespace Riptide
         {
             if (message.SendMode == MessageSendMode.Unreliable)
             {
-                Send(message.Bytes, message.WrittenLength);
-                Metrics.SentUnreliable(message.WrittenLength);
+                int byteAmount = message.BytesInUse;
+                Send(message.Bytes, byteAmount);
+                Metrics.SentUnreliable(byteAmount);
             }
             else
             {
@@ -173,8 +174,9 @@ namespace Riptide
         public ushort SendNotify(Message message, bool shouldRelease = true)
         {
             ushort sequenceId = notify.InsertHeader(message);
-            Send(message.Bytes, message.WrittenLength);
-            Metrics.SentNotify(message.WrittenLength);
+            int byteAmount = message.BytesInUse;
+            Send(message.Bytes, byteAmount);
+            Metrics.SentNotify(byteAmount);
 
             if (shouldRelease)
                 message.Release();
@@ -193,10 +195,10 @@ namespace Riptide
         /// <param name="message">The message instance to use.</param>
         internal void ProcessNotify(byte[] dataBuffer, int amount, Message message)
         {
-            notify.UpdateReceivedAcks(Converter.ToUShort(dataBuffer, 1), dataBuffer[3]);
+            notify.UpdateReceivedAcks(Converter.UShortFromBits(dataBuffer, 8), Converter.ByteFromBits(dataBuffer, 24));
 
             Metrics.ReceivedNotify(amount);
-            if (notify.ShouldHandle(Converter.ToUShort(dataBuffer, 4)))
+            if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, 32)))
             {
                 Array.Copy(dataBuffer, 1, message.Bytes, 1, amount - 1); // Copy payload
                 NotifyReceived?.Invoke(message);
@@ -291,7 +293,10 @@ namespace Riptide
             message.AddUShort(lastReceivedSeqId);
             message.AddUShort(receivedSeqIds.First16);
 
-            if (forSeqId != lastReceivedSeqId)
+            if (forSeqId == lastReceivedSeqId)
+                message.AddBool(false);
+            else
+                message.AddBool(true);
                 message.AddUShort(forSeqId);
             
             Send(message);
@@ -303,7 +308,7 @@ namespace Riptide
         {
             ushort remoteLastReceivedSeqId = message.GetUShort();
             ushort remoteAcksBitField = message.GetUShort();
-            ushort ackedSeqId = message.UnreadLength > 0 ? message.GetUShort() : remoteLastReceivedSeqId;
+            ushort ackedSeqId = message.GetBool() ? message.GetUShort() : remoteLastReceivedSeqId;
 
             ClearMessage(ackedSeqId);
             reliable.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
@@ -476,9 +481,9 @@ namespace Riptide
             internal ushort InsertHeader(Message message)
             {
                 ushort sequenceId = NextSequenceId;
-                Converter.FromUShort(lastReceivedSeqId, message.Bytes, 1); // Ack sequence ID
-                message.Bytes[3] = receivedSeqIds.First8;                  // Acks bitfield
-                Converter.FromUShort(sequenceId, message.Bytes, 4);        // Insert sequence ID
+                Converter.UShortToBits(lastReceivedSeqId, message.Bytes, Message.BitsPerByte);       // Ack sequence ID
+                Converter.ByteToBits(receivedSeqIds.First8, message.Bytes, 3 * Message.BitsPerByte); // Acks bitfield
+                Converter.UShortToBits(sequenceId, message.Bytes, 4 * Message.BitsPerByte);          // Insert sequence ID
                 return sequenceId;
             }
 

@@ -127,10 +127,10 @@ namespace Riptide
 
             if (message != null)
             {
-                if (message.ReadLength != 0)
-                    RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when including data with a connection attempt!");
-                
-                connectBytes = message.GetBytes(message.WrittenLength);
+                if (message.ReadBits != 0)
+                    RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting connection attempt data!");
+
+                connectBytes = message.GetBytes(message.BytesInUse);
                 message.Release();
             }
             else
@@ -288,7 +288,7 @@ namespace Riptide
                     OnClientDisconnected(message.GetUShort());
                     break;
                 default:
-                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes.");
+                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.BytesInUse} bytes.");
                     break;
             }
 
