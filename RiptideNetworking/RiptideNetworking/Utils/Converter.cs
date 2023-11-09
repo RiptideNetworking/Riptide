@@ -157,8 +157,9 @@ namespace Riptide.Utils
             else
             {
                 array[pos    ] |= (byte)(value << bit);
-                array[pos + 1]  = (byte)(value >> (8 - bit));
-                array[pos + 2]  = (byte)(value >> (16 - bit));
+                value >>= 8 - bit;
+                array[pos + 1]  = (byte)value;
+                array[pos + 2]  = (byte)(value >> 8);
             }
         }
 
@@ -258,10 +259,11 @@ namespace Riptide.Utils
             else
             {
                 array[pos    ] |= (byte)(value << bit);
-                array[pos + 1] = (byte)(value >> (8 - bit));
-                array[pos + 2] = (byte)(value >> (16 - bit));
-                array[pos + 3] = (byte)(value >> (24 - bit));
-                array[pos + 4] = (byte)(value >> (32 - bit));
+                value >>= 8 - bit;
+                array[pos + 1] = (byte)value;
+                array[pos + 2] = (byte)(value >> 8);
+                array[pos + 3] = (byte)(value >> 16);
+                array[pos + 4] = (byte)(value >> 24);
             }
         }
 
@@ -378,14 +380,15 @@ namespace Riptide.Utils
             else
             {
                 array[pos    ] |= (byte)(value << bit);
-                array[pos + 1] = (byte)(value >> (8 - bit));
-                array[pos + 2] = (byte)(value >> (16 - bit));
-                array[pos + 3] = (byte)(value >> (24 - bit));
-                array[pos + 4] = (byte)(value >> (32 - bit));
-                array[pos + 5] = (byte)(value >> (40 - bit));
-                array[pos + 6] = (byte)(value >> (48 - bit));
-                array[pos + 7] = (byte)(value >> (56 - bit));
-                array[pos + 8] = (byte)(value >> (64 - bit));
+                value >>= 8 - bit;
+                array[pos + 1] = (byte)value;
+                array[pos + 2] = (byte)(value >> 8);
+                array[pos + 3] = (byte)(value >> 16);
+                array[pos + 4] = (byte)(value >> 24);
+                array[pos + 5] = (byte)(value >> 32);
+                array[pos + 6] = (byte)(value >> 40);
+                array[pos + 7] = (byte)(value >> 48);
+                array[pos + 8] = (byte)(value >> 56);
             }
         }
 
