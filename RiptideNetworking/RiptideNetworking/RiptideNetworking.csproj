@@ -40,10 +40,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <UPMSourceFiles Remove="Utils\StructConverter.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\nuget-readme.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>

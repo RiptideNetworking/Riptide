@@ -6,12 +6,6 @@ using Timer = System.Timers.Timer;
 
 namespace Riptide.Demos.ConsoleClient
 {
-    public struct test
-    {
-        public float b;
-        public int c;
-    }
-
     internal class Program
     {
         private static Client client;
@@ -108,9 +102,6 @@ namespace Riptide.Demos.ConsoleClient
             Console.WriteLine("Press enter to disconnect at any time.");
 
             client.Send(Message.Create(MessageSendMode.Reliable, MessageId.StartTest).AddBool(isRoundTripTest).AddInt(testIdAmount));
-
-            Console.WriteLine("add struct: " + Message.Create(MessageSendMode.Reliable, 0, 0).AddStruct(new test { b = 5, c = 56 }).WrittenLength);
-            Console.WriteLine("add byte: " + Message.Create(MessageSendMode.Reliable, 0, 0).AddFloat(5).AddInt(56).WrittenLength);
         }
 
         private static void Disconnected()

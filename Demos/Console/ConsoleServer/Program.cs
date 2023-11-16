@@ -6,12 +6,6 @@ using Timer = System.Timers.Timer;
 
 namespace Riptide.Demos.ConsoleServer
 {
-
-    public struct test
-    {
-        public byte b;
-    }
-
     internal class Program
     {
         private static Server server;
