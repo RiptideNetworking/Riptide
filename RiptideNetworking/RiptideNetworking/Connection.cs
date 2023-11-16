@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -195,10 +195,10 @@ namespace Riptide
         /// <param name="message">The message instance to use.</param>
         internal void ProcessNotify(byte[] dataBuffer, int amount, Message message)
         {
-            notify.UpdateReceivedAcks(Converter.UShortFromBits(dataBuffer, 8), Converter.ByteFromBits(dataBuffer, 24));
+            notify.UpdateReceivedAcks(Converter.UShortFromBits(dataBuffer, Message.HeaderBits), Converter.ByteFromBits(dataBuffer, Message.HeaderBits + 16));
 
             Metrics.ReceivedNotify(amount);
-            if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, 32)))
+            if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, Message.HeaderBits + 24)))
             {
                 Array.Copy(dataBuffer, 1, message.Bytes, 1, amount - 1); // Copy payload
                 NotifyReceived?.Invoke(message);
@@ -481,9 +481,8 @@ namespace Riptide
             internal ushort InsertHeader(Message message)
             {
                 ushort sequenceId = NextSequenceId;
-                Converter.UShortToBits(lastReceivedSeqId, message.Bytes, Message.BitsPerByte);       // Ack sequence ID
-                Converter.ByteToBits(receivedSeqIds.First8, message.Bytes, 3 * Message.BitsPerByte); // Acks bitfield
-                Converter.UShortToBits(sequenceId, message.Bytes, 4 * Message.BitsPerByte);          // Insert sequence ID
+                ulong notifyBits = lastReceivedSeqId | ((ulong)receivedSeqIds.First8 << (2 * Message.BitsPerByte)) | ((ulong)sequenceId << (3 * Message.BitsPerByte));
+                message.SetBits(notifyBits, 5 * Message.BitsPerByte, Message.HeaderBits);
                 return sequenceId;
             }
 

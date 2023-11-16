@@ -143,7 +143,7 @@ namespace Riptide.Transports.Tcp
         /// <inheritdoc/>
         protected internal override void OnDataReceived(int amount, TcpConnection fromConnection)
         {
-            if ((MessageHeader)ReceiveBuffer[0] == MessageHeader.Connect)
+            if ((MessageHeader)(ReceiveBuffer[0] & Message.HeaderBitmask) == MessageHeader.Connect)
             {
                 if (fromConnection.DidReceiveConnect)
                     return;

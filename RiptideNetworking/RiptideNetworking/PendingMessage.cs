@@ -50,10 +50,9 @@ namespace Riptide
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
 
-            pendingMessage.data[0] = message.Bytes[0]; // Copy message header
-            Converter.UShortToBits(sequenceId, pendingMessage.data, 8); // Insert sequence ID
+            message.SetBits(sequenceId, sizeof(ushort) * Message.BitsPerByte, Message.HeaderBits);
             pendingMessage.size = message.BytesInUse;
-            Array.Copy(message.Bytes, 3, pendingMessage.data, 3, pendingMessage.size - 3); // Copy the rest of the message
+            Array.Copy(message.Bytes, 0, pendingMessage.data, 0, pendingMessage.size);
 
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
@@ -106,7 +105,7 @@ namespace Riptide
         {
             if (sendAttempts >= connection.MaxSendAttempts)
             {
-                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)data[0]} message after {sendAttempts} attempts! Disconnecting...");
+                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)(data[0] & Message.HeaderBitmask)} message after {sendAttempts} attempts! Disconnecting...");
                 connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection);
                 return;
             }

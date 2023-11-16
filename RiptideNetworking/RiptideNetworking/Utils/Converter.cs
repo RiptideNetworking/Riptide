@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -12,6 +12,148 @@ namespace Riptide.Utils
     /// <summary>Provides functionality for converting bits and bytes to various value types and vice versa.</summary>
     public class Converter
     {
+        #region Bits
+        /// <summary>Takes <paramref name="amount"/> bits from <paramref name="bitfield"/> and writes them into <paramref name="array"/>, starting at <paramref name="startBit"/>.</summary>
+        /// <param name="bitfield">The bitfield from which to write the bits into the array.</param>
+        /// <param name="amount">The number of bits to write.</param>
+        /// <param name="array">The array to write the bits into.</param>
+        /// <param name="startBit">The bit position in the array at which to start writing.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetBits(byte bitfield, int amount, byte[] array, int startBit)
+        {
+            byte mask = (byte)((1 << amount) - 1);
+            bitfield &= mask; // Discard any bits that are set beyond the ones we're setting
+            int inverseMask = ~mask;
+            int pos = startBit / Message.BitsPerByte;
+            int bit = startBit % Message.BitsPerByte;
+            if (bit == 0)
+                array[pos] = (byte)(bitfield | (array[pos] & inverseMask));
+            else
+            {
+                array[pos    ] = (byte)((bitfield << bit) | (array[pos] & ~(mask << bit)));
+                array[pos + 1] = (byte)((bitfield >> (8 - bit)) | (array[pos + 1] & (inverseMask >> (8 - bit))));
+            }
+        }
+        /// <inheritdoc cref="SetBits(byte, int, byte[], int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetBits(ushort bitfield, int amount, byte[] array, int startBit)
+        {
+            ushort mask = (ushort)((1 << amount) - 1);
+            bitfield &= mask; // Discard any bits that are set beyond the ones we're setting
+            int inverseMask = ~mask;
+            int pos = startBit / Message.BitsPerByte;
+            int bit = startBit % Message.BitsPerByte;
+            if (bit == 0)
+            {
+                array[pos    ] = (byte)(bitfield | (array[pos] & inverseMask));
+                array[pos + 1] = (byte)((bitfield >> 8) | (array[pos + 1] & (inverseMask >> 8)));
+            }
+            else
+            {
+                array[pos    ] = (byte)((bitfield << bit) | (array[pos] & ~(mask << bit)));
+                bitfield >>= 8 - bit;
+                inverseMask >>= 8 - bit;
+                array[pos + 1] = (byte)(bitfield | (array[pos + 1] & inverseMask));
+                array[pos + 2] = (byte)((bitfield >> 8) | (array[pos + 2] & (inverseMask >> 8)));
+            }
+        }
+        /// <inheritdoc cref="SetBits(byte, int, byte[], int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetBits(uint bitfield, int amount, byte[] array, int startBit)
+        {
+            uint mask = (1u << (amount - 1) << 1) - 1; // Perform 2 shifts, doing it in 1 doesn't cause the value to wrap properly
+            bitfield &= mask; // Discard any bits that are set beyond the ones we're setting
+            uint inverseMask = ~mask;
+            int pos = startBit / Message.BitsPerByte;
+            int bit = startBit % Message.BitsPerByte;
+            if (bit == 0)
+            {
+                array[pos    ] = (byte)(bitfield | (array[pos] & inverseMask));
+                array[pos + 1] = (byte)((bitfield >>  8) | (array[pos + 1] & (inverseMask >>  8)));
+                array[pos + 2] = (byte)((bitfield >> 16) | (array[pos + 2] & (inverseMask >> 16)));
+                array[pos + 3] = (byte)((bitfield >> 24) | (array[pos + 3] & (inverseMask >> 24)));
+            }
+            else
+            {
+                array[pos    ] = (byte)((bitfield << bit) | (array[pos] & ~(mask << bit)));
+                bitfield >>= 8 - bit;
+                inverseMask >>= 8 - bit;
+                array[pos + 1] = (byte)(bitfield | (array[pos + 1] & inverseMask));
+                array[pos + 2] = (byte)((bitfield >>  8) | (array[pos + 2] & (inverseMask >>  8)));
+                array[pos + 3] = (byte)((bitfield >> 16) | (array[pos + 3] & (inverseMask >> 16)));
+                array[pos + 4] = (byte)((bitfield >> 24) | (array[pos + 4] & (inverseMask >> 24)));
+            }
+        }
+        /// <inheritdoc cref="SetBits(byte, int, byte[], int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void SetBits(ulong bitfield, int amount, byte[] array, int startBit)
+        {
+            ulong mask = (1ul << (amount - 1) << 1) - 1; // Perform 2 shifts, doing it in 1 doesn't cause the value to wrap properly
+            bitfield &= mask; // Discard any bits that are set beyond the ones we're setting
+            ulong inverseMask = ~mask;
+            int pos = startBit / Message.BitsPerByte;
+            int bit = startBit % Message.BitsPerByte;
+            if (bit == 0)
+            {
+                array[pos    ] = (byte)(bitfield | (array[pos] & inverseMask));
+                array[pos + 1] = (byte)((bitfield >>  8) | (array[pos + 1] & (inverseMask >>  8)));
+                array[pos + 2] = (byte)((bitfield >> 16) | (array[pos + 2] & (inverseMask >> 16)));
+                array[pos + 3] = (byte)((bitfield >> 24) | (array[pos + 3] & (inverseMask >> 24)));
+                array[pos + 4] = (byte)((bitfield >> 32) | (array[pos + 4] & (inverseMask >> 32)));
+                array[pos + 5] = (byte)((bitfield >> 40) | (array[pos + 5] & (inverseMask >> 40)));
+                array[pos + 6] = (byte)((bitfield >> 48) | (array[pos + 6] & (inverseMask >> 48)));
+                array[pos + 7] = (byte)((bitfield >> 56) | (array[pos + 7] & (inverseMask >> 56)));
+            }
+            else
+            {
+                array[pos    ] = (byte)((bitfield << bit) | (array[pos] & ~(mask << bit)));
+                bitfield >>= 8 - bit;
+                inverseMask >>= 8 - bit;
+                array[pos + 1] = (byte)(bitfield | (array[pos + 1] & inverseMask));
+                array[pos + 2] = (byte)((bitfield >>  8) | (array[pos + 2] & (inverseMask >>  8)));
+                array[pos + 3] = (byte)((bitfield >> 16) | (array[pos + 3] & (inverseMask >> 16)));
+                array[pos + 4] = (byte)((bitfield >> 24) | (array[pos + 4] & (inverseMask >> 24)));
+                array[pos + 5] = (byte)((bitfield >> 32) | (array[pos + 5] & (inverseMask >> 32)));
+                array[pos + 6] = (byte)((bitfield >> 40) | (array[pos + 6] & (inverseMask >> 40)));
+                array[pos + 7] = (byte)((bitfield >> 48) | (array[pos + 7] & (inverseMask >> 48)));
+                array[pos + 8] = (byte)((bitfield >> 56) | (array[pos + 8] & (inverseMask >> 56)));
+            }
+        }
+
+        /// <summary>Starting at <paramref name="startBit"/>, reads <paramref name="amount"/> bits from <paramref name="array"/> into <paramref name="bitfield"/>.</summary>
+        /// <param name="amount">The number of bits to read.</param>
+        /// <param name="array">The array to read the bits from.</param>
+        /// <param name="startBit">The bit position in the array at which to start reading.</param>
+        /// <param name="bitfield">The bitfield into which to write the bits from the array.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetBits(int amount, byte[] array, int startBit, out byte bitfield)
+        {
+            bitfield = ByteFromBits(array, startBit);
+            bitfield &= (byte)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're reading
+        }
+        /// <inheritdoc cref="GetBits(int, byte[], int, out byte)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetBits(int amount, byte[] array, int startBit, out ushort bitfield)
+        {
+            bitfield = UShortFromBits(array, startBit);
+            bitfield &= (ushort)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're reading
+        }
+        /// <inheritdoc cref="GetBits(int, byte[], int, out byte)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetBits(int amount, byte[] array, int startBit, out uint bitfield)
+        {
+            bitfield = UIntFromBits(array, startBit);
+            bitfield &= (1u << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're reading
+        }
+        /// <inheritdoc cref="GetBits(int, byte[], int, out byte)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void GetBits(int amount, byte[] array, int startBit, out ulong bitfield)
+        {
+            bitfield = ULongFromBits(array, startBit);
+            bitfield &= (1ul << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're reading
+        }
+        #endregion
+
         #region Byte/SByte
         /// <summary>Converts <paramref name="value"/> to 8 bits and writes them into <paramref name="array"/> at <paramref name="startBit"/>.</summary>
         /// <param name="value">The <see cref="sbyte"/> to convert.</param>

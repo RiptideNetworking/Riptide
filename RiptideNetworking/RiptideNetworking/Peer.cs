@@ -158,8 +158,7 @@ namespace Riptide
         /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
-            MessageHeader header = (MessageHeader)e.DataBuffer[0];
-            Message message = Message.Create(header, e.Amount);
+            Message message = Message.Create().Init(e.DataBuffer[0], e.Amount, out MessageHeader header);
             
             if (header == MessageHeader.Notify)
             {
@@ -182,7 +181,7 @@ namespace Riptide
                     return;
 
                 e.FromConnection.Metrics.ReceivedReliable(e.Amount);
-                if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, 8)))
+                if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
                 {
                     Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));

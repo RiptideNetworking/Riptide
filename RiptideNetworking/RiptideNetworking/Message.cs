@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -24,22 +24,26 @@ namespace Riptide
     public class Message
     {
         /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
-        internal const int MinUnreliableBytes = 1;
+        internal const int MinUnreliableBytes = UnreliableHeaderBits / BitsPerByte + (UnreliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The minimum number of bytes contained in a reliable message.</summary>
-        internal const int MinReliableBytes = 3;
+        internal const int MinReliableBytes = ReliableHeaderBits / BitsPerByte + (ReliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The minimum number of bytes contained in a notify message.</summary>
-        internal const int MinNotifyBytes = 6;
+        internal const int MinNotifyBytes = NotifyHeaderBits / BitsPerByte + (NotifyHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The number of bits in a byte.</summary>
         internal const int BitsPerByte = 8;
+        /// <summary>The number of bits used by the <see cref="MessageHeader"/>.</summary>
+        internal const int HeaderBits = 4;
+        /// <summary>A bitmask that, when applied, only keeps the header bits.</summary>
+        internal const byte HeaderBitmask = (1 << HeaderBits) - 1;
         /// <summary>The header size for unreliable messages. Does not count the 2 bytes used for the message ID.</summary>
-        /// <remarks>1 byte - header.</remarks>
-        internal const int UnreliableHeaderBits = 1 * BitsPerByte;
+        /// <remarks>4 bits - header.</remarks>
+        internal const int UnreliableHeaderBits = HeaderBits;
         /// <summary>The header size for reliable messages. Does not count the 2 bytes used for the message ID.</summary>
-        /// <remarks>1 byte - header, 2 bytes - sequence ID.</remarks>
-        internal const int ReliableHeaderBits = 3 * BitsPerByte;
+        /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
+        internal const int ReliableHeaderBits = HeaderBits + 2 * BitsPerByte;
         /// <summary>The header size for notify messages.</summary>
-        /// <remarks>1 byte - header, 3 bytes - ack, 2 bytes - sequence ID.</remarks>
-        internal const int NotifyHeaderBits = 6 * BitsPerByte;
+        /// <remarks>4 bits - header, 24 bits - ack, 16 bits - sequence ID.</remarks>
+        internal const int NotifyHeaderBits = HeaderBits + 5 * BitsPerByte;
         /// <summary>The maximum number of bits required for a message's header.</summary>
         public const int MaxHeaderSize = NotifyHeaderBits;
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
@@ -52,7 +56,7 @@ namespace Riptide
             {
                 if (Peer.ActiveCount > 0)
                     throw new InvalidOperationException($"Changing the '{nameof(MaxPayloadSize)}' is not allowed while a {nameof(Server)} or {nameof(Client)} is running!");
-                
+
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
@@ -128,7 +132,10 @@ namespace Riptide
         /// <returns>An empty message instance.</returns>
         public static Message Create()
         {
-            return RetrieveFromPool().PrepareForUse();
+            Message message = RetrieveFromPool();
+            message.readBit = 0;
+            message.writeBit = 0;
+            return message;
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
@@ -136,7 +143,7 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return RetrieveFromPool().PrepareForUse((MessageHeader)sendMode).AddUShort(id);
+            return RetrieveFromPool().Init((MessageHeader)sendMode).AddUShort(id);
         }
         /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
@@ -149,22 +156,14 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         internal static Message Create(MessageHeader header)
         {
-            return RetrieveFromPool().PrepareForUse(header);
-        }
-        /// <summary>Gets a message instance that can be used for receiving/handling.</summary>
-        /// <param name="header">The message's header type.</param>
-        /// <param name="contentLength">The number of bytes which this message will contain.</param>
-        /// <returns>A message instance ready to be populated with received data.</returns>
-        internal static Message Create(MessageHeader header, int contentLength)
-        {
-            return RetrieveFromPool().PrepareForUse(header, contentLength);
+            return RetrieveFromPool().Init(header);
         }
 
         /// <summary>Gets a notify message instance that can be used for sending.</summary>
         /// <returns>A notify message instance ready to be sent.</returns>
         public static Message CreateNotify()
         {
-            return RetrieveFromPool().PrepareForUse(MessageHeader.Notify);
+            return RetrieveFromPool().Init(MessageHeader.Notify);
         }
 
         /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
@@ -196,28 +195,24 @@ namespace Riptide
         #endregion
 
         #region Functions
-        /// <summary>Prepares the message to be used.</summary>
-        /// <returns>The message, ready to be used.</returns>
-        private Message PrepareForUse()
-        {
-            readBit = 0;
-            writeBit = 0;
-            return this;
-        }
-        /// <summary>Prepares the message to be used for sending.</summary>
-        /// <param name="header">The header of the message.</param>
+        /// <summary>Initializes the message so that it can be used for sending.</summary>
+        /// <param name="header">The message's header type.</param>
         /// <returns>The message, ready to be used for sending.</returns>
-        private Message PrepareForUse(MessageHeader header)
+        private Message Init(MessageHeader header)
         {
+            Bytes[0] = (byte)header;
             SetHeader(header);
             return this;
         }
-        /// <summary>Prepares the message to be used for handling.</summary>
-        /// <param name="header">The header of the message.</param>
-        /// <param name="contentLength">The number of bytes that this message will contain and which can be retrieved.</param>
+        /// <summary>Initializes the message so that it can be used for receiving/handling.</summary>
+        /// <param name="firstByte">The first byte of the received data.</param>
+        /// <param name="header">The message's header type.</param>
+        /// <param name="contentLength">The number of bytes which this message will contain.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        private Message PrepareForUse(MessageHeader header, int contentLength)
+        internal Message Init(byte firstByte, int contentLength, out MessageHeader header)
         {
+            Bytes[0] = firstByte;
+            header = (MessageHeader)(firstByte & HeaderBitmask);
             SetHeader(header);
             writeBit = contentLength * BitsPerByte;
             return this;
@@ -227,15 +222,16 @@ namespace Riptide
         /// <param name="header">The header to use for this message.</param>
         private void SetHeader(MessageHeader header)
         {
-            Bytes[0] = (byte)header;
             if (header == MessageHeader.Notify)
             {
+                Bytes[MinNotifyBytes - 1] = 0;
                 readBit = NotifyHeaderBits;
                 writeBit = NotifyHeaderBits;
                 SendMode = MessageSendMode.Unreliable; // Technically it's different but notify messages *are* still unreliable
             }
             else if (header >= MessageHeader.Reliable)
             {
+                Bytes[MinReliableBytes - 1] = 0;
                 readBit = ReliableHeaderBits;
                 writeBit = ReliableHeaderBits;
                 SendMode = MessageSendMode.Reliable;
@@ -250,6 +246,54 @@ namespace Riptide
         #endregion
 
         #region Add & Retrieve Data
+        #region Bits
+        /// <summary>Sets up to 8 bits at the specified position in the message.</summary>
+        /// <param name="bitfield">The bitfield from which to write the bits into the message.</param>
+        /// <param name="amount">The number of bits to set.</param>
+        /// <param name="startBit">The bit position in the message at which to start writing.</param>
+        /// <returns>The message instance.</returns>
+        /// <remarks>This method can be used to directly set a range of bits without moving the message's internal write position. Data which was previously added to the message
+        /// and which falls within the range of bits being set will be <i>overwritten</i>, meaning that improper use of this method will likely corrupt the message!</remarks>
+        public Message SetBits(byte bitfield, int amount, int startBit)
+        {
+            if (amount > BitsPerByte)
+                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(SetBits)}' overload cannot be used to set more than {BitsPerByte} bits at a time!");
+
+            Converter.SetBits(bitfield, amount, Bytes, startBit);
+            return this;
+        }
+        /// <summary>Sets up to 16 bits at the specified position in the message.</summary>
+        /// <inheritdoc cref="SetBits(byte, int, int)"/>
+        public Message SetBits(ushort bitfield, int amount, int startBit)
+        {
+            if (amount > sizeof(ushort) * BitsPerByte)
+                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(SetBits)}' overload cannot be used to set more than {sizeof(ushort) * BitsPerByte} bits at a time!");
+
+            Converter.SetBits(bitfield, amount, Bytes, startBit);
+            return this;
+        }
+        /// <summary>Sets up to 32 bits at the specified position in the message.</summary>
+        /// <inheritdoc cref="SetBits(byte, int, int)"/>
+        public Message SetBits(uint bitfield, int amount, int startBit)
+        {
+            if (amount > sizeof(uint) * BitsPerByte)
+                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(SetBits)}' overload cannot be used to set more than {sizeof(uint) * BitsPerByte} bits at a time!");
+
+            Converter.SetBits(bitfield, amount, Bytes, startBit);
+            return this;
+        }
+        /// <summary>Sets up to 64 bits at the specified position in the message.</summary>
+        /// <inheritdoc cref="SetBits(byte, int, int)"/>
+        public Message SetBits(ulong bitfield, int amount, int startBit)
+        {
+            if (amount > sizeof(ulong) * BitsPerByte)
+                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(SetBits)}' overload cannot be used to set more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+
+            Converter.SetBits(bitfield, amount, Bytes, startBit);
+            return this;
+        }
+        #endregion
+
         #region Byte & SByte
         /// <summary>Adds a <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
