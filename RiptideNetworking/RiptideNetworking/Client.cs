@@ -66,8 +66,8 @@ namespace Riptide
         private int connectionAttempts;
         /// <summary>How many connection attempts to make before giving up.</summary>
         private int maxConnectionAttempts;
-        /// <inheritdoc cref="Server.messageHandlers"/>
-        private Dictionary<ushort, MessageHandler> messageHandlers;
+        /// <inheritdoc cref="Server.groupHandlers"/>
+        private Dictionary<ushort, Dictionary<ushort, MessageHandler>> groupHandlers;
         /// <summary>The underlying transport's client that is used for sending and receiving data.</summary>
         private IClient transport;
         /// <summary>Custom data to include when connecting.</summary>
@@ -86,7 +86,7 @@ namespace Riptide
 
         /// <summary>Disconnects the client if it's connected and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new transport to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, int, byte, Message, bool)"/> must be called again.</remarks>
+        /// <remarks>This method does not automatically reconnect to the server. To continue communicating with the server, <see cref="Connect(string, int, Message, bool)"/> must be called again.</remarks>
         public void ChangeTransport(IClient newTransport)
         {
             Disconnect();
@@ -96,7 +96,6 @@ namespace Riptide
         /// <summary>Attempts to connect to a server at the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
-        /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         /// <param name="useMessageHandlers">Whether or not the client should use the built-in message handler system.</param>
         /// <remarks>
@@ -104,7 +103,7 @@ namespace Riptide
         ///   <para>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</para>
         /// </remarks>
         /// <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
-        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null, bool useMessageHandlers = true)
+        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, Message message = null, bool useMessageHandlers = true)
         {
             Disconnect();
 
@@ -123,7 +122,7 @@ namespace Riptide
             IncreaseActiveCount();
             this.useMessageHandlers = useMessageHandlers;
             if (useMessageHandlers)
-                CreateMessageHandlersDictionary(messageHandlerGroupId);
+                CreateMessageHandlersDictionary();
 
             if (message != null)
             {
@@ -161,16 +160,13 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        protected override void CreateMessageHandlersDictionary(byte messageHandlerGroupId)
+        protected override void CreateMessageHandlersDictionary()
         {
             MethodInfo[] methods = FindMessageHandlers();
-
-            messageHandlers = new Dictionary<ushort, MessageHandler>(methods.Length);
+            groupHandlers = new Dictionary<ushort, Dictionary<ushort, MessageHandler>>();
             foreach (MethodInfo method in methods)
             {
                 MessageHandlerAttribute attribute = method.GetCustomAttribute<MessageHandlerAttribute>();
-                if (attribute.GroupId != messageHandlerGroupId)
-                    continue;
 
                 if (!method.IsStatic)
                     throw new NonStaticHandlerException(method.DeclaringType, method.Name);
@@ -178,6 +174,10 @@ namespace Riptide
                 Delegate clientMessageHandler = Delegate.CreateDelegate(typeof(MessageHandler), method, false);
                 if (clientMessageHandler != null)
                 {
+                    if (!groupHandlers.ContainsKey(attribute.GroupId))
+                        groupHandlers.Add(attribute.GroupId, new Dictionary<ushort, MessageHandler>());
+
+                    Dictionary<ushort, MessageHandler> messageHandlers = groupHandlers[attribute.GroupId];
                     // It's a message handler for Client instances
                     if (messageHandlers.ContainsKey(attribute.MessageId))
                     {
@@ -376,15 +376,21 @@ namespace Riptide
         /// <param name="message">The received message.</param>
         protected virtual void OnMessageReceived(Message message)
         {
+            ushort groupId = message.GetUShort();
             ushort messageId = message.GetUShort();
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
+            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, groupId, messageId, message));
 
             if (useMessageHandlers)
             {
-                if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
-                    messageHandler(message);
+                if (groupHandlers.TryGetValue(groupId, out Dictionary<ushort, MessageHandler> messageHandlers))
+                {
+                    if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                        messageHandler(message);
+                    else
+                        RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
+                }
                 else
-                    RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
+                    RiptideLogger.Log(LogType.Error, LogName, $"No group found for group ID {groupId}!");
             }
         }
 

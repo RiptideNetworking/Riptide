@@ -1,4 +1,4 @@
-using Riptide.Utils;
+﻿using Riptide.Utils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -6,6 +6,12 @@ using Timer = System.Timers.Timer;
 
 namespace Riptide.Demos.ConsoleServer
 {
+
+    public struct test
+    {
+        public byte b;
+    }
+
     internal class Program
     {
         private static Server server;
