@@ -327,8 +327,8 @@ namespace Riptide
         {
             if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
+                return default;
             }
 
             byte value = Converter.ByteFromBits(Bytes, readBit);
@@ -342,8 +342,8 @@ namespace Riptide
         {
             if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName, $"{default(sbyte)}"));
+                return default;
             }
 
             sbyte value = Converter.SByteFromBits(Bytes, readBit);
@@ -515,8 +515,8 @@ namespace Riptide
         {
             if (UnreadBits < 1)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, "false"));
-                return false;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, $"{default(bool)}"));
+                return default;
             }
 
             return Converter.BoolFromBit(Bytes, readBit++);
@@ -614,8 +614,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName, $"{default(short)}"));
+                return default;
             }
 
             short value = Converter.ShortFromBits(Bytes, readBit);
@@ -629,8 +629,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
+                return default;
             }
 
             ushort value = Converter.UShortFromBits(Bytes, readBit);
@@ -800,8 +800,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName, $"{default(int)}"));
+                return default;
             }
 
             int value = Converter.IntFromBits(Bytes, readBit);
@@ -815,8 +815,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
+                return default;
             }
 
             uint value = Converter.UIntFromBits(Bytes, readBit);
@@ -986,8 +986,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName, $"{default(long)}"));
+                return default;
             }
 
             long value = Converter.LongFromBits(Bytes, readBit);
@@ -1001,8 +1001,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
+                return default;
             }
 
             ulong value = Converter.ULongFromBits(Bytes, readBit);
@@ -1159,8 +1159,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName, $"{default(float)}"));
+                return default;
             }
 
             float value = Converter.FloatFromBits(Bytes, readBit);
@@ -1253,8 +1253,8 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(DoubleName));
-                return 0;
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(DoubleName, $"{default(double)}"));
+                return default;
             }
 
             double value = Converter.DoubleFromBits(Bytes, readBit);
@@ -1443,7 +1443,7 @@ namespace Riptide
         {
             if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName, "0"));
                 return 0;
             }
 
@@ -1459,7 +1459,7 @@ namespace Riptide
             
             if (UnreadBits < sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName, "0"));
                 return 0;
             }
 
@@ -1655,7 +1655,7 @@ namespace Riptide
         /// <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
         /// <param name="defaultReturn">Text describing the value which will be returned.</param>
         /// <returns>The error message.</returns>
-        private string NotEnoughBitsError(string valueName, string defaultReturn = "0")
+        private string NotEnoughBitsError(string valueName, string defaultReturn)
         {
             return $"Message only contains {UnreadBits} unread {Helper.CorrectForm(UnreadBits, "bit")}, which is not enough to retrieve a value of type '{valueName}'! Returning {defaultReturn}.";
         }
