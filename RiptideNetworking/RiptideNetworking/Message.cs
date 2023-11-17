@@ -457,7 +457,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ByteName));
                 amount = UnreadBits / BitsPerByte;
             }
 
@@ -484,7 +484,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, SByteName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, SByteName));
                 amount = UnreadBits / BitsPerByte;
             }
 
@@ -736,7 +736,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ShortName));
                 amount = UnreadBits / (sizeof(short) * BitsPerByte);
             }
 
@@ -755,7 +755,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, UShortName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UShortName));
                 amount = UnreadBits / (sizeof(ushort) * BitsPerByte);
             }
 
@@ -922,7 +922,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, IntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, IntName));
                 amount = UnreadBits / (sizeof(int) * BitsPerByte);
             }
 
@@ -941,7 +941,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, UIntName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UIntName));
                 amount = UnreadBits / (sizeof(uint) * BitsPerByte);
             }
 
@@ -1108,7 +1108,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, LongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, LongName));
                 amount = UnreadBits / (sizeof(long) * BitsPerByte);
             }
 
@@ -1127,7 +1127,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, ULongName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ULongName));
                 amount = UnreadBits / (sizeof(ulong) * BitsPerByte);
             }
 
@@ -1221,7 +1221,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, FloatName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, FloatName));
                 amount = UnreadBits / (sizeof(float) * BitsPerByte);
             }
 
@@ -1315,7 +1315,7 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(intoArray.Length, DoubleName));
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, DoubleName));
                 amount = UnreadBits / (sizeof(double) * BitsPerByte);
             }
 
