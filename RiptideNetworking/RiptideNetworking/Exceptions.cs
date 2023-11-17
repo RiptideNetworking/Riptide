@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Riptide
 {
-    /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unwritten bits to add a certain value.</summary>
+    /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unwritten bits to perform an operation.</summary>
     public class InsufficientCapacityException : Exception
     {
         /// <summary>The message with insufficient remaining capacity.</summary>
@@ -30,13 +30,22 @@ namespace Riptide
         public InsufficientCapacityException(string message, Exception inner) : base(message, inner) { }
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
+        /// <param name="reserveBits">The number of bits which were attempted to be reserved.</param>
+        public InsufficientCapacityException(Message message, int reserveBits) : base(GetErrorMessage(message, reserveBits))
+        {
+            RiptideMessage = message;
+            TypeName = "reservation";
+            RequiredBits = reserveBits;
+        }
+        /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
+        /// <param name="message">The message with insufficient remaining capacity.</param>
         /// <param name="typeName">The name of the type which could not be added to the message.</param>
         /// <param name="requiredBits">The number of available bits required for the type to be added successfully.</param>
         public InsufficientCapacityException(Message message, string typeName, int requiredBits) : base(GetErrorMessage(message, typeName, requiredBits))
         {
             RiptideMessage = message;
-            RequiredBits = requiredBits;
             TypeName = typeName;
+            RequiredBits = requiredBits;
         }
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
@@ -46,10 +55,17 @@ namespace Riptide
         public InsufficientCapacityException(Message message, int arrayLength, string typeName, int requiredBits) : base(GetErrorMessage(message, arrayLength, typeName, requiredBits))
         {
             RiptideMessage = message;
-            RequiredBits = requiredBits * arrayLength;
             TypeName = $"{typeName}[]";
+            RequiredBits = requiredBits * arrayLength;
         }
 
+        /// <summary>Constructs the error message from the given information.</summary>
+        /// <returns>The error message.</returns>
+        private static string GetErrorMessage(Message message, int reserveBits)
+        {
+            return $"Cannot reserve {reserveBits} {Helper.CorrectForm(reserveBits, "bit")} in a message with {message.UnwrittenBits} " +
+                   $"{Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
+        }
         /// <summary>Constructs the error message from the given information.</summary>
         /// <returns>The error message.</returns>
         private static string GetErrorMessage(Message message, string typeName, int requiredBits)

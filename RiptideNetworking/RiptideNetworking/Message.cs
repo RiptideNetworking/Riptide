@@ -248,6 +248,36 @@ namespace Riptide
 
         #region Add & Retrieve Data
         #region Bits
+        /// <summary>Moves the message's internal write position by the given <paramref name="amount"/> of bits, reserving them so they can be set at a later time.</summary>
+        /// <param name="amount">The number of bits to reserve.</param>
+        /// <returns>The message instance.</returns>
+        public Message ReserveBits(int amount)
+        {
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, amount);
+
+            int bit = writeBit % BitsPerByte;
+            writeBit += amount;
+
+            // Reset the last byte that the reserved range touches, unless it's also the first one, in which case it may already contain data which we don't want to overwrite
+            if (bit != 0 && amount < BitsPerByte)
+                Bytes[writeBit / BitsPerByte] = 0;
+
+            return this;
+        }
+
+        /// <summary>Moves the message's internal read position by the given <paramref name="amount"/> of bits, skipping over them.</summary>
+        /// <param name="amount">The number of bits to skip.</param>
+        /// <returns>The message instance.</returns>
+        public Message SkipBits(int amount)
+        {
+            if (UnreadBits < amount)
+                RiptideLogger.Log(LogType.Error, $"Message only contains {UnreadBits} unread {Helper.CorrectForm(UnreadBits, "bit")}, which is not enough to skip {amount}!");
+
+            readBit += amount;
+            return this;
+        }
+
         /// <summary>Sets up to 8 bits at the specified position in the message.</summary>
         /// <param name="bitfield">The bitfield from which to write the bits into the message.</param>
         /// <param name="amount">The number of bits to set.</param>
