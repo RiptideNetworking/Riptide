@@ -23,17 +23,13 @@ namespace Riptide
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
     public class Message
     {
-        /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
-        internal const int MinUnreliableBytes = UnreliableHeaderBits / BitsPerByte + (UnreliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
-        /// <summary>The minimum number of bytes contained in a reliable message.</summary>
-        internal const int MinReliableBytes = ReliableHeaderBits / BitsPerByte + (ReliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
-        /// <summary>The minimum number of bytes contained in a notify message.</summary>
-        internal const int MinNotifyBytes = NotifyHeaderBits / BitsPerByte + (NotifyHeaderBits % BitsPerByte == 0 ? 0 : 1);
+        /// <summary>The maximum number of bits required for a message's header.</summary>
+        public const int MaxHeaderSize = NotifyHeaderBits;
         /// <summary>The number of bits in a byte.</summary>
         internal const int BitsPerByte = 8;
         /// <summary>The number of bits used by the <see cref="MessageHeader"/>.</summary>
         internal const int HeaderBits = 4;
-        /// <summary>A bitmask that, when applied, only keeps the header bits.</summary>
+        /// <summary>A bitmask that, when applied, only keeps the bits corresponding to the <see cref="MessageHeader"/> value.</summary>
         internal const byte HeaderBitmask = (1 << HeaderBits) - 1;
         /// <summary>The header size for unreliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>4 bits - header.</remarks>
@@ -44,8 +40,13 @@ namespace Riptide
         /// <summary>The header size for notify messages.</summary>
         /// <remarks>4 bits - header, 24 bits - ack, 16 bits - sequence ID.</remarks>
         internal const int NotifyHeaderBits = HeaderBits + 5 * BitsPerByte;
-        /// <summary>The maximum number of bits required for a message's header.</summary>
-        public const int MaxHeaderSize = NotifyHeaderBits;
+        /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
+        internal const int MinUnreliableBytes = UnreliableHeaderBits / BitsPerByte + (UnreliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
+        /// <summary>The minimum number of bytes contained in a reliable message.</summary>
+        internal const int MinReliableBytes = ReliableHeaderBits / BitsPerByte + (ReliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
+        /// <summary>The minimum number of bytes contained in a notify message.</summary>
+        internal const int MinNotifyBytes = NotifyHeaderBits / BitsPerByte + (NotifyHeaderBits % BitsPerByte == 0 ? 0 : 1);
+
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; } = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + 1225;
         /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="MaxHeaderSize"/>.</summary>
@@ -106,28 +107,6 @@ namespace Riptide
         /// <param name="maxSize">The maximum amount of bytes the message can contain.</param>
         private Message(int maxSize) => Bytes = new byte[maxSize];
 
-        #region Pooling
-        /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
-        public static void TrimPool()
-        {
-            if (Peer.ActiveCount == 0)
-            {
-                // No Servers or Clients are running, empty the list and reset the capacity
-                pool.Clear();
-                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
-            }
-            else
-            {
-                // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
-                int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
-                if (pool.Count > idealInstanceAmount)
-                {
-                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
-                    pool.Capacity = idealInstanceAmount * 2;
-                }
-            }
-        }
-
         /// <summary>Gets a completely empty message instance with no header.</summary>
         /// <returns>An empty message instance.</returns>
         public static Message Create()
@@ -164,6 +143,28 @@ namespace Riptide
         public static Message CreateNotify()
         {
             return RetrieveFromPool().Init(MessageHeader.Notify);
+        }
+
+        #region Pooling
+        /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
+        public static void TrimPool()
+        {
+            if (Peer.ActiveCount == 0)
+            {
+                // No Servers or Clients are running, empty the list and reset the capacity
+                pool.Clear();
+                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+            }
+            else
+            {
+                // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
+                int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
+                if (pool.Count > idealInstanceAmount)
+                {
+                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
+                    pool.Capacity = idealInstanceAmount * 2;
+                }
+            }
         }
 
         /// <summary>Retrieves a message instance from the pool. If none is available, a new instance is created.</summary>
