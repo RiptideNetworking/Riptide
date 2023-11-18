@@ -81,7 +81,7 @@ namespace Riptide.Utils
                 array[pos + 1] = (byte)(bitfield | (array[pos + 1] & inverseMask));
                 array[pos + 2] = (byte)((bitfield >>  8) | (array[pos + 2] & (inverseMask >>  8)));
                 array[pos + 3] = (byte)((bitfield >> 16) | (array[pos + 3] & (inverseMask >> 16)));
-                array[pos + 4] = (byte)((bitfield >> 24) | (array[pos + 4] & (inverseMask >> 24)));
+                array[pos + 4] = (byte)((bitfield >> 24) | (array[pos + 4] & ~(mask >> (32 - bit)))); // This one can't use inverseMask because it would have incorrectly zeroed bits
             }
         }
         /// <inheritdoc cref="SetBits(byte, int, byte[], int)"/>
@@ -116,7 +116,7 @@ namespace Riptide.Utils
                 array[pos + 5] = (byte)((bitfield >> 32) | (array[pos + 5] & (inverseMask >> 32)));
                 array[pos + 6] = (byte)((bitfield >> 40) | (array[pos + 6] & (inverseMask >> 40)));
                 array[pos + 7] = (byte)((bitfield >> 48) | (array[pos + 7] & (inverseMask >> 48)));
-                array[pos + 8] = (byte)((bitfield >> 56) | (array[pos + 8] & (inverseMask >> 56)));
+                array[pos + 8] = (byte)((bitfield >> 56) | (array[pos + 8] & ~(mask >> (64 - bit)))); // This one can't use inverseMask because it would have incorrectly zeroed bits
             }
         }
 
