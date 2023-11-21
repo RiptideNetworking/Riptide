@@ -266,7 +266,7 @@ namespace Riptide
                 Message message = Message.Create(MessageHeader.Reject);
                 message.AddByte((byte)reason);
                 if (reason == RejectReason.Custom)
-                    message.AddBytes(rejectMessage.GetBytes(rejectMessage.BytesInUse), false);
+                    message.AddMessage(rejectMessage);
 
                 for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
                     connection.Send(message, false);
@@ -516,7 +516,7 @@ namespace Riptide
             message.AddByte((byte)reason);
 
             if (reason == DisconnectReason.Kicked && disconnectMessage != null)
-                message.AddBytes(disconnectMessage.GetBytes(disconnectMessage.BytesInUse), false);
+                message.AddMessage(disconnectMessage);
 
             Send(message, client);
         }

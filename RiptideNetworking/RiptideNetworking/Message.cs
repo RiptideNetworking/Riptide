@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -263,6 +263,80 @@ namespace Riptide
         #endregion
 
         #region Add & Retrieve Data
+        #region Message
+        /// <summary>Adds <paramref name="message"/>'s unread bits to the message.</summary>
+        /// <param name="message">The message whose unread bits to add.</param>
+        /// <returns>The message that the bits were added to.</returns>
+        /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
+        public Message AddMessage(Message message) => AddMessage(message, message.UnreadBits, message.readBit);
+        /// <summary>Adds a range of bits from <paramref name="message"/> to the message.</summary>
+        /// <param name="message">The message whose bits to add.</param>
+        /// <param name="amount">The number of bits to add.</param>
+        /// <param name="startBit">The position in <paramref name="message"/> from which to add the bits.</param>
+        /// <returns>The message that the bits were added to.</returns>
+        /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
+        public Message AddMessage(Message message, int amount, int startBit)
+        {
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, nameof(Message), amount);
+
+            int sourcePos = startBit / BitsPerSegment;
+            int sourceBit = startBit % BitsPerSegment;
+            int destPos   = writeBit / BitsPerSegment;
+            int destBit   = writeBit % BitsPerSegment;
+            int bitOffset = destBit - sourceBit;
+            int destSegments = (writeBit + amount) / BitsPerSegment - destPos + 1;
+
+            if (bitOffset == 0)
+            {
+                // Source doesn't need to be shifted, source and dest bits span the same number of segments
+                ulong firstSegment = message.data[sourcePos];
+                if (destBit == 0)
+                    data[destPos] = firstSegment;
+                else
+                    data[destPos] |= firstSegment & ~((1ul << sourceBit) - 1);
+
+                for (int i = 1; i < destSegments; i++)
+                    data[destPos + i] = message.data[sourcePos + i];
+            }
+            else if (bitOffset > 0)
+            {
+                // Source needs to be shifted left, dest bits may span more segments than source bits
+                ulong firstSegment = message.data[sourcePos] & ~((1ul << sourceBit) - 1);
+                firstSegment <<= bitOffset;
+                if (destBit == 0)
+                    data[destPos] = firstSegment;
+                else
+                    data[destPos] |= firstSegment;
+
+                for (int i = 1; i < destSegments; i++)
+                    data[destPos + i] = (message.data[sourcePos + i - 1] >> (BitsPerSegment - bitOffset)) | (message.data[sourcePos + i] << bitOffset);
+            }
+            else
+            {
+                // Source needs to be shifted right, source bits may span more segments than dest bits
+                bitOffset = -bitOffset;
+                ulong firstSegment = message.data[sourcePos] & ~((1ul << sourceBit) - 1);
+                firstSegment >>= bitOffset;
+                if (destBit == 0)
+                    data[destPos] = firstSegment;
+                else
+                    data[destPos] |= firstSegment;
+
+                int sourceSegments = (startBit + amount) / BitsPerSegment - sourcePos + 1;
+                for (int i = 1; i < sourceSegments; i++)
+                {
+                    data[destPos + i - 1] |= message.data[sourcePos + i] << (BitsPerSegment - bitOffset);
+                    data[destPos + i    ]  = message.data[sourcePos + i] >> bitOffset;
+                }
+            }
+
+            writeBit += amount;
+            data[destPos + destSegments - 1] &= (1ul << (writeBit % BitsPerSegment)) - 1;
+            return this;
+        }
+        #endregion
+
         #region Bits
         /// <summary>Moves the message's internal write position by the given <paramref name="amount"/> of bits, reserving them so they can be set at a later time.</summary>
         /// <param name="amount">The number of bits to reserve.</param>
