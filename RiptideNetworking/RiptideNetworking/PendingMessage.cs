@@ -50,9 +50,9 @@ namespace Riptide
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
 
-            message.SetBits(sequenceId, sizeof(ushort) * Message.BitsPerByte, Message.HeaderBits);
+            message.SetBits(sequenceId, sizeof(ushort) * Converter.BitsPerByte, Message.HeaderBits);
             pendingMessage.size = message.BytesInUse;
-            Array.Copy(message.Bytes, 0, pendingMessage.data, 0, pendingMessage.size);
+            Buffer.BlockCopy(message.Data, 0, pendingMessage.data, 0, pendingMessage.size);
 
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;

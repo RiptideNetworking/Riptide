@@ -1,4 +1,4 @@
-// This file is provided under The MIT License as part of RiptideNetworking.
+﻿// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -151,7 +151,8 @@ namespace Riptide
             if (message.SendMode == MessageSendMode.Unreliable)
             {
                 int byteAmount = message.BytesInUse;
-                Send(message.Bytes, byteAmount);
+                Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+                Send(Message.ByteBuffer, byteAmount);
                 Metrics.SentUnreliable(byteAmount);
             }
             else
@@ -175,7 +176,8 @@ namespace Riptide
         {
             ushort sequenceId = notify.InsertHeader(message);
             int byteAmount = message.BytesInUse;
-            Send(message.Bytes, byteAmount);
+            Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+            Send(Message.ByteBuffer, byteAmount);
             Metrics.SentNotify(byteAmount);
 
             if (shouldRelease)
@@ -200,7 +202,7 @@ namespace Riptide
             Metrics.ReceivedNotify(amount);
             if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, Message.HeaderBits + 24)))
             {
-                Array.Copy(dataBuffer, 1, message.Bytes, 1, amount - 1); // Copy payload
+                Buffer.BlockCopy(dataBuffer, 1, message.Data, 1, amount - 1); // Copy payload
                 NotifyReceived?.Invoke(message);
             }
             else
@@ -481,8 +483,8 @@ namespace Riptide
             internal ushort InsertHeader(Message message)
             {
                 ushort sequenceId = NextSequenceId;
-                ulong notifyBits = lastReceivedSeqId | ((ulong)receivedSeqIds.First8 << (2 * Message.BitsPerByte)) | ((ulong)sequenceId << (3 * Message.BitsPerByte));
-                message.SetBits(notifyBits, 5 * Message.BitsPerByte, Message.HeaderBits);
+                ulong notifyBits = lastReceivedSeqId | ((ulong)receivedSeqIds.First8 << (2 * Converter.BitsPerByte)) | ((ulong)sequenceId << (3 * Converter.BitsPerByte));
+                message.SetBits(notifyBits, 5 * Converter.BitsPerByte, Message.HeaderBits);
                 return sequenceId;
             }
 

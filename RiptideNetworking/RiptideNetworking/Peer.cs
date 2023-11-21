@@ -170,7 +170,7 @@ namespace Riptide
             else if (message.SendMode == MessageSendMode.Unreliable)
             {
                 if (e.Amount > Message.MinUnreliableBytes)
-                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
+                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
 
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
@@ -183,7 +183,7 @@ namespace Riptide
                 e.FromConnection.Metrics.ReceivedReliable(e.Amount);
                 if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
                 {
-                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
+                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
                 else
