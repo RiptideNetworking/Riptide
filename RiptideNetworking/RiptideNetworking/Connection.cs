@@ -595,13 +595,6 @@ namespace Riptide
                 if (sequenceGap > 0)
                 {
                     // The latest sequence ID that the other end has received is newer than the previous one
-                    for (int i = 0; i < 16; i++)
-                    {
-                        // Clear any messages that have been newly acknowledged
-                        if (!ackedSeqIds.IsSet(i + 1) && (remoteReceivedSeqIds & (1 << (sequenceGap + i))) != 0)
-                            connection.ClearMessage((ushort)(lastAckedSeqId - (i + 1)));
-                    }
-
                     if (!ackedSeqIds.HasCapacityFor(sequenceGap, out int overflow))
                     {
                         for (int i = 0; i < overflow; i++)
@@ -615,9 +608,17 @@ namespace Riptide
                     }
 
                     ackedSeqIds.ShiftBy(sequenceGap);
-                    ackedSeqIds.Combine(remoteReceivedSeqIds);
-                    ackedSeqIds.Set(sequenceGap); // Ensure that the bit corresponding to the previous ack is set
                     lastAckedSeqId = remoteLastReceivedSeqId;
+
+                    for (int i = 0; i < 16; i++)
+                    {
+                        // Clear any messages that have been newly acknowledged
+                        if (!ackedSeqIds.IsSet(i + 1) && (remoteReceivedSeqIds & (1 << i)) != 0)
+                            connection.ClearMessage((ushort)(lastAckedSeqId - (i + 1)));
+                    }
+
+                    ackedSeqIds.Combine(remoteReceivedSeqIds);
+                    ackedSeqIds.Set(sequenceGap); // Ensure that the bit corresponding to the previous acked sequence ID is set
                     connection.ClearMessage(remoteLastReceivedSeqId);
                 }
                 else if (sequenceGap < 0)
