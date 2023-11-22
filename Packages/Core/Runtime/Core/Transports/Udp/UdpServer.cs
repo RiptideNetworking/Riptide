@@ -83,7 +83,7 @@ namespace Riptide.Transports.Udp
         /// <inheritdoc/>
         protected override void OnDataReceived(byte[] dataBuffer, int amount, IPEndPoint fromEndPoint)
         {
-            if ((MessageHeader)dataBuffer[0] == MessageHeader.Connect && !HandleConnectionAttempt(fromEndPoint))
+            if ((MessageHeader)(dataBuffer[0] & Message.HeaderBitmask) == MessageHeader.Connect && !HandleConnectionAttempt(fromEndPoint))
                 return;
 
             if (connections.TryGetValue(fromEndPoint, out Connection connection) && !connection.IsNotConnected)

@@ -158,33 +158,32 @@ namespace Riptide
         /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
-            MessageHeader header = (MessageHeader)e.DataBuffer[0];
-            Message message = Message.Create(header, e.Amount);
+            Message message = Message.Create().Init(e.DataBuffer[0], e.Amount, out MessageHeader header);
             
             if (header == MessageHeader.Notify)
             {
-                if (e.Amount < Message.NotifyHeaderSize)
+                if (e.Amount < Message.MinNotifyBytes)
                     return;
 
                 e.FromConnection.ProcessNotify(e.DataBuffer, e.Amount, message);
             }
             else if (message.SendMode == MessageSendMode.Unreliable)
             {
-                if (e.Amount > Message.UnreliableHeaderSize) // Only bother with the array copy if there is more than 1 byte in the packet (1 or less means no payload for a reliably sent packet)
-                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
+                if (e.Amount > Message.MinUnreliableBytes)
+                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
 
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
             }
             else
             {
-                if (e.Amount < Message.ReliableHeaderSize)
+                if (e.Amount < Message.MinReliableBytes)
                     return;
 
                 e.FromConnection.Metrics.ReceivedReliable(e.Amount);
-                if (e.FromConnection.ShouldHandle(Converter.ToUShort(e.DataBuffer, 1)))
+                if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
                 {
-                    Array.Copy(e.DataBuffer, 1, message.Bytes, 1, e.Amount - 1);
+                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
                 else

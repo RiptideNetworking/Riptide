@@ -220,7 +220,7 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being rejected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         public void Reject(Connection connection, Message message = null)
         {
-            if (message != null && message.ReadLength != 0)
+            if (message != null && message.ReadBits != 0)
                 RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting rejection data!");
 
             if (pendingConnections.Remove(connection))
@@ -266,7 +266,7 @@ namespace Riptide
                 Message message = Message.Create(MessageHeader.Reject);
                 message.AddByte((byte)reason);
                 if (reason == RejectReason.Custom)
-                    message.AddBytes(rejectMessage.GetBytes(rejectMessage.WrittenLength), false);
+                    message.AddMessage(rejectMessage);
 
                 for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
                     connection.Send(message, false);
@@ -336,7 +336,7 @@ namespace Riptide
                         OnClientConnected(connection);
                     break;
                 default:
-                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.WrittenLength} bytes received from {connection}.");
+                    RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.BytesInUse} bytes received from {connection}.");
                     break;
             }
 
@@ -398,7 +398,7 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         public void DisconnectClient(ushort id, Message message = null)
         {
-            if (message != null && message.ReadLength != 0)
+            if (message != null && message.ReadBits != 0)
                 RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting disconnection data!");
 
             if (clients.TryGetValue(id, out Connection client))
@@ -415,7 +415,7 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
         public void DisconnectClient(Connection client, Message message = null)
         {
-            if (message != null && message.ReadLength != 0)
+            if (message != null && message.ReadBits != 0)
                 RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting disconnection data!");
 
             if (clients.ContainsKey(client.Id))
@@ -516,7 +516,7 @@ namespace Riptide
             message.AddByte((byte)reason);
 
             if (reason == DisconnectReason.Kicked && disconnectMessage != null)
-                message.AddBytes(disconnectMessage.GetBytes(disconnectMessage.WrittenLength), false);
+                message.AddMessage(disconnectMessage);
 
             Send(message, client);
         }
