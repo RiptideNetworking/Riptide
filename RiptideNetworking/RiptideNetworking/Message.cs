@@ -516,6 +516,60 @@ namespace Riptide
         }
         #endregion
 
+        #region Varint
+        /// <summary>Adds a positive or negative number to the message, using fewer bits for smaller values.</summary>
+        /// <inheritdoc cref="AddVarULong(ulong)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Message AddVarLong(long value) => AddVarULong((ulong)Converter.ZigZagEncode(value));
+        /// <summary>Adds a positive number to the message, using fewer bits for smaller values.</summary>
+        /// <param name="value">The value to add.</param>
+        /// <returns>The message that the value was added to.</returns>
+        /// <remarks>The value is added in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
+        /// added to the message using fewer bits, while large values will require a few more bits than they would if they were added via <see cref="AddByte(byte)"/>,
+        /// <see cref="AddUShort(ushort)"/>, <see cref="AddUInt"/>, or <see cref="AddULong(ulong)"/> (or their signed counterparts).</remarks>
+        public Message AddVarULong(ulong value)
+        {
+            do
+            {
+                byte byteValue = (byte)(value & 0b_0111_1111);
+                value >>= 7;
+                if (value != 0) // There's more to write
+                    byteValue |= 0b_1000_0000;
+
+                AddByte(byteValue);
+            }
+            while (value != 0);
+            
+            return this;
+        }
+
+        /// <summary>Retrieves a positive or negative number from the message, using fewer bits for smaller values.</summary>
+        /// <inheritdoc cref="GetVarULong()"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public long GetVarLong() => Converter.ZigZagDecode((long)GetVarULong());
+        /// <summary>Retrieves a positive number from the message, using fewer bits for smaller values.</summary>
+        /// <returns>The value that was retrieved.</returns>
+        /// <remarks>The value is retrieved in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
+        /// retrieved from the message using fewer bits, while large values will require a few more bits than they would if they were retrieved via <see cref="GetByte"/>,
+        /// <see cref="GetUShort"/>, <see cref="GetUInt"/>, or <see cref="GetULong"/> (or their signed counterparts).</remarks>
+        public ulong GetVarULong()
+        {
+            ulong byteValue;
+            ulong value = 0;
+            int shift = 0;
+
+            do
+            {
+                byteValue = GetByte();
+                value |= (byteValue & 0b_0111_1111) << shift;
+                shift += 7;
+            }
+            while ((byteValue & 0b_1000_0000) != 0);
+
+            return value;
+        }
+        #endregion
+
         #region Byte & SByte
         /// <summary>Adds a <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
@@ -580,7 +634,7 @@ namespace Riptide
         public Message AddBytes(byte[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, ByteName, BitsPerByte);
@@ -609,7 +663,7 @@ namespace Riptide
         public Message AddSBytes(sbyte[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, SByteName, BitsPerByte);
@@ -625,7 +679,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public byte[] GetBytes() => GetBytes(GetArrayLength());
+        public byte[] GetBytes() => GetBytes((int)GetVarULong());
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -649,7 +703,7 @@ namespace Riptide
 
         /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public sbyte[] GetSBytes() => GetSBytes(GetArrayLength());
+        public sbyte[] GetSBytes() => GetSBytes((int)GetVarULong());
         /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -751,7 +805,7 @@ namespace Riptide
         public Message AddBools(bool[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length)
                 throw new InsufficientCapacityException(this, array.Length, BoolName, 1);
@@ -764,7 +818,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public bool[] GetBools() => GetBools(GetArrayLength());
+        public bool[] GetBools() => GetBools((int)GetVarULong());
         /// <summary>Retrieves a <see cref="bool"/> array from the message.</summary>
         /// <param name="amount">The amount of bools to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -867,7 +921,7 @@ namespace Riptide
         public Message AddShorts(short[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(short) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, ShortName, sizeof(short) * BitsPerByte);
@@ -888,7 +942,7 @@ namespace Riptide
         public Message AddUShorts(ushort[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(ushort) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, UShortName, sizeof(ushort) * BitsPerByte);
@@ -904,7 +958,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public short[] GetShorts() => GetShorts(GetArrayLength());
+        public short[] GetShorts() => GetShorts((int)GetVarULong());
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -928,7 +982,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public ushort[] GetUShorts() => GetUShorts(GetArrayLength());
+        public ushort[] GetUShorts() => GetUShorts((int)GetVarULong());
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1053,7 +1107,7 @@ namespace Riptide
         public Message AddInts(int[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(int) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, IntName, sizeof(int) * BitsPerByte);
@@ -1074,7 +1128,7 @@ namespace Riptide
         public Message AddUInts(uint[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(uint) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, UIntName, sizeof(uint) * BitsPerByte);
@@ -1090,7 +1144,7 @@ namespace Riptide
 
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public int[] GetInts() => GetInts(GetArrayLength());
+        public int[] GetInts() => GetInts((int)GetVarULong());
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1114,7 +1168,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public uint[] GetUInts() => GetUInts(GetArrayLength());
+        public uint[] GetUInts() => GetUInts((int)GetVarULong());
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1239,7 +1293,7 @@ namespace Riptide
         public Message AddLongs(long[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(long) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, LongName, sizeof(long) * BitsPerByte);
@@ -1260,7 +1314,7 @@ namespace Riptide
         public Message AddULongs(ulong[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(ulong) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, ULongName, sizeof(ulong) * BitsPerByte);
@@ -1276,7 +1330,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public long[] GetLongs() => GetLongs(GetArrayLength());
+        public long[] GetLongs() => GetLongs((int)GetVarULong());
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1300,7 +1354,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public ulong[] GetULongs() => GetULongs(GetArrayLength());
+        public ulong[] GetULongs() => GetULongs((int)GetVarULong());
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1397,7 +1451,7 @@ namespace Riptide
         public Message AddFloats(float[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(float) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, FloatName, sizeof(float) * BitsPerByte);
@@ -1413,7 +1467,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public float[] GetFloats() => GetFloats(GetArrayLength());
+        public float[] GetFloats() => GetFloats((int)GetVarULong());
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1491,7 +1545,7 @@ namespace Riptide
         public Message AddDoubles(double[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             if (UnwrittenBits < array.Length * sizeof(double) * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, DoubleName, sizeof(double) * BitsPerByte);
@@ -1507,7 +1561,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public double[] GetDoubles() => GetDoubles(GetArrayLength());
+        public double[] GetDoubles() => GetDoubles((int)GetVarULong());
         /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1555,12 +1609,7 @@ namespace Riptide
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
         public Message AddString(string value)
         {
-            byte[] stringBytes = Encoding.UTF8.GetBytes(value);
-            int requiredBytes = stringBytes.Length + (stringBytes.Length <= OneByteLengthThreshold ? 1 : 2);
-            if (UnwrittenBits < requiredBytes * BitsPerByte)
-                throw new InsufficientCapacityException(this, StringName, requiredBytes * BitsPerByte);
-
-            AddBytes(stringBytes);
+            AddBytes(Encoding.UTF8.GetBytes(value));
             return this;
         }
 
@@ -1568,7 +1617,7 @@ namespace Riptide
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
         public string GetString()
         {
-            int length = GetArrayLength(); // Get the length of the string (in bytes, NOT characters)
+            int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadBits < length * BitsPerByte)
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(StringName, "shortened string"));
@@ -1586,7 +1635,7 @@ namespace Riptide
         public Message AddStrings(string[] array, bool includeLength = true)
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             // It'd be ideal to throw an exception here (instead of in AddString) if the entire array isn't going to fit, but since each string could
             // be (and most likely is) a different length and some characters use more than a single byte, the only way of doing that would be to loop
@@ -1601,7 +1650,7 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings() => GetStrings(GetArrayLength());
+        public string[] GetStrings() => GetStrings((int)GetVarULong());
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1624,70 +1673,6 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
                 intoArray[startIndex + i] = GetString();
-        }
-        #endregion
-
-        #region Array Lengths
-        /// <summary>The maximum number of elements an array can contain where the length still fits into a single byte.</summary>
-        private const int OneByteLengthThreshold = 0b_0111_1111;
-        /// <summary>The maximum number of elements an array can contain where the length still fits into two byte2.</summary>
-        private const int TwoByteLengthThreshold = 0b_0111_1111_1111_1111;
-
-        /// <summary>Adds the length of an array to the message, using either 8 or 16 bits depending on how large the array is. Does not support arrays with more than 32,767 elements.</summary>
-        /// <param name="length">The length of the array.</param>
-        private void AddArrayLength(int length)
-        {
-            if (UnwrittenBits < BitsPerByte)
-                throw new InsufficientCapacityException(this, ArrayLengthName, (length <= OneByteLengthThreshold ? 1 : 2) * BitsPerByte);
-
-            if (length <= OneByteLengthThreshold)
-            {
-                Converter.ByteToBits((byte)(length << 1), data, writeBit);
-                writeBit += BitsPerByte;
-            }
-            else
-            {
-                if (length > TwoByteLengthThreshold)
-                    throw new ArgumentOutOfRangeException(nameof(length), $"Messages do not support auto-inclusion of array lengths for arrays with more than {TwoByteLengthThreshold} elements! Either send a smaller array or set the 'includeLength' paremeter to false in the Add method and manually pass the array length to the Get method.");
-                
-                if (UnwrittenBits < sizeof(ushort) * BitsPerByte)
-                    throw new InsufficientCapacityException(this, ArrayLengthName, sizeof(ushort) * BitsPerByte);
-
-                length = (length << 1) | 1; // OR in the big array flag
-                Converter.UShortToBits((ushort)length, data, writeBit);
-                writeBit += sizeof(ushort) * BitsPerByte;
-            }
-        }
-
-        /// <summary>Retrieves the length of an array from the message, using either 8 or 16 bits depending on how large the array is.</summary>
-        /// <returns>The length of the array.</returns>
-        private int GetArrayLength()
-        {
-            if (UnreadBits < BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName, "0"));
-                return 0;
-            }
-
-            int pos = readBit / BitsPerSegment;
-            int bit = readBit % BitsPerSegment;
-            int value;
-            if ((data[pos] & (1ul << bit)) == 0)
-            {
-                value = Converter.ByteFromBits(data, readBit);
-                readBit += BitsPerByte;
-                return value >> 1; // Get rid of the flag bit
-            }
-            
-            if (UnreadBits < sizeof(ushort) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ArrayLengthName, "0"));
-                return 0;
-            }
-
-            value = Converter.UShortFromBits(data, readBit);
-            readBit += sizeof(ushort) * BitsPerByte;
-            return value >> 1; // Get rid of the flag bit
         }
         #endregion
 
@@ -1717,7 +1702,7 @@ namespace Riptide
         public Message AddSerializables<T>(T[] array, bool includeLength = true) where T : IMessageSerializable
         {
             if (includeLength)
-                AddArrayLength(array.Length);
+                AddVarULong((uint)array.Length);
 
             for (int i = 0; i < array.Length; i++)
                 AddSerializable(array[i]);
@@ -1727,7 +1712,7 @@ namespace Riptide
 
         /// <summary>Retrieves an array of serializables from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public T[] GetSerializables<T>() where T : IMessageSerializable, new() => GetSerializables<T>(GetArrayLength());
+        public T[] GetSerializables<T>() where T : IMessageSerializable, new() => GetSerializables<T>((int)GetVarULong());
         /// <summary>Retrieves an array of serializables from the message.</summary>
         /// <param name="amount">The amount of serializables to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
@@ -1756,9 +1741,7 @@ namespace Riptide
         private void ReadSerializables<T>(int amount, T[] intArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
             for (int i = 0; i < amount; i++)
-            {
                 intArray[startIndex + i] = GetSerializable<T>();
-            }
         }
         #endregion
 

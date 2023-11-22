@@ -17,6 +17,42 @@ namespace Riptide.Utils
         /// <summary>The number of bits in a ulong.</summary>
         public const int BitsPerULong = sizeof(ulong) * BitsPerByte;
 
+        #region Zig Zag Encoding
+        /// <summary>Zig zag encodes <paramref name="value"/>.</summary>
+        /// <param name="value">The value to encode.</param>
+        /// <returns>The zig zag-encoded value.</returns>
+        /// <remarks>Zig zag encoding allows small negative numbers to be represented as small positive numbers. All positive numbers are doubled and become even numbers,
+        /// while all negative numbers become positive odd numbers. In contrast, simply casting a negative value to its unsigned counterpart would result in a large positive
+        /// number which uses the high bit, rendering compression via <see cref="Message.AddVarULong(ulong)"/> and <see cref="Message.GetVarULong"/> ineffective.</remarks>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ZigZagEncode(int value)
+        {
+            return (value >> 31) ^ (value << 1);
+        }
+        /// <inheritdoc cref="ZigZagEncode(int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long ZigZagEncode(long value)
+        {
+            return (value >> 63) ^ (value << 1);
+        }
+
+        /// <summary>Zig zag decodes <paramref name="value"/>.</summary>
+        /// <param name="value">The value to decode.</param>
+        /// <returns>The zig zag-decoded value.</returns>
+        /// <inheritdoc cref="ZigZagEncode(int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int ZigZagDecode(int value)
+        {
+            return (value >> 1) ^ -(value & 1);
+        }
+        /// <inheritdoc cref="ZigZagDecode(int)"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static long ZigZagDecode(long value)
+        {
+            return (value >> 1) ^ -(value & 1);
+        }
+        #endregion
+
         #region Bits
         /// <summary>Takes <paramref name="amount"/> bits from <paramref name="bitfield"/> and writes them into <paramref name="array"/>, starting at <paramref name="startBit"/>.</summary>
         /// <param name="bitfield">The bitfield from which to write the bits into the array.</param>
