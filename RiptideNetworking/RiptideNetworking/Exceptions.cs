@@ -9,15 +9,15 @@ using System.Reflection;
 
 namespace Riptide
 {
-    /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unread bytes to add a certain value.</summary>
+    /// <summary>The exception that is thrown when a <see cref="Message"/> does not contain enough unwritten bits to perform an operation.</summary>
     public class InsufficientCapacityException : Exception
     {
         /// <summary>The message with insufficient remaining capacity.</summary>
         public readonly Message RiptideMessage;
         /// <summary>The name of the type which could not be added to the message.</summary>
         public readonly string TypeName;
-        /// <summary>The number of available bytes the type requires in order to be added successfully.</summary>
-        public readonly int RequiredBytes;
+        /// <summary>The number of available bits the type requires in order to be added successfully.</summary>
+        public readonly int RequiredBits;
 
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance.</summary>
         public InsufficientCapacityException() { }
@@ -30,43 +30,56 @@ namespace Riptide
         public InsufficientCapacityException(string message, Exception inner) : base(message, inner) { }
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
-        /// <param name="typeName">The name of the type which could not be added to the message.</param>
-        /// <param name="requiredBytes">The number of available bytes required for the type to be added successfully.</param>
-        public InsufficientCapacityException(Message message, string typeName, int requiredBytes) : base(GetErrorMessage(message, typeName, requiredBytes))
+        /// <param name="reserveBits">The number of bits which were attempted to be reserved.</param>
+        public InsufficientCapacityException(Message message, int reserveBits) : base(GetErrorMessage(message, reserveBits))
         {
             RiptideMessage = message;
-            RequiredBytes = requiredBytes;
+            TypeName = "reservation";
+            RequiredBits = reserveBits;
+        }
+        /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
+        /// <param name="message">The message with insufficient remaining capacity.</param>
+        /// <param name="typeName">The name of the type which could not be added to the message.</param>
+        /// <param name="requiredBits">The number of available bits required for the type to be added successfully.</param>
+        public InsufficientCapacityException(Message message, string typeName, int requiredBits) : base(GetErrorMessage(message, typeName, requiredBits))
+        {
+            RiptideMessage = message;
             TypeName = typeName;
+            RequiredBits = requiredBits;
         }
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
         /// <param name="arrayLength">The length of the array which could not be added to the message.</param>
         /// <param name="typeName">The name of the array's type.</param>
-        /// <param name="requiredBytes">The number of available bytes required for a single element of the array to be added successfully.</param>
-        /// <param name="totalRequiredBytes">The number of available bytes required for the entire array to be added successfully. If left as -1, this will be set to <paramref name="arrayLength"/> * <paramref name="requiredBytes"/>.</param>
-        public InsufficientCapacityException(Message message, int arrayLength, string typeName, int requiredBytes, int totalRequiredBytes = -1) : base(GetErrorMessage(message, arrayLength, typeName, requiredBytes, totalRequiredBytes))
+        /// <param name="requiredBits">The number of available bits required for a single element of the array to be added successfully.</param>
+        public InsufficientCapacityException(Message message, int arrayLength, string typeName, int requiredBits) : base(GetErrorMessage(message, arrayLength, typeName, requiredBits))
         {
             RiptideMessage = message;
-            RequiredBytes = totalRequiredBytes == -1 ? arrayLength * requiredBytes : totalRequiredBytes;
             TypeName = $"{typeName}[]";
+            RequiredBits = requiredBits * arrayLength;
         }
 
         /// <summary>Constructs the error message from the given information.</summary>
         /// <returns>The error message.</returns>
-        private static string GetErrorMessage(Message message, string typeName, int requiredBytes)
+        private static string GetErrorMessage(Message message, int reserveBits)
         {
-            return $"Cannot add a value of type '{typeName}' (requires {requiredBytes} {Helper.CorrectForm(requiredBytes, "byte")}) to " +
-                   $"a message with {message.UnwrittenLength} {Helper.CorrectForm(message.UnwrittenLength, "byte")} of remaining capacity!";
+            return $"Cannot reserve {reserveBits} {Helper.CorrectForm(reserveBits, "bit")} in a message with {message.UnwrittenBits} " +
+                   $"{Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
         }
         /// <summary>Constructs the error message from the given information.</summary>
         /// <returns>The error message.</returns>
-        private static string GetErrorMessage(Message message, int arrayLength, string typeName, int requiredBytes, int totalRequiredBytes)
+        private static string GetErrorMessage(Message message, string typeName, int requiredBits)
         {
-            if (totalRequiredBytes == -1)
-                totalRequiredBytes = arrayLength * requiredBytes;
-
-            return $"Cannot add an array of type '{typeName}[]' with {arrayLength} {Helper.CorrectForm(arrayLength, "element")} (requires {totalRequiredBytes} {Helper.CorrectForm(totalRequiredBytes, "byte")}) " +
-                   $"to a message with {message.UnwrittenLength} {Helper.CorrectForm(message.UnwrittenLength, "byte")} of remaining capacity!";
+            return $"Cannot add a value of type '{typeName}' (requires {requiredBits} {Helper.CorrectForm(requiredBits, "bit")}) to " +
+                   $"a message with {message.UnwrittenBits} {Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
+        }
+        /// <summary>Constructs the error message from the given information.</summary>
+        /// <returns>The error message.</returns>
+        private static string GetErrorMessage(Message message, int arrayLength, string typeName, int requiredBits)
+        {
+            requiredBits *= arrayLength;
+            return $"Cannot add an array of type '{typeName}[]' with {arrayLength} {Helper.CorrectForm(arrayLength, "element")} (requires {requiredBits} {Helper.CorrectForm(requiredBits, "bit")}) " +
+                   $"to a message with {message.UnwrittenBits} {Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
         }
     }
     

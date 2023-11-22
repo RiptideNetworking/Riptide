@@ -26,8 +26,8 @@ namespace Riptide
         private Connection connection;
         /// <summary>The contents of the message.</summary>
         private readonly byte[] data;
-        /// <summary>The length in bytes of the data that has been written to the message.</summary>
-        private int writtenLength;
+        /// <summary>The length in bytes of the message.</summary>
+        private int size;
         /// <summary>How many send attempts have been made so far.</summary>
         private byte sendAttempts;
         /// <summary>Whether the pending message has been cleared or not.</summary>
@@ -50,10 +50,9 @@ namespace Riptide
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
 
-            pendingMessage.data[0] = message.Bytes[0]; // Copy message header
-            Converter.FromUShort(sequenceId, pendingMessage.data, 1); // Insert sequence ID
-            Array.Copy(message.Bytes, 3, pendingMessage.data, 3, message.WrittenLength - 3); // Copy the rest of the message
-            pendingMessage.writtenLength = message.WrittenLength;
+            message.SetBits(sequenceId, sizeof(ushort) * Converter.BitsPerByte, Message.HeaderBits);
+            pendingMessage.size = message.BytesInUse;
+            Buffer.BlockCopy(message.Data, 0, pendingMessage.data, 0, pendingMessage.size);
 
             pendingMessage.sendAttempts = 0;
             pendingMessage.wasCleared = false;
@@ -106,13 +105,13 @@ namespace Riptide
         {
             if (sendAttempts >= connection.MaxSendAttempts)
             {
-                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)data[0]} message after {sendAttempts} attempts! Disconnecting...");
+                RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)(data[0] & Message.HeaderBitmask)} message after {sendAttempts} attempts! Disconnecting...");
                 connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection);
                 return;
             }
 
-            connection.Send(data, writtenLength);
-            connection.Metrics.SentReliable(writtenLength);
+            connection.Send(data, size);
+            connection.Metrics.SentReliable(size);
 
             LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;
