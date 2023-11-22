@@ -75,6 +75,12 @@ namespace Riptide
             return message;
         }
 
+        /// <summary>Empties the pool. Does not affect <see cref="PendingMessage"/> instances which are actively pending and therefore not in the pool.</summary>
+        public static void ClearPool()
+        {
+            pool.Clear();
+        }
+
         /// <summary>Returns the <see cref="PendingMessage"/> instance to the pool so it can be reused.</summary>
         private void Release()
         {
