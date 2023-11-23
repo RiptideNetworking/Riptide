@@ -40,14 +40,16 @@ The only architecture that would require some tweaks to Riptide's source is true
 
 #### Why am I not receiving any messages?
 
-Make sure that you're calling the server's and/or client's `Update()` method regularly.
+Make sure that you're calling the server's and/or client's `Update` method regularly.
 
 #### Why am I getting a warning about no server-side/client-side method handler being found?
 
 If you're getting this warning, make sure you actually have a handler method set up for the message ID mentioned in the warning. If that doesn't help, chances are your handler method has the wrong parameters for what you intended it to be used for.
 
-Remember, server-side handler methods (which handle messages coming from clients) should have two parameters—a `ushort` and a `Message` instance. Client-side handler methods (which handles messages coming from a server) should have only one parameter—a `Message` instance.
+Remember, server-side handler methods (which handle messages coming from clients) should have two parameters—a `ushort` and a `Message` instance. Client-side handler methods (which handle messages coming from a server) should have only one parameter—a `Message` instance.
 
-#### Do I have to use `Debug.Log()` with Riptide's log system?
+Alternatively, you may be getting this warning if you have chosen to handle messages via the `MessageReceived` event instead of using the <code>[<a href="xref:Riptide.MessageHandlerAttribute">MessageHandler</a>]</code> attribute-based system. If this is the case, you can disable the attribute-based system by setting `useMessageHandlers` to `false` when calling <code><a href="xref:Riptide.Server.Start*">Server.Start</a></code> and <code><a href="xref:Riptide.Client.Connect*">Client.Connect</a></code>.
 
-No. You can use whatever log method you like, including `Console.WriteLine()`, other engine-specific log methods, and your own custom log methods. All you have to do is pass your chosen log method to `RiptideLogger`'s <code><a href="xref:Riptide.Utils.RiptideLogger.Initialize*">Initialize()</a></code> method.
+#### Do I have to use `Debug.Log` with Riptide's log system?
+
+No. You can use whatever log method you like, including `Console.WriteLine`, other engine-specific log methods, and your own custom log methods. All you have to do is pass your chosen log method to the <code><a href="xref:Riptide.Utils.RiptideLogger.Initialize*">RiptideLogger.Initialize</a></code> method.

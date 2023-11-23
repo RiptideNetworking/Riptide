@@ -192,12 +192,6 @@ p {
 }
 
 /* CODE BLOCKS */
-code a,
-code a:hover,
-code a:focus {
-    text-decoration: underline;
-}
-
 pre {
     font-size: 14px;
 }

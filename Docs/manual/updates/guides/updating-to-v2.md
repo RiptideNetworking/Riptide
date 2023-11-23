@@ -8,7 +8,7 @@ The git URL for installing Riptide via the Unity Package Manager has changed. Se
 
 ## Logic and Behavior Changes
 
-- The <code><a href="xref:Riptide.Client.Disconnected">Client.Disconnected</a></code> event is now invoked any time the client disconnects—including when <code><a href="xref:Riptide.Client.Disconnect*">Client.Disconnect()</a></code> is called—instead of only when the disconnection is caused by something outside the client (such as server shutdown, connection failure, etc).
+- The <code><a href="xref:Riptide.Client.Disconnected">Client.Disconnected</a></code> event is now invoked any time the client disconnects—including when <code><a href="xref:Riptide.Client.Disconnect*">Client.Disconnect</a></code> is called—instead of only when the disconnection is caused by something outside the client (such as server shutdown, connection failure, etc).
 - The default maximum message payload size has been reduced to 1225 bytes (from 1247 bytes) to ensure messages are smaller than the [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit). If you were sending messages which were close to the old size limit, those messages may exceed the new maximum and cause errors.
 
 ## Renames and Replacements
@@ -45,19 +45,19 @@ A few things were removed in v2.0.0 for a variety of reasons, some of which have
 
 **Reason:** Having clients decide which messages are automatically relayed by the server was counter-intuitive, and it meant that as long as the server had `AllowAutoMessageRelay` set to true, any message could be made to be automatically relayed, even if it wasn't intended by the developer.
 
-**Alternative:** Servers that have a <code><a href="xref:Riptide.MessageRelayFilter">MessageRelayFilter</a></code> instance assigned to their <code><a href="xref:Riptide.Server.RelayFilter">RelayFilter</a></code> will automatically relay any messages whose IDs are enabled in the filter.
+**Alternative:** Servers that have a <code><xref:Riptide.MessageRelayFilter></code> instance assigned to their <code><xref:Riptide.Server.RelayFilter></code> will automatically relay any messages whose IDs are enabled in the filter.
 
 #### `isBigArray` Parameter
 
 **Reason:** Manually setting the `isBigArray` parameter to true was extremely clunky and error-prone.
 
-**Alternative:** None, as this is done automatically now. Arrays with up to 127 elements will only use a single byte to transmit their length, while anything larger (up to 32,767 elements) will automatically use two bytes.
+**Alternative:** None, as this is done automatically now.
 
 #### `Message.Bytes` Property
 
 **Reason:** The `Message` class's backing byte array was only ever publicly accessible for use by transports, in case they needed to modify a message's data directly. The transport system's overhaul has eliminated this potential need, and having the byte array remain publicly accessible creates a risk for accidental misuse without providing any real benefit.
 
-**Alternative:** There is no direct alternative, but chances are you can do what you need using the <code><a href="xref:Riptide.Message.AddBytes*">AddBytes()</a></code> and <code><a href="xref:Riptide.Message.GetBytes*">GetBytes()</a></code> methods.
+**Alternative:** There is no direct alternative, but chances are you can do what you need using the <code><xref:Riptide.Message.AddBytes*></code> and <code><xref:Riptide.Message.GetBytes*></code> methods.
 
 #### `LanDiscovery` Class
 
