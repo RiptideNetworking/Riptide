@@ -21,8 +21,7 @@
         "content": [
             {
                 "files": [
-                    "api/**.yml",
-                    "api/index.md"
+                    "api/**.yml"
                 ]
             },
             {
@@ -72,28 +71,16 @@
             "_donateText": "Support Riptide",
             "_lang": "csharp"
         },
-        "fileMetadata": {
-            "redirectUrl": {
-                "index.md": "manual/overview/about-riptide.html"
-            }
-        },
+        "fileMetadata": {},
         "globalMetadataFiles": [],
         "fileMetadataFiles": [],
         "template": [
             "default",
             "templates/riptide"
         ],
-        "xrefService": [
-            "https://xref.docs.microsoft.com/query?uid={uid}"
-        ],
         "sitemap": {
             "baseUrl": "https://riptide.tomweiland.net/"
         },
-        "postProcessors": [],
-        "markdownEngineName": "markdig",
-        "noLangKeyword": false,
-        "keepFileLink": false,
-        "cleanupCacheHistory": false,
         "disableGitFeatures": false
     }
 }
