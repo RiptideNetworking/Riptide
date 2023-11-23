@@ -69,6 +69,7 @@ namespace Riptide
                 maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
                 ByteBuffer = new byte[MaxSize];
                 TrimPool(); // When ActiveSocketCount is 0, this clears the pool
+                PendingMessage.ClearPool();
             }
         }
         /// <summary>An intermediary buffer to help convert <see cref="data"/> to a byte array when sending.</summary>
