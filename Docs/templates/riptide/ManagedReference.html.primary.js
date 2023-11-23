@@ -19,7 +19,7 @@ exports.transform = function (model) {
   if (common && common.transform) {
     model = common.transform(model);
   }
-  if (model.type && model.type.toLowerCase() === "enum") { // MODIFIED to fix error as per https://github.com/dotnet/docfx/issues/8540
+  if (model.type.toLowerCase() === "enum") {
     model.isClass = false;
     model.isEnum = true;
   }

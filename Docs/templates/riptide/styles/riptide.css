@@ -206,6 +206,10 @@ pre code {
     white-space: pre;
 }
 
+code.hljs {
+    padding: 3px 5px !important;
+}
+
 /* SEARCH */
 mark,
 .mark {
