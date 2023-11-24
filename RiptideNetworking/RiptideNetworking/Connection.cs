@@ -145,10 +145,25 @@ namespace Riptide
         }
 
         /// <summary>Sends a message.</summary>
-        /// <inheritdoc cref="Client.Send(Message, bool)"/>
-        internal void Send(Message message, bool shouldRelease = true)
+        /// <param name="message">The message to send.</param>
+        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
+        /// <returns>For reliable and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
+        /// <remarks>
+        ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
+        ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
+        /// </remarks>
+        public ushort Send(Message message, bool shouldRelease = true)
         {
-            if (message.SendMode == MessageSendMode.Unreliable)
+            ushort sequenceId = 0;
+            if (message.SendMode == MessageSendMode.Notify)
+            {
+                sequenceId = notify.InsertHeader(message);
+                int byteAmount = message.BytesInUse;
+                Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+                Send(Message.ByteBuffer, byteAmount);
+                Metrics.SentNotify(byteAmount);
+            }
+            else if (message.SendMode == MessageSendMode.Unreliable)
             {
                 int byteAmount = message.BytesInUse;
                 Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
@@ -157,28 +172,12 @@ namespace Riptide
             }
             else
             {
-                ushort sequenceId = reliable.NextSequenceId;
+                sequenceId = reliable.NextSequenceId;
                 PendingMessage pendingMessage = PendingMessage.Create(sequenceId, message, this);
                 pendingMessages.Add(sequenceId, pendingMessage);
                 pendingMessage.TrySend();
                 Metrics.ReliableUniques++;
             }
-
-            if (shouldRelease)
-                message.Release();
-        }
-
-        /// <summary>Sends a notify message.</summary>
-        /// <param name="message">The message to send.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <returns>The sequence ID of the sent message.</returns>
-        public ushort SendNotify(Message message, bool shouldRelease = true)
-        {
-            ushort sequenceId = notify.InsertHeader(message);
-            int byteAmount = message.BytesInUse;
-            Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
-            Send(Message.ByteBuffer, byteAmount);
-            Metrics.SentNotify(byteAmount);
 
             if (shouldRelease)
                 message.Release();

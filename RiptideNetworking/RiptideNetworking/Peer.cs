@@ -160,7 +160,7 @@ namespace Riptide
         {
             Message message = Message.Create().Init(e.DataBuffer[0], e.Amount, out MessageHeader header);
             
-            if (header == MessageHeader.Notify)
+            if (message.SendMode == MessageSendMode.Notify)
             {
                 if (e.Amount < Message.MinNotifyBytes)
                     return;
