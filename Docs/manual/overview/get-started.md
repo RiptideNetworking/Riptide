@@ -4,7 +4,7 @@ _description: How to set up the basics with Riptide.
 
 # Getting Started
 
-For a more complete tutorial on how to set up Riptide in your project, see [this video](https://youtu.be/6kWNZOFcFQw). A lot of things were renamed in v2.0.0, which makes following along with the tutorial more difficult, so it's recommended to use v1.1.0 when watching the video and to use the [upgrade guides](~/manual/updates/guides/updating-to-v2.md) to update your project afterwards.
+For a more complete tutorial on how to set up Riptide in your project, see [this video](https://youtu.be/6kWNZOFcFQw). A lot of things were renamed in v2.0.0, which makes following along with the tutorial more difficult, so it's recommended to use v1.1.0 when watching the video and to use the [upgrade guides](~/manual/updates/guides/update-to-v2.md) to update your project afterwards.
 
 > [!TIP]
 > The video tutorial uses two separate projects (one for the server and one for the client). This makes the separation between server and client very clear, which can be helpful when first getting into multiplayer game development. However, it's not ideal—especially for larger projects—due to the fact that it results in duplicated code and assets. This can be mitigated somewhat by setting up a local package for shared code, but combining server and client in the same project is just as doable and arguably easier to maintain.
