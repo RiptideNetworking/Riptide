@@ -8,4 +8,4 @@ Riptide is 100% free to use under the [MIT license](https://github.com/RiptideNe
 
 ## Getting Started
 
-Check out the documentation for [installation instructions](https://riptide.tomweiland.net/manual/overview/installation.html) and a [guide on setting up the basics](https://riptide.tomweiland.net/manual/overview/getting-started.html).
+Check out the documentation for [installation instructions](https://riptide.tomweiland.net/manual/overview/installation.html) and a [guide on setting up the basics](https://riptide.tomweiland.net/manual/overview/get-started.html).
