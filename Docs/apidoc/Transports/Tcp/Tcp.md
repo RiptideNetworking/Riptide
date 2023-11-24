@@ -1,6 +1,7 @@
 ---
 uid: Riptide.Transports.Tcp
 summary: Provides a low level transport which communicates via TCP sockets.
+apiDescription: Provides a low level transport which communicates via TCP sockets.
 remarks: *content
 ---
 This transport is intended to act as a fallback for situations where Riptide's default [UDP transport](xref:Riptide.Transports.Udp) can't establish a connection. It primarily exists because Apple's app review center [appears to have issues handling UDP traffic](https://developer.apple.com/forums/thread/133938?answerId=617066022#617066022), with UDP-only applications frequently being rejected due to connection issues. Apple's devices *do* support UDP traffic—it's only their app review center that apparently doesn't allow UDP.

@@ -1,3 +1,8 @@
+---
+title: Build Docs Locally
+_description: How to build Riptide's documentation locally on your computer.
+---
+
 # How to Build Documentation Locally
 
 Building the documentation site locally on your computer can be useful in a variety of situations, such as when you wish to preview changes you've made.

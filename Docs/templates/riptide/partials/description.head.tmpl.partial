@@ -1,0 +1,14 @@
+{{#isAPI}}
+  {{#apiDescription}}
+  <meta name="description" content="{{apiDescription}}">
+  <meta property="og:description" content="{{apiDescription}}"/>
+  {{/apiDescription}}
+  {{^apiDescription}}
+  <meta name="description" content="Documentation for the {{>partials/title}}.">
+  <meta property="og:description" content="Documentation for the {{>partials/title}}."/>
+  {{/apiDescription}}
+{{/isAPI}}
+{{^isAPI}}
+  <meta name="description" content="{{_description}}">
+  <meta property="og:description" content="{{_description}}"/>
+{{/isAPI}}

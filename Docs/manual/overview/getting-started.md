@@ -1,3 +1,7 @@
+---
+_description: How to set up the basics with Riptide.
+---
+
 # Getting Started
 
 For a more complete tutorial on how to set up Riptide in your project, see [this video](https://youtu.be/6kWNZOFcFQw). A lot of things were renamed in v2.0.0, which makes following along with the tutorial more difficult, so it's recommended to use v1.1.0 when watching the video and to use the [upgrade guides](~/manual/updates/guides/updating-to-v2.md) to update your project afterwards.

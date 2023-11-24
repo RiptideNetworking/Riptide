@@ -1,3 +1,7 @@
+---
+_description: How to install Riptide in your project.
+---
+
 # Installation
 
 There are a number of ways to install Riptide, depending on what you're working on and which tools you're using.

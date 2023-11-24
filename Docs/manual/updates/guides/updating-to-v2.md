@@ -1,3 +1,7 @@
+---
+_description: A full list of v2.0.0's breaking changes and what to do about them when updating.
+---
+
 # Updating to v2
 
 As a major version update, Riptide v2.0.0 includes a number of breaking changes. This means that updating will likely cause errors in your project and may result in your application behaving differently. To help make the update process go smoothly and seem less daunting, this article covers the behavior changes and what has been removed or renamed, as well as what you should use instead!

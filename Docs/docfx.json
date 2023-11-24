@@ -71,7 +71,15 @@
             "_donateText": "Support Riptide",
             "_lang": "csharp"
         },
-        "fileMetadata": {},
+        "fileMetadata": {
+            "_appTitle": {
+                "api/**/*.yml": "Riptide API Docs",
+                "manual/**/*.md": "Riptide Manual"
+            },
+            "isAPI": {
+                "api/**/*.yml": "true"
+            }
+        },
         "globalMetadataFiles": [],
         "fileMetadataFiles": [],
         "template": [

@@ -1,4 +1,9 @@
-# FAQ
+---
+title: FAQ
+_description: Answers to frequently asked questions about Riptide.
+---
+
+# Frequently Asked Questions
 
 Below are some frequently asked questions as well as common issues which you may face when getting started with Riptide. If you can't find your question or the provided answer/solution is insufficient, feel free to join the [Discord server](https://discord.gg/tomweiland) and ask there!
 

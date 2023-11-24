@@ -1,3 +1,7 @@
+---
+_description: What is Riptide Networking?
+---
+
 # About Riptide
 
 Riptide Networking is a lightweight C# networking library primarily designed for use in multiplayer games. It can be used in Unity as well as in other .NET environments such as console applications.
