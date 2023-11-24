@@ -15,9 +15,12 @@ namespace Riptide
     /// <summary>The send mode of a <see cref="Message"/>.</summary>
     public enum MessageSendMode : byte
     {
-        /// <summary>Unreliable send mode.</summary>
+        /// <summary>Guarantees order but not delivery. Notifies the sender of what happened via the <see cref="Connection.NotifyDelivered"/> and <see cref="Connection.NotifyLost"/>
+        /// events. The receiver must handle notify messages via the <see cref="Connection.NotifyReceived"/> event, <i>which is different from the other two send modes</i>.</summary>
+        Notify = MessageHeader.Notify,
+        /// <summary>Guarantees neither delivery nor order.</summary>
         Unreliable = MessageHeader.Unreliable,
-        /// <summary>Reliable send mode.</summary>
+        /// <summary>Guarantees delivery but not order.</summary>
         Reliable = MessageHeader.Reliable,
     }
 
@@ -137,6 +140,15 @@ namespace Riptide
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
+        /// <returns>A message instance ready to be sent.</returns>
+        /// <remarks>This method is primarily intended for use with <see cref="MessageSendMode.Notify"/> as notify messages don't have a built-in message ID, and unlike
+        /// <see cref="Create(MessageSendMode, ushort)"/> and <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
+        public static Message Create(MessageSendMode sendMode)
+        {
+            return RetrieveFromPool().Init((MessageHeader)sendMode);
+        }
+        /// <summary>Gets a message instance that can be used for sending.</summary>
+        /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <param name="id">The message ID.</param>
         /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
@@ -155,13 +167,6 @@ namespace Riptide
         internal static Message Create(MessageHeader header)
         {
             return RetrieveFromPool().Init(header);
-        }
-
-        /// <summary>Gets a notify message instance that can be used for sending.</summary>
-        /// <returns>A notify message instance ready to be sent.</returns>
-        public static Message CreateNotify()
-        {
-            return RetrieveFromPool().Init(MessageHeader.Notify);
         }
 
         #region Pooling
@@ -246,7 +251,7 @@ namespace Riptide
             {
                 readBit = NotifyHeaderBits;
                 writeBit = NotifyHeaderBits;
-                SendMode = MessageSendMode.Unreliable; // Technically it's different but notify messages *are* still unreliable
+                SendMode = MessageSendMode.Notify;
             }
             else if (header >= MessageHeader.Reliable)
             {
