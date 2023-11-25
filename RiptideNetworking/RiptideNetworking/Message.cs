@@ -114,8 +114,6 @@ namespace Riptide
         [Obsolete("Use UnreadBits instead.")] public int UnreadLength => UnreadBits / BitsPerByte + (UnreadBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>How many bytes have been added to the message.</summary>
         [Obsolete("Use WrittenBits instead.")] public int WrittenLength => WrittenBits / BitsPerByte + (WrittenBits % BitsPerByte == 0 ? 0 : 1);
-        /// <summary>How many more bytes can be added to the message.</summary>
-        [Obsolete("Use UnwrittenBits instead.")] public int UnwrittenLength => UnwrittenBits / BitsPerByte + (UnwrittenBits % BitsPerByte == 0 ? 0 : 1);
         /// <inheritdoc cref="data"/>
         internal ulong[] Data => data;
 
