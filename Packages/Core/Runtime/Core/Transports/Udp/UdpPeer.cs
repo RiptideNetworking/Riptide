@@ -155,8 +155,17 @@ namespace Riptide.Transports.Udp
         /// <param name="toEndPoint">The endpoint to send the data to.</param>
         internal void Send(byte[] dataBuffer, int numBytes, IPEndPoint toEndPoint)
         {
-            if (isRunning)
-                socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
+            try
+            {
+                if (isRunning)
+                    socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
+            }
+            catch(SocketException)
+            {
+                // May want to consider triggering a disconnect here (perhaps depending on the type
+                // of SocketException)? Timeout should catch disconnections, but disconnecting
+                // explicitly might be better...
+            }
         }
 
         /// <summary>Handles received data.</summary>
