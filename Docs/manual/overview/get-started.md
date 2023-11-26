@@ -11,7 +11,7 @@ For a more complete tutorial on how to set up Riptide in your project, see [this
 
 ## Initial Setup
 
-First of all, we need to tell Riptide how we want information to be logged so that we can see what our code is doing. We can do this using the <code><a href="xref:Riptide.Utils.RiptideLogger.Initialize*">RiptideLogger.Initialize</a></code> method, which should be called before we do anything else with Riptide. If you're using separate projects for the server and the client, make sure to call it in both.
+First of all, we need to tell Riptide how we want information to be logged so that we can see what our code is doing. We can do this using the <code><xref:Riptide.Utils.RiptideLogger.Initialize*?displayProperty=nameWithType></code> method, which should be called before we do anything else with Riptide. If you're using separate projects for the server and the client, make sure to call it in both.
 
 ```cs
 RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
@@ -90,7 +90,7 @@ The first step of sending a message is to get an instance of the class. This is 
 Message message = Message.Create(MessageSendMode.Unreliable, 1);
 ```
 
-The <code><xref:Riptide.MessageSendMode></code> can be set to `Reliable` or `Unreliable`. Due to how the internet works, not every packet a computer sends will arrive at its destination. Using the unreliable send mode means Riptide will send the message without doing anything extra to ensure delivery, which may result in some of these messages being lost. Using the reliable send mode will make Riptide track whether or not the message has been successfully delivered, and it will continue to resend it until that is the case.
+The <code><xref:Riptide.MessageSendMode></code> can be set to `Reliable`, `Unreliable`, or `Notify`. Due to how the internet works, not every packet a computer sends will arrive at its destination. Using the unreliable send mode means Riptide will send the message without doing anything extra to ensure delivery, which may result in some of these messages being lost. Using the reliable send mode will make Riptide track whether or not the message has been successfully delivered, and it will continue to resend it until that is the case.
 
 > [!TIP]
 > Your first instinct may be to send everything reliably, but at least in fast-paced games, the opposite is normally true—most information is sent unreliably. Consider the fact that even in an extremely basic setup where you simply send a player's position every tick, a newer, more up-to-date position message will have already been sent by the time a previous one could be detected as lost and be resent, and there's no point in resending outdated information.
@@ -125,7 +125,7 @@ Make sure to replace `<toClientId>` with the ID of the client you want to send t
 
 ### Handling the Message
 
-There are two ways to handle messages. The first is with "message handler" methods. These are just regular static methods with a <code>[<a href="xref:Riptide.MessageHandlerAttribute">MessageHandler</a>]</code> attribute attached.
+There are two ways to handle messages. The first is with "message handler" methods. These are just regular static methods with a <code>[<xref:Riptide.MessageHandlerAttribute?text=MessageHandler>]</code> attribute attached.
 
 ```cs
 [MessageHandler(1)]

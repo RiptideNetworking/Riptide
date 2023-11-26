@@ -12,7 +12,7 @@ The git URL for installing Riptide via the Unity Package Manager has changed. Se
 
 ## Logic and Behavior Changes
 
-- The <code><a href="xref:Riptide.Client.Disconnected">Client.Disconnected</a></code> event is now invoked any time the client disconnects—including when <code><a href="xref:Riptide.Client.Disconnect*">Client.Disconnect</a></code> is called—instead of only when the disconnection is caused by something outside the client (such as server shutdown, connection failure, etc).
+- The <code><xref:Riptide.Client.Disconnected?displayProperty=nameWithType></code> event is now invoked any time the client disconnects—including when <code><xref:Riptide.Client.Disconnect*?displayProperty=nameWithType></code> is called—instead of only when the disconnection is caused by something outside the client (such as server shutdown, connection failure, etc).
 - The default maximum message payload size has been reduced to 1225 bytes (from 1247 bytes) to ensure messages are smaller than the [MTU](https://en.wikipedia.org/wiki/Maximum_transmission_unit). If you were sending messages which were close to the old size limit, those messages may exceed the new maximum and cause errors.
 
 ## Renames and Replacements
@@ -79,4 +79,4 @@ A few things were removed in v2.0.0 for a variety of reasons, some of which have
 
 **Reason:** As part of the transport system overhaul, transports are no longer responsible for reliable message delivery. This has been completely decoupled and reliability (among many other features) are now implemented on top of the transport, leading to a more consistent development experience between different transports and requiring less transport-specific implementations of features.
 
-**Alternative:** The `UdpPeer`, `UdpServer`, `UdpClient`, and `UdpConnection` classes which are found in the <code><a href="xref:Riptide.Transports.Udp">Riptide.Transports.Udp</a></code> namespace.
+**Alternative:** The `UdpPeer`, `UdpServer`, `UdpClient`, and `UdpConnection` classes which are found in the <code><xref:Riptide.Transports.Udp?displayProperty=fullName></code> namespace.
