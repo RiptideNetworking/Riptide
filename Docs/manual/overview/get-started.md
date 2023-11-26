@@ -92,6 +92,8 @@ Message message = Message.Create(MessageSendMode.Unreliable, 1);
 
 The <code><xref:Riptide.MessageSendMode></code> can be set to `Reliable`, `Unreliable`, or `Notify`. Due to how the internet works, not every packet a computer sends will arrive at its destination. Using the unreliable send mode means Riptide will send the message without doing anything extra to ensure delivery, which may result in some of these messages being lost. Using the reliable send mode will make Riptide track whether or not the message has been successfully delivered, and it will continue to resend it until that is the case.
 
+You can find more information about all three send modes in the [Message Send Modes Explained](~/manual/guides/send-modes-explained.md) article.
+
 > [!TIP]
 > Your first instinct may be to send everything reliably, but at least in fast-paced games, the opposite is normally true—most information is sent unreliably. Consider the fact that even in an extremely basic setup where you simply send a player's position every tick, a newer, more up-to-date position message will have already been sent by the time a previous one could be detected as lost and be resent, and there's no point in resending outdated information.
 

@@ -20,5 +20,7 @@
         href: updates/guides/update-to-v2.md
 - name: Guides
   items:
+  - name: Send Modes Explained
+    href: guides/send-modes-explained.md
   - name: Build Docs Locally
     href: guides/build-docs.md
