@@ -32,6 +32,8 @@ namespace Riptide
         public Action<ushort> NotifyLost;
         /// <summary>Invoked when a notify message is received.</summary>
         public Action<Message> NotifyReceived;
+        /// <summary>Invoked when the reliable message with the given sequence ID is successfully delivered.</summary>
+        public Action<ushort> ReliableDelivered;
 
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
@@ -249,6 +251,7 @@ namespace Riptide
         {
             if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
+                ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
                 UpdateSendAttemptsViolations();
