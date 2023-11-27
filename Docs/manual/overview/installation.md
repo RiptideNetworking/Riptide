@@ -40,7 +40,7 @@ If you prefer not to use Unity's Package Manager or that option doesn't work for
 
 The following installation steps are for Visual Studio users and may differ if you use a different IDE.
 
-### Option 1: NuGet Package
+### Option 1: [NuGet Package](https://www.nuget.org/packages/RiptideNetworking.Riptide)
 
 1. Right click your solution in the Solution Explorer.
 2. Select *Manage NuGet Packages for Solution...*
