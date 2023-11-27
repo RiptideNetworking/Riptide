@@ -1,0 +1,190 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html lang="csharp">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>v2.1.0 Release Notes | Riptide Manual</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="v2.1.0 Release Notes | Riptide Manual">
+    <meta name="generator" content="docfx">
+    <meta property="og:title" content="v2.1.0 Release Notes | Riptide Manual">
+    <meta property="og:type" content="website">
+      <meta name="description" content="Release notes for Riptide v2.1.0.">
+      <meta property="og:description" content="Release notes for Riptide v2.1.0.">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta property="og:image:width" content="50">
+    <meta property="og:image:height" content="50">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+
+    <link rel="shortcut icon" href="../../../images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/config.css">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/riptide.css">
+    <link rel="stylesheet" href="../../../styles/codehighlighting.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+  
+  <meta property="docfx:rel" content="../../../">
+  <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+
+            <div class="subnav navbar navbar-default">
+              <div class="container hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="v210-release-notes">v2.1.0 Release Notes</h1>
+
+<p>Install this version with Unity's Package Manager using the following URL (<a href="../../overview/installation.html#option-1-unity-package-manager">step-by-step instructions</a>):</p>
+<pre><code class="lang-plaintext">https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.1.0
+</code></pre>
+<p>It can also be installed a number of <a href="../../overview/installation.html#net-projects">other ways</a> for use outside of Unity.</p>
+<p>For a full list of source code changes, check out the <a href="https://github.com/RiptideNetworking/Riptide/compare/v2.0.0...v2.1.0">version comparison</a> on GitHub.</p>
+<h2 id="additions">Additions</h2>
+<ul>
+<li>Added the <a href="../../guides/send-modes-explained.html#notify-send-mode">&quot;notify&quot; message send mode</a> and overhauled message sequencing (<a href="https://github.com/RiptideNetworking/Riptide/pull/109">PR #109</a>).</li>
+<li>Added support for reserving (when writing) and skipping (when reading) bits in a message via <code><a class="xref" href="../../../api/Riptide.Message.ReserveBits.html">ReserveBits</a></code> and <code><a class="xref" href="../../../api/Riptide.Message.SkipBits.html">SkipBits</a></code>, respectively (<a href="https://github.com/RiptideNetworking/Riptide/issues/103">#103</a>).</li>
+<li>Added support for setting and retrieving specific ranges of bits in a message, regardless of its internal write and read positions via <code><a class="xref" href="../../../api/Riptide.Message.SetBits.html">SetBits</a></code> and <code><a class="xref" href="../../../api/Riptide.Message.PeekBits.html">PeekBits</a></code>, respectively. Use these with care, as accidentally setting or peeking bits in an incorrect range or at an incorrect position will scramble your data.</li>
+<li>Added support for adding bits to a message via <code><a class="xref" href="../../../api/Riptide.Message.AddBits.html">AddBits</a></code>.</li>
+<li>Added support for adding data to a message directly from another existing message via <code><a class="xref" href="../../../api/Riptide.Message.AddMessage.html">AddMessage</a></code>.</li>
+<li>Added support for adding values to a message using a variable amount of bits (based on how large the value is) via <code><a class="xref" href="../../../api/Riptide.Message.AddVarLong.html">AddVarLong</a></code>/<code><a class="xref" href="../../../api/Riptide.Message.AddVarULong.html">AddVarULong</a></code>.</li>
+<li>Added an option to disable the <code>[<a class="xref" href="../../../api/Riptide.MessageHandlerAttribute.html">MessageHandler</a>]</code> attribute-based message handler system via the <code>useMessageHandlers</code> parameter in the <code><a class="xref" href="../../../api/Riptide.Server.Start.html">Server.Start</a></code> &amp; <code><a class="xref" href="../../../api/Riptide.Client.Connect.html">Client.Connect</a></code> methods. This is useful if you prefer to handle messages via the <code><a class="xref" href="../../../api/Riptide.Server.MessageReceived.html">Server.MessageReceived</a></code> &amp; <code><a class="xref" href="../../../api/Riptide.Client.MessageReceived.html">Client.MessageReceived</a></code> events.</li>
+<li>Added an option to set timeout time per <code><a class="xref" href="../../../api/Riptide.Connection.html">Connection</a></code>.</li>
+<li>Added an option to specify the IP address that <code><a class="xref" href="../../../api/Riptide.Transports.Udp.UdpServer.html">UdpServer</a></code> and <code><a class="xref" href="../../../api/Riptide.Transports.Tcp.TcpServer.html">TcpServer</a></code> should listen on (<a href="https://github.com/RiptideNetworking/Riptide/issues/26">#26</a> and <a href="https://github.com/RiptideNetworking/Riptide/issues/79">#79</a>).</li>
+<li>Added the <code><a class="xref" href="../../../api/Riptide.Connection.ReliableDelivered.html">Connection.ReliableDelivered</a></code> event for when a reliably sent message is successfully delivered (<a href="https://github.com/RiptideNetworking/Riptide/pull/42">#42</a>).</li>
+<li>Added bandwidth-related <code><a class="xref" href="../../../api/Riptide.Connection.Metrics.html">Connection.Metrics</a></code> (<a href="https://github.com/RiptideNetworking/Riptide/issues/77">#77</a>).</li>
+<li>Added <code><a class="xref" href="../../../api/Riptide.ConnectionFailedEventArgs.Reason.html">Reason</a></code> to <code><a class="xref" href="../../../api/Riptide.ConnectionFailedEventArgs.html">ConnectionFailedEventArgs</a></code>.</li>
+<li>Added the <code><a class="xref" href="../../../api/Riptide.Server.ConnectionFailed.html">Server.ConnectionFailed</a></code> event for when a pending connection fails (<a href="https://github.com/RiptideNetworking/Riptide/issues/104">#104</a>).</li>
+<li>Added error logs for when the incorrect <code><a class="xref" href="../../../api/Riptide.Message.Create.html">Create</a></code> overload is used (<a href="https://github.com/RiptideNetworking/Riptide/pull/113">#113</a>).</li>
+</ul>
+<h2 id="changes">Changes</h2>
+<ul>
+<li>Made the <code><a class="xref" href="../../../api/Riptide.Message.html">Message</a></code> class operate on the bit-level instead of the byte-level. This allowed for a slightly reduced message header size and gives you more control over how much data you're sending (<a href="https://github.com/RiptideNetworking/Riptide/pull/121">PR #121</a>).</li>
+<li>Made poor connection quality trigger disconnections. This can be finely controlled via the <code>Connection</code> class's <code><a class="xref" href="../../../api/Riptide.Connection.MaxAvgSendAttempts.html">MaxAvgSendAttempts</a></code>, <code><a class="xref" href="../../../api/Riptide.Connection.AvgSendAttemptsResilience.html">AvgSendAttemptsResilience</a></code>, <code><a class="xref" href="../../../api/Riptide.Connection.MaxSendAttempts.html">MaxSendAttempts</a></code>, <code><a class="xref" href="../../../api/Riptide.Connection.MaxNotifyLoss.html">MaxNotifyLoss</a></code>, and <code><a class="xref" href="../../../api/Riptide.Connection.NotifyLossResilience.html">NotifyLossResilience</a></code> fields, or disabled entirely by setting <code><a class="xref" href="../../../api/Riptide.Connection.CanQualityDisconnect.html">CanQualityDisconnect</a></code> to <code>false</code>.</li>
+<li>Deprecated the <code>Message</code> class's <code>ReadLength</code>, <code>UnreadLength</code>, and <code>WrittenLength</code> properties. Use <code><a class="xref" href="../../../api/Riptide.Message.ReadBits.html#Riptide_Message_ReadBits">ReadBits</a></code>, <code><a class="xref" href="../../../api/Riptide.Message.UnreadBits.html#Riptide_Message_UnreadBits">UnreadBits</a></code>, and <code><a class="xref" href="../../../api/Riptide.Message.WrittenBits.html#Riptide_Message_WrittenBits">WrittenBits</a></code> instead.</li>
+<li>Changed <code><a class="xref" href="../../../api/Riptide.Message.MaxPayloadSize.html#Riptide_Message_MaxPayloadSize">Message.MaxPayloadSize</a></code> setter's error logs to exceptions.</li>
+<li>Disabled Nagle's algorithm in the TCP transport.</li>
+<li>Removed the unnecessary 65 second limit on <code><a class="xref" href="../../../api/Riptide.Connection.TimeoutTime.html#Riptide_Connection_TimeoutTime">Connection.TimeoutTime</a></code> and <code><a class="xref" href="../../../api/Riptide.Peer.HeartbeatInterval.html#Riptide_Peer_HeartbeatInterval">Peer.HeartbeatInterval</a></code>.</li>
+<li>Made <code><a class="xref" href="../../../api/Riptide.Utils.PriorityQueue-2.html">PriorityQueue&lt;TElement, TPriority&gt;</a></code> publicly accessible and removed its internal use of <code>List&lt;T&gt;</code>.</li>
+<li>Removed the unnecessary <code>AckExtra</code> <code><a class="xref" href="../../../api/Riptide.Transports.MessageHeader.html">MessageHeader</a></code> type.</li>
+<li>Stopped using <code>DateTime</code> for calculating timeouts.</li>
+<li>Updated DocFX to v2.70.1.</li>
+</ul>
+<h2 id="fixes">Fixes</h2>
+<ul>
+<li>Fixed improper duplicate filtering which allowed duplicates to be handled under certain circumstances (<a href="https://github.com/RiptideNetworking/Riptide/pull/109">PR #109</a>).</li>
+<li>Fixed unintended processing of subsequent connection attempts from connections that had already been rejected.</li>
+<li>Fixed incorrect processing of new acks for reliable messages.</li>
+<li>Fixed incorrect transport data buffer sizes.</li>
+<li>Fixed incorrect values that were used in some of the <code>Message</code> class's error messages.</li>
+<li>Fixed the size of <code>PendingMessage</code>s not being changed along with <code>Message.MaxPayloadSize</code>.</li>
+<li>Fixed incorrect &quot;unknown reason&quot; rejection log when an already-connected connection was rejected (<a href="https://github.com/RiptideNetworking/Riptide/issues/84">#84</a>).</li>
+<li>Fixed errors that occurred when various <code><a class="xref" href="../../../api/Riptide.Server.html">Server</a></code> properties were accessed before the first player connected (<a href="https://github.com/RiptideNetworking/Riptide/issues/86">#86</a>).</li>
+<li>Fixed the TCP transport's improper handling of large packets (<a href="https://github.com/RiptideNetworking/Riptide/issues/92">#92</a>).</li>
+<li>Fixed unhandled <code>SocketException</code>s when sending data, such as the one that occurred when a <code><a class="xref" href="../../../api/Riptide.Client.html">Client</a></code> with no internet connection attempted to connect (<a href="https://github.com/RiptideNetworking/Riptide/pull/102">#102</a>).</li>
+<li>Fixed unintended timeout when a <code>Client</code> would disconnect and reconnect again in quick succession (<a href="https://github.com/RiptideNetworking/Riptide/issues/105">#105</a>).</li>
+<li>Fixed an infinite loop when a <code>Server</code> was started with a <code>maxClientCount</code> of 65,535 (<a href="https://github.com/RiptideNetworking/Riptide/issues/111">#111</a>).</li>
+<li>Fixed an issue with the TCP transport that caused connections to be rejected shortly after they were accepted and fully connected (similar to <a href="https://github.com/RiptideNetworking/SteamTransport/issues/1">SteamTransport#1</a>).</li>
+</ul>
+<h2 id="sponsor-shoutout">Sponsor Shoutout</h2>
+<p>Thank you so much to all of my <a href="https://github.com/sponsors/tom-weiland">GitHub Sponsors</a> for helping to make this update possible by financially supporting the project!</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Docs/manual/updates/release-notes/v2.1.0.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright © Tom Weiland 2022
+            <br>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

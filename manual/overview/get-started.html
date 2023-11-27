@@ -1,0 +1,236 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html lang="csharp">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Getting Started | Riptide Manual</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Getting Started | Riptide Manual">
+    <meta name="generator" content="docfx">
+    <meta property="og:title" content="Getting Started | Riptide Manual">
+    <meta property="og:type" content="website">
+      <meta name="description" content="How to set up the basics with Riptide.">
+      <meta property="og:description" content="How to set up the basics with Riptide.">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta property="og:image:width" content="50">
+    <meta property="og:image:height" content="50">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/config.css">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/riptide.css">
+    <link rel="stylesheet" href="../../styles/codehighlighting.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+  
+  <meta property="docfx:rel" content="../../">
+  <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+
+            <div class="subnav navbar navbar-default">
+              <div class="container hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="getting-started">Getting Started</h1>
+
+<p>For a more complete tutorial on how to set up Riptide in your project, see <a href="https://youtu.be/6kWNZOFcFQw">this video</a>. A lot of things were renamed in v2.0.0, which makes following along with the tutorial more difficult, so it's recommended to use v1.1.0 when watching the video and to use the <a href="../updates/guides/update-to-v2.html">upgrade guides</a> to update your project afterwards.</p>
+<div class="TIP">
+<h5>Tip</h5>
+<p>The video tutorial uses two separate projects (one for the server and one for the client). This makes the separation between server and client very clear, which can be helpful when first getting into multiplayer game development. However, it's not ideal—especially for larger projects—due to the fact that it results in duplicated code and assets. This can be mitigated somewhat by setting up a local package for shared code, but combining server and client in the same project is just as doable and arguably easier to maintain.</p>
+</div>
+<h2 id="initial-setup">Initial Setup</h2>
+<p>First of all, we need to tell Riptide how we want information to be logged so that we can see what our code is doing. We can do this using the <code><a class="xref" href="../../api/Riptide.Utils.RiptideLogger.Initialize.html">RiptideLogger.Initialize</a></code> method, which should be called before we do anything else with Riptide. If you're using separate projects for the server and the client, make sure to call it in both.</p>
+<pre><code class="lang-cs">RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
+</code></pre>
+<p>Obviously this is using Unity's logging methods, so if you're not using Unity for your project you'll need to replace the four log methods with <code>Console.WriteLine</code> or your engine's equivalent.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>This article explains the basics and includes various code snippets, but if you'd like to see these snippets in the context of a working demo, take a look at the <code>NetworkManager</code> classes in the <a href="https://github.com/RiptideNetworking/Riptide/tree/main/Demos/Unity/DedicatedServerDemo">dedicated server demo</a>'s <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Server/Assets/Scripts/NetworkManager.cs">server</a> and <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Demos/Unity/DedicatedServerDemo/Client/Assets/Scripts/NetworkManager.cs">client</a> projects.</p>
+</div>
+<h3 id="starting-a-server">Starting a Server</h3>
+<p>To start a server, we need to create a new <code><a class="xref" href="../../api/Riptide.Server.html">Server</a></code> instance and then call its <code><a class="xref" href="../../api/Riptide.Server.Start.html">Start</a></code> method, which takes in the port we want it to run on and the maximum number of clients we want to allow to be connected at any given time. You'll likely want to run this code as soon as your server application starts up.</p>
+<pre><code class="lang-cs">Server server = new Server();
+server.Start(7777, 10);
+</code></pre>
+<p>In order for the server to be able to accept connections and process messages, we need to call its <code><a class="xref" href="../../api/Riptide.Server.Update.html">Update</a></code> method on a regular basis. In Unity, this can be done using the provided <a href="https://docs.unity3d.com/ScriptReference/MonoBehaviour.FixedUpdate.html">FixedUpdate method</a>.</p>
+<pre><code class="lang-cs">private void FixedUpdate()
+{
+    server.Update();
+}
+</code></pre>
+<h3 id="connecting-a-client">Connecting a Client</h3>
+<p>The process of connecting a client is quite similar. First we create a new <code><a class="xref" href="../../api/Riptide.Client.html">Client</a></code> instance and then we call its <code><a class="xref" href="../../api/Riptide.Client.Connect.html">Connect</a></code> method, which expects a host address as the parameter.</p>
+<p>Riptide's default transport requires host addresses to consist of an IP address and a port number, separated by a <code>:</code>. Since we're running the server and the client on the same computer right now, we'll use <code>127.0.0.1</code> (also known as <em>localhost</em>) as the IP.</p>
+<pre><code class="lang-cs">Client client = new Client();
+client.Connect(&quot;127.0.0.1:7777&quot;);
+</code></pre>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Connecting to <code>127.0.0.1</code> will only work if your server and client applications are running on the same computer. To connect from a computer on a different network you need to connect to your host computer's public IP address instead, and you'll need to portforward to allow traffic from your clients to reach your server.</p>
+</div>
+<p>Finally, we need to call the client's <code><a class="xref" href="../../api/Riptide.Client.Update.html">Update</a></code> method on a regular basis, just like we did with the server.</p>
+<pre><code class="lang-cs">private void FixedUpdate()
+{
+    client.Update();
+}
+</code></pre>
+<p>At this point, if you run the server and the client you should see log messages informing you that the server started and the client connected!</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Make sure you have the <code>Run in Background</code> option enabled (found under Edit &gt; Project Settings &gt; Player &gt; Resolution and Presentation), otherwise your server and client will only be able to communicate with each other when their window is active/in-focus! This used to be enabled by default, but that appears to have changed in newer versions of Unity.</p>
+</div>
+<h2 id="hooking-into-events">Hooking Into Events</h2>
+<p>Riptide's <code>Server</code> and <code>Client</code> classes both have several events to allow you to run your own code when various things happen.</p>
+<p>For example, you'll likely want your server to spawn a player object when a client connects and destroy it again when they disconnect. You can do this by subscribing your spawn and despawn methods to the <code><a class="xref" href="../../api/Riptide.Server.ClientConnected.html">ClientConnected</a></code> and <code><a class="xref" href="../../api/Riptide.Server.ClientDisconnected.html">ClientDisconnected</a></code> events.</p>
+<p>The <code>Client</code> class's most useful events are probably the <code><a class="xref" href="../../api/Riptide.Client.ConnectionFailed.html">ConnectionFailed</a></code> and <code><a class="xref" href="../../api/Riptide.Client.Disconnected.html">Disconnected</a></code> events, which come in handy for things like returning the player to the main menu when their connection attempt fails or they're disconnected.</p>
+<p>For a complete list of available events, check out the <a class="xref" href="../../api/Riptide.Server.html#events">server events</a> and <a class="xref" href="../../api/Riptide.Client.html#events">client events</a>.</p>
+<h2 id="sending-data">Sending Data</h2>
+<p>In order to send data over the network, it has to be converted to bytes first—you can't just send a string or an int directly. Riptide provides the <code><a class="xref" href="../../api/Riptide.Message.html">Message</a></code> class to make this process really easy.</p>
+<h3 id="creating-a-message">Creating a Message</h3>
+<p>The first step of sending a message is to get an instance of the class. This is done using the <code><a class="xref" href="../../api/Riptide.Message.Create.html">Create</a></code> method, which requires the message's send mode and an ID as parameters.</p>
+<pre><code class="lang-cs">Message message = Message.Create(MessageSendMode.Unreliable, 1);
+</code></pre>
+<p>The <code><a class="xref" href="../../api/Riptide.MessageSendMode.html">MessageSendMode</a></code> can be set to <code>Reliable</code>, <code>Unreliable</code>, or <code>Notify</code>. Due to how the internet works, not every packet a computer sends will arrive at its destination. Using the unreliable send mode means Riptide will send the message without doing anything extra to ensure delivery, which may result in some of these messages being lost. Using the reliable send mode will make Riptide track whether or not the message has been successfully delivered, and it will continue to resend it until that is the case.</p>
+<p>You can find more information about all three send modes in the <a href="../guides/send-modes-explained.html">Message Send Modes Explained</a> article.</p>
+<div class="TIP">
+<h5>Tip</h5>
+<p>Your first instinct may be to send everything reliably, but at least in fast-paced games, the opposite is normally true—most information is sent unreliably. Consider the fact that even in an extremely basic setup where you simply send a player's position every tick, a newer, more up-to-date position message will have already been sent by the time a previous one could be detected as lost and be resent, and there's no point in resending outdated information.</p>
+</div>
+<p>Message IDs are used to identify what type of message you're sending, which allows the receiving end to determine how to properly handle it. In the example above, we set the message ID to <code>1</code> (in practice you'd probably want to use an enum for message IDs instead of hard-coding the number).</p>
+<h3 id="adding-data-to-the-message">Adding Data to the Message</h3>
+<p>To add data to our message, we can simply call the <code>Add</code> method for the type we want to add. For example:</p>
+<pre><code class="lang-cs">message.AddInt(365);
+</code></pre>
+<p>The <code>Message</code> class has built-in methods for bits, all primitive data types (<code>byte</code>, <code>bool</code>, <code>int</code>/<code>uint</code>, <code>float</code>, etc.), <code>string</code>s, and structs which implement <code><a class="xref" href="../../api/Riptide.IMessageSerializable.html">IMessageSerializable</a></code>, as well as arrays of all these types.</p>
+<p>Any other types you may want to send should consist of combinations of these supported types. For example, a <code>Vector3</code> consists of three <code>float</code>s (one for each component), so to add one to your message, you would simply call <code><a class="xref" href="../../api/Riptide.Message.AddFloat.html">AddFloat</a></code> three times, passing in the vector's three different components. Alternatively, you could write a custom extension method to make this easier, just like <a href="https://github.com/RiptideNetworking/Riptide/blob/unity-package/Packages/Core/Runtime/UnitySpecific/MessageExtensions.cs">the ones included in the Unity package</a>.</p>
+<h3 id="sending-the-message">Sending the Message</h3>
+<p>Once you've added the data you want to include in your message, it's time to send it. Clients have only one <code><a class="xref" href="../../api/Riptide.Client.Send.html">Send</a></code> method, while servers have <code><a class="xref" href="../../api/Riptide.Server.Send.html">Send</a></code> and <code><a class="xref" href="../../api/Riptide.Server.SendToAll.html">SendToAll</a></code> (which has an overload as well).</p>
+<pre><code class="lang-cs">client.Send(message); // Sends the message to the server
+
+server.Send(message, &lt;toClientId&gt;); // Sends the message to a specific client
+server.SendToAll(message); // Sends the message to all connected clients
+server.SendToAll(message, &lt;toClientId&gt;); // Sends the message to all connected clients except the specified one
+</code></pre>
+<p>Make sure to replace <code>&lt;toClientId&gt;</code> with the ID of the client you want to send the message to, or who you <em>don't</em> want to sent the message to if you're using the <code>SendToAll</code> method.</p>
+<h3 id="handling-the-message">Handling the Message</h3>
+<p>There are two ways to handle messages. The first is with &quot;message handler&quot; methods. These are just regular static methods with a <code>[<a class="xref" href="../../api/Riptide.MessageHandlerAttribute.html">MessageHandler</a>]</code> attribute attached.</p>
+<pre><code class="lang-cs">[MessageHandler(1)]
+private static void HandleSomeMessageFromServer(Message message)
+{
+    int someInt = message.GetInt();
+    
+    // Do stuff with the retrieved data here
+}
+</code></pre>
+<p>Notice that we've passed <code>1</code> to the <code>[MessageHandler]</code> attribute. This tells Riptide that this method is meant to handle messages with an ID of <code>1</code>, which is what we set our message's ID to in the <a href="#creating-a-message">creating a message</a> part of this article.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>Whether a message handler method handles messages received from a server or a client is determined by its parameters. In order for a handler method to handle messages from clients, it must have two parameters (a <code>ushort</code> and a <code>Message</code> instance). In order for a handler method to handle messages from a server, it must have only one parameter (a <code>Message</code> instance). The code snippet above shows a client-side message handler, which will only handle messages received from the server.</p>
+</div>
+<p>Alternatively, you can handle messages using the <code>MessageReceived</code> event. This option gives you extra flexibility with how messages are handled, and doesn't require you to use any static methods or attributes. If you choose this approach, make sure to disable the attribute-based handler system by setting <code>useMessageHandlers</code> to <code>false</code> when calling <code>Server.Start</code> and <code>Client.Connect</code>.</p>
+<div class="CAUTION">
+<h5>Caution</h5>
+<p><strong>Data MUST be retrieved in the exact order in which it was added to the message!</strong> If you added an <code>int</code>, followed by a <code>float</code> and then another <code>int</code>, you must retrieve an <code>int</code> and a <code>float</code> <em>before</em> you can retrieve the second <code>int</code>. Mixing up the order will result in your retrieved values being completely different from what you added to the message.</p>
+</div>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Docs/manual/overview/get-started.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright © Tom Weiland 2022
+            <br>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

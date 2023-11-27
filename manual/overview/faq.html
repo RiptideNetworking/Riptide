@@ -1,41 +1,41 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
-<html>
-  
+<html lang="csharp">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>FAQ | Riptide Docs</title>
+    <title>FAQ | Riptide Manual</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="FAQ | Riptide Docs">
+    <meta name="title" content="FAQ | Riptide Manual">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="FAQ | Riptide Docs">
+    <meta property="og:title" content="FAQ | Riptide Manual">
     <meta property="og:type" content="website">
-    <meta name="description" content="Documentation for Riptide Networking.">
-    <meta property="og:description" content="Documentation for Riptide Networking.">
+      <meta name="description" content="Answers to frequently asked questions about Riptide.">
+      <meta property="og:description" content="Answers to frequently asked questions about Riptide.">
     <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
     <meta name="theme-color" content="#2bbade" data-react-helmet="true">
-  
+
     <link rel="shortcut icon" href="../../images/favicon.ico">
     <link rel="stylesheet" href="../../styles/config.css">
-    <link rel="stylesheet" href="../../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
     <link rel="stylesheet" href="../../styles/docfx.css">
     <link rel="stylesheet" href="../../styles/riptide.css">
     <link rel="stylesheet" href="../../styles/codehighlighting.css">
     <link rel="stylesheet" href="../../styles/main.css">
     <meta property="docfx:navrel" content="../../toc.html">
     <meta property="docfx:tocrel" content="../toc.html">
-    
-    <meta property="docfx:rel" content="../../">
-    <meta property="docfx:newtab" content="true">
+  
+  <meta property="docfx:rel" content="../../">
+  <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -45,7 +45,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../../index.html">
                 <img id="logo" class="svg" src="../../images/logo.png" alt="">
               </a>
@@ -61,7 +61,7 @@
         </nav>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,16 +80,16 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            
+
             <div class="subnav navbar navbar-default">
-              <div class="hide-when-search" id="breadcrumb">
+              <div class="container hide-when-search" id="breadcrumb">
                 <ul class="breadcrumb">
                   <li></li>
                 </ul>
               </div>
             </div>
             <article class="content wrap" id="_content" data-uid="">
-<h1 id="faq">FAQ</h1>
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
 
 <p>Below are some frequently asked questions as well as common issues which you may face when getting started with Riptide. If you can't find your question or the provided answer/solution is insufficient, feel free to join the <a href="https://discord.gg/tomweiland">Discord server</a> and ask there!</p>
 <h4 id="whats-the-difference-between-riptide-and-other-networking-solutions">What's the difference between Riptide and other networking solutions?</h4>
@@ -111,15 +111,16 @@
 <p>Yes! Riptide gives you the tools to manage connections and send data, but doesn't really impose any restrictions on how you do that. You can set up a dedicated server with full authority, a relay server which just passes on data it receives, a client that also acts as the host (server), or pretty much anything inbetween.</p>
 <p>The only architecture that would require some tweaks to Riptide's source is true peer-to-peer, where all clients in a lobby are connected to all other clients in the same lobby.</p>
 <h4 id="why-am-i-not-receiving-any-messages">Why am I not receiving any messages?</h4>
-<p>Make sure that you're calling the server's and/or client's <code>Update()</code> method regularly.</p>
+<p>Make sure that you're calling the server's and/or client's <code>Update</code> method regularly.</p>
 <h4 id="why-am-i-getting-a-warning-about-no-server-sideclient-side-method-handler-being-found">Why am I getting a warning about no server-side/client-side method handler being found?</h4>
 <p>If you're getting this warning, make sure you actually have a handler method set up for the message ID mentioned in the warning. If that doesn't help, chances are your handler method has the wrong parameters for what you intended it to be used for.</p>
-<p>Remember, server-side handler methods (which handle messages coming from clients) should have two parameters—a <code>ushort</code> and a <code>Message</code> instance. Client-side handler methods (which handles messages coming from a server) should have only one parameter—a <code>Message</code> instance.</p>
-<h4 id="do-i-have-to-use-debuglog-with-riptides-log-system">Do I have to use <code>Debug.Log()</code> with Riptide's log system?</h4>
-<p>No. You can use whatever log method you like, including <code>Console.WriteLine()</code>, other engine-specific log methods, and your own custom log methods. All you have to do is pass your chosen log method to <code>RiptideLogger</code>'s <code><a class="xref" href="../../api/Riptide.Utils.RiptideLogger.Initialize.html">Initialize()</a></code> method.</p>
+<p>Remember, server-side handler methods (which handle messages coming from clients) should have two parameters—a <code>ushort</code> and a <code>Message</code> instance. Client-side handler methods (which handle messages coming from a server) should have only one parameter—a <code>Message</code> instance.</p>
+<p>Alternatively, you may be getting this warning if you have chosen to handle messages via the <code>MessageReceived</code> event instead of using the <code>[<a class="xref" href="../../api/Riptide.MessageHandlerAttribute.html">MessageHandler</a>]</code> attribute-based system. If this is the case, you can disable the attribute-based system by setting <code>useMessageHandlers</code> to <code>false</code> when calling <code><a class="xref" href="../../api/Riptide.Server.Start.html">Server.Start</a></code> and <code><a class="xref" href="../../api/Riptide.Client.Connect.html">Client.Connect</a></code>.</p>
+<h4 id="do-i-have-to-use-debuglog-with-riptides-log-system">Do I have to use <code>Debug.Log</code> with Riptide's log system?</h4>
+<p>No. You can use whatever log method you like, including <code>Console.WriteLine</code>, other engine-specific log methods, and your own custom log methods. All you have to do is pass your chosen log method to the <code><a class="xref" href="../../api/Riptide.Utils.RiptideLogger.Initialize.html">RiptideLogger.Initialize</a></code> method.</p>
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
@@ -140,7 +141,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -148,18 +149,15 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © Tom Weiland 2022
+      Copyright © Tom Weiland 2022
             <br>
-            <span>
-              Generated by 
-              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
-            </span>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../../styles/docfx.js"></script>
     <script type="text/javascript" src="../../styles/main.js"></script>
   </body>

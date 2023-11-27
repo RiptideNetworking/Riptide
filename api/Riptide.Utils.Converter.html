@@ -1,41 +1,41 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
-<html>
-  
+<html lang="csharp">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Converter Class | Riptide Docs</title>
+    <title>Converter Class | Riptide API Docs</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Converter Class | Riptide Docs">
+    <meta name="title" content="Converter Class | Riptide API Docs">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="Converter Class | Riptide Docs">
+    <meta property="og:title" content="Converter Class | Riptide API Docs">
     <meta property="og:type" content="website">
-    <meta name="description" content="Documentation for Riptide Networking.">
-    <meta property="og:description" content="Documentation for Riptide Networking.">
+      <meta name="description" content="Documentation for the Converter Class.">
+      <meta property="og:description" content="Documentation for the Converter Class.">
     <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
     <meta name="theme-color" content="#2bbade" data-react-helmet="true">
-  
+
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    <meta property="docfx:newtab" content="true">
+  
+  <meta property="docfx:rel" content="../">
+  <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -45,7 +45,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
@@ -61,7 +61,7 @@
         </nav>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,170 +80,645 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            
+
             <div class="subnav navbar navbar-default">
-              <div class="hide-when-search" id="breadcrumb">
+              <div class="container hide-when-search" id="breadcrumb">
                 <ul class="breadcrumb">
                   <li></li>
                 </ul>
               </div>
             </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Utils.Converter">
-  
-  
+
+
+
   <h1 id="Riptide_Utils_Converter" data-uid="Riptide.Utils.Converter" class="text-break">Converter Class</h1>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Utils.html">Riptide.Utils</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a>.<a class="xref" href="Riptide.Utils.html">Utils</a></h6>
   <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
-  <div class="markdown level0 summary"><p>Provides functionality for converting bytes to various value types and vice versa.</p>
+  <div class="markdown level0 summary"><p>Provides functionality for converting bits and bytes to various value types and vice versa.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class Converter : object</code></pre>
+    <pre><code class="lang-csharp hljs">public class Converter</code></pre>
   </div>
 
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
     <div class="level1"><span class="xref">Converter</span></div>
   </div>
-  
-  
-  
-  
-  
-  
-  
-  <h3 id="methods">Methods
-  </h3>
-  
-  
+
+
+
+
+
+
+
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.tostring">object.ToString()</a>
+    </div>
+  </div>
+  <h3 id="fields">Fields
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
-        <td id="Riptide_Utils_Converter_FromDouble_System_Double_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromDouble(System.Double,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromDouble.html#Riptide_Utils_Converter_FromDouble_System_Double_System_Byte___System_Int32_">FromDouble(Double, Byte[], Int32)</a>
+        <td id="Riptide_Utils_Converter_BitsPerByte" data-uid="Riptide.Utils.Converter.BitsPerByte" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BitsPerByte.html">BitsPerByte</a>
         </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.Double"></see> to bytes and writes them into the given array.</p>
+        <td class="markdown level1 summary"><p>The number of bits in a byte.</p>
 </td>
       </tr>
       <tr>
-        <td id="Riptide_Utils_Converter_FromFloat_System_Single_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromFloat(System.Single,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromFloat.html#Riptide_Utils_Converter_FromFloat_System_Single_System_Byte___System_Int32_">FromFloat(Single, Byte[], Int32)</a>
+        <td id="Riptide_Utils_Converter_BitsPerULong" data-uid="Riptide.Utils.Converter.BitsPerULong" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BitsPerULong.html">BitsPerULong</a>
         </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.Single"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromInt_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromInt(System.Int32,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromInt.html#Riptide_Utils_Converter_FromInt_System_Int32_System_Byte___System_Int32_">FromInt(Int32, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.Int32"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromLong_System_Int64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromLong(System.Int64,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromLong.html#Riptide_Utils_Converter_FromLong_System_Int64_System_Byte___System_Int32_">FromLong(Int64, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.Int64"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromShort_System_Int16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromShort(System.Int16,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromShort.html#Riptide_Utils_Converter_FromShort_System_Int16_System_Byte___System_Int32_">FromShort(Int16, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.Int16"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromUInt_System_UInt32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromUInt(System.UInt32,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromUInt.html#Riptide_Utils_Converter_FromUInt_System_UInt32_System_Byte___System_Int32_">FromUInt(UInt32, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.UInt32"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromULong_System_UInt64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromULong(System.UInt64,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromULong.html#Riptide_Utils_Converter_FromULong_System_UInt64_System_Byte___System_Int32_">FromULong(UInt64, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.UInt64"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_FromUShort_System_UInt16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromUShort(System.UInt16,System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.FromUShort.html#Riptide_Utils_Converter_FromUShort_System_UInt16_System_Byte___System_Int32_">FromUShort(UInt16, Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts a given <see cref="!:System.UInt16"></see> to bytes and writes them into the given array.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToDouble_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToDouble(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToDouble.html#Riptide_Utils_Converter_ToDouble_System_Byte___System_Int32_">ToDouble(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.Double"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToFloat_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToFloat(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToFloat.html#Riptide_Utils_Converter_ToFloat_System_Byte___System_Int32_">ToFloat(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.Single"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToInt_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToInt(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToInt.html#Riptide_Utils_Converter_ToInt_System_Byte___System_Int32_">ToInt(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.Int32"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToLong_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToLong(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToLong.html#Riptide_Utils_Converter_ToLong_System_Byte___System_Int32_">ToLong(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.Int64"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToShort_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToShort(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToShort.html#Riptide_Utils_Converter_ToShort_System_Byte___System_Int32_">ToShort(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 2 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.Int16"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToUInt_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToUInt(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToUInt.html#Riptide_Utils_Converter_ToUInt_System_Byte___System_Int32_">ToUInt(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.UInt32"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToULong_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToULong(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToULong.html#Riptide_Utils_Converter_ToULong_System_Byte___System_Int32_">ToULong(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.UInt64"></see>.</p>
-</td>
-      </tr>
-      <tr>
-        <td id="Riptide_Utils_Converter_ToUShort_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToUShort(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Utils.Converter.ToUShort.html#Riptide_Utils_Converter_ToUShort_System_Byte___System_Int32_">ToUShort(Byte[], Int32)</a>
-        </td>
-        <td class="markdown level1 summary"><p>Converts the 2 bytes in the array at <code data-dev-comment-type="paramref" class="paramref">startIndex</code> to a <see cref="!:System.UInt16"></see>.</p>
+        <td class="markdown level1 summary"><p>The number of bits in a ulong.</p>
 </td>
       </tr>
     </tbody>
   </table>
-  
-  
+  <h3 id="methods">Methods
+</h3>
+
+
+  <table class="table table-condensed">
+    <tbody>
+      <tr>
+        <td id="Riptide_Utils_Converter_BoolFromBit_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.BoolFromBit(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BoolFromBit.html#Riptide_Utils_Converter_BoolFromBit_System_Byte___System_Int32_">BoolFromBit(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the bit at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_BoolFromBit_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.BoolFromBit(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BoolFromBit.html#Riptide_Utils_Converter_BoolFromBit_System_UInt64___System_Int32_">BoolFromBit(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the bit at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_BoolToBit_System_Boolean_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.BoolToBit(System.Boolean,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BoolToBit.html#Riptide_Utils_Converter_BoolToBit_System_Boolean_System_Byte___System_Int32_">BoolToBit(bool, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to a bit and writes it into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_BoolToBit_System_Boolean_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.BoolToBit(System.Boolean,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.BoolToBit.html#Riptide_Utils_Converter_BoolToBit_System_Boolean_System_UInt64___System_Int32_">BoolToBit(bool, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to a bit and writes it into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ByteFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ByteFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ByteFromBits.html#Riptide_Utils_Converter_ByteFromBits_System_Byte___System_Int32_">ByteFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ByteFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ByteFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ByteFromBits.html#Riptide_Utils_Converter_ByteFromBits_System_UInt64___System_Int32_">ByteFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ByteToBits_System_Byte_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ByteToBits(System.Byte,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ByteToBits.html#Riptide_Utils_Converter_ByteToBits_System_Byte_System_Byte___System_Int32_">ByteToBits(byte, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 8 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ByteToBits_System_Byte_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ByteToBits(System.Byte,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ByteToBits.html#Riptide_Utils_Converter_ByteToBits_System_Byte_System_UInt64___System_Int32_">ByteToBits(byte, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 8 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_DoubleFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.DoubleFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.DoubleFromBits.html#Riptide_Utils_Converter_DoubleFromBits_System_Byte___System_Int32_">DoubleFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_DoubleFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.DoubleFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.DoubleFromBits.html#Riptide_Utils_Converter_DoubleFromBits_System_UInt64___System_Int32_">DoubleFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_DoubleToBits_System_Double_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.DoubleToBits(System.Double,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.DoubleToBits.html#Riptide_Utils_Converter_DoubleToBits_System_Double_System_Byte___System_Int32_">DoubleToBits(double, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_DoubleToBits_System_Double_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.DoubleToBits(System.Double,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.DoubleToBits.html#Riptide_Utils_Converter_DoubleToBits_System_Double_System_UInt64___System_Int32_">DoubleToBits(double, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FloatFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FloatFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FloatFromBits.html#Riptide_Utils_Converter_FloatFromBits_System_Byte___System_Int32_">FloatFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FloatFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.FloatFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FloatFromBits.html#Riptide_Utils_Converter_FloatFromBits_System_UInt64___System_Int32_">FloatFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FloatToBits_System_Single_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FloatToBits(System.Single,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FloatToBits.html#Riptide_Utils_Converter_FloatToBits_System_Single_System_Byte___System_Int32_">FloatToBits(float, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FloatToBits_System_Single_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.FloatToBits(System.Single,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FloatToBits.html#Riptide_Utils_Converter_FloatToBits_System_Single_System_UInt64___System_Int32_">FloatToBits(float, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromDouble_System_Double_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromDouble(System.Double,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromDouble.html#Riptide_Utils_Converter_FromDouble_System_Double_System_Byte___System_Int32_">FromDouble(double, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromFloat_System_Single_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromFloat(System.Single,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromFloat.html#Riptide_Utils_Converter_FromFloat_System_Single_System_Byte___System_Int32_">FromFloat(float, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromInt_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromInt(System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromInt.html#Riptide_Utils_Converter_FromInt_System_Int32_System_Byte___System_Int32_">FromInt(int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromLong_System_Int64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromLong(System.Int64,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromLong.html#Riptide_Utils_Converter_FromLong_System_Int64_System_Byte___System_Int32_">FromLong(long, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromShort_System_Int16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromShort(System.Int16,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromShort.html#Riptide_Utils_Converter_FromShort_System_Int16_System_Byte___System_Int32_">FromShort(short, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromUInt_System_UInt32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromUInt(System.UInt32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromUInt.html#Riptide_Utils_Converter_FromUInt_System_UInt32_System_Byte___System_Int32_">FromUInt(uint, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromULong_System_UInt64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromULong(System.UInt64,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromULong.html#Riptide_Utils_Converter_FromULong_System_UInt64_System_Byte___System_Int32_">FromULong(ulong, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_FromUShort_System_UInt16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.FromUShort(System.UInt16,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.FromUShort.html#Riptide_Utils_Converter_FromUShort_System_UInt16_System_Byte___System_Int32_">FromUShort(ushort, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts a given <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a> to bytes and writes them into the given array.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_Byte__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.Byte[],System.Int32,System.Byte@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_Byte__">GetBits(int, byte[], int, out byte)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt16__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.Byte[],System.Int32,System.UInt16@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt16__">GetBits(int, byte[], int, out ushort)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt32__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.Byte[],System.Int32,System.UInt32@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt32__">GetBits(int, byte[], int, out uint)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt64__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.Byte[],System.Int32,System.UInt64@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_Byte___System_Int32_System_UInt64__">GetBits(int, byte[], int, out ulong)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_Byte__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.UInt64[],System.Int32,System.Byte@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_Byte__">GetBits(int, ulong[], int, out byte)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt16__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.UInt64[],System.Int32,System.UInt16@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt16__">GetBits(int, ulong[], int, out ushort)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt32__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.UInt64[],System.Int32,System.UInt32@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt32__">GetBits(int, ulong[], int, out uint)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt64__" data-uid="Riptide.Utils.Converter.GetBits(System.Int32,System.UInt64[],System.Int32,System.UInt64@)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.GetBits.html#Riptide_Utils_Converter_GetBits_System_Int32_System_UInt64___System_Int32_System_UInt64__">GetBits(int, ulong[], int, out ulong)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Starting at <code class="paramref">startBit</code>, reads <code class="paramref">amount</code> bits from <code class="paramref">array</code> into <code class="paramref">bitfield</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_IntFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.IntFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.IntFromBits.html#Riptide_Utils_Converter_IntFromBits_System_Byte___System_Int32_">IntFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_IntFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.IntFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.IntFromBits.html#Riptide_Utils_Converter_IntFromBits_System_UInt64___System_Int32_">IntFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_IntToBits_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.IntToBits(System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.IntToBits.html#Riptide_Utils_Converter_IntToBits_System_Int32_System_Byte___System_Int32_">IntToBits(int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_IntToBits_System_Int32_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.IntToBits(System.Int32,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.IntToBits.html#Riptide_Utils_Converter_IntToBits_System_Int32_System_UInt64___System_Int32_">IntToBits(int, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_LongFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.LongFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.LongFromBits.html#Riptide_Utils_Converter_LongFromBits_System_Byte___System_Int32_">LongFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_LongFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.LongFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.LongFromBits.html#Riptide_Utils_Converter_LongFromBits_System_UInt64___System_Int32_">LongFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_LongToBits_System_Int64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.LongToBits(System.Int64,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.LongToBits.html#Riptide_Utils_Converter_LongToBits_System_Int64_System_Byte___System_Int32_">LongToBits(long, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_LongToBits_System_Int64_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.LongToBits(System.Int64,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.LongToBits.html#Riptide_Utils_Converter_LongToBits_System_Int64_System_UInt64___System_Int32_">LongToBits(long, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SByteFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SByteFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SByteFromBits.html#Riptide_Utils_Converter_SByteFromBits_System_Byte___System_Int32_">SByteFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.sbyte">sbyte</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SByteFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.SByteFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SByteFromBits.html#Riptide_Utils_Converter_SByteFromBits_System_UInt64___System_Int32_">SByteFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to an <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.sbyte">sbyte</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SByteToBits_System_SByte_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SByteToBits(System.SByte,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SByteToBits.html#Riptide_Utils_Converter_SByteToBits_System_SByte_System_Byte___System_Int32_">SByteToBits(sbyte, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 8 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SByteToBits_System_SByte_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.SByteToBits(System.SByte,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SByteToBits.html#Riptide_Utils_Converter_SByteToBits_System_SByte_System_UInt64___System_Int32_">SByteToBits(sbyte, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 8 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SetBits_System_Byte_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SetBits(System.Byte,System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SetBits.html#Riptide_Utils_Converter_SetBits_System_Byte_System_Int32_System_Byte___System_Int32_">SetBits(byte, int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Takes <code class="paramref">amount</code> bits from <code class="paramref">bitfield</code> and writes them into <code class="paramref">array</code>, starting at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SetBits_System_UInt16_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SetBits(System.UInt16,System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SetBits.html#Riptide_Utils_Converter_SetBits_System_UInt16_System_Int32_System_Byte___System_Int32_">SetBits(ushort, int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Takes <code class="paramref">amount</code> bits from <code class="paramref">bitfield</code> and writes them into <code class="paramref">array</code>, starting at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SetBits_System_UInt32_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SetBits(System.UInt32,System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SetBits.html#Riptide_Utils_Converter_SetBits_System_UInt32_System_Int32_System_Byte___System_Int32_">SetBits(uint, int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Takes <code class="paramref">amount</code> bits from <code class="paramref">bitfield</code> and writes them into <code class="paramref">array</code>, starting at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SetBits_System_UInt64_System_Int32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.SetBits(System.UInt64,System.Int32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SetBits.html#Riptide_Utils_Converter_SetBits_System_UInt64_System_Int32_System_Byte___System_Int32_">SetBits(ulong, int, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Takes <code class="paramref">amount</code> bits from <code class="paramref">bitfield</code> and writes them into <code class="paramref">array</code>, starting at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_SetBits_System_UInt64_System_Int32_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.SetBits(System.UInt64,System.Int32,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.SetBits.html#Riptide_Utils_Converter_SetBits_System_UInt64_System_Int32_System_UInt64___System_Int32_">SetBits(ulong, int, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Takes <code class="paramref">amount</code> bits from <code class="paramref">bitfield</code> and writes them into <code class="paramref">array</code>, starting at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ShortFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ShortFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ShortFromBits.html#Riptide_Utils_Converter_ShortFromBits_System_Byte___System_Int32_">ShortFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 16 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ShortFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ShortFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ShortFromBits.html#Riptide_Utils_Converter_ShortFromBits_System_UInt64___System_Int32_">ShortFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 16 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ShortToBits_System_Int16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ShortToBits(System.Int16,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ShortToBits.html#Riptide_Utils_Converter_ShortToBits_System_Int16_System_Byte___System_Int32_">ShortToBits(short, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 16 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ShortToBits_System_Int16_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ShortToBits(System.Int16,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ShortToBits.html#Riptide_Utils_Converter_ShortToBits_System_Int16_System_UInt64___System_Int32_">ShortToBits(short, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 16 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToDouble_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToDouble(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToDouble.html#Riptide_Utils_Converter_ToDouble_System_Byte___System_Int32_">ToDouble(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.double">double</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToFloat_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToFloat(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToFloat.html#Riptide_Utils_Converter_ToFloat_System_Byte___System_Int32_">ToFloat(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.single">float</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToInt_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToInt(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToInt.html#Riptide_Utils_Converter_ToInt_System_Byte___System_Int32_">ToInt(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToLong_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToLong(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToLong.html#Riptide_Utils_Converter_ToLong_System_Byte___System_Int32_">ToLong(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int64">long</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToShort_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToShort(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToShort.html#Riptide_Utils_Converter_ToShort_System_Byte___System_Int32_">ToShort(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 2 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int16">short</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToUInt_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToUInt(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToUInt.html#Riptide_Utils_Converter_ToUInt_System_Byte___System_Int32_">ToUInt(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 4 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToULong_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToULong(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToULong.html#Riptide_Utils_Converter_ToULong_System_Byte___System_Int32_">ToULong(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 8 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ToUShort_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ToUShort(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ToUShort.html#Riptide_Utils_Converter_ToUShort_System_Byte___System_Int32_">ToUShort(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 2 bytes in the array at <code class="paramref">startIndex</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UIntFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.UIntFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UIntFromBits.html#Riptide_Utils_Converter_UIntFromBits_System_Byte___System_Int32_">UIntFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UIntFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.UIntFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UIntFromBits.html#Riptide_Utils_Converter_UIntFromBits_System_UInt64___System_Int32_">UIntFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 32 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint32">uint</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UIntToBits_System_UInt32_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.UIntToBits(System.UInt32,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UIntToBits.html#Riptide_Utils_Converter_UIntToBits_System_UInt32_System_Byte___System_Int32_">UIntToBits(uint, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UIntToBits_System_UInt32_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.UIntToBits(System.UInt32,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UIntToBits.html#Riptide_Utils_Converter_UIntToBits_System_UInt32_System_UInt64___System_Int32_">UIntToBits(uint, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 32 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ULongFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ULongFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ULongFromBits.html#Riptide_Utils_Converter_ULongFromBits_System_Byte___System_Int32_">ULongFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ULongFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ULongFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ULongFromBits.html#Riptide_Utils_Converter_ULongFromBits_System_UInt64___System_Int32_">ULongFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 64 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint64">ulong</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ULongToBits_System_UInt64_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.ULongToBits(System.UInt64,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ULongToBits.html#Riptide_Utils_Converter_ULongToBits_System_UInt64_System_Byte___System_Int32_">ULongToBits(ulong, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ULongToBits_System_UInt64_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.ULongToBits(System.UInt64,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ULongToBits.html#Riptide_Utils_Converter_ULongToBits_System_UInt64_System_UInt64___System_Int32_">ULongToBits(ulong, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 64 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UShortFromBits_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.UShortFromBits(System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UShortFromBits.html#Riptide_Utils_Converter_UShortFromBits_System_Byte___System_Int32_">UShortFromBits(byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 16 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UShortFromBits_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.UShortFromBits(System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UShortFromBits.html#Riptide_Utils_Converter_UShortFromBits_System_UInt64___System_Int32_">UShortFromBits(ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts the 16 bits at <code class="paramref">startBit</code> in <code class="paramref">array</code> to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UShortToBits_System_UInt16_System_Byte___System_Int32_" data-uid="Riptide.Utils.Converter.UShortToBits(System.UInt16,System.Byte[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UShortToBits.html#Riptide_Utils_Converter_UShortToBits_System_UInt16_System_Byte___System_Int32_">UShortToBits(ushort, byte[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 16 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_UShortToBits_System_UInt16_System_UInt64___System_Int32_" data-uid="Riptide.Utils.Converter.UShortToBits(System.UInt16,System.UInt64[],System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.UShortToBits.html#Riptide_Utils_Converter_UShortToBits_System_UInt16_System_UInt64___System_Int32_">UShortToBits(ushort, ulong[], int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Converts <code class="paramref">value</code> to 16 bits and writes them into <code class="paramref">array</code> at <code class="paramref">startBit</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ZigZagDecode_System_Int32_" data-uid="Riptide.Utils.Converter.ZigZagDecode(System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ZigZagDecode.html#Riptide_Utils_Converter_ZigZagDecode_System_Int32_">ZigZagDecode(int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Zig zag decodes <code class="paramref">value</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ZigZagDecode_System_Int64_" data-uid="Riptide.Utils.Converter.ZigZagDecode(System.Int64)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ZigZagDecode.html#Riptide_Utils_Converter_ZigZagDecode_System_Int64_">ZigZagDecode(long)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Zig zag decodes <code class="paramref">value</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ZigZagEncode_System_Int32_" data-uid="Riptide.Utils.Converter.ZigZagEncode(System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ZigZagEncode.html#Riptide_Utils_Converter_ZigZagEncode_System_Int32_">ZigZagEncode(int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Zig zag encodes <code class="paramref">value</code>.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_Utils_Converter_ZigZagEncode_System_Int64_" data-uid="Riptide.Utils.Converter.ZigZagEncode(System.Int64)" class="one-third-width">
+          <a class="xref" href="Riptide.Utils.Converter.ZigZagEncode.html#Riptide_Utils_Converter_ZigZagEncode_System_Int64_">ZigZagEncode(long)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Zig zag encodes <code class="paramref">value</code>.</p>
+</td>
+      </tr>
+    </tbody>
+  </table>
+
+
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_Converter.md&amp;value=---%0Auid%3A%20Riptide.Utils.Converter%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Utils_Converter.md&amp;value=---%0Auid%3A%20Riptide.Utils.Converter%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Utils/Converter.cs/#L13" class="contribution-link">View Source</a>
@@ -261,7 +736,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -269,18 +744,15 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © Tom Weiland 2022
+      Copyright © Tom Weiland 2022
             <br>
-            <span>
-              Generated by 
-              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
-            </span>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>

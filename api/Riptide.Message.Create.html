@@ -1,41 +1,41 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
-<html>
-  
+<html lang="csharp">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Create Method | Riptide Docs</title>
+    <title>Message.Create Method | Riptide API Docs</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="Create Method | Riptide Docs">
+    <meta name="title" content="Message.Create Method | Riptide API Docs">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="Create Method | Riptide Docs">
+    <meta property="og:title" content="Message.Create Method | Riptide API Docs">
     <meta property="og:type" content="website">
-    <meta name="description" content="Documentation for Riptide Networking.">
-    <meta property="og:description" content="Documentation for Riptide Networking.">
+      <meta name="description" content="Documentation for the Message.Create Method.">
+      <meta property="og:description" content="Documentation for the Message.Create Method.">
     <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
     <meta name="theme-color" content="#2bbade" data-react-helmet="true">
-  
+
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    <meta property="docfx:newtab" content="true">
+  
+  <meta property="docfx:rel" content="../">
+  <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -45,7 +45,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
@@ -61,7 +61,7 @@
         </nav>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,9 +80,9 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            
+
             <div class="subnav navbar navbar-default">
-              <div class="hide-when-search" id="breadcrumb">
+              <div class="container hide-when-search" id="breadcrumb">
                 <ul class="breadcrumb">
                   <li></li>
                 </ul>
@@ -90,7 +90,9 @@
             </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Message.Create*">
 
-<h1 id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*">Create Method</h1>
+
+
+<h1 id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*">Message.Create Method</h1>
 <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a></h6>
 <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
 <div class="markdown level0 summary"></div>
@@ -98,24 +100,31 @@
 
 <h2 class="overloads">Overloads</h2>
 <table class="table table-condensed">
-  <tbody class="parameter-table">
+  <tbody>
     <tr>
       <td class="one-third-width">
         <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create">Create()</a>
       </td>
-      <td class="markdown level1 summary"><p>Gets a usable message instance.</p>
+      <td class="markdown level1 summary"><p>Gets a completely empty message instance with no header.</p>
 </td>
     </tr>
     <tr>
       <td class="one-third-width">
-        <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_">Create(MessageSendMode, UInt16)</a>
+        <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_">Create(MessageSendMode)</a>
       </td>
       <td class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
 </td>
     </tr>
     <tr>
       <td class="one-third-width">
-        <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_Enum_">Create(MessageSendMode, Enum)</a>
+        <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_">Create(MessageSendMode, ushort)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_">Create(MessageSendMode, Enum)</a>
       </td>
       <td class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
 </td>
@@ -126,7 +135,7 @@
 <a id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*"></a>
 
 <h2 id="Riptide_Message_Create" data-uid="Riptide.Message.Create">Create()</h2>
-<div class="markdown level1 summary"><p>Gets a usable message instance.</p>
+<div class="markdown level1 summary"><p>Gets a completely empty message instance with no header.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
 
@@ -136,9 +145,15 @@
 
 
 <h4 class="returns">Returns</h4>
-<span><a class="xref" href="Riptide.Message.html">Message</a></span>
-<span><p>A message instance ready to be used.</p>
-</span>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.Message.html">Message</a></td>
+      <td><p>An empty message instance.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -151,7 +166,54 @@
 
 <a id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*"></a>
 
-<h2 id="Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_" data-uid="Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16)">Create(MessageSendMode, UInt16)</h2>
+<h2 id="Riptide_Message_Create_Riptide_MessageSendMode_" data-uid="Riptide.Message.Create(Riptide.MessageSendMode)">Create(MessageSendMode)</h2>
+<div class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
+</div>
+<div class="markdown level1 conceptual"></div>
+
+<div class="codewrapper">
+  <pre><code class="lang-csharp hljs">public static Message Create(MessageSendMode sendMode)</code></pre>
+</div>
+
+<h4 class="parameters">Parameters</h4>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.MessageSendMode.html">MessageSendMode</a></td>
+      <td><code>sendMode</code></td>
+      <td><p>The mode in which the message should be sent.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="returns">Returns</h4>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.Message.html">Message</a></td>
+      <td><p>A message instance ready to be sent.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+<h4 id="Riptide_Message_Create_Riptide_MessageSendMode__remarks">Remarks</h4>
+<div class="markdown level1 remarks"><p>This method is primarily intended for use with <a class="xref" href="Riptide.MessageSendMode.html#Riptide_MessageSendMode_Notify">Notify</a> as notify messages don't have a built-in message ID, and unlike
+<a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_">Create(MessageSendMode, ushort)</a> and <a class="xref" href="Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_">Create(MessageSendMode, Enum)</a>, this overload does not add a message ID to the message.</p>
+</div>
+
+
+
+<a id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*"></a>
+
+<h2 id="Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_" data-uid="Riptide.Message.Create(Riptide.MessageSendMode,System.UInt16)">Create(MessageSendMode, ushort)</h2>
 <div class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -162,7 +224,7 @@
 
 <h4 class="parameters">Parameters</h4>
 <table class="table table-condensed">
-  <tbody class="parameter-table">
+  <tbody>
     <tr>
       <td><a class="xref" href="Riptide.MessageSendMode.html">MessageSendMode</a></td>
       <td><code>sendMode</code></td>
@@ -170,7 +232,7 @@
 </td>
     </tr>
     <tr>
-      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">UInt16</a></td>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a></td>
       <td><code>id</code></td>
       <td><p>The message ID.</p>
 </td>
@@ -179,9 +241,15 @@
 </table>
 
 <h4 class="returns">Returns</h4>
-<span><a class="xref" href="Riptide.Message.html">Message</a></span>
-<span><p>A message instance ready to be used for sending.</p>
-</span>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.Message.html">Message</a></td>
+      <td><p>A message instance ready to be sent.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -194,7 +262,7 @@
 
 <a id="Riptide_Message_Create_" data-uid="Riptide.Message.Create*"></a>
 
-<h2 id="Riptide_Message_Create_Riptide_MessageSendMode_Enum_" data-uid="Riptide.Message.Create(Riptide.MessageSendMode,Enum)">Create(MessageSendMode, Enum)</h2>
+<h2 id="Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_" data-uid="Riptide.Message.Create(Riptide.MessageSendMode,System.Enum)">Create(MessageSendMode, Enum)</h2>
 <div class="markdown level1 summary"><p>Gets a message instance that can be used for sending.</p>
 </div>
 <div class="markdown level1 conceptual"></div>
@@ -205,7 +273,7 @@
 
 <h4 class="parameters">Parameters</h4>
 <table class="table table-condensed">
-  <tbody class="parameter-table">
+  <tbody>
     <tr>
       <td><a class="xref" href="Riptide.MessageSendMode.html">MessageSendMode</a></td>
       <td><code>sendMode</code></td>
@@ -213,17 +281,24 @@
 </td>
     </tr>
     <tr>
-      <td><span class="xref">Enum</span></td>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.enum">Enum</a></td>
       <td><code>id</code></td>
-      <td></td>
+      <td><p>The message ID.</p>
+</td>
     </tr>
   </tbody>
 </table>
 
 <h4 class="returns">Returns</h4>
-<span><a class="xref" href="Riptide.Message.html">Message</a></span>
-<span><p>A message instance ready to be used for sending.</p>
-</span>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.Message.html">Message</a></td>
+      <td><p>A message instance ready to be sent.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 
 
 
@@ -231,8 +306,8 @@
 
 
 
-<h4 id="Riptide_Message_Create_Riptide_MessageSendMode_Enum__remarks">Remarks</h4>
-<div class="markdown level1 remarks"><p>NOTE: <code data-dev-comment-type="paramref" class="paramref">id</code> will be cast to a <see cref="!:System.UInt16"></see>. You should ensure that its value never exceeds that of <see cref="!:ushort.MaxValue"></see>, otherwise you'll encounter unexpected behaviour when handling messages.</p>
+<h4 id="Riptide_Message_Create_Riptide_MessageSendMode_System_Enum__remarks">Remarks</h4>
+<div class="markdown level1 remarks"><p>NOTE: <code class="paramref">id</code> will be cast to a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16">ushort</a>. You should ensure that its value never exceeds that of <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.uint16.maxvalue">MaxValue</a>, otherwise you'll encounter unexpected behaviour when handling messages.</p>
 </div>
 
 
@@ -241,16 +316,16 @@
 
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Message_Create_.md&amp;value=---%0Auid%3A%20Riptide.Message.Create*%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Message_Create_.md&amp;value=---%0Auid%3A%20Riptide.Message.Create*%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Message.cs/#L104" class="contribution-link">View Source</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Message.cs/#L132" class="contribution-link">View Source</a>
                   </li>
                   <li>
                     <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
@@ -265,7 +340,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -273,18 +348,15 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © Tom Weiland 2022
+      Copyright © Tom Weiland 2022
             <br>
-            <span>
-              Generated by 
-              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
-            </span>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>

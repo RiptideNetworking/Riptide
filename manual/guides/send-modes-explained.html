@@ -1,0 +1,211 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html lang="csharp">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Message Send Modes Explained | Riptide Manual</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Message Send Modes Explained | Riptide Manual">
+    <meta name="generator" content="docfx">
+    <meta property="og:title" content="Message Send Modes Explained | Riptide Manual">
+    <meta property="og:type" content="website">
+      <meta name="description" content="How Riptide&#39;s various message send modes work and how to use them.">
+      <meta property="og:description" content="How Riptide&#39;s various message send modes work and how to use them.">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta property="og:image:width" content="50">
+    <meta property="og:image:height" content="50">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+
+    <link rel="shortcut icon" href="../../images/favicon.ico">
+    <link rel="stylesheet" href="../../styles/config.css">
+    <link rel="stylesheet" href="../../styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="../../styles/docfx.css">
+    <link rel="stylesheet" href="../../styles/riptide.css">
+    <link rel="stylesheet" href="../../styles/codehighlighting.css">
+    <link rel="stylesheet" href="../../styles/main.css">
+    <meta property="docfx:navrel" content="../../toc.html">
+    <meta property="docfx:tocrel" content="../toc.html">
+  
+  <meta property="docfx:rel" content="../../">
+  <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../index.html">
+                <img id="logo" class="svg" src="../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+
+            <div class="subnav navbar navbar-default">
+              <div class="container hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="message-send-modes-explained">Message Send Modes Explained</h1>
+
+<p>Riptide has three different message send modes (defined in the <code><a class="xref" href="../../api/Riptide.MessageSendMode.html">MessageSendMode</a></code> enum) that you can use to send data. This article explains the differences between them and how &amp; when to use them.</p>
+<p>The table below provides a quick functionality comparison:</p>
+<table>
+<thead>
+<tr>
+<th>Send Mode</th>
+<th style="text-align: center;">Guaranteed Delivery</th>
+<th style="text-align: center;">Ordered</th>
+<th style="text-align: center;">Delivery Feedback</th>
+<th style="text-align: center;">Duplicate Filtering</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unreliable</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td>Reliable</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+</tr>
+<tr>
+<td>Notify</td>
+<td style="text-align: center;">✗</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✓</td>
+</tr>
+</tbody>
+</table>
+<h2 id="unreliable-send-mode">Unreliable Send Mode</h2>
+<p>The most basic of the three send modes is the <code>Unreliable</code> send mode. It guarantees neither delivery nor order. When you send a message unreliably it is sent once and effectively forgotten about—nothing further is done to ensure order <em>or</em> delivery.</p>
+<p>Due to how the internet works, a message you send may sometimes get duplicated in transmission. Since unreliably sent messages aren't given a sequence ID, Riptide can't use said sequence ID to determine if a messages was already received once before.</p>
+<p>However, even if the unreliable send mode had a duplicate filtering system, it would <em>not</em> be able to catch duplicates which are sent maliciously with a unique sequence ID, so your server should be capable of receiving the same data more than once anyways.</p>
+<h3 id="unreliable-usage">Usage</h3>
+<p>The unreliable send mode is primarily useful for sending data which changes frequently and is being updated continually, such as a player's position. It doesn't really matter if a position update goes missing here and there due to packet loss as the next update is probably already in transmission, and resending the update that was lost to ensure its delivery wouldn't make much sense since it's already outdated information.</p>
+<p>Unreliable messages have message IDs built in, so you should use the <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_">Create(MessageSendMode, ushort)</a></code> or <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_">Create(MessageSendMode, Enum)</a></code> overloads when creating your message (replace <code>&lt;messageId&gt;</code> with your message ID):</p>
+<pre><code class="lang-cs">Message.Create(MessageSendMode.Unreliable, &lt;messageId&gt;);
+</code></pre>
+<p>You can handle unreliable messages using static methods with <code>[<a class="xref" href="../../api/Riptide.MessageHandlerAttribute.html">MessageHandler</a>]</code> attributes attached, or via the <code><a class="xref" href="../../api/Riptide.Server.MessageReceived.html">Server.MessageReceived</a></code> &amp; <code><a class="xref" href="../../api/Riptide.Client.MessageReceived.html">Client.MessageReceived</a></code> events.</p>
+<h2 id="reliable-send-mode">Reliable Send Mode</h2>
+<p>The <code>Reliable</code> send mode guarantees delivery but not order. When you send a message reliably, it is resent repeatedly under the hood until the other end responds and acknowledges that it received the message in question.</p>
+<p>Reliable mode assigns each message a sequence ID and uses that to (among other things) filter out duplicate messages on the receiving end. However, this duplicate filtering system will <em>not</em> catch duplicates which are sent maliciously with a unique sequence ID, so your server should be capable of receiving the same data more than once without breaking.</p>
+<h3 id="reliable-usage">Usage</h3>
+<p>The reliable send mode is primarily useful for sending &quot;one-off&quot; data and data which changes less often, but whose delivery is important. Player chat messages are a good example of this.</p>
+<p>While reliable mode doesn't inherently guarantee order, you <em>can</em> manually ensure data arrives in the correct order by using the <code><a class="xref" href="../../api/Riptide.Connection.ReliableDelivered.html">Connection.ReliableDelivered</a></code> event to wait for the previous message to be delivered before sending the next one. This obviously comes at the cost of some added latency since you're sending messages and awaiting their delivery one at a time, but for something like player chat messages that likely wouldn't be an issue.</p>
+<p>You can identify messages by tracking the sequence ID returned by the <code>Send</code> method and comparing it to the one provided by the <code>ReliableDelivered</code> event.</p>
+<p>Reliable messages have message IDs built in, so you should use the <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_UInt16_">Create(MessageSendMode, ushort)</a></code> or <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_System_Enum_">Create(MessageSendMode, Enum)</a></code> overloads when creating your message (replace <code>&lt;messageId&gt;</code> with your message ID):</p>
+<pre><code class="lang-cs">Message.Create(MessageSendMode.Reliable, &lt;messageId&gt;);
+</code></pre>
+<p>You can handle reliable messages using static methods with <code>[<a class="xref" href="../../api/Riptide.MessageHandlerAttribute.html">MessageHandler</a>]</code> attributes attached, or via the <code><a class="xref" href="../../api/Riptide.Server.MessageReceived.html">Server.MessageReceived</a></code> &amp; <code><a class="xref" href="../../api/Riptide.Client.MessageReceived.html">Client.MessageReceived</a></code> events.</p>
+<h2 id="notify-send-mode">Notify Send Mode</h2>
+<p>Added in v2.1.0, the <code>Notify</code> send mode is the newest—but arguably the most powerful and versatile—of the three modes. It guarantees order but not delivery, and provides actionable feedback to the sender about what happened to each message.</p>
+<p>Notify mode guarantees order by simply having the receiver discard any out of order messages it receives. No packet buffering or reordering takes place on the receiving end.</p>
+<p>The sender invokes the <code><a class="xref" href="../../api/Riptide.Connection.NotifyLost.html">Connection.NotifyLost</a></code> or <code><a class="xref" href="../../api/Riptide.Connection.NotifyLost.html">Connection.NotifyLost</a></code> event depending on whether the message was lost or delivered, allowing you to determine what to do with that information. Messages discarded due to being received out of order are considered lost.</p>
+<div class="IMPORTANT">
+<h5>Important</h5>
+<p>The notify send mode includes its &quot;acks&quot; in the headers of other notify messages. This is more bandwidth-efficient than the reliable send mode (which sends separate unreliable ack packets for each message), but it means that <em>both</em> ends of the connection <em><strong>must</strong></em> send notify messages at a similar rate in order for it to work properly!</p>
+</div>
+<p>Notify mode assigns each message a sequence ID and uses that to (among other things) filter out duplicate messages on the receiving end. However, this duplicate filtering system will <em>not</em> catch duplicates which are sent maliciously with a unique sequence ID, so your server should be capable of receiving the same data more than once without breaking.</p>
+<h3 id="notify-usage">Usage</h3>
+<p>The notify send mode gives you complete control by allowing you to decide what actions to take based on what happened to which data. For example, if a player's health changes twice in quick succession and the message containing the first health update is lost, you can avoid resending that data because you know you already sent a more recent health update.</p>
+<p>You can identify messages by tracking the sequence ID returned by the <code>Send</code> method and comparing it to the one provided by the <code>NotifyLost</code> and <code>NotifyDelivered</code> events.</p>
+<p>This level of control unlocks the ability to balance speed, reliability, and bandwidth-efficiency as necessary and makes it capable of replacing the other two send modes in the vast majority of situations.</p>
+<p>Notify messages do <em>not</em> have message IDs built in, so you should use the <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_">Create(MessageSendMode)</a></code> overload when creating your message:</p>
+<pre><code class="lang-cs">Message.Create(MessageSendMode.Reliable);
+</code></pre>
+<p>You can handle notify messages via the <code><a class="xref" href="../../api/Riptide.Connection.NotifyReceived.html">Connection.NotifyReceived</a></code> event.</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Docs/manual/guides/send-modes-explained.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright © Tom Weiland 2022
+            <br>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../styles/main.js"></script>
+  </body>
+</html>

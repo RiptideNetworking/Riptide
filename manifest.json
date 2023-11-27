@@ -12,19 +12,16 @@
         "resource": {
           "relative_path": "index.json"
         }
-      },
-      "is_incremental": false
+      }
     },
     {
       "type": "ManagedReference",
       "source_relative_path": "api/Riptide.Client.MessageHandler.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.MessageHandler.html",
-          "hash": "y92mtrr30tmPfZ+uqe27j37ownGJblfohJKmPLNUFVQ="
+          "relative_path": "api/Riptide.Client.MessageHandler.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -32,11 +29,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Connected.html",
-          "hash": "NzDhhvtJ4krnCAv/CZZde39bLapWAnKgLV/op0yKO1o="
+          "relative_path": "api/Riptide.Client.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -44,11 +39,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.ConnectionFailed.html",
-          "hash": "Q6LInl5Rea5hP+0N5P4Z2vTEHN6p4UyTITjhSLY6pzQ="
+          "relative_path": "api/Riptide.Client.ConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -56,11 +49,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.MessageReceived.html",
-          "hash": "6gxVLSTBNjgf1Ru/wYnCxUGDFZlOR9n0maod4lRXbd4="
+          "relative_path": "api/Riptide.Client.MessageReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -68,11 +59,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Disconnected.html",
-          "hash": "aG52tS73qqxXAdXCxLVOAQbCAXkbsKiBGAitFnRitHo="
+          "relative_path": "api/Riptide.Client.Disconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -80,11 +69,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.ClientConnected.html",
-          "hash": "PBoO+A8C1Wav1So4GIZvb7SyuSyw9B6V1MkYWBUmAM4="
+          "relative_path": "api/Riptide.Client.ClientConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -92,11 +79,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.ClientDisconnected.html",
-          "hash": "MjTYQJ2HzQPaA69BpVlsuN/crKhbo2AyzfT4XXQkCu0="
+          "relative_path": "api/Riptide.Client.ClientDisconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -104,11 +89,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Id.html",
-          "hash": "fuN5UhihwVrVo6UdGBmdrbesblY5X4zIwTTrsf0jts4="
+          "relative_path": "api/Riptide.Client.Id.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -116,11 +99,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.RTT.html",
-          "hash": "jm6k50NmzOh4aCR21VJsuDFnID2VgQ9ry4PlluWuWh0="
+          "relative_path": "api/Riptide.Client.RTT.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -128,11 +109,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.SmoothRTT.html",
-          "hash": "LWwVcA+l2tj4/xpKbn6+W4Sae4SHkrpGRe3we7NClCo="
+          "relative_path": "api/Riptide.Client.SmoothRTT.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -140,11 +119,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.IsNotConnected.html",
-          "hash": "QsppJpEKAOdRk2iFRwQR2DASpjJvufqDdeXFpxB0fLg="
+          "relative_path": "api/Riptide.Client.TimeoutTime.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -152,11 +129,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.IsConnecting.html",
-          "hash": "Y9SsSxGqUL6j8zB4qhZL/jBLM7EwnbcvQze/xZG5JF4="
+          "relative_path": "api/Riptide.Client.IsNotConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -164,11 +139,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.IsPending.html",
-          "hash": "uII0l7r+yib0u7KubB//jFzXneRTNORzPA3HbbLEwUY="
+          "relative_path": "api/Riptide.Client.IsConnecting.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -176,11 +149,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.IsConnected.html",
-          "hash": "6ccgkZiRpvdjrM6ciNDCF9qWqfLKKecnMFpSmDF+yIc="
+          "relative_path": "api/Riptide.Client.IsPending.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -188,11 +159,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Connection.html",
-          "hash": "2NgubfEqrthbSYCbibRgR8IdwUian6ps4ff7yutnnkM="
+          "relative_path": "api/Riptide.Client.IsConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -200,11 +169,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.-ctor.html",
-          "hash": "NEfTOMl5g6BXH71TPiOenDuvUOCnK72E6n4uvsiHjdE="
+          "relative_path": "api/Riptide.Client.Connection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -212,11 +179,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.ChangeTransport.html",
-          "hash": "oT+yq/UsfzhE1ct9hzRjwiR2p+DAewY2MDyj0mrQ93E="
+          "relative_path": "api/Riptide.Client.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -224,11 +189,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Connect.html",
-          "hash": "HYyhoTJwj1RWTDGut/veEIB0x3qlZYVl8OcImviAohM="
+          "relative_path": "api/Riptide.Client.ChangeTransport.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -236,11 +199,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.CreateMessageHandlersDictionary.html",
-          "hash": "/Y3cqmlmBgpVv9Jh6hj0RQ37TwIC74lmCtJWyB2/LAM="
+          "relative_path": "api/Riptide.Client.Connect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -248,11 +209,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Update.html",
-          "hash": "5eTWgpIkXHac/nQQO/i0W02R24n0S0oBG4VUYz8PF+Y="
+          "relative_path": "api/Riptide.Client.CreateMessageHandlersDictionary.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -260,11 +219,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Handle.html",
-          "hash": "4+6gluYSe9gREynu3ZoHUDPPS3ns/fCxJnRQqf8Ofas="
+          "relative_path": "api/Riptide.Client.Update.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -272,11 +229,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Send.html",
-          "hash": "l1ADxe+cSpUHCoNOnO0EsnHtLgKEl9mpU2WurUkWluw="
+          "relative_path": "api/Riptide.Client.Handle.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -284,11 +239,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.Disconnect.html",
-          "hash": "bwcCZI3OOWKZrBadO++DqsdNvwtwIF9/x14OHHeFpyk="
+          "relative_path": "api/Riptide.Client.Send.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -296,11 +249,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnConnected.html",
-          "hash": "xV/CnT/J2nr6HO4m03f3/fG7gqISgPsykDu34XP291E="
+          "relative_path": "api/Riptide.Client.Disconnect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -308,11 +259,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnConnectionFailed.html",
-          "hash": "K7FgVADCMQ99SNSMY9+NghQqppdTK3YtoWOYe+p+v04="
+          "relative_path": "api/Riptide.Client.OnConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -320,11 +269,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnMessageReceived.html",
-          "hash": "LgvTOTkxmqg8ucRVzzH20c3dsU7AliPFxK4Wasc/iNI="
+          "relative_path": "api/Riptide.Client.OnConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -332,11 +279,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnDisconnected.html",
-          "hash": "Ek/NtELGzHg+iC6UeGD2a22Dot6EIjfzpnmCBG23ORg="
+          "relative_path": "api/Riptide.Client.OnMessageReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -344,11 +289,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnClientConnected.html",
-          "hash": "wN4GE8FTJTibJA1l314bON/Qy7RmG9wuYNaUPW28JK4="
+          "relative_path": "api/Riptide.Client.OnDisconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -356,11 +299,9 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.OnClientDisconnected.html",
-          "hash": "E4WzJvPYctgvPlIb5E/S+QOz0wGNjnzVs2ym8S2iiKk="
+          "relative_path": "api/Riptide.Client.OnClientConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -368,11 +309,19 @@
       "source_relative_path": "api/Riptide.Client.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Client.html",
-          "hash": "KYdtHSRevHlXkwv39aGg/PVp24J3OOpqNmYP67EcXps="
+          "relative_path": "api/Riptide.Client.OnClientDisconnected.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Client.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Client.html"
+        }
+      },
       "version": ""
     },
     {
@@ -380,11 +329,9 @@
       "source_relative_path": "api/Riptide.ClientConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientConnectedEventArgs.Id.html",
-          "hash": "WqP7iVPZIsEdP6/1sDwjNDR7+Ji9y6aup0Dx2wTIVYw="
+          "relative_path": "api/Riptide.ClientConnectedEventArgs.Id.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -392,11 +339,9 @@
       "source_relative_path": "api/Riptide.ClientConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientConnectedEventArgs.-ctor.html",
-          "hash": "sC6H7CXDqZew+YjGooVVB6fMRb2TZF8snDrc+4mVvCg="
+          "relative_path": "api/Riptide.ClientConnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -404,11 +349,9 @@
       "source_relative_path": "api/Riptide.ClientConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientConnectedEventArgs.html",
-          "hash": "qV39zZRBGwfu+La9OLoU1nvk/LssJ9j2ljvuXomVB/s="
+          "relative_path": "api/Riptide.ClientConnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -416,11 +359,9 @@
       "source_relative_path": "api/Riptide.ClientDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.Id.html",
-          "hash": "pikBslvmQGA3+5UxwjCrCmbeQ9GKBPrUUbWKxnVHUno="
+          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.Id.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -428,11 +369,9 @@
       "source_relative_path": "api/Riptide.ClientDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.-ctor.html",
-          "hash": "efLa/qs0k85icx7ZKDmah6A/eGRXZZITV9H8CBr4QRY="
+          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -440,11 +379,9 @@
       "source_relative_path": "api/Riptide.ClientDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.html",
-          "hash": "H3XStXm3BQ4cPSKo6j+FqtnYeUyGi50KkU9oTGdYxMY="
+          "relative_path": "api/Riptide.ClientDisconnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -452,11 +389,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.Id.html",
-          "hash": "wt9TJgBY4CkC7Mm5368jfedy3je7DpjNW3dX/YxzaE8="
+          "relative_path": "api/Riptide.Connection.NotifyDelivered.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -464,11 +399,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.IsNotConnected.html",
-          "hash": "gYoKRzI6Yb05mgQG0emm4nGBUFzbUJzH90SIXCs6rZ8="
+          "relative_path": "api/Riptide.Connection.NotifyLost.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -476,11 +409,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.IsConnecting.html",
-          "hash": "ZTTQP0xEkTqoOUE5V/oXAV2toR52X/7pNGBs/eDE0NE="
+          "relative_path": "api/Riptide.Connection.NotifyReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -488,11 +419,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.IsPending.html",
-          "hash": "VRNI/lQ7cPieDe8v/wP2ukcWciHO45PJ50bHZ/jxSbI="
+          "relative_path": "api/Riptide.Connection.ReliableDelivered.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -500,11 +429,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.IsConnected.html",
-          "hash": "+ORR8UskDvSQYLZAyGB0UCyG8XkEMZ1ogsHUv4NkPBQ="
+          "relative_path": "api/Riptide.Connection.CanQualityDisconnect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -512,11 +439,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.RTT.html",
-          "hash": "Cl5DGLMibL9iZJ8OcCuwCxdyLop0erSxyxRK7ha7/n0="
+          "relative_path": "api/Riptide.Connection.Metrics.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -524,11 +449,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.SmoothRTT.html",
-          "hash": "IAuuZ5AgshdF+BBiOdnrbcLE0CSQcrZkVny143YTYIQ="
+          "relative_path": "api/Riptide.Connection.MaxAvgSendAttempts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -536,11 +459,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.CanTimeout.html",
-          "hash": "jI79JKmzLYh3fIBNGMyh0EJ+z3XgMbo4dchRoIYYcxc="
+          "relative_path": "api/Riptide.Connection.AvgSendAttemptsResilience.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -548,11 +469,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.-ctor.html",
-          "hash": "yIWcFZFiWAq43LH3XGGpHmb5OZ35B25dgxbzE0ResQE="
+          "relative_path": "api/Riptide.Connection.MaxSendAttempts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -560,11 +479,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.ResetTimeout.html",
-          "hash": "GsUGlhb+gr6tEvXfLX3lXgeua0e2take/cPcXluXhbM="
+          "relative_path": "api/Riptide.Connection.MaxNotifyLoss.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -572,11 +489,9 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.Send.html",
-          "hash": "rlLbkdCUwybkycggorcZzdsZjGdJuYKjXDy8OelNGj0="
+          "relative_path": "api/Riptide.Connection.NotifyLossResilience.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -584,11 +499,149 @@
       "source_relative_path": "api/Riptide.Connection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Connection.html",
-          "hash": "N4XYfRhfPNZuLaIczxCpPGWFqyFSWF5SLIaYWXsmdNc="
+          "relative_path": "api/Riptide.Connection.Id.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsNotConnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsConnecting.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsPending.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.IsConnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.RTT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.SmoothRTT.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.TimeoutTime.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.CanTimeout.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.ResetTimeout.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.Send.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.OnNotifyDelivered.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.OnNotifyLost.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Connection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Connection.html"
+        }
+      },
       "version": ""
     },
     {
@@ -596,11 +649,9 @@
       "source_relative_path": "api/Riptide.ConnectionFailedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ConnectionFailedEventArgs.Message.html",
-          "hash": "ADS44S6lymqx0Z06q99lIqYDhBB1D5JmXnfkPr25oRw="
+          "relative_path": "api/Riptide.ConnectionFailedEventArgs.Reason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -608,11 +659,9 @@
       "source_relative_path": "api/Riptide.ConnectionFailedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ConnectionFailedEventArgs.-ctor.html",
-          "hash": "kBs4nmj5nf/nf32h1e+4JauA2R9aKJLIGJMzVCsMBs8="
+          "relative_path": "api/Riptide.ConnectionFailedEventArgs.Message.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -620,23 +669,19 @@
       "source_relative_path": "api/Riptide.ConnectionFailedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ConnectionFailedEventArgs.html",
-          "hash": "QpFdN5Oj9qp/zbwJ6yt+jgfDi7V2GozxauY3WKhg1aE="
+          "relative_path": "api/Riptide.ConnectionFailedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.ConnectionState.yml",
+      "source_relative_path": "api/Riptide.ConnectionFailedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ConnectionState.html",
-          "hash": "Vsulqj6xKfxcvXaILU8M3murtaaVkFp0t/I6aFms9Ek="
+          "relative_path": "api/Riptide.ConnectionFailedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -644,11 +689,9 @@
       "source_relative_path": "api/Riptide.DisconnectReason.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DisconnectReason.html",
-          "hash": "6JvfSdwG8zNJ0+7EgyIS1efuwWNOV/osgYtYfavNzr8="
+          "relative_path": "api/Riptide.DisconnectReason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -656,11 +699,9 @@
       "source_relative_path": "api/Riptide.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DisconnectedEventArgs.Reason.html",
-          "hash": "qPThhozsHEvUP9MlILA90x2g1YWILZkHt8k0b5kxF8E="
+          "relative_path": "api/Riptide.DisconnectedEventArgs.Reason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -668,11 +709,9 @@
       "source_relative_path": "api/Riptide.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DisconnectedEventArgs.Message.html",
-          "hash": "Aa9ehzXQD2efHCMNF4DEMwesudbOOInJQq0gJd0d8qw="
+          "relative_path": "api/Riptide.DisconnectedEventArgs.Message.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -680,11 +719,9 @@
       "source_relative_path": "api/Riptide.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DisconnectedEventArgs.-ctor.html",
-          "hash": "JoCO9Nz2qg21D25ugBJZbpn/MLwvXBgVkyE4B513PVU="
+          "relative_path": "api/Riptide.DisconnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -692,11 +729,9 @@
       "source_relative_path": "api/Riptide.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DisconnectedEventArgs.html",
-          "hash": "kdFcobwVnDDFW8EraqkLlsrj5jyFQP2rkXj6QTAwveY="
+          "relative_path": "api/Riptide.DisconnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -704,11 +739,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.Id.html",
-          "hash": "n2/E/OjWkKOk7lXkgyBRPKvLmN99SuqjiNNgGRAHcIg="
+          "relative_path": "api/Riptide.DuplicateHandlerException.Id.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -716,11 +749,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType1.html",
-          "hash": "r9WWqUKvCpS4RcZpuk3629T6UHJ5wEUJHVrSV+kWFn8="
+          "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -728,11 +759,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName1.html",
-          "hash": "+ysm1CuJp8eQuO7Z8N7g9/aVEPP44JRNFlyonxTT8N0="
+          "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName1.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -740,11 +769,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType2.html",
-          "hash": "99/OzNt9eROX+DqsuBwqAwa4WOxXaxsXm+LjBpRTmKo="
+          "relative_path": "api/Riptide.DuplicateHandlerException.DeclaringType2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -752,11 +779,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName2.html",
-          "hash": "8i0vb5QGpqSjqyUO+eAw1beAgZYum0W4K0hsCrF6BYo="
+          "relative_path": "api/Riptide.DuplicateHandlerException.HandlerMethodName2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -764,11 +789,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.-ctor.html",
-          "hash": "ehCOFmwU8O+kSet2OJw7z5ccHNykNUz2c0mFXIE8Q60="
+          "relative_path": "api/Riptide.DuplicateHandlerException.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -776,11 +799,9 @@
       "source_relative_path": "api/Riptide.DuplicateHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.DuplicateHandlerException.html",
-          "hash": "qrbJjgj8cbDnim5+hJwNL3jjeF0xcngznpRpZL93zt8="
+          "relative_path": "api/Riptide.DuplicateHandlerException.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -788,11 +809,9 @@
       "source_relative_path": "api/Riptide.IMessageSerializable.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.IMessageSerializable.Serialize.html",
-          "hash": "lWwOTbd2wO+kDEehjKX0IFd6YylPm38HP838g6lPVHY="
+          "relative_path": "api/Riptide.IMessageSerializable.Serialize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -800,11 +819,9 @@
       "source_relative_path": "api/Riptide.IMessageSerializable.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.IMessageSerializable.Deserialize.html",
-          "hash": "r4OHeze8WXVq8+epImlmf2RSQMOBar+3bWWlYvRY63o="
+          "relative_path": "api/Riptide.IMessageSerializable.Deserialize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -812,11 +829,9 @@
       "source_relative_path": "api/Riptide.IMessageSerializable.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.IMessageSerializable.html",
-          "hash": "pakzZeLu8Gg/ZYEmQLqWrUJkXOixn6S9s1TKJMHTB54="
+          "relative_path": "api/Riptide.IMessageSerializable.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -824,11 +839,9 @@
       "source_relative_path": "api/Riptide.InsufficientCapacityException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InsufficientCapacityException.RiptideMessage.html",
-          "hash": "YDRPbR2u57jWoUkVaBC7b+LPpkDfMwKSlfDGFeLHyP0="
+          "relative_path": "api/Riptide.InsufficientCapacityException.RiptideMessage.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -836,11 +849,9 @@
       "source_relative_path": "api/Riptide.InsufficientCapacityException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InsufficientCapacityException.TypeName.html",
-          "hash": "NF6UZr8xh6fjyKF9tK5YR4nF4t8o8dIp4/RtlSM3YxQ="
+          "relative_path": "api/Riptide.InsufficientCapacityException.TypeName.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -848,11 +859,9 @@
       "source_relative_path": "api/Riptide.InsufficientCapacityException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InsufficientCapacityException.RequiredBytes.html",
-          "hash": "60Hw4aBN6hMlRM/pBSNNHJ5cqfnuJ9HY3pB3MgCtoVM="
+          "relative_path": "api/Riptide.InsufficientCapacityException.RequiredBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -860,11 +869,9 @@
       "source_relative_path": "api/Riptide.InsufficientCapacityException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InsufficientCapacityException.-ctor.html",
-          "hash": "wxMgrIY9Wq3T/AnN6yy+dItEvfShRHlLU8Qhrx2wsEk="
+          "relative_path": "api/Riptide.InsufficientCapacityException.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -872,11 +879,9 @@
       "source_relative_path": "api/Riptide.InsufficientCapacityException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InsufficientCapacityException.html",
-          "hash": "DmalJ9psUGZWBcWTBk9VTEsYdZMd6Kb4sKpyo5L4GHs="
+          "relative_path": "api/Riptide.InsufficientCapacityException.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -884,11 +889,9 @@
       "source_relative_path": "api/Riptide.InvalidHandlerSignatureException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InvalidHandlerSignatureException.DeclaringType.html",
-          "hash": "chXDqhEQjlot0/pgeGp7I89s6UkjYFYtYHs7RZrmNEs="
+          "relative_path": "api/Riptide.InvalidHandlerSignatureException.DeclaringType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -896,11 +899,9 @@
       "source_relative_path": "api/Riptide.InvalidHandlerSignatureException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InvalidHandlerSignatureException.HandlerMethodName.html",
-          "hash": "la9OQeJ3XDrNM3tvV3nH8VdZOxQBQsQwrx68dNUsgFo="
+          "relative_path": "api/Riptide.InvalidHandlerSignatureException.HandlerMethodName.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -908,11 +909,9 @@
       "source_relative_path": "api/Riptide.InvalidHandlerSignatureException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InvalidHandlerSignatureException.-ctor.html",
-          "hash": "PBgbzVRoDImHvimMHgeUU2FufuVEA3y8yK+gaAxUnSg="
+          "relative_path": "api/Riptide.InvalidHandlerSignatureException.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -920,11 +919,9 @@
       "source_relative_path": "api/Riptide.InvalidHandlerSignatureException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.InvalidHandlerSignatureException.html",
-          "hash": "ShxIU9+ozF3axY5zujKWqXqCPAbv+J+I7n3X6e7/LEk="
+          "relative_path": "api/Riptide.InvalidHandlerSignatureException.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -932,11 +929,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetByte.html",
-          "hash": "f2KOPXEHpeX05JM1On+HEYcOSMh6Npgpg02whC54u6I="
+          "relative_path": "api/Riptide.Message.MaxHeaderSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -944,11 +939,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetSByte.html",
-          "hash": "aX88djuEZo2Ioo2gHmOez8ZpCHN/QNzkaBItD/GZ3aE="
+          "relative_path": "api/Riptide.Message.MaxSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -956,11 +949,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddBytes.html",
-          "hash": "zKmlRRTubu0/dngsc2OVPJ+DyMiPgEJxWFqQmgQeZAk="
+          "relative_path": "api/Riptide.Message.MaxPayloadSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -968,11 +959,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddSBytes.html",
-          "hash": "Xo5Wc4wfQ17mqs7gi9uiHrUgDRgqwZ7GnQ8a1RuvNPA="
+          "relative_path": "api/Riptide.Message.InstancesPerPeer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -980,11 +969,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetBytes.html",
-          "hash": "qJtgtHV7VIJj6Nx+jScND5FWa0uOJdtIAMqEfzsLucc="
+          "relative_path": "api/Riptide.Message.SendMode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -992,11 +979,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetSBytes.html",
-          "hash": "+UmMQKsOOMTOtleShBLxeuFteANaaoCqjBYa5HrfX5o="
+          "relative_path": "api/Riptide.Message.ReadBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1004,11 +989,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddBool.html",
-          "hash": "OFuxd1NWjGz2qxLydj5MQZ1D5NyLuNboPbSRXsgHLCg="
+          "relative_path": "api/Riptide.Message.UnreadBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1016,11 +999,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetBool.html",
-          "hash": "coqm+SWacCC/WJgA/C2/brUq7bO0mZ+povimXd+2h9U="
+          "relative_path": "api/Riptide.Message.WrittenBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1028,11 +1009,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddBools.html",
-          "hash": "nAM7x8sa/ge2eM3j0B087Kw1301sCuQe/cOGVylhBig="
+          "relative_path": "api/Riptide.Message.UnwrittenBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1040,11 +1019,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetBools.html",
-          "hash": "OocoQqj9OECJDHvBEfgm+Kgys+JsSas1H5vNB7LQWHk="
+          "relative_path": "api/Riptide.Message.BytesInUse.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1052,11 +1029,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddShort.html",
-          "hash": "7LiuSrqI2gRdnpU4U7Wre76VaW/vAZcLPeGYXb/QxOI="
+          "relative_path": "api/Riptide.Message.ReadLength.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1064,11 +1039,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddUShort.html",
-          "hash": "uYGPccNq2N2rVaJL534Fwvid7i2Pff6i73vURl5EV+g="
+          "relative_path": "api/Riptide.Message.UnreadLength.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1076,11 +1049,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetShort.html",
-          "hash": "0xAzZpOu5QR+NICvBUNTcZ1oQlOAZaLU1PLhfsoWd6Q="
+          "relative_path": "api/Riptide.Message.WrittenLength.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1088,11 +1059,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetUShort.html",
-          "hash": "eWXB17+BBTjfmmqNLBDf9zgQxJpHTCG9obDWyTRAJnA="
+          "relative_path": "api/Riptide.Message.Create.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1100,11 +1069,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddShorts.html",
-          "hash": "XssOskF1/JPtuufEf6x70GecIhW2AG2atdAAzp/Z4pE="
+          "relative_path": "api/Riptide.Message.TrimPool.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1112,11 +1079,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddUShorts.html",
-          "hash": "uM0K759ZRW2yK6j4Bw13h7qtlLVy3f6y8WjVC5KE338="
+          "relative_path": "api/Riptide.Message.Release.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1124,11 +1089,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.MaxHeaderSize.html",
-          "hash": "20dYJp+iyO0OCzYrcihoCkapLVa9qr6pP17M4yvmHWE="
+          "relative_path": "api/Riptide.Message.AddMessage.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1136,11 +1099,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.MaxSize.html",
-          "hash": "oumXFXGlaVcmRmpKQtj2oGbkHpolE0GMejq9g9BV/xQ="
+          "relative_path": "api/Riptide.Message.ReserveBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1148,11 +1109,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.MaxPayloadSize.html",
-          "hash": "Edgu4ApnLVfgFSMRcycdseUoda/vJN2aW/XVe0DIqhY="
+          "relative_path": "api/Riptide.Message.SkipBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1160,11 +1119,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.InstancesPerPeer.html",
-          "hash": "xVqZ5WtB4Lw/PFlgpy8vh99w/NEmBfc0DaRAgsLzzIE="
+          "relative_path": "api/Riptide.Message.SetBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1172,11 +1129,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.SendMode.html",
-          "hash": "Ngx37k3BwJHj1FttATosbOIoN/ku3e2yUIsmGVy1vJo="
+          "relative_path": "api/Riptide.Message.PeekBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1184,11 +1139,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.UnreadLength.html",
-          "hash": "rRzeXIvroPvFhND/2cPZS7bgL+wzH53iCXzekDI7M/o="
+          "relative_path": "api/Riptide.Message.AddBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1196,11 +1149,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.WrittenLength.html",
-          "hash": "E59DYkpUixdNjZCgupMohsZSsJg6D8K+mgUIT+Be+2M="
+          "relative_path": "api/Riptide.Message.GetBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1208,11 +1159,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.TrimPool.html",
-          "hash": "nSWzcgT3PBMb2sPSUs7yDw1CGmEoYygBG25LPUZAj1E="
+          "relative_path": "api/Riptide.Message.AddVarLong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1220,11 +1169,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.Create.html",
-          "hash": "G6Xaoo5rxiUBrPmXDdXsfInd5OZIKCpgNOaT0JpjoGM="
+          "relative_path": "api/Riptide.Message.AddVarULong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1232,11 +1179,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.Release.html",
-          "hash": "EfuUgiu5LeycPlk4LDp3xyALFpFvK/SUbqqUwrXUPQM="
+          "relative_path": "api/Riptide.Message.GetShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1244,11 +1189,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddByte.html",
-          "hash": "u8yM2886RGP+mhoy5cMLehTsFr791fJ62TOt0+BN15w="
+          "relative_path": "api/Riptide.Message.GetUShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1256,11 +1199,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddSByte.html",
-          "hash": "m0XvF0IkW1RorRmqI06+dZZPyfF+AGq5m8RK4+IzfMU="
+          "relative_path": "api/Riptide.Message.AddShorts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1268,11 +1209,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetShorts.html",
-          "hash": "ZUMxrWGWeMOJL40azKX2KZpzSIl6/ciyx6jrz2m2UX4="
+          "relative_path": "api/Riptide.Message.AddUShorts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1280,11 +1219,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetUShorts.html",
-          "hash": "GS0WNhFfExjp1fhvxd5dg3LjAxDSt8sOS1uHwN4oVqM="
+          "relative_path": "api/Riptide.Message.GetShorts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1292,11 +1229,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddInt.html",
-          "hash": "8yEmxIlFWM1xqe0yIWJHxq/frOwelPTFYYtPOJQh494="
+          "relative_path": "api/Riptide.Message.GetUShorts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1304,11 +1239,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddUInt.html",
-          "hash": "zZLAAaIdDo7yM/1LHLzbRvoHKp2ZRNCQNO4gaw8HsXU="
+          "relative_path": "api/Riptide.Message.AddInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1316,11 +1249,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetInt.html",
-          "hash": "eITeb3/vyydLsmI21Re24kqP1xCbI68WAT9bX2RtcYE="
+          "relative_path": "api/Riptide.Message.AddUInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1328,11 +1259,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetUInt.html",
-          "hash": "J5S3aoaY0B0H+VtCelovIA/0nmD1KN/vZdLghE/DRDU="
+          "relative_path": "api/Riptide.Message.GetInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1340,11 +1269,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddInts.html",
-          "hash": "zSq45Y1iWgsvkLhH5+754SY8O2aQGCkWZdsqdQKARDY="
+          "relative_path": "api/Riptide.Message.GetUInt.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1352,11 +1279,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddUInts.html",
-          "hash": "6SH7B6GDD8w9wDGPcPpP2cWUFRbKKIFA3i5dCVNKpbk="
+          "relative_path": "api/Riptide.Message.AddInts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1364,11 +1289,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetInts.html",
-          "hash": "xwPQoUwZ6qhoTO69Jz5b0hISQu0Xn6h1wAJzXTsO6M0="
+          "relative_path": "api/Riptide.Message.AddUInts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1376,11 +1299,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetUInts.html",
-          "hash": "7fbeU0h3wYbpEtDQccmjy5X8n/CaWZBr4McIrwYiu2w="
+          "relative_path": "api/Riptide.Message.GetInts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1388,11 +1309,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddLong.html",
-          "hash": "lO1T4UdtW5KfRoA8b137/PtrbFVUeTKpMNYI1iE8aw8="
+          "relative_path": "api/Riptide.Message.GetUInts.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1400,11 +1319,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddULong.html",
-          "hash": "cr+wdZlxrFiaLjYJ/ROJAymfe497Fdx9DIx4Sx+IOkQ="
+          "relative_path": "api/Riptide.Message.AddLong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1412,11 +1329,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetLong.html",
-          "hash": "jmtbeQjc8wNAZXqfVzewt3co3jQQeQBu9IuK37NXJgA="
+          "relative_path": "api/Riptide.Message.AddULong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1424,11 +1339,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetULong.html",
-          "hash": "lipuDXBZF8FTwkZ4IyXoHxT4ci4Zq6rmgbWxeY4p7qM="
+          "relative_path": "api/Riptide.Message.GetLong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1436,11 +1349,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddLongs.html",
-          "hash": "nrXDm/emg/FsN9518b+F7mxnQfzWBg2n8XZcymN/2do="
+          "relative_path": "api/Riptide.Message.GetULong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1448,11 +1359,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddULongs.html",
-          "hash": "xU9t13ed8HEBuEmceByoEWDXwsi2cWW8CNb+xQgGKS0="
+          "relative_path": "api/Riptide.Message.AddLongs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1460,11 +1369,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetLongs.html",
-          "hash": "yl29+sEMZrO/bHOnYBUHgl+GX1pv9jPDbB5XxBP1YQ8="
+          "relative_path": "api/Riptide.Message.AddULongs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1472,11 +1379,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetULongs.html",
-          "hash": "wz4Zi3HeNBHe1MOrawJb9n0Cl043b+K71F6hSIzLn9s="
+          "relative_path": "api/Riptide.Message.GetLongs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1484,11 +1389,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddFloat.html",
-          "hash": "z4sG0s3wRoiX63GlcvGP+eoNGOl/QJUL1a0RS/xj3Cw="
+          "relative_path": "api/Riptide.Message.GetULongs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1496,11 +1399,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetFloat.html",
-          "hash": "6k72rj0mb0Btmeh8UpohkLDtpSerR8YkOVCPYI5AQ9Q="
+          "relative_path": "api/Riptide.Message.AddFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1508,11 +1409,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddFloats.html",
-          "hash": "wlEGyWC3iG48S75hsbo+Z72b6bGU9aadTz1qDOqbFOo="
+          "relative_path": "api/Riptide.Message.GetFloat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1520,11 +1419,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetFloats.html",
-          "hash": "Vyf5Crl7QsriBObgMwssdGH+mTTwFDJvVypWkzxmCj0="
+          "relative_path": "api/Riptide.Message.AddFloats.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1532,11 +1429,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddDouble.html",
-          "hash": "JZyOfBKi7BmINyjy/z86mbPVPWR1sgBvMEhaAVkp1Hg="
+          "relative_path": "api/Riptide.Message.GetFloats.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1544,11 +1439,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetDouble.html",
-          "hash": "ldROZEX/C8QEbYI6rUy7UxhwWiNF2I9v8WW05zkceo4="
+          "relative_path": "api/Riptide.Message.AddDouble.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1556,11 +1449,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddDoubles.html",
-          "hash": "3xIJ3/t/420XmrtS7IU6U1XeUFpzeei2gXFb6WJSLkc="
+          "relative_path": "api/Riptide.Message.GetDouble.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1568,11 +1459,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetDoubles.html",
-          "hash": "Z2kpuy4pFDC1h8h+6O6etWSUj1XtZ9/8XNORUKxD3wY="
+          "relative_path": "api/Riptide.Message.AddDoubles.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1580,11 +1469,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddString.html",
-          "hash": "8PpUh/mdu84jIMeGmNxUdy4eza9b8gzPKS5Q21jqmsA="
+          "relative_path": "api/Riptide.Message.GetDoubles.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1592,11 +1479,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetString.html",
-          "hash": "BPt7UejaCp6cnFPUIvrzLCqT3suO3kotxYeqESd7iS0="
+          "relative_path": "api/Riptide.Message.AddString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1604,11 +1489,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddStrings.html",
-          "hash": "+rgkn755cIsZsDiCeoyuUyS9lEmHgkhOdj0tOaNZeL4="
+          "relative_path": "api/Riptide.Message.GetString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1616,11 +1499,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetStrings.html",
-          "hash": "6o7d1YbXacWMUa+a2gvTae33Q6FrT7n6l5qwzE0rnx0="
+          "relative_path": "api/Riptide.Message.AddStrings.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1628,11 +1509,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddSerializable.html",
-          "hash": "Dqm00/9LAIAPRTjpKdeaniOTVPJT9Xb/zyKg1aVmJvc="
+          "relative_path": "api/Riptide.Message.GetStrings.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1640,11 +1519,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetSerializable.html",
-          "hash": "5emULjzsGCYsVdW4msc0X12s1Wq5TbcBra1irfDZbyQ="
+          "relative_path": "api/Riptide.Message.AddSerializable.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1652,11 +1529,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.AddSerializables.html",
-          "hash": "GxehtwIxAa6I1gz5QcsMODftzYIpds+oROhqjNnHlx8="
+          "relative_path": "api/Riptide.Message.GetSerializable.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1664,11 +1539,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.GetSerializables.html",
-          "hash": "4KFEg6XfXGtfF7X4OEs6AUM110OAD6cczHxi8fvp+XY="
+          "relative_path": "api/Riptide.Message.AddSerializables.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1676,11 +1549,9 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.Add.html",
-          "hash": "g+cMgIsrBaSxXE2HDlbSjU54+NDVezHPQPt0sKCj/FY="
+          "relative_path": "api/Riptide.Message.GetSerializables.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1688,11 +1559,179 @@
       "source_relative_path": "api/Riptide.Message.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Message.html",
-          "hash": "53a0/UG8/2zwRmBOYAzVqXEvlhx4Jqe8W7rkv8rp1Bs="
+          "relative_path": "api/Riptide.Message.Add.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetVarLong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetVarULong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddByte.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddSByte.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetByte.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetSByte.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddBytes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddSBytes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetBytes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetSBytes.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddBool.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetBool.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddBools.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.GetBools.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddShort.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Message.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Message.AddUShort.html"
+        }
+      },
       "version": ""
     },
     {
@@ -1700,11 +1739,9 @@
       "source_relative_path": "api/Riptide.MessageHandlerAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageHandlerAttribute.MessageId.html",
-          "hash": "lT6BLTYBOukfpp1tpWXMn/9laofg8BeXgIBXTvx3MN4="
+          "relative_path": "api/Riptide.MessageHandlerAttribute.MessageId.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1712,11 +1749,9 @@
       "source_relative_path": "api/Riptide.MessageHandlerAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageHandlerAttribute.GroupId.html",
-          "hash": "tmoosZ23Mqow8Bw4Iy0G1GkqXVBiFwNJxcL+HLsmY5I="
+          "relative_path": "api/Riptide.MessageHandlerAttribute.GroupId.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1724,11 +1759,9 @@
       "source_relative_path": "api/Riptide.MessageHandlerAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageHandlerAttribute.-ctor.html",
-          "hash": "OBdu7k/ttVkLYduphV5gw/KVK7Ixqycyz9FO5Me1zC8="
+          "relative_path": "api/Riptide.MessageHandlerAttribute.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1736,11 +1769,9 @@
       "source_relative_path": "api/Riptide.MessageHandlerAttribute.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageHandlerAttribute.html",
-          "hash": "ZSz2EjeGQvKd8I3+0gx4iWoUlwXzq8ydfVqmHYHeS+4="
+          "relative_path": "api/Riptide.MessageHandlerAttribute.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1748,11 +1779,9 @@
       "source_relative_path": "api/Riptide.MessageReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageReceivedEventArgs.FromConnection.html",
-          "hash": "VGDf1zX3/Usi5uszoacKN9A6Eg52Z2U59R3Fh410kNM="
+          "relative_path": "api/Riptide.MessageReceivedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1760,11 +1789,9 @@
       "source_relative_path": "api/Riptide.MessageReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageReceivedEventArgs.MessageId.html",
-          "hash": "+N5GzVtWAfcZOffHgHcn/+qbzdRKNs63tuBqTw94vNM="
+          "relative_path": "api/Riptide.MessageReceivedEventArgs.FromConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1772,11 +1799,9 @@
       "source_relative_path": "api/Riptide.MessageReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageReceivedEventArgs.Message.html",
-          "hash": "OBq+DqE6p6RvFRJyCzzdy2pMYLO9kio/Gsybf0XFPrw="
+          "relative_path": "api/Riptide.MessageReceivedEventArgs.MessageId.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1784,11 +1809,9 @@
       "source_relative_path": "api/Riptide.MessageReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageReceivedEventArgs.-ctor.html",
-          "hash": "1MhmGhJm4V+IQdEHAo1dz6YrbRMGB4LmyahzZyXT1cc="
+          "relative_path": "api/Riptide.MessageReceivedEventArgs.Message.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1796,11 +1819,9 @@
       "source_relative_path": "api/Riptide.MessageReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageReceivedEventArgs.html",
-          "hash": "DnE+1QqwoBjYGKu7y7Ornlz+HiLftan6WF6nk/m2Y5c="
+          "relative_path": "api/Riptide.MessageReceivedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1808,11 +1829,9 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html",
-          "hash": "1EQ7sf6ZrAXrwyNM0mm274LqY0D7HcIv1qEZoVMBhjc="
+          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1820,11 +1839,9 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.EnableRelay.html",
-          "hash": "fX1zhqTWT3V5myGlPsntbx2DmNpbILN9oTq+jgzMkTw="
+          "relative_path": "api/Riptide.MessageRelayFilter.EnableRelay.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1832,11 +1849,9 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.DisableRelay.html",
-          "hash": "4mrsnmbCe7jKVx2yNLCQItQHmNj8GbHzA8WbJ8Mzzjg="
+          "relative_path": "api/Riptide.MessageRelayFilter.DisableRelay.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1844,11 +1859,9 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.html",
-          "hash": "tSQl9ITiCeyJmngrCdOCK9FD7+BCzvX0BwKCi8KOG7c="
+          "relative_path": "api/Riptide.MessageRelayFilter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1856,11 +1869,9 @@
       "source_relative_path": "api/Riptide.MessageSendMode.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageSendMode.html",
-          "hash": "7NTLosKGRA59VA5/PLyJGNvQk2jArEb6RFeEJfRIVAI="
+          "relative_path": "api/Riptide.MessageSendMode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1868,11 +1879,9 @@
       "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.DeclaringType.html",
-          "hash": "GJhxzEbUL7VA0nZrIFJwRmFqjcG8NgIyNjki9lCeUHg="
+          "relative_path": "api/Riptide.NonStaticHandlerException.DeclaringType.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1880,11 +1889,9 @@
       "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.HandlerMethodName.html",
-          "hash": "+ZvaHkQbW8+1HhIad38MNVNNbjzp1hFEB5phFU0ruGg="
+          "relative_path": "api/Riptide.NonStaticHandlerException.HandlerMethodName.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1892,11 +1899,9 @@
       "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.-ctor.html",
-          "hash": "gS1hfPPjbtftxx259IHiKiOibk7EWsRDHt3SjJMdw1E="
+          "relative_path": "api/Riptide.NonStaticHandlerException.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1904,11 +1909,9 @@
       "source_relative_path": "api/Riptide.NonStaticHandlerException.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.NonStaticHandlerException.html",
-          "hash": "CVnQld16Yq6MnnvUyj6w9e35HtX261ShCbNHBQcxCvs="
+          "relative_path": "api/Riptide.NonStaticHandlerException.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1916,11 +1919,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.LogName.html",
-          "hash": "pJDIK50ZQVThJbGEuTS63bTIAQ8nioqgb5Wx9CTocjY="
+          "relative_path": "api/Riptide.Peer.FindMessageHandlers.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1928,11 +1929,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCNeverConnected.html",
-          "hash": "G/bcRVMS0azHw4uz4YyYSQLATkftXmQazvpYeW44llU="
+          "relative_path": "api/Riptide.Peer.CreateMessageHandlersDictionary.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1940,11 +1939,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCTransportError.html",
-          "hash": "3ixccZfbxvdiHJasp9QG8DKqV6QwmRlmNQy+JRUf5yk="
+          "relative_path": "api/Riptide.Peer.StartTime.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1952,11 +1949,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCTimedOut.html",
-          "hash": "zO1hPmFwIG0pmrpSBCdmXkbTiY7Tn6+QusMGxa1ODDo="
+          "relative_path": "api/Riptide.Peer.StopTime.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1964,11 +1959,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCKicked.html",
-          "hash": "4KQtDW1V7sSR5CuGIswJ5UnPmzwJX7SJIEZ03hfC+WA="
+          "relative_path": "api/Riptide.Peer.Update.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1976,11 +1969,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCServerStopped.html",
-          "hash": "hxl3dQ0AvhgP1ztMN8bkV+3uDsErXSjV2TJba5O9vKg="
+          "relative_path": "api/Riptide.Peer.HandleMessages.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -1988,11 +1979,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.DCDisconnected.html",
-          "hash": "Tbs91y7otWkIm4BjjTpec6SpVhdmsFzvIiTbIV4hY28="
+          "relative_path": "api/Riptide.Peer.HandleData.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2000,11 +1989,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.UnknownReason.html",
-          "hash": "HDSzVAlpvn/TzTVXYFy+mv+6JHFyH3SZZCoARtvlGCE="
+          "relative_path": "api/Riptide.Peer.Handle.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2012,11 +1999,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.CRNoConnection.html",
-          "hash": "FFISZEYaLmW+ahOqKRLK8mI13MfWikuR3+XGOWDzhBk="
+          "relative_path": "api/Riptide.Peer.IncreaseActiveCount.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2024,11 +2009,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.CRServerFull.html",
-          "hash": "/J8bkCmEnLQepKVDoBEkuYp0gDqH2ect1Lpy3UjrtVQ="
+          "relative_path": "api/Riptide.Peer.DecreaseActiveCount.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2036,11 +2019,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.CRRejected.html",
-          "hash": "tKg/zlyTezJUbYteo4lqmLu3bFekfZ8uftSoPDbHI1U="
+          "relative_path": "api/Riptide.Peer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2048,11 +2029,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.CRCustom.html",
-          "hash": "x/1YPl3sCdcUXvnGpur7eLWBbF385LtYvNCyeaNICuQ="
+          "relative_path": "api/Riptide.Peer.LogName.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2060,11 +2039,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.TimeoutTime.html",
-          "hash": "LyttN+AM4qx1l1JCDJBIVRQY9ZZSQio4Ntp/uElcb1E="
+          "relative_path": "api/Riptide.Peer.useMessageHandlers.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2072,11 +2049,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.HeartbeatInterval.html",
-          "hash": "CZOG3P24508J7cBG+RU1sG4QDgaPaN5wXDDWRnTjzfE="
+          "relative_path": "api/Riptide.Peer.defaultTimeout.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2084,11 +2059,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.-ctor.html",
-          "hash": "+d0gZt0+2RpBb3Ys9rAHae/2hxre1962oxoe0NRLUVU="
+          "relative_path": "api/Riptide.Peer.TimeoutTime.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2096,11 +2069,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.FindMessageHandlers.html",
-          "hash": "z9WfAM2K3gYNIRVXdKSdD0FXwLt1Un7xuy1TgSa7Cxc="
+          "relative_path": "api/Riptide.Peer.HeartbeatInterval.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2108,119 +2079,9 @@
       "source_relative_path": "api/Riptide.Peer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Peer.CreateMessageHandlersDictionary.html",
-          "hash": "6z5ZhrQ+aknETWxRiuwuF5MlGl0rWDn8wDHdmEwnPws="
+          "relative_path": "api/Riptide.Peer.-ctor.html"
         }
       },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.StartTime.html",
-          "hash": "Nxz9H9JLFy4S2TkIuzxuRK/KkfLaLP6KXbAaFWtAZGs="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.StopTime.html",
-          "hash": "BkOq1enf0ANUFeu0W+sqq6SR7ELxwTb2lPtBivd7MvY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.Update.html",
-          "hash": "MJWFRstOoeEHDNfzgUwAYZkjVayvvX1uN/Q1ndYlTkY="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.HandleMessages.html",
-          "hash": "kyNvVuhqIPbyYogVOBhuIqlNW3yhxfWqZsp1z6rlZc8="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.HandleData.html",
-          "hash": "Y2Tgvolp+8WdJZt0NAF2/XvzYMuq6yTDmOmD8U3UuyA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.Handle.html",
-          "hash": "YceZQ2VkYHuHRdqVa6LqybeNL/MqgSPgt8vCPZZUibo="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.IncreaseActiveCount.html",
-          "hash": "mB3tXIqEQptKnefD/i68uWdHke9c3LaeiMunmI7xuHA="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.DecreaseActiveCount.html",
-          "hash": "amnKRJ/+yCg/R3NahL0ccYk4GTtrBGdSFZ9Doi0HjPM="
-        }
-      },
-      "is_incremental": false,
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Peer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Peer.html",
-          "hash": "vq+R0JS7/s8np8ZeZEqE3A2YbANE0vBAfIzAg1Jw5sY="
-        }
-      },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2228,11 +2089,9 @@
       "source_relative_path": "api/Riptide.RejectReason.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.RejectReason.html",
-          "hash": "c1WSc7XnkwhABUiegKOc6+9zwtisQrtU3g3PxU7/hWY="
+          "relative_path": "api/Riptide.RejectReason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2240,11 +2099,9 @@
       "source_relative_path": "api/Riptide.Server.ConnectionAttemptHandler.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ConnectionAttemptHandler.html",
-          "hash": "R5FttRtijL+E93WLtQqrrMwDxLAUKGHGNV/nAqtOQlg="
+          "relative_path": "api/Riptide.Server.ConnectionAttemptHandler.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2252,11 +2109,9 @@
       "source_relative_path": "api/Riptide.Server.MessageHandler.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.MessageHandler.html",
-          "hash": "3Grk5RVwHaTxEvVwAfMGcDRx1t0qtyZauQjkoFp9MmE="
+          "relative_path": "api/Riptide.Server.MessageHandler.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2264,11 +2119,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ClientConnected.html",
-          "hash": "klSaOBSo4LcMRsWlWu9hueAh3wavPYGv/wKa2ehBC0Q="
+          "relative_path": "api/Riptide.Server.ClientConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2276,11 +2129,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.MessageReceived.html",
-          "hash": "qM+T8XeM4ILFvudrKg7+iVp5aLc50CDklIUH31zr1XM="
+          "relative_path": "api/Riptide.Server.ConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2288,11 +2139,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ClientDisconnected.html",
-          "hash": "rdJVMAePcqcc655yYyFqCg/KNPEA9Q917fYNmYZKXtQ="
+          "relative_path": "api/Riptide.Server.MessageReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2300,11 +2149,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.HandleConnection.html",
-          "hash": "3bcSgX0nA62EDRONEFxQWIAhje5QtnIq4dfQOVCkXF8="
+          "relative_path": "api/Riptide.Server.ClientDisconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2312,11 +2159,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.RelayFilter.html",
-          "hash": "YAuSmPZdRRikdXcyet3rm6utdg6KPEcXx3sRyT8UNgU="
+          "relative_path": "api/Riptide.Server.HandleConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2324,11 +2169,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.IsRunning.html",
-          "hash": "qg5ppAYQjNtId+YSCFpu0pch84dpWuiDoQsW7DsGHBo="
+          "relative_path": "api/Riptide.Server.RelayFilter.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2336,11 +2179,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Port.html",
-          "hash": "P/GdcsFyvs3QmrCWEQ4nn4+TaPm8Sf7x9wPYaBpKI6U="
+          "relative_path": "api/Riptide.Server.IsRunning.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2348,11 +2189,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.MaxClientCount.html",
-          "hash": "ITxBSed4T11pKtFKWTs5FfZGHJFZ08ngI9Y+HkRuy6E="
+          "relative_path": "api/Riptide.Server.Port.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2360,11 +2199,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ClientCount.html",
-          "hash": "7LWsq6pZ2BDCaJ6b17+GgAK3WhJCQDJoqItD9Mxg2+0="
+          "relative_path": "api/Riptide.Server.TimeoutTime.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2372,11 +2209,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Clients.html",
-          "hash": "631AY7F5AKQze0QS1bIFAOfxAF4Zh09WOmVrJYXkdIo="
+          "relative_path": "api/Riptide.Server.MaxClientCount.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2384,11 +2219,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.-ctor.html",
-          "hash": "BkwCOd368vqYSYPn/YuY/36s1ecG24mxRQ2bC5G89R0="
+          "relative_path": "api/Riptide.Server.ClientCount.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2396,11 +2229,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ChangeTransport.html",
-          "hash": "UVFPo2qsOkgkZ+D42Ci9eaCMG/2K7I0sOOWC6Th7LVs="
+          "relative_path": "api/Riptide.Server.Clients.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2408,11 +2239,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Start.html",
-          "hash": "aBbb5RwDBi9bNPYy9rbpb5iKawnvbs0wyXae/m0baj8="
+          "relative_path": "api/Riptide.Server.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2420,11 +2249,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.CreateMessageHandlersDictionary.html",
-          "hash": "fT9pjrPIjA35Xd+hwIgE2a/IUZBx7HTlAOV7+BMMM0A="
+          "relative_path": "api/Riptide.Server.ChangeTransport.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2432,11 +2259,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Accept.html",
-          "hash": "u2q01sauwdgPQPhbGth8kqXIaTjhGMTldhrsyqTBtBc="
+          "relative_path": "api/Riptide.Server.Start.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2444,11 +2269,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Reject.html",
-          "hash": "NjRpIH13f+eh/47XVFRjWFBTU2OAADlp1fx5lEBzIO8="
+          "relative_path": "api/Riptide.Server.CreateMessageHandlersDictionary.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2456,11 +2279,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Update.html",
-          "hash": "rX189w7bJNoTG1W3gwtHXxRzxFizIpuGP6vgpHRXEo0="
+          "relative_path": "api/Riptide.Server.Accept.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2468,11 +2289,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Handle.html",
-          "hash": "sDVMTVqBR1OnuUAkHZkzRAIFky7YHrHrbmcnqF4Zwdg="
+          "relative_path": "api/Riptide.Server.Reject.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2480,11 +2299,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Send.html",
-          "hash": "kUn9OKkAe2v/+CDLX4OdTcDWTifOJOy3Lo9oxxOympE="
+          "relative_path": "api/Riptide.Server.Update.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2492,11 +2309,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.SendToAll.html",
-          "hash": "WWZd4ZQr7AJIJeb1NvamsLY/ptzZGLtnFg4Y2lxdwbw="
+          "relative_path": "api/Riptide.Server.Handle.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2504,11 +2319,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.TryGetClient.html",
-          "hash": "PSNyn7z4ihr1JXelXPH5mpOdvlRsI2EP3qniybTMRLw="
+          "relative_path": "api/Riptide.Server.Send.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2516,11 +2329,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.DisconnectClient.html",
-          "hash": "J0L+ZNdN700SEFcOmmfChITpevFYErP2PvMX7XM1k3I="
+          "relative_path": "api/Riptide.Server.SendToAll.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2528,11 +2339,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Stop.html",
-          "hash": "CeqWsjEVJsteP1YBUxQlxOmMATlPZuVULx40iKSqyYI="
+          "relative_path": "api/Riptide.Server.TryGetClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2540,11 +2349,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnClientConnected.html",
-          "hash": "/rxtMwkIzx+5kyZ1o+3/Br+r2ZCBDedUtAG99/Fyvpc="
+          "relative_path": "api/Riptide.Server.DisconnectClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2552,11 +2359,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnMessageReceived.html",
-          "hash": "dh5oMgu5iTemXy2y0pNOYWLnMytPGMnZUGIcCSRgdUs="
+          "relative_path": "api/Riptide.Server.Stop.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2564,11 +2369,9 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnClientDisconnected.html",
-          "hash": "JO4+P+gPfdrvwY+OhSz3KW2D3tT/qwZMrKsYuxGf5qw="
+          "relative_path": "api/Riptide.Server.OnClientConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2576,11 +2379,39 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.html",
-          "hash": "SSR0HyrQ3YhOyiWPizLBMU6yHRom4qRe1wMeaimj4GI="
+          "relative_path": "api/Riptide.Server.OnConnectionFailed.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.OnMessageReceived.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.OnClientDisconnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.html"
+        }
+      },
       "version": ""
     },
     {
@@ -2588,11 +2419,9 @@
       "source_relative_path": "api/Riptide.ServerConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerConnectedEventArgs.Client.html",
-          "hash": "vf/viA4bjqB7rlSoit0rJQky/6W8WnKj944wkBEUhNE="
+          "relative_path": "api/Riptide.ServerConnectedEventArgs.Client.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2600,11 +2429,9 @@
       "source_relative_path": "api/Riptide.ServerConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerConnectedEventArgs.-ctor.html",
-          "hash": "cfFVOhMEJqoo3Jsa0Twn8loBTn1+KzvH1L9mYQVIz0Q="
+          "relative_path": "api/Riptide.ServerConnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2612,11 +2439,39 @@
       "source_relative_path": "api/Riptide.ServerConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerConnectedEventArgs.html",
-          "hash": "nRuDCc/hYcKnrX6Mts6a6PqRZFgkmToA3GQDlblzWF0="
+          "relative_path": "api/Riptide.ServerConnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.ServerConnectionFailedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.ServerConnectionFailedEventArgs.Client.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.ServerConnectionFailedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.ServerConnectionFailedEventArgs.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.ServerConnectionFailedEventArgs.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.ServerConnectionFailedEventArgs.html"
+        }
+      },
       "version": ""
     },
     {
@@ -2624,11 +2479,9 @@
       "source_relative_path": "api/Riptide.ServerDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Client.html",
-          "hash": "S+iHIIE2izwAumM5pHJw5SHVMF8KqoL7zzaC2tdeOHU="
+          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Client.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2636,11 +2489,9 @@
       "source_relative_path": "api/Riptide.ServerDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Reason.html",
-          "hash": "ev1LfrSbeGDVYzNHS5XGNxikRgwYAeYHyuP8QvlpSu8="
+          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.Reason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2648,11 +2499,9 @@
       "source_relative_path": "api/Riptide.ServerDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.-ctor.html",
-          "hash": "14/NNPFiZmqskH8BBwwRn7HKr6iCcRUmqoywyS0a/R4="
+          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2660,11 +2509,9 @@
       "source_relative_path": "api/Riptide.ServerDisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.html",
-          "hash": "qkMEbrI6j6V3Q8QpRtRqJE4zDxB3XxlL/zQHmaydHv8="
+          "relative_path": "api/Riptide.ServerDisconnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2672,11 +2519,9 @@
       "source_relative_path": "api/Riptide.Transports.ConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.Connection.html",
-          "hash": "qWg0Lef4686ltl1NACYfYsNcO7RlTzu7gwdJV+CSJeQ="
+          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.Connection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2684,11 +2529,9 @@
       "source_relative_path": "api/Riptide.Transports.ConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.-ctor.html",
-          "hash": "Y6PBFlkFtWlCZ33loKyYmJ7Sd8mA1HlqECWUOHOGzu0="
+          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2696,11 +2539,9 @@
       "source_relative_path": "api/Riptide.Transports.ConnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.html",
-          "hash": "P+L/c3+2PxVSF1BoW20qaPoU3xs/33Wcnou+bcgG5ng="
+          "relative_path": "api/Riptide.Transports.ConnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2708,11 +2549,9 @@
       "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.DataBuffer.html",
-          "hash": "wlOOnMUB8sXoRtxjJqGLVWmT1D/6xTiE2nf2ctPUF7Q="
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.DataBuffer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2720,11 +2559,9 @@
       "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.Amount.html",
-          "hash": "qI/QzmZVWSuRBiB4CPNHakOVI+Fm1z8wYZsKYxV5964="
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.Amount.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2732,11 +2569,9 @@
       "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.FromConnection.html",
-          "hash": "L5kJlLM9CbhuvkgX4yDFLg+yFbV4hZZmpvbGIbn7RMc="
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.FromConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2744,11 +2579,9 @@
       "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.-ctor.html",
-          "hash": "RamvOFFcF2yDDVTXqdLNY+v94fPGq/zBS8KUr4qOh0I="
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2756,11 +2589,9 @@
       "source_relative_path": "api/Riptide.Transports.DataReceivedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.html",
-          "hash": "J4aYwjnFfLvDwS99dZDozvQDpQfmuTr4xDUUwtJQ4co="
+          "relative_path": "api/Riptide.Transports.DataReceivedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2768,11 +2599,9 @@
       "source_relative_path": "api/Riptide.Transports.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Connection.html",
-          "hash": "vR8DWI1P4tB/scza9f0cDLjO30WcY/DQEjUWYay1kD4="
+          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Connection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2780,11 +2609,9 @@
       "source_relative_path": "api/Riptide.Transports.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Reason.html",
-          "hash": "lj7IetZFrty1ICjvkHTSleZx4i5ykyMYY5Pv8VlzUKM="
+          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.Reason.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2792,11 +2619,9 @@
       "source_relative_path": "api/Riptide.Transports.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.-ctor.html",
-          "hash": "B3BjH4NH5/QM/S0c0ymCLUYavQQLJ10kz960tcT7EFM="
+          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2804,11 +2629,9 @@
       "source_relative_path": "api/Riptide.Transports.DisconnectedEventArgs.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.html",
-          "hash": "BTRiNNH3TiWRbE1F+JzIWpJjRfjgFmTux1t489XBm9A="
+          "relative_path": "api/Riptide.Transports.DisconnectedEventArgs.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2816,11 +2639,9 @@
       "source_relative_path": "api/Riptide.Transports.IClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IClient.Connected.html",
-          "hash": "ouW+0byOHRdFczS27VaIBsdOsJo4CX742/M5zUVk8Lw="
+          "relative_path": "api/Riptide.Transports.IClient.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2828,11 +2649,9 @@
       "source_relative_path": "api/Riptide.Transports.IClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IClient.ConnectionFailed.html",
-          "hash": "5iy+pUGJXP8879RKukQDWy/JPh/38zxDqYgCJuE7wsM="
+          "relative_path": "api/Riptide.Transports.IClient.ConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2840,11 +2659,9 @@
       "source_relative_path": "api/Riptide.Transports.IClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IClient.Connect.html",
-          "hash": "tqrWsUZQlWMWf6Fvv5M59UeTvkWxavH2/c2toEVypcU="
+          "relative_path": "api/Riptide.Transports.IClient.Connect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2852,11 +2669,9 @@
       "source_relative_path": "api/Riptide.Transports.IClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IClient.Disconnect.html",
-          "hash": "LPshebZppDURaTg9wALwANm0fVt5KfgGR1OpGJnrknc="
+          "relative_path": "api/Riptide.Transports.IClient.Disconnect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2864,11 +2679,9 @@
       "source_relative_path": "api/Riptide.Transports.IClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IClient.html",
-          "hash": "/2CDsr/eJK5LJBnlPGg/Nz2Q7qkihLhstzVB1n1Wf7o="
+          "relative_path": "api/Riptide.Transports.IClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2876,11 +2689,9 @@
       "source_relative_path": "api/Riptide.Transports.IPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IPeer.DataReceived.html",
-          "hash": "fKRgi9lA5sik8TpsX73EfFCo2HSDlun78i1dL7feziY="
+          "relative_path": "api/Riptide.Transports.IPeer.DataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2888,11 +2699,9 @@
       "source_relative_path": "api/Riptide.Transports.IPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IPeer.Disconnected.html",
-          "hash": "S0QNM4BWNruvN8lHk9VXJJnrDmPfeFIET23BT/IIHjc="
+          "relative_path": "api/Riptide.Transports.IPeer.Disconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2900,11 +2709,9 @@
       "source_relative_path": "api/Riptide.Transports.IPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IPeer.Poll.html",
-          "hash": "zYtG1gEXylO7qQvwXb9RcgYrbUNoICYM6hRIsBzPQXU="
+          "relative_path": "api/Riptide.Transports.IPeer.Poll.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2912,11 +2719,9 @@
       "source_relative_path": "api/Riptide.Transports.IPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IPeer.html",
-          "hash": "zo3O7/5YVVoM3NIoNOQRalETlLdxpnIgX2K7D9IfzUs="
+          "relative_path": "api/Riptide.Transports.IPeer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2924,11 +2729,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.Connected.html",
-          "hash": "aVIV7j3VbyW8/jAtQDi0mxsgXzZp918a4bOCwL/xar0="
+          "relative_path": "api/Riptide.Transports.IServer.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2936,11 +2739,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.Port.html",
-          "hash": "PIBBeqCHfJclwU7lO0SgZizfQzQ5NiVxL5BZckOfDt0="
+          "relative_path": "api/Riptide.Transports.IServer.Port.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2948,11 +2749,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.Start.html",
-          "hash": "mJxu4jNw5nBjNpMU1L1LUp4Gze6isvNwhHUCfCZTwus="
+          "relative_path": "api/Riptide.Transports.IServer.Start.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2960,11 +2759,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.Close.html",
-          "hash": "wPMxHBsnL2M4ztGguJSz9diZWiuLkNYsaoU9hvlmkl4="
+          "relative_path": "api/Riptide.Transports.IServer.Close.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2972,11 +2769,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.Shutdown.html",
-          "hash": "CSzWJZ/+DRwoKYOjKskEf4ERF5U+UWI7XA+00MJQzIs="
+          "relative_path": "api/Riptide.Transports.IServer.Shutdown.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2984,11 +2779,9 @@
       "source_relative_path": "api/Riptide.Transports.IServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.IServer.html",
-          "hash": "Q6hOy7rcuNhLFEg3tb+iXKLH1c7r4T2RHumAVfJY0pY="
+          "relative_path": "api/Riptide.Transports.IServer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -2996,11 +2789,9 @@
       "source_relative_path": "api/Riptide.Transports.MessageHeader.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.MessageHeader.html",
-          "hash": "ntgEbvBMKcRbXs1swVRH66QzVK9UYB2PxlhF8MGaCnU="
+          "relative_path": "api/Riptide.Transports.MessageHeader.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3008,11 +2799,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnDataReceived.html",
-          "hash": "xgTQpM6QmrTg+IjOeCZloaUJrhZ/vuO/x2kdAJSwqd4="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3020,11 +2809,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.html",
-          "hash": "VafqaUHQWyE+/khbAr7kPN0pT0HydaVEukAyugcyAxo="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.ConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3032,11 +2819,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Connected.html",
-          "hash": "IoI/3UBMROuf4IiWe9YC6Wus4LyGHkmtBkgtSndC4rw="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.DataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3044,11 +2829,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.ConnectionFailed.html",
-          "hash": "UWBEmYyalS3SglXppo6C69PlJ34bF8LRusdSjCnhErs="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Connect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3056,11 +2839,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.DataReceived.html",
-          "hash": "FvGR0By/mwLE/cTg9JSNwiDzQ7A7DnYH/ZkhB0tg2UA="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Poll.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3068,11 +2849,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Connect.html",
-          "hash": "tJVar0scWkOuP2P7NybP/mUMpzJrF41E5uFpyynYnUA="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Disconnect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3080,11 +2859,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Poll.html",
-          "hash": "BUc+v8ZVCd2oTzpydanO3SsB2t1MSkJhi2h6IAXaMhs="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3092,11 +2869,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.Disconnect.html",
-          "hash": "oCMxZvJtsCO/VrXgfsADIcTwOKbQjg2lr4UWcO76NRY="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3104,11 +2879,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnConnected.html",
-          "hash": "gNLo3Mjr/6e08SnO756HjQmmd0Sp2PWmW1eWtSap4y0="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3116,11 +2889,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.OnConnectionFailed.html",
-          "hash": "HHDDBByZPYSlPhSeajJ86lkP8i1HqQjWU0raOz4z5sk="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3128,11 +2899,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.RemoteEndPoint.html",
-          "hash": "Wi7/Wj03axjephPICOXIf2WOWsHn6bUtCww+P3p4y94="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.RemoteEndPoint.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3140,11 +2909,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.Send.html",
-          "hash": "hAVFBwVEuwDEb4t7LntIcZ4ZsTcjGRVIatwV7aB271E="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.Send.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3152,11 +2919,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.ToString.html",
-          "hash": "PE4CbnHxG/0Y1sXT/+y2meeKZ2JMuqWdU/ppCh1LMF0="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.ToString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3164,11 +2929,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.Equals.html",
-          "hash": "SNaG7S7tJ7wL3rz5CtFv2hytj49JV+v7IXBASB0tLpY="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.Equals.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3176,11 +2939,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.GetHashCode.html",
-          "hash": "fsMDYsPkyCGbJ9evYwY55nd3XG5S+HlB+Am73uFXaMQ="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.GetHashCode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3188,11 +2949,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.op_Equality.html",
-          "hash": "qfnyfrL/2bGZ6xX8WskUCnG21ozaW99S76MQUO5gbNA="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.op_Equality.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3200,11 +2959,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.op_Inequality.html",
-          "hash": "w30tmv4r9+bqotrCKh04laK6x5NhFgJuOhXEOru6PxQ="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.op_Inequality.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3212,11 +2969,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.html",
-          "hash": "sss9QUFMeCfVMX8UTRuC2PXVuvhjkkjLcdrQh7L6Me4="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3224,11 +2979,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.Disconnected.html",
-          "hash": "hM/+VfGk7w1CDI8ic+I1gxBs6DcxYqS53a6r0MRpqS4="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.Disconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3236,11 +2989,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.DefaultSocketBufferSize.html",
-          "hash": "27ByV2bH7/T5Qgbhz8iRsr0Hu3WJTfebgST7n4coKjE="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.DefaultSocketBufferSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3248,11 +2999,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.socketBufferSize.html",
-          "hash": "4F613Y1PSIjgF+JUa1qMoMetoEcfvCbe2LavjP0TPHs="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.socketBufferSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3260,11 +3009,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.socket.html",
-          "hash": "WmEwyzfkdrL4BkT4wnBKCBp9NcLNSG691yEpKNnYu8Q="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.socket.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3272,11 +3019,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.-ctor.html",
-          "hash": "apTcUF+p46TufPhx4i15xhp1HfLZRVkuaS+ggUbcPa4="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3284,11 +3029,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.OnDataReceived.html",
-          "hash": "wNOkGqaHMimEN2FcENb4BmVoy0aLvXT8MsLx6kEArwU="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3296,11 +3039,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.OnDisconnected.html",
-          "hash": "E8vWJgYBV84UhAmzDda57iFzGPhL4X2mGT7CFU3Lpyk="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.OnDisconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3308,11 +3049,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.html",
-          "hash": "WuyR70BbAuppwEamy9OIIgmqBOSfp7k0rA+lDbYk2Fk="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpPeer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3320,11 +3059,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Connected.html",
-          "hash": "sVXsZjq5P2rqm06XnQ2AUMQSdtPvx7W+zvYZ2gKp8eo="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3332,11 +3069,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.DataReceived.html",
-          "hash": "ZYcO9wMp7DQBEPXskyYyck7uusWW1pRaVTqI2BuPbGI="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.DataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3344,11 +3079,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Port.html",
-          "hash": "7F/uhl9XJ+LrnZk4M1wP7mTUed3IOhMDRH6l1Jq1Voc="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Port.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3356,11 +3089,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.MaxPendingConnections.html",
-          "hash": "QDGsKIPQNjaxkhQb5gNts1rnX5MjWsA8tPQ+v/kHT5E="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.MaxPendingConnections.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3368,11 +3099,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.-ctor.html",
-          "hash": "An/Pw3mrU6ZJv3wgJcN/GA0XmFuQAUu30yn926RujTs="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3380,11 +3109,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Start.html",
-          "hash": "9AB/dnglueOHWV0Vv9juyrwZ1ipzgFMoMk0s9u+d3jE="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Start.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3392,11 +3119,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Poll.html",
-          "hash": "462nVkgVwK/TQ0W6znf+YrHBguqS0WllH03beYpkUXE="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Poll.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3404,11 +3129,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Close.html",
-          "hash": "Fe9OvnBO5mx0gsJ8NxqrZcYdxsdKeRtjvOJdJsoTo3s="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Close.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3416,11 +3139,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Shutdown.html",
-          "hash": "y0VYI58XPNd0xic9ekwwVg7F0e0pkqHCtwjwynJwYQo="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.Shutdown.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3428,11 +3149,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.OnConnected.html",
-          "hash": "6h7CWFmBvaCPsedbpdS01TitD3JBWemUJhcEanrjut8="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.OnConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3440,11 +3159,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.OnDataReceived.html",
-          "hash": "UrDh99m3lifjXxApDA4moMUwXJp4b2JDpu0XOLq/3c4="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3452,11 +3169,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.TcpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.html",
-          "hash": "sgYfoAW5X/SJVVL8hY9BODFZXW+bTasbg8A0aGgecfw="
+          "relative_path": "api/Riptide.Transports.Tcp.TcpServer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3464,11 +3179,9 @@
       "source_relative_path": "api/Riptide.Transports.Tcp.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Tcp.html",
-          "hash": "3OdfW7GkEmtjtcK8x4QggVncYhnIuNCcCi4PUoxuHzM="
+          "relative_path": "api/Riptide.Transports.Tcp.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3476,11 +3189,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.SocketMode.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.SocketMode.html",
-          "hash": "biLVCsVEg6mfXy1d+66Dpyq6MuFcANGVYmc+eqk92GY="
+          "relative_path": "api/Riptide.Transports.Udp.SocketMode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3488,11 +3199,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connected.html",
-          "hash": "w/uGT3qq5OnnbUin2CpJtPVtY2WwR/+NRmg5ZwZ7+H4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3500,11 +3209,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.ConnectionFailed.html",
-          "hash": "7odRKapi8vy29AXdWYwCLzjdPekb3RobAVZIz8hG0NA="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.ConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3512,11 +3219,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.DataReceived.html",
-          "hash": "O8lQQtYWDuzZDVS5tTThlPTGPn8BQuCUGbSbfz+vN+E="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.DataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3524,11 +3229,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.-ctor.html",
-          "hash": "8lgsh+Bn7+dSlOw5QOsBI2j0zA8ya7+LBzXPHNMmC40="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3536,11 +3239,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connect.html",
-          "hash": "RpoNyzCl696YJHjbbf6Pdg4XOZuc5CqaEloqDcBHKK0="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Connect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3548,11 +3249,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Disconnect.html",
-          "hash": "DBGBCFhwfXdtVe9UsAthyv2zQBYKdq3EYCixoarCbus="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.Disconnect.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3560,11 +3259,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnected.html",
-          "hash": "5FjXXOENdKkX/Puwkg+nMSjFfdstG30hD7b9Mjjil8k="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3572,11 +3269,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnectionFailed.html",
-          "hash": "knPgvdlCOxq9yuk2K3WHQyoYSemnxGQJDiMXiabbxU4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnConnectionFailed.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3584,11 +3279,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnDataReceived.html",
-          "hash": "xUZHQcwepnPFztbcq6o+WkSUvQW2NUo+yivd3UA0zO8="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3596,11 +3289,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpClient.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpClient.html",
-          "hash": "3pP1ejcLIxk639tK7BBwedSx75cM5HFtpGN0a6BBgwA="
+          "relative_path": "api/Riptide.Transports.Udp.UdpClient.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3608,11 +3299,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html",
-          "hash": "YBwRb1PhN5G/pgRYqutoyb/WeaDaxidVHUEk2jo2AVk="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3620,11 +3309,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Send.html",
-          "hash": "dTrOVH3MoWnjmk+goEqW173j8trnXwMGCXy5uoWjKnw="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Send.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3632,11 +3319,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.ToString.html",
-          "hash": "vvNerFq9tC0sKBFmHvlAltMAQSVT79Y0/8JzUUpNl80="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.ToString.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3644,11 +3329,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Equals.html",
-          "hash": "g19NQ9pt8PSzwINWXB/9/zH7N5FIOgmSTndh9tmXAao="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Equals.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3656,11 +3339,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.GetHashCode.html",
-          "hash": "0Z2aFBMk4+qc6gDAAWqAPrlrfm7fCDdcWFJbnioa/GI="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.GetHashCode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3668,11 +3349,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Equality.html",
-          "hash": "6p8cDrnLKhmdoydyppmlFkG4pox3YWSoWhHUkfKNqWk="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Equality.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3680,11 +3359,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html",
-          "hash": "jxBXNGvHXQJh8UGv1qbxcuJtcuw1haeJ4LJvseRCcfY="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3692,11 +3369,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.html",
-          "hash": "FdMSPTzPAM7nQPp0YzTeGTjWX3H1GzP2nsuD0J+Dxi0="
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3704,11 +3379,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html",
-          "hash": "rp2HEp2IiNCG7agFjJoZWXhwNucicr4JVBhkPL6UcKE="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OpenSocket.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3716,11 +3389,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html",
-          "hash": "igqlnRgU0s+rEy/pArpUiuywcKNTnv1Ym0BEzP0bsCo="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3728,11 +3399,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html",
-          "hash": "aO32NmRO0c+4kmFPtBgc1PzVM1fEQpMfPtGUB6hkKkM="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3740,11 +3409,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Disconnected.html",
-          "hash": "XNBr4abAjC+TH/Lg8xWqDTRx40NJk7J7K7A3hj2IzM4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3752,11 +3419,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html",
-          "hash": "I/htZo8X9F/Em3SBNdqUDJEpfnkM4xYwpr+m2ydYj/s="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3764,11 +3429,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.mode.html",
-          "hash": "6c7hXZibbWUrR+hmsUdWxNvT3goYByEuyRnHiqEXTZ4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Disconnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3776,11 +3439,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.-ctor.html",
-          "hash": "eIcGWBmyugEdvVqoeMjhn3LGkr0RBKeUpEqHlkw7Zug="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.DefaultSocketBufferSize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3788,11 +3449,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Poll.html",
-          "hash": "NwLOZXxEnHlrWSSU/KfJsGVFeLK+H8ZxvPEjfCtnek0="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.mode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3800,11 +3459,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OpenSocket.html",
-          "hash": "HWspZFTM383K6GJTei/5eDTKkd0vSMpjZGXUS5zCALE="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3812,11 +3469,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html",
-          "hash": "KANfrSmol6P+1t12O5zX6H2EBPQv06pkL1grJfbyzXo="
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.Poll.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3824,11 +3479,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Connected.html",
-          "hash": "GH8JXyzX40Ih5CrOd9mnPV0sWJXMTVUkc49TNAVrjtY="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Connected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3836,11 +3489,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.DataReceived.html",
-          "hash": "vE7Kr+yxxFFnLHiobY5AI++7NPCCsWtxwrUcMcnOYFQ="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.DataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3848,11 +3499,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Port.html",
-          "hash": "nP+l7XwSCF09xHwKkW4LxCoVb9REhHUOllikT8Vht8Y="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Port.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3860,11 +3509,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.-ctor.html",
-          "hash": "TrxIWjDrufsdjECsdczDggRwr3Q4oEyuUc4LigMSQb0="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.-ctor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3872,11 +3519,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Start.html",
-          "hash": "e07Ylf90idI19jQH/enFgqPQSRaBnEgTb7gjlHVzIL4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Start.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3884,11 +3529,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Close.html",
-          "hash": "5CikRlgmZ/d22Upoz37FyI52uzyodXUEpKjv3IJGpkk="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Close.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3896,11 +3539,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Shutdown.html",
-          "hash": "T1PkwS6GsbtVLs6WOn0N4IvKPj9D1AT1qBNeNeNQnk4="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.Shutdown.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3908,11 +3549,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnConnected.html",
-          "hash": "3tARgJDA/G5ceVfF66yFByE8J0g1DhxPXcC81X40YmA="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnConnected.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3920,11 +3559,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnDataReceived.html",
-          "hash": "MTefSuy3AyfF0bO7o8nZ9as2asBk/c/AaIp2sHtr8Cg="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.OnDataReceived.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3932,11 +3569,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpServer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpServer.html",
-          "hash": "8Uy/En+NCgT+TxWobrSpJiLDmN4f9x/kOmNz9LJ30TA="
+          "relative_path": "api/Riptide.Transports.Udp.UdpServer.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3944,11 +3579,9 @@
       "source_relative_path": "api/Riptide.Transports.Udp.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.html",
-          "hash": "OrzSzPY7fZcWmbwVUEwUlk2Xk99yRnCBQwA0CyZln9s="
+          "relative_path": "api/Riptide.Transports.Udp.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3956,11 +3589,289 @@
       "source_relative_path": "api/Riptide.Transports.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.html",
-          "hash": "HrhMa8bwUCr9hZ9xRwt/PJ/8wgA2Bu5yvm9V2OjHCWM="
+          "relative_path": "api/Riptide.Transports.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.BytesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.BytesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.MessagesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.MessagesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.UnreliableBytesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.UnreliableBytesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.UnreliableIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.UnreliableOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyBytesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyBytesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyDiscarded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyLost.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.NotifyDelivered.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingNotifyLost.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingNotifyDelivered.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingNotifyLossRate.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableDiscarded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableUniques.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingReliableSends.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.Reset.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.html"
+        }
+      },
       "version": ""
     },
     {
@@ -3968,11 +3879,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromShort.html",
-          "hash": "z1WB9318WfXbORmqt/IuuM4S6MCcCIetPmuvWEL3jZ8="
+          "relative_path": "api/Riptide.Utils.Converter.BitsPerByte.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3980,11 +3889,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromUShort.html",
-          "hash": "IiPRpA2y6itmpDcVXgfFfzR5b+xM/k/Rk8zQUI0bFvg="
+          "relative_path": "api/Riptide.Utils.Converter.BitsPerULong.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -3992,11 +3899,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToShort.html",
-          "hash": "GgBPvgEMU++iqTkXPSEyM14lLGw5lzInDx6OOPFRnKQ="
+          "relative_path": "api/Riptide.Utils.Converter.ZigZagEncode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4004,11 +3909,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToUShort.html",
-          "hash": "JNXBhjrgoGk1A88Op5e8N/vtwynrocML9lvbobYHyik="
+          "relative_path": "api/Riptide.Utils.Converter.ZigZagDecode.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4016,11 +3919,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromInt.html",
-          "hash": "TZj0e8gZ5M6vVtpk3BaoZFhRCyRXeMJ9jAR4VjU+rVU="
+          "relative_path": "api/Riptide.Utils.Converter.SetBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4028,11 +3929,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromUInt.html",
-          "hash": "cBJqv+X2afq3G6wJ/yKuIf84v66Uj5avLuTuh6l0N+k="
+          "relative_path": "api/Riptide.Utils.Converter.GetBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4040,11 +3939,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToInt.html",
-          "hash": "xVaPnl1KYoUL6vFRp7kj1exPq/N2cAfi/1ziT+on2X0="
+          "relative_path": "api/Riptide.Utils.Converter.SByteToBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4052,11 +3949,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html",
-          "hash": "K1aaUfW3TEEhy9KmTtqds8xfo4SFn74Q3CJVRemzPo8="
+          "relative_path": "api/Riptide.Utils.Converter.ByteToBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4064,11 +3959,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromLong.html",
-          "hash": "JYW4pZWoxXv1FVcJcyZ8O6ziEm+qenPbAmDqQBVtmuk="
+          "relative_path": "api/Riptide.Utils.Converter.SByteFromBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4076,11 +3969,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromULong.html",
-          "hash": "X3WFeM7vVK1yXS/scDAsYbYa6U4gT1QOISVi2txVsrk="
+          "relative_path": "api/Riptide.Utils.Converter.ByteFromBits.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4088,11 +3979,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToLong.html",
-          "hash": "caIxehga+Q8kCAoIGKV071MAbva02ZzwAPdCIRv69w0="
+          "relative_path": "api/Riptide.Utils.Converter.BoolToBit.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4100,11 +3989,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToULong.html",
-          "hash": "LSDpAlsOdwhfKOhCsOFIYRM5EBv8L9MxZzw+uBuuDKI="
+          "relative_path": "api/Riptide.Utils.Converter.BoolFromBit.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4112,11 +3999,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html",
-          "hash": "ML1Lrz9NhK3OVYxbpM7DYLcQ1/QIBSAtpf5QTEUFr88="
+          "relative_path": "api/Riptide.Utils.Converter.FromShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4124,11 +4009,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html",
-          "hash": "QrM1FaXl4UUKNedGPn4980dEwNsnjnavAc/e+59xVS8="
+          "relative_path": "api/Riptide.Utils.Converter.FromUShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4136,11 +4019,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromDouble.html",
-          "hash": "izM+VgazBvcZ1g/3ZJmubRd51Qi4y5vv9pGSXikkZak="
+          "relative_path": "api/Riptide.Utils.Converter.ToShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4148,11 +4029,9 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToDouble.html",
-          "hash": "oYctIER6VCX+V/ksOpGXHXmWZDxB0CAiNJ+0aA3y+wA="
+          "relative_path": "api/Riptide.Utils.Converter.ToUShort.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4160,11 +4039,289 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.html",
-          "hash": "OkyvK2rcOYs1tWrvJYPOPOT1MwepEiixEM1LqAyxFTQ="
+          "relative_path": "api/Riptide.Utils.Converter.ShortToBits.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UShortToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ShortFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UShortFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromUInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.IntToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UIntToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.IntFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UIntFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromLong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromULong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToLong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToULong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.LongToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ULongToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.LongFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ULongFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FloatToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FloatFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromDouble.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToDouble.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.DoubleToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.DoubleFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.html"
+        }
+      },
       "version": ""
     },
     {
@@ -4172,11 +4329,9 @@
       "source_relative_path": "api/Riptide.Utils.Extensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Extensions.ToStringBasedOnIPFormat.html",
-          "hash": "465gYfl3JeKETHZj6Av7+sjmEkKS2/owOio38bjy5WI="
+          "relative_path": "api/Riptide.Utils.Extensions.ToStringBasedOnIPFormat.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4184,11 +4339,9 @@
       "source_relative_path": "api/Riptide.Utils.Extensions.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.Extensions.html",
-          "hash": "UzqeLHf19cZH0tWySbCKAy0zaMtzfQ5uguvTll761No="
+          "relative_path": "api/Riptide.Utils.Extensions.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4196,11 +4349,99 @@
       "source_relative_path": "api/Riptide.Utils.LogType.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.LogType.html",
-          "hash": "RYXSoFaW1DGpujdzY+OKhJMMVE4j8ZzVyHh7ImSXrIQ="
+          "relative_path": "api/Riptide.Utils.LogType.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Count.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Enqueue.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Dequeue.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.TryDequeue.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Peek.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.PeekPriority.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Clear.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.html"
+        }
+      },
       "version": ""
     },
     {
@@ -4208,11 +4449,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.html",
-          "hash": "Vs7jJCEcfeSTO4u1d9T15DI4oanwVirt+wmeqj8QzaA="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4220,11 +4459,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.IsDebugLoggingEnabled.html",
-          "hash": "Xm2H+p01DDaTfvDl1ZqJpnsSFobp1YsLHHxc+vlvNXI="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.IsDebugLoggingEnabled.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4232,11 +4469,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.IsInfoLoggingEnabled.html",
-          "hash": "tPW9Bykh9cuHGl1Dxz84wxfTzRmAF3yUs1MqoFCcdCs="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.IsInfoLoggingEnabled.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4244,11 +4479,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.IsWarningLoggingEnabled.html",
-          "hash": "K97o2Y38K505Xpre1oghYXMg/OJ33KCH94MfkXUPd20="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.IsWarningLoggingEnabled.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4256,11 +4489,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.IsErrorLoggingEnabled.html",
-          "hash": "Udv+dy+Nc1ABUxw7jYeVgnkED5pQK+9dlOVP15pbkdE="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.IsErrorLoggingEnabled.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4268,11 +4499,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.Initialize.html",
-          "hash": "vtQ867IQIwyOzYy8D0KSl/yh8EKQFWmi5R9/IoopEbo="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.Initialize.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4280,11 +4509,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.EnableLoggingFor.html",
-          "hash": "lcXcXYcqAaIZjSWOM5Dt3ciEzpNsw4GpYrhNYB2trPw="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.EnableLoggingFor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4292,11 +4519,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.DisableLoggingFor.html",
-          "hash": "n0MPqJSOsfVaf37VtkoU9SMwhKEGD6FpbVmESYmiB0A="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.DisableLoggingFor.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4304,11 +4529,9 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.Log.html",
-          "hash": "1I6rku96mLKc5t9poNWVIfQwm66W7psG6i1/ACIpUvg="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.Log.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4316,11 +4539,79 @@
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.html",
-          "hash": "CZWb0vpt+R5FUwmg+2oy6RDIZcQKRvJE1FxP5hIyJuc="
+          "relative_path": "api/Riptide.Utils.RiptideLogger.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.Mean.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.Variance.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.StandardDev.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.Add.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.ToString.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.html"
+        }
+      },
       "version": ""
     },
     {
@@ -4328,11 +4619,9 @@
       "source_relative_path": "api/Riptide.Utils.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.html",
-          "hash": "lKD2q58qXSP5Ra/H/sCKCkHrm/D7sSIg7/78nwH4IUo="
+          "relative_path": "api/Riptide.Utils.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4340,11 +4629,9 @@
       "source_relative_path": "api/Riptide.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.html",
-          "hash": "ZVtkrLTT+cq3LvbQ0Y1YWzGBeUi22hCWpnfgSQnXHuE="
+          "relative_path": "api/Riptide.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4352,11 +4639,9 @@
       "source_relative_path": "api/toc.yml",
       "output": {
         ".html": {
-          "relative_path": "api/toc.html",
-          "hash": "9FDCc2fFvcT0BFIV3ZM/Uc6JSxvuJiGxTvAaZ/+UvBA="
+          "relative_path": "api/toc.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4367,7 +4652,6 @@
           "relative_path": "images/down-arrow.svg"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4378,7 +4662,6 @@
           "relative_path": "images/favicon.ico"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4389,7 +4672,6 @@
           "relative_path": "images/logo.png"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4400,19 +4682,36 @@
           "relative_path": "images/sponsor-heart.png"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Redirection",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
       "version": ""
     },
     {
       "type": "Conceptual",
-      "source_relative_path": "index.md",
+      "source_relative_path": "manual/guides/build-docs.md",
       "output": {
         ".html": {
-          "relative_path": "index.html",
-          "hash": "c0GUsO3zRd8i5QWzvorNL7UbCONthMT7d/o/pKfhrrM="
+          "relative_path": "manual/guides/build-docs.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/guides/send-modes-explained.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/guides/send-modes-explained.html"
+        }
+      },
       "version": ""
     },
     {
@@ -4420,11 +4719,9 @@
       "source_relative_path": "manual/overview/about-riptide.md",
       "output": {
         ".html": {
-          "relative_path": "manual/overview/about-riptide.html",
-          "hash": "JwN/JfnvE6c8IPOOYj6VIpzyuhcZ4qNKCiA2NR9UMBk="
+          "relative_path": "manual/overview/about-riptide.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4432,23 +4729,29 @@
       "source_relative_path": "manual/overview/faq.md",
       "output": {
         ".html": {
-          "relative_path": "manual/overview/faq.html",
-          "hash": "ihsPtUIo8SipLe+9zhtVFbHGWtuXSfAds3W4pP3U6eM="
+          "relative_path": "manual/overview/faq.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/overview/get-started.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/overview/get-started.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Redirection",
       "source_relative_path": "manual/overview/getting-started.md",
       "output": {
         ".html": {
-          "relative_path": "manual/overview/getting-started.html",
-          "hash": "Zz1pxbshJTbDOgGU0/Nmz7MYG1aR4S7oTMRctTSVpCY="
+          "relative_path": "manual/overview/getting-started.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4456,11 +4759,9 @@
       "source_relative_path": "manual/overview/installation.md",
       "output": {
         ".html": {
-          "relative_path": "manual/overview/installation.html",
-          "hash": "3JRHHzIf0KKUh797LV6kJWvNOvps32AMUTjEkA0uhoE="
+          "relative_path": "manual/overview/installation.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4468,23 +4769,29 @@
       "source_relative_path": "manual/toc.yml",
       "output": {
         ".html": {
-          "relative_path": "manual/toc.html",
-          "hash": "wgznapRwOylzkzrFuHT7G2EV0mdqHizHimPrC+h1dOg="
+          "relative_path": "manual/toc.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
       "type": "Conceptual",
+      "source_relative_path": "manual/updates/guides/update-to-v2.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/updates/guides/update-to-v2.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Redirection",
       "source_relative_path": "manual/updates/guides/updating-to-v2.md",
       "output": {
         ".html": {
-          "relative_path": "manual/updates/guides/updating-to-v2.html",
-          "hash": "0H07EV3hkrM6HYBatptgcACMac+N2ChEOutJFihT15Q="
+          "relative_path": "manual/updates/guides/updating-to-v2.html"
         }
       },
-      "is_incremental": false,
       "version": ""
     },
     {
@@ -4492,11 +4799,19 @@
       "source_relative_path": "manual/updates/release-notes/v2.0.0.md",
       "output": {
         ".html": {
-          "relative_path": "manual/updates/release-notes/v2.0.0.html",
-          "hash": "3XXGc21dHm4v6ra6W7RiTP3FclRF0KgczmgYufwkDdo="
+          "relative_path": "manual/updates/release-notes/v2.0.0.html"
         }
       },
-      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/updates/release-notes/v2.1.0.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/updates/release-notes/v2.1.0.html"
+        }
+      },
       "version": ""
     },
     {
@@ -4504,62 +4819,10 @@
       "source_relative_path": "toc.yml",
       "output": {
         ".html": {
-          "relative_path": "toc.html",
-          "hash": "G2YkHiMJnt+aRFJ5B6sXs2ZrlDW6WLakVMRI73fEWd4="
+          "relative_path": "toc.html"
         }
       },
-      "is_incremental": false,
       "version": ""
-    }
-  ],
-  "incremental_info": [
-    {
-      "status": {
-        "can_incremental": false,
-        "details": "Cannot build incrementally because last build info is missing.",
-        "incrementalPhase": "build",
-        "total_file_count": 0,
-        "skipped_file_count": 0,
-        "full_build_reason_code": "NoAvailableBuildCache"
-      },
-      "processors": {
-        "ConceptualDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 7,
-          "skipped_file_count": 0
-        },
-        "ManagedReferenceDocumentProcessor": {
-          "can_incremental": false,
-          "incrementalPhase": "build",
-          "total_file_count": 53,
-          "skipped_file_count": 0
-        },
-        "ResourceDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        },
-        "TocDocumentProcessor": {
-          "can_incremental": false,
-          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
-          "incrementalPhase": "build",
-          "total_file_count": 0,
-          "skipped_file_count": 0
-        }
-      }
-    },
-    {
-      "status": {
-        "can_incremental": false,
-        "details": "Cannot support incremental post processing, the reason is: should not trace intermediate info.",
-        "incrementalPhase": "postProcessing",
-        "total_file_count": 0,
-        "skipped_file_count": 0
-      },
-      "processors": {}
     }
   ],
   "version_info": {},

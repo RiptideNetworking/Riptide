@@ -1,41 +1,41 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
-<html>
-  
+<html lang="csharp">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>InsufficientCapacityException Class | Riptide Docs</title>
+    <title>InsufficientCapacityException Class | Riptide API Docs</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="InsufficientCapacityException Class | Riptide Docs">
+    <meta name="title" content="InsufficientCapacityException Class | Riptide API Docs">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="InsufficientCapacityException Class | Riptide Docs">
+    <meta property="og:title" content="InsufficientCapacityException Class | Riptide API Docs">
     <meta property="og:type" content="website">
-    <meta name="description" content="Documentation for Riptide Networking.">
-    <meta property="og:description" content="Documentation for Riptide Networking.">
+      <meta name="description" content="Documentation for the InsufficientCapacityException Class.">
+      <meta property="og:description" content="Documentation for the InsufficientCapacityException Class.">
     <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
     <meta name="theme-color" content="#2bbade" data-react-helmet="true">
-  
+
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    <meta property="docfx:newtab" content="true">
+  
+  <meta property="docfx:rel" content="../">
+  <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -45,7 +45,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
@@ -61,7 +61,7 @@
         </nav>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,43 +80,106 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            
+
             <div class="subnav navbar navbar-default">
-              <div class="hide-when-search" id="breadcrumb">
+              <div class="container hide-when-search" id="breadcrumb">
                 <ul class="breadcrumb">
                   <li></li>
                 </ul>
               </div>
             </div>
             <article class="content wrap" id="_content" data-uid="Riptide.InsufficientCapacityException">
-  
-  
+
+
+
   <h1 id="Riptide_InsufficientCapacityException" data-uid="Riptide.InsufficientCapacityException" class="text-break">InsufficientCapacityException Class</h1>
   <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a></h6>
   <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
-  <div class="markdown level0 summary"><p>The exception that is thrown when a <a class="xref" href="Riptide.Message.html">Message</a> does not contain enough unread bytes to add a certain value.</p>
+  <div class="markdown level0 summary"><p>The exception that is thrown when a <a class="xref" href="Riptide.Message.html">Message</a> does not contain enough unwritten bits to perform an operation.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class InsufficientCapacityException : Exception</code></pre>
+    <pre><code class="lang-csharp hljs">public class InsufficientCapacityException : Exception, ISerializable</code></pre>
   </div>
 
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
-    <div class="level1"><span class="xref">InsufficientCapacityException</span></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
+    <div class="level1"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception">Exception</a></div>
+    <div class="level2"><span class="xref">InsufficientCapacityException</span></div>
   </div>
-  
-  
-  
-  
-  
-  
-  
+
+  <div class="implements">
+    <h5>Implements</h5>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.runtime.serialization.iserializable">ISerializable</a></div>
+  </div>
+
+
+
+
+
+
+  <div class="inheritedMembers">
+    <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.getbaseexception">Exception.GetBaseException()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.getobjectdata">Exception.GetObjectData(SerializationInfo, StreamingContext)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.gettype">Exception.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.tostring">Exception.ToString()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.data">Exception.Data</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.helplink">Exception.HelpLink</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.hresult">Exception.HResult</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.innerexception">Exception.InnerException</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.message">Exception.Message</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.source">Exception.Source</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.stacktrace">Exception.StackTrace</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.targetsite">Exception.TargetSite</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.exception.serializeobjectstate">Exception.SerializeObjectState</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object)">object.Equals(object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gethashcode">object.GetHashCode()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
+  </div>
   <h3 id="constructors">Constructors
-  </h3>
-  
-  
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
@@ -127,29 +190,36 @@
 </td>
       </tr>
       <tr>
-        <td id="Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_System_String_System_Int32_System_Int32_" data-uid="Riptide.InsufficientCapacityException.#ctor(Riptide.Message,System.Int32,System.String,System.Int32,System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_System_String_System_Int32_System_Int32_">InsufficientCapacityException(Message, Int32, String, Int32, Int32)</a>
+        <td id="Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_" data-uid="Riptide.InsufficientCapacityException.#ctor(Riptide.Message,System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_">InsufficientCapacityException(Message, int)</a>
+        </td>
+        <td class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a> instance and constructs an error message from the given information.</p>
+</td>
+      </tr>
+      <tr>
+        <td id="Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_System_String_System_Int32_" data-uid="Riptide.InsufficientCapacityException.#ctor(Riptide.Message,System.Int32,System.String,System.Int32)" class="one-third-width">
+          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_Int32_System_String_System_Int32_">InsufficientCapacityException(Message, int, string, int)</a>
         </td>
         <td class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a> instance and constructs an error message from the given information.</p>
 </td>
       </tr>
       <tr>
         <td id="Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_String_System_Int32_" data-uid="Riptide.InsufficientCapacityException.#ctor(Riptide.Message,System.String,System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_String_System_Int32_">InsufficientCapacityException(Message, String, Int32)</a>
+          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_Riptide_Message_System_String_System_Int32_">InsufficientCapacityException(Message, string, int)</a>
         </td>
         <td class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a> instance and constructs an error message from the given information.</p>
 </td>
       </tr>
       <tr>
         <td id="Riptide_InsufficientCapacityException__ctor_System_String_" data-uid="Riptide.InsufficientCapacityException.#ctor(System.String)" class="one-third-width">
-          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_System_String_">InsufficientCapacityException(String)</a>
+          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_System_String_">InsufficientCapacityException(string)</a>
         </td>
         <td class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a> instance with a specified error message.</p>
 </td>
       </tr>
       <tr>
-        <td id="Riptide_InsufficientCapacityException__ctor_System_String_Exception_" data-uid="Riptide.InsufficientCapacityException.#ctor(System.String,Exception)" class="one-third-width">
-          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_System_String_Exception_">InsufficientCapacityException(String, Exception)</a>
+        <td id="Riptide_InsufficientCapacityException__ctor_System_String_System_Exception_" data-uid="Riptide.InsufficientCapacityException.#ctor(System.String,System.Exception)" class="one-third-width">
+          <a class="xref" href="Riptide.InsufficientCapacityException.-ctor.html#Riptide_InsufficientCapacityException__ctor_System_String_System_Exception_">InsufficientCapacityException(string, Exception)</a>
         </td>
         <td class="markdown level1 summary"><p>Initializes a new <a class="xref" href="Riptide.InsufficientCapacityException.html">InsufficientCapacityException</a> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</p>
 </td>
@@ -157,16 +227,16 @@
     </tbody>
   </table>
   <h3 id="fields">Fields
-  </h3>
-  
-  
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
-        <td id="Riptide_InsufficientCapacityException_RequiredBytes" data-uid="Riptide.InsufficientCapacityException.RequiredBytes" class="one-third-width">
-          <a class="xref" href="Riptide.InsufficientCapacityException.RequiredBytes.html">RequiredBytes</a>
+        <td id="Riptide_InsufficientCapacityException_RequiredBits" data-uid="Riptide.InsufficientCapacityException.RequiredBits" class="one-third-width">
+          <a class="xref" href="Riptide.InsufficientCapacityException.RequiredBits.html">RequiredBits</a>
         </td>
-        <td class="markdown level1 summary"><p>The number of available bytes the type requires in order to be added successfully.</p>
+        <td class="markdown level1 summary"><p>The number of available bits the type requires in order to be added successfully.</p>
 </td>
       </tr>
       <tr>
@@ -185,17 +255,18 @@
       </tr>
     </tbody>
   </table>
-  
-  
+
+
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_InsufficientCapacityException.md&amp;value=---%0Auid%3A%20Riptide.InsufficientCapacityException%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_InsufficientCapacityException.md&amp;value=---%0Auid%3A%20Riptide.InsufficientCapacityException%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Exceptions.cs/#L13" class="contribution-link">View Source</a>
@@ -213,7 +284,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -221,18 +292,15 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © Tom Weiland 2022
+      Copyright © Tom Weiland 2022
             <br>
-            <span>
-              Generated by 
-              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
-            </span>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>

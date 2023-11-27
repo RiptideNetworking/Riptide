@@ -1,0 +1,253 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html lang="csharp">
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Updating to v2 | Riptide Manual</title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Updating to v2 | Riptide Manual">
+    <meta name="generator" content="docfx">
+    <meta property="og:title" content="Updating to v2 | Riptide Manual">
+    <meta property="og:type" content="website">
+      <meta name="description" content="A full list of v2.0.0&#39;s breaking changes and what to do about them when updating.">
+      <meta property="og:description" content="A full list of v2.0.0&#39;s breaking changes and what to do about them when updating.">
+    <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
+    <meta property="og:image:alt" content="Riptide Logo">
+    <meta property="og:image:width" content="50">
+    <meta property="og:image:height" content="50">
+    <meta name="theme-color" content="#2bbade" data-react-helmet="true">
+
+    <link rel="shortcut icon" href="../../../images/favicon.ico">
+    <link rel="stylesheet" href="../../../styles/config.css">
+    <link rel="stylesheet" href="../../../styles/docfx.vendor.min.css">
+    <link rel="stylesheet" href="../../../styles/docfx.css">
+    <link rel="stylesheet" href="../../../styles/riptide.css">
+    <link rel="stylesheet" href="../../../styles/codehighlighting.css">
+    <link rel="stylesheet" href="../../../styles/main.css">
+    <meta property="docfx:navrel" content="../../../toc.html">
+    <meta property="docfx:tocrel" content="../../toc.html">
+  
+  <meta property="docfx:rel" content="../../../">
+  <meta property="docfx:newtab" content="true">
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+
+              <a class="navbar-brand" href="../../../index.html">
+                <img id="logo" class="svg" src="../../../images/logo.png" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+      </header>
+      <div class="container body-content">
+
+        <div id="search-results">
+          <div class="search-list">Search Results for <span></span></div>
+          <div class="sr-items">
+            <p><i class="glyphicon glyphicon-refresh index-loading"></i></p>
+          </div>
+          <ul id="pagination" data-first="First" data-prev="Previous" data-next="Next" data-last="Last"></ul>
+        </div>
+      </div>
+      <div role="main" class="container body-content hide-when-search">
+
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+
+            <div class="subnav navbar navbar-default">
+              <div class="container hide-when-search" id="breadcrumb">
+                <ul class="breadcrumb">
+                  <li></li>
+                </ul>
+              </div>
+            </div>
+            <article class="content wrap" id="_content" data-uid="">
+<h1 id="updating-to-v2">Updating to v2</h1>
+
+<p>As a major version update, Riptide v2.0.0 includes a number of breaking changes. This means that updating will likely cause errors in your project and may result in your application behaving differently. To help make the update process go smoothly and seem less daunting, this article covers the behavior changes and what has been removed or renamed, as well as what you should use instead!</p>
+<p>You can also take a look at all the <a href="https://github.com/RiptideNetworking/SampleFPS/commit/ce215ef2a452790fae53af9df7e378830ff886f7">changes which were required</a> to update the Sample FPS repo to Riptide v2.0.0.</p>
+<p>The git URL for installing Riptide via the Unity Package Manager has changed. See the <a href="../../overview/installation.html#option-1-unity-package-manager">installation instructions</a> for more information.</p>
+<h2 id="logic-and-behavior-changes">Logic and Behavior Changes</h2>
+<ul>
+<li>The <code><a class="xref" href="../../../api/Riptide.Client.Disconnected.html">Client.Disconnected</a></code> event is now invoked any time the client disconnects—including when <code><a class="xref" href="../../../api/Riptide.Client.Disconnect.html">Client.Disconnect</a></code> is called—instead of only when the disconnection is caused by something outside the client (such as server shutdown, connection failure, etc).</li>
+<li>The default maximum message payload size has been reduced to 1225 bytes (from 1247 bytes) to ensure messages are smaller than the <a href="https://en.wikipedia.org/wiki/Maximum_transmission_unit">MTU</a>. If you were sending messages which were close to the old size limit, those messages may exceed the new maximum and cause errors.</li>
+</ul>
+<h2 id="renames-and-replacements">Renames and Replacements</h2>
+<p>Quite a lot was renamed in v2.0.0 with the goal of making names clearer and more intuitive. Things that were replaced but which have a direct equivalent that can be used are also listed below.</p>
+<table>
+<thead>
+<tr>
+<th>Previous</th>
+<th>What to Use Instead</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Client.Tick</code></td>
+<td><code>Client.Update</code></td>
+</tr>
+<tr>
+<td><code>ClientMessageReceivedEventArgs</code></td>
+<td><code>MessageReceivedEventArgs</code></td>
+</tr>
+<tr>
+<td><code>ClientDisconnectedEventArgs</code></td>
+<td><code>ServerDisconnectedEventArgs</code></td>
+</tr>
+<tr>
+<td><code>ClientDisconnectedEventArgs.Id</code></td>
+<td><code>ServerDisconnectedEventArgs.Client.Id</code></td>
+</tr>
+<tr>
+<td><code>Common</code></td>
+<td><code>Peer</code></td>
+</tr>
+<tr>
+<td><code>HeaderType</code></td>
+<td><code>MessageHeader</code></td>
+</tr>
+<tr>
+<td><code>ICommon</code></td>
+<td><code>IPeer</code></td>
+</tr>
+<tr>
+<td><code>IConnectionInfo</code></td>
+<td><code>Connection</code></td>
+</tr>
+<tr>
+<td><code>Message.MaxMessageSize</code></td>
+<td><code>Message.MaxSize</code></td>
+</tr>
+<tr>
+<td><code>MessageSendMode.reliable</code></td>
+<td><code>MessageSendMode.Reliable</code></td>
+</tr>
+<tr>
+<td><code>MessageSendMode.unreliable</code></td>
+<td><code>MessageSendMode.Unreliable</code></td>
+</tr>
+<tr>
+<td><code>RiptideNetworking</code></td>
+<td><code>Riptide</code></td>
+</tr>
+<tr>
+<td><code>RiptideNetworking.Utils</code></td>
+<td><code>Riptide.Utils</code></td>
+</tr>
+<tr>
+<td><code>RiptideNetworking.Transports</code></td>
+<td><code>Riptide.Transports</code></td>
+</tr>
+<tr>
+<td><code>RiptideNetworking.Transports.RudpTransport</code></td>
+<td><code>Riptide.Transports.Udp</code></td>
+</tr>
+<tr>
+<td><code>Server.Tick</code></td>
+<td><code>Server.Update</code></td>
+</tr>
+<tr>
+<td><code>ServerClientConnectedEventArgs</code></td>
+<td><code>ServerConnectedEventArgs</code></td>
+</tr>
+<tr>
+<td><code>ServerMessageReceivedEventArgs</code></td>
+<td><code>MessageReceivedEventArgs</code></td>
+</tr>
+<tr>
+<td><code>ServerMessageReceivedEventArgs.FromClientId</code></td>
+<td><code>MessageReceivedEventArgs.FromConnection.Id</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="removals">Removals</h2>
+<p>A few things were removed in v2.0.0 for a variety of reasons, some of which have alternatives or replacements but require a bit more explanation than those listed in the table above.</p>
+<h4 id="serverallowautomessagerelay-property-and-shouldautorelay-parameter"><code>Server.AllowAutoMessageRelay</code> Property and <code>shouldAutoRelay</code> Parameter</h4>
+<p><strong>Reason:</strong> Having clients decide which messages are automatically relayed by the server was counter-intuitive, and it meant that as long as the server had <code>AllowAutoMessageRelay</code> set to true, any message could be made to be automatically relayed, even if it wasn't intended by the developer.</p>
+<p><strong>Alternative:</strong> Servers that have a <code><a class="xref" href="../../../api/Riptide.MessageRelayFilter.html">MessageRelayFilter</a></code> instance assigned to their <code><a class="xref" href="../../../api/Riptide.Server.RelayFilter.html">RelayFilter</a></code> will automatically relay any messages whose IDs are enabled in the filter.</p>
+<h4 id="isbigarray-parameter"><code>isBigArray</code> Parameter</h4>
+<p><strong>Reason:</strong> Manually setting the <code>isBigArray</code> parameter to true was extremely clunky and error-prone.</p>
+<p><strong>Alternative:</strong> None, as this is done automatically now.</p>
+<h4 id="messagebytes-property"><code>Message.Bytes</code> Property</h4>
+<p><strong>Reason:</strong> The <code>Message</code> class's backing byte array was only ever publicly accessible for use by transports, in case they needed to modify a message's data directly. The transport system's overhaul has eliminated this potential need, and having the byte array remain publicly accessible creates a risk for accidental misuse without providing any real benefit.</p>
+<p><strong>Alternative:</strong> There is no direct alternative, but chances are you can do what you need using the <code><a class="xref" href="../../../api/Riptide.Message.AddBytes.html">AddBytes</a></code> and <code><a class="xref" href="../../../api/Riptide.Message.GetBytes.html">GetBytes</a></code> methods.</p>
+<h4 id="landiscovery-class"><code>LanDiscovery</code> Class</h4>
+<p><strong>Reason:</strong> It was a mess and in dire need of an overhaul which would have involved breaking changes. By removing it, the removal <em>is</em> the breaking change (the necessary changes weren't going to make it into v2.0.0) and this way it can be re-added whenever, instead of having to wait for v3.0.0 to be revamped.</p>
+<p><strong>Alternative:</strong> Currently none—it will be overhauled and re-added in a future update. If you need it for your project in the meantime, you can download the file from the old versions on GitHub and manually add it to your project.</p>
+<h4 id="actionqueue-and-doublekeydictionary-classes"><code>ActionQueue</code> and <code>DoubleKeyDictionary</code> Classes</h4>
+<p><strong>Reason:</strong> They were unused.</p>
+<p><strong>Alternative:</strong> None.</p>
+<h4 id="rudp-transport-classes">RUDP Transport Classes</h4>
+<p><strong>Reason:</strong> As part of the transport system overhaul, transports are no longer responsible for reliable message delivery. This has been completely decoupled and reliability (among many other features) are now implemented on top of the transport, leading to a more consistent development experience between different transports and requiring less transport-specific implementations of features.</p>
+<p><strong>Alternative:</strong> The <code>UdpPeer</code>, <code>UdpServer</code>, <code>UdpClient</code>, and <code>UdpConnection</code> classes which are found in the <code><a class="xref" href="../../../api/Riptide.Transports.Udp.html">Riptide.Transports.Udp</a></code> namespace.</p>
+</article>
+          </div>
+
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/Docs/manual/updates/guides/update-to-v2.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                  <li>
+                    <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+      Copyright © Tom Weiland 2022
+            <br>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <script type="text/javascript" src="../../../styles/docfx.vendor.min.js"></script>
+    <script type="text/javascript" src="../../../styles/docfx.js"></script>
+    <script type="text/javascript" src="../../../styles/main.js"></script>
+  </body>
+</html>

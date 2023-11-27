@@ -1,41 +1,41 @@
 ﻿<!DOCTYPE html>
 <!--[if IE]><![endif]-->
-<html>
-  
+<html lang="csharp">
+
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>TcpConnection Class | Riptide Docs</title>
+    <title>TcpConnection Class | Riptide API Docs</title>
     <meta name="viewport" content="width=device-width">
-    <meta name="title" content="TcpConnection Class | Riptide Docs">
+    <meta name="title" content="TcpConnection Class | Riptide API Docs">
     <meta name="generator" content="docfx">
-    <meta property="og:title" content="TcpConnection Class | Riptide Docs">
+    <meta property="og:title" content="TcpConnection Class | Riptide API Docs">
     <meta property="og:type" content="website">
-    <meta name="description" content="Documentation for Riptide Networking.">
-    <meta property="og:description" content="Documentation for Riptide Networking.">
+      <meta name="description" content="Documentation for the TcpConnection Class.">
+      <meta property="og:description" content="Documentation for the TcpConnection Class.">
     <meta property="og:image" content="https://riptide.tomweiland.net/images/logo.png">
     <meta property="og:image:alt" content="Riptide Logo">
     <meta property="og:image:width" content="50">
     <meta property="og:image:height" content="50">
     <meta name="theme-color" content="#2bbade" data-react-helmet="true">
-  
+
     <link rel="shortcut icon" href="../images/favicon.ico">
     <link rel="stylesheet" href="../styles/config.css">
-    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.vendor.min.css">
     <link rel="stylesheet" href="../styles/docfx.css">
     <link rel="stylesheet" href="../styles/riptide.css">
     <link rel="stylesheet" href="../styles/codehighlighting.css">
     <link rel="stylesheet" href="../styles/main.css">
     <meta property="docfx:navrel" content="../toc.html">
     <meta property="docfx:tocrel" content="toc.html">
-    
-    <meta property="docfx:rel" content="../">
-    <meta property="docfx:newtab" content="true">
+  
+  <meta property="docfx:rel" content="../">
+  <meta property="docfx:newtab" content="true">
   </head>
   <body data-spy="scroll" data-target="#affix" data-offset="120">
     <div id="wrapper">
       <header>
-        
+
         <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
           <div class="container">
             <div class="navbar-header">
@@ -45,7 +45,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              
+
               <a class="navbar-brand" href="../index.html">
                 <img id="logo" class="svg" src="../images/logo.png" alt="">
               </a>
@@ -61,7 +61,7 @@
         </nav>
       </header>
       <div class="container body-content">
-        
+
         <div id="search-results">
           <div class="search-list">Search Results for <span></span></div>
           <div class="sr-items">
@@ -71,7 +71,7 @@
         </div>
       </div>
       <div role="main" class="container body-content hide-when-search">
-        
+
         <div class="sidenav hide-when-search">
           <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
           <div class="sidetoggle collapse" id="sidetoggle">
@@ -80,46 +80,59 @@
         </div>
         <div class="article row grid-right">
           <div class="col-md-10">
-            
+
             <div class="subnav navbar navbar-default">
-              <div class="hide-when-search" id="breadcrumb">
+              <div class="container hide-when-search" id="breadcrumb">
                 <ul class="breadcrumb">
                   <li></li>
                 </ul>
               </div>
             </div>
             <article class="content wrap" id="_content" data-uid="Riptide.Transports.Tcp.TcpConnection">
-  
-  
+
+
+
   <h1 id="Riptide_Transports_Tcp_TcpConnection" data-uid="Riptide.Transports.Tcp.TcpConnection" class="text-break">TcpConnection Class</h1>
-  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.Transports.Tcp.html">Riptide.Transports.Tcp</a></h6>
+  <h6><strong>Namespace</strong>: <a class="xref" href="Riptide.html">Riptide</a>.<a class="xref" href="Riptide.Transports.html">Transports</a>.<a class="xref" href="Riptide.Transports.Tcp.html">Tcp</a></h6>
   <h6><strong>Assembly</strong>: RiptideNetworking.dll</h6>
   <div class="markdown level0 summary"><p>Represents a connection to a <a class="xref" href="Riptide.Transports.Tcp.TcpServer.html">TcpServer</a> or <a class="xref" href="Riptide.Transports.Tcp.TcpClient.html">TcpClient</a>.</p>
 </div>
   <div class="markdown level0 conceptual"></div>
   <div class="codewrapper">
-    <pre><code class="lang-csharp hljs">public class TcpConnection : Connection</code></pre>
+    <pre><code class="lang-csharp hljs">public class TcpConnection : Connection, IEquatable&lt;TcpConnection&gt;</code></pre>
   </div>
 
   <div class="inheritance">
     <h5>Inheritance</h5>
-    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">Object</a></div>
+    <div class="level0"><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object">object</a></div>
     <div class="level1"><a class="xref" href="Riptide.Connection.html">Connection</a></div>
     <div class="level2"><span class="xref">TcpConnection</span></div>
   </div>
-  
+
   <div class="implements">
     <h5>Implements</h5>
-    <div><span class="xref">IEquatable</span>&lt;<a class="xref" href="Riptide.Transports.Tcp.TcpConnection.html">TcpConnection</a>&gt;</div>
+    <div><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<a class="xref" href="Riptide.Transports.Tcp.TcpConnection.html">TcpConnection</a>&gt;</div>
   </div>
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
   <div class="inheritedMembers">
     <h5>Inherited Members</h5>
+    <div>
+      <a class="xref" href="Riptide.Connection.NotifyDelivered.html">Connection.NotifyDelivered</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.NotifyLost.html">Connection.NotifyLost</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.NotifyReceived.html">Connection.NotifyReceived</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.ReliableDelivered.html">Connection.ReliableDelivered</a>
+    </div>
     <div>
       <a class="xref" href="Riptide.Connection.Id.html#Riptide_Connection_Id">Connection.Id</a>
     </div>
@@ -142,16 +155,61 @@
       <a class="xref" href="Riptide.Connection.SmoothRTT.html#Riptide_Connection_SmoothRTT">Connection.SmoothRTT</a>
     </div>
     <div>
+      <a class="xref" href="Riptide.Connection.TimeoutTime.html#Riptide_Connection_TimeoutTime">Connection.TimeoutTime</a>
+    </div>
+    <div>
       <a class="xref" href="Riptide.Connection.CanTimeout.html#Riptide_Connection_CanTimeout">Connection.CanTimeout</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.CanQualityDisconnect.html">Connection.CanQualityDisconnect</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.Metrics.html">Connection.Metrics</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.MaxAvgSendAttempts.html">Connection.MaxAvgSendAttempts</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.AvgSendAttemptsResilience.html">Connection.AvgSendAttemptsResilience</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.MaxSendAttempts.html">Connection.MaxSendAttempts</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.MaxNotifyLoss.html">Connection.MaxNotifyLoss</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.NotifyLossResilience.html">Connection.NotifyLossResilience</a>
     </div>
     <div>
       <a class="xref" href="Riptide.Connection.ResetTimeout.html#Riptide_Connection_ResetTimeout">Connection.ResetTimeout()</a>
     </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.Send.html#Riptide_Connection_Send_Riptide_Message_System_Boolean_">Connection.Send(Message, bool)</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.OnNotifyDelivered.html#Riptide_Connection_OnNotifyDelivered_System_UInt16_">Connection.OnNotifyDelivered(ushort)</a>
+    </div>
+    <div>
+      <a class="xref" href="Riptide.Connection.OnNotifyLost.html#Riptide_Connection_OnNotifyLost_System_UInt16_">Connection.OnNotifyLost(ushort)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.equals#system-object-equals(system-object-system-object)">object.Equals(object, object)</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.gettype">object.GetType()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.memberwiseclone">object.MemberwiseClone()</a>
+    </div>
+    <div>
+      <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.object.referenceequals">object.ReferenceEquals(object, object)</a>
+    </div>
   </div>
   <h3 id="fields">Fields
-  </h3>
-  
-  
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
@@ -164,9 +222,9 @@
     </tbody>
   </table>
   <h3 id="methods">Methods
-  </h3>
-  
-  
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
@@ -177,7 +235,7 @@
       </tr>
       <tr>
         <td id="Riptide_Transports_Tcp_TcpConnection_Equals_System_Object_" data-uid="Riptide.Transports.Tcp.TcpConnection.Equals(System.Object)" class="one-third-width">
-          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.Equals.html#Riptide_Transports_Tcp_TcpConnection_Equals_System_Object_">Equals(Object)</a>
+          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.Equals.html#Riptide_Transports_Tcp_TcpConnection_Equals_System_Object_">Equals(object)</a>
         </td>
         <td class="markdown level1 summary"></td>
       </tr>
@@ -189,7 +247,7 @@
       </tr>
       <tr>
         <td id="Riptide_Transports_Tcp_TcpConnection_Send_System_Byte___System_Int32_" data-uid="Riptide.Transports.Tcp.TcpConnection.Send(System.Byte[],System.Int32)" class="one-third-width">
-          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.Send.html#Riptide_Transports_Tcp_TcpConnection_Send_System_Byte___System_Int32_">Send(Byte[], Int32)</a>
+          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.Send.html#Riptide_Transports_Tcp_TcpConnection_Send_System_Byte___System_Int32_">Send(byte[], int)</a>
         </td>
         <td class="markdown level1 summary"><p>Sends data.</p>
 </td>
@@ -203,36 +261,37 @@
     </tbody>
   </table>
   <h3 id="operators">Operators
-  </h3>
-  
-  
+</h3>
+
+
   <table class="table table-condensed">
     <tbody>
       <tr>
         <td id="Riptide_Transports_Tcp_TcpConnection_op_Equality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_" data-uid="Riptide.Transports.Tcp.TcpConnection.op_Equality(Riptide.Transports.Tcp.TcpConnection,Riptide.Transports.Tcp.TcpConnection)" class="one-third-width">
-          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.op_Equality.html#Riptide_Transports_Tcp_TcpConnection_op_Equality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_">Equality(TcpConnection, TcpConnection)</a>
+          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.op_Equality.html#Riptide_Transports_Tcp_TcpConnection_op_Equality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_">operator ==(TcpConnection, TcpConnection)</a>
         </td>
         <td class="markdown level1 summary"></td>
       </tr>
       <tr>
         <td id="Riptide_Transports_Tcp_TcpConnection_op_Inequality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_" data-uid="Riptide.Transports.Tcp.TcpConnection.op_Inequality(Riptide.Transports.Tcp.TcpConnection,Riptide.Transports.Tcp.TcpConnection)" class="one-third-width">
-          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.op_Inequality.html#Riptide_Transports_Tcp_TcpConnection_op_Inequality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_">Inequality(TcpConnection, TcpConnection)</a>
+          <a class="xref" href="Riptide.Transports.Tcp.TcpConnection.op_Inequality.html#Riptide_Transports_Tcp_TcpConnection_op_Inequality_Riptide_Transports_Tcp_TcpConnection_Riptide_Transports_Tcp_TcpConnection_">operator !=(TcpConnection, TcpConnection)</a>
         </td>
         <td class="markdown level1 summary"></td>
       </tr>
     </tbody>
   </table>
-  
-  
+
+
+
 </article>
           </div>
-          
+
           <div class="hidden-sm col-md-2" role="complementary">
             <div class="sideaffix">
               <div class="contribution">
                 <ul class="nav">
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Tcp_TcpConnection.md&amp;value=---%0Auid%3A%20Riptide.Transports.Tcp.TcpConnection%0Asummary%3A%20'*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax'%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Transports_Tcp_TcpConnection.md&amp;value=---%0Auid%3A%20Riptide.Transports.Tcp.TcpConnection%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
                     <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Transports/Tcp/TcpConnection.cs/#L15" class="contribution-link">View Source</a>
@@ -250,7 +309,7 @@
           </div>
         </div>
       </div>
-      
+
       <footer>
         <div class="grad-bottom"></div>
         <div class="footer">
@@ -258,18 +317,15 @@
             <span class="pull-right">
               <a href="#top">Back to top</a>
             </span>
-            Copyright © Tom Weiland 2022
+      Copyright © Tom Weiland 2022
             <br>
-            <span>
-              Generated by 
-              <strong><a href="https://dotnet.github.io/docfx/tutorial/docfx_getting_started.html">DocFX</a></strong>
-            </span>
+            <span>Made with <strong><a href="https://dotnet.github.io/docfx">DocFX</a></strong></span>
           </div>
         </div>
       </footer>
     </div>
-    
-    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+
+    <script type="text/javascript" src="../styles/docfx.vendor.min.js"></script>
     <script type="text/javascript" src="../styles/docfx.js"></script>
     <script type="text/javascript" src="../styles/main.js"></script>
   </body>
