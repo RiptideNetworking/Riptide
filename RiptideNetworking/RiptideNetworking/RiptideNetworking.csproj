@@ -19,8 +19,8 @@
     <Copyright>Copyright © Tom Weiland 2022</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>package-icon.png</PackageIcon>
-    <PackageReleaseNotes>[Release Notes](https://riptide.tomweiland.net/manual/updates/release-notes/v2.0.0.html)
-[Update Guide](https://riptide.tomweiland.net/manual/updates/guides/updating-to-v2.html)</PackageReleaseNotes>
+    <PackageReleaseNotes>Check out the full release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.1.0.html</PackageReleaseNotes>
+    <Title>Riptide Networking</Title>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
