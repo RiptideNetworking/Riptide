@@ -86,6 +86,9 @@
             "default",
             "templates/riptide"
         ],
+        "xref": [
+            "https://learn.microsoft.com/en-us/dotnet/.xrefmap.json"
+        ],
         "sitemap": {
             "baseUrl": "https://riptide.tomweiland.net/"
         },
