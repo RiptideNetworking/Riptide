@@ -151,7 +151,7 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return RetrieveFromPool().Init((MessageHeader)sendMode).AddUShort(id);
+            return RetrieveFromPool().Init((MessageHeader)sendMode).AddVarULong(id);
         }
         /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
