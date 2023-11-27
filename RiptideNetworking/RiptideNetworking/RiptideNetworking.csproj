@@ -8,7 +8,7 @@
     <PackageId>RiptideNetworking.Riptide</PackageId>
     <Authors>Tom Weiland</Authors>
     <Product>Riptide Networking</Product>
-    <VersionPrefix>2.0.0</VersionPrefix>
+    <VersionPrefix>2.1.0</VersionPrefix>
     <PackageTags>riptide;networking;multiplayer;game development;server;client;multiplayer games;udp;rudp</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>

@@ -15,7 +15,7 @@ There are a number of ways to install Riptide, depending on what you're working 
 1. In your Unity project, open the Package Manager (Window > Package Manager).
 2. Click the `+` (plus) button in the top left corner of the window.
 3. Select the *Add package from git URL...* option.
-4. Enter the following URL: `https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.0.0`. To install a version other than v2.0.0, replace the `2.0.0` after the `#` with your chosen version number.
+4. Enter the following URL: `https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.1.0`. To install a version other than v2.1.0, replace the `2.1.0` after the `#` with your chosen version number.
 5. Click 'Add' and wait for Riptide to be installed.
 
 If you have errors in your project after installation or intellisense isn't working for Riptide's classes, go to Edit > Preferences > External Tools, make sure the box next to *Git packages* is checked, and then click *Regenerate project files*.
