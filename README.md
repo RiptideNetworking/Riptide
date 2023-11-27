@@ -20,7 +20,7 @@ For a video tutorial on how to set up Riptide (using v1.1.0) in your project, se
 
 - [UDP Transport](RiptideNetworking/RiptideNetworking/Transports/Udp) (built-in)
 - [TCP Transport](RiptideNetworking/RiptideNetworking/Transports/Tcp) (built-in)
-- [Steam Transport](https://github.com/RiptideNetworking/SteamTransport) (in development)
+- [Steam Transport](https://github.com/RiptideNetworking/SteamTransport)
 
 ## Implementations in Other Languages
 
@@ -37,7 +37,7 @@ Community bug reports, feature requests, and pull requests are welcome and appre
 
 ## Donate
 
-Riptide is 100% free to use, but if you'd like to financially support Riptide's development and get early access to new features, you can do so through [GitHub Sponsors](https://github.com/sponsors/tom-weiland).
+Riptide is 100% free to use, but if you'd like to financially support Riptide's development you can do so through [GitHub Sponsors](https://github.com/sponsors/tom-weiland).
 
 ## License
 
