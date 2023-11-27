@@ -307,7 +307,7 @@ namespace Riptide
         /// <inheritdoc/>
         internal override void Disconnect(Connection connection, DisconnectReason reason)
         {
-            if (connection.IsConnected)
+            if (connection.IsConnected && connection.CanQualityDisconnect)
                 LocalDisconnect(reason);
         }
 
@@ -377,7 +377,7 @@ namespace Riptide
         /// <param name="message">The received message.</param>
         protected virtual void OnMessageReceived(Message message)
         {
-            ushort messageId = message.GetUShort();
+            ushort messageId = (ushort)message.GetVarULong();
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
 
             if (useMessageHandlers)

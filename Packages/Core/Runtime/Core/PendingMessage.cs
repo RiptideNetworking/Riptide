@@ -109,7 +109,7 @@ namespace Riptide
         /// <summary>Attempts to send the message.</summary>
         internal void TrySend()
         {
-            if (sendAttempts >= connection.MaxSendAttempts)
+            if (sendAttempts >= connection.MaxSendAttempts && connection.CanQualityDisconnect)
             {
                 RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Could not guarantee delivery of a {(MessageHeader)(data[0] & Message.HeaderBitmask)} message after {sendAttempts} attempts! Disconnecting...");
                 connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection);

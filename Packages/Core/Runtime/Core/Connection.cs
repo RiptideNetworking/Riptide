@@ -32,6 +32,8 @@ namespace Riptide
         public Action<ushort> NotifyLost;
         /// <summary>Invoked when a notify message is received.</summary>
         public Action<Message> NotifyReceived;
+        /// <summary>Invoked when the reliable message with the given sequence ID is successfully delivered.</summary>
+        public Action<ushort> ReliableDelivered;
 
         /// <summary>The connection's numeric ID.</summary>
         public ushort Id { get; internal set; }
@@ -53,10 +55,10 @@ namespace Riptide
                 _rtt = value;
             }
         }
-        private short _rtt = -1;
+        private short _rtt;
         /// <summary>The smoothed round trip time (ping) of the connection, in milliseconds. -1 if not calculated yet.</summary>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
-        public short SmoothRTT { get; private set; } = -1;
+        public short SmoothRTT { get; private set; }
         /// <summary>The time (in milliseconds) after which to disconnect if no heartbeats are received.</summary>
         public int TimeoutTime { get; set; }
         /// <summary>Whether or not the connection can time out.</summary>
@@ -72,9 +74,14 @@ namespace Riptide
             }
         }
         private bool _canTimeout;
+        /// <summary>Whether or not the connection can disconnect due to poor connection quality.</summary>
+        /// <remarks>When this is set to <see langword="false"/>, <see cref="MaxAvgSendAttempts"/>, <see cref="MaxSendAttempts"/>,
+        /// and <see cref="MaxNotifyLoss"/> are ignored and exceeding their values will not trigger a disconnection.</remarks>
+        public bool CanQualityDisconnect;
         /// <summary>The connection's metrics.</summary>
         public readonly ConnectionMetrics Metrics;
-        /// <summary>The maximum acceptable average number of send attempts it takes to deliver a reliable message. The connection will be closed if this is exceeded more than <see cref="AvgSendAttemptsResilience"/> times in a row.</summary>
+        /// <summary>The maximum acceptable average number of send attempts it takes to deliver a reliable message. The connection
+        /// will be closed if this is exceeded more than <see cref="AvgSendAttemptsResilience"/> times in a row.</summary>
         public int MaxAvgSendAttempts;
         /// <summary>How many consecutive times <see cref="MaxAvgSendAttempts"/> can be exceeded before triggering a disconnect.</summary>
         public int AvgSendAttemptsResilience;
@@ -97,7 +104,7 @@ namespace Riptide
         /// <summary>The sequencer for reliable messages.</summary>
         private readonly ReliableSequencer reliable;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
-        private readonly Dictionary<ushort, PendingMessage> pendingMessages = new Dictionary<ushort, PendingMessage>();
+        private readonly Dictionary<ushort, PendingMessage> pendingMessages;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The number of consecutive times that the <see cref="MaxAvgSendAttempts"/> threshold was exceeded.</summary>
@@ -120,13 +127,16 @@ namespace Riptide
             notify = new NotifySequencer(this);
             reliable = new ReliableSequencer(this);
             state = ConnectionState.Connecting;
+            _rtt = -1;
+            SmoothRTT = -1;
             _canTimeout = true;
-
+            CanQualityDisconnect = true;
             MaxAvgSendAttempts = 5;
             AvgSendAttemptsResilience = 64;
             MaxSendAttempts = 15;
             MaxNotifyLoss = 0.05f; // 5%
             NotifyLossResilience = 64;
+            pendingMessages = new Dictionary<ushort, PendingMessage>();
         }
 
         /// <summary>Initializes connection data.</summary>
@@ -241,6 +251,7 @@ namespace Riptide
         {
             if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
+                ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
                 UpdateSendAttemptsViolations();
