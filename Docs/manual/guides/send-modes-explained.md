@@ -59,7 +59,7 @@ Added in v2.1.0, the `Notify` send mode is the newest—but arguably the most po
 
 Notify mode guarantees order by simply having the receiver discard any out of order messages it receives. No packet buffering or reordering takes place on the receiving end.
 
-The sender invokes the <code><xref:Riptide.Connection.NotifyLost?displayProperty=nameWithType></code> or <code><xref:Riptide.Connection.NotifyLost?displayProperty=nameWithType></code> event depending on whether the message was lost or delivered, allowing you to determine what to do with that information. Messages discarded due to being received out of order are considered lost.
+The sender invokes the <code><xref:Riptide.Connection.NotifyLost?displayProperty=nameWithType></code> or <code><xref:Riptide.Connection.NotifyDelivered?displayProperty=nameWithType></code> event depending on whether the message was lost or delivered, allowing you to determine what to do with that information. Messages discarded due to being received out of order are considered lost.
 
 > [!IMPORTANT]
 > The notify send mode includes its "acks" in the headers of other notify messages. This is more bandwidth-efficient than the reliable send mode (which sends separate unreliable ack packets for each message), but it means that *both* ends of the connection ***must*** send notify messages at a similar rate in order for it to work properly!
