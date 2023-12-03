@@ -170,12 +170,11 @@ namespace Riptide.Utils
             int bit = startBit % BitsPerULong;
             if (bit == 0)
                 array[pos] = bitfield | array[pos] & ~mask;
-            else if (bit + amount < BitsPerULong)
-                array[pos] |= bitfield << bit;
             else
             {
-                array[pos    ] = (bitfield << bit) | (array[pos] & ~(mask << bit));
-                array[pos + 1] = (bitfield >> (64 - bit)) | (array[pos + 1] & ~(mask >> (64 - bit)));
+                array[pos] = (bitfield << bit) | (array[pos] & ~(mask << bit));
+                if (bit + amount >= BitsPerULong)
+                    array[pos + 1] = (bitfield >> (64 - bit)) | (array[pos + 1] & ~(mask >> (64 - bit)));
             }
         }
 
