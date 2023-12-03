@@ -146,11 +146,11 @@
       }
     },
     "net.tomweiland.riptide": {
-      "version": "https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.1.0",
+      "version": "https://github.com/RiptideNetworking/Riptide.git?path=/Packages/Core#2.1.1",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "2caa59aff78e93fe55f381a22638f24bb044d15e"
+      "hash": "aa9029911b4f28a70a4438f1245a88ffc17fa2aa"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
