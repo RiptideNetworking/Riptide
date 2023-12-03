@@ -1829,16 +1829,6 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
-      "output": {
-        ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.EnableRelay.html"
         }
       },
@@ -1860,6 +1850,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html"
         }
       },
       "version": ""
@@ -2119,26 +2119,6 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.MessageReceived.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.ClientDisconnected.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
           "relative_path": "api/Riptide.Server.HandleConnection.html"
         }
       },
@@ -2220,6 +2200,46 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.ClientConnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.ConnectionFailed.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.MessageReceived.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.ClientDisconnected.html"
         }
       },
       "version": ""
@@ -2390,26 +2410,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Server.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.ClientConnected.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.ConnectionFailed.html"
         }
       },
       "version": ""
@@ -2689,6 +2689,16 @@
       "source_relative_path": "api/Riptide.Transports.IPeer.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Transports.IPeer.DataReceived.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.IPeer.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.Disconnected.html"
         }
       },
@@ -2710,16 +2720,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.IPeer.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.IPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.IPeer.DataReceived.html"
         }
       },
       "version": ""
@@ -3299,6 +3299,46 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Send.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.ToString.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Equals.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.GetHashCode.html"
         }
       },
@@ -3336,40 +3376,30 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html"
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Send.html"
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.ToString.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.Equals.html"
+          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html"
         }
       },
       "version": ""
@@ -3440,36 +3470,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpPeer.CloseSocket.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDataReceived.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.OnDisconnected.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpPeer.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpPeer.html"
         }
       },
       "version": ""
@@ -4359,6 +4359,26 @@
       "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Count.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Utils.PriorityQueue-2.Enqueue.html"
         }
       },
@@ -4420,26 +4440,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.PriorityQueue-2.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Count.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.PriorityQueue-2.-ctor.html"
         }
       },
       "version": ""
@@ -4810,6 +4810,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/updates/release-notes/v2.1.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/updates/release-notes/v2.1.1.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/updates/release-notes/v2.1.1.html"
         }
       },
       "version": ""
