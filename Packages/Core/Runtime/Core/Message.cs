@@ -640,20 +640,13 @@ namespace Riptide
             if (includeLength)
                 AddVarULong((uint)array.Length);
 
-            int writeAmount = array.Length * BitsPerByte;
-            if (UnwrittenBits < writeAmount)
+            if (UnwrittenBits < array.Length * BitsPerByte)
                 throw new InsufficientCapacityException(this, array.Length, ByteName, BitsPerByte);
 
             if (writeBit % BitsPerByte == 0)
             {
-                int bit = writeBit % BitsPerSegment;
-                if (bit + writeAmount > BitsPerSegment) // Range reaches into subsequent segment(s)
-                    data[(writeBit + writeAmount) / BitsPerSegment] = 0;
-                else if (bit == 0) // Range doesn't fill the current segment, but begins the segment
-                    data[writeBit / BitsPerSegment] = 0;
-
                 Buffer.BlockCopy(array, 0, data, writeBit / BitsPerByte, array.Length);
-                writeBit += writeAmount;
+                writeBit += array.Length * BitsPerByte;
             }
             else
             {
@@ -663,7 +656,7 @@ namespace Riptide
                     writeBit += BitsPerByte;
                 }
             }
-
+            
             return this;
         }
 
