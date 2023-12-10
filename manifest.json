@@ -1829,6 +1829,16 @@
       "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.EnableRelay.html"
         }
       },
@@ -1850,16 +1860,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.MessageRelayFilter.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.MessageRelayFilter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.MessageRelayFilter.-ctor.html"
         }
       },
       "version": ""
@@ -3299,6 +3299,26 @@
       "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.RemoteEndPoint.html"
         }
       },
@@ -3350,26 +3370,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Equality.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.op_Inequality.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Transports.Udp.UdpConnection.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Transports.Udp.UdpConnection.html"
         }
       },
       "version": ""
@@ -4079,6 +4079,96 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FloatToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FloatFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromDouble.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToDouble.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.DoubleToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.DoubleFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Utils.Converter.FromInt.html"
         }
       },
@@ -4230,96 +4320,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.ULongFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FloatToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FloatFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromDouble.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToDouble.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.DoubleToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.DoubleFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.html"
         }
       },
       "version": ""
@@ -4549,16 +4549,6 @@
       "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RollingStat.Mean.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
-      "output": {
-        ".html": {
           "relative_path": "api/Riptide.Utils.RollingStat.Variance.html"
         }
       },
@@ -4610,6 +4600,16 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RollingStat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.Mean.html"
         }
       },
       "version": ""
@@ -4820,6 +4820,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/updates/release-notes/v2.1.1.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/updates/release-notes/v2.1.2.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/updates/release-notes/v2.1.2.html"
         }
       },
       "version": ""
