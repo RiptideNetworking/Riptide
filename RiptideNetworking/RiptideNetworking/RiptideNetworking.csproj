@@ -8,7 +8,7 @@
     <PackageId>RiptideNetworking.Riptide</PackageId>
     <Authors>Tom Weiland</Authors>
     <Product>Riptide Networking</Product>
-    <VersionPrefix>2.1.1</VersionPrefix>
+    <VersionPrefix>2.1.2</VersionPrefix>
     <PackageTags>riptide;networking;multiplayer;game development;server;client;multiplayer games;udp;rudp</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
@@ -19,7 +19,7 @@
     <Copyright>Copyright © Tom Weiland 2022</Copyright>
     <RepositoryType>git</RepositoryType>
     <PackageIcon>package-icon.png</PackageIcon>
-    <PackageReleaseNotes>Check out the full release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.1.1.html</PackageReleaseNotes>
+    <PackageReleaseNotes>Check out the full release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.1.2.html</PackageReleaseNotes>
     <Title>Riptide Networking</Title>
   </PropertyGroup>
 
