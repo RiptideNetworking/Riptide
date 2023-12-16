@@ -939,7 +939,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.ShortToBits(array[i], data, readBit);
+                Converter.ShortToBits(array[i], data, writeBit);
                 writeBit += sizeof(short) * BitsPerByte;
             }
 
@@ -960,7 +960,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.UShortToBits(array[i], data, readBit);
+                Converter.UShortToBits(array[i], data, writeBit);
                 writeBit += sizeof(ushort) * BitsPerByte;
             }
 
