@@ -960,8 +960,8 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                array[i] = Converter.UShortFromBits(data, readBit);
-                readBit += sizeof(ushort) * BitsPerByte;
+                Converter.UShortToBits(array[i], data, readBit);
+                writeBit += sizeof(ushort) * BitsPerByte;
             }
 
             return this;
