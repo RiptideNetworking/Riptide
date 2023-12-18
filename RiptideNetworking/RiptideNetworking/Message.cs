@@ -286,8 +286,8 @@ namespace Riptide
 
             int sourcePos = startBit / BitsPerSegment;
             int sourceBit = startBit % BitsPerSegment;
-            int destPos = writeBit / BitsPerSegment;
-            int destBit = writeBit % BitsPerSegment;
+            int destPos   = writeBit / BitsPerSegment;
+            int destBit   = writeBit % BitsPerSegment;
             int bitOffset = destBit - sourceBit;
             int destSegments = (writeBit + amount) / BitsPerSegment - destPos + 1;
 
@@ -331,7 +331,7 @@ namespace Riptide
                 for (int i = 1; i < sourceSegments; i++)
                 {
                     data[destPos + i - 1] |= message.data[sourcePos + i] << (BitsPerSegment - bitOffset);
-                    data[destPos + i] = message.data[sourcePos + i] >> bitOffset;
+                    data[destPos + i    ]  = message.data[sourcePos + i] >> bitOffset;
                 }
             }
 
@@ -1919,29 +1919,29 @@ namespace Riptide
 
         #region Error Messaging
         /// <summary>The name of a <see cref="byte"/> value.</summary>
-        private const string ByteName = "byte";
+        private const string ByteName        = "byte";
         /// <summary>The name of a <see cref="sbyte"/> value.</summary>
-        private const string SByteName = "sbyte";
+        private const string SByteName       = "sbyte";
         /// <summary>The name of a <see cref="bool"/> value.</summary>
-        private const string BoolName = "bool";
+        private const string BoolName        = "bool";
         /// <summary>The name of a <see cref="short"/> value.</summary>
-        private const string ShortName = "short";
+        private const string ShortName       = "short";
         /// <summary>The name of a <see cref="ushort"/> value.</summary>
-        private const string UShortName = "ushort";
+        private const string UShortName      = "ushort";
         /// <summary>The name of an <see cref="int"/> value.</summary>
-        private const string IntName = "int";
+        private const string IntName         = "int";
         /// <summary>The name of a <see cref="uint"/> value.</summary>
-        private const string UIntName = "uint";
+        private const string UIntName        = "uint";
         /// <summary>The name of a <see cref="long"/> value.</summary>
-        private const string LongName = "long";
+        private const string LongName        = "long";
         /// <summary>The name of a <see cref="ulong"/> value.</summary>
-        private const string ULongName = "ulong";
+        private const string ULongName       = "ulong";
         /// <summary>The name of a <see cref="float"/> value.</summary>
-        private const string FloatName = "float";
+        private const string FloatName       = "float";
         /// <summary>The name of a <see cref="double"/> value.</summary>
-        private const string DoubleName = "double";
+        private const string DoubleName      = "double";
         /// <summary>The name of a <see cref="string"/> value.</summary>
-        private const string StringName = "string";
+        private const string StringName      = "string";
         /// <summary>The name of an array length value.</summary>
         private const string ArrayLengthName = "array length";
 
