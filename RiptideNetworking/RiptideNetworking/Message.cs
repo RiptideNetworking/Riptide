@@ -726,14 +726,14 @@ namespace Riptide
         }
         /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
-        /// <param name="intArray">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="intArray"/>.</param>
-        public void GetSBytes(int amount, sbyte[] intArray, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="intoArray"/>.</param>
+        public void GetSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > intArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intArray.Length, startIndex, SByteName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, SByteName));
 
-            ReadSBytes(amount, intArray, startIndex);
+            ReadSBytes(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
@@ -1747,12 +1747,12 @@ namespace Riptide
 
         /// <summary>Reads a number of serializables from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of serializables to read.</param>
-        /// <param name="intArray">The array to write the serializables into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="intArray"/>.</param>
-        private void ReadSerializables<T>(int amount, T[] intArray, int startIndex = 0) where T : IMessageSerializable, new()
+        /// <param name="intoArray">The array to write the serializables into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="intoArray"/>.</param>
+        private void ReadSerializables<T>(int amount, T[] intoArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
             for (int i = 0; i < amount; i++)
-                intArray[startIndex + i] = GetSerializable<T>();
+                intoArray[startIndex + i] = GetSerializable<T>();
         }
         #endregion
 
