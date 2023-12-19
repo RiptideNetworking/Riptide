@@ -543,7 +543,7 @@ namespace Riptide
                 AddByte(byteValue);
             }
             while (value != 0);
-            
+
             return this;
         }
 
@@ -684,7 +684,7 @@ namespace Riptide
                 Converter.SByteToBits(array[i], data, writeBit);
                 writeBit += BitsPerByte;
             }
-            
+
             return this;
         }
 
@@ -700,6 +700,10 @@ namespace Riptide
             ReadBytes(amount, array);
             return array;
         }
+        /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetBytes(byte[] intoArray, int startIndex = 0) => GetBytes((int)GetVarULong(), intoArray, startIndex);
         /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
@@ -725,15 +729,19 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="intoArray"/>.</param>
+        public void GetSBytes(sbyte[] intoArray, int startIndex = 0) => GetSBytes((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
-        /// <param name="intArray">The array to populate.</param>
-        /// <param name="startIndex">The position at which to start populating <paramref name="intArray"/>.</param>
-        public void GetSBytes(int amount, sbyte[] intArray, int startIndex = 0)
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating <paramref name="intoArray"/>.</param>
+        public void GetSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
         {
-            if (startIndex + amount > intArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intArray.Length, startIndex, SByteName));
+            if (startIndex + amount > intoArray.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, SByteName));
 
-            ReadSBytes(amount, intArray, startIndex);
+            ReadSBytes(amount, intoArray, startIndex);
         }
 
         /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
@@ -840,6 +848,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="bool"/> array with bools retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetBools(bool[] intoArray, int startIndex = 0) => GetBools((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="bool"/> array with bools retrieved from the message.</summary>
         /// <param name="amount">The amount of bools to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -862,7 +874,7 @@ namespace Riptide
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, BoolName));
                 amount = UnreadBits;
             }
-            
+
             for (int i = 0; i < amount; i++)
                 intoArray[startIndex + i] = Converter.BoolFromBit(data, readBit++);
         }
@@ -924,7 +936,7 @@ namespace Riptide
             readBit += sizeof(ushort) * BitsPerByte;
             return value;
         }
-        
+
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
@@ -980,6 +992,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetShorts(short[] intoArray, int startIndex = 0) => GetShorts((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1003,6 +1019,10 @@ namespace Riptide
             ReadUShorts(amount, array);
             return array;
         }
+        /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetUShorts(ushort[] intoArray, int startIndex = 0) => GetUShorts((int)GetVarULong(), intoArray, startIndex);
         /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
@@ -1166,6 +1186,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetInts(int[] intoArray, int startIndex = 0) => GetInts((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1189,6 +1213,10 @@ namespace Riptide
             ReadUInts(amount, array);
             return array;
         }
+        /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetUInts(uint[] intoArray, int startIndex = 0) => GetUInts((int)GetVarULong(), intoArray, startIndex);
         /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
@@ -1352,6 +1380,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetLongs(long[] intoArray, int startIndex = 0) => GetLongs((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1375,6 +1407,10 @@ namespace Riptide
             ReadULongs(amount, array);
             return array;
         }
+        /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetULongs(ulong[] intoArray, int startIndex = 0) => GetULongs((int)GetVarULong(), intoArray, startIndex);
         /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
@@ -1489,6 +1525,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetFloats(float[] intoArray, int startIndex = 0) => GetFloats((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1583,6 +1623,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetDoubles(double[] intoArray, int startIndex = 0) => GetDoubles((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1674,6 +1718,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetStrings(string[] intoArray, int startIndex = 0) => GetStrings((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1734,6 +1782,10 @@ namespace Riptide
             return array;
         }
         /// <summary>Populates an array of serializables retrieved from the message.</summary>
+        /// <param name="intoArray">The array to populate.</param>
+        /// <param name="startIndex">The position at which to start populating the array.</param>
+        public void GetSerializables<T>(T[] intoArray, int startIndex = 0) where T : IMessageSerializable, new() => GetSerializables<T>((int)GetVarULong(), intoArray, startIndex);
+        /// <summary>Populates an array of serializables retrieved from the message.</summary>
         /// <param name="amount">The amount of serializables to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
@@ -1747,12 +1799,12 @@ namespace Riptide
 
         /// <summary>Reads a number of serializables from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of serializables to read.</param>
-        /// <param name="intArray">The array to write the serializables into.</param>
-        /// <param name="startIndex">The position at which to start writing into <paramref name="intArray"/>.</param>
-        private void ReadSerializables<T>(int amount, T[] intArray, int startIndex = 0) where T : IMessageSerializable, new()
+        /// <param name="intoArray">The array to write the serializables into.</param>
+        /// <param name="startIndex">The position at which to start writing into <paramref name="intoArray"/>.</param>
+        private void ReadSerializables<T>(int amount, T[] intoArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
             for (int i = 0; i < amount; i++)
-                intArray[startIndex + i] = GetSerializable<T>();
+                intoArray[startIndex + i] = GetSerializable<T>();
         }
         #endregion
 
