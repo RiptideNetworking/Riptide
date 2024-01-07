@@ -308,9 +308,11 @@ namespace Riptide
             if (forSeqId == lastReceivedSeqId)
                 message.AddBool(false);
             else
+            {
                 message.AddBool(true);
                 message.AddUShort(forSeqId);
-            
+            }
+
             Send(message);
         }
 
