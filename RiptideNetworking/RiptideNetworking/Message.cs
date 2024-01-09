@@ -234,6 +234,7 @@ namespace Riptide
         /// <returns>The message, ready to be used for handling.</returns>
         internal Message Init(byte firstByte, int contentLength, out MessageHeader header)
         {
+            data[contentLength / sizeof(ulong)] = 0;
             data[0] = firstByte;
             header = (MessageHeader)(firstByte & HeaderBitmask);
             SetHeader(header);
