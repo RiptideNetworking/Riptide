@@ -668,6 +668,48 @@ namespace Riptide
             return this;
         }
 
+        /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
+        /// <param name="array">The array to add.</param>
+        /// <param name="startIndex">The position at which to start adding from the array.</param>
+        /// <param name="amount">The amount of bytes to add from the startIndex of the array.</param>
+        /// <returns>The message that the array was added to.</returns>
+        public Message AddBytes(byte[] array, int startIndex, int amount)
+        {
+            if (startIndex < 0 || startIndex >= array.Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (startIndex + amount > array.Length)
+                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ByteName));
+
+            AddVarULong((uint)amount);
+
+            int writeAmount = amount * BitsPerByte;
+            if (UnwrittenBits < writeAmount)
+                throw new InsufficientCapacityException(this, amount, ByteName, BitsPerByte);
+
+            if (writeBit % BitsPerByte == 0)
+            {
+                int bit = writeBit % BitsPerSegment;
+                if (bit + writeAmount > BitsPerSegment) // Range reaches into subsequent segment(s)
+                    data[(writeBit + writeAmount) / BitsPerSegment] = 0;
+                else if (bit == 0) // Range doesn't fill the current segment, but begins the segment
+                    data[writeBit / BitsPerSegment] = 0;
+
+                Buffer.BlockCopy(array, startIndex, data, writeBit / BitsPerByte, amount);
+                writeBit += writeAmount;
+            }
+            else
+            {
+                for (int i = startIndex; i < startIndex + amount; i++)
+                {
+                    Converter.ByteToBits(array[i], data, writeBit);
+                    writeBit += BitsPerByte;
+                }
+            }
+
+            return this;
+        }
+
         /// <summary>Adds an <see cref="sbyte"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
