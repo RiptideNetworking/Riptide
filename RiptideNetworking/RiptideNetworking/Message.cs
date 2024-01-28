@@ -680,7 +680,7 @@ namespace Riptide
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ByteName));
+                throw new ArgumentException(nameof(amount), $"The source array is not long enough to read {amount} {Helper.CorrectForm(amount, ByteName)} starting at {startIndex}!");
 
             if (includeLength)
                 AddVarULong((uint)amount);
