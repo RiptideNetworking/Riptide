@@ -672,7 +672,7 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="startIndex">The position at which to start adding from the array.</param>
         /// <param name="amount">The amount of bytes to add from the startIndex of the array.</param>
-        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+        /// <param name="includeLength">Whether or not to include the <paramref name="amount"/> in the message.</param>
         /// <returns>The message that the array was added to.</returns>
         public Message AddBytes(byte[] array, int startIndex, int amount, bool includeLength = true)
         {
