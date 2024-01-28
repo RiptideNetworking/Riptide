@@ -672,8 +672,9 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="startIndex">The position at which to start adding from the array.</param>
         /// <param name="amount">The amount of bytes to add from the startIndex of the array.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddBytes(byte[] array, int startIndex, int amount)
+        public Message AddBytes(byte[] array, int startIndex, int amount, bool includeLength = true)
         {
             if (startIndex < 0 || startIndex >= array.Length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -681,7 +682,8 @@ namespace Riptide
             if (startIndex + amount > array.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, array.Length, startIndex, ByteName));
 
-            AddVarULong((uint)amount);
+            if (includeLength)
+                AddVarULong((uint)amount);
 
             int writeAmount = amount * BitsPerByte;
             if (UnwrittenBits < writeAmount)
