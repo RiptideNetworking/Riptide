@@ -1,11 +1,11 @@
 {
     "name": "net.tomweiland.riptide",
-    "version": "2.1.2",
+    "version": "2.2.0",
     "displayName": "Riptide Networking",
     "description": "Riptide is a lightweight C# networking library primarily designed for use in multiplayer games.",
     "unity": "2019.4",
     "license": "MIT",
-    "changelogUrl": "https://riptide.tomweiland.net/manual/updates/release-notes/v2.1.2.html",
+    "changelogUrl": "https://riptide.tomweiland.net/manual/updates/release-notes/v2.2.0.html",
     "documentationUrl": "https://riptide.tomweiland.net",
     "author": {
         "name": "Tom Weiland",
