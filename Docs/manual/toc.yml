@@ -20,6 +20,8 @@
         href: updates/release-notes/v2.1.1.md
       - name: v2.1.2
         href: updates/release-notes/v2.1.2.md
+      - name: v2.2.0
+        href: updates/release-notes/v2.2.0.md
     - name: Upgrade Guides
       items:
       - name: Updating to v2
