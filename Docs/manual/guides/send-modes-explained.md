@@ -76,6 +76,6 @@ This level of control unlocks the ability to balance speed, reliability, and ban
 
 Notify messages do *not* have message IDs built in, so you should use the <code><xref:Riptide.Message.Create(Riptide.MessageSendMode)></code> overload when creating your message:
 ```cs
-Message.Create(MessageSendMode.Reliable);
+Message.Create(MessageSendMode.Notify);
 ```
 You can handle notify messages via the <code><xref:Riptide.Connection.NotifyReceived?displayProperty=nameWithType></code> event.
