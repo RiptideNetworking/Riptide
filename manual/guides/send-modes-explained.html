@@ -162,7 +162,7 @@
 <p>You can identify messages by tracking the sequence ID returned by the <code>Send</code> method and comparing it to the one provided by the <code>NotifyLost</code> and <code>NotifyDelivered</code> events.</p>
 <p>This level of control unlocks the ability to balance speed, reliability, and bandwidth-efficiency as necessary and makes it capable of replacing the other two send modes in the vast majority of situations.</p>
 <p>Notify messages do <em>not</em> have message IDs built in, so you should use the <code><a class="xref" href="../../api/Riptide.Message.Create.html#Riptide_Message_Create_Riptide_MessageSendMode_">Create(MessageSendMode)</a></code> overload when creating your message:</p>
-<pre><code class="lang-cs">Message.Create(MessageSendMode.Reliable);
+<pre><code class="lang-cs">Message.Create(MessageSendMode.Notify);
 </code></pre>
 <p>You can handle notify messages via the <code><a class="xref" href="../../api/Riptide.Connection.NotifyReceived.html">Connection.NotifyReceived</a></code> event.</p>
 </article>

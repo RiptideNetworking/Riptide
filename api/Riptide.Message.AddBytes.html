@@ -98,6 +98,25 @@
 <div class="markdown level0 summary"></div>
 <div class="markdown level0 conceptual"></div>
 
+<h2 class="overloads">Overloads</h2>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Message.AddBytes.html#Riptide_Message_AddBytes_System_Byte___System_Boolean_">AddBytes(byte[], bool)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Adds a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a> array to the message.</p>
+</td>
+    </tr>
+    <tr>
+      <td class="one-third-width">
+        <a class="xref" href="Riptide.Message.AddBytes.html#Riptide_Message_AddBytes_System_Byte___System_Int32_System_Int32_System_Boolean_">AddBytes(byte[], int, int, bool)</a>
+      </td>
+      <td class="markdown level1 summary"><p>Adds a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a> array to the message.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
 
 <a id="Riptide_Message_AddBytes_" data-uid="Riptide.Message.AddBytes*"></a>
 
@@ -148,6 +167,67 @@
 
 
 
+<a id="Riptide_Message_AddBytes_" data-uid="Riptide.Message.AddBytes*"></a>
+
+<h2 id="Riptide_Message_AddBytes_System_Byte___System_Int32_System_Int32_System_Boolean_" data-uid="Riptide.Message.AddBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)">AddBytes(byte[], int, int, bool)</h2>
+<div class="markdown level1 summary"><p>Adds a <a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a> array to the message.</p>
+</div>
+<div class="markdown level1 conceptual"></div>
+
+<div class="codewrapper">
+  <pre><code class="lang-csharp hljs">public Message AddBytes(byte[] array, int startIndex, int amount, bool includeLength = true)</code></pre>
+</div>
+
+<h4 class="parameters">Parameters</h4>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.byte">byte</a>[]</td>
+      <td><code>array</code></td>
+      <td><p>The array to add.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+      <td><code>startIndex</code></td>
+      <td><p>The position at which to start adding from the array.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.int32">int</a></td>
+      <td><code>amount</code></td>
+      <td><p>The amount of bytes to add from the startIndex of the array.</p>
+</td>
+    </tr>
+    <tr>
+      <td><a class="xref" href="https://learn.microsoft.com/dotnet/api/system.boolean">bool</a></td>
+      <td><code>includeLength</code></td>
+      <td><p>Whether or not to include the <code class="paramref">amount</code> in the message.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 class="returns">Returns</h4>
+<table class="table table-condensed">
+  <tbody>
+    <tr>
+      <td><a class="xref" href="Riptide.Message.html">Message</a></td>
+      <td><p>The message that the array was added to.</p>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
 
 
 </article>
@@ -161,7 +241,7 @@
                     <a href="https://github.com/RiptideNetworking/Riptide/new/main/Docs/apidoc/new?filename=Riptide_Message_AddBytes_.md&amp;value=---%0Auid%3A%20Riptide.Message.AddBytes*%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A" class="contribution-link">Improve this Doc</a>
                   </li>
                   <li>
-                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Message.cs/#L638" class="contribution-link">View Source</a>
+                    <a href="https://github.com/RiptideNetworking/Riptide/blob/main/RiptideNetworking/RiptideNetworking/Message.cs/#L639" class="contribution-link">View Source</a>
                   </li>
                   <li>
                     <a href="https://github.com/sponsors/tom-weiland" class="contribution-link">Support Riptide</a>

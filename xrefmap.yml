@@ -1396,6 +1396,15 @@ references:
   fullName.vb: Riptide.Message.AddBytes(Byte(), Boolean)
   nameWithType: Message.AddBytes(byte[], bool)
   nameWithType.vb: Message.AddBytes(Byte(), Boolean)
+- uid: Riptide.Message.AddBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)
+  name: AddBytes(byte[], int, int, bool)
+  href: api/Riptide.Message.AddBytes.html#Riptide_Message_AddBytes_System_Byte___System_Int32_System_Int32_System_Boolean_
+  commentId: M:Riptide.Message.AddBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)
+  name.vb: AddBytes(Byte(), Integer, Integer, Boolean)
+  fullName: Riptide.Message.AddBytes(byte[], int, int, bool)
+  fullName.vb: Riptide.Message.AddBytes(Byte(), Integer, Integer, Boolean)
+  nameWithType: Message.AddBytes(byte[], int, int, bool)
+  nameWithType.vb: Message.AddBytes(Byte(), Integer, Integer, Boolean)
 - uid: Riptide.Message.AddBytes*
   name: AddBytes
   href: api/Riptide.Message.AddBytes.html
@@ -1906,6 +1915,15 @@ references:
   commentId: M:Riptide.Message.GetBools
   fullName: Riptide.Message.GetBools()
   nameWithType: Message.GetBools()
+- uid: Riptide.Message.GetBools(System.Boolean[],System.Int32)
+  name: GetBools(bool[], int)
+  href: api/Riptide.Message.GetBools.html#Riptide_Message_GetBools_System_Boolean___System_Int32_
+  commentId: M:Riptide.Message.GetBools(System.Boolean[],System.Int32)
+  name.vb: GetBools(Boolean(), Integer)
+  fullName: Riptide.Message.GetBools(bool[], int)
+  fullName.vb: Riptide.Message.GetBools(Boolean(), Integer)
+  nameWithType: Message.GetBools(bool[], int)
+  nameWithType.vb: Message.GetBools(Boolean(), Integer)
 - uid: Riptide.Message.GetBools(System.Int32)
   name: GetBools(int)
   href: api/Riptide.Message.GetBools.html#Riptide_Message_GetBools_System_Int32_
@@ -1948,6 +1966,15 @@ references:
   commentId: M:Riptide.Message.GetBytes
   fullName: Riptide.Message.GetBytes()
   nameWithType: Message.GetBytes()
+- uid: Riptide.Message.GetBytes(System.Byte[],System.Int32)
+  name: GetBytes(byte[], int)
+  href: api/Riptide.Message.GetBytes.html#Riptide_Message_GetBytes_System_Byte___System_Int32_
+  commentId: M:Riptide.Message.GetBytes(System.Byte[],System.Int32)
+  name.vb: GetBytes(Byte(), Integer)
+  fullName: Riptide.Message.GetBytes(byte[], int)
+  fullName.vb: Riptide.Message.GetBytes(Byte(), Integer)
+  nameWithType: Message.GetBytes(byte[], int)
+  nameWithType.vb: Message.GetBytes(Byte(), Integer)
 - uid: Riptide.Message.GetBytes(System.Int32)
   name: GetBytes(int)
   href: api/Riptide.Message.GetBytes.html#Riptide_Message_GetBytes_System_Int32_
@@ -1990,6 +2017,15 @@ references:
   commentId: M:Riptide.Message.GetDoubles
   fullName: Riptide.Message.GetDoubles()
   nameWithType: Message.GetDoubles()
+- uid: Riptide.Message.GetDoubles(System.Double[],System.Int32)
+  name: GetDoubles(double[], int)
+  href: api/Riptide.Message.GetDoubles.html#Riptide_Message_GetDoubles_System_Double___System_Int32_
+  commentId: M:Riptide.Message.GetDoubles(System.Double[],System.Int32)
+  name.vb: GetDoubles(Double(), Integer)
+  fullName: Riptide.Message.GetDoubles(double[], int)
+  fullName.vb: Riptide.Message.GetDoubles(Double(), Integer)
+  nameWithType: Message.GetDoubles(double[], int)
+  nameWithType.vb: Message.GetDoubles(Double(), Integer)
 - uid: Riptide.Message.GetDoubles(System.Int32)
   name: GetDoubles(int)
   href: api/Riptide.Message.GetDoubles.html#Riptide_Message_GetDoubles_System_Int32_
@@ -2050,6 +2086,15 @@ references:
   fullName.vb: Riptide.Message.GetFloats(Integer, Single(), Integer)
   nameWithType: Message.GetFloats(int, float[], int)
   nameWithType.vb: Message.GetFloats(Integer, Single(), Integer)
+- uid: Riptide.Message.GetFloats(System.Single[],System.Int32)
+  name: GetFloats(float[], int)
+  href: api/Riptide.Message.GetFloats.html#Riptide_Message_GetFloats_System_Single___System_Int32_
+  commentId: M:Riptide.Message.GetFloats(System.Single[],System.Int32)
+  name.vb: GetFloats(Single(), Integer)
+  fullName: Riptide.Message.GetFloats(float[], int)
+  fullName.vb: Riptide.Message.GetFloats(Single(), Integer)
+  nameWithType: Message.GetFloats(float[], int)
+  nameWithType.vb: Message.GetFloats(Single(), Integer)
 - uid: Riptide.Message.GetFloats*
   name: GetFloats
   href: api/Riptide.Message.GetFloats.html
@@ -2092,6 +2137,15 @@ references:
   fullName.vb: Riptide.Message.GetInts(Integer, Integer(), Integer)
   nameWithType: Message.GetInts(int, int[], int)
   nameWithType.vb: Message.GetInts(Integer, Integer(), Integer)
+- uid: Riptide.Message.GetInts(System.Int32[],System.Int32)
+  name: GetInts(int[], int)
+  href: api/Riptide.Message.GetInts.html#Riptide_Message_GetInts_System_Int32___System_Int32_
+  commentId: M:Riptide.Message.GetInts(System.Int32[],System.Int32)
+  name.vb: GetInts(Integer(), Integer)
+  fullName: Riptide.Message.GetInts(int[], int)
+  fullName.vb: Riptide.Message.GetInts(Integer(), Integer)
+  nameWithType: Message.GetInts(int[], int)
+  nameWithType.vb: Message.GetInts(Integer(), Integer)
 - uid: Riptide.Message.GetInts*
   name: GetInts
   href: api/Riptide.Message.GetInts.html
@@ -2134,6 +2188,15 @@ references:
   fullName.vb: Riptide.Message.GetLongs(Integer, Long(), Integer)
   nameWithType: Message.GetLongs(int, long[], int)
   nameWithType.vb: Message.GetLongs(Integer, Long(), Integer)
+- uid: Riptide.Message.GetLongs(System.Int64[],System.Int32)
+  name: GetLongs(long[], int)
+  href: api/Riptide.Message.GetLongs.html#Riptide_Message_GetLongs_System_Int64___System_Int32_
+  commentId: M:Riptide.Message.GetLongs(System.Int64[],System.Int32)
+  name.vb: GetLongs(Long(), Integer)
+  fullName: Riptide.Message.GetLongs(long[], int)
+  fullName.vb: Riptide.Message.GetLongs(Long(), Integer)
+  nameWithType: Message.GetLongs(long[], int)
+  nameWithType.vb: Message.GetLongs(Long(), Integer)
 - uid: Riptide.Message.GetLongs*
   name: GetLongs
   href: api/Riptide.Message.GetLongs.html
@@ -2176,6 +2239,15 @@ references:
   fullName.vb: Riptide.Message.GetSBytes(Integer, SByte(), Integer)
   nameWithType: Message.GetSBytes(int, sbyte[], int)
   nameWithType.vb: Message.GetSBytes(Integer, SByte(), Integer)
+- uid: Riptide.Message.GetSBytes(System.SByte[],System.Int32)
+  name: GetSBytes(sbyte[], int)
+  href: api/Riptide.Message.GetSBytes.html#Riptide_Message_GetSBytes_System_SByte___System_Int32_
+  commentId: M:Riptide.Message.GetSBytes(System.SByte[],System.Int32)
+  name.vb: GetSBytes(SByte(), Integer)
+  fullName: Riptide.Message.GetSBytes(sbyte[], int)
+  fullName.vb: Riptide.Message.GetSBytes(SByte(), Integer)
+  nameWithType: Message.GetSBytes(sbyte[], int)
+  nameWithType.vb: Message.GetSBytes(SByte(), Integer)
 - uid: Riptide.Message.GetSBytes*
   name: GetSBytes
   href: api/Riptide.Message.GetSBytes.html
@@ -2230,6 +2302,15 @@ references:
   fullName.vb: Riptide.Message.GetSerializables(Of T)(Integer, T(), Integer)
   nameWithType: Message.GetSerializables<T>(int, T[], int)
   nameWithType.vb: Message.GetSerializables(Of T)(Integer, T(), Integer)
+- uid: Riptide.Message.GetSerializables``1(``0[],System.Int32)
+  name: GetSerializables<T>(T[], int)
+  href: api/Riptide.Message.GetSerializables.html#Riptide_Message_GetSerializables__1___0___System_Int32_
+  commentId: M:Riptide.Message.GetSerializables``1(``0[],System.Int32)
+  name.vb: GetSerializables(Of T)(T(), Integer)
+  fullName: Riptide.Message.GetSerializables<T>(T[], int)
+  fullName.vb: Riptide.Message.GetSerializables(Of T)(T(), Integer)
+  nameWithType: Message.GetSerializables<T>(T[], int)
+  nameWithType.vb: Message.GetSerializables(Of T)(T(), Integer)
 - uid: Riptide.Message.GetShort
   name: GetShort()
   href: api/Riptide.Message.GetShort.html#Riptide_Message_GetShort
@@ -2248,6 +2329,15 @@ references:
   commentId: M:Riptide.Message.GetShorts
   fullName: Riptide.Message.GetShorts()
   nameWithType: Message.GetShorts()
+- uid: Riptide.Message.GetShorts(System.Int16[],System.Int32)
+  name: GetShorts(short[], int)
+  href: api/Riptide.Message.GetShorts.html#Riptide_Message_GetShorts_System_Int16___System_Int32_
+  commentId: M:Riptide.Message.GetShorts(System.Int16[],System.Int32)
+  name.vb: GetShorts(Short(), Integer)
+  fullName: Riptide.Message.GetShorts(short[], int)
+  fullName.vb: Riptide.Message.GetShorts(Short(), Integer)
+  nameWithType: Message.GetShorts(short[], int)
+  nameWithType.vb: Message.GetShorts(Short(), Integer)
 - uid: Riptide.Message.GetShorts(System.Int32)
   name: GetShorts(int)
   href: api/Riptide.Message.GetShorts.html#Riptide_Message_GetShorts_System_Int32_
@@ -2308,6 +2398,15 @@ references:
   fullName.vb: Riptide.Message.GetStrings(Integer, String(), Integer)
   nameWithType: Message.GetStrings(int, string[], int)
   nameWithType.vb: Message.GetStrings(Integer, String(), Integer)
+- uid: Riptide.Message.GetStrings(System.String[],System.Int32)
+  name: GetStrings(string[], int)
+  href: api/Riptide.Message.GetStrings.html#Riptide_Message_GetStrings_System_String___System_Int32_
+  commentId: M:Riptide.Message.GetStrings(System.String[],System.Int32)
+  name.vb: GetStrings(String(), Integer)
+  fullName: Riptide.Message.GetStrings(string[], int)
+  fullName.vb: Riptide.Message.GetStrings(String(), Integer)
+  nameWithType: Message.GetStrings(string[], int)
+  nameWithType.vb: Message.GetStrings(String(), Integer)
 - uid: Riptide.Message.GetStrings*
   name: GetStrings
   href: api/Riptide.Message.GetStrings.html
@@ -2350,6 +2449,15 @@ references:
   fullName.vb: Riptide.Message.GetUInts(Integer, UInteger(), Integer)
   nameWithType: Message.GetUInts(int, uint[], int)
   nameWithType.vb: Message.GetUInts(Integer, UInteger(), Integer)
+- uid: Riptide.Message.GetUInts(System.UInt32[],System.Int32)
+  name: GetUInts(uint[], int)
+  href: api/Riptide.Message.GetUInts.html#Riptide_Message_GetUInts_System_UInt32___System_Int32_
+  commentId: M:Riptide.Message.GetUInts(System.UInt32[],System.Int32)
+  name.vb: GetUInts(UInteger(), Integer)
+  fullName: Riptide.Message.GetUInts(uint[], int)
+  fullName.vb: Riptide.Message.GetUInts(UInteger(), Integer)
+  nameWithType: Message.GetUInts(uint[], int)
+  nameWithType.vb: Message.GetUInts(UInteger(), Integer)
 - uid: Riptide.Message.GetUInts*
   name: GetUInts
   href: api/Riptide.Message.GetUInts.html
@@ -2392,6 +2500,15 @@ references:
   fullName.vb: Riptide.Message.GetULongs(Integer, ULong(), Integer)
   nameWithType: Message.GetULongs(int, ulong[], int)
   nameWithType.vb: Message.GetULongs(Integer, ULong(), Integer)
+- uid: Riptide.Message.GetULongs(System.UInt64[],System.Int32)
+  name: GetULongs(ulong[], int)
+  href: api/Riptide.Message.GetULongs.html#Riptide_Message_GetULongs_System_UInt64___System_Int32_
+  commentId: M:Riptide.Message.GetULongs(System.UInt64[],System.Int32)
+  name.vb: GetULongs(ULong(), Integer)
+  fullName: Riptide.Message.GetULongs(ulong[], int)
+  fullName.vb: Riptide.Message.GetULongs(ULong(), Integer)
+  nameWithType: Message.GetULongs(ulong[], int)
+  nameWithType.vb: Message.GetULongs(ULong(), Integer)
 - uid: Riptide.Message.GetULongs*
   name: GetULongs
   href: api/Riptide.Message.GetULongs.html
@@ -2434,6 +2551,15 @@ references:
   fullName.vb: Riptide.Message.GetUShorts(Integer, UShort(), Integer)
   nameWithType: Message.GetUShorts(int, ushort[], int)
   nameWithType.vb: Message.GetUShorts(Integer, UShort(), Integer)
+- uid: Riptide.Message.GetUShorts(System.UInt16[],System.Int32)
+  name: GetUShorts(ushort[], int)
+  href: api/Riptide.Message.GetUShorts.html#Riptide_Message_GetUShorts_System_UInt16___System_Int32_
+  commentId: M:Riptide.Message.GetUShorts(System.UInt16[],System.Int32)
+  name.vb: GetUShorts(UShort(), Integer)
+  fullName: Riptide.Message.GetUShorts(ushort[], int)
+  fullName.vb: Riptide.Message.GetUShorts(UShort(), Integer)
+  nameWithType: Message.GetUShorts(ushort[], int)
+  nameWithType.vb: Message.GetUShorts(UShort(), Integer)
 - uid: Riptide.Message.GetUShorts*
   name: GetUShorts
   href: api/Riptide.Message.GetUShorts.html
