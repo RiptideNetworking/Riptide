@@ -98,6 +98,26 @@ namespace Riptide
 
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
+        /// <summary>Id of the message.</summary>
+        public ulong Id
+        {
+            get
+            {
+                int currentBit = 20;
+                ulong num = 0;
+                int num2 = 0;
+                ulong num3;
+                do
+                {
+                    msg.PeekBits(8, currentBit, out num3);
+                    num |= (num3 & 0x7F) << num2;
+                    currentBit += 8;
+                    num2 += 7;
+                }
+                while((num3 & 0x80) != 0L);
+                return num;
+            }
+        }
         /// <summary>How many bits have been retrieved from the message.</summary>
         public int ReadBits => readBit;
         /// <summary>How many unretrieved bits remain in the message.</summary>
