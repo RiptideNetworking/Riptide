@@ -7,6 +7,7 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Riptide
 {
@@ -26,10 +27,10 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
-		Queue<QueuedMessage> overlyReliableQueue = new();
-
+		/// <summary>The Queue storing the messages for the send mode OverlyReliable Queue</summary>
+		Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
+		/// <summary>The highest recieved sequence id for the send mode OverlyReliable</summary>
 		ushort highestQueuedMessageSequenceId = 0;
-
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -187,7 +188,7 @@ namespace Riptide
 			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
 				sequenceId = reliable.NextSequenceId;
 				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
-				if(overlyReliableQueue.Length == 1) SendQueuedMessage();
+				if(overlyReliableQueue.Count == 1) SendQueuedMessage();
 				shouldRelease = false;
 			}
             else
@@ -205,12 +206,19 @@ namespace Riptide
             return sequenceId;
         }
 
+		/// <summary>
+		/// Clears the OverlyReliableQueue for send mode OverlyReliableQueue
+		/// </summary>
+		/// <remarks>
+		/// You need to use this, when you want to disconnect after having used
+		/// the send mode OverlyReliableQueue
+		/// </remarks>
 		public void ClearOverlyReliableQueue() {
 			overlyReliableQueue.Clear();
 		}
 
 		void SendQueuedMessage() {
-			if(overlyReliableQueue.Length == 0) return;
+			if(overlyReliableQueue.Count == 0) return;
 			Message message = overlyReliableQueue.Peek().message;
 			message = message.MakeMessageResendable();
 			int byteAmount = message.BytesInUse;
@@ -279,11 +287,11 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
         internal void ClearMessage(ushort sequenceId)
         {
-			if(overlyReliableQueue.Peek().SequenceId == sequenceId) {
+			if(overlyReliableQueue.Peek().message.SequenceId == sequenceId) {
 				overlyReliableQueue.Dequeue();
 				SendQueuedMessage();
 			} else if (overlyReliableQueue.Any(qm => qm.message.SequenceId == sequenceId))
-				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {sequenceId} instead of {overlyReliableQueue.Peek().SequenceId}!");
+				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {sequenceId} instead of {overlyReliableQueue.Peek().message.SequenceId}!");
             else if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
                 ReliableDelivered?.Invoke(sequenceId);

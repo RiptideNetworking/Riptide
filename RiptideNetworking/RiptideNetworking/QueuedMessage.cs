@@ -1,4 +1,4 @@
-
+using Riptide.Utils;
 
 namespace Riptide
 {

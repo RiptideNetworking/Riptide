@@ -58,7 +58,8 @@ namespace Riptide
         /// </remarks>
         public MessageHandlerAttribute(Enum messageId, byte groupId = 0)
         {
-			MessageHandlerAttribute((ushort)(object)messageId, groupId);
+			MessageId = (ushort)(object)messageId;
+            GroupId = groupId;
         }
     }
 }

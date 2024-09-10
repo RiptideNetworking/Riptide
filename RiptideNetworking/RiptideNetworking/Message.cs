@@ -101,18 +101,18 @@ namespace Riptide
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
         /// <summary>Id of the message.</summary>
-        public ulong Id
+        public ushort Id
         {
             get
             {
                 int currentBit = 20;
-                ulong num = 0;
+                ushort num = 0;
                 int num2 = 0;
-                ulong num3;
+                byte num3;
                 do
                 {
-                    msg.PeekBits(8, currentBit, out num3);
-                    num |= (num3 & 0x7F) << num2;
+                    PeekBits(8, currentBit, out num3);
+                    num |= (ushort)((num3 & 0x7F) << num2);
                     currentBit += 8;
                     num2 += 7;
                 }
@@ -558,6 +558,10 @@ namespace Riptide
         #endregion
 
         #region Varint
+		/// <summary>
+		/// Messages for some reason break when being resent
+		/// </summary>
+		/// <returns>The new Message, that is now reusable</returns>
 		public Message MakeMessageResendable() {
 			Message message = Message.Create(SendMode, Id);
 			while(UnreadBits >= 8) message.AddByte(GetByte());
