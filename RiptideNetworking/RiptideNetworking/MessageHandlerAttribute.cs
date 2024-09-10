@@ -46,5 +46,19 @@ namespace Riptide
             MessageId = messageId;
             GroupId = groupId;
         }
+
+
+		/// <summary>Initializes a new instance of the <see cref="MessageHandlerAttribute"/> class with the <paramref name="messageId"/> and <paramref name="groupId"/> values.</summary>
+        /// <param name="messageId">The ID of the message type which this method is meant to handle.</param>
+        /// <param name="groupId">The ID of the group of message handlers which this method belongs to.</param>
+        /// <remarks>
+        ///   <see cref="Server"/>s will only use this method if its signature matches the <see cref="Server.MessageHandler"/> signature.
+        ///   <see cref="Client"/>s will only use this method if its signature matches the <see cref="Client.MessageHandler"/> signature.
+        ///   This method will be ignored if its signature matches neither of the valid message handler signatures.
+        /// </remarks>
+        public MessageHandlerAttribute(Enum messageId, byte groupId = 0)
+        {
+			MessageHandlerAttribute((ushort)(object)messageId, groupId);
+        }
     }
 }

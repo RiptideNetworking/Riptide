@@ -577,8 +577,10 @@ namespace Riptide
 
             if (useMessageHandlers)
             {
-                if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
+                if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler)) {
+					// TODO ignore duplicates for queue
                     messageHandler(fromConnection.Id, message);
+				}
                 else
                     RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
             }

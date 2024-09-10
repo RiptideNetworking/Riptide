@@ -22,6 +22,8 @@ namespace Riptide
         Unreliable = MessageHeader.Unreliable,
         /// <summary>Guarantees delivery but not order.</summary>
         Reliable = MessageHeader.Reliable,
+		/// <summary>Guarantees both delivery and order, as well as reconnection resending.</summary>
+		OverlyReliableQueue = MessageHeader.OverlyReliableQueue
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -118,6 +120,15 @@ namespace Riptide
                 return num;
             }
         }
+		/// <summary>Gets the sequence Id of the message</summary>
+		public ushort SequenceId
+        {
+			get
+			{
+				PeekBits(16, HeaderBits, out ushort sequenceId);
+				return sequenceId;
+			}
+		}
         /// <summary>How many bits have been retrieved from the message.</summary>
         public int ReadBits => readBit;
         /// <summary>How many unretrieved bits remain in the message.</summary>
@@ -542,6 +553,15 @@ namespace Riptide
         #endregion
 
         #region Varint
+		public Message MakeMessageResendable() {
+			Message message = Message.Create(SendMode, Id);
+			while(UnreadBits >= 8) message.AddByte(GetByte());
+			int unreadBits = UnreadBits;
+			GetBits(unreadBits, out byte b);
+			message.AddBits(b, unreadBits);
+			return message;
+		}
+
         /// <summary>Adds a positive or negative number to the message, using fewer bits for smaller values.</summary>
         /// <inheritdoc cref="AddVarULong(ulong)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

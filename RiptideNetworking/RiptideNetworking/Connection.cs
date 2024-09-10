@@ -26,6 +26,10 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
+		Queue<QueuedMessage> overlyReliableQueue = new();
+
+		ushort highestQueuedMessageSequenceId = 0;
+
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -180,6 +184,12 @@ namespace Riptide
                 Send(Message.ByteBuffer, byteAmount);
                 Metrics.SentUnreliable(byteAmount);
             }
+			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
+				sequenceId = reliable.NextSequenceId;
+				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
+				if(overlyReliableQueue.Length == 1) SendQueuedMessage();
+				shouldRelease = false;
+			}
             else
             {
                 sequenceId = reliable.NextSequenceId;
@@ -194,6 +204,19 @@ namespace Riptide
 
             return sequenceId;
         }
+
+		public void ClearOverlyReliableQueue() {
+			overlyReliableQueue.Clear();
+		}
+
+		void SendQueuedMessage() {
+			if(overlyReliableQueue.Length == 0) return;
+			Message message = overlyReliableQueue.Peek().message;
+			message = message.MakeMessageResendable();
+			int byteAmount = message.BytesInUse;
+			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+			Send(Message.ByteBuffer, byteAmount);
+		}
 
         /// <summary>Sends data.</summary>
         /// <param name="dataBuffer">The array containing the data.</param>
@@ -217,6 +240,13 @@ namespace Riptide
             else
                 Metrics.NotifyDiscarded++;
         }
+
+		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
+			if(!(highestQueuedMessageSequenceId >= 65000 && sequenceId <= 500)) // overflow handling
+				if(sequenceId <= highestQueuedMessageSequenceId) return false;
+			highestQueuedMessageSequenceId = sequenceId;
+			return true;
+		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
         /// <param name="sequenceId">The message's sequence ID.</param>
@@ -249,7 +279,12 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
         internal void ClearMessage(ushort sequenceId)
         {
-            if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+			if(overlyReliableQueue.Peek().SequenceId == sequenceId) {
+				overlyReliableQueue.Dequeue();
+				SendQueuedMessage();
+			} else if (overlyReliableQueue.Any(qm => qm.message.SequenceId == sequenceId))
+				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {sequenceId} instead of {overlyReliableQueue.Peek().SequenceId}!");
+            else if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
                 ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
@@ -361,6 +396,8 @@ namespace Riptide
         {
             if (!IsConnected)
                 return; // A client that is not yet fully connected should not be sending heartbeats
+
+			SendQueuedMessage();
 
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();

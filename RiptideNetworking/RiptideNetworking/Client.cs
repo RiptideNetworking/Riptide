@@ -249,6 +249,7 @@ namespace Riptide
                 // User messages
                 case MessageHeader.Unreliable:
                 case MessageHeader.Reliable:
+				case MessageHandler.OverlyReliableQueue:
                     OnMessageReceived(message);
                     break;
 

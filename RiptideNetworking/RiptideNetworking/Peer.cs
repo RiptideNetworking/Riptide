@@ -175,6 +175,11 @@ namespace Riptide
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
             }
+			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
+				if(!e.FromConnection.ShouldHandleQueuedMessage(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits))) return;
+                Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
+                messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
+			}
             else
             {
                 if (e.Amount < Message.MinReliableBytes)
