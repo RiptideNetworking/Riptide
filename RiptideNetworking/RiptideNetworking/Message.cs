@@ -283,6 +283,11 @@ namespace Riptide
                 writeBit = NotifyHeaderBits;
                 SendMode = MessageSendMode.Notify;
             }
+			else if (header == MessageHeader.OverlyReliableQueue) {
+				readBit = ReliableHeaderBits;
+                writeBit = ReliableHeaderBits;
+                SendMode = MessageSendMode.OverlyReliableQueue;
+			}
             else if (header >= MessageHeader.Reliable)
             {
                 readBit = ReliableHeaderBits;
