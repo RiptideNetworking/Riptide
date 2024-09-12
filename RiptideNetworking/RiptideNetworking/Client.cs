@@ -254,6 +254,9 @@ namespace Riptide
                     break;
 
                 // Internal messages
+				case MessageHeader.QueuedAck:
+					connection.HandleQueuedAck(message);
+					break;
                 case MessageHeader.Ack:
                     connection.HandleAck(message);
                     break;

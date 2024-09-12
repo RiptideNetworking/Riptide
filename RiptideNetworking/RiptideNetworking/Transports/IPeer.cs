@@ -12,6 +12,8 @@ namespace Riptide.Transports
     {
         /// <summary>An unreliable user message.</summary>
         Unreliable,
+		/// <summary>An internal overly reliable ack message.</summary>
+		QueuedAck,
         /// <summary>An internal unreliable ack message.</summary>
         Ack,
         /// <summary>An internal unreliable connect message.</summary>

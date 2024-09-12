@@ -320,6 +320,9 @@ namespace Riptide
                     break;
 
                 // Internal messages
+				case MessageHeader.QueuedAck:
+					connection.HandleQueuedAck(message);
+					break;
                 case MessageHeader.Ack:
                     connection.HandleAck(message);
                     break;
@@ -579,7 +582,6 @@ namespace Riptide
             if (useMessageHandlers)
             {
                 if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler)) {
-					// TODO ignore duplicates for queue
                     messageHandler(fromConnection.Id, message);
 				}
                 else

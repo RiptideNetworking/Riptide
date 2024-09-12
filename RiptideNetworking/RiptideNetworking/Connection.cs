@@ -27,10 +27,10 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
-		/// <summary>The Queue storing the messages for the send mode OverlyReliable Queue</summary>
-		Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
-		/// <summary>The highest recieved sequence id for the send mode OverlyReliable</summary>
-		ushort highestQueuedMessageSequenceId = 0;
+        /// <summary>The Queue storing the messages for the send mode OverlyReliable Queue</summary>
+        readonly Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
+        /// <summary>The highest recieved sequence id for the send mode OverlyReliable</summary>
+        private ushort expectedQueuedSequenceId = 0;
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -186,10 +186,11 @@ namespace Riptide
                 Metrics.SentUnreliable(byteAmount);
             }
 			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
-				sequenceId = reliable.NextSequenceId;
-				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
+				sequenceId = expectedQueuedSequenceId;
+				ushort qsid = (ushort)(sequenceId + overlyReliableQueue.Count);
+				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, qsid));	
 				if(overlyReliableQueue.Count == 1) SendQueuedMessage();
-				shouldRelease = false;
+				shouldRelease = true;
 			}
             else
             {
@@ -217,10 +218,10 @@ namespace Riptide
 			overlyReliableQueue.Clear();
 		}
 
-		void SendQueuedMessage() {
+        private void SendQueuedMessage() {
 			if(overlyReliableQueue.Count == 0) return;
-			Message message = overlyReliableQueue.Peek().message;
-			message = message.MakeMessageResendable();
+			ResetTimeout();
+			Message message = overlyReliableQueue.Peek().Message;
 			int byteAmount = message.BytesInUse;
 			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
 			Send(Message.ByteBuffer, byteAmount);
@@ -250,10 +251,7 @@ namespace Riptide
         }
 
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
-			if(!(highestQueuedMessageSequenceId >= 65000 && sequenceId <= 500)) // overflow handling
-				if(sequenceId <= highestQueuedMessageSequenceId) return false;
-			highestQueuedMessageSequenceId = sequenceId;
-			return true;
+			return sequenceId == expectedQueuedSequenceId;
 		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
@@ -287,12 +285,7 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
         internal void ClearMessage(ushort sequenceId)
         {
-			if(overlyReliableQueue.Peek().message.SequenceId == sequenceId) {
-				overlyReliableQueue.Dequeue();
-				SendQueuedMessage();
-			} else if (overlyReliableQueue.Any(qm => qm.message.SequenceId == sequenceId))
-				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {sequenceId} instead of {overlyReliableQueue.Peek().message.SequenceId}!");
-            else if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+			if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
                 ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
@@ -370,6 +363,27 @@ namespace Riptide
             ClearMessage(ackedSeqId);
             reliable.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
+
+		#region Queue Ack
+		internal void SendQueuedAck(ushort sequenceId) {
+			Message message = Message.Create(MessageHeader.QueuedAck);
+			message.SequenceId = sequenceId;
+			Send(message);
+		}
+
+		internal void HandleQueuedAck(Message message) {
+			ushort ackedSeqId = message.SequenceId;
+			if(overlyReliableQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
+				return;
+			if(overlyReliableQueue.Peek().Message.SequenceId != ackedSeqId) {
+				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {overlyReliableQueue.Peek().Message.SequenceId}!");
+				return;
+			}
+			overlyReliableQueue.Dequeue();
+			expectedQueuedSequenceId++;
+			SendQueuedMessage();
+		}
+		#endregion
 
         #region Server
         /// <summary>Sends a welcome message.</summary>

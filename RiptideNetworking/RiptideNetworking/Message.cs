@@ -125,9 +125,10 @@ namespace Riptide
         {
 			get
 			{
-				PeekBits(16, HeaderBits, out ushort sequenceId);
+				PeekBits(sizeof(ushort) * Converter.BitsPerByte, HeaderBits, out ushort sequenceId);
 				return sequenceId;
 			}
+			set => SetBits(value, sizeof(ushort) * Converter.BitsPerByte, Message.HeaderBits);
 		}
         /// <summary>How many bits have been retrieved from the message.</summary>
         public int ReadBits => readBit;
@@ -198,6 +199,19 @@ namespace Riptide
             return RetrieveFromPool().Init(header);
         }
 
+		/// <summary>Logs info of the message</summary>
+		public void LogStuff() {
+			string s = "";
+			for(int i = 0; i < WrittenBits / 8 + 1; i++) {
+				PeekBits(8, i * 8, out byte b);
+				s += System.Convert.ToString(b, 2).PadLeft(8, '0') + " ";
+			}
+			s += "\n" + ReadBits;
+			s += "\n" + WrittenBits;
+			s += "\n" + UnreadBits;
+			RiptideLogger.Log(LogType.Info, s);
+		}
+
         #region Pooling
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
         public static void TrimPool()
@@ -239,6 +253,7 @@ namespace Riptide
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
+			if(SendMode == MessageSendMode.OverlyReliableQueue) return;
             if (pool.Count < pool.Capacity)
             {
                 // Pool exists and there's room
@@ -562,14 +577,21 @@ namespace Riptide
 		/// Messages for some reason break when being resent
 		/// </summary>
 		/// <returns>The new Message, that is now reusable</returns>
-		public Message MakeMessageResendable() {
-			Message message = Message.Create(SendMode, Id);
-			while(UnreadBits >= 8) message.AddByte(GetByte());
-			int unreadBits = UnreadBits;
-			GetBits(unreadBits, out byte b);
-			message.AddBits(b, unreadBits);
+		public Message MakeQueuedMessageIndependent() {
+            Message message = new Message {
+                SendMode = SendMode,
+				readBit = readBit,
+				writeBit = writeBit,
+            };
+			Array.Copy(data, message.data, data.Length);
 			return message;
-		}
+        }
+
+		internal static Message QueuedAck(ushort sequenceId, ushort id) {
+            Message message = new Message().Init(MessageHeader.QueuedAck).AddVarULong(id);
+			message.SequenceId = sequenceId;
+			return message;
+        }
 
         /// <summary>Adds a positive or negative number to the message, using fewer bits for smaller values.</summary>
         /// <inheritdoc cref="AddVarULong(ulong)"/>

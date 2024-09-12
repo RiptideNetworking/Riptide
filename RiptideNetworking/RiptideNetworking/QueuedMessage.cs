@@ -1,18 +1,22 @@
-using Riptide.Utils;
+// This file is provided under The MIT License as part of RiptideNetworking.
+// Copyright (c) Tom Weiland
+// For additional information please see the included LICENSE.md file or view it on GitHub:
+// https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 namespace Riptide
 {
 /// <summary>Represents a currently pending overly reliably sent message whose delivery has not been acknowledged yet.</summary>
 internal class QueuedMessage
 {
-    internal Message message;
+    internal Message Message;
 
-	QueuedMessage(Message message) {
-		this.message = message;
+    private QueuedMessage(Message message) {
+		Message = message;
 	}
 
 	public static QueuedMessage Create(Message message, ushort sequenceId) {
-        message.SetBits(sequenceId, sizeof(ushort) * Converter.BitsPerByte, Message.HeaderBits);
+		message = message.MakeQueuedMessageIndependent();
+        message.SequenceId = sequenceId;
 		return new QueuedMessage(message);
 	}
 }
