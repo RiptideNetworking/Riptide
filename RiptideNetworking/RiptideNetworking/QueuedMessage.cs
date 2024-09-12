@@ -15,7 +15,7 @@ internal class QueuedMessage
 	}
 
 	public static QueuedMessage Create(Message message, ushort sequenceId) {
-		message = message.MakeQueuedMessageIndependent();
+		message = message.MakeIndependentMessage();
         message.SequenceId = sequenceId;
 		return new QueuedMessage(message);
 	}

@@ -28,9 +28,11 @@ namespace Riptide
     public abstract class Connection
     {
         /// <summary>The Queue storing the messages for the send mode OverlyReliable Queue</summary>
-        readonly Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
-        /// <summary>The highest recieved sequence id for the send mode OverlyReliable</summary>
-        private ushort expectedQueuedSequenceId = 0;
+        private readonly Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
+        /// <summary>The next send sequence id for the send mode OverlyReliable</summary>
+        private ushort nextQueuedSequenceId = 0;
+		/// <summary>The next recieve sequence id for the send mode OverlyReliable</summary>
+		private ushort expectedNextQueuedSequenceId = 0;
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -186,9 +188,8 @@ namespace Riptide
                 Metrics.SentUnreliable(byteAmount);
             }
 			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
-				sequenceId = expectedQueuedSequenceId;
-				ushort qsid = (ushort)(sequenceId + overlyReliableQueue.Count);
-				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, qsid));	
+				sequenceId = nextQueuedSequenceId++;
+				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
 				if(overlyReliableQueue.Count == 1) SendQueuedMessage();
 				shouldRelease = true;
 			}
@@ -251,7 +252,11 @@ namespace Riptide
         }
 
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
-			return sequenceId == expectedQueuedSequenceId;
+			// FIXME doesn't check for the right connection
+			RiptideLogger.Log(LogType.Debug, $"expected: {expectedNextQueuedSequenceId}, actual: {sequenceId}");
+			if(sequenceId != expectedNextQueuedSequenceId) return false;
+			expectedNextQueuedSequenceId++;
+			return true;
 		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
@@ -380,7 +385,6 @@ namespace Riptide
 				return;
 			}
 			overlyReliableQueue.Dequeue();
-			expectedQueuedSequenceId++;
 			SendQueuedMessage();
 		}
 		#endregion

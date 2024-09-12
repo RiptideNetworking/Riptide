@@ -574,10 +574,10 @@ namespace Riptide
 
         #region Varint
 		/// <summary>
-		/// Messages for some reason break when being resent
+		/// Frees the message from the pool system
 		/// </summary>
-		/// <returns>The new Message, that is now reusable</returns>
-		public Message MakeQueuedMessageIndependent() {
+		/// <returns>The new Message, that is now free</returns>
+		public Message MakeIndependentMessage() {
             Message message = new Message {
                 SendMode = SendMode,
 				readBit = readBit,
