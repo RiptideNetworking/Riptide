@@ -27,11 +27,11 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
-        /// <summary>The Queue storing the messages for the send mode OverlyReliable Queue</summary>
-        private readonly Queue<QueuedMessage> overlyReliableQueue = new Queue<QueuedMessage>();
-        /// <summary>The next send sequence id for the send mode OverlyReliable</summary>
+        /// <summary>The Queue storing the messages for the send mode Queued</summary>
+        private readonly Queue<QueuedMessage> messageQueue = new Queue<QueuedMessage>();
+        /// <summary>The next send sequence id for the send mode Queued</summary>
         private ushort nextQueuedSequenceId = 0;
-		/// <summary>The next recieve sequence id for the send mode OverlyReliable</summary>
+		/// <summary>The next recieve sequence id for the send mode Queued</summary>
 		private ushort expectedNextQueuedSequenceId = 0;
 		/// <summary>Skips the heartbeat sending if true</summary>
 		private bool skipNextHeartbeatQueuedSend = false;
@@ -189,10 +189,10 @@ namespace Riptide
                 Send(Message.ByteBuffer, byteAmount);
                 Metrics.SentUnreliable(byteAmount);
             }
-			else if (message.SendMode == MessageSendMode.OverlyReliableQueue) {
+			else if (message.SendMode == MessageSendMode.Queued) {
 				sequenceId = nextQueuedSequenceId++;
-				overlyReliableQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
-				if(overlyReliableQueue.Count == 1) SendQueuedMessage();
+				messageQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
+				if(messageQueue.Count == 1) SendQueuedMessage();
 				shouldRelease = true;
 			}
             else
@@ -211,22 +211,22 @@ namespace Riptide
         }
 
 		/// <summary>
-		/// Clears the OverlyReliableQueue for send mode OverlyReliableQueue
+		/// Clears the messageQueue for send mode messageQueue
 		/// </summary>
 		/// <remarks>
 		/// You need to use this, when you want to disconnect after having used
-		/// the send mode OverlyReliableQueue
+		/// the send mode Queued
 		/// </remarks>
-		public void ClearOverlyReliableQueue() {
-			overlyReliableQueue.Clear();
+		public void ClearMessageQueue() {
+			messageQueue.Clear();
 			nextQueuedSequenceId = 0;
 			expectedNextQueuedSequenceId = 0;
 		}
 
         private void SendQueuedMessage() {
-			if(overlyReliableQueue.Count == 0) return;
+			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
-			Message message = overlyReliableQueue.Peek().Message;
+			Message message = messageQueue.Peek().Message;
 			int byteAmount = message.BytesInUse;
 			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
 			Send(Message.ByteBuffer, byteAmount);
@@ -375,13 +375,13 @@ namespace Riptide
 		#region Queue Ack
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
-			if(overlyReliableQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
+			if(messageQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
 				return;
-			if(overlyReliableQueue.Peek().Message.SequenceId != ackedSeqId) {
-				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {overlyReliableQueue.Peek().Message.SequenceId}!");
+			if(messageQueue.Peek().Message.SequenceId != ackedSeqId) {
+				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {messageQueue.Peek().Message.SequenceId}!");
 				return;
 			}
-			overlyReliableQueue.Dequeue();
+			messageQueue.Dequeue();
 			SendQueuedMessage();
 		}
 		#endregion

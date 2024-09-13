@@ -175,7 +175,7 @@ namespace Riptide
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
             }
-			else if (message.SendMode == MessageSendMode.OverlyReliableQueue)
+			else if (message.SendMode == MessageSendMode.Queued)
 			{
 				Message m = message.MakeIndependentMessage();
 				message.Release();

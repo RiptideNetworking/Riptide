@@ -31,7 +31,7 @@ namespace Riptide.Transports
         /// <summary>A reliable user message.</summary>
         Reliable,
 		/// <summary>An overly reliable user message.</summary>
-		OverlyReliableQueue,
+		Queued,
         /// <summary>An internal reliable welcome message.</summary>
         Welcome,
         /// <summary>An internal reliable client connected message.</summary>

@@ -23,7 +23,7 @@ namespace Riptide
         /// <summary>Guarantees delivery but not order.</summary>
         Reliable = MessageHeader.Reliable,
 		/// <summary>Guarantees both delivery and order, as well as reconnection resending.</summary>
-		OverlyReliableQueue = MessageHeader.OverlyReliableQueue
+		Queued = MessageHeader.Queued
     }
 
     /// <summary>Provides functionality for converting data to bytes and vice versa.</summary>
@@ -253,7 +253,7 @@ namespace Riptide
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
-			if(SendMode == MessageSendMode.OverlyReliableQueue) return;
+			if(SendMode == MessageSendMode.Queued) return;
             if (pool.Count < pool.Capacity)
             {
                 // Pool exists and there's room
@@ -298,10 +298,10 @@ namespace Riptide
                 writeBit = NotifyHeaderBits;
                 SendMode = MessageSendMode.Notify;
             }
-			else if (header == MessageHeader.OverlyReliableQueue) {
+			else if (header == MessageHeader.Queued) {
 				readBit = ReliableHeaderBits;
                 writeBit = ReliableHeaderBits;
-                SendMode = MessageSendMode.OverlyReliableQueue;
+                SendMode = MessageSendMode.Queued;
 			}
             else if (header >= MessageHeader.Reliable)
             {
