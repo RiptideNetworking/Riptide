@@ -225,9 +225,8 @@ namespace Riptide
 
         private void SendQueuedMessage() {
 			if(overlyReliableQueue.Count == 0) return;
-			Message message = overlyReliableQueue.Peek().Message;
-			RiptideLogger.Log(LogType.Debug, $"id: {message.Id} sid: {message.SequenceId} count: {overlyReliableQueue.Count} expected: {expectedNextQueuedSequenceId} next: {nextQueuedSequenceId}");
 			skipNextHeartbeatQueuedSend = true;
+			Message message = overlyReliableQueue.Peek().Message;
 			int byteAmount = message.BytesInUse;
 			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
 			Send(Message.ByteBuffer, byteAmount);
@@ -377,10 +376,8 @@ namespace Riptide
 		#region Queue Ack
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.SequenceId;
-			RiptideLogger.Log(LogType.Debug, $"Queued len: {overlyReliableQueue.Count}");
 			if(overlyReliableQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
 				return;
-			RiptideLogger.Log(LogType.Debug, $"Queued ack: {ackedSeqId}");
 			if(overlyReliableQueue.Peek().Message.SequenceId != ackedSeqId) {
 				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {overlyReliableQueue.Peek().Message.SequenceId}!");
 				return;
