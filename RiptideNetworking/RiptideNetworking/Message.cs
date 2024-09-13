@@ -587,8 +587,8 @@ namespace Riptide
 			return message;
         }
 
-		internal static Message QueuedAck(ushort sequenceId, ushort id) {
-            Message message = new Message().Init(MessageHeader.QueuedAck).AddVarULong(id);
+		internal static Message QueuedAck(ushort sequenceId) {
+            Message message = new Message().Init(MessageHeader.QueuedAck);
 			message.SequenceId = sequenceId;
 			return message;
         }
