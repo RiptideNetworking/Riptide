@@ -589,7 +589,7 @@ namespace Riptide
 
 		internal static Message QueuedAck(ushort sequenceId) {
             Message message = new Message().Init(MessageHeader.QueuedAck);
-			message.SequenceId = sequenceId;
+			message.AddUShort(sequenceId);
 			return message;
         }
 

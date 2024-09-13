@@ -256,7 +256,6 @@ namespace Riptide
         }
 
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
-			// FIXME doesn't check for the right connection
 			RiptideLogger.Log(LogType.Debug, $"expected: {expectedNextQueuedSequenceId}, actual: {sequenceId}");
 			if(sequenceId != expectedNextQueuedSequenceId) return false;
 			expectedNextQueuedSequenceId++;
@@ -375,7 +374,7 @@ namespace Riptide
 
 		#region Queue Ack
 		internal void HandleQueuedAck(Message message) {
-			ushort ackedSeqId = message.SequenceId;
+			ushort ackedSeqId = message.GetUShort();
 			if(overlyReliableQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
 				return;
 			if(overlyReliableQueue.Peek().Message.SequenceId != ackedSeqId) {
