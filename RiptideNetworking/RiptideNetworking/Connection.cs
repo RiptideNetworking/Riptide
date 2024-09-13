@@ -256,7 +256,6 @@ namespace Riptide
         }
 
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
-			RiptideLogger.Log(LogType.Debug, $"expected: {expectedNextQueuedSequenceId}, actual: {sequenceId}");
 			if(sequenceId != expectedNextQueuedSequenceId) return false;
 			expectedNextQueuedSequenceId++;
 			return true;
