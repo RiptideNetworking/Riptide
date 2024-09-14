@@ -404,15 +404,19 @@ namespace Riptide
             if (!IsConnected)
                 return; // A client that is not yet fully connected should not be sending heartbeats
 
-			if(!skipNextHeartbeatQueuedSend)
-				SendQueuedMessage();
-			skipNextHeartbeatQueuedSend = false;
+			ResendQueuedMessage();
 			
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();
 
             ResetTimeout();
         }
+
+		private void ResendQueuedMessage() {
+			if(!skipNextHeartbeatQueuedSend)
+				SendQueuedMessage();
+			skipNextHeartbeatQueuedSend = false;
+		}
 
         /// <summary>Sends a heartbeat message.</summary>
         private void RespondHeartbeat(byte pingId)
@@ -462,6 +466,7 @@ namespace Riptide
         /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeatResponse(Message message)
         {
+			ResendQueuedMessage();
             byte pingId = message.GetByte();
 
             if (pendingPingId == pingId)
