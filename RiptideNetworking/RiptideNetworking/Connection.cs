@@ -34,7 +34,7 @@ namespace Riptide
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
 		private ushort expectedNextQueuedSequenceId = 0;
 		/// <summary>Skips the heartbeat sending if true</summary>
-		private bool skipNextHeartbeatQueuedSend = false;
+		private bool skipNextHeartbeatQueuedSend;
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -292,7 +292,7 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
         internal void ClearMessage(ushort sequenceId)
         {
-			if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+            if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
                 ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
@@ -371,7 +371,7 @@ namespace Riptide
             reliable.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteAcksBitField);
         }
 
-		#region Queue Ack
+        #region Server
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
 			if(messageQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
@@ -383,9 +383,7 @@ namespace Riptide
 			messageQueue.Dequeue();
 			SendQueuedMessage();
 		}
-		#endregion
-
-        #region Server
+		
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
