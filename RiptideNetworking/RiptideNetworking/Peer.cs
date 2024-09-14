@@ -70,7 +70,7 @@ namespace Riptide
         /// <summary>The time (in milliseconds) for which to wait before giving up on a connection attempt.</summary>
         internal int ConnectTimeoutTime { get; set; } = 10000;
         /// <summary>The current time.</summary>
-        internal long CurrentTime { get; private set; }
+        public long CurrentTime { get; private set; }
 
         /// <summary>Whether or not the peer should use the built-in message handler system.</summary>
         protected bool useMessageHandlers;
