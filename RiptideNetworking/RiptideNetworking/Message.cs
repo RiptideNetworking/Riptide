@@ -22,7 +22,7 @@ namespace Riptide
         Unreliable = MessageHeader.Unreliable,
         /// <summary>Guarantees delivery but not order.</summary>
         Reliable = MessageHeader.Reliable,
-		/// <summary>Guarantees both delivery and order, as well as reconnection resending.</summary>
+		/// <summary>Guarantees both delivery and order and doesn't give up until the connection gives up.</summary>
 		Queued = MessageHeader.Queued
     }
 

@@ -30,7 +30,7 @@ namespace Riptide.Transports
 
         /// <summary>A reliable user message.</summary>
         Reliable,
-		/// <summary>An overly reliable user message.</summary>
+		/// <summary>An overly reliable user message, guaranteeing order.</summary>
 		Queued,
         /// <summary>An internal reliable welcome message.</summary>
         Welcome,

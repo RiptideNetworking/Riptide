@@ -121,7 +121,7 @@ namespace Riptide
         /// <summary>The number of consecutive times that the <see cref="MaxNotifyLoss"/> threshold was exceeded.</summary>
         private int lossRateViolations;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
-        private long lastHeartbeat;
+        public long lastHeartbeat { get; private set; }
         /// <summary>The ID of the last ping that was sent.</summary>
         private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
@@ -209,19 +209,6 @@ namespace Riptide
 
             return sequenceId;
         }
-
-		/// <summary>
-		/// Clears the messageQueue for send mode messageQueue
-		/// </summary>
-		/// <remarks>
-		/// You need to use this, when you want to disconnect after having used
-		/// the send mode Queued
-		/// </remarks>
-		public void ClearMessageQueue() {
-			messageQueue.Clear();
-			nextQueuedSequenceId = 0;
-			expectedNextQueuedSequenceId = 0;
-		}
 
         private void SendQueuedMessage() {
 			if(messageQueue.Count == 0) return;
