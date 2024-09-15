@@ -572,11 +572,11 @@ namespace Riptide
         #endregion
 
         #region Varint
-		/// <summary>
-		/// Frees the message from the pool system
-		/// </summary>
-		/// <returns>The new Message, that is now free</returns>
-		public Message MakeIndependentMessage() {
+		/// <summary>copies a message</summary>
+		/// <remarks>useful for saving a recieved message,
+		/// that would otherwhise be returned to the pool</remarks>
+		/// <returns>The copy of the message</returns>
+		public Message Copy() {
             Message message = new Message {
                 SendMode = SendMode,
 				readBit = readBit,

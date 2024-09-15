@@ -191,7 +191,7 @@ namespace Riptide
             }
 			else if (message.SendMode == MessageSendMode.Queued) {
 				sequenceId = nextQueuedSequenceId++;
-				Message m = message.MakeIndependentMessage();
+				Message m = message.Copy();
 				m.SequenceId = sequenceId;
 				messageQueue.Enqueue(m);
 				if(messageQueue.Count == 1) SendQueuedMessage();
@@ -211,6 +211,7 @@ namespace Riptide
             return sequenceId;
         }
 
+		/// <summary>Sends the first queued message, if available</summary>
         private void SendQueuedMessage() {
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
@@ -243,6 +244,9 @@ namespace Riptide
                 Metrics.NotifyDiscarded++;
         }
 
+		/// <summary>Determines if the queued message with the given sequence ID should be handled.</summary>
+        /// <param name="sequenceId">The message's sequence ID.</param>
+        /// <returns>Whether or not the message should be handled.</returns>
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
 			if(sequenceId != expectedNextQueuedSequenceId) return false;
 			expectedNextQueuedSequenceId++;
@@ -360,6 +364,8 @@ namespace Riptide
         }
 
         #region Server
+		/// <summary>Handles a queued message ack.</summary>
+		/// <param name="message">The ack message to handle.</param>
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
 			if(messageQueue.All(qm => qm.SequenceId != ackedSeqId))
@@ -413,6 +419,7 @@ namespace Riptide
             ResetTimeout();
         }
 
+		/// <summary>Sends the first queued message again</summary>
 		private void ResendQueuedMessage() {
 			if(!skipNextHeartbeatQueuedSend)
 				SendQueuedMessage();
@@ -468,6 +475,7 @@ namespace Riptide
         internal void HandleHeartbeatResponse(Message message)
         {
 			ResendQueuedMessage();
+
             byte pingId = message.GetByte();
 
             if (pendingPingId == pingId)
