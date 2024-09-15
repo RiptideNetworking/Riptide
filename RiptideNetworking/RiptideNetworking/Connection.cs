@@ -28,7 +28,7 @@ namespace Riptide
     public abstract class Connection
     {
         /// <summary>The Queue storing the messages for the send mode Queued</summary>
-        private readonly Queue<QueuedMessage> messageQueue = new Queue<QueuedMessage>();
+        private readonly Queue<Message> messageQueue = new Queue<Message>();
         /// <summary>The next send sequence id for the send mode Queued</summary>
         private ushort nextQueuedSequenceId = 0;
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
@@ -191,9 +191,10 @@ namespace Riptide
             }
 			else if (message.SendMode == MessageSendMode.Queued) {
 				sequenceId = nextQueuedSequenceId++;
-				messageQueue.Enqueue(QueuedMessage.Create(message, sequenceId));	
+				Message m = message.MakeIndependentMessage();
+				m.SequenceId = sequenceId;
+				messageQueue.Enqueue(m);
 				if(messageQueue.Count == 1) SendQueuedMessage();
-				shouldRelease = true;
 			}
             else
             {
@@ -213,7 +214,7 @@ namespace Riptide
         private void SendQueuedMessage() {
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
-			Message message = messageQueue.Peek().Message;
+			Message message = messageQueue.Peek();
 			int byteAmount = message.BytesInUse;
 			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
 			Send(Message.ByteBuffer, byteAmount);
@@ -361,10 +362,10 @@ namespace Riptide
         #region Server
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
-			if(messageQueue.All(qm => qm.Message.SequenceId != ackedSeqId))
+			if(messageQueue.All(qm => qm.SequenceId != ackedSeqId))
 				return;
-			if(messageQueue.Peek().Message.SequenceId != ackedSeqId) {
-				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {messageQueue.Peek().Message.SequenceId}!");
+			if(messageQueue.Peek().SequenceId != ackedSeqId) {
+				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {messageQueue.Peek().SequenceId}!");
 				return;
 			}
 			messageQueue.Dequeue();

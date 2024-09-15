@@ -253,7 +253,6 @@ namespace Riptide
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
-			if(SendMode == MessageSendMode.Queued) return;
             if (pool.Count < pool.Capacity)
             {
                 // Pool exists and there's room

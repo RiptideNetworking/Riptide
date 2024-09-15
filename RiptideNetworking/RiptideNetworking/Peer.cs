@@ -177,16 +177,15 @@ namespace Riptide
             }
 			else if (message.SendMode == MessageSendMode.Queued)
 			{
-				Message m = message.MakeIndependentMessage();
-				message.Release();
 				if (e.Amount < Message.MinReliableBytes)
                     return;
+
 				if (e.FromConnection.ShouldHandleQueuedMessage(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
 				{
-					Buffer.BlockCopy(e.DataBuffer, 1, m.Data, 1, e.Amount - 1);
-					messagesToHandle.Enqueue(new MessageToHandle(m, header, e.FromConnection));
+					Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
+					messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
 				}
-				e.FromConnection.Send(Message.QueuedAck(m.SequenceId));
+				e.FromConnection.Send(Message.QueuedAck(message.SequenceId));
 			}
             else
             {
