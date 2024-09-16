@@ -210,6 +210,7 @@ namespace Riptide
 			s += "\nWrittenBits: " + WrittenBits;
 			s += "\nUnreadBits: " + UnreadBits;
 			s += "\nId: " + Id;
+			s += "\nSequenceId: " + SequenceId;
 			RiptideLogger.Log(LogType.Info, s);
 		}
 
