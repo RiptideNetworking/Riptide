@@ -101,7 +101,7 @@ namespace Riptide
         /// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
         /// <summary>Id of the message.</summary>
-        public ushort Id
+        internal ushort Id
         {
             get
             {
@@ -121,7 +121,7 @@ namespace Riptide
             }
         }
 		/// <summary>The sequence Id of the message</summary>
-		public ushort SequenceId
+		internal ushort SequenceId
         {
 			get
 			{
@@ -206,9 +206,10 @@ namespace Riptide
 				PeekBits(8, i * 8, out byte b);
 				s += System.Convert.ToString(b, 2).PadLeft(8, '0') + " ";
 			}
-			s += "\n" + ReadBits;
-			s += "\n" + WrittenBits;
-			s += "\n" + UnreadBits;
+			s += "\nReadBits: " + ReadBits;
+			s += "\nWrittenBits: " + WrittenBits;
+			s += "\nUnreadBits: " + UnreadBits;
+			s += "\nId: " + Id;
 			RiptideLogger.Log(LogType.Info, s);
 		}
 

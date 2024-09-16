@@ -405,7 +405,7 @@ namespace Riptide
         }
 
         /// <summary>Handles a heartbeat message.</summary>
-		/// <param name="message">The heartbeat message to handle.</param>
+        /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeat(Message message)
         {
             if (!IsConnected)
