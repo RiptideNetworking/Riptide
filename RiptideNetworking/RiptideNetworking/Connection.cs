@@ -245,7 +245,7 @@ namespace Riptide
         }
 
 		/// <summary>Determines if the queued message with the given sequence ID should be handled.</summary>
-        /// <param name="sequenceId">The message's sequence ID.</param>
+		/// <param name="sequenceId">The message's sequence ID.</param>
         /// <returns>Whether or not the message should be handled.</returns>
 		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
 			if(sequenceId != expectedNextQueuedSequenceId) return false;
@@ -377,7 +377,7 @@ namespace Riptide
 			messageQueue.Dequeue();
 			SendQueuedMessage();
 		}
-		
+
         /// <summary>Sends a welcome message.</summary>
         internal void SendWelcome()
         {
@@ -405,7 +405,7 @@ namespace Riptide
         }
 
         /// <summary>Handles a heartbeat message.</summary>
-        /// <param name="message">The heartbeat message to handle.</param>
+		/// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeat(Message message)
         {
             if (!IsConnected)

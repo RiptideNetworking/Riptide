@@ -120,7 +120,7 @@ namespace Riptide
                 return num;
             }
         }
-		/// <summary>Gets the sequence Id of the message</summary>
+		/// <summary>The sequence Id of the message</summary>
 		public ushort SequenceId
         {
 			get
@@ -572,10 +572,10 @@ namespace Riptide
         #endregion
 
         #region Varint
-		/// <summary>copies a message</summary>
-		/// <remarks>useful for saving a recieved message,
-		/// that would otherwhise be returned to the pool</remarks>
-		/// <returns>The copy of the message</returns>
+		/// <summary>Copies a message.</summary>
+		/// <remarks>Useful for saving a recieved message,
+		/// that would otherwhise be returned to the pool.</remarks>
+		/// <returns>The copy of the message.</returns>
 		public Message Copy() {
             Message message = new Message {
                 SendMode = SendMode,
@@ -586,6 +586,9 @@ namespace Riptide
 			return message;
         }
 
+		/// <summary>Creates a QueuedAck message containing sequence ID.</summary>
+		/// <param name="sequenceId">The sequence id to queue.</param>
+		/// <returns>The new message.</returns>
 		internal static Message QueuedAck(ushort sequenceId) {
             Message message = new Message().Init(MessageHeader.QueuedAck);
 			message.AddUShort(sequenceId);
