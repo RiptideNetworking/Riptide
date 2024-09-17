@@ -104,9 +104,9 @@ namespace Riptide
         /// <summary>The local peer this connection is associated with.</summary>
         internal Peer Peer { get; private set; }
         /// <summary>Whether or not the connection has timed out.</summary>
-        internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > TimeoutTime;
+        internal bool HasTimedOut => _canTimeout && Peer.CurrentTime - LastHeartbeat > TimeoutTime;
         /// <summary>Whether or not the connection attempt has timed out.</summary>
-        internal bool HasConnectAttemptTimedOut => _canTimeout && Peer.CurrentTime - lastHeartbeat > Peer.ConnectTimeoutTime;
+        internal bool HasConnectAttemptTimedOut => _canTimeout && Peer.CurrentTime - LastHeartbeat > Peer.ConnectTimeoutTime;
 
         /// <summary>The sequencer for notify messages.</summary>
         private readonly NotifySequencer notify;
@@ -121,7 +121,7 @@ namespace Riptide
         /// <summary>The number of consecutive times that the <see cref="MaxNotifyLoss"/> threshold was exceeded.</summary>
         private int lossRateViolations;
         /// <summary>The time at which the last heartbeat was received from the other end.</summary>
-        public long lastHeartbeat { get; private set; }
+        internal long LastHeartbeat { get; private set; }
         /// <summary>The ID of the last ping that was sent.</summary>
         private byte lastPingId;
         /// <summary>The ID of the currently pending ping.</summary>
@@ -160,7 +160,7 @@ namespace Riptide
         /// <summary>Resets the connection's timeout time.</summary>
         public void ResetTimeout()
         {
-            lastHeartbeat = Peer.CurrentTime;
+            LastHeartbeat = Peer.CurrentTime;
         }
 
         /// <summary>Sends a message.</summary>

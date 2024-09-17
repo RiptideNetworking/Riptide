@@ -40,10 +40,14 @@ namespace Riptide
             set
             {
                 defaultTimeout = value;
-				if(connection != null)
-                	connection.TimeoutTime = defaultTimeout;
+				if(connection is null) return;
+                connection.TimeoutTime = defaultTimeout;
             }
         }
+		/// <summary>The time untill the client disconnects.</summary>
+		public long TimeUntilDisconnect => connection is null
+			? -1
+			: Math.Max(0, connection.LastHeartbeat + connection.TimeoutTime - CurrentTime);
         /// <summary>Whether or not the client is currently <i>not</i> trying to connect, pending, nor actively connected.</summary>
         public bool IsNotConnected => connection is null || connection.IsNotConnected;
         /// <summary>Whether or not the client is currently in the process of connecting.</summary>
