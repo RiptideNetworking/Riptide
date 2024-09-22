@@ -3,15 +3,17 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Riptide.Utils
 {
-    internal class MovingList<T>
+    internal class MovingList<T> : IEnumerable<T>
 	{
-		private readonly List<T> list;
-		private int start;
-        private int end;
+		private readonly List<T> list = new List<T>();
+		private int start = 0;
+        private int end = 0;
 
 		internal void Add(T item) {
 			if(end == list.Count) {
@@ -20,6 +22,12 @@ namespace Riptide.Utils
 				list[end] = item;
 			}
 			end++;
+		}
+
+		internal T RemoveLast() {
+			T item = list[--end];
+			list[end] = default;
+			return item;
 		}
 
 		internal T RemoveFirst() {
@@ -54,5 +62,29 @@ namespace Riptide.Utils
 				list[index] = value;
 			}
 		}
+
+		internal int Count => end - start;
+
+		internal void AddRange(IEnumerable<T> items) {
+			foreach(T item in items) Add(item);
+		}
+
+		internal bool Contains(T item) => this.Any(i => i.Equals(item));
+
+		internal int IndexOf(T item) {
+			int i = -1;
+			if(this.Any(it => ++i >= 0 & it.Equals(item))) return i;
+			return -1;
+		}
+
+		public IEnumerator<T> GetEnumerator() {
+            for(int i = start; i < end; i++) {
+                yield return list[i];
+            }
+        }
+
+		IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
+        }
 	}
 }
