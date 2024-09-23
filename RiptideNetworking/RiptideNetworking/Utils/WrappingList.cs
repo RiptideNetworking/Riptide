@@ -42,7 +42,8 @@ namespace Riptide.Utils
 
 		internal int Count => count;
 		internal int Capacity => capacity;
-		private Func<int, int> IndexConverter => i => (start + i) % capacity;
+		
+		private int IndexConverter(int i) => (start + i) % capacity;
 
 		internal void AddFirst(T item) {
 			if(count == capacity) Resize();
