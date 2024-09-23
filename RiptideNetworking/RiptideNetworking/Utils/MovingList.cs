@@ -19,32 +19,30 @@ namespace Riptide.Utils
         private int end = 0;
 
 		internal void Add(T item) {
-			if(end == list.Count) {
-				list.Add(item);
-			} else {
-				list[end] = item;
-			}
+			if(end == list.Count) list.Add(item);
+			else list[end] = item;
 			end++;
 		}
 
 		internal void RemoveLast() {
-			if(end == start) throw new System.InvalidOperationException("Cannot remove from an empty list");
+			if(Count <= 0) throw new System.InvalidOperationException("Cannot remove from an empty list");
 			list[--end] = default;
 		}
 
 		internal void RemoveFirst() {
-			if(start == end) throw new System.InvalidOperationException("Cannot remove from an empty list");
+			if(Count <= 0) throw new System.InvalidOperationException("Cannot remove from an empty list");
 			list[start++] = default;
 			if(start > list.Count / 2) RearrangeList();
 		}
 
 		private void RearrangeList() {
-			for(int i = start; i < end; i++) {
-				list[i - start] = list[i];
-				list[i] = default;
+			int c = Count;
+			for(int i = 0; i < c; i++) {
+				list[i] = list[i + start];
+				list[i + start] = default;
 			}
-			end -= start;
 			start = 0;
+			end = c;
 		}
 
 		internal void Clear() {
@@ -64,12 +62,14 @@ namespace Riptide.Utils
 
 		internal T this[int index] {
 			get {
-				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
-				return list[start + index];
+				int i = start + index;
+				if(i >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
+				return list[i];
 			}
 			set {
-				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
-				list[index] = value;
+				int i = start + index;
+				if(i >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
+				list[i] = value;
 			}
 		}
 

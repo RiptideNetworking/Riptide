@@ -218,7 +218,6 @@ namespace Riptide
 
 		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
         private void SendQueuedMessages() {
-			RiptideLogger.Log(LogType.Info, $"queueLength: {messageQueue.Count} RecievedLength: {recievedMessageQueue.Count}");
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
 			foreach(Message message in messageQueue.Take(MaxSynchronousQueuedMessages)) {
@@ -260,10 +259,11 @@ namespace Riptide
 			ushort listId = (ushort)(sequenceId - recievedNextQueuedSequenceId);
 			if(listId >= MaxSynchronousQueuedMessages) yield break;
 			recievedMessageQueue.SetUnchecked(listId, message);
-			while(recievedMessageQueue.Count > 0 && recievedMessageQueue[0] != null) {
-				yield return recievedMessageQueue[0];
+			while((recievedMessageQueue.Count > 0) && (recievedMessageQueue[0] != null)) {
+				Message m = recievedMessageQueue[0];
 				recievedMessageQueue.RemoveFirst();
 				recievedNextQueuedSequenceId++;
+				yield return m;
 			}
 		}
 
@@ -383,13 +383,13 @@ namespace Riptide
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
 			ushort listId = (ushort)(ackedSeqId - nextQueuedSequenceId + messageQueue.Count);
-			RiptideLogger.Log(LogType.Info, $"ackedSeqId: {ackedSeqId} listId: {listId}");
 			if(listId >= MaxSynchronousQueuedMessages) return;
-			if(messageQueue.All(qm => qm == null || qm.SequenceId != ackedSeqId)) return;
+			Message qm = messageQueue[listId];
+			if(qm != null && qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}");
 			messageQueue[listId] = null;
-			while(messageQueue.Count > 0 && messageQueue[0] == null)
+			while((messageQueue.Count > 0) && (messageQueue[0] == null))
 				messageQueue.RemoveFirst();
-			SendQueuedMessages();
+			if(listId == 0) SendQueuedMessages();
 		}
 
         /// <summary>Sends a welcome message.</summary>
@@ -425,12 +425,12 @@ namespace Riptide
             if (!IsConnected)
                 return; // A client that is not yet fully connected should not be sending heartbeats
 
-			ResendQueuedMessages();
-			
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();
 
             ResetTimeout();
+
+			ResendQueuedMessages();
         }
 
 		/// <summary>Sends the first MaxSynchronousQueuedMessages queued messages again</summary>
@@ -488,14 +488,14 @@ namespace Riptide
         /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeatResponse(Message message)
         {
-			ResendQueuedMessages();
-
             byte pingId = message.GetByte();
 
             if (pendingPingId == pingId)
                 RTT = (short)Math.Max(1, Peer.CurrentTime - pendingPingSendTime);
 
             ResetTimeout();
+
+			ResendQueuedMessages();
         }
         #endregion
         #endregion
