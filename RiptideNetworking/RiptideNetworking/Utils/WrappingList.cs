@@ -20,7 +20,9 @@ namespace Riptide.Utils
 		private int start;
 		private int count;
 
-		internal WrappingList(int initialCapacity = 16) {
+		internal WrappingList(int initialCapacity = 16) => Initialize(initialCapacity);
+
+		private void Initialize(int initialCapacity) {
 			capacity = initialCapacity;
 			buffer = new T[capacity];
 			start = 0;
@@ -44,7 +46,6 @@ namespace Riptide.Utils
 
 		internal void AddFirst(T item) {
 			if(count == capacity) Resize();
-
 			start = IndexConverter(capacity - 1);
 			buffer[start] = item;
 			count++;
@@ -52,7 +53,6 @@ namespace Riptide.Utils
 
 		internal void RemoveFirst() {
 			if(count == 0) throw new InvalidOperationException("List is empty.");
-
 			buffer[start] = default;
 			start = IndexConverter(1);
 			count--;
@@ -60,31 +60,22 @@ namespace Riptide.Utils
 
 		internal void Add(T item) {
 			if(count == capacity) Resize();
-
-			buffer[IndexConverter(count)] = item;
-			count++;
+			this[count++] = item;
 		}
 
 		internal void Remove() {
 			if(count == 0) throw new InvalidOperationException("List is empty.");
-
-			buffer[IndexConverter(count - 1)] = default;
-			count--;
+			this[--count] = default;
 		}
 
-		internal void Clear() {
-			capacity = 16;
-			buffer = new T[capacity];
-			count = 0;
-			start = 0;
-		}
+		internal void Clear() => Initialize(16);
 
 		private void Resize() {
 			int newCapacity = capacity * 2;
 			T[] newBuffer = new T[newCapacity];
 
 			for(int i = 0; i < count; i++)
-				newBuffer[i] = buffer[IndexConverter(i)];
+				newBuffer[i] = this[i];
 
 			buffer = newBuffer;
 			capacity = newCapacity;
@@ -93,7 +84,7 @@ namespace Riptide.Utils
 
 		public IEnumerator<T> GetEnumerator() {
 			for(int i = 0; i < count; i++)
-				yield return buffer[IndexConverter(i)];
+				yield return this[i];
 		}
 
 		IEnumerator IEnumerable.GetEnumerator() {
