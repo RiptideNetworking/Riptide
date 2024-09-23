@@ -28,7 +28,7 @@ namespace Riptide
     public abstract class Connection
     {
         /// <summary>The Queue storing the messages for the send mode Queued</summary>
-        private readonly MovingList<Message> messageQueue = new MovingList<Message>();
+        private readonly WrappingList<Message> messageQueue = new WrappingList<Message>();
         /// <summary>The next send sequence id for the send mode Queued</summary>
         private ushort nextQueuedSequenceId = 0;
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
@@ -39,7 +39,7 @@ namespace Riptide
 		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b></remarks>
 		public static ushort MaxSynchronousQueuedMessages = 1;
 		/// <summary>The Queue storing the messages for the send mode Queued</summary>
-		private readonly MovingList<Message> recievedMessageQueue = new MovingList<Message>();
+		private readonly WrappingList<Message> recievedMessageQueue = new WrappingList<Message>();
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
