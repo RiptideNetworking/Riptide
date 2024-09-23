@@ -180,12 +180,11 @@ namespace Riptide
 				if (e.Amount < Message.MinReliableBytes)
                     return;
 
-				if (e.FromConnection.ShouldHandleQueuedMessage(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
-				{
-					Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
-					messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
-				}
-				e.FromConnection.Send(Message.QueuedAck(message.SequenceId));
+				ushort sequenceId = Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits);
+				Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
+				foreach(Message m in e.FromConnection.QueuedMessagesToHandle(message.Copy(), sequenceId))
+					messagesToHandle.Enqueue(new MessageToHandle(m, MessageHeader.Queued, e.FromConnection));
+				e.FromConnection.Send(Message.QueuedAck(sequenceId));
 			}
             else
             {

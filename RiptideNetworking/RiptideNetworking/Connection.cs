@@ -28,13 +28,18 @@ namespace Riptide
     public abstract class Connection
     {
         /// <summary>The Queue storing the messages for the send mode Queued</summary>
-        private readonly Queue<Message> messageQueue = new Queue<Message>();
+        private readonly MovingList<Message> messageQueue = new MovingList<Message>();
         /// <summary>The next send sequence id for the send mode Queued</summary>
         private ushort nextQueuedSequenceId = 0;
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
 		private ushort expectedNextQueuedSequenceId = 0;
 		/// <summary>Skips the heartbeat sending if true</summary>
 		private bool skipNextHeartbeatQueuedSend;
+		/// <summary>The maximum number of Queued messages, sent simultaneously.</summary>
+		/// <remarks>This absolutely needs to be equal on all devices</remarks>
+		public static ushort MaxSynchronousQueuedMessages = 1;
+		/// <summary>The Queue storing the messages for the send mode Queued</summary>
+		private readonly MovingList<Message> recievedMessageQueue = new MovingList<Message>();
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> NotifyDelivered;
         /// <summary>Invoked when the notify message with the given sequence ID is lost.</summary>
@@ -193,7 +198,7 @@ namespace Riptide
 				sequenceId = nextQueuedSequenceId++;
 				Message m = message.Copy();
 				m.SequenceId = sequenceId;
-				messageQueue.Enqueue(m);
+				messageQueue.Add(m);
 				if(messageQueue.Count == 1) SendQueuedMessage();
 			}
             else
@@ -215,10 +220,11 @@ namespace Riptide
         private void SendQueuedMessage() {
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
-			Message message = messageQueue.Peek();
-			int byteAmount = message.BytesInUse;
-			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
-			Send(Message.ByteBuffer, byteAmount);
+			foreach(Message message in messageQueue.Take(MaxSynchronousQueuedMessages)) {
+				int byteAmount = message.BytesInUse;
+				Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+				Send(Message.ByteBuffer, byteAmount);
+			}
 		}
 
         /// <summary>Sends data.</summary>
@@ -245,12 +251,20 @@ namespace Riptide
         }
 
 		/// <summary>Determines if the queued message with the given sequence ID should be handled.</summary>
+		/// <param name="message">The message to handle.</param>
 		/// <param name="sequenceId">The message's sequence ID.</param>
         /// <returns>Whether or not the message should be handled.</returns>
-		internal bool ShouldHandleQueuedMessage(ushort sequenceId) {
-			if(sequenceId != expectedNextQueuedSequenceId) return false;
-			expectedNextQueuedSequenceId++;
-			return true;
+		internal IEnumerable<Message> QueuedMessagesToHandle(Message message, ushort sequenceId) {
+			ushort listId = (ushort)(sequenceId - expectedNextQueuedSequenceId);
+			if(listId < MaxSynchronousQueuedMessages) {
+				messageQueue.SetUnchecked(listId, message);
+			}
+			if(sequenceId != expectedNextQueuedSequenceId) yield break;
+			do {
+				yield return messageQueue[0];
+				messageQueue.RemoveFirst();
+				expectedNextQueuedSequenceId++;
+			} while(messageQueue.Count > 0 && messageQueue[0] != null);
 		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
@@ -368,13 +382,12 @@ namespace Riptide
 		/// <param name="message">The ack message to handle.</param>
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
-			if(messageQueue.All(qm => qm.SequenceId != ackedSeqId))
-				return;
-			if(messageQueue.Peek().SequenceId != ackedSeqId) {
-				RiptideLogger.Log(LogType.Error, Peer.LogName, $"Queued message ack is out of order and has assumed ID {ackedSeqId} instead of {messageQueue.Peek().SequenceId}!");
-				return;
-			}
-			messageQueue.Dequeue();
+			ushort listId = (ushort)(ackedSeqId - expectedNextQueuedSequenceId);
+			if(listId >= MaxSynchronousQueuedMessages) return;
+			if(messageQueue.All(qm => qm.SequenceId != ackedSeqId)) return;
+			messageQueue[listId] = null;
+			while(messageQueue.Count > 0 && messageQueue[0] == null)
+				messageQueue.RemoveFirst();
 			SendQueuedMessage();
 		}
 

@@ -24,17 +24,15 @@ namespace Riptide.Utils
 			end++;
 		}
 
-		internal T RemoveLast() {
-			T item = list[--end];
-			list[end] = default;
-			return item;
+		internal void RemoveLast() {
+			if(end == start) throw new System.InvalidOperationException("Cannot remove from an empty list");
+			list[--end] = default;
 		}
 
-		internal T RemoveFirst() {
-			T item = list[start];
+		internal void RemoveFirst() {
+			if(start == end) throw new System.InvalidOperationException("Cannot remove from an empty list");
 			list[start++] = default;
 			if(start > list.Count / 2) RearrangeList();
-			return item;
 		}
 
 		protected void RearrangeList() {
@@ -52,6 +50,15 @@ namespace Riptide.Utils
 			end = 0;
 		}
 
+		internal void SetUnchecked(int index, T item) {
+			if(index >= 0 && index < Count) {
+				this[index] = item;
+				return;
+			}
+			while(Count <= index) Add(default);
+			Add(item);
+		}
+
 		internal T this[int index] {
 			get {
 				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException();
@@ -64,6 +71,7 @@ namespace Riptide.Utils
 		}
 
 		internal int Count => end - start;
+		internal int Capacity => list.Capacity - start;
 
 		internal void AddRange(IEnumerable<T> items) {
 			foreach(T item in items) Add(item);
