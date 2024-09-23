@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace Riptide.Utils
 {
+	/// <summary>A list, that can remove the first element in O(1) time.</summary>
+	/// <remarks>I also added SetUnchecked, since it was useful.</remarks>
+	/// <typeparam name="T"></typeparam>
     internal class MovingList<T> : IEnumerable<T>
 	{
 		private readonly List<T> list = new List<T>();
@@ -35,7 +38,7 @@ namespace Riptide.Utils
 			if(start > list.Count / 2) RearrangeList();
 		}
 
-		protected void RearrangeList() {
+		private void RearrangeList() {
 			for(int i = start; i < end; i++) {
 				list[i - start] = list[i];
 				list[i] = default;
@@ -61,11 +64,11 @@ namespace Riptide.Utils
 
 		internal T this[int index] {
 			get {
-				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException();
+				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
 				return list[start + index];
 			}
 			set {
-				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException();
+				if(start + index >= end || index < 0) throw new System.IndexOutOfRangeException($"index: {index} Count: {Count}");
 				list[index] = value;
 			}
 		}

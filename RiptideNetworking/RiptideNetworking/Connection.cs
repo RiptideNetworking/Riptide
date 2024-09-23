@@ -32,11 +32,11 @@ namespace Riptide
         /// <summary>The next send sequence id for the send mode Queued</summary>
         private ushort nextQueuedSequenceId = 0;
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
-		private ushort expectedNextQueuedSequenceId = 0;
+		private ushort recievedNextQueuedSequenceId = 0;
 		/// <summary>Skips the heartbeat sending if true</summary>
 		private bool skipNextHeartbeatQueuedSend;
 		/// <summary>The maximum number of Queued messages, sent simultaneously.</summary>
-		/// <remarks>This absolutely needs to be equal on all devices</remarks>
+		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b></remarks>
 		public static ushort MaxSynchronousQueuedMessages = 1;
 		/// <summary>The Queue storing the messages for the send mode Queued</summary>
 		private readonly MovingList<Message> recievedMessageQueue = new MovingList<Message>();
@@ -199,7 +199,7 @@ namespace Riptide
 				Message m = message.Copy();
 				m.SequenceId = sequenceId;
 				messageQueue.Add(m);
-				if(messageQueue.Count == 1) SendQueuedMessage();
+				if(messageQueue.Count == 1) SendQueuedMessages();
 			}
             else
             {
@@ -217,10 +217,12 @@ namespace Riptide
         }
 
 		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
-        private void SendQueuedMessage() {
+        private void SendQueuedMessages() {
+			RiptideLogger.Log(LogType.Info, $"queueLength: {messageQueue.Count} RecievedLength: {recievedMessageQueue.Count}");
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
 			foreach(Message message in messageQueue.Take(MaxSynchronousQueuedMessages)) {
+				if(message == null) continue;
 				int byteAmount = message.BytesInUse;
 				Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
 				Send(Message.ByteBuffer, byteAmount);
@@ -250,18 +252,18 @@ namespace Riptide
                 Metrics.NotifyDiscarded++;
         }
 
-		/// <summary>Determines if the queued message with the given sequence ID should be handled.</summary>
+		/// <summary>Determines all the messages that should be handled.</summary>
 		/// <param name="message">The message to handle.</param>
 		/// <param name="sequenceId">The message's sequence ID.</param>
-        /// <returns>Whether or not the message should be handled.</returns>
+        /// <returns>All the messages that should be handled.</returns>
 		internal IEnumerable<Message> QueuedMessagesToHandle(Message message, ushort sequenceId) {
-			ushort listId = (ushort)(sequenceId - expectedNextQueuedSequenceId);
-			if(listId < MaxSynchronousQueuedMessages)
-				recievedMessageQueue.SetUnchecked(listId, message);
+			ushort listId = (ushort)(sequenceId - recievedNextQueuedSequenceId);
+			if(listId >= MaxSynchronousQueuedMessages) yield break;
+			recievedMessageQueue.SetUnchecked(listId, message);
 			while(recievedMessageQueue.Count > 0 && recievedMessageQueue[0] != null) {
 				yield return recievedMessageQueue[0];
 				recievedMessageQueue.RemoveFirst();
-				expectedNextQueuedSequenceId++;
+				recievedNextQueuedSequenceId++;
 			}
 		}
 
@@ -380,13 +382,14 @@ namespace Riptide
 		/// <param name="message">The ack message to handle.</param>
 		internal void HandleQueuedAck(Message message) {
 			ushort ackedSeqId = message.GetUShort();
-			ushort listId = (ushort)(ackedSeqId - expectedNextQueuedSequenceId);
+			ushort listId = (ushort)(ackedSeqId - nextQueuedSequenceId + messageQueue.Count);
+			RiptideLogger.Log(LogType.Info, $"ackedSeqId: {ackedSeqId} listId: {listId}");
 			if(listId >= MaxSynchronousQueuedMessages) return;
-			if(messageQueue.All(qm => qm.SequenceId != ackedSeqId)) return;
+			if(messageQueue.All(qm => qm == null || qm.SequenceId != ackedSeqId)) return;
 			messageQueue[listId] = null;
 			while(messageQueue.Count > 0 && messageQueue[0] == null)
 				messageQueue.RemoveFirst();
-			SendQueuedMessage();
+			SendQueuedMessages();
 		}
 
         /// <summary>Sends a welcome message.</summary>
@@ -422,7 +425,7 @@ namespace Riptide
             if (!IsConnected)
                 return; // A client that is not yet fully connected should not be sending heartbeats
 
-			ResendQueuedMessage();
+			ResendQueuedMessages();
 			
             RespondHeartbeat(message.GetByte());
             RTT = message.GetShort();
@@ -430,10 +433,10 @@ namespace Riptide
             ResetTimeout();
         }
 
-		/// <summary>Sends the first queued message again</summary>
-		private void ResendQueuedMessage() {
+		/// <summary>Sends the first MaxSynchronousQueuedMessages queued messages again</summary>
+		private void ResendQueuedMessages() {
 			if(!skipNextHeartbeatQueuedSend)
-				SendQueuedMessage();
+				SendQueuedMessages();
 			skipNextHeartbeatQueuedSend = false;
 		}
 
@@ -485,7 +488,7 @@ namespace Riptide
         /// <param name="message">The heartbeat message to handle.</param>
         internal void HandleHeartbeatResponse(Message message)
         {
-			ResendQueuedMessage();
+			ResendQueuedMessages();
 
             byte pingId = message.GetByte();
 
