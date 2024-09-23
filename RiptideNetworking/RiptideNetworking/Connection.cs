@@ -216,7 +216,7 @@ namespace Riptide
             return sequenceId;
         }
 
-		/// <summary>Sends the first queued message, if available</summary>
+		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
         private void SendQueuedMessage() {
 			if(messageQueue.Count == 0) return;
 			skipNextHeartbeatQueuedSend = true;
@@ -256,15 +256,13 @@ namespace Riptide
         /// <returns>Whether or not the message should be handled.</returns>
 		internal IEnumerable<Message> QueuedMessagesToHandle(Message message, ushort sequenceId) {
 			ushort listId = (ushort)(sequenceId - expectedNextQueuedSequenceId);
-			if(listId < MaxSynchronousQueuedMessages) {
-				messageQueue.SetUnchecked(listId, message);
-			}
-			if(sequenceId != expectedNextQueuedSequenceId) yield break;
-			do {
-				yield return messageQueue[0];
-				messageQueue.RemoveFirst();
+			if(listId < MaxSynchronousQueuedMessages)
+				recievedMessageQueue.SetUnchecked(listId, message);
+			while(recievedMessageQueue.Count > 0 && recievedMessageQueue[0] != null) {
+				yield return recievedMessageQueue[0];
+				recievedMessageQueue.RemoveFirst();
 				expectedNextQueuedSequenceId++;
-			} while(messageQueue.Count > 0 && messageQueue[0] != null);
+			}
 		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>

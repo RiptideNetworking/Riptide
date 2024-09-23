@@ -55,7 +55,7 @@ namespace Riptide.Utils
 				this[index] = item;
 				return;
 			}
-			while(Count <= index) Add(default);
+			while(Count < index) Add(default);
 			Add(item);
 		}
 
@@ -80,10 +80,10 @@ namespace Riptide.Utils
 		internal bool Contains(T item) => this.Any(i => i.Equals(item));
 
 		internal int IndexOf(T item) {
-			int i = -1;
-			if(this.Any(it => ++i >= 0 & it.Equals(item))) return i;
-			return -1;
-		}
+		for(int i = 0; i < Count; i++) 
+			if(this[i].Equals(item)) return i;
+		return -1;
+	}
 
 		public IEnumerator<T> GetEnumerator() {
             for(int i = start; i < end; i++) {
