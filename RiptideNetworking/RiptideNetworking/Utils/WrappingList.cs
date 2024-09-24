@@ -118,8 +118,8 @@ namespace Riptide.Utils
 
 		private void SetCapacityUnchecked(int capacity) {
 			T[] newBuffer = new T[capacity];
-			for(int i = 0; i < count; i++)
-				newBuffer[i] = this[i];
+			Array.Copy(buffer, start, newBuffer, 0, Capacity - start);
+			Array.Copy(buffer, 0, newBuffer, Capacity - start, start);
 			buffer = newBuffer;
 			start = 0;
 		}
