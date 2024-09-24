@@ -33,12 +33,9 @@ namespace Riptide
         private ushort nextQueuedSequenceId = 0;
 		/// <summary>The next recieve sequence id for the send mode Queued</summary>
 		private ushort recievedNextQueuedSequenceId = 0;
-		/// <summary>Skips the heartbeat sending if true</summary>
-		private bool skipNextHeartbeatQueuedSend;
 		/// <summary>The maximum number of Queued messages, sent simultaneously.</summary>
 		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b>
-		/// <para>it has a minimum of 1 and max of 16383 if you have an especially bad connection
-		/// then 1000 is the recommended max</para></remarks>
+		/// <para>it has a minimum of 1 and max of 16383 but 1024 is the recommended max</para></remarks>
 		public static ushort MaxSynchronousQueuedMessages {
 			private get => maxSynchronousQueuedMessages;
 			set => maxSynchronousQueuedMessages = Helper.Clamp(value, 1, ushort.MaxValue / 4);
@@ -188,16 +185,12 @@ namespace Riptide
             if (message.SendMode == MessageSendMode.Notify)
             {
                 sequenceId = notify.InsertHeader(message);
-                int byteAmount = message.BytesInUse;
-                Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
-                Send(Message.ByteBuffer, byteAmount);
+                int byteAmount = SendData(message);
                 Metrics.SentNotify(byteAmount);
             }
             else if (message.SendMode == MessageSendMode.Unreliable)
             {
-                int byteAmount = message.BytesInUse;
-                Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
-                Send(Message.ByteBuffer, byteAmount);
+                int byteAmount = SendData(message);
                 Metrics.SentUnreliable(byteAmount);
             }
 			else if (message.SendMode == MessageSendMode.Queued) {
@@ -205,7 +198,7 @@ namespace Riptide
 				Message m = message.Copy();
 				m.SequenceId = sequenceId;
 				messageQueue.Add(m);
-				if(messageQueue.Count == 1) SendQueuedMessages();
+				SendData(m);
 			}
             else
             {
@@ -222,15 +215,19 @@ namespace Riptide
             return sequenceId;
         }
 
+		private int SendData(Message message) {
+			int byteAmount = message.BytesInUse;
+			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
+			Send(Message.ByteBuffer, byteAmount);
+			return byteAmount;
+		}
+
 		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
-        private void SendQueuedMessages() {
+        private void ResendQueuedMessages() {
 			if(messageQueue.Count == 0) return;
-			skipNextHeartbeatQueuedSend = true;
 			foreach(Message message in messageQueue.Take(MaxSynchronousQueuedMessages)) {
 				if(message == null) continue;
-				int byteAmount = message.BytesInUse;
-				Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
-				Send(Message.ByteBuffer, byteAmount);
+				SendData(message);
 			}
 		}
 
@@ -397,7 +394,6 @@ namespace Riptide
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
 			}
-			if(listId == 0) SendQueuedMessages();
 		}
 
         /// <summary>Sends a welcome message.</summary>
@@ -440,13 +436,6 @@ namespace Riptide
 
 			ResendQueuedMessages();
         }
-
-		/// <summary>Sends the first MaxSynchronousQueuedMessages queued messages again</summary>
-		private void ResendQueuedMessages() {
-			if(!skipNextHeartbeatQueuedSend)
-				SendQueuedMessages();
-			skipNextHeartbeatQueuedSend = false;
-		}
 
         /// <summary>Sends a heartbeat message.</summary>
         private void RespondHeartbeat(byte pingId)
