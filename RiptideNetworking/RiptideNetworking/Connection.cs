@@ -264,7 +264,7 @@ namespace Riptide
 		internal IEnumerable<Message> QueuedMessagesToHandle(Message message, ushort sequenceId) {
 			ushort listId = (ushort)(sequenceId - recievedNextQueuedSequenceId);
 			if(listId >= MaxSynchronousQueuedMessages) yield break;
-			recievedMessageQueue.SetUnchecked(listId, message);
+			recievedMessageQueue.SetUnchecked(listId, message.Copy());
 			while((recievedMessageQueue.Count > 0) && (recievedMessageQueue[0] != null)) {
 				Message m = recievedMessageQueue[0];
 				recievedMessageQueue.RemoveFirst();
@@ -391,10 +391,12 @@ namespace Riptide
 			ushort listId = (ushort)(ackedSeqId - nextQueuedSequenceId + messageQueue.Count);
 			if(listId >= MaxSynchronousQueuedMessages) return;
 			Message qm = messageQueue[listId];
-			if(qm != null && qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}");
+			if(qm != null && qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}. Count: {messageQueue.Count}. Next: {nextQueuedSequenceId}. ListId: {listId}");
+			messageQueue[listId].Release();
 			messageQueue[listId] = null;
-			while((messageQueue.Count > 0) && (messageQueue[0] == null))
+			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
+			}
 			if(listId == 0) SendQueuedMessages();
 		}
 

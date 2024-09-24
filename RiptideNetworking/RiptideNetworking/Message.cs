@@ -579,11 +579,10 @@ namespace Riptide
 		/// that would otherwhise be returned to the pool.</remarks>
 		/// <returns>The copy of the message.</returns>
 		public Message Copy() {
-            Message message = new Message {
-                SendMode = SendMode,
-				readBit = readBit,
-				writeBit = writeBit,
-            };
+			Message message = RetrieveFromPool();
+            message.SendMode = SendMode;
+			message.readBit = readBit;
+			message.writeBit = writeBit;
 			Array.Copy(data, message.data, data.Length);
 			return message;
         }

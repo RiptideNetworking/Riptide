@@ -18,10 +18,7 @@ namespace Riptide.Utils
 		private int start;
 		private int count;
 
-		internal WrappingList(int initialCapacity = 16)
-			=> Initialize(NextPowerOfTwo(initialCapacity));
-
-		private void Initialize(int initialCapacity) {
+		internal WrappingList(int initialCapacity = 16) {
 			buffer = new T[initialCapacity];
 			start = 0;
 			count = 0;
@@ -46,10 +43,8 @@ namespace Riptide.Utils
 		private int IndexConverter(int i) => (start + i) & (Capacity - 1);
 
 		internal void AddFirst(T item) {
-			if(count == Capacity) Resize();
-			start = IndexConverter(Capacity - 1);
+			MakeSpace(1);
 			buffer[start] = item;
-			count++;
 		}
 
 		internal void RemoveFirst() {
@@ -60,7 +55,7 @@ namespace Riptide.Utils
 		}
 
 		internal void Add(T item) {
-			if(count == Capacity) Resize();
+			if(count == Capacity) DoubleCapacity();
 			this[count++] = item;
 		}
 
@@ -69,7 +64,11 @@ namespace Riptide.Utils
 			this[--count] = default;
 		}
 
-		internal void Clear() => Initialize(16);
+		internal void Clear() {
+			Array.Clear(buffer, 0, count);
+			start = 0;
+			count = 0;
+		}
 
 		public IEnumerator<T> GetEnumerator() {
 			for(int i = 0; i < count; i++)
@@ -79,19 +78,14 @@ namespace Riptide.Utils
 		IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
 		internal void SetUnchecked(int index, T item) {
-			if(index >= count) {
-				if(++index > Capacity) SetCapacity(index);
-				count = --index;
-				Add(item);
+			if(index < 0) {
+				MakeSpace(-index);
+				buffer[start] = item;
 				return;
 			}
-			if(index < 0) {
-				int newSize = count - index;
-				if(newSize > Capacity) SetCapacity(newSize);
-				start = IndexConverter(++index);
-				count -= index;
-				AddFirst(item);
-				return;
+			if(index >= count) {
+				SetCapacity(++index);
+				count = index--;
 			}
 			this[index] = item;
 		}
@@ -101,16 +95,24 @@ namespace Riptide.Utils
 		}
 
 		internal int IndexOf(T item) {
+			EqualityComparer<T> comparer = EqualityComparer<T>.Default;
 			for(int i = 0; i < count; i++) 
-				if(this[i].Equals(item)) return i;
+				if(comparer.Equals(this[i], item)) return i;
 			return -1;
 		}
 
-		private void Resize() => SetCapacityUnchecked(Capacity << 1);
+		private void MakeSpace(int amount) {
+			int newSpace = count + amount;
+			SetCapacity(newSpace);
+			start = IndexConverter(Capacity - amount);
+			count = newSpace;
+		}
+
+		private void DoubleCapacity() => SetCapacityUnchecked(Capacity << 1);
 
 		internal void SetCapacity(int capacity) {
-			capacity = NextPowerOfTwo(capacity);
 			if(capacity <= Capacity) return;
+			capacity = NextPowerOfTwo(capacity);
 			SetCapacityUnchecked(capacity);
 		}
 
@@ -122,7 +124,7 @@ namespace Riptide.Utils
 			start = 0;
 		}
 
-		private int NextPowerOfTwo(int x) {
+		private static int NextPowerOfTwo(int x) {
 			if(x <= 1) return 1;
 			x--;
 			x |= x >> 1;
