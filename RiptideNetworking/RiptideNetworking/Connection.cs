@@ -36,8 +36,14 @@ namespace Riptide
 		/// <summary>Skips the heartbeat sending if true</summary>
 		private bool skipNextHeartbeatQueuedSend;
 		/// <summary>The maximum number of Queued messages, sent simultaneously.</summary>
-		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b></remarks>
-		public static ushort MaxSynchronousQueuedMessages = 1;
+		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b>
+		/// <para>it has a minimum of 1 and max of 16383 if you have an especially bad connection
+		/// then 1000 is the recommended max</para></remarks>
+		public static ushort MaxSynchronousQueuedMessages {
+			private get => maxSynchronousQueuedMessages;
+			set => maxSynchronousQueuedMessages = Helper.Clamp(value, 1, ushort.MaxValue / 4);
+		}
+		private static ushort maxSynchronousQueuedMessages = 1;
 		/// <summary>The Queue storing the messages for the send mode Queued</summary>
 		private readonly WrappingList<Message> recievedMessageQueue = new WrappingList<Message>();
         /// <summary>Invoked when the notify message with the given sequence ID is successfully delivered.</summary>

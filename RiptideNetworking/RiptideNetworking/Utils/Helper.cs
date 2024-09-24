@@ -109,5 +109,9 @@ namespace Riptide.Utils
                     return $"{UnknownReason} '{forReason}'";
             }
         }
+
+		internal static ushort Clamp(ushort value, ushort min, ushort max) {
+			return value < min ? min : value > max ? max : value;
+		}
     }
 }
