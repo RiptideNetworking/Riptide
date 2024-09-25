@@ -101,6 +101,10 @@ namespace Riptide.Utils
 			return -1;
 		}
 
+		internal void RemoveRange(int count) {
+			for(int i = 0; i < count; i++) Remove();
+		}
+
 		internal void SetCapacity(int capacity) {
 			if(capacity <= Count) return;
 			capacity = NextPowerOfTwo(capacity);

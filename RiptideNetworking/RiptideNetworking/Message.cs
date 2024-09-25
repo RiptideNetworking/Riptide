@@ -7,6 +7,7 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -88,7 +89,7 @@ namespace Riptide
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
         public static byte InstancesPerPeer { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
-        private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
+        private static readonly WrappingList<Message> pool = new WrappingList<Message>(InstancesPerPeer * 2);
 
         static Message()
         {
@@ -222,7 +223,7 @@ namespace Riptide
             {
                 // No Servers or Clients are running, empty the list and reset the capacity
                 pool.Clear();
-                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+                pool.SetCapacity(InstancesPerPeer * 2); // x2 so there's some buffer room for extra Message instances in the event that more are needed
             }
             else
             {
@@ -230,8 +231,8 @@ namespace Riptide
                 int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
                 if (pool.Count > idealInstanceAmount)
                 {
-                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
-                    pool.Capacity = idealInstanceAmount * 2;
+                    pool.RemoveRange(pool.Count - idealInstanceAmount);
+                    pool.SetCapacity(idealInstanceAmount * 2);
                 }
             }
         }
@@ -244,7 +245,7 @@ namespace Riptide
             if (pool.Count > 0)
             {
                 message = pool[0];
-                pool.RemoveAt(0);
+                pool.RemoveFirst();
             }
             else
                 message = new Message();
