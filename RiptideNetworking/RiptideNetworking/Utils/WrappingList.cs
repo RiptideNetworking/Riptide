@@ -101,6 +101,12 @@ namespace Riptide.Utils
 			return -1;
 		}
 
+		internal void SetCapacity(int capacity) {
+			if(capacity <= Count) return;
+			capacity = NextPowerOfTwo(capacity);
+			SetCapacityUnchecked(capacity);
+		}
+
 		private void MakeSpace(int amount) {
 			int newSpace = count + amount;
 			SetCapacity(newSpace);
@@ -110,16 +116,11 @@ namespace Riptide.Utils
 
 		private void DoubleCapacity() => SetCapacityUnchecked(Capacity << 1);
 
-		internal void SetCapacity(int capacity) {
-			if(capacity <= Capacity) return;
-			capacity = NextPowerOfTwo(capacity);
-			SetCapacityUnchecked(capacity);
-		}
-
 		private void SetCapacityUnchecked(int capacity) {
 			T[] newBuffer = new T[capacity];
-			Array.Copy(buffer, start, newBuffer, 0, Capacity - start);
-			Array.Copy(buffer, 0, newBuffer, Capacity - start, start);
+			int right = Math.Min(count, Capacity - start);
+			Array.Copy(buffer, start, newBuffer, 0, right);
+			if(right != count) Array.Copy(buffer, 0, newBuffer, right, count - right);
 			buffer = newBuffer;
 			start = 0;
 		}

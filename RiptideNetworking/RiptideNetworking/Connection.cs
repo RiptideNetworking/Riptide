@@ -215,6 +215,9 @@ namespace Riptide
             return sequenceId;
         }
 
+		/// <summary>Sends the message data</summary>
+		/// <param name="message">The message to send</param>
+		/// <returns>The amount of bytes sent</returns>
 		private int SendData(Message message) {
 			int byteAmount = message.BytesInUse;
 			Buffer.BlockCopy(message.Data, 0, Message.ByteBuffer, 0, byteAmount);
