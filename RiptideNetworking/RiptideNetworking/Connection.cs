@@ -198,7 +198,8 @@ namespace Riptide
 				Message m = message.Copy();
 				m.SequenceId = sequenceId;
 				messageQueue.Add(m);
-				SendData(m);
+				if(messageQueue.Count <= MaxSynchronousQueuedMessages)
+					SendData(m);
 			}
             else
             {

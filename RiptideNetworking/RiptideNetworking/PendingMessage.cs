@@ -7,6 +7,7 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Riptide
 {
@@ -20,7 +21,7 @@ namespace Riptide
         private const float RetryTimeMultiplier = 1.2f;
 
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
-        private static readonly List<PendingMessage> pool = new List<PendingMessage>();
+        private static readonly WrappingList<PendingMessage> pool = new WrappingList<PendingMessage>();
 
         /// <summary>The <see cref="Connection"/> to use to send (and resend) the pending message.</summary>
         private Connection connection;
@@ -67,7 +68,7 @@ namespace Riptide
             if (pool.Count > 0)
             {
                 message = pool[0];
-                pool.RemoveAt(0);
+                pool.RemoveFirst();
             }
             else
                 message = new PendingMessage();
