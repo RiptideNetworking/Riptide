@@ -84,7 +84,7 @@ namespace Riptide.Utils
 				return;
 			}
 			if(index >= count) {
-				SetCapacity(++index);
+				IncreaseCapacity(++index);
 				count = index--;
 			}
 			this[index] = item;
@@ -111,9 +111,15 @@ namespace Riptide.Utils
 			SetCapacityUnchecked(capacity);
 		}
 
+		private void IncreaseCapacity(int capacity) {
+			if(capacity <= Capacity) return;
+			capacity = NextPowerOfTwo(capacity);
+			SetCapacityUnchecked(capacity);
+		}
+
 		private void MakeSpace(int amount) {
 			int newSpace = count + amount;
-			SetCapacity(newSpace);
+			IncreaseCapacity(newSpace);
 			start = IndexConverter(Capacity - amount);
 			count = newSpace;
 		}
