@@ -94,15 +94,15 @@ namespace Riptide.Utils
 			foreach(T item in items) Add(item);
 		}
 
+		internal void RemoveRange(int count) {
+			for(int i = 0; i < count; i++) Remove();
+		}
+
 		internal int IndexOf(T item) {
 			EqualityComparer<T> comparer = EqualityComparer<T>.Default;
 			for(int i = 0; i < count; i++) 
 				if(comparer.Equals(this[i], item)) return i;
 			return -1;
-		}
-
-		internal void RemoveRange(int count) {
-			for(int i = 0; i < count; i++) Remove();
 		}
 
 		internal void SetCapacity(int capacity) {
@@ -130,7 +130,7 @@ namespace Riptide.Utils
 			T[] newBuffer = new T[capacity];
 			int right = Math.Min(count, Capacity - start);
 			Array.Copy(buffer, start, newBuffer, 0, right);
-			if(right != count) Array.Copy(buffer, 0, newBuffer, right, count - right);
+			Array.Copy(buffer, 0, newBuffer, right, count - right);
 			buffer = newBuffer;
 			start = 0;
 		}

@@ -392,9 +392,11 @@ namespace Riptide
 			ushort listId = (ushort)(ackedSeqId - nextQueuedSequenceId + messageQueue.Count);
 			if(listId >= MaxSynchronousQueuedMessages) return;
 			Message qm = messageQueue[listId];
-			if(qm != null && qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}. Count: {messageQueue.Count}. Next: {nextQueuedSequenceId}. ListId: {listId}");
-			messageQueue[listId].Release();
 			messageQueue[listId] = null;
+			if(qm != null) {
+				qm.Release();
+				if(qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}. Count: {messageQueue.Count}. Next: {nextQueuedSequenceId}. ListId: {listId}");
+			}
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
 			}
