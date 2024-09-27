@@ -2,9 +2,5 @@
 cd RiptideNetworking/RiptideNetworking
 # run
 dotnet build --configuration Release
-# take the files
-copy /Y "bin\Release\netstandard2.0\RiptideNetworking.dll" "..\..\..\Programs\programfiles\unity Projects\Party Game Collection\Assets\RiptideNetworking\"
-copy /Y "bin\Release\netstandard2.0\RiptideNetworking.xml" "..\..\..\Programs\programfiles\unity Projects\Party Game Collection\Assets\RiptideNetworking\"
-
-copy /Y "bin\Release\netstandard2.0\RiptideNetworking.dll" "..\..\..\Programs\programfiles\unity Projects\DeltaruneVersus\Assets\Scripts\RiptideNetworking\"
-copy /Y "bin\Release\netstandard2.0\RiptideNetworking.xml" "..\..\..\Programs\programfiles\unity Projects\DeltaruneVersus\Assets\Scripts\RiptideNetworking\"
+# take the files from bin/release/netstandard2.0
+# RiptideNetworking.dll and RiptideNetworking.xml
