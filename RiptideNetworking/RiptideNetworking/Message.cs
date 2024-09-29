@@ -6,7 +6,6 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -583,8 +582,9 @@ namespace Riptide
 			Message message = RetrieveFromPool();
             message.SendMode = SendMode;
 			message.readBit = readBit;
+			int byteCount = (writeBit + 7) / 8;
 			message.writeBit = writeBit;
-			Array.Copy(data, message.data, data.Length);
+			Buffer.BlockCopy(data, 0, message.data, 0, byteCount);
 			return message;
         }
 
