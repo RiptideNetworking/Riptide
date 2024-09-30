@@ -156,6 +156,23 @@ namespace Riptide
         /// <summary>The next bit to be written.</summary>
         private int writeBit;
 
+		/// <summary>The next state to be read.</summary>
+		private int overallReadState = 1;
+		/// <summary>The next state to be written.</summary>
+		private int overallWriteState = 1;
+
+		private byte ReadState {
+			get => (byte)overallReadState;
+			set => overallReadState = (overallReadState & ~byte.MaxValue) + value;
+		}
+		private byte WriteState {
+			get => (byte)overallWriteState;
+			set => overallWriteState = (overallWriteState & ~byte.MaxValue) + value;
+		}
+		private byte ReadByte => (byte)(overallReadState >> 8);
+		private byte WriteByte => (byte)(overallWriteState >> 8);
+		
+
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         private Message() => data = new ulong[maxArraySize];
 
@@ -606,7 +623,7 @@ namespace Riptide
         /// <returns>The message that the value was added to.</returns>
         /// <remarks>The value is added in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
         /// added to the message using fewer bits, while large values will require a few more bits than they would if they were added via <see cref="AddByte(byte)"/>,
-        /// <see cref="AddUShort(ushort)"/>, <see cref="AddUInt"/>, or <see cref="AddULong(ulong)"/> (or their signed counterparts).</remarks>
+        /// <see cref="AddUShort(ushort)"/>, <see cref="AddUInt(uint)"/>, or <see cref="AddULong(ulong)"/> (or their signed counterparts).</remarks>
         public Message AddVarULong(ulong value)
         {
             do
@@ -630,8 +647,8 @@ namespace Riptide
         /// <summary>Retrieves a positive number from the message, using fewer bits for smaller values.</summary>
         /// <returns>The value that was retrieved.</returns>
         /// <remarks>The value is retrieved in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
-        /// retrieved from the message using fewer bits, while large values will require a few more bits than they would if they were retrieved via <see cref="GetByte"/>,
-        /// <see cref="GetUShort"/>, <see cref="GetUInt"/>, or <see cref="GetULong"/> (or their signed counterparts).</remarks>
+        /// retrieved from the message using fewer bits, while large values will require a few more bits than they would if they were retrieved via <see cref="GetByte()"/>,
+        /// <see cref="GetUShort()"/>, <see cref="GetUInt()"/>, or <see cref="GetULong()"/> (or their signed counterparts).</remarks>
         public ulong GetVarULong()
         {
             ulong byteValue;
@@ -650,62 +667,84 @@ namespace Riptide
         }
         #endregion
 
+        #region overall states
+		private uint AddWriteStates(uint states)
+			=> WriteState = AddStates(states, ref overallWriteState, WriteState);
+		
+		private uint AddReadStates(uint states)
+			=> ReadState = AddStates(states, ref overallReadState, ReadState);
+
+		private byte AddStates(uint states, ref int overallState, byte currentState) {
+			long next = currentState * states;
+			// not the best handling of the rest, it wastes less than a bit of space
+			// but the accurate way is O(n²) for GetByte instead of O(n)
+			int overflowBytes = Helper.Log256((ulong)next);
+			int shiftAmount = 8 * overflowBytes;
+			long prev = next;
+			next >>= shiftAmount;
+			if(next << shiftAmount < prev) next++;
+			overallState += 1 << shiftAmount;
+			return (byte)next;
+		}
+		#endregion
+
         #region Byte & SByte
-        /// <summary>Adds a <see cref="byte"/> to the message.</summary>
+		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
-        public Message AddByte(byte value)
-        {
-            if (UnwrittenBits < BitsPerByte)
-                throw new InsufficientCapacityException(this, ByteName, BitsPerByte);
+		public Message AddByte(byte value) {
+			Converter.AddNextUInt(value, data, WriteByte, WriteState);
+			overallWriteState += 1 << 8;
+			return this;
+		}
 
-            Converter.ByteToBits(value, data, writeBit);
-            writeBit += BitsPerByte;
-            return this;
-        }
+		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
+        /// <param name="value">The <see cref="byte"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="byte"/> was added to.</returns>
+		public Message AddByte(byte value, byte minValue, byte maxValue) {
+			AddUInt(value, minValue, maxValue);
+			return this;
+		}
 
-        /// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
+		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
+        /// <returns>The <see cref="byte"/> that was retrieved.</returns>
+		public Byte GetByte() {
+			Byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, ReadByte, ReadState);
+			overallReadState += 1 << 8;
+			return value;
+		}
+
+		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="byte"/> that was retrieved.</returns>
+		public byte GetByte(byte minValue, byte maxValue)
+			=> (byte)GetUInt(minValue, maxValue);
+
+		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
         /// <param name="value">The <see cref="sbyte"/> to add.</param>
         /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
-        public Message AddSByte(sbyte value)
-        {
-            if (UnwrittenBits < BitsPerByte)
-                throw new InsufficientCapacityException(this, SByteName, BitsPerByte);
+		public Message AddSByte(sbyte value) => AddByte((byte)value);
 
-            Converter.SByteToBits(value, data, writeBit);
-            writeBit += BitsPerByte;
-            return this;
-        }
-
-        /// <summary>Retrieves a <see cref="byte"/> from the message.</summary>
-        /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-        public byte GetByte()
-        {
-            if (UnreadBits < BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
-                return default;
-            }
-
-            byte value = Converter.ByteFromBits(data, readBit);
-            readBit += BitsPerByte;
-            return value;
-        }
-
-        /// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
+		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
+        /// <param name="value">The <see cref="sbyte"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
+		public Message AddSByte(sbyte value, sbyte minValue, sbyte maxValue)
+			=> AddByte((byte)value, (byte)minValue, (byte)maxValue);
+		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
-        public sbyte GetSByte()
-        {
-            if (UnreadBits < BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName, $"{default(sbyte)}"));
-                return default;
-            }
+		public sbyte GetSByte() => (sbyte)GetByte();
 
-            sbyte value = Converter.SByteFromBits(data, readBit);
-            readBit += BitsPerByte;
-            return value;
-        }
+		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
+		public sbyte GetSByte(sbyte minValue, sbyte maxValue)
+			=> (sbyte)GetUInt((uint)minValue, (uint)maxValue);
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
@@ -912,30 +951,13 @@ namespace Riptide
         #endregion
 
         #region Bool
-        /// <summary>Adds a <see cref="bool"/> to the message.</summary>
+		/// <summary>Adds a <see cref="bool"/> to the message.</summary>
         /// <param name="value">The <see cref="bool"/> to add.</param>
         /// <returns>The message that the <see cref="bool"/> was added to.</returns>
-        public Message AddBool(bool value)
-        {
-            if (UnwrittenBits < 1)
-                throw new InsufficientCapacityException(this, BoolName, 1);
-
-            Converter.BoolToBit(value, data, writeBit++);
-            return this;
-        }
-
-        /// <summary>Retrieves a <see cref="bool"/> from the message.</summary>
+		public Message AddBool(bool value) => AddByte((byte)(value ? 1 : 0), 0, 1);
+		/// <summary>Retrieves a <see cref="bool"/> from the message.</summary>
         /// <returns>The <see cref="bool"/> that was retrieved.</returns>
-        public bool GetBool()
-        {
-            if (UnreadBits < 1)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, $"{default(bool)}"));
-                return default;
-            }
-
-            return Converter.BoolFromBit(data, readBit++);
-        }
+		public bool GetBool() => GetByte(0, 1) == 1;
 
         /// <summary>Adds a <see cref="bool"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
@@ -1001,61 +1023,62 @@ namespace Riptide
         #endregion
 
         #region Short & UShort
-        /// <summary>Adds a <see cref="short"/> to the message.</summary>
-        /// <param name="value">The <see cref="short"/> to add.</param>
-        /// <returns>The message that the <see cref="short"/> was added to.</returns>
-        public Message AddShort(short value)
-        {
-            if (UnwrittenBits < sizeof(short) * BitsPerByte)
-                throw new InsufficientCapacityException(this, ShortName, sizeof(short) * BitsPerByte);
-
-            Converter.ShortToBits(value, data, writeBit);
-            writeBit += sizeof(short) * BitsPerByte;
-            return this;
-        }
-
-        /// <summary>Adds a <see cref="ushort"/> to the message.</summary>
+		/// <summary>Adds a <see cref="ushort"/> to the message.</summary>
         /// <param name="value">The <see cref="ushort"/> to add.</param>
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
-        public Message AddUShort(ushort value)
-        {
-            if (UnwrittenBits < sizeof(ushort) * BitsPerByte)
-                throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
+		public Message AddUShort(ushort value) {
+			Converter.AddNextUInt(value, data, WriteByte, WriteState);
+			overallWriteState += 1 << 16;
+			return this;
+		}
 
-            Converter.UShortToBits(value, data, writeBit);
-            writeBit += sizeof(ushort) * BitsPerByte;
-            return this;
-        }
+		/// <summary>Adds a <see cref="short"/> to the message.</summary>
+        /// <param name="value">The <see cref="short"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="short"/> was added to.</returns>
+		public Message AddUShort(ushort value, ushort minValue, ushort maxValue) {
+			AddUInt(value, minValue, maxValue);
+			return this;
+		}
 
-        /// <summary>Retrieves a <see cref="short"/> from the message.</summary>
-        /// <returns>The <see cref="short"/> that was retrieved.</returns>
-        public short GetShort()
-        {
-            if (UnreadBits < sizeof(short) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName, $"{default(short)}"));
-                return default;
-            }
-
-            short value = Converter.ShortFromBits(data, readBit);
-            readBit += sizeof(short) * BitsPerByte;
-            return value;
-        }
-
-        /// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
+		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
-        public ushort GetUShort()
-        {
-            if (UnreadBits < sizeof(ushort) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
-                return default;
-            }
+		public ushort GetUShort() {
+			ushort value = (ushort)Converter.GetNextUInt(data, ushort.MaxValue, ReadByte, ReadState);
+			overallReadState += 1 << 16;
+			return value;
+		}
 
-            ushort value = Converter.UShortFromBits(data, readBit);
-            readBit += sizeof(ushort) * BitsPerByte;
-            return value;
-        }
+		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
+		public ushort GetUShort(ushort minValue, ushort maxValue)
+			=> (ushort)GetUInt(minValue, maxValue);
+
+		/// <summary>Adds a <see cref="short"/> to the message.</summary>
+        /// <param name="value">The <see cref="short"/> to add.</param>
+        /// <returns>The message that the <see cref="short"/> was added to.</returns>
+		public Message AddShort(short value) => AddUShort((ushort)value);
+
+		/// <summary>Adds a <see cref="short"/> to the message.</summary>
+        /// <param name="value">The <see cref="short"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="short"/> was added to.</returns>
+		public Message AddShort(short value, short minValue, short maxValue)
+			=> AddUShort((ushort)value, (ushort)minValue, (ushort)maxValue);
+		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
+        /// <returns>The <see cref="short"/> that was retrieved.</returns>
+		public short GetShort() => (short)GetUShort();
+
+		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="short"/> that was retrieved.</returns>
+		public short GetShort(short minValue, short maxValue)
+			=> (short)GetUInt((uint)minValue, (uint)maxValue);
 
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
@@ -1195,61 +1218,72 @@ namespace Riptide
         #endregion
 
         #region Int & UInt
-        /// <summary>Adds an <see cref="int"/> to the message.</summary>
-        /// <param name="value">The <see cref="int"/> to add.</param>
-        /// <returns>The message that the <see cref="int"/> was added to.</returns>
-        public Message AddInt(int value)
-        {
-            if (UnwrittenBits < sizeof(int) * BitsPerByte)
-                throw new InsufficientCapacityException(this, IntName, sizeof(int) * BitsPerByte);
-
-            Converter.IntToBits(value, data, writeBit);
-            writeBit += sizeof(int) * BitsPerByte;
-            return this;
-        }
-
-        /// <summary>Adds a <see cref="uint"/> to the message.</summary>
+		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
-        public Message AddUInt(uint value)
-        {
-            if (UnwrittenBits < sizeof(uint) * BitsPerByte)
-                throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
+		public Message AddUInt(uint value) {
+			Converter.AddNextUInt(value, data, WriteByte, WriteState);
+			overallWriteState += 1 << 32;
+			return this;
+		}
 
-            Converter.UIntToBits(value, data, writeBit);
-            writeBit += sizeof(uint) * BitsPerByte;
-            return this;
-        }
+		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
+        /// <param name="value">The <see cref="uint"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="uint"/> was added to.</returns>
+		public Message AddUInt(uint value, uint minValue, uint maxValue) {
+			if(minValue == 0 && maxValue == uint.MaxValue) return AddUInt(value);
+			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
+			Converter.AddNextUInt(value - minValue, data, WriteByte, WriteState);
+			AddWriteStates(maxValue - minValue + 1);
+			return this;
+		}
 
-        /// <summary>Retrieves an <see cref="int"/> from the message.</summary>
-        /// <returns>The <see cref="int"/> that was retrieved.</returns>
-        public int GetInt()
-        {
-            if (UnreadBits < sizeof(int) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName, $"{default(int)}"));
-                return default;
-            }
-
-            int value = Converter.IntFromBits(data, readBit);
-            readBit += sizeof(int) * BitsPerByte;
-            return value;
-        }
-
-        /// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
+		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
-        public uint GetUInt()
-        {
-            if (UnreadBits < sizeof(uint) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
-                return default;
-            }
+		public uint GetUInt() {
+			uint value = Converter.GetNextUInt(data, uint.MaxValue, ReadByte, ReadState);
+			overallReadState += 1 << 32;
+			return value;
+		}
 
-            uint value = Converter.UIntFromBits(data, readBit);
-            readBit += sizeof(uint) * BitsPerByte;
-            return value;
-        }
+		/// <summary>Retrieves an <see cref="uint"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
+		public uint GetUInt(uint minValue, uint maxValue) {
+			if(minValue == 0 && maxValue == uint.MaxValue) return GetUInt();
+			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
+			uint states = maxValue - minValue + 1;
+			uint value = Converter.GetNextUInt(data, states, ReadByte, ReadState);
+			AddReadStates(states);
+			return value + minValue;
+		}
+
+		/// <summary>Adds an <see cref="int"/> to the message.</summary>
+        /// <param name="value">The <see cref="int"/> to add.</param>
+        /// <returns>The message that the <see cref="int"/> was added to.</returns>
+		public Message AddInt(int value) => AddUInt((uint)value);
+		
+		/// <summary>Adds an <see cref="int"/> to the message.</summary>
+		/// <param name="value">The <see cref="int"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="int"/> was added to.</returns>
+		public Message AddInt(int value, int minValue, int maxValue)
+			=> AddUInt((uint)value, (uint)minValue, (uint)maxValue);
+		
+		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
+        /// <returns>The <see cref="int"/> that was retrieved.</returns>
+		public int GetInt() => (int)GetUInt();
+
+		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+		/// <returns>The <see cref="int"/> that was retrieved.</returns>
+		public int GetInt(int minValue, int maxValue)
+			=> (int)GetUInt((uint)minValue, (uint)maxValue);
 
         /// <summary>Adds an <see cref="int"/> array message.</summary>
         /// <param name="array">The array to add.</param>
@@ -1389,61 +1423,65 @@ namespace Riptide
         #endregion
 
         #region Long & ULong
-        /// <summary>Adds a <see cref="long"/> to the message.</summary>
-        /// <param name="value">The <see cref="long"/> to add.</param>
-        /// <returns>The message that the <see cref="long"/> was added to.</returns>
-        public Message AddLong(long value)
-        {
-            if (UnwrittenBits < sizeof(long) * BitsPerByte)
-                throw new InsufficientCapacityException(this, LongName, sizeof(long) * BitsPerByte);
-
-            Converter.LongToBits(value, data, writeBit);
-            writeBit += sizeof(long) * BitsPerByte;
-            return this;
-        }
-
-        /// <summary>Adds a <see cref="ulong"/> to the message.</summary>
+		/// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
-        public Message AddULong(ulong value)
-        {
-            if (UnwrittenBits < sizeof(ulong) * BitsPerByte)
-                throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
+		public Message AddULong(ulong value) {
+			AddUInt((uint)(value >> 32));
+			return AddUInt((uint)value);
+		}
 
-            Converter.ULongToBits(value, data, writeBit);
-            writeBit += sizeof(ulong) * BitsPerByte;
-            return this;
-        }
+		/// <summary>Adds a <see cref="ulong"/> to the message.</summary>
+        /// <param name="value">The <see cref="ulong"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
+		public Message AddULong(ulong value, ulong minValue, ulong maxValue) {
+			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
+			AddUInt((uint)(value >> 32), (uint)(minValue >> 32), (uint)(maxValue >> 32));
+			AddUInt((uint)value, (uint)minValue, (uint)maxValue);
+			return this;
+		}
 
-        /// <summary>Retrieves a <see cref="long"/> from the message.</summary>
-        /// <returns>The <see cref="long"/> that was retrieved.</returns>
-        public long GetLong()
-        {
-            if (UnreadBits < sizeof(long) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName, $"{default(long)}"));
-                return default;
-            }
-
-            long value = Converter.LongFromBits(data, readBit);
-            readBit += sizeof(long) * BitsPerByte;
-            return value;
-        }
-
-        /// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
+		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
-        public ulong GetULong()
-        {
-            if (UnreadBits < sizeof(ulong) * BitsPerByte)
-            {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
-                return default;
-            }
+		public ulong GetULong() {
+			ulong high = (ulong)GetUInt() << 32;
+			return high | GetUInt();
+		}
 
-            ulong value = Converter.ULongFromBits(data, readBit);
-            readBit += sizeof(ulong) * BitsPerByte;
-            return value;
-        }
+		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
+		public ulong GetULong(ulong minValue, ulong maxValue) {
+			// TODO check if this is correct
+			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
+			ulong dif = maxValue - minValue;
+			ulong high = (ulong)GetUInt(0, (uint)(dif >> 32)) << 32;
+			return high | GetUInt(0, (uint)dif);
+		}
+
+		/// <summary>Adds a <see cref="long"/> to the message.</summary>
+        /// <param name="value">The <see cref="long"/> to add.</param>
+        /// <returns>The message that the <see cref="long"/> was added to.</returns>
+		public Message AddLong(long value) => AddULong((ulong)value);
+		/// <summary>Adds a <see cref="long"/> to the message.</summary>
+        /// <param name="value">The <see cref="long"/> to add.</param>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The message that the <see cref="long"/> was added to.</returns>
+		public Message AddLong(long value, long minValue, long maxValue)
+			=> AddULong((ulong)value, (ulong)minValue, (ulong)maxValue);
+		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
+        /// <returns>The <see cref="long"/> that was retrieved.</returns>
+		public long GetLong() => (long)GetULong();
+		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
+		/// <param name="minValue">The minimum value.</param>
+		/// <param name="maxValue">The maximum value.</param>
+        /// <returns>The <see cref="long"/> that was retrieved.</returns>
+		public long GetLong(long minValue, long maxValue)
+			=> (long)GetULong((ulong)minValue, (ulong)maxValue);
 
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>

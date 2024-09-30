@@ -271,6 +271,51 @@ namespace Riptide.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ByteToBits(byte value, ulong[] array, int startBit) => ToBits(value, BitsPerByte, array, startBit);
 
+		/// <summary>Gets the next byte.</summary>
+		/// <param name="array"></param>
+		/// <param name="maxValue"></param>
+		/// <param name="startByte"></param>
+		/// <param name="startState"></param>
+		/// <returns></returns>
+		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState) {
+			return Mod(array, maxValue, startByte, startState);
+		}
+
+		/// <summary>Adds a Byte.</summary>
+		/// <param name="value"></param>
+		/// <param name="array"></param>
+		/// <param name="startByte"></param>
+		/// <param name="startState"></param>
+		public static void AddNextUInt(uint value, ulong[] array, byte startByte, byte startState) {
+			ulong[] bytes = new ulong[1];
+			Buffer.BlockCopy(array, startByte, bytes, 0, 5);
+			bytes[0] += value * startState;
+			Buffer.BlockCopy(bytes, 0, array, startByte, 5);
+		}
+
+		/// <summary>Takes the mod of <paramref name="value"/> shifted by 
+		/// <paramref name="startByte"/> bytes and <paramref name="startState"/> states.</summary>
+		/// <param name="value"></param>
+		/// <param name="mod"></param>
+		/// <param name="startByte"></param>
+		/// <param name="startState"></param>
+		/// <returns>The result.</returns>
+		public static uint Mod(ulong[] value, uint mod, byte startByte, byte startState) {
+			uint result = 0;
+			uint carryOver = 0;
+			int totalBytes = value.Length * 8;
+			for(int i = totalBytes - 1; i >= startByte; i--) {
+				int ulongIndex = i / 8;
+				int byteOffset = i % 8;
+				byte currentByte = (byte)((value[ulongIndex] >> (byteOffset * 8)) & 0xFF);
+				uint currentValue = (carryOver << 8) + currentByte;
+				uint dividedValue = currentValue / startState;
+				carryOver = currentValue % startState;
+				result = (result * 256 + dividedValue) % mod;
+			}
+			return result;
+		}
+
         /// <summary>Converts the 8 bits at <paramref name="startBit"/> in <paramref name="array"/> to an <see cref="sbyte"/>.</summary>
         /// <param name="array">The array to convert the bits from.</param>
         /// <param name="startBit">The position in the array from which to read the bits.</param>
