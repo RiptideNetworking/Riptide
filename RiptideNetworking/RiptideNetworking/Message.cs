@@ -169,8 +169,17 @@ namespace Riptide
 			get => (byte)overallWriteState;
 			set => overallWriteState = (overallWriteState & ~byte.MaxValue) + value;
 		}
-		private byte ReadByte => (byte)(overallReadState >> 8);
-		private byte WriteByte => (byte)(overallWriteState >> 8);
+		private byte ReadByte {
+			get => (byte)(overallReadState >> 8);
+			set => overallReadState = (overallReadState & byte.MaxValue) + (value << 8);
+		}
+		private byte WriteByte {
+			get => (byte)(overallWriteState >> 8);
+			set => overallWriteState = (overallWriteState & byte.MaxValue) + (value << 8);
+		}
+
+		private int UnreadBytes => WriteByte - ReadByte;
+		private int UnwrittenBytes => maxBitCount / 8 - WriteByte;
 		
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
@@ -694,7 +703,7 @@ namespace Riptide
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
 		public Message AddByte(byte value) {
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			overallWriteState += 1 << 8;
+			WriteByte += 1;
 			return this;
 		}
 
@@ -711,8 +720,10 @@ namespace Riptide
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
 		public Byte GetByte() {
+			if(UnwrittenBytes < sizeof(byte) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(byte) * BitsPerByte);
 			Byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, ReadByte, ReadState);
-			overallReadState += 1 << 8;
+			ReadByte += 1;
 			return value;
 		}
 
@@ -720,8 +731,11 @@ namespace Riptide
 		/// <param name="minValue">The minimum value.</param>
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-		public byte GetByte(byte minValue, byte maxValue)
-			=> (byte)GetUInt(minValue, maxValue);
+		public byte GetByte(byte minValue, byte maxValue) {
+			if(UnwrittenBytes < sizeof(byte) * BitsPerByte)
+				throw new InsufficientCapacityException(this, ByteName, sizeof(byte) * BitsPerByte);
+			return (byte)GetUInt(minValue, maxValue);
+		}
 
 		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
         /// <param name="value">The <see cref="sbyte"/> to add.</param>
@@ -1028,7 +1042,7 @@ namespace Riptide
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
 		public Message AddUShort(ushort value) {
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			overallWriteState += 1 << 16;
+			WriteByte += 2;
 			return this;
 		}
 
@@ -1045,8 +1059,10 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
 		public ushort GetUShort() {
+			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(ushort) * BitsPerByte);
 			ushort value = (ushort)Converter.GetNextUInt(data, ushort.MaxValue, ReadByte, ReadState);
-			overallReadState += 1 << 16;
+			ReadByte += 2;
 			return value;
 		}
 
@@ -1054,8 +1070,11 @@ namespace Riptide
 		/// <param name="minValue">The minimum value.</param>
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
-		public ushort GetUShort(ushort minValue, ushort maxValue)
-			=> (ushort)GetUInt(minValue, maxValue);
+		public ushort GetUShort(ushort minValue, ushort maxValue) {
+			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
+			return (ushort)GetUInt(minValue, maxValue);
+		}
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
@@ -1223,7 +1242,7 @@ namespace Riptide
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
 		public Message AddUInt(uint value) {
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			overallWriteState += 1 << 32;
+			WriteByte += 4;
 			return this;
 		}
 
@@ -1243,8 +1262,10 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt() {
+			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 			uint value = Converter.GetNextUInt(data, uint.MaxValue, ReadByte, ReadState);
-			overallReadState += 1 << 32;
+			ReadByte += 4;
 			return value;
 		}
 
@@ -1253,6 +1274,8 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
 		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt(uint minValue, uint maxValue) {
+			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 			if(minValue == 0 && maxValue == uint.MaxValue) return GetUInt();
 			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
 			uint states = maxValue - minValue + 1;
@@ -1446,6 +1469,8 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong() {
+			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
+				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
 			ulong high = (ulong)GetUInt() << 32;
 			return high | GetUInt();
 		}
@@ -1455,6 +1480,8 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong minValue, ulong maxValue) {
+			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
+				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
 			// TODO check if this is correct
 			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
 			ulong dif = maxValue - minValue;
@@ -1466,6 +1493,7 @@ namespace Riptide
         /// <param name="value">The <see cref="long"/> to add.</param>
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
 		public Message AddLong(long value) => AddULong((ulong)value);
+
 		/// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
 		/// <param name="minValue">The minimum value.</param>
@@ -1473,9 +1501,11 @@ namespace Riptide
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
 		public Message AddLong(long value, long minValue, long maxValue)
 			=> AddULong((ulong)value, (ulong)minValue, (ulong)maxValue);
+
 		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
 		public long GetLong() => (long)GetULong();
+
 		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
 		/// <param name="minValue">The minimum value.</param>
 		/// <param name="maxValue">The maximum value.</param>
