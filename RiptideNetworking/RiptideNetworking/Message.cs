@@ -421,36 +421,6 @@ namespace Riptide
         #endregion
 
         #region Bits
-        /// <summary>Moves the message's internal write position by the given <paramref name="amount"/> of bits, reserving them so they can be set at a later time.</summary>
-        /// <param name="amount">The number of bits to reserve.</param>
-        /// <returns>The message instance.</returns>
-        public Message ReserveBits(int amount)
-        {
-            if (UnwrittenBits < amount)
-                throw new InsufficientCapacityException(this, amount);
-
-            int bit = writeBit % BitsPerSegment;
-            writeBit += amount;
-
-            // Reset the last segment that the reserved range touches, unless it's also the first one, in which case it may already contain data which we don't want to overwrite
-            if (bit + amount >= BitsPerSegment)
-                data[writeBit / BitsPerSegment] = 0;
-
-            return this;
-        }
-
-        /// <summary>Moves the message's internal read position by the given <paramref name="amount"/> of bits, skipping over them.</summary>
-        /// <param name="amount">The number of bits to skip.</param>
-        /// <returns>The message instance.</returns>
-        public Message SkipBits(int amount)
-        {
-            if (UnreadBits < amount)
-                RiptideLogger.Log(LogType.Error, $"Message only contains {UnreadBits} unread {Helper.CorrectForm(UnreadBits, "bit")}, which is not enough to skip {amount}!");
-
-            readBit += amount;
-            return this;
-        }
-
         /// <summary>Sets up to 64 bits at the specified position in the message.</summary>
         /// <param name="bitfield">The bits to write into the message.</param>
         /// <param name="amount">The number of bits to set.</param>
@@ -511,92 +481,6 @@ namespace Riptide
             Converter.GetBits(amount, data, startBit, out bitfield);
             return this;
         }
-
-        /// <summary>Adds up to 8 of the given bits to the message.</summary>
-        /// <param name="bitfield">The bits to add.</param>
-        /// <param name="amount">The number of bits to add.</param>
-        /// <returns>The message that the bits were added to.</returns>
-        public Message AddBits(byte bitfield, int amount)
-        {
-            if (amount > BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {BitsPerByte} bits at a time!");
-
-            bitfield &= (byte)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're setting
-            Converter.ByteToBits(bitfield, data, writeBit);
-            writeBit += amount;
-            return this;
-        }
-        /// <summary>Adds up to 16 of the given bits to the message.</summary>
-        /// <inheritdoc cref="AddBits(byte, int)"/>
-        public Message AddBits(ushort bitfield, int amount)
-        {
-            if (amount > sizeof(ushort) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ushort) * BitsPerByte} bits at a time!");
-
-            bitfield &= (ushort)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're adding
-            Converter.UShortToBits(bitfield, data, writeBit);
-            writeBit += amount;
-            return this;
-        }
-        /// <summary>Adds up to 32 of the given bits to the message.</summary>
-        /// <inheritdoc cref="AddBits(byte, int)"/>
-        public Message AddBits(uint bitfield, int amount)
-        {
-            if (amount > sizeof(uint) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(uint) * BitsPerByte} bits at a time!");
-
-            bitfield &= (1u << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
-            Converter.UIntToBits(bitfield, data, writeBit);
-            writeBit += amount;
-            return this;
-        }
-        /// <summary>Adds up to 64 of the given bits to the message.</summary>
-        /// <inheritdoc cref="AddBits(byte, int)"/>
-        public Message AddBits(ulong bitfield, int amount)
-        {
-            if (amount > sizeof(ulong) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
-
-            bitfield &= (1ul << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
-            Converter.ULongToBits(bitfield, data, writeBit);
-            writeBit += amount;
-            return this;
-        }
-
-        /// <summary>Retrieves the next <paramref name="amount"/> bits (up to 8) from the message.</summary>
-        /// <param name="amount">The number of bits to retrieve.</param>
-        /// <param name="bitfield">The bits that were retrieved.</param>
-        /// <returns>The messages that the bits were retrieved from.</returns>
-        public Message GetBits(int amount, out byte bitfield)
-        {
-            PeekBits(amount, readBit, out bitfield);
-            readBit += amount;
-            return this;
-        }
-        /// <summary>Retrieves the next <paramref name="amount"/> bits (up to 16) from the message.</summary>
-        /// <inheritdoc cref="GetBits(int, out byte)"/>
-        public Message GetBits(int amount, out ushort bitfield)
-        {
-            PeekBits(amount, readBit, out bitfield);
-            readBit += amount;
-            return this;
-        }
-        /// <summary>Retrieves the next <paramref name="amount"/> bits (up to 32) from the message.</summary>
-        /// <inheritdoc cref="GetBits(int, out byte)"/>
-        public Message GetBits(int amount, out uint bitfield)
-        {
-            PeekBits(amount, readBit, out bitfield);
-            readBit += amount;
-            return this;
-        }
-        /// <summary>Retrieves the next <paramref name="amount"/> bits (up to 64) from the message.</summary>
-        /// <inheritdoc cref="GetBits(int, out byte)"/>
-        public Message GetBits(int amount, out ulong bitfield)
-        {
-            PeekBits(amount, readBit, out bitfield);
-            readBit += amount;
-            return this;
-        }
         #endregion
 
         #region Varint
@@ -608,8 +492,8 @@ namespace Riptide
 			Message message = RetrieveFromPool();
             message.SendMode = SendMode;
 			message.readBit = readBit;
-			int byteCount = (writeBit + 7) / 8;
 			message.writeBit = writeBit;
+			int byteCount = (writeBit + 7) / 8;
 			Buffer.BlockCopy(data, 0, message.data, 0, byteCount);
 			return message;
         }
