@@ -21,18 +21,21 @@
     <PackageIcon>package-icon.png</PackageIcon>
     <PackageReleaseNotes>Check out the full release notes: https://riptide.tomweiland.net/manual/updates/release-notes/v2.2.0.html</PackageReleaseNotes>
     <Title>Riptide Networking</Title>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>bin\Debug\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
     <OutputPath>bin\Debug\netstandard2.0\</OutputPath>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <OutputPath>bin\Release\netstandard2.0\</OutputPath>
     <DocumentationFile>bin\Release\netstandard2.0\RiptideNetworking.xml</DocumentationFile>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

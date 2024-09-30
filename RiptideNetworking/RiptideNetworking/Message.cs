@@ -687,7 +687,7 @@ namespace Riptide
 			long next = currentState * states;
 			// not the best handling of the rest, it wastes less than a bit of space
 			// but the accurate way is O(n²) for GetByte instead of O(n)
-			int overflowBytes = Helper.Log256((ulong)next);
+			int overflowBytes = ((ulong)next).Log256();
 			int shiftAmount = 8 * overflowBytes;
 			long prev = next;
 			next >>= shiftAmount;
@@ -702,6 +702,8 @@ namespace Riptide
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
 		public Message AddByte(byte value) {
+			if(UnwrittenBytes < sizeof(byte))
+				throw new InsufficientCapacityException(this, ByteName, sizeof(byte) * BitsPerByte);
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
 			WriteByte += 1;
 			return this;
@@ -713,16 +715,21 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
 		public Message AddByte(byte value, byte minValue, byte maxValue) {
+			if(UnwrittenBytes < sizeof(byte))
+				throw new InsufficientCapacityException(this, ByteName, sizeof(byte) * BitsPerByte);
 			AddUInt(value, minValue, maxValue);
 			return this;
 		}
 
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-		public Byte GetByte() {
-			if(UnwrittenBytes < sizeof(byte) * BitsPerByte)
-				throw new InsufficientCapacityException(this, UIntName, sizeof(byte) * BitsPerByte);
-			Byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, ReadByte, ReadState);
+		public byte GetByte() {
+			if (UnreadBytes < sizeof(byte))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
+                return default;
+            }
+			byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, ReadByte, ReadState);
 			ReadByte += 1;
 			return value;
 		}
@@ -1041,6 +1048,8 @@ namespace Riptide
         /// <param name="value">The <see cref="ushort"/> to add.</param>
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
 		public Message AddUShort(ushort value) {
+			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
 			WriteByte += 2;
 			return this;
@@ -1052,6 +1061,8 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
 		public Message AddUShort(ushort value, ushort minValue, ushort maxValue) {
+			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
 			AddUInt(value, minValue, maxValue);
 			return this;
 		}
@@ -1059,8 +1070,11 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
 		public ushort GetUShort() {
-			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
-				throw new InsufficientCapacityException(this, UIntName, sizeof(ushort) * BitsPerByte);
+			if (UnreadBytes < sizeof(ushort))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
+                return default;
+            }
 			ushort value = (ushort)Converter.GetNextUInt(data, ushort.MaxValue, ReadByte, ReadState);
 			ReadByte += 2;
 			return value;
@@ -1071,8 +1085,11 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
 		public ushort GetUShort(ushort minValue, ushort maxValue) {
-			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
-				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
+			if (UnreadBytes < sizeof(ushort))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
+                return default;
+            }
 			return (ushort)GetUInt(minValue, maxValue);
 		}
 
@@ -1241,6 +1258,8 @@ namespace Riptide
         /// <param name="value">The <see cref="uint"/> to add.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
 		public Message AddUInt(uint value) {
+			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 			Converter.AddNextUInt(value, data, WriteByte, WriteState);
 			WriteByte += 4;
 			return this;
@@ -1252,6 +1271,8 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
 		public Message AddUInt(uint value, uint minValue, uint maxValue) {
+			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
+				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 			if(minValue == 0 && maxValue == uint.MaxValue) return AddUInt(value);
 			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
 			Converter.AddNextUInt(value - minValue, data, WriteByte, WriteState);
@@ -1262,8 +1283,11 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt() {
-			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
-				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
+			if (UnreadBytes < sizeof(uint))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
+                return default;
+            }
 			uint value = Converter.GetNextUInt(data, uint.MaxValue, ReadByte, ReadState);
 			ReadByte += 4;
 			return value;
@@ -1274,8 +1298,11 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
 		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt(uint minValue, uint maxValue) {
-			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
-				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
+			if (UnreadBytes < sizeof(uint))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
+                return default;
+            }
 			if(minValue == 0 && maxValue == uint.MaxValue) return GetUInt();
 			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
 			uint states = maxValue - minValue + 1;
@@ -1450,6 +1477,8 @@ namespace Riptide
         /// <param name="value">The <see cref="ulong"/> to add.</param>
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
 		public Message AddULong(ulong value) {
+			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
+				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
 			AddUInt((uint)(value >> 32));
 			return AddUInt((uint)value);
 		}
@@ -1460,6 +1489,8 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
 		public Message AddULong(ulong value, ulong minValue, ulong maxValue) {
+			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
+				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
 			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
 			AddUInt((uint)(value >> 32), (uint)(minValue >> 32), (uint)(maxValue >> 32));
 			AddUInt((uint)value, (uint)minValue, (uint)maxValue);
@@ -1469,8 +1500,11 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong() {
-			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
-				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
+			if (UnreadBytes < sizeof(ulong))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
+                return default;
+            }
 			ulong high = (ulong)GetUInt() << 32;
 			return high | GetUInt();
 		}
@@ -1480,8 +1514,11 @@ namespace Riptide
 		/// <param name="maxValue">The maximum value.</param>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong minValue, ulong maxValue) {
-			if(UnwrittenBytes < sizeof(ulong) * BitsPerByte)
-				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong) * BitsPerByte);
+			if (UnreadBytes < sizeof(ulong))
+            {
+                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
+                return default;
+            }
 			// TODO check if this is correct
 			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
 			ulong dif = maxValue - minValue;
@@ -1658,25 +1695,19 @@ namespace Riptide
         {
             if (UnwrittenBits < sizeof(float) * BitsPerByte)
                 throw new InsufficientCapacityException(this, FloatName, sizeof(float) * BitsPerByte);
-
-            Converter.FloatToBits(value, data, writeBit);
-            writeBit += sizeof(float) * BitsPerByte;
-            return this;
+			return AddFloat(value.ToUInt());
         }
 
         /// <summary>Retrieves a <see cref="float"/> from the message.</summary>
         /// <returns>The <see cref="float"/> that was retrieved.</returns>
         public float GetFloat()
         {
-            if (UnreadBits < sizeof(float) * BitsPerByte)
+            if (UnreadBytes < sizeof(float))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName, $"{default(float)}"));
                 return default;
             }
-
-            float value = Converter.FloatFromBits(data, readBit);
-            readBit += sizeof(float) * BitsPerByte;
-            return value;
+			return GetUInt().ToFloat();
         }
 
         /// <summary>Adds a <see cref="float"/> array to the message.</summary>
@@ -1756,10 +1787,7 @@ namespace Riptide
         {
             if (UnwrittenBits < sizeof(double) * BitsPerByte)
                 throw new InsufficientCapacityException(this, DoubleName, sizeof(double) * BitsPerByte);
-
-            Converter.DoubleToBits(value, data, writeBit);
-            writeBit += sizeof(double) * BitsPerByte;
-            return this;
+            return AddULong(value.ToULong());
         }
 
         /// <summary>Retrieves a <see cref="double"/> from the message.</summary>
@@ -1772,9 +1800,7 @@ namespace Riptide
                 return default;
             }
 
-            double value = Converter.DoubleFromBits(data, readBit);
-            readBit += sizeof(double) * BitsPerByte;
-            return value;
+            return GetULong().ToDouble();
         }
 
         /// <summary>Adds a <see cref="double"/> array to the message.</summary>

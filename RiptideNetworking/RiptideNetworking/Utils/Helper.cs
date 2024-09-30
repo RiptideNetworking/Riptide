@@ -109,27 +109,5 @@ namespace Riptide.Utils
                     return $"{UnknownReason} '{forReason}'";
             }
         }
-
-		internal static ushort Clamp(ushort value, ushort min, ushort max) {
-			return value < min ? min : value > max ? max : value;
-		}
-
-		internal static int Log256(uint value) {
-			int log = 0;
-			while(value > byte.MaxValue) {
-				value >>= 8;
-				log++;
-			}
-			return log;
-		}
-
-		internal static int Log256(ulong value) {
-			int log = 0;
-			while(value > byte.MaxValue) {
-				value >>= 8;
-				log++;
-			}
-			return log;
-		}
     }
 }
