@@ -640,6 +640,7 @@ namespace Riptide
         /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
 		public Message AddSByte(sbyte value, sbyte minValue, sbyte maxValue)
 			=> AddByte((byte)value, (byte)minValue, (byte)maxValue);
+
 		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
 		public sbyte GetSByte() => (sbyte)GetByte();
@@ -664,25 +665,10 @@ namespace Riptide
             if (UnwrittenBits < writeAmount)
                 throw new InsufficientCapacityException(this, array.Length, ByteName, BitsPerByte);
 
-            if (writeBit % BitsPerByte == 0)
-            {
-                int bit = writeBit % BitsPerSegment;
-                if (bit + writeAmount > BitsPerSegment) // Range reaches into subsequent segment(s)
-                    data[(writeBit + writeAmount) / BitsPerSegment] = 0;
-                else if (bit == 0) // Range doesn't fill the current segment, but begins the segment
-                    data[writeBit / BitsPerSegment] = 0;
-
-                Buffer.BlockCopy(array, 0, data, writeBit / BitsPerByte, array.Length);
-                writeBit += writeAmount;
-            }
-            else
-            {
-                for (int i = 0; i < array.Length; i++)
-                {
-                    Converter.ByteToBits(array[i], data, writeBit);
-                    writeBit += BitsPerByte;
-                }
-            }
+			for (int i = 0; i < array.Length; i++)
+			{
+				AddByte(array[i]);
+			}
 
             return this;
         }
@@ -708,25 +694,10 @@ namespace Riptide
             if (UnwrittenBits < writeAmount)
                 throw new InsufficientCapacityException(this, amount, ByteName, BitsPerByte);
 
-            if (writeBit % BitsPerByte == 0)
-            {
-                int bit = writeBit % BitsPerSegment;
-                if (bit + writeAmount > BitsPerSegment) // Range reaches into subsequent segment(s)
-                    data[(writeBit + writeAmount) / BitsPerSegment] = 0;
-                else if (bit == 0) // Range doesn't fill the current segment, but begins the segment
-                    data[writeBit / BitsPerSegment] = 0;
-
-                Buffer.BlockCopy(array, startIndex, data, writeBit / BitsPerByte, amount);
-                writeBit += writeAmount;
-            }
-            else
-            {
-                for (int i = startIndex; i < startIndex + amount; i++)
-                {
-                    Converter.ByteToBits(array[i], data, writeBit);
-                    writeBit += BitsPerByte;
-                }
-            }
+			for (int i = startIndex; i < startIndex + amount; i++)
+			{
+				AddByte(array[i]);
+			}
 
             return this;
         }
@@ -745,8 +716,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.SByteToBits(array[i], data, writeBit);
-                writeBit += BitsPerByte;
+                AddSByte(array[i]);
             }
 
             return this;
@@ -820,19 +790,10 @@ namespace Riptide
                 amount = UnreadBits / BitsPerByte;
             }
 
-            if (readBit % BitsPerByte == 0)
-            {
-                Buffer.BlockCopy(data, readBit / BitsPerByte, intoArray, startIndex, amount);
-                readBit += amount * BitsPerByte;
-            }
-            else
-            {
-                for (int i = 0; i < amount; i++)
-                {
-                    intoArray[startIndex + i] = Converter.ByteFromBits(data, readBit);
-                    readBit += BitsPerByte;
-                }
-            }
+			for (int i = 0; i < amount; i++)
+			{
+				intoArray[startIndex + i] = GetByte();
+			}
         }
 
         /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
@@ -849,8 +810,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.SByteFromBits(data, readBit);
-                readBit += BitsPerByte;
+                intoArray[startIndex + i] = GetSByte();
             }
         }
         #endregion
@@ -877,7 +837,7 @@ namespace Riptide
                 throw new InsufficientCapacityException(this, array.Length, BoolName, 1);
 
             for (int i = 0; i < array.Length; i++)
-                Converter.BoolToBit(array[i], data, writeBit++);
+                AddBool(array[i]);
 
             return this;
         }
@@ -923,7 +883,7 @@ namespace Riptide
             }
 
             for (int i = 0; i < amount; i++)
-                intoArray[startIndex + i] = Converter.BoolFromBit(data, readBit++);
+                intoArray[startIndex + i] = GetBool();
         }
         #endregion
 
@@ -1014,8 +974,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.ShortToBits(array[i], data, writeBit);
-                writeBit += sizeof(short) * BitsPerByte;
+                AddShort(array[i]);
             }
 
             return this;
@@ -1035,8 +994,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.UShortToBits(array[i], data, writeBit);
-                writeBit += sizeof(ushort) * BitsPerByte;
+                AddUShort(array[i]);
             }
 
             return this;
@@ -1112,8 +1070,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ShortFromBits(data, readBit);
-                readBit += sizeof(short) * BitsPerByte;
+                intoArray[startIndex + i] = GetShort();
             }
         }
 
@@ -1131,8 +1088,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.UShortFromBits(data, readBit);
-                readBit += sizeof(ushort) * BitsPerByte;
+                intoArray[startIndex + i] = GetUShort();
             }
         }
         #endregion
@@ -1233,8 +1189,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.IntToBits(array[i], data, writeBit);
-                writeBit += sizeof(int) * BitsPerByte;
+                AddInt(array[i]);
             }
 
             return this;
@@ -1254,8 +1209,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.UIntToBits(array[i], data, writeBit);
-                writeBit += sizeof(uint) * BitsPerByte;
+                AddUInt(array[i]);
             }
 
             return this;
@@ -1331,8 +1285,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.IntFromBits(data, readBit);
-                readBit += sizeof(int) * BitsPerByte;
+                intoArray[startIndex + i] = GetInt();
             }
         }
 
@@ -1350,8 +1303,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.UIntFromBits(data, readBit);
-                readBit += sizeof(uint) * BitsPerByte;
+                intoArray[startIndex + i] = GetUInt();
             }
         }
         #endregion
@@ -1448,8 +1400,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.LongToBits(array[i], data, writeBit);
-                writeBit += sizeof(long) * BitsPerByte;
+                AddLong(array[i]);
             }
 
             return this;
@@ -1469,8 +1420,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.ULongToBits(array[i], data, writeBit);
-                writeBit += sizeof(ulong) * BitsPerByte;
+                AddULong(array[i]);
             }
 
             return this;
@@ -1546,8 +1496,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.LongFromBits(data, readBit);
-                readBit += sizeof(long) * BitsPerByte;
+                intoArray[startIndex + i] = GetLong();
             }
         }
 
@@ -1565,8 +1514,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.ULongFromBits(data, readBit);
-                readBit += sizeof(ulong) * BitsPerByte;
+                intoArray[startIndex + i] = GetULong();
             }
         }
         #endregion
@@ -1608,8 +1556,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.FloatToBits(array[i], data, writeBit);
-                writeBit += sizeof(float) * BitsPerByte;
+                AddFloat(array[i]);
             }
 
             return this;
@@ -1657,8 +1604,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.FloatFromBits(data, readBit);
-                readBit += sizeof(float) * BitsPerByte;
+                intoArray[startIndex + i] = GetFloat();
             }
         }
         #endregion
@@ -1701,8 +1647,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                Converter.DoubleToBits(array[i], data, writeBit);
-                writeBit += sizeof(double) * BitsPerByte;
+                AddDouble(array[i]);
             }
 
             return this;
@@ -1750,8 +1695,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = Converter.DoubleFromBits(data, readBit);
-                readBit += sizeof(double) * BitsPerByte;
+                intoArray[startIndex + i] = GetDouble();
             }
         }
         #endregion
@@ -1832,6 +1776,41 @@ namespace Riptide
                 intoArray[startIndex + i] = GetString();
         }
         #endregion
+
+		#region States of T
+		/// <summary>Adds one of the possible values.</summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="element"></param>
+		/// <param name="possibleValues"></param>
+		/// <exception cref="ArgumentException"></exception>
+		public void AddElement<T>(T element, T[] possibleValues) {
+			if (possibleValues == null || possibleValues.Length == 0)
+				throw new ArgumentException("Possible values array cannot be null or empty", nameof(possibleValues));
+
+			int index = Array.IndexOf(possibleValues, element);
+			if (index == -1)
+				throw new ArgumentException($"Element {element} is not a valid value for this message", nameof(element));
+
+			AddInt(index, 0, possibleValues.Length - 1);
+		}
+
+		/// <summary>Retrieves one of the possible values.</summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="possibleValues"></param>
+		/// <returns>The retrieved element.</returns>
+		/// <exception cref="ArgumentException"></exception>
+		/// <exception cref="Exception"></exception>
+		public T GetElement<T>(T[] possibleValues) {
+			if (possibleValues == null || possibleValues.Length == 0)
+				throw new ArgumentException("Possible values array cannot be null or empty", nameof(possibleValues));
+
+			int index = GetInt(0, possibleValues.Length - 1);
+			if (index < 0 || index >= possibleValues.Length)
+				throw new Exception($"Received invalid index {index} for possible values array of length {possibleValues.Length}");
+
+			return possibleValues[index];
+		}
+		#endregion
 
         #region IMessageSerializable Types
         /// <summary>Adds a serializable to the message.</summary>
