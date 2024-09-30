@@ -7,6 +7,10 @@ namespace Riptide.Utils
 {
 	internal static class CMath
 	{
+		internal static ushort Clamp(this ushort value, ushort min, ushort max) {
+			return value < min ? min : value > max ? max : value;
+		}
+
 		internal static int Log256(this ulong value) {
 			int log = 0;
 			while(value > byte.MaxValue) {

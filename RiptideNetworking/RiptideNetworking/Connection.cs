@@ -38,7 +38,7 @@ namespace Riptide
 		/// <para>it has a minimum of 1 and max of 16383 but 1024 is the recommended max</para></remarks>
 		public static ushort MaxSynchronousQueuedMessages {
 			private get => maxSynchronousQueuedMessages;
-			set => maxSynchronousQueuedMessages = Helper.Clamp(value, 1, ushort.MaxValue / 4);
+			set => maxSynchronousQueuedMessages = value.Clamp(1, ushort.MaxValue / 4);
 		}
 		private static ushort maxSynchronousQueuedMessages = 1;
 		/// <summary>The Queue storing the messages for the send mode Queued</summary>
