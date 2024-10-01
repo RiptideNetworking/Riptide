@@ -279,7 +279,9 @@ namespace Riptide.Utils
 		/// <param name="bytesInUse"></param>
 		/// <returns></returns>
 		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState, int bytesInUse) {
-			return Mod(array, maxValue, startByte, startState, bytesInUse);
+			if(maxValue == uint.MaxValue)
+				return Div(array, startState, startByte, bytesInUse);
+			return Mod(array, maxValue + 1, startState, startByte, bytesInUse);
 		}
 
 		/// <summary>Adds a Byte.</summary>
@@ -296,14 +298,15 @@ namespace Riptide.Utils
 		}
 
 		/// <summary>Takes the mod of <paramref name="value"/> shifted by 
-		/// <paramref name="startByte"/> bytes and <paramref name="startState"/> states.</summary>
+		/// <paramref name="startByte"/> bytes and <paramref name="div"/> states.</summary>
 		/// <param name="value"></param>
 		/// <param name="mod"></param>
 		/// <param name="startByte"></param>
-		/// <param name="startState"></param>
+		/// <param name="div"></param>
 		/// <param name="maxByte"></param>
 		/// <returns>The result.</returns>
-		public static uint Mod(ulong[] value, uint mod, byte startByte, byte startState, int maxByte) {
+		public static uint Mod(ulong[] value, uint mod, byte div, byte startByte, int maxByte) {
+			if(div == 0) throw new ArgumentException("div cannot be 0");
 			uint result = 0;
 			uint carryOver = 0;
 			int totalBytes = Math.Min(value.Length * 8, Math.Max(0, maxByte - startByte));
@@ -312,10 +315,27 @@ namespace Riptide.Utils
 				int byteOffset = i % 8;
 				byte currentByte = (byte)((value[ulongIndex] >> (byteOffset * 8)) & 0xFF);
 				uint currentValue = (carryOver << 8) + currentByte;
-				uint dividedValue = currentValue / startState;
-				carryOver = currentValue % startState;
-				result = (result * 256 + dividedValue) % mod;
+				carryOver = (byte)(currentValue % div);
+				result = (result * 256 + (currentValue / div)) % mod;
 			}
+			return result;
+		}
+
+
+		/// <summary>Divides <paramref name="value"/> by <paramref name="div"/>.</summary>
+		/// <param name="value"></param>
+		/// <param name="div"></param>
+		/// <param name="startByte"></param>
+		/// <param name="maxByte"></param>
+		/// <returns></returns>
+		public static uint Div(ulong[] value, byte div, byte startByte, int maxByte) {
+			ulong remainder = 0;
+			for(int i = startByte; i < maxByte; i++) {
+				ulong currentValue = (remainder << 8) + ((value[i / 8] >> (8 * (i % 8))) & 0xFF);
+				remainder = currentValue % div;
+				value[i / 8] = (value[i / 8] & ~(0xFFUL << (8 * (i % 8)))) | ((currentValue / div) << (8 * (i % 8)));
+			}
+			uint result = (uint)(value[startByte / 8] & 0xFFFFFFFF);
 			return result;
 		}
 
