@@ -276,10 +276,10 @@ namespace Riptide.Utils
 		/// <param name="maxValue"></param>
 		/// <param name="startByte"></param>
 		/// <param name="startState"></param>
-		/// <param name="writeByte"></param>
+		/// <param name="bytesInUse"></param>
 		/// <returns></returns>
-		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState, int writeByte) {
-			return Mod(array, maxValue, startByte, startState, writeByte + 1);
+		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState, int bytesInUse) {
+			return Mod(array, maxValue, startByte, startState, bytesInUse);
 		}
 
 		/// <summary>Adds a Byte.</summary>

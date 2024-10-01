@@ -63,15 +63,15 @@ namespace Riptide
         /// <returns>The error message.</returns>
         private static string GetErrorMessage(Message message, int reserveBits)
         {
-            return $"Cannot reserve {reserveBits} {Helper.CorrectForm(reserveBits, "bit")} in a message with {message.UnwrittenBits} " +
-                   $"{Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
+            return $"Cannot reserve {reserveBits} {Helper.CorrectForm(reserveBits, "bit")} in a message with {message.UnwrittenBytes} " +
+                   $"{Helper.CorrectForm(message.UnwrittenBytes, "byte")} of remaining capacity!";
         }
         /// <summary>Constructs the error message from the given information.</summary>
         /// <returns>The error message.</returns>
         private static string GetErrorMessage(Message message, string typeName, int requiredBits)
         {
             return $"Cannot add a value of type '{typeName}' (requires {requiredBits} {Helper.CorrectForm(requiredBits, "bit")}) to " +
-                   $"a message with {message.UnwrittenBits} {Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
+                   $"a message with {message.UnwrittenBytes} {Helper.CorrectForm(message.UnwrittenBytes, "byte")} of remaining capacity!";
         }
         /// <summary>Constructs the error message from the given information.</summary>
         /// <returns>The error message.</returns>
@@ -79,7 +79,7 @@ namespace Riptide
         {
             requiredBits *= arrayLength;
             return $"Cannot add an array of type '{typeName}[]' with {arrayLength} {Helper.CorrectForm(arrayLength, "element")} (requires {requiredBits} {Helper.CorrectForm(requiredBits, "bit")}) " +
-                   $"to a message with {message.UnwrittenBits} {Helper.CorrectForm(message.UnwrittenBits, "bit")} of remaining capacity!";
+                   $"to a message with {message.UnwrittenBytes} {Helper.CorrectForm(message.UnwrittenBytes, "byte")} of remaining capacity!";
         }
     }
     

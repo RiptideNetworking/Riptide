@@ -133,7 +133,7 @@ namespace Riptide
             connectMessage = Message.Create(MessageHeader.Connect);
             if (message != null)
             {
-                if (message.ReadBits != 0)
+                if (!message.HasReadNothing)
                     RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting connection attempt data!");
 
                 connectMessage.AddMessage(message);
