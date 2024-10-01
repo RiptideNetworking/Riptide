@@ -468,9 +468,9 @@ namespace Riptide
                 return;
 
             pendingConnections.Clear(); 
-            byte[] disconnectBytes = { (byte)MessageHeader.Disconnect, (byte)DisconnectReason.ServerStopped };
-            foreach (Connection client in clients.Values)
-                client.Send(disconnectBytes, disconnectBytes.Length);
+            Message disconnectMessage = Message.Create(MessageHeader.Disconnect);
+            disconnectMessage.AddByte((byte)DisconnectReason.ServerStopped);
+            SendToAll(disconnectMessage);
             clients.Clear();
 
             transport.Shutdown();
