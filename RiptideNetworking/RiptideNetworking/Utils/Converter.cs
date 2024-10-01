@@ -276,9 +276,10 @@ namespace Riptide.Utils
 		/// <param name="maxValue"></param>
 		/// <param name="startByte"></param>
 		/// <param name="startState"></param>
+		/// <param name="writeByte"></param>
 		/// <returns></returns>
-		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState) {
-			return Mod(array, maxValue, startByte, startState);
+		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState, int writeByte) {
+			return Mod(array, maxValue, startByte, startState, writeByte + 1);
 		}
 
 		/// <summary>Adds a Byte.</summary>
@@ -289,6 +290,7 @@ namespace Riptide.Utils
 		public static void AddNextUInt(uint value, ulong[] array, byte startByte, byte startState) {
 			ulong[] bytes = new ulong[1];
 			Buffer.BlockCopy(array, startByte, bytes, 0, 5);
+			bytes[0] %= startState;
 			bytes[0] += value * startState;
 			Buffer.BlockCopy(bytes, 0, array, startByte, 5);
 		}
@@ -299,11 +301,12 @@ namespace Riptide.Utils
 		/// <param name="mod"></param>
 		/// <param name="startByte"></param>
 		/// <param name="startState"></param>
+		/// <param name="maxByte"></param>
 		/// <returns>The result.</returns>
-		public static uint Mod(ulong[] value, uint mod, byte startByte, byte startState) {
+		public static uint Mod(ulong[] value, uint mod, byte startByte, byte startState, int maxByte) {
 			uint result = 0;
 			uint carryOver = 0;
-			int totalBytes = value.Length * 8;
+			int totalBytes = Math.Min(value.Length * 8, Math.Max(0, maxByte - startByte));
 			for(int i = totalBytes - 1; i >= startByte; i--) {
 				int ulongIndex = i / 8;
 				int byteOffset = i % 8;

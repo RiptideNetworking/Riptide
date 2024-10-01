@@ -156,30 +156,14 @@ namespace Riptide
         /// <summary>The next bit to be written.</summary>
         private int writeBit;
 
-		/// <summary>The next state to be read.</summary>
-		private int overallReadState = 1;
-		/// <summary>The next state to be written.</summary>
-		private int overallWriteState = 1;
+		private byte readByte = 0;
+		private byte readState = 1;
+		private byte writeByte = 0;
+		private byte writeState = 1;
 
-		private byte ReadState {
-			get => (byte)overallReadState;
-			set => overallReadState = (overallReadState & ~byte.MaxValue) + value;
-		}
-		private byte WriteState {
-			get => (byte)overallWriteState;
-			set => overallWriteState = (overallWriteState & ~byte.MaxValue) + value;
-		}
-		private byte ReadByte {
-			get => (byte)(overallReadState >> 8);
-			set => overallReadState = (overallReadState & byte.MaxValue) + (value << 8);
-		}
-		private byte WriteByte {
-			get => (byte)(overallWriteState >> 8);
-			set => overallWriteState = (overallWriteState & byte.MaxValue) + (value << 8);
-		}
-
-		private int UnreadBytes => WriteByte - ReadByte;
-		private int UnwrittenBytes => maxBitCount / 8 - WriteByte;
+		private int UnreadBytes => writeByte - readByte - (writeState > readState ? 1 : 0);
+		private byte UnreadStates => (byte)(writeState - readState + (writeState < readState ? 256 : 0));
+		private int UnwrittenBytes => maxBitCount / 8 - writeByte;
 		
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
@@ -190,8 +174,10 @@ namespace Riptide
         public static Message Create()
         {
             Message message = RetrieveFromPool();
-            message.readBit = 0;
-            message.writeBit = 0;
+			message.readByte = 0;
+            message.readState = 1;
+			message.writeByte = 0;
+            message.writeState = 1;
             return message;
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
@@ -311,7 +297,7 @@ namespace Riptide
             data[0] = firstByte;
             header = (MessageHeader)(firstByte & HeaderBitmask);
             SetHeader(header);
-            writeBit = contentLength * BitsPerByte;
+            writeByte = (byte)contentLength;
             return this;
         }
 
@@ -351,72 +337,29 @@ namespace Riptide
         /// <param name="message">The message whose unread bits to add.</param>
         /// <returns>The message that the bits were added to.</returns>
         /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-        public Message AddMessage(Message message) => AddMessage(message, message.UnreadBits, message.readBit);
+        public Message AddMessage(Message message)
+			=> AddMessage(message, message.UnreadBytes,
+				message.readByte, message.readState, message.UnreadStates);
         /// <summary>Adds a range of bits from <paramref name="message"/> to the message.</summary>
         /// <param name="message">The message whose bits to add.</param>
-        /// <param name="amount">The number of bits to add.</param>
-        /// <param name="startBit">The position in <paramref name="message"/> from which to add the bits.</param>
+        /// <param name="amount">The number of bytes to add.</param>
+        /// <param name="startByte">The position in <paramref name="message"/> from which to add the bytes.</param>
+		/// <param name="startState">The state to start at.</param>
+		/// <param name="stateAmount">The number of states to add.</param>
         /// <returns>The message that the bits were added to.</returns>
         /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-        public Message AddMessage(Message message, int amount, int startBit)
+        public Message AddMessage(Message message, int amount, byte startByte, byte startState, byte stateAmount = 0)
         {
-            if (UnwrittenBits < amount)
+            if(UnwrittenBytes < amount)
                 throw new InsufficientCapacityException(this, nameof(Message), amount);
 
-            int sourcePos = startBit / BitsPerSegment;
-            int sourceBit = startBit % BitsPerSegment;
-            int destPos   = writeBit / BitsPerSegment;
-            int destBit   = writeBit % BitsPerSegment;
-            int bitOffset = destBit - sourceBit;
-            int destSegments = (writeBit + amount) / BitsPerSegment - destPos + 1;
+			for(int i = 0; i < amount; i++)
+				AddByte(message.GetByte());
+			AddByte(message.GetByte(0, stateAmount), 0, stateAmount);
 
-            if (bitOffset == 0)
-            {
-                // Source doesn't need to be shifted, source and dest bits span the same number of segments
-                ulong firstSegment = message.data[sourcePos];
-                if (destBit == 0)
-                    data[destPos] = firstSegment;
-                else
-                    data[destPos] |= firstSegment & ~((1ul << sourceBit) - 1);
-
-                for (int i = 1; i < destSegments; i++)
-                    data[destPos + i] = message.data[sourcePos + i];
-            }
-            else if (bitOffset > 0)
-            {
-                // Source needs to be shifted left, dest bits may span more segments than source bits
-                ulong firstSegment = message.data[sourcePos] & ~((1ul << sourceBit) - 1);
-                firstSegment <<= bitOffset;
-                if (destBit == 0)
-                    data[destPos] = firstSegment;
-                else
-                    data[destPos] |= firstSegment;
-
-                for (int i = 1; i < destSegments; i++)
-                    data[destPos + i] = (message.data[sourcePos + i - 1] >> (BitsPerSegment - bitOffset)) | (message.data[sourcePos + i] << bitOffset);
-            }
-            else
-            {
-                // Source needs to be shifted right, source bits may span more segments than dest bits
-                bitOffset = -bitOffset;
-                ulong firstSegment = message.data[sourcePos] & ~((1ul << sourceBit) - 1);
-                firstSegment >>= bitOffset;
-                if (destBit == 0)
-                    data[destPos] = firstSegment;
-                else
-                    data[destPos] |= firstSegment;
-
-                int sourceSegments = (startBit + amount) / BitsPerSegment - sourcePos + 1;
-                for (int i = 1; i < sourceSegments; i++)
-                {
-                    data[destPos + i - 1] |= message.data[sourcePos + i] << (BitsPerSegment - bitOffset);
-                    data[destPos + i    ]  = message.data[sourcePos + i] >> bitOffset;
-                }
-            }
-
-            writeBit += amount;
-            data[destPos + destSegments - 1] &= (1ul << (writeBit % BitsPerSegment)) - 1;
-            return this;
+			message.readByte = startByte;
+			message.readState = startState;
+			return this;
         }
         #endregion
 
@@ -486,15 +429,18 @@ namespace Riptide
         #region Varint
 		/// <summary>Copies a message.</summary>
 		/// <remarks>Useful for saving a recieved message,
-		/// that would otherwhise be returned to the pool.</remarks>
+		/// that would otherwhise be returned to the pool.
+		/// <para>Recieved messages should not be written to and
+		/// can break if their data is not purely whole bytes.</para></remarks>
 		/// <returns>The copy of the message.</returns>
 		public Message Copy() {
 			Message message = RetrieveFromPool();
             message.SendMode = SendMode;
-			message.readBit = readBit;
-			message.writeBit = writeBit;
-			int byteCount = (writeBit + 7) / 8;
-			Buffer.BlockCopy(data, 0, message.data, 0, byteCount);
+			message.readByte = readByte;
+			message.writeByte = writeByte;
+			message.readState = readState;
+			message.writeState = writeState;
+			Array.Copy(data, message.data, data.Length);
 			return message;
         }
 
@@ -561,23 +507,23 @@ namespace Riptide
         #endregion
 
         #region overall states
-		private uint AddWriteStates(uint states)
-			=> WriteState = AddStates(states, ref overallWriteState, WriteState);
+		private void AddWriteStates(uint states)
+			=> AddStates(states, ref writeByte, ref writeState);
 		
-		private uint AddReadStates(uint states)
-			=> ReadState = AddStates(states, ref overallReadState, ReadState);
+		private void AddReadStates(uint states)
+			=> AddStates(states, ref readByte, ref readState);
 
-		private byte AddStates(uint states, ref int overallState, byte currentState) {
+		private void AddStates(uint states, ref byte currentByte, ref byte currentState) {
 			long next = currentState * states;
 			// not the best handling of the rest, it wastes less than a bit of space
 			// but the accurate way is O(n²) for GetByte instead of O(n)
-			int overflowBytes = ((ulong)next).Log256();
-			int shiftAmount = 8 * overflowBytes;
+			byte overflowBytes = ((ulong)next).Log256();
+			byte shiftAmount = (byte)(8 * overflowBytes);
 			long prev = next;
 			next >>= shiftAmount;
 			if(next << shiftAmount < prev) next++;
-			overallState += 1 << shiftAmount;
-			return (byte)next;
+			currentByte += shiftAmount;
+			currentState = (byte)next;
 		}
 		#endregion
 
@@ -588,8 +534,8 @@ namespace Riptide
 		public Message AddByte(byte value) {
 			if(UnwrittenBytes < sizeof(byte))
 				throw new InsufficientCapacityException(this, ByteName, sizeof(byte) * BitsPerByte);
-			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			WriteByte += 1;
+			Converter.AddNextUInt(value, data, writeByte, writeState);
+			writeByte += 1;
 			return this;
 		}
 
@@ -613,8 +559,8 @@ namespace Riptide
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
                 return default;
             }
-			byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, ReadByte, ReadState);
-			ReadByte += 1;
+			byte value = (byte)Converter.GetNextUInt(data, byte.MaxValue, readByte, readState, writeByte);
+			readByte += 1;
 			return value;
 		}
 
@@ -894,8 +840,8 @@ namespace Riptide
 		public Message AddUShort(ushort value) {
 			if(UnwrittenBytes < sizeof(ushort) * BitsPerByte)
 				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort) * BitsPerByte);
-			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			WriteByte += 2;
+			Converter.AddNextUInt(value, data, writeByte, writeState);
+			writeByte += 2;
 			return this;
 		}
 
@@ -919,8 +865,8 @@ namespace Riptide
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
                 return default;
             }
-			ushort value = (ushort)Converter.GetNextUInt(data, ushort.MaxValue, ReadByte, ReadState);
-			ReadByte += 2;
+			ushort value = (ushort)Converter.GetNextUInt(data, ushort.MaxValue, readByte, readState, writeByte);
+			readByte += 2;
 			return value;
 		}
 
@@ -1100,8 +1046,8 @@ namespace Riptide
 		public Message AddUInt(uint value) {
 			if(UnwrittenBytes < sizeof(uint) * BitsPerByte)
 				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
-			Converter.AddNextUInt(value, data, WriteByte, WriteState);
-			WriteByte += 4;
+			Converter.AddNextUInt(value, data, writeByte, writeState);
+			writeByte += 4;
 			return this;
 		}
 
@@ -1115,7 +1061,7 @@ namespace Riptide
 				throw new InsufficientCapacityException(this, UIntName, sizeof(uint) * BitsPerByte);
 			if(minValue == 0 && maxValue == uint.MaxValue) return AddUInt(value);
 			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
-			Converter.AddNextUInt(value - minValue, data, WriteByte, WriteState);
+			Converter.AddNextUInt(value - minValue, data, writeByte, writeState);
 			AddWriteStates(maxValue - minValue + 1);
 			return this;
 		}
@@ -1128,8 +1074,8 @@ namespace Riptide
                 RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
                 return default;
             }
-			uint value = Converter.GetNextUInt(data, uint.MaxValue, ReadByte, ReadState);
-			ReadByte += 4;
+			uint value = Converter.GetNextUInt(data, uint.MaxValue, readByte, readState, writeByte);
+			readByte += 4;
 			return value;
 		}
 
@@ -1146,7 +1092,7 @@ namespace Riptide
 			if(minValue == 0 && maxValue == uint.MaxValue) return GetUInt();
 			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
 			uint states = maxValue - minValue + 1;
-			uint value = Converter.GetNextUInt(data, states, ReadByte, ReadState);
+			uint value = Converter.GetNextUInt(data, states, readByte, readState, writeByte);
 			AddReadStates(states);
 			return value + minValue;
 		}

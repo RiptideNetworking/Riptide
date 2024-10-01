@@ -11,8 +11,8 @@ namespace Riptide.Utils
 			return value < min ? min : value > max ? max : value;
 		}
 
-		internal static int Log256(this ulong value) {
-			int log = 0;
+		internal static byte Log256(this ulong value) {
+			byte log = 0;
 			while(value > byte.MaxValue) {
 				value >>= 8;
 				log++;
