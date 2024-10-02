@@ -87,5 +87,19 @@ namespace Riptide.Utils
 			ulong carry = val << (64 - shift);
 			return (value, carry);
 		}
+
+		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
+			ulong value = 0;
+			for(int i = 63; i >= 0; i--) {
+				value <<= 1;
+				carry <<= 1;
+				carry += val & 1;
+				val >>= 1;
+				if(carry < div) continue;
+				carry -= div;
+				value |= 1;
+			}
+			return (value, carry);
+		}
 	}
 }

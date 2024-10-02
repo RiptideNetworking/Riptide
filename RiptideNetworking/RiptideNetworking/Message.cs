@@ -46,7 +46,7 @@ namespace Riptide
         internal const int NotifyHeaderBits = HeaderBits + 5 * BitsPerByte;
 		/// <summary>The header size for queued messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
-		internal const byte QueuedHeaderBits = 2 * BitsPerByte + 4;
+		internal const byte QueuedHeaderBits = HeaderBits + 2 * BitsPerByte;
         /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
         internal const int MinUnreliableBytes = UnreliableHeaderBits / BitsPerByte + (UnreliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The minimum number of bytes contained in a reliable message.</summary>
@@ -101,26 +101,8 @@ namespace Riptide
             ByteBuffer = new byte[MaxSize];
         }
 
-        /// <summary>Id of the message.</summary>
-        internal ushort Id
-        {
-            get
-            {
-                int currentBit = 20;
-                ushort num = 0;
-                int num2 = 0;
-                byte num3;
-                do
-                {
-                    PeekBits(8, currentBit, out num3);
-                    num |= (ushort)((num3 & 0x7F) << num2);
-                    currentBit += 8;
-                    num2 += 7;
-                }
-                while((num3 & 0x80) != 0L);
-                return num;
-            }
-        }
+		/// <summary>The maximum value of Id.</summary>
+		public static ushort MaxId { private get; set; } = ushort.MaxValue;
 		/// <summary>The sequence Id of the message</summary>
 		internal ushort SequenceId
         {
@@ -187,7 +169,7 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return RetrieveFromPool().Init((MessageHeader)sendMode).AddVarULong(id);
+            return RetrieveFromPool().Init((MessageHeader)sendMode).AddUShort(id, 0, MaxId);
         }
         /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
@@ -211,7 +193,6 @@ namespace Riptide
 				s += Convert.ToString(b, 2).PadLeft(8, '0') + " ";
 			}
 			s += "\nmaxWriteByte: " + maxWriteByte;
-			s += "\nId: " + Id;
 			s += "\nSequenceId: " + SequenceId;
 			RiptideLogger.Log(LogType.Info, s);
 		}
@@ -424,6 +405,8 @@ namespace Riptide
 			Array.Copy(data, message.data, data.Length);
 			return message;
         }
+
+		internal ushort GetMessageID() => GetUShort(0, MaxId);
 
 		/// <summary>Creates a QueuedAck message containing sequence ID.</summary>
 		/// <param name="sequenceId">The sequence id to queue.</param>

@@ -569,7 +569,7 @@ namespace Riptide
         /// <param name="fromConnection">The client from which the message was received.</param>
         protected virtual void OnMessageReceived(Message message, Connection fromConnection)
         {
-            ushort messageId = (ushort)message.GetVarULong();
+            ushort messageId = message.GetMessageID();
             if (RelayFilter != null && RelayFilter.ShouldRelay(messageId))
             {
                 // The message should be automatically relayed to clients instead of being handled on the server
