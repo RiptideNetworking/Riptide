@@ -127,7 +127,7 @@ namespace Riptide
 		/// <summary>The mult for new values.</summary>
 		private ulong[] writeValue;
 		/// <summary>The maximum byte of the writeValue.</summary>
-		private int maxWriteByte = 0; // TODO
+		private int maxWriteByte = 0;
 
 		/// <summary>How many bytes remain to be read from the message(not including Unread States).</summary>
 		public int UnreadBytes => maxWriteByte + 1;
@@ -145,15 +145,7 @@ namespace Riptide
 
         /// <summary>Gets a completely empty message instance with no header.</summary>
         /// <returns>An empty message instance.</returns>
-        public static Message Create()
-        {
-            Message message = RetrieveFromPool();
-			message.data.Clear();
-			message.writeValue.Clear();
-			message.writeValue[0] = 1;
-			message.maxWriteByte = 0;
-            return message;
-        }
+        public static Message Create() => RetrieveFromPool();
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <returns>A message instance ready to be sent.</returns>
@@ -193,8 +185,13 @@ namespace Riptide
 				s += Convert.ToString(b, 2).PadLeft(8, '0') + " ";
 			}
 			s += "\nmaxWriteByte: " + maxWriteByte;
-			s += "\nSequenceId: " + SequenceId;
 			RiptideLogger.Log(LogType.Info, s);
+		}
+
+		private void Clean() {
+			data[0] = 0;
+			writeValue[0] = 1;
+			maxWriteByte = 0;
 		}
 
         #region Pooling
@@ -224,15 +221,11 @@ namespace Riptide
         private static Message RetrieveFromPool()
         {
             Message message;
-            if (pool.Count > 0)
-            {
-                message = pool[0];
-                pool.RemoveFirst();
-            }
-            else
-                message = new Message();
-
-            return message;
+            if(pool.Count == 0) return new Message();
+			message = pool[0];
+			pool.RemoveFirst();
+			message.Clean();
+			return message;
         }
 
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
@@ -268,7 +261,7 @@ namespace Riptide
             data[0] = firstByte;
             header = (MessageHeader)(firstByte & HeaderBitmask);
             SetHeader(header);
-            maxWriteByte = (byte)contentLength;
+            maxWriteByte = contentLength;
             return this;
         }
 
@@ -478,14 +471,24 @@ namespace Riptide
 		
 		private ulong AddReadStates(ulong states) {
 			if(states.IsPowerOf256()) return GetFullBytes(states.Log256());
-			return Converter.DivReturnMod(data, states, ref maxWriteByte);
+			int mwb = maxWriteByte;
+			ulong ret = Converter.DivReturnMod(data, states, ref mwb);
+			Converter.DivReturnMod(writeValue, states, ref maxWriteByte);
+			return ret;
 		}
 
-		private void AddFullBytes(byte byteAmount)
-			=> Converter.LeftShift(data, byteAmount, ref maxWriteByte);
+		private void AddFullBytes(byte byteAmount) {
+			int mwb = maxWriteByte;
+			Converter.LeftShift(data, byteAmount, ref mwb);
+			Converter.LeftShift(writeValue, byteAmount, ref maxWriteByte);
+		}
 
-		private ulong GetFullBytes(byte byteAmount)
-			=> Converter.RightShift(data, byteAmount, ref maxWriteByte);
+		private ulong GetFullBytes(byte byteAmount) {
+			int mwb = maxWriteByte;
+			ulong ret = Converter.RightShift(data, byteAmount, ref mwb);
+			Converter.RightShift(writeValue, byteAmount, ref maxWriteByte);
+			return ret;
+		}
 		#endregion
 
         #region Byte & SByte
@@ -1230,7 +1233,8 @@ namespace Riptide
 			if(UnwrittenBytes < sizeof(ulong))
 				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong));
 			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
-			Converter.Add(data, writeValue, value - minValue, ref maxWriteByte);
+			int mwb = maxWriteByte;
+			Converter.Add(data, writeValue, value - minValue, ref mwb);
 			AddWriteStates(maxValue - minValue + 1);
 			return this;
 		}
