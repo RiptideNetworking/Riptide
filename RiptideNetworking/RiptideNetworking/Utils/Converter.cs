@@ -271,72 +271,114 @@ namespace Riptide.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ByteToBits(byte value, ulong[] array, int startBit) => ToBits(value, BitsPerByte, array, startBit);
 
-		/// <summary>Gets the next byte.</summary>
-		/// <param name="array"></param>
-		/// <param name="maxValue"></param>
-		/// <param name="startByte"></param>
-		/// <param name="startState"></param>
-		/// <param name="bytesInUse"></param>
-		/// <returns></returns>
-		public static uint GetNextUInt(ulong[] array, uint maxValue, byte startByte, byte startState, int bytesInUse) {
-			if(maxValue == uint.MaxValue)
-				return Div(array, startState, startByte, bytesInUse);
-			return Mod(array, maxValue + 1, startState, startByte, bytesInUse);
-		}
+		// TODO check if these are correct
 
-		/// <summary>Adds a Byte.</summary>
+		/// <summary>Calculates: value += amount * mult.</summary>
 		/// <param name="value"></param>
-		/// <param name="array"></param>
-		/// <param name="startByte"></param>
-		/// <param name="startState"></param>
-		public static void AddNextUInt(uint value, ulong[] array, byte startByte, byte startState) {
-			ulong[] bytes = new ulong[1];
-			Buffer.BlockCopy(array, startByte, bytes, 0, 5);
-			bytes[0] %= startState;
-			bytes[0] += value * startState;
-			Buffer.BlockCopy(bytes, 0, array, startByte, 5);
-		}
-
-		/// <summary>Takes the mod of <paramref name="value"/> shifted by 
-		/// <paramref name="startByte"/> bytes and <paramref name="div"/> states.</summary>
-		/// <param name="value"></param>
-		/// <param name="mod"></param>
-		/// <param name="startByte"></param>
-		/// <param name="div"></param>
+		/// <param name="amount"></param>
+		/// <param name="mult"></param>
 		/// <param name="maxByte"></param>
-		/// <returns>The result.</returns>
-		public static uint Mod(ulong[] value, uint mod, byte div, byte startByte, int maxByte) {
-			if(div == 0) throw new ArgumentException("div cannot be 0");
-			uint result = 0;
-			uint carryOver = 0;
-			int totalBytes = Math.Min(value.Length * 8, Math.Max(0, maxByte - startByte));
-			for(int i = totalBytes - 1; i >= startByte; i--) {
-				int ulongIndex = i / 8;
-				int byteOffset = i % 8;
-				byte currentByte = (byte)((value[ulongIndex] >> (byteOffset * 8)) & 0xFF);
-				uint currentValue = (carryOver << 8) + currentByte;
-				carryOver = (byte)(currentValue % div);
-				result = (result * 256 + (currentValue / div)) % mod;
+		public static void Add(ulong[] value, ulong[] amount, ulong mult, ref int maxByte) {
+			int iters = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
+			ulong carry = 0;
+			for(int i = 0; i < iters; i++) {
+				(ulong temp, ulong tempCarry) = CMath.MultiplyUlong(amount[i], mult);
+				(value[i], carry) = CMath.AddUlong(value[i], carry);
+				carry += tempCarry;
+				(value[i], tempCarry) = CMath.AddUlong(value[i], temp);
+				carry += tempCarry;
 			}
-			return result;
+			maxByte += mult.Log256() + 2;
+			AdjustMaxByte(value, ref maxByte);
 		}
 
+		/// <summary>Calculates: value *= mult.</summary>
+		/// <param name="value"></param>
+		/// <param name="mult"></param>
+		/// <param name="maxByte"></param>
+		public static void Mult(ulong[] value, ulong mult, ref int maxByte) {
+			int iters = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
+			ulong carry = 0;
+			for(int i = 0; i < iters; i++) {
+				ulong prevCarry = carry;
+				(value[i], carry) = CMath.MultiplyUlong(value[i], mult);
+				value[i] += prevCarry;
+			}
+			maxByte += mult.Log256() + 1;
+			AdjustMaxByte(value, ref maxByte);
+		}
 
-		/// <summary>Divides <paramref name="value"/> by <paramref name="div"/>.</summary>
+		/// <summary>Calculates: value /= div.</summary>
 		/// <param name="value"></param>
 		/// <param name="div"></param>
-		/// <param name="startByte"></param>
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
-		public static uint Div(ulong[] value, byte div, byte startByte, int maxByte) {
+		public static ulong DivReturnMod(ulong[] value, ulong div, ref int maxByte) {
+			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
+			if(value.Length == 0) return 0;
+
+			int valueLength = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
+			ulong divInverse = PrecomputeBarrett(div, valueLength);
 			ulong remainder = 0;
-			for(int i = startByte; i < maxByte; i++) {
-				ulong currentValue = (remainder << 8) + ((value[i / 8] >> (8 * (i % 8))) & 0xFF);
-				remainder = currentValue % div;
-				value[i / 8] = (value[i / 8] & ~(0xFFUL << (8 * (i % 8)))) | ((currentValue / div) << (8 * (i % 8)));
+			ulong quotient;
+			
+			for (int i = valueLength - 1; i >= 0; i--) {
+				remainder = (remainder << 64) | value[i];
+				quotient = (remainder * divInverse) >> 64;
+				value[i] = quotient;
+				remainder -= quotient * div;
 			}
-			uint result = (uint)(value[startByte / 8] & 0xFFFFFFFF);
-			return result;
+
+			maxByte -= div.Log256();
+			AdjustMaxByte(value, ref maxByte);
+
+			if (remainder >= div) return remainder - div;
+			return remainder;
+		}
+
+		private static ulong PrecomputeBarrett(ulong div, int bitLength) {
+			ulong mu = (1UL << (bitLength * 64)) / div;
+			return mu;
+		}
+
+		/// <summary>Shifts the value to the left by (shiftBytes * 8) bits.</summary>
+		/// <param name="value"></param>
+		/// <param name="shiftBytes"></param>
+		/// <param name="maxByte"></param>
+		public static void LeftShift(ulong[] value, byte shiftBytes, ref int maxByte) {
+			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
+			ulong carry = 0;
+			for(int i = 0; i < iters; i++) {
+				ulong val;
+				ulong prevCarry = carry;
+				(val, carry) = CMath.RightShiftUlong(value[i], shiftBytes * 8);
+				value[i] = val + prevCarry;
+			}
+			maxByte += shiftBytes;
+		}
+
+		/// <summary>Shifts the value to the right by (shiftBytes * 8) bits.</summary>
+		/// <param name="value"></param>
+		/// <param name="shiftBytes"></param>
+		/// <param name="maxByte"></param>
+		/// <returns></returns>
+		public static ulong RightShift(ulong[] value, byte shiftBytes, ref int maxByte) {
+			ulong remainder = 0;
+			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
+			ulong carry = 0;
+			for(int i = iters - 1; i >= 0; i--) {
+				ulong val;
+				ulong prevCarry = carry;
+				(val, carry) = CMath.RightShiftUlong(value[i], shiftBytes * 8);
+				value[i] = val + prevCarry;
+			}
+			maxByte -= shiftBytes;
+			return remainder;
+		}
+
+		private static void AdjustMaxByte(ulong[] value, ref int maxByte) {
+			while(maxByte >= 0 && (value[maxByte / 8] >> (maxByte % 8)) == 0)
+				maxByte--;
 		}
 
         /// <summary>Converts the 8 bits at <paramref name="startBit"/> in <paramref name="array"/> to an <see cref="sbyte"/>.</summary>

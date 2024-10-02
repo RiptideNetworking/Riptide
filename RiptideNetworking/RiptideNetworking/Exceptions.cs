@@ -40,23 +40,23 @@ namespace Riptide
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
         /// <param name="typeName">The name of the type which could not be added to the message.</param>
-        /// <param name="requiredBits">The number of available bits required for the type to be added successfully.</param>
-        public InsufficientCapacityException(Message message, string typeName, int requiredBits) : base(GetErrorMessage(message, typeName, requiredBits))
+        /// <param name="requiredBytes">The number of available bytes required for the type to be added successfully.</param>
+        public InsufficientCapacityException(Message message, string typeName, int requiredBytes) : base(GetErrorMessage(message, typeName, requiredBytes))
         {
             RiptideMessage = message;
             TypeName = typeName;
-            RequiredBits = requiredBits;
+            RequiredBits = requiredBytes;
         }
         /// <summary>Initializes a new <see cref="InsufficientCapacityException"/> instance and constructs an error message from the given information.</summary>
         /// <param name="message">The message with insufficient remaining capacity.</param>
         /// <param name="arrayLength">The length of the array which could not be added to the message.</param>
         /// <param name="typeName">The name of the array's type.</param>
-        /// <param name="requiredBits">The number of available bits required for a single element of the array to be added successfully.</param>
-        public InsufficientCapacityException(Message message, int arrayLength, string typeName, int requiredBits) : base(GetErrorMessage(message, arrayLength, typeName, requiredBits))
+        /// <param name="requiredBytes">The number of available bytes required for a single element of the array to be added successfully.</param>
+        public InsufficientCapacityException(Message message, int arrayLength, string typeName, int requiredBytes) : base(GetErrorMessage(message, arrayLength, typeName, requiredBytes))
         {
             RiptideMessage = message;
             TypeName = $"{typeName}[]";
-            RequiredBits = requiredBits * arrayLength;
+            RequiredBits = requiredBytes * arrayLength;
         }
 
         /// <summary>Constructs the error message from the given information.</summary>
