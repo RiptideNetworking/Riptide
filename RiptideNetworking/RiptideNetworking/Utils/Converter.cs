@@ -4,6 +4,7 @@
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -271,7 +272,7 @@ namespace Riptide.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void ByteToBits(byte value, ulong[] array, int startBit) => ToBits(value, BitsPerByte, array, startBit);
 
-		// TODO check if these are correct
+		// TODO more testing
 
 		/// <summary>Calculates: value += amount * mult.</summary>
 		/// <param name="value"></param>
@@ -318,27 +319,20 @@ namespace Riptide.Utils
 			if(value.Length == 0) return 0;
 
 			int valueLength = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
-			ulong divInverse = PrecomputeBarrett(div, valueLength);
-			ulong remainder = 0;
-			ulong quotient;
-			
-			for (int i = valueLength - 1; i >= 0; i--) {
-				remainder = (remainder << 64) | value[i];
-				quotient = (remainder * divInverse) >> 64;
-				value[i] = quotient;
-				remainder -= quotient * div;
+			ulong carry = 0;
+			for(int i = valueLength * 2 - 1; i >= 0; i--) {
+				int ui = i % 2 * 32;
+				ulong mask = (0ul - (ulong)(i % 2)) ^ 0x00000000FFFFFFFFUL;
+				carry <<= 32;
+				ulong current = (value[i / 2] >> ui) & mask;
+				current += carry;
+				(current, carry) = (current / div, current % div);
+				value[i / 2] = (current << ui) | (value[i / 2] & ~mask);
 			}
 
 			maxByte -= div.Log256();
 			AdjustMaxByte(value, ref maxByte);
-
-			if (remainder >= div) return remainder - div;
-			return remainder;
-		}
-
-		private static ulong PrecomputeBarrett(ulong div, int bitLength) {
-			ulong mu = (1UL << (bitLength * 64)) / div;
-			return mu;
+			return carry;
 		}
 
 		/// <summary>Shifts the value to the left by (shiftBytes * 8) bits.</summary>
@@ -363,7 +357,7 @@ namespace Riptide.Utils
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
 		public static ulong RightShift(ulong[] value, byte shiftBytes, ref int maxByte) {
-			ulong remainder = 0;
+			RiptideLogger.Log(LogType.Info, "right shift");
 			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = iters - 1; i >= 0; i--) {
@@ -373,11 +367,11 @@ namespace Riptide.Utils
 				value[i] = val + prevCarry;
 			}
 			maxByte -= shiftBytes;
-			return remainder;
+			return carry;
 		}
 
 		private static void AdjustMaxByte(ulong[] value, ref int maxByte) {
-			while(maxByte >= 0 && (value[maxByte / 8] >> (maxByte % 8)) == 0)
+			while(maxByte > 0 && (value[maxByte / 8] >> ((maxByte % 8) * 8)) == 0)
 				maxByte--;
 		}
 

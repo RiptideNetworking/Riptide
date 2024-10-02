@@ -502,7 +502,7 @@ namespace Riptide
 			=> Converter.LeftShift(data, byteAmount, ref maxWriteByte);
 
 		private ulong GetFullBytes(byte byteAmount)
-			=> Converter.RightShift(data, byteAmount,ref maxWriteByte);
+			=> Converter.RightShift(data, byteAmount, ref maxWriteByte);
 		#endregion
 
         #region Byte & SByte
