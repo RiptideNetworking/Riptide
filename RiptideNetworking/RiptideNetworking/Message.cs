@@ -503,13 +503,13 @@ namespace Riptide
 
 		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
-		public Message AddByte(byte value, byte minValue, byte maxValue) {
+		public Message AddByte(byte value, byte min, byte max) {
 			if(UnwrittenBytes < sizeof(byte))
 				throw new InsufficientCapacityException(this, ByteName, sizeof(byte));
-			return AddULong(value, minValue, maxValue);
+			return AddULong(value, min, max);
 		}
 
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
@@ -524,16 +524,16 @@ namespace Riptide
 		}
 
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-		public byte GetByte(byte minValue, byte maxValue) {
+		public byte GetByte(byte min, byte max) {
 			if (UnreadBytes < sizeof(byte))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ByteName, $"{default(byte)}"));
                 return default;
             }
-			return (byte)GetULongUnchecked(minValue, maxValue);
+			return (byte)GetULongUnchecked(min, max);
 		}
 
 		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
@@ -543,34 +543,34 @@ namespace Riptide
 
 		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
         /// <param name="value">The <see cref="sbyte"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
-		public Message AddSByte(sbyte value, sbyte minValue, sbyte maxValue)
-			=> AddByte((byte)value, (byte)minValue, (byte)maxValue);
+		public Message AddSByte(sbyte value, sbyte min, sbyte max)
+			=> AddByte(value.Conv(), min.Conv(), max.Conv());
 
 		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
 		public sbyte GetSByte() => (sbyte)GetByte();
 
 		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
-		public sbyte GetSByte(sbyte minValue, sbyte maxValue) {
+		public sbyte GetSByte(sbyte min, sbyte max) {
 			if (UnreadBytes < sizeof(byte))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ByteName, $"{default(sbyte)}"));
                 return default;
             }
-			return (sbyte)GetULongUnchecked((uint)minValue, (uint)maxValue);
+			return (sbyte)GetULongUnchecked(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddBytes(byte[] array, bool includeLength = true)
+        public Message AddBytes(byte[] array, bool includeLength = true, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -580,7 +580,7 @@ namespace Riptide
 
 			for (int i = 0; i < array.Length; i++)
 			{
-				AddByte(array[i]);
+				AddByte(array[i], min, max);
 			}
 
             return this;
@@ -592,7 +592,7 @@ namespace Riptide
         /// <param name="amount">The amount of bytes to add from the startIndex of the array.</param>
         /// <param name="includeLength">Whether or not to include the <paramref name="amount"/> in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddBytes(byte[] array, int startIndex, int amount, bool includeLength = true)
+        public Message AddBytes(byte[] array, int startIndex, int amount, bool includeLength = true, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             if (startIndex < 0 || startIndex >= array.Length)
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
@@ -608,7 +608,7 @@ namespace Riptide
 
 			for (int i = startIndex; i < startIndex + amount; i++)
 			{
-				AddByte(array[i]);
+				AddByte(array[i], min, max);
 			}
 
             return this;
@@ -618,7 +618,7 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddSBytes(sbyte[] array, bool includeLength = true)
+        public Message AddSBytes(sbyte[] array, bool includeLength = true, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -628,7 +628,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddSByte(array[i]);
+                AddSByte(array[i], min, max);
             }
 
             return this;
@@ -636,65 +636,65 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public byte[] GetBytes() => GetBytes((int)GetVarULong());
+        public byte[] GetBytes(byte min = byte.MinValue, byte max = byte.MaxValue) => GetBytes((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="byte"/> array from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public byte[] GetBytes(int amount)
+        public byte[] GetBytes(int amount, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             byte[] array = new byte[amount];
-            ReadBytes(amount, array);
+            ReadBytes(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetBytes(byte[] intoArray, int startIndex = 0) => GetBytes((int)GetVarULong(), intoArray, startIndex);
+        public void GetBytes(byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue) => GetBytes((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="byte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of bytes to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetBytes(int amount, byte[] intoArray, int startIndex = 0)
+        public void GetBytes(int amount, byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ByteName));
 
-            ReadBytes(amount, intoArray, startIndex);
+            ReadBytes(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public sbyte[] GetSBytes() => GetSBytes((int)GetVarULong());
+        public sbyte[] GetSBytes(sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue) => GetSBytes((int)GetVarULong(), min, max);
         /// <summary>Retrieves an <see cref="sbyte"/> array from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public sbyte[] GetSBytes(int amount)
+        public sbyte[] GetSBytes(int amount, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
         {
             sbyte[] array = new sbyte[amount];
-            ReadSBytes(amount, array);
+            ReadSBytes(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating <paramref name="intoArray"/>.</param>
-        public void GetSBytes(sbyte[] intoArray, int startIndex = 0) => GetSBytes((int)GetVarULong(), intoArray, startIndex);
+        public void GetSBytes(sbyte[] intoArray, int startIndex = 0, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue) => GetSBytes((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="sbyte"/> array with bytes retrieved from the message.</summary>
         /// <param name="amount">The amount of sbytes to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating <paramref name="intoArray"/>.</param>
-        public void GetSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
+        public void GetSBytes(int amount, sbyte[] intoArray, int startIndex = 0, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, SByteName));
 
-            ReadSBytes(amount, intoArray, startIndex);
+            ReadSBytes(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Reads a number of bytes from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of bytes to read.</param>
         /// <param name="intoArray">The array to write the bytes into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0)
+        private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             if (UnreadBytes < amount)
             {
@@ -704,7 +704,7 @@ namespace Riptide
 
 			for (int i = 0; i < amount; i++)
 			{
-				intoArray[startIndex + i] = GetByte();
+				intoArray[startIndex + i] = GetByte(min, max);
 			}
         }
 
@@ -712,7 +712,7 @@ namespace Riptide
         /// <param name="amount">The amount of sbytes to read.</param>
         /// <param name="intoArray">The array to write the sbytes into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex = 0)
+        private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex = 0, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
         {
             if (UnreadBytes < amount)
             {
@@ -722,7 +722,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetSByte();
+                intoArray[startIndex + i] = GetSByte(min, max);
             }
         }
         #endregion
@@ -811,13 +811,13 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
-		public Message AddUShort(ushort value, ushort minValue, ushort maxValue) {
+		public Message AddUShort(ushort value, ushort min, ushort max) {
 			if(UnwrittenBytes < sizeof(ushort))
 				throw new InsufficientCapacityException(this, UShortName, sizeof(ushort));
-			return AddULong(value, minValue, maxValue);
+			return AddULong(value, min, max);
 		}
 
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
@@ -832,16 +832,16 @@ namespace Riptide
 		}
 
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
-		public ushort GetUShort(ushort minValue, ushort maxValue) {
+		public ushort GetUShort(ushort min, ushort max) {
 			if (UnreadBytes < sizeof(ushort))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UShortName, $"{default(ushort)}"));
                 return default;
             }
-			return (ushort)GetULongUnchecked(minValue, maxValue);
+			return (ushort)GetULongUnchecked(min, max);
 		}
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
@@ -851,33 +851,33 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
-		public Message AddShort(short value, short minValue, short maxValue)
-			=> AddUShort((ushort)value, (ushort)minValue, (ushort)maxValue);
+		public Message AddShort(short value, short min, short max)
+			=> AddUShort(value.Conv(), min.Conv(), max.Conv());
 		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
 		public short GetShort() => (short)GetUShort();
 
 		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
-		public short GetShort(short minValue, short maxValue) {
+		public short GetShort(short min, short max) {
 			if (UnreadBytes < sizeof(short))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ByteName, $"{default(short)}"));
                 return default;
             }
-			return (short)GetULongUnchecked((uint)minValue, (uint)maxValue);
+			return (short)GetULongUnchecked(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddShorts(short[] array, bool includeLength = true)
+        public Message AddShorts(short[] array, bool includeLength = true, short min = short.MinValue, short max = short.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -887,7 +887,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddShort(array[i]);
+                AddShort(array[i], min, max);
             }
 
             return this;
@@ -897,7 +897,7 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddUShorts(ushort[] array, bool includeLength = true)
+        public Message AddUShorts(ushort[] array, bool includeLength = true, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -907,7 +907,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddUShort(array[i]);
+                AddUShort(array[i], min, max);
             }
 
             return this;
@@ -915,65 +915,65 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public short[] GetShorts() => GetShorts((int)GetVarULong());
+        public short[] GetShorts(short min = short.MinValue, short max = short.MaxValue) => GetShorts((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="short"/> array from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public short[] GetShorts(int amount)
+        public short[] GetShorts(int amount, short min = short.MinValue, short max = short.MaxValue)
         {
             short[] array = new short[amount];
-            ReadShorts(amount, array);
+            ReadShorts(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetShorts(short[] intoArray, int startIndex = 0) => GetShorts((int)GetVarULong(), intoArray, startIndex);
+        public void GetShorts(short[] intoArray, int startIndex = 0, short min = short.MinValue, short max = short.MaxValue) => GetShorts((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="short"/> array with shorts retrieved from the message.</summary>
         /// <param name="amount">The amount of shorts to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetShorts(int amount, short[] intoArray, int startIndex = 0)
+        public void GetShorts(int amount, short[] intoArray, int startIndex = 0, short min = short.MinValue, short max = short.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ShortName));
 
-            ReadShorts(amount, intoArray, startIndex);
+            ReadShorts(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public ushort[] GetUShorts() => GetUShorts((int)GetVarULong());
+        public ushort[] GetUShorts(ushort min = ushort.MinValue, ushort max = ushort.MaxValue) => GetUShorts((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="ushort"/> array from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public ushort[] GetUShorts(int amount)
+        public ushort[] GetUShorts(int amount, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
         {
             ushort[] array = new ushort[amount];
-            ReadUShorts(amount, array);
+            ReadUShorts(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetUShorts(ushort[] intoArray, int startIndex = 0) => GetUShorts((int)GetVarULong(), intoArray, startIndex);
+        public void GetUShorts(ushort[] intoArray, int startIndex = 0, ushort min = ushort.MinValue, ushort max = ushort.MaxValue) => GetUShorts((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="ushort"/> array with ushorts retrieved from the message.</summary>
         /// <param name="amount">The amount of ushorts to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetUShorts(int amount, ushort[] intoArray, int startIndex = 0)
+        public void GetUShorts(int amount, ushort[] intoArray, int startIndex = 0, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UShortName));
 
-            ReadUShorts(amount, intoArray, startIndex);
+            ReadUShorts(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Reads a number of shorts from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of shorts to read.</param>
         /// <param name="intoArray">The array to write the shorts into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadShorts(int amount, short[] intoArray, int startIndex = 0)
+        private void ReadShorts(int amount, short[] intoArray, int startIndex = 0, short min = short.MinValue, short max = short.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(short))
             {
@@ -983,7 +983,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetShort();
+                intoArray[startIndex + i] = GetShort(min, max);
             }
         }
 
@@ -991,7 +991,7 @@ namespace Riptide
         /// <param name="amount">The amount of ushorts to read.</param>
         /// <param name="intoArray">The array to write the ushorts into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadUShorts(int amount, ushort[] intoArray, int startIndex = 0)
+        private void ReadUShorts(int amount, ushort[] intoArray, int startIndex = 0, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(ushort))
             {
@@ -1001,7 +1001,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetUShort();
+                intoArray[startIndex + i] = GetUShort(min, max);
             }
         }
         #endregion
@@ -1018,13 +1018,13 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
-		public Message AddUInt(uint value, uint minValue, uint maxValue) {
+		public Message AddUInt(uint value, uint min, uint max) {
 			if(UnwrittenBytes < sizeof(uint))
 				throw new InsufficientCapacityException(this, UIntName, sizeof(uint));
-			return AddULong(value, minValue, maxValue);
+			return AddULong(value, min, max);
 		}
 
 		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
@@ -1039,16 +1039,16 @@ namespace Riptide
 		}
 
 		/// <summary>Retrieves an <see cref="uint"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
-		public uint GetUInt(uint minValue, uint maxValue) {
+		public uint GetUInt(uint min, uint max) {
 			if (UnreadBytes < sizeof(uint))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(UIntName, $"{default(uint)}"));
                 return default;
             }
-			return (uint)GetULongUnchecked(minValue, maxValue);
+			return (uint)GetULongUnchecked(min, max);
 		}
 
 		/// <summary>Adds an <see cref="int"/> to the message.</summary>
@@ -1058,34 +1058,34 @@ namespace Riptide
 		
 		/// <summary>Adds an <see cref="int"/> to the message.</summary>
 		/// <param name="value">The <see cref="int"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
-		public Message AddInt(int value, int minValue, int maxValue)
-			=> AddULong((ulong)value, (ulong)minValue, (ulong)maxValue);
+		public Message AddInt(int value, int min, int max)
+			=> AddULong(value.Conv(), min.Conv(), max.Conv());
 		
 		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
         /// <returns>The <see cref="int"/> that was retrieved.</returns>
 		public int GetInt() => (int)GetUInt();
 
 		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="int"/> that was retrieved.</returns>
-		public int GetInt(int minValue, int maxValue) {
+		public int GetInt(int min, int max) {
 			if (UnreadBytes < sizeof(uint))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(IntName, $"{default(int)}"));
                 return default;
             }
-			return (int)GetULongUnchecked((uint)minValue, (uint)maxValue);
+			return (int)GetULongUnchecked(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds an <see cref="int"/> array message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddInts(int[] array, bool includeLength = true)
+        public Message AddInts(int[] array, bool includeLength = true, int min = int.MinValue, int max = int.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1095,7 +1095,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddInt(array[i]);
+                AddInt(array[i], min, max);
             }
 
             return this;
@@ -1105,7 +1105,7 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddUInts(uint[] array, bool includeLength = true)
+        public Message AddUInts(uint[] array, bool includeLength = true, uint min = uint.MinValue, uint max = uint.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1115,7 +1115,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddUInt(array[i]);
+                AddUInt(array[i], min, max);
             }
 
             return this;
@@ -1123,65 +1123,65 @@ namespace Riptide
 
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public int[] GetInts() => GetInts((int)GetVarULong());
+        public int[] GetIntsAutoAmmount(int min = int.MinValue, int max = int.MaxValue) => GetInts((int)GetVarULong(), min, max);
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public int[] GetInts(int amount)
+        public int[] GetInts(int amount, int min = int.MinValue, int max = int.MaxValue)
         {
             int[] array = new int[amount];
-            ReadInts(amount, array);
+            ReadInts(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetInts(int[] intoArray, int startIndex = 0) => GetInts((int)GetVarULong(), intoArray, startIndex);
+        public void GetInts(int[] intoArray, int startIndex = 0, int min = int.MinValue, int max = int.MaxValue) => GetInts((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetInts(int amount, int[] intoArray, int startIndex = 0)
+        public void GetInts(int amount, int[] intoArray, int startIndex = 0, int min = int.MinValue, int max = int.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, IntName));
 
-            ReadInts(amount, intoArray, startIndex);
+            ReadInts(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public uint[] GetUInts() => GetUInts((int)GetVarULong());
+        public uint[] GetUInts(uint min = uint.MinValue, uint max = uint.MaxValue) => GetUInts((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="uint"/> array from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public uint[] GetUInts(int amount)
+        public uint[] GetUInts(int amount, uint min = uint.MinValue, uint max = uint.MaxValue)
         {
             uint[] array = new uint[amount];
-            ReadUInts(amount, array);
+            ReadUInts(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetUInts(uint[] intoArray, int startIndex = 0) => GetUInts((int)GetVarULong(), intoArray, startIndex);
+        public void GetUInts(uint[] intoArray, int startIndex = 0, uint min = uint.MinValue, uint max = uint.MaxValue) => GetUInts((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="uint"/> array with uints retrieved from the message.</summary>
         /// <param name="amount">The amount of uints to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetUInts(int amount, uint[] intoArray, int startIndex = 0)
+        public void GetUInts(int amount, uint[] intoArray, int startIndex = 0, uint min = uint.MinValue, uint max = uint.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UIntName));
 
-            ReadUInts(amount, intoArray, startIndex);
+            ReadUInts(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Reads a number of ints from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of ints to read.</param>
         /// <param name="intoArray">The array to write the ints into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadInts(int amount, int[] intoArray, int startIndex = 0)
+        private void ReadInts(int amount, int[] intoArray, int startIndex = 0, int min = int.MinValue, int max = int.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(int))
             {
@@ -1191,7 +1191,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetInt();
+                intoArray[startIndex + i] = GetInt(min, max);
             }
         }
 
@@ -1199,7 +1199,7 @@ namespace Riptide
         /// <param name="amount">The amount of uints to read.</param>
         /// <param name="intoArray">The array to write the uints into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadUInts(int amount, uint[] intoArray, int startIndex = 0)
+        private void ReadUInts(int amount, uint[] intoArray, int startIndex = 0, uint min = uint.MinValue, uint max = uint.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(uint))
             {
@@ -1209,7 +1209,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetUInt();
+                intoArray[startIndex + i] = GetUInt(min, max);
             }
         }
         #endregion
@@ -1226,16 +1226,16 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
-		public Message AddULong(ulong value, ulong minValue, ulong maxValue) {
+		public Message AddULong(ulong value, ulong min, ulong max) {
 			if(UnwrittenBytes < sizeof(ulong))
 				throw new InsufficientCapacityException(this, ULongName, sizeof(ulong));
-			if(value > maxValue || value < minValue) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {minValue} and {maxValue} (inclusive)");
+			if(value > max || value < min) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {min} and {max} (inclusive)");
 			int mwb = maxWriteByte;
-			Converter.Add(data, writeValue, value - minValue, ref mwb);
-			AddWriteStates(maxValue - minValue + 1);
+			Converter.Add(data, writeValue, value - min, ref mwb);
+			AddWriteStates(max - min + 1);
 			return this;
 		}
 
@@ -1251,22 +1251,22 @@ namespace Riptide
 		}
 
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
-		public ulong GetULong(ulong minValue, ulong maxValue) {
+		public ulong GetULong(ulong min, ulong max) {
 			if (UnreadBytes < sizeof(ulong))
             {
                 RiptideLogger.Log(LogType.Error, NotEnoughBytesError(ULongName, $"{default(ulong)}"));
                 return default;
             }
-			return GetULongUnchecked(minValue, maxValue);
+			return GetULongUnchecked(min, max);
 		}
 
-		private ulong GetULongUnchecked(ulong minValue, ulong maxValue) {
-			if(minValue > maxValue) throw new ArgumentOutOfRangeException(nameof(minValue), "minValue must be <= maxValue");
-			ulong value = AddReadStates(maxValue - minValue + 1);
-			return value + minValue;
+		private ulong GetULongUnchecked(ulong min, ulong max) {
+			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
+			ulong value = AddReadStates(max - min + 1);
+			return value + min;
 		}
 
 		/// <summary>Adds a <see cref="long"/> to the message.</summary>
@@ -1276,28 +1276,28 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
-		public Message AddLong(long value, long minValue, long maxValue)
-			=> AddULong((ulong)value, (ulong)minValue, (ulong)maxValue);
+		public Message AddLong(long value, long min, long max)
+			=> AddULong(value.Conv(), min.Conv(), max.Conv());
 
 		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
 		public long GetLong() => (long)GetULong();
 
 		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
-		/// <param name="minValue">The minimum value.</param>
-		/// <param name="maxValue">The maximum value.</param>
+		/// <param name="min">The minimum value.</param>
+		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
-		public long GetLong(long minValue, long maxValue)
-			=> (long)GetULong((ulong)minValue, (ulong)maxValue);
+		public long GetLong(long min, long max)
+			=> (long)GetULong(min.Conv(), max.Conv());
 
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddLongs(long[] array, bool includeLength = true)
+        public Message AddLongs(long[] array, bool includeLength = true, long min = long.MinValue, long max = long.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1307,7 +1307,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddLong(array[i]);
+                AddLong(array[i], min, max);
             }
 
             return this;
@@ -1317,7 +1317,7 @@ namespace Riptide
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddULongs(ulong[] array, bool includeLength = true)
+        public Message AddULongs(ulong[] array, bool includeLength = true, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1327,7 +1327,7 @@ namespace Riptide
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddULong(array[i]);
+                AddULong(array[i], min, max);
             }
 
             return this;
@@ -1335,65 +1335,65 @@ namespace Riptide
 
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public long[] GetLongs() => GetLongs((int)GetVarULong());
+        public long[] GetLongs(long min = long.MinValue, long max = long.MaxValue) => GetLongs((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="long"/> array from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public long[] GetLongs(int amount)
+        public long[] GetLongs(int amount, long min = long.MinValue, long max = long.MaxValue)
         {
             long[] array = new long[amount];
-            ReadLongs(amount, array);
+            ReadLongs(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetLongs(long[] intoArray, int startIndex = 0) => GetLongs((int)GetVarULong(), intoArray, startIndex);
+        public void GetLongs(long[] intoArray, int startIndex = 0, long min = long.MinValue, long max = long.MaxValue) => GetLongs((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="long"/> array with longs retrieved from the message.</summary>
         /// <param name="amount">The amount of longs to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetLongs(int amount, long[] intoArray, int startIndex = 0)
+        public void GetLongs(int amount, long[] intoArray, int startIndex = 0, long min = long.MinValue, long max = long.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, LongName));
 
-            ReadLongs(amount, intoArray, startIndex);
+            ReadLongs(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <returns>The array that was retrieved.</returns>
-        public ulong[] GetULongs() => GetULongs((int)GetVarULong());
+        public ulong[] GetULongs(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) => GetULongs((int)GetVarULong(), min, max);
         /// <summary>Retrieves a <see cref="ulong"/> array from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
         /// <returns>The array that was retrieved.</returns>
-        public ulong[] GetULongs(int amount)
+        public ulong[] GetULongs(int amount, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
         {
             ulong[] array = new ulong[amount];
-            ReadULongs(amount, array);
+            ReadULongs(amount, array, 0, min, max);
             return array;
         }
         /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetULongs(ulong[] intoArray, int startIndex = 0) => GetULongs((int)GetVarULong(), intoArray, startIndex);
+        public void GetULongs(ulong[] intoArray, int startIndex = 0, ulong min = ulong.MinValue, ulong max = ulong.MaxValue) => GetULongs((int)GetVarULong(), intoArray, startIndex, min, max);
         /// <summary>Populates a <see cref="ulong"/> array with ulongs retrieved from the message.</summary>
         /// <param name="amount">The amount of ulongs to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetULongs(int amount, ulong[] intoArray, int startIndex = 0)
+        public void GetULongs(int amount, ulong[] intoArray, int startIndex = 0, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ULongName));
 
-            ReadULongs(amount, intoArray, startIndex);
+            ReadULongs(amount, intoArray, startIndex, min, max);
         }
 
         /// <summary>Reads a number of longs from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of longs to read.</param>
         /// <param name="intoArray">The array to write the longs into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadLongs(int amount, long[] intoArray, int startIndex = 0)
+        private void ReadLongs(int amount, long[] intoArray, int startIndex = 0, long min = long.MinValue, long max = long.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(long))
             {
@@ -1403,7 +1403,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetLong();
+                intoArray[startIndex + i] = GetLong(min, max);
             }
         }
 
@@ -1411,7 +1411,7 @@ namespace Riptide
         /// <param name="amount">The amount of ulongs to read.</param>
         /// <param name="intoArray">The array to write the ulongs into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadULongs(int amount, ulong[] intoArray, int startIndex = 0)
+        private void ReadULongs(int amount, ulong[] intoArray, int startIndex = 0, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
         {
             if (UnreadBytes < amount * sizeof(ulong))
             {
@@ -1421,7 +1421,7 @@ namespace Riptide
 
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetULong();
+                intoArray[startIndex + i] = GetULong(min, max);
             }
         }
         #endregion

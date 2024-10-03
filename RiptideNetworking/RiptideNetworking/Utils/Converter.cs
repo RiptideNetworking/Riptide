@@ -318,7 +318,7 @@ namespace Riptide.Utils
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
 			if(value.Length == 0) return 0;
 
-			int valueLength = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
+			int valueLength = Math.Min(value.Length, (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = valueLength * 2 - 1; i >= 0; i--) {
 				int ui = i % 2 * 32;
@@ -340,7 +340,7 @@ namespace Riptide.Utils
 		/// <param name="shiftBytes"></param>
 		/// <param name="maxByte"></param>
 		public static void LeftShift(ulong[] value, byte shiftBytes, ref int maxByte) {
-			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
+			int iters = Math.Min(value.Length, (maxByte + shiftBytes + 7) / 8);
 			ulong carry = 0;
 			for(int i = 0; i < iters; i++) {
 				ulong val;
@@ -357,7 +357,6 @@ namespace Riptide.Utils
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
 		public static ulong RightShift(ulong[] value, byte shiftBytes, ref int maxByte) {
-			RiptideLogger.Log(LogType.Info, "right shift");
 			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = iters - 1; i >= 0; i--) {

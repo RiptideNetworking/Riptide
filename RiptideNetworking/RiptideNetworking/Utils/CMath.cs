@@ -88,7 +88,9 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
+		// TODO
 		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
+			if(carry == 0) return (val / div, val % div);
 			ulong value = 0;
 			for(int i = 63; i >= 0; i--) {
 				value <<= 1;
@@ -98,8 +100,23 @@ namespace Riptide.Utils
 				if(carry < div) continue;
 				carry -= div;
 				value |= 1;
+				if(carry >> i == 0) {
+					carry <<= 63 - i;
+					value <<= 63 - i;
+					break;
+				}
 			}
-			return (value, carry);
+			val += carry;
+			return (val / div + value, val % div);
 		}
+
+		public static byte Conv(this sbyte value) => (byte)(value + (1 << 7));
+		public static sbyte Conv(this byte value) => (sbyte)(value - (1 << 7));
+		public static ushort Conv(this short value) => (ushort)(value + (1 << 15));
+		public static short Conv(this ushort value) => (short)(value - (1 << 15));
+		public static uint Conv(this int value) => (uint)(value + (1 << 31));
+		public static int Conv(this uint value) => (int)(value - (1u << 31));
+		public static ulong Conv(this long value) => (ulong)(value + (1L << 63));
+		public static long Conv(this ulong value) => (long)(value - (1UL << 63));
 	}
 }
