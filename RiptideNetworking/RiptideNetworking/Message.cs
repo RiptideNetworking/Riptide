@@ -465,28 +465,28 @@ namespace Riptide
 
         #region overall states
 		private void AddWriteStates(ulong states) {
-			if(states.IsPowerOf256()) AddFullBytes(states.Log256());
+			if(states.IsPowerOf2()) AddFullBytes(states.Log2());
 			else Converter.Mult(writeValue, states, ref maxWriteByte);
 		}
 		
 		private ulong AddReadStates(ulong states) {
-			if(states.IsPowerOf256()) return GetFullBytes(states.Log256());
+			if(states.IsPowerOf2()) return GetFullBytes(states.Log2());
 			int mwb = maxWriteByte;
 			ulong ret = Converter.DivReturnMod(data, states, ref mwb);
 			Converter.DivReturnMod(writeValue, states, ref maxWriteByte);
 			return ret;
 		}
 
-		private void AddFullBytes(byte byteAmount) {
+		private void AddFullBytes(byte bitAmount) {
 			int mwb = maxWriteByte;
-			Converter.LeftShift(data, byteAmount, ref mwb);
-			Converter.LeftShift(writeValue, byteAmount, ref maxWriteByte);
+			Converter.LeftShift(data, bitAmount, ref mwb);
+			Converter.LeftShift(writeValue, bitAmount, ref maxWriteByte);
 		}
 
-		private ulong GetFullBytes(byte byteAmount) {
+		private ulong GetFullBytes(byte bitAmount) {
 			int mwb = maxWriteByte;
-			ulong ret = Converter.RightShift(data, byteAmount, ref mwb);
-			Converter.RightShift(writeValue, byteAmount, ref maxWriteByte);
+			ulong ret = Converter.RightShift(data, bitAmount, ref mwb);
+			Converter.RightShift(writeValue, bitAmount, ref maxWriteByte);
 			return ret;
 		}
 		#endregion
@@ -1174,21 +1174,33 @@ namespace Riptide
         }
 
         /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
+        /// <returns>The array that was retrieved.</returns>
+        public int[] GetInts() => GetInts((int)GetVarULong(), int.MinValue, int.MaxValue);
+        /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
+        /// <param name="amount">The amount of ints to retrieve.</param>
+        /// <returns>The array that was retrieved.</returns>
+        public int[] GetInts(int amount)
+        {
+            int[] array = new int[amount];
+            ReadInts(amount, array, 0, int.MinValue, int.MaxValue);
+            return array;
+        }
+		/// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The array that was retrieved.</returns>
-        public int[] GetIntsAutoAmmount(int min = int.MinValue, int max = int.MaxValue) => GetInts((int)GetVarULong(), min, max);
-        /// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
+		public int[] GetInts(int min, int max) => GetInts((int)GetVarULong(), min, max);
+		/// <summary>Retrieves an <see cref="int"/> array from the message.</summary>
         /// <param name="amount">The amount of ints to retrieve.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The array that was retrieved.</returns>
-        public int[] GetInts(int amount, int min = int.MinValue, int max = int.MaxValue)
-        {
-            int[] array = new int[amount];
-            ReadInts(amount, array, 0, min, max);
-            return array;
-        }
+		public int[] GetInts(int amount, int min, int max)
+		{
+			int[] array = new int[amount];
+			ReadInts(amount, array, 0, min, max);
+			return array;
+		}
         /// <summary>Populates an <see cref="int"/> array with ints retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>

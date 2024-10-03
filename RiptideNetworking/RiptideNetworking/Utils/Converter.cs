@@ -316,9 +316,9 @@ namespace Riptide.Utils
 		/// <returns></returns>
 		public static ulong DivReturnMod(ulong[] value, ulong div, ref int maxByte) {
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
-			if(value.Length == 0) return 0;
+			if(value.Length == 0) throw new DivideByZeroException("Value cannot be empty.");
 
-			int valueLength = Math.Min(value.Length, (maxByte + 7) / 8);
+			int valueLength = Math.Min(value.Length, 1 + (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = valueLength * 2 - 1; i >= 0; i--) {
 				int ui = i % 2 * 32;
@@ -337,35 +337,38 @@ namespace Riptide.Utils
 
 		/// <summary>Shifts the value to the left by (shiftBytes * 8) bits.</summary>
 		/// <param name="value"></param>
-		/// <param name="shiftBytes"></param>
+		/// <param name="shiftBits"></param>
 		/// <param name="maxByte"></param>
-		public static void LeftShift(ulong[] value, byte shiftBytes, ref int maxByte) {
-			int iters = Math.Min(value.Length, (maxByte + shiftBytes + 7) / 8);
+		public static void LeftShift(ulong[] value, byte shiftBits, ref int maxByte) {
+			byte possibleByteShift = (byte)((shiftBits + 7) / 8);
+			int iters = Math.Min(value.Length, (maxByte + possibleByteShift + 7) / 8);
 			ulong carry = 0;
 			for(int i = 0; i < iters; i++) {
 				ulong val;
 				ulong prevCarry = carry;
-				(val, carry) = CMath.RightShiftUlong(value[i], shiftBytes * 8);
+				(val, carry) = CMath.RightShiftUlong(value[i], shiftBits);
 				value[i] = val + prevCarry;
 			}
-			maxByte += shiftBytes;
+			maxByte += possibleByteShift;
+			AdjustMaxByte(value, ref maxByte);
 		}
 
 		/// <summary>Shifts the value to the right by (shiftBytes * 8) bits.</summary>
 		/// <param name="value"></param>
-		/// <param name="shiftBytes"></param>
+		/// <param name="shiftBits"></param>
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
-		public static ulong RightShift(ulong[] value, byte shiftBytes, ref int maxByte) {
+		public static ulong RightShift(ulong[] value, byte shiftBits, ref int maxByte) {
 			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = iters - 1; i >= 0; i--) {
 				ulong val;
 				ulong prevCarry = carry;
-				(val, carry) = CMath.RightShiftUlong(value[i], shiftBytes * 8);
+				(val, carry) = CMath.RightShiftUlong(value[i], shiftBits);
 				value[i] = val + prevCarry;
 			}
-			maxByte -= shiftBytes;
+			maxByte -= shiftBits / 8;
+			AdjustMaxByte(value, ref maxByte);
 			return carry;
 		}
 

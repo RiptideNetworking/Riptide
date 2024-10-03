@@ -3,6 +3,8 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
+using System;
+
 namespace Riptide.Utils
 {
 	internal static class CMath
@@ -24,6 +26,20 @@ namespace Riptide.Utils
 		internal static bool IsPowerOf256(this ulong value) {
 			if(value == 0) return true;
 			return (value & (value - 1)) == 0 && (value % 255 == 1);
+		}
+
+		internal static byte Log2(this ulong value) {
+			byte log = 0;
+			while(value > 1) {
+				value >>= 1;
+				log++;
+			}
+			return log;
+		}
+
+		/// <remarks>Includes 0</remarks>
+		internal static bool IsPowerOf2(this ulong value) {
+			return (value & (value - 1)) == 0;
 		}
 
 		internal static unsafe uint ToUInt(this float value) {
