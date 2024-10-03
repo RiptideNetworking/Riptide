@@ -228,6 +228,9 @@ namespace Riptide
 			return byteAmount;
 		}
 
+		/// <summary>Resends the first message and prepares to resend all messages
+		/// when the connection is guaranteed to be decent.</summary>
+		/// <exception cref="Exception"></exception>
 		private void RetryQueuedSending() {
 			if(messageQueue.Count == 0) return;
 			Message m = messageQueue[0] ?? throw new Exception("Null message in first slot of messageQueue");
