@@ -41,6 +41,9 @@ namespace Riptide
         /// <summary>The header size for reliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
         internal const int ReliableHeaderBits = HeaderBits + 2 * BitsPerByte;
+		/// <summary>The header size for queued messages. Does not count the 2 bytes used for the message ID.</summary>
+        /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
+		internal const int QueuedHeaderBits = HeaderBits + 2 * BitsPerByte;
         /// <summary>The header size for notify messages.</summary>
         /// <remarks>4 bits - header, 24 bits - ack, 16 bits - sequence ID.</remarks>
         internal const int NotifyHeaderBits = HeaderBits + 5 * BitsPerByte;
@@ -300,8 +303,8 @@ namespace Riptide
                 SendMode = MessageSendMode.Notify;
             }
 			else if (header == MessageHeader.Queued) {
-				readBit = ReliableHeaderBits;
-                writeBit = ReliableHeaderBits;
+				readBit = QueuedHeaderBits;
+                writeBit = QueuedHeaderBits;
                 SendMode = MessageSendMode.Queued;
 			}
             else if (header >= MessageHeader.Reliable)
