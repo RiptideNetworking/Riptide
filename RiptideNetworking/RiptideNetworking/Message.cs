@@ -41,12 +41,12 @@ namespace Riptide
         /// <summary>The header size for reliable messages. Does not count the 2 bytes used for the message ID.</summary>
         /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
         internal const int ReliableHeaderBits = HeaderBits + 2 * BitsPerByte;
+		/// <summary>The header size for queued messages. Does not count the 2 bytes used for the message ID.</summary>
+        /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
+		internal const int QueuedHeaderBits = HeaderBits + 2 * BitsPerByte;
         /// <summary>The header size for notify messages.</summary>
         /// <remarks>4 bits - header, 24 bits - ack, 16 bits - sequence ID.</remarks>
         internal const int NotifyHeaderBits = HeaderBits + 5 * BitsPerByte;
-		/// <summary>The header size for queued messages. Does not count the 2 bytes used for the message ID.</summary>
-        /// <remarks>4 bits - header, 16 bits - sequence ID.</remarks>
-		internal const byte QueuedHeaderBits = HeaderBits + 2 * BitsPerByte;
         /// <summary>The minimum number of bytes contained in an unreliable message.</summary>
         internal const int MinUnreliableBytes = UnreliableHeaderBits / BitsPerByte + (UnreliableHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The minimum number of bytes contained in a reliable message.</summary>

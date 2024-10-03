@@ -27,12 +27,14 @@ namespace Riptide
     /// <summary>Represents a connection to a <see cref="Server"/> or <see cref="Client"/>.</summary>
     public abstract class Connection
     {
-        /// <summary>The Queue storing the messages for the send mode Queued</summary>
+        /// <summary>The Queue storing the messages for the send mode Queued.</summary>
         private readonly WrappingList<Message> messageQueue = new WrappingList<Message>();
-        /// <summary>The next send sequence id for the send mode Queued</summary>
+        /// <summary>The next send sequence id for the send mode Queued.</summary>
         private ushort nextQueuedSequenceId = 0;
-		/// <summary>The next recieve sequence id for the send mode Queued</summary>
+		/// <summary>The next recieve sequence id for the send mode Queued.</summary>
 		private ushort recievedNextQueuedSequenceId = 0;
+		/// <summary>Wether the entire queue has been emptied between heartbeats.</summary>
+		private bool stableQueuedConnection = true;
 		/// <summary>The maximum number of Queued messages, sent simultaneously.</summary>
 		/// <remarks><b>This absolutely needs to be equal on all devices, including server</b>
 		/// <para>it has a minimum of 1 and max of 16383 but 1024 is the recommended max</para></remarks>
@@ -226,9 +228,18 @@ namespace Riptide
 			return byteAmount;
 		}
 
-		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
-        private void ResendQueuedMessages() {
+		/// <summary>Resends the first message and prepares to resend all messages
+		/// when the connection is guaranteed to be decent.</summary>
+		/// <exception cref="Exception"></exception>
+		private void RetryQueuedSending() {
 			if(messageQueue.Count == 0) return;
+			Message m = messageQueue[0] ?? throw new Exception("Null message in first slot of messageQueue");
+            SendData(m);
+			stableQueuedConnection = false;
+		}
+
+		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
+        private void ResendAllQueuedMessages() {
 			foreach(Message message in messageQueue.Take(MaxSynchronousQueuedMessages)) {
 				if(message == null) continue;
 				SendData(message);
@@ -400,6 +411,8 @@ namespace Riptide
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
 			}
+			if(!stableQueuedConnection) ResendAllQueuedMessages();
+			stableQueuedConnection = true;
 		}
 
         /// <summary>Sends a welcome message.</summary>
@@ -440,7 +453,7 @@ namespace Riptide
 
             ResetTimeout();
 
-			ResendQueuedMessages();
+			RetryQueuedSending();
         }
 
         /// <summary>Sends a heartbeat message.</summary>
@@ -498,7 +511,7 @@ namespace Riptide
 
             ResetTimeout();
 
-			ResendQueuedMessages();
+			RetryQueuedSending();
         }
         #endregion
         #endregion
