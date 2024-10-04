@@ -39,9 +39,23 @@ namespace Riptide.Utils
 		}
 
 		public override string ToString() {
-			StringBuilder s = new StringBuilder();
-			for(int i = maxIndex; i >= minIndex; i--) {
+			StringBuilder s = new StringBuilder(2 * (maxIndex - minIndex) + 6);
+			for(int i = 0; i <= maxIndex; i++) {
 				s.Append(data[i]);
+				s.Append(' ');
+			}
+			s.Append('\n');
+			s.Append("min: ");
+			s.Append(minIndex);
+			s.Append(" max: ");
+			s.Append(maxIndex);
+			return s.ToString();
+		}
+
+		public string ToStringBinary() {
+			StringBuilder s = new StringBuilder(2 * (maxIndex - minIndex) + 6);
+			for(int i = 0; i <= maxIndex; i++) {
+				s.Append(Convert.ToString((long)data[i], 2).PadLeft(64, '0'));
 				s.Append(' ');
 			}
 			s.Append('\n');
@@ -82,6 +96,7 @@ namespace Riptide.Utils
 
 		internal void Mult(ulong mult) {
 			if(mult.IsPowerOf2()) {
+				RiptideLogger.Log(LogType.Info, $"LeftShift {mult.Log2()}");
 				LeftShift(mult.Log2());
 				return;
 			}
@@ -103,8 +118,7 @@ namespace Riptide.Utils
 				byte rightShift = div.Log2();
 				return RightShift(rightShift) >> (64 - rightShift);
 			}
-			minIndex -= 1;
-			while(minIndex < 0) minIndex++;
+			if(minIndex > 0) minIndex -= 1;
 			ulong carry = 0;
 			for(int i = maxIndex * 2; i >= 0; i--) {
 				int ui = i % 2 * 32;
@@ -135,8 +149,7 @@ namespace Riptide.Utils
 
 		internal ulong RightShift(byte shiftBits) {
 			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
-			minIndex -= 1;
-			if(minIndex < 0) minIndex++;
+			if(minIndex > 0) minIndex -= 1;
 			ulong carry = 0;
 			for(int i = maxIndex; i >= 0; i--) {
 				ulong val;
@@ -152,7 +165,7 @@ namespace Riptide.Utils
 			while(maxIndex > 0 && data[maxIndex] == 0) maxIndex--;
 			while(minIndex < 0) minIndex++;
 			while(minIndex < maxIndex && data[minIndex] == 0) minIndex++;
-			if(minIndex >= maxIndex) {
+			if(minIndex > maxIndex) {
 				minIndex = 0;
 				maxIndex = 0;
 			}
@@ -161,7 +174,7 @@ namespace Riptide.Utils
 		private void EnsureCapacity() {
 			if(maxIndex < data.Length) return;
 			ulong[] newData = new ulong[data.Length * 2];
-			Array.Copy(data, 0, newData, data.Length, data.Length);
+			Array.Copy(data, 0, newData, 0, data.Length);
 			data = newData;
 		}
 	}

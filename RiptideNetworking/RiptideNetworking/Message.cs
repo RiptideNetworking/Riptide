@@ -162,7 +162,7 @@ namespace Riptide
 
 		/// <summary>Logs info of the message</summary>
 		public void LogStuff() {
-			RiptideLogger.Log(LogType.Info, data.ToString() + "\n" + writeValue.ToString());
+			RiptideLogger.Log(LogType.Info, data.ToStringBinary() + "\n" + writeValue.ToStringBinary());
 		}
 
         #region Functions
@@ -171,7 +171,6 @@ namespace Riptide
         /// <returns>The message, ready to be used for sending.</returns>
         private Message Init(MessageHeader header)
         {
-			AddByte((byte)header, 0, 15);
             SetHeader(header);
             return this;
         }
@@ -190,21 +189,14 @@ namespace Riptide
         /// <param name="header">The header to use for this message.</param>
         private void SetHeader(MessageHeader header)
         {
+			AddByte((byte)header, 0, 15);
             if (header == MessageHeader.Notify)
-            {
-				SetHeader(MessageSendMode.Notify, NotifyHeaderBits);
-            }
-			else if (header == MessageHeader.Queued) {
-				SetHeader(MessageSendMode.Queued, QueuedHeaderBits);
-			}
+				SetHeader(MessageSendMode.Notify, NotifyHeaderBits - HeaderBits);
+			else if (header == MessageHeader.Queued)
+				SetHeader(MessageSendMode.Queued, QueuedHeaderBits - HeaderBits);
             else if (header >= MessageHeader.Reliable)
-            {
-				SetHeader(MessageSendMode.Reliable, ReliableHeaderBits);
-            }
-            else
-            {
-				SetHeader(MessageSendMode.Unreliable, UnreliableHeaderBits);
-            }
+				SetHeader(MessageSendMode.Reliable, ReliableHeaderBits - HeaderBits);
+            else SetHeader(MessageSendMode.Unreliable, UnreliableHeaderBits - HeaderBits);
         }
 
 		private void SetHeader(MessageSendMode sendMode, byte headerBits) {

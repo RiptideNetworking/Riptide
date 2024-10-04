@@ -3,6 +3,7 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
+
 namespace Riptide.Utils
 {
 	internal static class CMath
@@ -11,29 +12,35 @@ namespace Riptide.Utils
 			return value < min ? min : value > max ? max : value;
 		}
 
-		internal static byte Log256(this ulong value) {
-			byte log = 0;
-			while(value > byte.MaxValue) {
-				value >>= 8;
-				log++;
-			}
-			return log;
-		}
-
-		/// <remarks>Includes 0</remarks>
-		internal static bool IsPowerOf256(this ulong value) {
-			if(value == 0) return true;
-			return (value & (value - 1)) == 0 && (value % 255 == 1);
-		}
-
+		/// <remarks>Only works of exact powers and includes 0.</remarks>
 		internal static byte Log2(this ulong value) {
-			byte log = 0;
-			while(value > 1) {
-				value >>= 1;
-				log++;
+			byte steps = sizeof(ulong) << 2;
+			byte log = (byte)(steps - 1);
+			while(steps > 1) {
+				ulong check = 1UL << log;
+				if(value == check) return log;
+				steps >>= 1;
+				if(value < check) log -= steps;
+				else log += steps;
 			}
 			return log;
 		}
+
+		internal static int GetBitCount(ulong n) {
+			int bits = 0;
+			ulong[] thresholds = { 0x1, 0x3, 0xf, 0xff, 0xffff, 0xffffffffffffffff };
+			int shiftCount = 0;
+			for(int i = thresholds.Length - 1; i >= 0; i--) {
+				if (n > thresholds[i]) {
+					n >>= 1 << (i + 1);
+					bits |= 1 << i;
+					shiftCount += 1 << (i + 1);
+				}
+			}
+
+			return bits;
+		}
+
 
 		/// <remarks>Includes 0</remarks>
 		internal static bool IsPowerOf2(this ulong value) {
