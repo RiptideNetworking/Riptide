@@ -175,13 +175,8 @@ namespace Riptide
 
         /// <summary>Sends a message.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
         /// <returns>For reliable and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
-        /// <remarks>
-        ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
-        ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
-        /// </remarks>
-        public ushort Send(Message message, bool shouldRelease = true)
+        public ushort Send(Message message)
         {
             ushort sequenceId = 0;
             if (message.SendMode == MessageSendMode.Notify)
@@ -211,9 +206,6 @@ namespace Riptide
                 pendingMessage.TrySend();
                 Metrics.ReliableUniques++;
             }
-
-            if (shouldRelease)
-                message.Release();
 
             return sequenceId;
         }
@@ -403,7 +395,6 @@ namespace Riptide
 			Message qm = messageQueue[listId];
 			messageQueue[listId] = null;
 			if(qm != null) {
-				qm.Release();
 				if(qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}. Count: {messageQueue.Count}. Next: {nextQueuedSequenceId}. ListId: {listId}");
 			}
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
@@ -418,6 +409,7 @@ namespace Riptide
         {
             Message message = Message.Create(MessageHeader.Welcome);
             message.AddUShort(Id);
+			message.LogStuff();
 
             Send(message);
         }

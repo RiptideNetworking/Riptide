@@ -269,9 +269,7 @@ namespace Riptide
                     message.AddMessage(rejectMessage);
 
                 for (int i = 0; i < 3; i++) // Send the rejection message a few times to increase the odds of it arriving
-                    connection.Send(message, false);
-
-                message.Release();
+                    connection.Send(message);
             }
 
             connection.ResetTimeout(); // Keep the connection alive for a moment so the same client can't immediately attempt to connect again
@@ -310,6 +308,7 @@ namespace Riptide
         /// <inheritdoc/>
         protected override void Handle(Message message, MessageHeader header, Connection connection)
         {
+			RiptideLogger.Log(LogType.Info, $"{header}");
             switch (header)
             {
                 // User messages
@@ -343,52 +342,37 @@ namespace Riptide
                     RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.BytesInUse} bytes received from {connection}.");
                     break;
             }
-
-            message.Release();
         }
 
         /// <summary>Sends a message to a given client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The numeric ID of the client to send the message to.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <inheritdoc cref="Connection.Send(Message, bool)"/>
-        public void Send(Message message, ushort toClient, bool shouldRelease = true)
+        public void Send(Message message, ushort toClient)
         {
             if (clients.TryGetValue(toClient, out Connection connection))
-                Send(message, connection, shouldRelease);
+                Send(message, connection);
         }
         /// <summary>Sends a message to a given client.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="toClient">The client to send the message to.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <inheritdoc cref="Connection.Send(Message, bool)"/>
-        public ushort Send(Message message, Connection toClient, bool shouldRelease = true) => toClient.Send(message, shouldRelease);
+        public ushort Send(Message message, Connection toClient) => toClient.Send(message);
 
         /// <summary>Sends a message to all connected clients.</summary>
         /// <param name="message">The message to send.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <inheritdoc cref="Connection.Send(Message, bool)"/>
-        public void SendToAll(Message message, bool shouldRelease = true)
+        public void SendToAll(Message message)
         {
             foreach (Connection client in clients.Values)
-                client.Send(message, false);
-
-            if (shouldRelease)
-                message.Release();
+                client.Send(message);
         }
         /// <summary>Sends a message to all connected clients except the given one.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="exceptToClientId">The numeric ID of the client to <i>not</i> send the message to.</param>
-        /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <inheritdoc cref="Connection.Send(Message, bool)"/>
-        public void SendToAll(Message message, ushort exceptToClientId, bool shouldRelease = true)
+        /// <inheritdoc cref="Connection.Send(Message)"/>
+        public void SendToAll(Message message, ushort exceptToClientId)
         {
             foreach (Connection client in clients.Values)
                 if (client.Id != exceptToClientId)
-                    client.Send(message, false);
-
-            if (shouldRelease)
-                message.Release();
+                    client.Send(message);
         }
 
         /// <summary>Retrieves the client with the given ID, if a client with that ID is currently connected.</summary>

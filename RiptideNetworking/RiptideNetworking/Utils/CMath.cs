@@ -3,8 +3,6 @@
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
-using System;
-
 namespace Riptide.Utils
 {
 	internal static class CMath

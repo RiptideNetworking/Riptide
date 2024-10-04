@@ -137,7 +137,6 @@ namespace Riptide
                     RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting connection attempt data!");
 
                 connectMessage.AddMessage(message);
-                message.Release();
             }
 
             StartTime();
@@ -208,7 +207,7 @@ namespace Riptide
                 // If still trying to connect, send connect messages instead of heartbeats
                 if (connectionAttempts < maxConnectionAttempts)
                 {
-                    Send(connectMessage, false);
+                    Send(connectMessage);
                     connectionAttempts++;
                 }
                 else
@@ -295,13 +294,11 @@ namespace Riptide
                     RiptideLogger.Log(LogType.Warning, LogName, $"Unexpected message header '{header}'! Discarding {message.BytesInUse} bytes.");
                     break;
             }
-
-            message.Release();
         }
 
         /// <summary>Sends a message to the server.</summary>
-        /// <inheritdoc cref="Connection.Send(Message, bool)"/>
-        public ushort Send(Message message, bool shouldRelease = true) => connection.Send(message, shouldRelease);
+        /// <inheritdoc cref="Connection.Send(Message)"/>
+        public ushort Send(Message message) => connection.Send(message);
 
         /// <summary>Disconnects from the server.</summary>
         public void Disconnect()
@@ -365,7 +362,6 @@ namespace Riptide
         /// <summary>Invokes the <see cref="Connected"/> event.</summary>
         protected virtual void OnConnected()
         {
-            connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, "Connected successfully!");
             Connected?.Invoke(this, EventArgs.Empty);
@@ -376,7 +372,6 @@ namespace Riptide
         /// <param name="message">Additional data related to the failed connection attempt.</param>
         protected virtual void OnConnectionFailed(RejectReason reason, Message message = null)
         {
-            connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {Helper.GetReasonString(reason)}.");
             ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
