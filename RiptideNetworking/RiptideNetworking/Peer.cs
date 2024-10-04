@@ -158,47 +158,26 @@ namespace Riptide
         /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
-            Message message = Message.Create().Init(e.DataBuffer[0], e.Amount, out MessageHeader header);
-            
-            if (message.SendMode == MessageSendMode.Notify)
-            {
-                if (e.Amount < Message.MinNotifyBytes)
-                    return;
-
-                e.FromConnection.ProcessNotify(e.DataBuffer, e.Amount, message);
-            }
-            else if (message.SendMode == MessageSendMode.Unreliable)
-            {
-                if (e.Amount > Message.MinUnreliableBytes)
-                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
-
+            Message message = Message.Create().Init(e.DataBuffer, e.Amount);
+			MessageHeader header = (MessageHeader)message.GetByte(0, 15);
+            RiptideLogger.Log(LogType.Info, $"Received {header} {e.Amount} from {e.FromConnection}.");
+			
+            if(message.SendMode == MessageSendMode.Notify) {
+                e.FromConnection.ProcessNotify(e.Amount, message);
+            } else if(message.SendMode == MessageSendMode.Unreliable) {
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 e.FromConnection.Metrics.ReceivedUnreliable(e.Amount);
-            }
-			else if (message.SendMode == MessageSendMode.Queued)
-			{
-				if (e.Amount < Message.MinReliableBytes)
-                    return;
-
-				ushort sequenceId = Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits);
-				Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
+            } else if(message.SendMode == MessageSendMode.Queued) {
+				ushort sequenceId = message.GetUShort();
 				foreach(Message m in e.FromConnection.QueuedMessagesToHandle(message, sequenceId))
 					messagesToHandle.Enqueue(new MessageToHandle(m, MessageHeader.Queued, e.FromConnection));
 				e.FromConnection.Send(Message.QueuedAck(sequenceId));
-			}
-            else
-            {
-                if (e.Amount < Message.MinReliableBytes)
-                    return;
-
+			} else {
                 e.FromConnection.Metrics.ReceivedReliable(e.Amount);
-                if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
-                {
-                    Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
+				ushort sequenceId = message.GetUShort();
+                if(e.FromConnection.ShouldHandle(sequenceId))
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
-                }
-                else
-                    e.FromConnection.Metrics.ReliableDiscarded++;
+                else e.FromConnection.Metrics.ReliableDiscarded++;
             }
         }
 

@@ -252,21 +252,19 @@ namespace Riptide
         protected internal abstract void Send(byte[] dataBuffer, int amount);
         
         /// <summary>Processes a notify message.</summary>
-        /// <param name="dataBuffer">The received data.</param>
         /// <param name="amount">The number of bytes that were received.</param>
         /// <param name="message">The message instance to use.</param>
-        internal void ProcessNotify(byte[] dataBuffer, int amount, Message message)
+        internal void ProcessNotify(int amount, Message message)
         {
-            notify.UpdateReceivedAcks(Converter.UShortFromBits(dataBuffer, Message.HeaderBits), Converter.ByteFromBits(dataBuffer, Message.HeaderBits + 16));
-
+			ushort remoteLastReceivedSeqId = message.GetUShort();
+			byte remoteReceivedSeqIds = message.GetByte();
+            notify.UpdateReceivedAcks(remoteLastReceivedSeqId, remoteReceivedSeqIds);
             Metrics.ReceivedNotify(amount);
-            if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, Message.HeaderBits + 24)))
-            {
-                Buffer.BlockCopy(dataBuffer, 1, message.Data, 1, amount - 1); // Copy payload
+
+			ushort sequenceId = message.GetUShort();
+            if(notify.ShouldHandle(sequenceId))
                 NotifyReceived?.Invoke(message);
-            }
-            else
-                Metrics.NotifyDiscarded++;
+            else Metrics.NotifyDiscarded++;
         }
 
 		/// <summary>Determines all the messages that should be handled.</summary>

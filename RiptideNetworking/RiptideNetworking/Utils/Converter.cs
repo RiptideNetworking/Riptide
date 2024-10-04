@@ -314,7 +314,7 @@ namespace Riptide.Utils
 		/// <param name="div"></param>
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
-		public static ulong DivReturnMod(ulong[] value, ulong div, ref int maxByte) {
+		public static ulong DivReturnMod(ulong[] value, ulong div, int maxByte) {
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
 			if(value.Length == 0) throw new DivideByZeroException("Value cannot be empty.");
 
@@ -329,9 +329,6 @@ namespace Riptide.Utils
 				(current, carry) = (current / div, current % div);
 				value[i / 2] = (current << ui) | (value[i / 2] & ~mask);
 			}
-
-			maxByte -= div.Log256();
-			AdjustMaxByte(value, ref maxByte);
 			return carry;
 		}
 
@@ -358,7 +355,7 @@ namespace Riptide.Utils
 		/// <param name="shiftBits"></param>
 		/// <param name="maxByte"></param>
 		/// <returns></returns>
-		public static ulong RightShift(ulong[] value, byte shiftBits, ref int maxByte) {
+		public static ulong RightShift(ulong[] value, byte shiftBits, int maxByte) {
 			int iters = Math.Min(value.Length, (maxByte + 7) / 8);
 			ulong carry = 0;
 			for(int i = iters - 1; i >= 0; i--) {
@@ -367,8 +364,6 @@ namespace Riptide.Utils
 				(val, carry) = CMath.RightShiftUlong(value[i], shiftBits);
 				value[i] = val + prevCarry;
 			}
-			maxByte -= shiftBits / 8;
-			AdjustMaxByte(value, ref maxByte);
 			return carry;
 		}
 

@@ -103,7 +103,7 @@ namespace Riptide
 
 		/// <summary>The maximum value of Id.</summary>
 		public static ushort MaxId { private get; set; } = ushort.MaxValue;
-		/// <summary>The sequence Id of the message</summary>
+		/// <summary>The sequence Id of the message, assuming it has one.</summary>
 		internal ushort SequenceId
         {
 			get
@@ -116,7 +116,7 @@ namespace Riptide
 		/// <summary>Wether anything has been read from the message.</summary>
 		public bool HasReadNothing => maxWriteByte == 0 && writeValue[0] == 1;
         /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
-        public int BytesInUse => maxWriteByte;
+        public int BytesInUse => maxWriteByte + 1;
         /// <inheritdoc cref="data"/>
         internal ulong[] Data => data;
 
@@ -190,7 +190,9 @@ namespace Riptide
 
 		private void Clean() {
 			data[0] = 0;
+			data[1] = 0;
 			writeValue[0] = 1;
+			writeValue[1] = 0;
 			maxWriteByte = 0;
 		}
 
@@ -251,16 +253,12 @@ namespace Riptide
             return this;
         }
         /// <summary>Initializes the message so that it can be used for receiving/handling.</summary>
-        /// <param name="firstByte">The first byte of the received data.</param>
-        /// <param name="header">The message's header type.</param>
+        /// <param name="bytes">The bytes of the received data.</param>
         /// <param name="contentLength">The number of bytes which this message will contain.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        internal Message Init(byte firstByte, int contentLength, out MessageHeader header)
+        internal Message Init(byte[] bytes, int contentLength)
         {
-            data[contentLength / sizeof(ulong)] = 0;
-            data[0] = firstByte;
-            header = (MessageHeader)(firstByte & HeaderBitmask);
-            SetHeader(header);
+			Buffer.BlockCopy(bytes, 0, Data, 0, contentLength);
             maxWriteByte = contentLength;
             return this;
         }
@@ -343,7 +341,7 @@ namespace Riptide
         /// <param name="bitfield">The bits that were retrieved.</param>
         /// <returns>The message instance.</returns>
         /// <remarks>This method can be used to retrieve a range of bits from anywhere in the message without moving its internal read position.</remarks>
-        public Message PeekBits(int amount, int startBit, out byte bitfield)
+        internal Message PeekBits(int amount, int startBit, out byte bitfield)
         {
             if (amount > BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {BitsPerByte} bits at a time!");
@@ -353,30 +351,10 @@ namespace Riptide
         }
         /// <summary>Retrieves up to 16 bits from the specified position in the message.</summary>
         /// <inheritdoc cref="PeekBits(int, int, out byte)"/>
-        public Message PeekBits(int amount, int startBit, out ushort bitfield)
+        internal Message PeekBits(int amount, int startBit, out ushort bitfield)
         {
             if (amount > sizeof(ushort) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {sizeof(ushort) * BitsPerByte} bits at a time!");
-
-            Converter.GetBits(amount, data, startBit, out bitfield);
-            return this;
-        }
-        /// <summary>Retrieves up to 32 bits from the specified position in the message.</summary>
-        /// <inheritdoc cref="PeekBits(int, int, out byte)"/>
-        public Message PeekBits(int amount, int startBit, out uint bitfield)
-        {
-            if (amount > sizeof(uint) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {sizeof(uint) * BitsPerByte} bits at a time!");
-
-            Converter.GetBits(amount, data, startBit, out bitfield);
-            return this;
-        }
-        /// <summary>Retrieves up to 64 bits from the specified position in the message.</summary>
-        /// <inheritdoc cref="PeekBits(int, int, out byte)"/>
-        public Message PeekBits(int amount, int startBit, out ulong bitfield)
-        {
-            if (amount > sizeof(ulong) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {sizeof(ulong) * BitsPerByte} bits at a time!");
 
             Converter.GetBits(amount, data, startBit, out bitfield);
             return this;
@@ -471,23 +449,15 @@ namespace Riptide
 		
 		private ulong AddReadStates(ulong states) {
 			if(states.IsPowerOf2()) return GetFullBytes(states.Log2());
-			int mwb = maxWriteByte;
-			ulong ret = Converter.DivReturnMod(data, states, ref mwb);
-			Converter.DivReturnMod(writeValue, states, ref maxWriteByte);
-			return ret;
+			return Converter.DivReturnMod(data, states, maxWriteByte);
 		}
 
 		private void AddFullBytes(byte bitAmount) {
-			int mwb = maxWriteByte;
-			Converter.LeftShift(data, bitAmount, ref mwb);
 			Converter.LeftShift(writeValue, bitAmount, ref maxWriteByte);
 		}
 
 		private ulong GetFullBytes(byte bitAmount) {
-			int mwb = maxWriteByte;
-			ulong ret = Converter.RightShift(data, bitAmount, ref mwb);
-			Converter.RightShift(writeValue, bitAmount, ref maxWriteByte);
-			return ret;
+			return Converter.RightShift(data, bitAmount, maxWriteByte);
 		}
 		#endregion
 
