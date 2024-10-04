@@ -308,7 +308,6 @@ namespace Riptide
         /// <inheritdoc/>
         protected override void Handle(Message message, MessageHeader header, Connection connection)
         {
-			RiptideLogger.Log(LogType.Info, $"{header}");
             switch (header)
             {
                 // User messages

@@ -91,12 +91,16 @@ namespace Riptide.Utils
 		}
 
 		public static (ulong value, ulong carry) LeftShiftUlong(ulong val, int shift) {
+			if(shift == 0) return (val, 0);
+			if(shift == 64) return (0, val);
 			ulong value = val << shift;
 			ulong carry = val >> (64 - shift);
 			return (value, carry);
 		}
 
 		public static (ulong value, ulong carry) RightShiftUlong(ulong val, int shift) {
+			if(shift == 0) return (val, 0);
+			if(shift == 64) return (0, val);
 			ulong value = val >> shift;
 			ulong carry = val << (64 - shift);
 			return (value, carry);

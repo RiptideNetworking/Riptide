@@ -179,10 +179,10 @@ namespace Riptide
         /// <param name="bytes">The bytes of the received data.</param>
         /// <param name="contentLength">The number of bytes which this message will contain.</param>
         /// <returns>The message, ready to be used for handling.</returns>
-        internal Message Init(byte[] bytes, int contentLength) // TODO remove cl
+        internal Message Init(byte[] bytes, int contentLength)
         {
-			data = new FastBigInt(bytes);
-			writeValue = new FastBigInt(1, 1);
+			data = new FastBigInt(contentLength, bytes);
+			writeValue = new FastBigInt(contentLength, 1);
             return this;
         }
 
@@ -1061,7 +1061,8 @@ namespace Riptide
 		public Message AddULong(ulong value, ulong min, ulong max) {
 			if(value > max || value < min) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {min} and {max} (inclusive)");
 			data.Add(writeValue, value - min);
-			writeValue.Mult(max - min + 1);
+			if(max - min + 1 == 0) writeValue.LeftShift(sizeof(ulong) * BitsPerByte);
+			else writeValue.Mult(max - min + 1);
 			return this;
 		}
 
@@ -1081,6 +1082,10 @@ namespace Riptide
 
 		private ulong GetULongUnchecked(ulong min, ulong max) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
+			if(max - min + 1 == 0) {
+				ulong val = data.RightShift(sizeof(ulong) * BitsPerByte);
+				return val + min;
+			}
 			ulong value = data.DivReturnMod(max - min + 1);
 			return value + min;
 		}

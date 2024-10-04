@@ -11,8 +11,8 @@ namespace Riptide.Utils
     internal class FastBigInt
 	{
         private ulong[] data;
-        private int maxUlong = 0;
-        private int minUlong = 0;
+        private int maxIndex = 0;
+        private int minIndex = 0;
 
 		internal FastBigInt(int initialCapacity) {
 			data = new ulong[initialCapacity];
@@ -23,41 +23,41 @@ namespace Riptide.Utils
 			data[0] = initialValue;
 		}
 
-		internal FastBigInt(byte[] bytes) {
-			data = new ulong[bytes.Length / sizeof(ulong) + 1];
-			Buffer.BlockCopy(bytes, 0, data, 0, bytes.Length);
-			maxUlong = data.Length - 1;
+		internal FastBigInt(int capacity, byte[] bytes) {
+			data = new ulong[capacity / sizeof(ulong) + 1];
+			Buffer.BlockCopy(bytes, 0, data, 0, capacity);
+			maxIndex = data.Length - 1;
 			AdjustMinAndMax();
 		}
 
 		internal FastBigInt Copy() {
 			FastBigInt copy = new FastBigInt(data.Length);
 			Buffer.BlockCopy(data, 0, copy.data, 0, data.Length * sizeof(ulong));
-			copy.maxUlong = maxUlong;
-			copy.minUlong = minUlong;
+			copy.maxIndex = maxIndex;
+			copy.minIndex = minIndex;
 			return copy;
 		}
 
 		public override string ToString() {
 			StringBuilder s = new StringBuilder();
-			for(int i = maxUlong; i >= minUlong; i--) {
+			for(int i = maxIndex; i >= minIndex; i--) {
 				s.Append(data[i]);
 				s.Append(' ');
 			}
 			s.Append('\n');
 			s.Append("min: ");
-			s.Append(minUlong);
+			s.Append(minIndex);
 			s.Append(" max: ");
-			s.Append(maxUlong);
+			s.Append(maxIndex);
 			return s.ToString();
 		}
 
 		internal ulong[] GetData() => data;
-		internal bool HasReadNothing => data[0] == 0 && maxUlong == 0;
+		internal bool HasReadNothing => data[0] == 0 && maxIndex == 0;
 
 		internal int GetBytesInUse() {
-			ulong max = data[maxUlong];
-			int bytes = maxUlong * sizeof(ulong);
+			ulong max = data[maxIndex];
+			int bytes = maxIndex * sizeof(ulong);
 			while(max > 0) {
 				max >>= 8;
 				bytes++;
@@ -66,11 +66,11 @@ namespace Riptide.Utils
 		}
 
 		internal void Add(FastBigInt value, ulong mult) {
-			minUlong = Math.Min(minUlong, value.minUlong);
-			maxUlong = Math.Max(maxUlong, value.maxUlong) + 1;
+			minIndex = Math.Min(minIndex, value.minIndex);
+			maxIndex = Math.Max(maxIndex, value.maxIndex + 1);
 			EnsureCapacity();
 			ulong carry = 0;
-			for(int i = minUlong; i < maxUlong; i++) {
+			for(int i = minIndex; i < maxIndex; i++) {
 				(ulong temp, ulong tempCarry) = CMath.MultiplyUlong(value.data[i], mult);
 				(data[i], carry) = CMath.AddUlong(data[i], carry);
 				carry += tempCarry;
@@ -85,10 +85,10 @@ namespace Riptide.Utils
 				LeftShift(mult.Log2());
 				return;
 			}
-			maxUlong += 1;
+			maxIndex += 1;
 			EnsureCapacity();
 			ulong carry = 0;
-			for(int i = minUlong; i <= maxUlong; i++) {
+			for(int i = minIndex; i <= maxIndex; i++) {
 				ulong prevCarry = carry;
 				(data[i], carry) = CMath.MultiplyUlong(data[i], mult);
 				data[i] += prevCarry;
@@ -99,10 +99,14 @@ namespace Riptide.Utils
 		internal ulong DivReturnMod(ulong div) {
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
 
-			if(div.IsPowerOf2()) return RightShift(div.Log2());
-			minUlong -= 1;
+			if(div.IsPowerOf2()) {
+				byte rightShift = div.Log2();
+				return RightShift(rightShift) >> (64 - rightShift);
+			}
+			minIndex -= 1;
+			while(minIndex < 0) minIndex++;
 			ulong carry = 0;
-			for(int i = maxUlong * 2; i >= minUlong * 2; i--) {
+			for(int i = maxIndex * 2; i >= 0; i--) {
 				int ui = i % 2 * 32;
 				ulong mask = (0ul - (ulong)(i % 2)) ^ 0x00000000FFFFFFFFUL;
 				carry <<= 32;
@@ -116,24 +120,25 @@ namespace Riptide.Utils
 		}
 
 		internal void LeftShift(byte shiftBits) {
-			byte possibleUlongShift = (byte)((shiftBits + 63) / 64);
-			maxUlong += possibleUlongShift;
+			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
+			maxIndex += 1;
 			EnsureCapacity();
 			ulong carry = 0;
-			for(int i = minUlong; i <= maxUlong; i++) {
+			for(int i = minIndex; i <= maxIndex; i++) {
 				ulong val;
 				ulong prevCarry = carry;
-				(val, carry) = CMath.RightShiftUlong(data[i], shiftBits);
+				(val, carry) = CMath.LeftShiftUlong(data[i], shiftBits);
 				data[i] = val + prevCarry;
 			}
 			AdjustMinAndMax();
 		}
 
 		internal ulong RightShift(byte shiftBits) {
-			byte possibleUlongShift = (byte)((shiftBits + 63) / 64);
-			minUlong -= possibleUlongShift;
+			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
+			minIndex -= 1;
+			if(minIndex < 0) minIndex++;
 			ulong carry = 0;
-			for(int i = maxUlong; i >= minUlong; i--) {
+			for(int i = maxIndex; i >= 0; i--) {
 				ulong val;
 				ulong prevCarry = carry;
 				(val, carry) = CMath.RightShiftUlong(data[i], shiftBits);
@@ -144,17 +149,17 @@ namespace Riptide.Utils
 		}
 
 		private void AdjustMinAndMax() {
-			while(maxUlong > 0 && data[maxUlong] == 0) maxUlong--;
-			while(minUlong < 0) minUlong++;
-			while(minUlong < maxUlong && data[minUlong] == 0) minUlong++;
-			if(minUlong >= maxUlong) {
-				minUlong = 0;
-				maxUlong = 0;
+			while(maxIndex > 0 && data[maxIndex] == 0) maxIndex--;
+			while(minIndex < 0) minIndex++;
+			while(minIndex < maxIndex && data[minIndex] == 0) minIndex++;
+			if(minIndex >= maxIndex) {
+				minIndex = 0;
+				maxIndex = 0;
 			}
 		}
 
 		private void EnsureCapacity() {
-			if(maxUlong < data.Length) return;
+			if(maxIndex < data.Length) return;
 			ulong[] newData = new ulong[data.Length * 2];
 			Array.Copy(data, 0, newData, data.Length, data.Length);
 			data = newData;
