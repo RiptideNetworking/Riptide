@@ -96,7 +96,6 @@ namespace Riptide.Utils
 
 		internal void Mult(ulong mult) {
 			if(mult.IsPowerOf2()) {
-				RiptideLogger.Log(LogType.Info, $"LeftShift {mult.Log2()}");
 				LeftShift(mult.Log2());
 				return;
 			}

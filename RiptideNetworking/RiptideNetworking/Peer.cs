@@ -158,9 +158,8 @@ namespace Riptide
         /// <summary>Handles data received by the transport.</summary>
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
-            Message message = Message.Create(e.DataBuffer, e.Amount);
-			MessageHeader header = (MessageHeader)message.GetByte(0, 15);
-			message.LogStuff();
+            Message message = Message.Create(e.DataBuffer, e.Amount).GetInfo(out MessageHeader header);
+			message.LogStuff(header.ToString());
 			
             if(message.SendMode == MessageSendMode.Notify) {
                 e.FromConnection.ProcessNotify(e.Amount, message);

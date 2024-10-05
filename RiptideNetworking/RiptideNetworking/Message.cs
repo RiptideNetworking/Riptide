@@ -111,7 +111,7 @@ namespace Riptide
         /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
         public int BytesInUse => data.GetBytesInUse();
         /// <inheritdoc cref="data"/>
-        internal ulong[] Data => data.GetData(); // TODO check for no writes
+        internal ulong[] Data => data.GetData(); // TODO check for no bad writes
 
 		/// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -169,8 +169,9 @@ namespace Riptide
         }
 
 		/// <summary>Logs info of the message</summary>
-		public void LogStuff() {
-			RiptideLogger.Log(LogType.Info, data.ToStringBinary() + "\n" + writeValue.ToStringBinary());
+		public void LogStuff(string added = "") {
+			RiptideLogger.Log(LogType.Info, data.ToStringBinary() + "\n"
+				+ writeValue.ToStringBinary() + "\nSendMode: " + SendMode + "\n" + added);
 		}
 
         #region Functions
@@ -200,6 +201,17 @@ namespace Riptide
 			if(headerBits >= 64) throw new ArgumentOutOfRangeException(nameof(headerBits), "Header bits must be less than 64");
 			writeValue.Mult(1UL << headerBits);
 			SendMode = sendMode;
+		}
+
+		internal Message GetInfo(out MessageHeader header) {
+			header = (MessageHeader)GetByte(0, 15);
+			switch(header) {
+				case MessageHeader.Notify: SendMode = MessageSendMode.Notify; break;
+				case MessageHeader.Reliable: SendMode = MessageSendMode.Reliable; break;
+				case MessageHeader.Queued: SendMode = MessageSendMode.Queued; break;
+				default: SendMode = MessageSendMode.Unreliable; break;
+			}
+			return this;
 		}
         #endregion
 
@@ -355,7 +367,7 @@ namespace Riptide
         /// <param name="value">The <see cref="byte"/> to add.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
 		public Message AddByte(byte value) {
-			return AddULong(value, 0, byte.MaxValue);
+			return AddByte(value, 0, byte.MaxValue);
 		}
 
 		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
@@ -370,7 +382,7 @@ namespace Riptide
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
 		public byte GetByte() {
-			return (byte)GetULongUnchecked(0, byte.MaxValue);
+			return (byte)GetULong(0, byte.MaxValue);
 		}
 
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
@@ -378,7 +390,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
 		public byte GetByte(byte min, byte max) {
-			return (byte)GetULongUnchecked(min, max);
+			return (byte)GetULong(min, max);
 		}
 
 		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
@@ -403,7 +415,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
 		public sbyte GetSByte(sbyte min, sbyte max) {
-			return (sbyte)GetULongUnchecked(min.Conv(), max.Conv());
+			return (sbyte)GetByte(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
@@ -638,7 +650,7 @@ namespace Riptide
         /// <param name="value">The <see cref="ushort"/> to add.</param>
         /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
 		public Message AddUShort(ushort value) {
-			return AddULong(value, 0, ushort.MaxValue);
+			return AddUShort(value, 0, ushort.MaxValue);
 		}
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
@@ -653,7 +665,7 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
 		public ushort GetUShort() {
-			return (ushort)GetULongUnchecked(0, ushort.MaxValue);
+			return (ushort)GetULong(0, ushort.MaxValue);
 		}
 
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
@@ -661,7 +673,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
 		public ushort GetUShort(ushort min, ushort max) {
-			return (ushort)GetULongUnchecked(min, max);
+			return (ushort)GetULong(min, max);
 		}
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
@@ -685,7 +697,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
 		public short GetShort(short min, short max) {
-			return (short)GetULongUnchecked(min.Conv(), max.Conv());
+			return (short)GetUShort(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
@@ -832,7 +844,7 @@ namespace Riptide
         /// <param name="value">The <see cref="uint"/> to add.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
 		public Message AddUInt(uint value) {
-			return AddULong(value, 0, uint.MaxValue);
+			return AddUInt(value, 0, uint.MaxValue);
 		}
 
 		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
@@ -847,7 +859,7 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
         /// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt() {
-			return (uint)GetULongUnchecked(0, uint.MaxValue);
+			return (uint)GetULong(0, uint.MaxValue);
 		}
 
 		/// <summary>Retrieves an <see cref="uint"/> from the message.</summary>
@@ -855,13 +867,13 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
 		public uint GetUInt(uint min, uint max) {
-			return (uint)GetULongUnchecked(min, max);
+			return (uint)GetULong(min, max);
 		}
 
 		/// <summary>Adds an <see cref="int"/> to the message.</summary>
         /// <param name="value">The <see cref="int"/> to add.</param>
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
-		public Message AddInt(int value) => AddULong((ulong)value, 0, int.MaxValue);
+		public Message AddInt(int value) => AddUInt(value.Conv());
 		
 		/// <summary>Adds an <see cref="int"/> to the message.</summary>
 		/// <param name="value">The <see cref="int"/> to add.</param>
@@ -869,7 +881,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
 		public Message AddInt(int value, int min, int max)
-			=> AddULong(value.Conv(), min.Conv(), max.Conv());
+			=> AddUInt(value.Conv(), min.Conv(), max.Conv());
 		
 		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
         /// <returns>The <see cref="int"/> that was retrieved.</returns>
@@ -880,7 +892,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="int"/> that was retrieved.</returns>
 		public int GetInt(int min, int max) {
-			return (int)GetULongUnchecked(min.Conv(), max.Conv());
+			return (int)GetUInt(min.Conv(), max.Conv());
 		}
 
         /// <summary>Adds an <see cref="int"/> array message.</summary>
@@ -1058,7 +1070,7 @@ namespace Riptide
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong() {
-			return GetULongUnchecked(0, ulong.MaxValue);
+			return GetULong(0, ulong.MaxValue);
 		}
 
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
@@ -1066,10 +1078,6 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong min, ulong max) {
-			return GetULongUnchecked(min, max);
-		}
-
-		private ulong GetULongUnchecked(ulong min, ulong max) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
 			if(max - min + 1 == 0) {
 				ulong val = data.RightShift(sizeof(ulong) * BitsPerByte);
