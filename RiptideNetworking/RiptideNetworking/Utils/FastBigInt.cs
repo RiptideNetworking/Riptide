@@ -38,8 +38,8 @@ namespace Riptide.Utils
 			return copy;
 		}
 
-		internal FastBigInt CopySlice(int start, int length, int extraCapacity = 0) {
-			FastBigInt slice = new FastBigInt(length + extraCapacity);
+		internal FastBigInt CopySlice(int start, int length) {
+			FastBigInt slice = new FastBigInt(length);
 			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, length * sizeof(ulong));
 			slice.maxIndex = length - 1;
 			slice.AdjustMinAndMax();
@@ -93,7 +93,7 @@ namespace Riptide.Utils
 			EnsureCapacity();
 			int offset = value.minIndex;
 			int len = value.maxIndex - offset + 2;
-			FastBigInt slice = value.CopySlice(offset, value.maxIndex + 1, 1);
+			FastBigInt slice = value.CopySlice(offset, len);
 			slice.Mult(mult);
 			ulong carry = 0;
 			for(int i = 0; i < len; i++) {
@@ -103,6 +103,7 @@ namespace Riptide.Utils
 				carry += tempCarry;
 			}
 			AdjustMinAndMax();
+			if(carry != 0) throw new OverflowException("Addition overflow.");
 		}
 
 		internal void Mult(ulong mult) {
@@ -119,6 +120,7 @@ namespace Riptide.Utils
 				data[i] += prevCarry;
 			}
 			AdjustMinAndMax();
+			if(carry != 0) throw new OverflowException("Multiplication overflow.");
 		}
 
 		internal ulong DivReturnMod(ulong div) {
@@ -155,6 +157,7 @@ namespace Riptide.Utils
 				data[i] = val + prevCarry;
 			}
 			AdjustMinAndMax();
+			if(carry != 0) throw new OverflowException("Left shift overflow.");
 		}
 
 		internal ulong RightShift(byte shiftBits) {
@@ -168,6 +171,7 @@ namespace Riptide.Utils
 				data[i] = val + prevCarry;
 			}
 			AdjustMinAndMax();
+			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
 			return carry;
 		}
 

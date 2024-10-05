@@ -47,6 +47,7 @@ namespace Riptide
         /// <returns>An intialized <see cref="PendingMessage"/> instance.</returns>
         internal static PendingMessage Create(ushort sequenceId, Message message, Connection connection)
         {
+			// FIXME welcome message worked from client but server never got a response
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
 

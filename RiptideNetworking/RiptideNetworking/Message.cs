@@ -144,7 +144,7 @@ namespace Riptide
         /// <see cref="Create(MessageSendMode, ushort)"/> and <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
         public static Message Create(MessageSendMode sendMode)
         {
-            return new Message().Init((MessageHeader)sendMode);
+            return Create((MessageHeader)sendMode);
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
@@ -355,8 +355,8 @@ namespace Riptide
         /// <param name="value">The value to add.</param>
         /// <returns>The message that the value was added to.</returns>
         /// <remarks>The value is added in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
-        /// added to the message using fewer bits, while large values will require a few more bits than they would if they were added via <see cref="AddByte(byte)"/>,
-        /// <see cref="AddUShort(ushort)"/>, <see cref="AddUInt(uint)"/>, or <see cref="AddULong(ulong)"/> (or their signed counterparts).</remarks>
+        /// added to the message using fewer bits, while large values will require a few more bits than they would if they were added via <see cref="AddByte(byte, byte, byte)"/>,
+        /// <see cref="AddUShort(ushort, ushort, ushort)"/>, <see cref="AddUInt(uint, uint, uint)"/>, or <see cref="AddULong(ulong, ulong, ulong)"/> (or their signed counterparts).</remarks>
         public Message AddVarULong(ulong value)
         {
             do
@@ -380,8 +380,8 @@ namespace Riptide
         /// <summary>Retrieves a positive number from the message, using fewer bits for smaller values.</summary>
         /// <returns>The value that was retrieved.</returns>
         /// <remarks>The value is retrieved in segments of 8 bits, 1 of which is used to indicate whether or not another segment follows. As a result, small values are
-        /// retrieved from the message using fewer bits, while large values will require a few more bits than they would if they were retrieved via <see cref="GetByte()"/>,
-        /// <see cref="GetUShort()"/>, <see cref="GetUInt()"/>, or <see cref="GetULong()"/> (or their signed counterparts).</remarks>
+        /// retrieved from the message using fewer bits, while large values will require a few more bits than they would if they were retrieved via <see cref="GetByte(byte, byte)"/>,
+        /// <see cref="GetUShort(ushort, ushort)"/>, <see cref="GetUInt(uint, uint)"/>, or <see cref="GetULong(ulong, ulong)"/> (or their signed counterparts).</remarks>
         public ulong GetVarULong()
         {
             ulong byteValue;
@@ -403,56 +403,34 @@ namespace Riptide
         #region Byte & SByte
 		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
         /// <param name="value">The <see cref="byte"/> to add.</param>
-        /// <returns>The message that the <see cref="byte"/> was added to.</returns>
-		public Message AddByte(byte value) {
-			return AddByte(value, 0, byte.MaxValue);
-		}
-
-		/// <summary>Adds an <see cref="byte"/> to the message.</summary>
-        /// <param name="value">The <see cref="byte"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="byte"/> was added to.</returns>
-		public Message AddByte(byte value, byte min, byte max) {
+		public Message AddByte(byte value, byte min = byte.MinValue, byte max = byte.MaxValue) {
 			return AddULong(value, min, max);
 		}
 
 		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
-        /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-		public byte GetByte() {
-			return (byte)GetULong(0, byte.MaxValue);
-		}
-
-		/// <summary>Retrieves an <see cref="byte"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="byte"/> that was retrieved.</returns>
-		public byte GetByte(byte min, byte max) {
+		public byte GetByte(byte min = byte.MinValue, byte max = byte.MaxValue) {
 			return (byte)GetULong(min, max);
 		}
 
 		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
         /// <param name="value">The <see cref="sbyte"/> to add.</param>
-        /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
-		public Message AddSByte(sbyte value) => AddByte((byte)value);
-
-		/// <summary>Adds an <see cref="sbyte"/> to the message.</summary>
-        /// <param name="value">The <see cref="sbyte"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="sbyte"/> was added to.</returns>
-		public Message AddSByte(sbyte value, sbyte min, sbyte max)
+		public Message AddSByte(sbyte value, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
 			=> AddByte(value.Conv(), min.Conv(), max.Conv());
 
 		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
-        /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
-		public sbyte GetSByte() => (sbyte)GetByte();
-
-		/// <summary>Retrieves an <see cref="sbyte"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
-		public sbyte GetSByte(sbyte min, sbyte max) {
+		public sbyte GetSByte(sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue) {
 			return (sbyte)GetByte(min.Conv(), max.Conv());
 		}
 
@@ -680,57 +658,36 @@ namespace Riptide
         #endregion
 
         #region Short & UShort
-		/// <summary>Adds a <see cref="ushort"/> to the message.</summary>
-        /// <param name="value">The <see cref="ushort"/> to add.</param>
-        /// <returns>The message that the <see cref="ushort"/> was added to.</returns>
-		public Message AddUShort(ushort value) {
-			return AddUShort(value, 0, ushort.MaxValue);
-		}
-
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
-		public Message AddUShort(ushort value, ushort min, ushort max) {
+		public Message AddUShort(ushort value, ushort min = ushort.MinValue, ushort max = ushort.MaxValue) {
 			return AddULong(value, min, max);
-		}
-
-		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
-        /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
-		public ushort GetUShort() {
-			return (ushort)GetULong(0, ushort.MaxValue);
 		}
 
 		/// <summary>Retrieves a <see cref="ushort"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ushort"/> that was retrieved.</returns>
-		public ushort GetUShort(ushort min, ushort max) {
+		public ushort GetUShort(ushort min = ushort.MinValue, ushort max = ushort.MaxValue) {
 			return (ushort)GetULong(min, max);
 		}
 
 		/// <summary>Adds a <see cref="short"/> to the message.</summary>
         /// <param name="value">The <see cref="short"/> to add.</param>
-        /// <returns>The message that the <see cref="short"/> was added to.</returns>
-		public Message AddShort(short value) => AddUShort((ushort)value);
-
-		/// <summary>Adds a <see cref="short"/> to the message.</summary>
-        /// <param name="value">The <see cref="short"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="short"/> was added to.</returns>
-		public Message AddShort(short value, short min, short max)
+		public Message AddShort(short value, short min = short.MinValue, short max = short.MaxValue)
 			=> AddUShort(value.Conv(), min.Conv(), max.Conv());
-		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
-        /// <returns>The <see cref="short"/> that was retrieved.</returns>
-		public short GetShort() => (short)GetUShort();
 
 		/// <summary>Retrieves a <see cref="short"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
-		public short GetShort(short min, short max) {
+		public short GetShort(short min = short.MinValue, short max = short.MaxValue) {
 			return (short)GetUShort(min.Conv(), max.Conv());
 		}
 
@@ -876,56 +833,34 @@ namespace Riptide
         #region Int & UInt
 		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
         /// <param name="value">The <see cref="uint"/> to add.</param>
-        /// <returns>The message that the <see cref="uint"/> was added to.</returns>
-		public Message AddUInt(uint value) {
-			return AddUInt(value, 0, uint.MaxValue);
-		}
-
-		/// <summary>Adds a <see cref="uint"/> to the message.</summary>
-        /// <param name="value">The <see cref="uint"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="uint"/> was added to.</returns>
-		public Message AddUInt(uint value, uint min, uint max) {
+		public Message AddUInt(uint value, uint min = uint.MinValue, uint max = uint.MaxValue) {
 			return AddULong(value, min, max);
-		}
-
-		/// <summary>Retrieves a <see cref="uint"/> from the message.</summary>
-        /// <returns>The <see cref="uint"/> that was retrieved.</returns>
-		public uint GetUInt() {
-			return (uint)GetULong(0, uint.MaxValue);
 		}
 
 		/// <summary>Retrieves an <see cref="uint"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="uint"/> that was retrieved.</returns>
-		public uint GetUInt(uint min, uint max) {
+		public uint GetUInt(uint min = uint.MinValue, uint max = uint.MaxValue) {
 			return (uint)GetULong(min, max);
 		}
 
-		/// <summary>Adds an <see cref="int"/> to the message.</summary>
-        /// <param name="value">The <see cref="int"/> to add.</param>
-        /// <returns>The message that the <see cref="int"/> was added to.</returns>
-		public Message AddInt(int value) => AddUInt(value.Conv());
-		
 		/// <summary>Adds an <see cref="int"/> to the message.</summary>
 		/// <param name="value">The <see cref="int"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="int"/> was added to.</returns>
-		public Message AddInt(int value, int min, int max)
+		public Message AddInt(int value, int min = int.MinValue, int max = int.MaxValue)
 			=> AddUInt(value.Conv(), min.Conv(), max.Conv());
-		
-		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
-        /// <returns>The <see cref="int"/> that was retrieved.</returns>
-		public int GetInt() => (int)GetUInt();
 
 		/// <summary>Retrieves an <see cref="int"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="int"/> that was retrieved.</returns>
-		public int GetInt(int min, int max) {
+		public int GetInt(int min = int.MinValue, int max = int.MaxValue) {
 			return (int)GetUInt(min.Conv(), max.Conv());
 		}
 
@@ -1083,17 +1018,10 @@ namespace Riptide
         #region Long & ULong
 		/// <summary>Adds a <see cref="ulong"/> to the message.</summary>
         /// <param name="value">The <see cref="ulong"/> to add.</param>
-        /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
-		public Message AddULong(ulong value) {
-			return AddULong(value, 0, ulong.MaxValue);
-		}
-
-		/// <summary>Adds a <see cref="ulong"/> to the message.</summary>
-        /// <param name="value">The <see cref="ulong"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="ulong"/> was added to.</returns>
-		public Message AddULong(ulong value, ulong min, ulong max) {
+		public Message AddULong(ulong value, ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(value > max || value < min) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {min} and {max} (inclusive)");
 			data.Add(writeValue, value - min);
 			if(max - min + 1 == 0) writeValue.LeftShift(sizeof(ulong) * BitsPerByte);
@@ -1102,16 +1030,10 @@ namespace Riptide
 		}
 
 		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
-        /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
-		public ulong GetULong() {
-			return GetULong(0, ulong.MaxValue);
-		}
-
-		/// <summary>Retrieves a <see cref="ulong"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
-		public ulong GetULong(ulong min, ulong max) {
+		public ulong GetULong(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
 			if(max - min + 1 == 0) {
 				ulong val = data.RightShift(sizeof(ulong) * BitsPerByte);
@@ -1123,26 +1045,17 @@ namespace Riptide
 
 		/// <summary>Adds a <see cref="long"/> to the message.</summary>
         /// <param name="value">The <see cref="long"/> to add.</param>
-        /// <returns>The message that the <see cref="long"/> was added to.</returns>
-		public Message AddLong(long value) => AddULong((ulong)value);
-
-		/// <summary>Adds a <see cref="long"/> to the message.</summary>
-        /// <param name="value">The <see cref="long"/> to add.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The message that the <see cref="long"/> was added to.</returns>
-		public Message AddLong(long value, long min, long max)
+		public Message AddLong(long value, long min = long.MinValue, long max = long.MaxValue)
 			=> AddULong(value.Conv(), min.Conv(), max.Conv());
 
 		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
-        /// <returns>The <see cref="long"/> that was retrieved.</returns>
-		public long GetLong() => (long)GetULong();
-
-		/// <summary>Retrieves a <see cref="long"/> from the message.</summary>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
-		public long GetLong(long min, long max)
+		public long GetLong(long min = long.MinValue, long max = long.MaxValue)
 			=> (long)GetULong(min.Conv(), max.Conv());
 
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
@@ -1612,40 +1525,40 @@ namespace Riptide
         #endregion
 
         #region Overload Versions
-        /// <inheritdoc cref="AddByte(byte)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddByte(byte)"/>.</remarks>
+        /// <inheritdoc cref="AddByte(byte, byte, byte)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddByte(byte, byte, byte)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(byte value) => AddByte(value);
-        /// <inheritdoc cref="AddSByte(sbyte)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddSByte(sbyte)"/>.</remarks>
+        /// <inheritdoc cref="AddSByte(sbyte, sbyte, sbyte)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddSByte(sbyte, sbyte, sbyte)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(sbyte value) => AddSByte(value);
         /// <inheritdoc cref="AddBool(bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddBool(bool)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(bool value) => AddBool(value);
-        /// <inheritdoc cref="AddShort(short)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddShort(short)"/>.</remarks>
+        /// <inheritdoc cref="AddShort(short, short, short)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddShort(short, short, short)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(short value) => AddShort(value);
-        /// <inheritdoc cref="AddUShort(ushort)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddUShort(ushort)"/>.</remarks>
+        /// <inheritdoc cref="AddUShort(ushort, ushort, ushort)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddUShort(ushort, ushort, ushort)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(ushort value) => AddUShort(value);
-        /// <inheritdoc cref="AddInt(int)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddInt(int)"/>.</remarks>
+        /// <inheritdoc cref="AddInt(int, int, int)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddInt(int, int, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(int value) => AddInt(value);
-        /// <inheritdoc cref="AddUInt(uint)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddUInt(uint)"/>.</remarks>
+        /// <inheritdoc cref="AddUInt(uint, uint, uint)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddUInt(uint, uint, uint)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(uint value) => AddUInt(value);
-        /// <inheritdoc cref="AddLong(long)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddLong(long)"/>.</remarks>
+        /// <inheritdoc cref="AddLong(long, long, long)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddLong(long, long, long)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(long value) => AddLong(value);
-        /// <inheritdoc cref="AddULong(ulong)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddULong(ulong)"/>.</remarks>
+        /// <inheritdoc cref="AddULong(ulong, ulong, ulong)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddULong(ulong, ulong, ulong)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(ulong value) => AddULong(value);
         /// <inheritdoc cref="AddFloat(float)"/>
