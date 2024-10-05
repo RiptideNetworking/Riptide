@@ -84,7 +84,7 @@ namespace Riptide
         /// <summary>The maximum number of bits a message can contain.</summary>
         private static int maxByteCount;
         /// <summary>The maximum size of the <see cref="data"/> array.</summary>
-        private static int maxArraySize;
+        private static int maxArraySize; // TODO implement along with standard init size
 
         static Message()
         {
@@ -126,9 +126,17 @@ namespace Riptide
 			writeValue = new FastBigInt(maxArraySize, 1);
 		}
 
-        /// <summary>Gets a completely empty message instance with no header.</summary>
-        /// <returns>An empty message instance.</returns>
-        public static Message Create() => new Message();
+        /// <summary>Creates a message that can be used for receiving/handling.</summary>
+        /// <param name="bytes">The bytes of the received data.</param>
+        /// <param name="contentLength">The number of bytes which this message will contain.</param>
+        /// <returns>The message, ready to be used for handling.</returns>
+        internal static Message Create(byte[] bytes, int contentLength) {
+            Message msg = new Message {
+                data = new FastBigInt(contentLength, bytes),
+                writeValue = new FastBigInt(contentLength, 1)
+            };
+            return msg;
+		}
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
         /// <returns>A message instance ready to be sent.</returns>
@@ -144,7 +152,7 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         public static Message Create(MessageSendMode sendMode, ushort id)
         {
-            return new Message().Init((MessageHeader)sendMode).AddUShort(id, 0, MaxId);
+            return Create(sendMode).AddUShort(id, 0, MaxId);
         }
         /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
@@ -169,19 +177,8 @@ namespace Riptide
         /// <summary>Initializes the message so that it can be used for sending.</summary>
         /// <param name="header">The message's header type.</param>
         /// <returns>The message, ready to be used for sending.</returns>
-        private Message Init(MessageHeader header)
-        {
+        private Message Init(MessageHeader header) {
             SetHeader(header);
-            return this;
-        }
-        /// <summary>Initializes the message so that it can be used for receiving/handling.</summary>
-        /// <param name="bytes">The bytes of the received data.</param>
-        /// <param name="contentLength">The number of bytes which this message will contain.</param>
-        /// <returns>The message, ready to be used for handling.</returns>
-        internal Message Init(byte[] bytes, int contentLength)
-        {
-			data = new FastBigInt(contentLength, bytes);
-			writeValue = new FastBigInt(contentLength, 1);
             return this;
         }
 

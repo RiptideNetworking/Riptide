@@ -12,18 +12,15 @@ namespace Riptide.Utils
 			return value < min ? min : value > max ? max : value;
 		}
 
-		/// <remarks>Only works of exact powers and includes 0.</remarks>
+		/// <remarks>Rounds down and includes 0.</remarks>
 		internal static byte Log2(this ulong value) {
-			byte steps = sizeof(ulong) << 2;
-			byte log = (byte)(steps - 1);
-			while(steps > 1) {
-				ulong check = 1UL << log;
-				if(value == check) return log;
-				steps >>= 1;
-				if(value < check) log -= steps;
-				else log += steps;
+			byte bits = 0;
+			for(byte step = 32; step >= 1; step >>= 1) {
+				if(value < 1UL << step) continue;
+				value >>= step;
+				bits += step;
 			}
-			return log;
+			return bits;
 		}
 
 		internal static int GetBitCount(ulong n) {

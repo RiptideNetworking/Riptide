@@ -102,7 +102,7 @@ namespace Riptide
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
-        /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the server with the connection attempt.</param>
         /// <param name="useMessageHandlers">Whether or not the client should use the built-in message handler system.</param>
         /// <remarks>
         ///   <para>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</para>
