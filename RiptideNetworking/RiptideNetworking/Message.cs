@@ -1438,20 +1438,16 @@ namespace Riptide
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
         public Message AddString(string value)
         {
-			byte[] bytes = Encoding.UTF8.GetBytes(value);
-			RiptideLogger.Log(LogType.Info, $"b: {bytes[bytes.Length - 1]}");
-            AddBytes(bytes);
+            AddBytes(Encoding.UTF8.GetBytes(value));
             return this;
         }
 
         /// <summary>Retrieves a <see cref="string"/> from the message.</summary>
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
-        public string GetString() // FIXME the last letter didnt arrive
+        public string GetString()
         {
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
-			byte[] bytes = GetBytes(length);
-			RiptideLogger.Log(LogType.Info, $"b: {bytes[bytes.Length - 1]}");
-            string value = Encoding.UTF8.GetString(bytes, 0, length);
+            string value = Encoding.UTF8.GetString(GetBytes(length), 0, length);
             return value;
         }
 

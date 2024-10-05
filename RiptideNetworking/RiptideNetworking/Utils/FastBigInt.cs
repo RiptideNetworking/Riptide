@@ -87,7 +87,6 @@ namespace Riptide.Utils
 			return bytes;
 		}
 
-		// TODO use shifting for powers of two
 		internal void Add(FastBigInt value, ulong mult) {
 			minIndex = Math.Min(minIndex, value.minIndex);
 			maxIndex = Math.Max(maxIndex, value.maxIndex + 2);

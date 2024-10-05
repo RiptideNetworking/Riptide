@@ -409,7 +409,6 @@ namespace Riptide
         {
             Message message = Message.Create(MessageHeader.Welcome);
             message.AddUShort(Id);
-			message.LogStuff();
 
             Send(message);
         }
