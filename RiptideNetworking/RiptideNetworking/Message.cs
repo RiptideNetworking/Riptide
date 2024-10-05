@@ -189,18 +189,36 @@ namespace Riptide
         {
 			AddByte((byte)header, 0, 15);
             if (header == MessageHeader.Notify)
-				SetHeader(MessageSendMode.Notify, NotifyHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Notify, NotifyHeaderBits - HeaderBits);
 			else if (header == MessageHeader.Queued)
-				SetHeader(MessageSendMode.Queued, QueuedHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Queued, QueuedHeaderBits - HeaderBits);
             else if (header >= MessageHeader.Reliable)
-				SetHeader(MessageSendMode.Reliable, ReliableHeaderBits - HeaderBits);
-            else SetHeader(MessageSendMode.Unreliable, UnreliableHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Reliable, ReliableHeaderBits - HeaderBits);
+            else SetHeaderRoom(MessageSendMode.Unreliable, UnreliableHeaderBits - HeaderBits);
         }
 
-		private void SetHeader(MessageSendMode sendMode, byte headerBits) {
+		/// <summary>Adds room for stuff like sequenceId.</summary>
+		/// <param name="sendMode">The send mode of this message.</param>
+		/// <param name="headerBits">The amount of header bits, that the specific send mode needs.</param>
+		/// <exception cref="ArgumentOutOfRangeException"></exception>
+		private void SetHeaderRoom(MessageSendMode sendMode, byte headerBits) {
 			if(headerBits >= 64) throw new ArgumentOutOfRangeException(nameof(headerBits), "Header bits must be less than 64");
-			writeValue.Mult(1UL << headerBits);
+			AddBits(0, headerBits);
 			SendMode = sendMode;
+		}
+
+		/// <summary>Removes the header of a message.</summary>
+		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
+		public void RemoveHeader() {
+			MessageHeader header = (MessageHeader)GetBits(HeaderBits);
+			if(header == MessageHeader.Notify)
+				GetBits(NotifyHeaderBits - HeaderBits);
+			else if(header == MessageHeader.Queued)
+				GetBits(QueuedHeaderBits - HeaderBits);
+			else if(header >= MessageHeader.Reliable)
+				GetBits(ReliableHeaderBits - HeaderBits);
+			else GetBits(UnreliableHeaderBits - HeaderBits);
+			GetUShort(0, MaxId);
 		}
 
 		internal Message GetInfo(out MessageHeader header) {
@@ -240,6 +258,26 @@ namespace Riptide
         #endregion
 
         #region Bits
+		/// <summary>Sets bits to the message.</summary>
+		/// <param name="bitfield">The bitfield to add.</param>
+		/// <param name="amount">The amount of bits.</param>
+		/// <returns></returns>
+		public Message AddBits(ulong bitfield, int amount) {
+			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
+			if(amount > sizeof(ulong) * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+			ulong mask = (1UL << amount) - 1;
+			bitfield &= mask;
+			AddULong(bitfield, 0, mask);
+			return this;
+		}
+		/// <summary>Gets bits from a message.</summary>
+		/// <param name="amount">The amount of bits.</param>
+		/// <returns></returns>
+		public ulong GetBits(int amount) {
+			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
+			if(amount > sizeof(ulong) * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot get more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+			return GetULong(0, (1UL << amount) - 1);
+		}
         /// <summary>Sets up to 64 bits at the specified position in the message.</summary>
         /// <param name="bitfield">The bits to write into the message.</param>
         /// <param name="amount">The number of bits to set.</param>
@@ -430,9 +468,7 @@ namespace Riptide
                 AddVarULong((uint)array.Length);
 
 			for (int i = 0; i < array.Length; i++)
-			{
 				AddByte(array[i], min, max);
-			}
 
             return this;
         }
@@ -562,9 +598,7 @@ namespace Riptide
         private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
 			for (int i = 0; i < amount; i++)
-			{
 				intoArray[startIndex + i] = GetByte(min, max);
-			}
         }
 
         /// <summary>Reads a number of sbytes from the message and writes them into the given array.</summary>
@@ -1404,16 +1438,20 @@ namespace Riptide
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
         public Message AddString(string value)
         {
-            AddBytes(Encoding.UTF8.GetBytes(value));
+			byte[] bytes = Encoding.UTF8.GetBytes(value);
+			RiptideLogger.Log(LogType.Info, $"b: {bytes[bytes.Length - 1]}");
+            AddBytes(bytes);
             return this;
         }
 
         /// <summary>Retrieves a <see cref="string"/> from the message.</summary>
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
-        public string GetString()
+        public string GetString() // FIXME the last letter didnt arrive
         {
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
-            string value = Encoding.UTF8.GetString(GetBytes(length), 0, length);
+			byte[] bytes = GetBytes(length);
+			RiptideLogger.Log(LogType.Info, $"b: {bytes[bytes.Length - 1]}");
+            string value = Encoding.UTF8.GetString(bytes, 0, length);
             return value;
         }
 

@@ -15,26 +15,11 @@ namespace Riptide.Utils
 		/// <remarks>Rounds down and includes 0.</remarks>
 		internal static byte Log2(this ulong value) {
 			byte bits = 0;
-			for(byte step = 32; step >= 1; step >>= 1) {
+			for(byte step = 32; step > 0; step >>= 1) {
 				if(value < 1UL << step) continue;
 				value >>= step;
 				bits += step;
 			}
-			return bits;
-		}
-
-		internal static int GetBitCount(ulong n) {
-			int bits = 0;
-			ulong[] thresholds = { 0x1, 0x3, 0xf, 0xff, 0xffff, 0xffffffffffffffff };
-			int shiftCount = 0;
-			for(int i = thresholds.Length - 1; i >= 0; i--) {
-				if (n > thresholds[i]) {
-					n >>= 1 << (i + 1);
-					bits |= 1 << i;
-					shiftCount += 1 << (i + 1);
-				}
-			}
-
 			return bits;
 		}
 

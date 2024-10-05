@@ -38,6 +38,14 @@ namespace Riptide.Utils
 			return copy;
 		}
 
+		internal FastBigInt CopySlice(int start, int length, int extraCapacity = 0) {
+			FastBigInt slice = new FastBigInt(length + extraCapacity);
+			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, length * sizeof(ulong));
+			slice.maxIndex = length - 1;
+			slice.AdjustMinAndMax();
+			return slice;
+		}
+
 		public override string ToString() {
 			StringBuilder s = new StringBuilder(2 * (maxIndex - minIndex) + 6);
 			for(int i = 0; i <= maxIndex; i++) {
@@ -79,16 +87,20 @@ namespace Riptide.Utils
 			return bytes;
 		}
 
+		// TODO use shifting for powers of two
 		internal void Add(FastBigInt value, ulong mult) {
 			minIndex = Math.Min(minIndex, value.minIndex);
-			maxIndex = Math.Max(maxIndex, value.maxIndex + 1);
+			maxIndex = Math.Max(maxIndex, value.maxIndex + 2);
 			EnsureCapacity();
+			int offset = value.minIndex;
+			int len = value.maxIndex - offset + 2;
+			FastBigInt slice = value.CopySlice(offset, value.maxIndex + 1, 1);
+			slice.Mult(mult);
 			ulong carry = 0;
-			for(int i = minIndex; i < maxIndex; i++) {
-				(ulong temp, ulong tempCarry) = CMath.MultiplyUlong(value.data[i], mult);
-				(data[i], carry) = CMath.AddUlong(data[i], carry);
-				carry += tempCarry;
-				(data[i], tempCarry) = CMath.AddUlong(data[i], temp);
+			for(int i = 0; i < len; i++) {
+				(data[i + offset], carry) = CMath.AddUlong(data[i + offset], carry);
+				ulong tempCarry;
+				(data[i + offset], tempCarry) = CMath.AddUlong(data[i + offset], slice.data[i]);
 				carry += tempCarry;
 			}
 			AdjustMinAndMax();
@@ -150,7 +162,7 @@ namespace Riptide.Utils
 			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
 			if(minIndex > 0) minIndex -= 1;
 			ulong carry = 0;
-			for(int i = maxIndex; i >= 0; i--) {
+			for(int i = maxIndex; i >= minIndex; i--) {
 				ulong val;
 				ulong prevCarry = carry;
 				(val, carry) = CMath.RightShiftUlong(data[i], shiftBits);
@@ -162,12 +174,8 @@ namespace Riptide.Utils
 
 		private void AdjustMinAndMax() {
 			while(maxIndex > 0 && data[maxIndex] == 0) maxIndex--;
-			while(minIndex < 0) minIndex++;
 			while(minIndex < maxIndex && data[minIndex] == 0) minIndex++;
-			if(minIndex > maxIndex) {
-				minIndex = 0;
-				maxIndex = 0;
-			}
+			if(maxIndex == 0) minIndex = 0;
 		}
 
 		private void EnsureCapacity() {

@@ -159,7 +159,6 @@ namespace Riptide
         protected void HandleData(object _, DataReceivedEventArgs e)
         {
             Message message = Message.Create(e.DataBuffer, e.Amount).GetInfo(out MessageHeader header);
-			message.LogStuff(header.ToString());
 			
             if(message.SendMode == MessageSendMode.Notify) {
                 e.FromConnection.ProcessNotify(e.Amount, message);
