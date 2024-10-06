@@ -1412,7 +1412,7 @@ namespace Riptide
 		/// <param name="element"></param>
 		/// <param name="possibleValues"></param>
 		/// <exception cref="ArgumentException"></exception>
-		public void AddElement<T>(T element, T[] possibleValues) {
+		public Message AddElement<T>(T element, T[] possibleValues) {
 			if (possibleValues == null || possibleValues.Length == 0)
 				throw new ArgumentException("Possible values array cannot be null or empty", nameof(possibleValues));
 
@@ -1421,6 +1421,7 @@ namespace Riptide
 				throw new ArgumentException($"Element {element} is not a valid value for this message", nameof(element));
 
 			AddInt(index, 0, possibleValues.Length - 1);
+			return this;
 		}
 
 		/// <summary>Retrieves one of the possible values.</summary>
@@ -1438,6 +1439,38 @@ namespace Riptide
 				throw new Exception($"Received invalid index {index} for possible values array of length {possibleValues.Length}");
 
 			return possibleValues[index];
+		}
+
+		/// <summary>Adds a T array message.</summary>
+        /// <param name="elements">The array to add.</param>
+        /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+		/// <param name="possibleValues">The possible values of the elements in elements.</param>
+        /// <returns>The message that the array was added to.</returns>
+		public Message AddElements<T>(T[] elements, T[] possibleValues, bool includeLength = true) {
+			if (includeLength)
+                AddVarULong((uint)elements.Length);
+
+			for (int i = 0; i < elements.Length; i++)
+				AddElement(elements[i], possibleValues);
+
+			return this;
+		}
+
+		/// <summary>Retrieves a T array from the message.</summary>
+		/// <param name="possibleValues">The possible values of the elements in elements.</param>
+        /// <returns>The array that was retrieved.</returns>
+		public T[] GetElements<T>(T[] possibleValues) => GetElements((int)GetVarULong(), possibleValues);
+
+		/// <summary>Retrieves a T array from the message.</summary>
+        /// <param name="amount">The amount of ints to retrieve.</param>
+		/// <param name="possibleValues">The possible values of the elements in elements.</param>
+        /// <returns>The array that was retrieved.</returns>
+		public T[] GetElements<T>(int amount, T[] possibleValues) {
+			T[] elements = new T[amount];
+			for (int i = 0; i < amount; i++)
+				elements[i] = GetElement(possibleValues);
+
+			return elements;
 		}
 		#endregion
 
