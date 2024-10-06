@@ -184,7 +184,7 @@ namespace Riptide
 				Buffer.BlockCopy(e.DataBuffer, 1, message.Data, 1, e.Amount - 1);
 				foreach(Message m in e.FromConnection.QueuedMessagesToHandle(message, sequenceId))
 					messagesToHandle.Enqueue(new MessageToHandle(m, MessageHeader.Queued, e.FromConnection));
-				e.FromConnection.Send(Message.QueuedAck(sequenceId));
+				e.FromConnection.Send(Message.QueuedAck(sequenceId, true));
 			}
             else
             {
