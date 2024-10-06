@@ -226,7 +226,7 @@ namespace Riptide
 			return byteAmount;
 		}
 
-		/// <summary>Sends all the queued messages up to MaxSynchronousQueuedMessages</summary>
+		/// <summary>Resends the queued message at listId.</summary>
         private void ResendQueuedMessage(ushort listId) {
 			Message msg = messageQueue[listId];
 			if(msg == null) return;
@@ -272,15 +272,15 @@ namespace Riptide
 			}
 		}
 
+		/// <summary>Asks for resends of all messages not recieved below the maximum queued sequence id.</summary>
 		internal void NotifyQueuedResends() {
-			int index = -1;
-			foreach(Message m in recievedMessageQueue) {
-				index++;
-				if(m != null) continue;
-				SendData(Message.QueuedAck((ushort)(recievedNextQueuedSequenceId + index), false));
+			for(int i = 1; i < recievedMessageQueue.Count; i++) {
+				if(recievedMessageQueue[i] != null) continue;
+				SendData(Message.QueuedAck((ushort)(recievedNextQueuedSequenceId + i), false));
 			}
 		}
 
+		/// <summary>Resends the first message from the queue.</summary>
 		internal void ResendFirstQueuedMessage() {
 			if(messageQueue.Count == 0) return;
 			SendData(messageQueue[0]);
