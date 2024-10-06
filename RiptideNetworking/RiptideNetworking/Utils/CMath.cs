@@ -29,21 +29,11 @@ namespace Riptide.Utils
 			return (value & (value - 1)) == 0;
 		}
 
-		internal static unsafe uint ToUInt(this float value) {
-			return *(uint*)&value;
-		}
-
-		internal static unsafe float ToFloat(this uint value) {
-			return *(float*)&value;
-		}
-
-		internal static unsafe ulong ToULong(this double value) {
-			return *(ulong*)&value;
-		}
-
-		internal static unsafe double ToDouble(this ulong value) {
-			return *(double*)&value;
-		}
+		internal static unsafe uint ToUInt(this float value) => *(uint*)&value;
+		internal static unsafe float ToFloat(this uint value) => *(float*)&value;
+		internal static unsafe ulong ToULong(this double value) => *(ulong*)&value;
+		internal static unsafe double ToDouble(this ulong value) => *(double*)&value;
+		internal static unsafe ulong ToULong(this bool value) => *(byte*)&value;
 
 		internal static void Clear(this ulong[] ulongs) {
 			for(int i = 0; i < ulongs.Length; i++)
@@ -52,13 +42,13 @@ namespace Riptide.Utils
 
 		public static (ulong value, ulong carry) AddUlong(ulong val, ulong add) {
 			ulong value = val + add;
-			ulong carry = value < val ? 1UL : 0UL;
+			ulong carry = (value < val).ToULong();
 			return (value, carry);
 		}
 
 		public static (ulong value, ulong carry) SubtractUlong(ulong val, ulong sub) {
 			ulong value = val - sub;
-			ulong carry = value > val ? 1UL : 0UL;
+			ulong carry = (value > val).ToULong();
 			return (value, carry);
 		}
 
@@ -95,8 +85,8 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
-		// TODO
 		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
+			// this has not been tested at all
 			if(carry == 0) return (val / div, val % div);
 			ulong value = 0;
 			for(int i = 63; i >= 0; i--) {
