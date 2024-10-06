@@ -283,7 +283,7 @@ namespace Riptide
 
 		internal void ResendFirstQueuedMessage() {
 			if(messageQueue.Count == 0) return;
-			SendData(messageQueue[0].Copy());
+			SendData(messageQueue[0]);
 		}
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>
