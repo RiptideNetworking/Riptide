@@ -165,7 +165,7 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         internal static Message Create(MessageHeader header)
         {
-            return new Message().Init(header);
+            return new Message().SetHeader(header);
         }
 
 		/// <summary>Logs info of the message</summary>
@@ -175,35 +175,27 @@ namespace Riptide
 		}
 
         #region Functions
-        /// <summary>Initializes the message so that it can be used for sending.</summary>
-        /// <param name="header">The message's header type.</param>
-        /// <returns>The message, ready to be used for sending.</returns>
-        private Message Init(MessageHeader header) {
-            SetHeader(header);
-            return this;
-        }
-
         /// <summary>Sets the message's header bits to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
         /// <param name="header">The header to use for this message.</param>
-        private void SetHeader(MessageHeader header)
-        {
+        /// <returns>The message, ready to be used for sending.</returns>
+        private Message SetHeader(MessageHeader header) {
 			AddByte((byte)header, 0, 15);
             if (header == MessageHeader.Notify)
-				SetHeaderRoom(MessageSendMode.Notify, NotifyHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Notify, NotifyHeaderBits);
 			else if (header == MessageHeader.Queued)
-				SetHeaderRoom(MessageSendMode.Queued, QueuedHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Queued, QueuedHeaderBits);
             else if (header >= MessageHeader.Reliable)
-				SetHeaderRoom(MessageSendMode.Reliable, ReliableHeaderBits - HeaderBits);
-            else SetHeaderRoom(MessageSendMode.Unreliable, UnreliableHeaderBits - HeaderBits);
+				SetHeaderRoom(MessageSendMode.Reliable, ReliableHeaderBits);
+            else SetHeaderRoom(MessageSendMode.Unreliable, UnreliableHeaderBits);
+			return this;
         }
 
 		/// <summary>Adds room for stuff like sequenceId.</summary>
 		/// <param name="sendMode">The send mode of this message.</param>
-		/// <param name="headerBits">The amount of header bits, that the specific send mode needs.</param>
+		/// <param name="roomBits">The amount of header bits, that the specific send mode needs.</param>
 		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		private void SetHeaderRoom(MessageSendMode sendMode, byte headerBits) {
-			if(headerBits >= 64) throw new ArgumentOutOfRangeException(nameof(headerBits), "Header bits must be less than 64");
-			AddBits(0, headerBits);
+		private void SetHeaderRoom(MessageSendMode sendMode, byte roomBits) {
+			AddBits(0, roomBits - HeaderBits);
 			SendMode = sendMode;
 		}
 
@@ -223,12 +215,10 @@ namespace Riptide
 
 		internal Message GetInfo(out MessageHeader header) {
 			header = (MessageHeader)GetByte(0, 15);
-			switch(header) {
-				case MessageHeader.Notify: SendMode = MessageSendMode.Notify; break;
-				case MessageHeader.Reliable: SendMode = MessageSendMode.Reliable; break;
-				case MessageHeader.Queued: SendMode = MessageSendMode.Queued; break;
-				default: SendMode = MessageSendMode.Unreliable; break;
-			}
+			if (header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
+			else if(header == MessageHeader.Queued) SendMode = MessageSendMode.Queued;
+			else if(header >= MessageHeader.Reliable) SendMode = MessageSendMode.Reliable;
+			else SendMode = MessageSendMode.Unreliable;
 			return this;
 		}
         #endregion
@@ -342,7 +332,7 @@ namespace Riptide
 		/// <param name="sequenceId">The sequence id to queue.</param>
 		/// <returns>The new message.</returns>
 		internal static Message QueuedAck(ushort sequenceId) {
-            Message message = new Message().Init(MessageHeader.QueuedAck);
+            Message message = Create(MessageHeader.QueuedAck);
 			message.AddUShort(sequenceId);
 			return message;
         }

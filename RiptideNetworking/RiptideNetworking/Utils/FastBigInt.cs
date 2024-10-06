@@ -130,9 +130,9 @@ namespace Riptide.Utils
 				byte rightShift = div.Log2();
 				return RightShift(rightShift) >> (64 - rightShift);
 			}
-			if(minIndex > 0) minIndex -= 1;
+			minIndex = 0;
 			ulong carry = 0;
-			for(int i = maxIndex * 2; i >= 0; i--) {
+			for(int i = maxIndex * 2; i >= minIndex; i--) {
 				int ui = i % 2 * 32;
 				ulong mask = (0ul - (ulong)(i % 2)) ^ 0x00000000FFFFFFFFUL;
 				carry <<= 32;
