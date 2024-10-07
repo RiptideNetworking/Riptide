@@ -12,7 +12,7 @@ namespace Riptide.Utils
 			return value < min ? min : value > max ? max : value;
 		}
 
-		/// <remarks>Rounds down and includes 0.</remarks>
+		/// <remarks>Rounds down and includes 0 as 0.</remarks>
 		internal static byte Log2(this ulong value) {
 			byte bits = 0;
 			for(byte step = 32; step > 0; step >>= 1) {
@@ -23,9 +23,8 @@ namespace Riptide.Utils
 			return bits;
 		}
 
-
-		/// <remarks>Includes 0</remarks>
 		internal static bool IsPowerOf2(this ulong value) {
+			if(value == 0) return false;
 			return (value & (value - 1)) == 0;
 		}
 
@@ -38,73 +37,6 @@ namespace Riptide.Utils
 		internal static void Clear(this ulong[] ulongs) {
 			for(int i = 0; i < ulongs.Length; i++)
 				ulongs[i] = 0;
-		}
-
-		public static (ulong value, ulong carry) AddUlong(ulong val, ulong add) {
-			ulong value = val + add;
-			ulong carry = (value < val).ToULong();
-			return (value, carry);
-		}
-
-		public static (ulong value, ulong carry) SubtractUlong(ulong val, ulong sub) {
-			ulong value = val - sub;
-			ulong carry = (value > val).ToULong();
-			return (value, carry);
-		}
-
-		public static (ulong value, ulong carry) MultiplyUlong(ulong val, ulong mult) {
-			ulong xLow = val & 0xFFFFFFFF;
-			ulong xHigh = val >> 32;
-			ulong yLow = mult & 0xFFFFFFFF;
-			ulong yHigh = mult >> 32;
-
-			ulong low = xLow * yLow;
-			ulong high = xHigh * yHigh;
-
-			ulong cross1 = xLow * yHigh;
-			ulong cross2 = xHigh * yLow;
-
-			ulong value = low + (cross1 << 32) + (cross2 << 32);
-			ulong carry = high + (cross1 >> 32) + (cross2 >> 32);
-			return (value, carry);
-		}
-
-		public static (ulong value, ulong carry) LeftShiftUlong(ulong val, int shift) {
-			if(shift == 0) return (val, 0);
-			if(shift == 64) return (0, val);
-			ulong value = val << shift;
-			ulong carry = val >> (64 - shift);
-			return (value, carry);
-		}
-
-		public static (ulong value, ulong carry) RightShiftUlong(ulong val, int shift) {
-			if(shift == 0) return (val, 0);
-			if(shift == 64) return (0, val);
-			ulong value = val >> shift;
-			ulong carry = val << (64 - shift);
-			return (value, carry);
-		}
-
-		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
-			// this has not been tested at all
-			if(carry == 0) return (val / div, val % div);
-			ulong value = 0;
-			for(int i = 63; i >= 0; i--) {
-				value <<= 1;
-				carry <<= 1;
-				carry += val & 1;
-				val >>= 1;
-				if(carry < div) continue;
-				carry -= div;
-				value |= 1;
-				if(carry >> i == 0) {
-					carry <<= 63 - i;
-					value <<= 63 - i;
-					break;
-				}
-			}
-			val += carry;
-			return (val / div + value, val % div);
 		}
 
 		public static byte Conv(this sbyte value) => (byte)(value + (1 << 7));

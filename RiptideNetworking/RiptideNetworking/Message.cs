@@ -179,7 +179,7 @@ namespace Riptide
         /// <param name="header">The header to use for this message.</param>
         /// <returns>The message, ready to be used for sending.</returns>
         private Message SetHeader(MessageHeader header) {
-			AddByte((byte)header, 0, 15);
+			AddBits((byte)header, HeaderBits);
             if (header == MessageHeader.Notify)
 				SetHeaderRoom(MessageSendMode.Notify, NotifyHeaderBits);
 			else if (header == MessageHeader.Queued)
@@ -203,9 +203,10 @@ namespace Riptide
 		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
 		public void RemoveHeader() {
 			MessageHeader header = (MessageHeader)GetBits(HeaderBits);
-			if(header == MessageHeader.Notify)
+			if(header == MessageHeader.Notify) {
 				GetBits(NotifyHeaderBits - HeaderBits);
-			else if(header == MessageHeader.Queued)
+				return;
+			} else if(header == MessageHeader.Queued)
 				GetBits(QueuedHeaderBits - HeaderBits);
 			else if(header >= MessageHeader.Reliable)
 				GetBits(ReliableHeaderBits - HeaderBits);
@@ -214,7 +215,7 @@ namespace Riptide
 		}
 
 		internal Message GetInfo(out MessageHeader header) {
-			header = (MessageHeader)GetByte(0, 15);
+			header = (MessageHeader)GetBits(HeaderBits);
 			if (header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
 			else if(header == MessageHeader.Queued) SendMode = MessageSendMode.Queued;
 			else if(header >= MessageHeader.Reliable) SendMode = MessageSendMode.Reliable;
@@ -1014,7 +1015,7 @@ namespace Riptide
 		public Message AddULong(ulong value, ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(value > max || value < min) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {min} and {max} (inclusive)");
 			data.Add(writeValue, value - min);
-			if(max - min + 1 == 0) writeValue.LeftShift(sizeof(ulong) * BitsPerByte);
+			if(max - min + 1 == 0) writeValue.LeftShift1ULong();
 			else writeValue.Mult(max - min + 1);
 			return this;
 		}
@@ -1025,11 +1026,9 @@ namespace Riptide
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
-			if(max - min + 1 == 0) {
-				ulong val = data.RightShift(sizeof(ulong) * BitsPerByte);
-				return val + min;
-			}
-			ulong value = data.DivReturnMod(max - min + 1);
+			ulong value;
+			if(max - min + 1 == 0) value = data.RightShift1ULong();
+			else value = data.DivReturnMod(max - min + 1);
 			return value + min;
 		}
 

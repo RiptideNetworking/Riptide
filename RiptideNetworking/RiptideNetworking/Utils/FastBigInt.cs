@@ -97,9 +97,9 @@ namespace Riptide.Utils
 			slice.Mult(mult);
 			ulong carry = 0;
 			for(int i = 0; i < len; i++) {
-				(data[i + offset], carry) = CMath.AddUlong(data[i + offset], carry);
+				(data[i + offset], carry) = AddUlong(data[i + offset], carry);
 				ulong tempCarry;
-				(data[i + offset], tempCarry) = CMath.AddUlong(data[i + offset], slice.data[i]);
+				(data[i + offset], tempCarry) = AddUlong(data[i + offset], slice.data[i]);
 				carry += tempCarry;
 			}
 			AdjustMinAndMax();
@@ -111,12 +111,12 @@ namespace Riptide.Utils
 				LeftShift(mult.Log2());
 				return;
 			}
-			maxIndex += 1;
+			maxIndex++;
 			EnsureCapacity();
 			ulong carry = 0;
 			for(int i = minIndex; i <= maxIndex; i++) {
 				ulong prevCarry = carry;
-				(data[i], carry) = CMath.MultiplyUlong(data[i], mult);
+				(data[i], carry) = MultiplyUlong(data[i], mult);
 				data[i] += prevCarry;
 			}
 			AdjustMinAndMax();
@@ -130,9 +130,13 @@ namespace Riptide.Utils
 				byte rightShift = div.Log2();
 				return RightShift(rightShift) >> (64 - rightShift);
 			}
-			minIndex = 0;
+			// This should be replaced by minIndex = 0;
+			// however for this case this is better performance
+			// and won't throw an exeption if used correctly
+			if(minIndex > 0) minIndex--;
+
 			ulong carry = 0;
-			for(int i = maxIndex * 2; i >= minIndex; i--) {
+			for(int i = maxIndex * 2; i >= minIndex * 2; i--) {
 				int ui = i % 2 * 32;
 				ulong mask = (0ul - (ulong)(i % 2)) ^ 0x00000000FFFFFFFFUL;
 				carry <<= 32;
@@ -142,18 +146,24 @@ namespace Riptide.Utils
 				data[i / 2] = (current << ui) | (data[i / 2] & ~mask);
 			}
 			AdjustMinAndMax();
+			if(minIndex != 0 && carry != 0) throw new OverflowException("Division overflow. \nYour \"Add\" and \"Get\" methods of your message probably don't line up correctly.");
 			return carry;
 		}
 
 		internal void LeftShift(byte shiftBits) {
+			if(shiftBits == 0) return;
+			if(shiftBits == 64) {
+				LeftShift1ULong();
+				return;
+			}
 			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
-			maxIndex += 1;
+			maxIndex++;
 			EnsureCapacity();
 			ulong carry = 0;
 			for(int i = minIndex; i <= maxIndex; i++) {
 				ulong val;
 				ulong prevCarry = carry;
-				(val, carry) = CMath.LeftShiftUlong(data[i], shiftBits);
+				(val, carry) = LeftShiftUlong(data[i], shiftBits);
 				data[i] = val + prevCarry;
 			}
 			AdjustMinAndMax();
@@ -161,16 +171,37 @@ namespace Riptide.Utils
 		}
 
 		internal ulong RightShift(byte shiftBits) {
+			if(shiftBits == 0) return 0;
+			if(shiftBits == 64) return RightShift1ULong();
 			if(shiftBits > 64) throw new ArgumentOutOfRangeException(nameof(shiftBits), "Shift bits cannot be greater than 64.");
-			if(minIndex > 0) minIndex -= 1;
+			if(minIndex > 0) minIndex--;
 			ulong carry = 0;
 			for(int i = maxIndex; i >= minIndex; i--) {
 				ulong val;
 				ulong prevCarry = carry;
-				(val, carry) = CMath.RightShiftUlong(data[i], shiftBits);
+				(val, carry) = RightShiftUlong(data[i], shiftBits);
 				data[i] = val + prevCarry;
 			}
 			AdjustMinAndMax();
+			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
+			return carry;
+		}
+
+		internal void LeftShift1ULong() {
+			maxIndex++;
+			EnsureCapacity();
+			ulong carry = 0;
+			for(int i = minIndex; i <= maxIndex; i++)
+				(data[i], carry) = (carry, data[i]);
+			AdjustMinAndMax();
+			if(carry != 0) throw new OverflowException("Left shift overflow.");
+		}
+
+		internal ulong RightShift1ULong() {
+			if(minIndex > 0) minIndex--;
+			ulong carry = 0;
+			for(int i = maxIndex; i >= minIndex; i--)
+				(data[i], carry) = (carry, data[i]);
 			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
 			return carry;
 		}
@@ -186,6 +217,70 @@ namespace Riptide.Utils
 			ulong[] newData = new ulong[data.Length * 2];
 			Array.Copy(data, 0, newData, 0, data.Length);
 			data = newData;
+		}
+
+
+		public static (ulong value, ulong carry) AddUlong(ulong val, ulong add) {
+			ulong value = val + add;
+			ulong carry = (value < val).ToULong();
+			return (value, carry);
+		}
+
+		public static (ulong value, ulong carry) SubtractUlong(ulong val, ulong sub) {
+			ulong value = val - sub;
+			ulong carry = (value > val).ToULong();
+			return (value, carry);
+		}
+
+		public static (ulong value, ulong carry) MultiplyUlong(ulong val, ulong mult) {
+			ulong xLow = val & 0xFFFFFFFF;
+			ulong xHigh = val >> 32;
+			ulong yLow = mult & 0xFFFFFFFF;
+			ulong yHigh = mult >> 32;
+
+			ulong low = xLow * yLow;
+			ulong high = xHigh * yHigh;
+
+			ulong cross1 = xLow * yHigh;
+			ulong cross2 = xHigh * yLow;
+
+			ulong value = low + (cross1 << 32) + (cross2 << 32);
+			ulong carry = high + (cross1 >> 32) + (cross2 >> 32);
+			return (value, carry);
+		}
+
+		public static (ulong value, ulong carry) LeftShiftUlong(ulong val, int shift) {
+			ulong value = val << shift;
+			ulong carry = val >> (64 - shift);
+			return (value, carry);
+		}
+
+		public static (ulong value, ulong carry) RightShiftUlong(ulong val, int shift) {
+			ulong value = val >> shift;
+			ulong carry = val << (64 - shift);
+			return (value, carry);
+		}
+
+		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
+			// this has not been tested at all and might be faster or slower than the current
+			if(carry == 0) return (val / div, val % div);
+			ulong value = 0;
+			for(int i = 63; i >= 0; i--) {
+				value <<= 1;
+				carry <<= 1;
+				carry += val & 1;
+				val >>= 1;
+				if(carry < div) continue;
+				carry -= div;
+				value |= 1;
+				if(carry >> i == 0) {
+					carry <<= 63 - i;
+					value <<= 63 - i;
+					break;
+				}
+			}
+			val += carry;
+			return (val / div + value, val % div);
 		}
 	}
 }
