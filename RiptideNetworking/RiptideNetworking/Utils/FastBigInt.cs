@@ -128,7 +128,7 @@ namespace Riptide.Utils
 
 			if(div.IsPowerOf2()) {
 				byte rightShift = div.Log2();
-				return RightShift(rightShift) >> (64 - rightShift);
+				return RightShift(rightShift);
 			}
 			// This should be replaced by minIndex = 0;
 			// however for this case this is better performance
@@ -136,15 +136,8 @@ namespace Riptide.Utils
 			if(minIndex > 0) minIndex--;
 
 			ulong carry = 0;
-			for(int i = maxIndex * 2; i >= minIndex * 2; i--) {
-				int ui = i % 2 * 32;
-				ulong mask = (0ul - (ulong)(i % 2)) ^ 0x00000000FFFFFFFFUL;
-				carry <<= 32;
-				ulong current = (data[i / 2] >> ui) & mask;
-				current += carry;
-				(current, carry) = (current / div, current % div);
-				data[i / 2] = (current << ui) | (data[i / 2] & ~mask);
-			}
+			for(int i = maxIndex; i >= minIndex; i--)
+				(data[i], carry) = DivideUlong(data[i], carry, div);
 			AdjustMinAndMax();
 			if(minIndex != 0 && carry != 0) throw new OverflowException("Division overflow. \nYour \"Add\" and \"Get\" methods of your message probably don't line up correctly.");
 			return carry;
@@ -184,7 +177,7 @@ namespace Riptide.Utils
 			}
 			AdjustMinAndMax();
 			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
-			return carry;
+			return carry >> (64 - shiftBits);
 		}
 
 		internal void LeftShift1ULong() {
@@ -262,25 +255,37 @@ namespace Riptide.Utils
 		}
 
 		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
-			// this has not been tested at all and might be faster or slower than the current
 			if(carry == 0) return (val / div, val % div);
+			ulong extra = IntermediateDivide(ref val, carry, div);
+			return (val / div + extra, val % div);
+		}
+
+		private static ulong IntermediateDivide(ref ulong val, ulong carry, ulong div) {
+			if(div <= uint.MaxValue) {
+				ulong intermediate = val >> 32 | carry << 32;
+				val &= uint.MaxValue;
+				(ulong interDiv, ulong interMod) = (intermediate / div, intermediate % div);
+				val |= interMod << 32;
+				return interDiv << 32;
+			}
+
+			// this has not been tested at all
 			ulong value = 0;
-			for(int i = 63; i >= 0; i--) {
+			int shift = 0;
+			while(carry >> shift != 0UL) {
+				shift++;
 				value <<= 1;
 				carry <<= 1;
-				carry += val & 1;
-				val >>= 1;
+				carry += val >> 63;
+				val <<= 1;
 				if(carry < div) continue;
 				carry -= div;
 				value |= 1;
-				if(carry >> i == 0) {
-					carry <<= 63 - i;
-					value <<= 63 - i;
-					break;
-				}
 			}
-			val += carry;
-			return (val / div + value, val % div);
-		}
+			val >>= shift;
+			int invShift = 64 - shift;
+			val |= carry << invShift;
+			return value << invShift;
+		} 
 	}
 }
