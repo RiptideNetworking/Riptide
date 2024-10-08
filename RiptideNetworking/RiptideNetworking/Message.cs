@@ -1215,7 +1215,7 @@ namespace Riptide
         /// <param name="amount">The amount of floats to read.</param>
         /// <param name="intoArray">The array to write the floats into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>s
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         private void ReadFloats(int amount, float[] intoArray, int startIndex = 0, int bitsOfAccuracy = 23)
         {
             for (int i = 0; i < amount; i++)
@@ -1228,73 +1228,87 @@ namespace Riptide
         #region Double
         /// <summary>Adds a <see cref="double"/> to the message.</summary>
         /// <param name="value">The <see cref="double"/> to add.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The message that the <see cref="double"/> was added to.</returns>
-        public Message AddDouble(double value)
+        public Message AddDouble(double value, int bitsOfAccuracy = 52)
         {
-            return AddULong(value.ToULong());
+			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 52) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 52 (inclusive)");
+			ulong val = value.ToULong();
+			val >>= 52 - bitsOfAccuracy;
+			return AddBits(val, 12 + bitsOfAccuracy);
         }
 
         /// <summary>Retrieves a <see cref="double"/> from the message.</summary>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The <see cref="double"/> that was retrieved.</returns>
-        public double GetDouble()
+        public double GetDouble(int bitsOfAccuracy = 52)
         {
-            return GetULong().ToDouble();
-        }
+			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 52) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 52 (inclusive)");
+			ulong val = GetBits(12 + bitsOfAccuracy);
+			val <<= 52 - bitsOfAccuracy;
+			return val.ToDouble();
+		}
 
         /// <summary>Adds a <see cref="double"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddDoubles(double[] array, bool includeLength = true)
+        public Message AddDoubles(double[] array, bool includeLength = true, int bitsOfAccuracy = 52)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddDouble(array[i]);
+                AddDouble(array[i], bitsOfAccuracy);
             }
 
             return this;
         }
 
         /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The array that was retrieved.</returns>
-        public double[] GetDoubles() => GetDoubles((int)GetVarULong());
+        public double[] GetDoubles(int bitsOfAccuracy = 52) => GetDoubles((int)GetVarULong(), bitsOfAccuracy);
         /// <summary>Retrieves a <see cref="double"/> array from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The array that was retrieved.</returns>
-        public double[] GetDoubles(int amount)
+        public double[] GetDoubles(int amount, int bitsOfAccuracy = 52)
         {
             double[] array = new double[amount];
-            ReadDoubles(amount, array);
+            ReadDoubles(amount, array, bitsOfAccuracy);
             return array;
         }
         /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetDoubles(double[] intoArray, int startIndex = 0) => GetDoubles((int)GetVarULong(), intoArray, startIndex);
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
+        public void GetDoubles(double[] intoArray, int startIndex = 0, int bitsOfAccuracy = 52) => GetDoubles((int)GetVarULong(), intoArray, startIndex, bitsOfAccuracy);
         /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
         /// <param name="amount">The amount of doubles to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetDoubles(int amount, double[] intoArray, int startIndex = 0)
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
+        public void GetDoubles(int amount, double[] intoArray, int startIndex = 0, int bitsOfAccuracy = 52)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, DoubleName), nameof(amount));
 
-            ReadDoubles(amount, intoArray, startIndex);
+            ReadDoubles(amount, intoArray, startIndex, bitsOfAccuracy);
         }
 
         /// <summary>Reads a number of doubles from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of doubles to read.</param>
         /// <param name="intoArray">The array to write the doubles into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadDoubles(int amount, double[] intoArray, int startIndex = 0)
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
+        private void ReadDoubles(int amount, double[] intoArray, int startIndex = 0, int bitsOfAccuracy = 52)
         {
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetDouble();
+                intoArray[startIndex + i] = GetDouble(bitsOfAccuracy);
             }
         }
         #endregion
@@ -1559,8 +1573,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddFloat(float, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(float value) => AddFloat(value);
-        /// <inheritdoc cref="AddDouble(double)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddDouble(double)"/>.</remarks>
+        /// <inheritdoc cref="AddDouble(double, int)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddDouble(double, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double value) => AddDouble(value);
         /// <inheritdoc cref="AddString(string, char)"/>
@@ -1612,8 +1626,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddFloats(float[], bool, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(float[] array, bool includeLength = true) => AddFloats(array, includeLength);
-        /// <inheritdoc cref="AddDoubles(double[], bool)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddDoubles(double[], bool)"/>.</remarks>
+        /// <inheritdoc cref="AddDoubles(double[], bool, int)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddDoubles(double[], bool, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double[] array, bool includeLength = true) => AddDoubles(array, includeLength);
         /// <inheritdoc cref="AddStrings(string[], bool, char)"/>
