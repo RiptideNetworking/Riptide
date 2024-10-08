@@ -172,25 +172,25 @@ namespace Riptide
         /// <param name="header">The header to use for this message.</param>
         /// <returns>The message, ready to be used for sending.</returns>
         private Message SetHeader(MessageHeader header) {
-			AddBits((byte)header, HeaderBits);
-            if (header == MessageHeader.Notify)
-				SetHeaderRoom(MessageSendMode.Notify, NotifyHeaderBits);
-			else if (header == MessageHeader.Queued)
-				SetHeaderRoom(MessageSendMode.Queued, QueuedHeaderBits);
-            else if (header >= MessageHeader.Reliable)
-				SetHeaderRoom(MessageSendMode.Reliable, ReliableHeaderBits);
-            else SetHeaderRoom(MessageSendMode.Unreliable, UnreliableHeaderBits);
+			ulong mult;
+			if(header == MessageHeader.Notify) {
+				SendMode = MessageSendMode.Notify;
+				mult = 1 << NotifyHeaderBits;
+			} else if(header == MessageHeader.Queued) {
+				SendMode = MessageSendMode.Queued;
+				mult = 1 << QueuedHeaderBits;
+			} else if(header >= MessageHeader.Reliable) {
+				SendMode = MessageSendMode.Reliable;
+				mult = 1 << ReliableHeaderBits;
+			} else {
+				SendMode = MessageSendMode.Unreliable;
+				mult = 1 << UnreliableHeaderBits;
+			}
+			data.Mult(mult);
+			writeValue.Mult(mult);
+			Data[0] += (ulong)resendHeader;
 			return this;
         }
-
-		/// <summary>Adds room for stuff like sequenceId.</summary>
-		/// <param name="sendMode">The send mode of this message.</param>
-		/// <param name="roomBits">The amount of header bits, that the specific send mode needs.</param>
-		/// <exception cref="ArgumentOutOfRangeException"></exception>
-		private void SetHeaderRoom(MessageSendMode sendMode, byte roomBits) {
-			AddBits(0, roomBits - HeaderBits);
-			SendMode = sendMode;
-		}
 
 		/// <summary>Removes the header of a message.</summary>
 		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
@@ -207,6 +207,9 @@ namespace Riptide
 			GetUShort(0, MaxId);
 		}
 
+		/// <summary>Gets the message's header and sets SendMode accordingly.</summary>
+		/// <param name="header">The header of the message.</param>
+		/// <returns>The message's header.</returns>
 		internal Message GetInfo(out MessageHeader header) {
 			header = (MessageHeader)GetBits(HeaderBits);
 			resendHeader = header;
@@ -217,15 +220,10 @@ namespace Riptide
 			return this;
 		}
 
+		/// <summary>Adds a resend header, if necessary.</summary>
 		internal void AddResendHeader() {
 			if(!resendHeader.HasValue) return;
-			ulong mult;
-			if(resendHeader == MessageHeader.Notify) mult = 1 << NotifyHeaderBits;
-			else if(resendHeader == MessageHeader.Queued) mult = 1 << QueuedHeaderBits;
-			else if(resendHeader >= MessageHeader.Reliable) mult = 1 << ReliableHeaderBits;
-			else mult = 1 << UnreliableHeaderBits;
-			data.Mult(mult);
-			Data[0] += (ulong)resendHeader;
+			SetHeader(resendHeader.Value);
 		}
         #endregion
 
