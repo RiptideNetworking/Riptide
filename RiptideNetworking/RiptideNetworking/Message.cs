@@ -110,6 +110,8 @@ namespace Riptide
         private FastBigInt data;
 		/// <summary>The mult for new values.</summary>
 		private FastBigInt writeValue;
+		/// <summary>The header necessary for resending the message.</summary>
+		private MessageHeader? resendHeader = null;
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         private Message() {
@@ -207,11 +209,23 @@ namespace Riptide
 
 		internal Message GetInfo(out MessageHeader header) {
 			header = (MessageHeader)GetBits(HeaderBits);
-			if (header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
+			resendHeader = header;
+			if(header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
 			else if(header == MessageHeader.Queued) SendMode = MessageSendMode.Queued;
 			else if(header >= MessageHeader.Reliable) SendMode = MessageSendMode.Reliable;
 			else SendMode = MessageSendMode.Unreliable;
 			return this;
+		}
+
+		internal void AddResendHeader() {
+			if(!resendHeader.HasValue) return;
+			ulong mult;
+			if(resendHeader == MessageHeader.Notify) mult = 1 << NotifyHeaderBits;
+			else if(resendHeader == MessageHeader.Queued) mult = 1 << QueuedHeaderBits;
+			else if(resendHeader >= MessageHeader.Reliable) mult = 1 << ReliableHeaderBits;
+			else mult = 1 << UnreliableHeaderBits;
+			data.Mult(mult);
+			Data[0] += (ulong)resendHeader;
 		}
         #endregion
 

@@ -10,3 +10,10 @@ file_header_template = This file is provided under The MIT License as part of Ri
 
 # IDE0073: Incorrect/missing header
 dotnet_diagnostic.IDE0073.severity = warning
+
+# Exclude CMath.cs and FastBigInt.cs
+[CMath.cs]
+dotnet_diagnostic.IDE0073.severity = none
+
+[FastBigInt.cs]
+dotnet_diagnostic.IDE0073.severity = none

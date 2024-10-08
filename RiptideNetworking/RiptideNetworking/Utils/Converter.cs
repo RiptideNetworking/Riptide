@@ -65,17 +65,17 @@ namespace Riptide.Utils
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void FromUInt(uint value, byte[] array, int startIndex)
         {
-#if BIG_ENDIAN
+			#if BIG_ENDIAN
             array[startIndex + 3] = (byte)value;
             array[startIndex + 2] = (byte)(value >> 8);
             array[startIndex + 1] = (byte)(value >> 16);
             array[startIndex    ] = (byte)(value >> 24);
-#else
+			#else
             array[startIndex    ] = (byte)value;
             array[startIndex + 1] = (byte)(value >> 8);
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
-#endif
+			#endif
         }
 
         /// <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="int"/>.</summary>

@@ -1,5 +1,5 @@
 // This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) Tom Weiland
+// Copyright (c) not Tom Weiland but me
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 

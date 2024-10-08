@@ -1,5 +1,5 @@
 // This file is provided under The MIT License as part of RiptideNetworking.
-// Copyright (c) Tom Weiland
+// Copyright (c) not Tom Weiland but me
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
@@ -9,7 +9,9 @@ namespace Riptide.Utils
 	internal static class CMath
 	{
 		internal static ushort Clamp(this ushort value, ushort min, ushort max) {
-			return value < min ? min : value > max ? max : value;
+			if(value < min) return min;
+			if(value > max) return max;
+			return value;
 		}
 
 		/// <remarks>Rounds down and includes 0 as 0.</remarks>
@@ -33,11 +35,6 @@ namespace Riptide.Utils
 		internal static unsafe ulong ToULong(this double value) => *(ulong*)&value;
 		internal static unsafe double ToDouble(this ulong value) => *(double*)&value;
 		internal static unsafe ulong ToULong(this bool value) => *(byte*)&value;
-
-		internal static void Clear(this ulong[] ulongs) {
-			for(int i = 0; i < ulongs.Length; i++)
-				ulongs[i] = 0;
-		}
 
 		public static byte Conv(this sbyte value) => (byte)(value + (1 << 7));
 		public static sbyte Conv(this byte value) => (sbyte)(value - (1 << 7));
