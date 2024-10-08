@@ -55,6 +55,8 @@ namespace Riptide
         /// <summary>The number of bits in a byte.</summary>
         private const int BitsPerByte = Converter.BitsPerByte;
 
+		/// <summary>The amount of bytes that can be stored without expanding the Array.</summary>
+		public static int InitialMessageSize = 64;
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; }
         /// <summary>The maximum number of bytes of payload data that a message can contain. This value represents how many bytes can be added to a message <i>on top of</i> the <see cref="MaxHeaderSize"/>.</summary>
@@ -70,24 +72,16 @@ namespace Riptide
                     throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
                 MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + value;
-                maxByteCount = MaxSize;
-                maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
                 ByteBuffer = new byte[MaxSize];
                 PendingMessage.ClearPool();
             }
         }
         /// <summary>An intermediary buffer to help convert <see cref="data"/> to a byte array when sending.</summary>
         internal static byte[] ByteBuffer;
-        /// <summary>The maximum number of bits a message can contain.</summary>
-        private static int maxByteCount;
-        /// <summary>The maximum size of the <see cref="data"/> array.</summary>
-        private static int maxArraySize; // TODO implement along with standard init size
 
         static Message()
         {
             MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + 1225;
-            maxByteCount = MaxSize;
-            maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
             ByteBuffer = new byte[MaxSize];
         }
 
@@ -119,8 +113,8 @@ namespace Riptide
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         private Message() {
-			data = new FastBigInt(maxArraySize);
-			writeValue = new FastBigInt(maxArraySize, 1);
+			data = new FastBigInt(InitialMessageSize / sizeof(ulong));
+			writeValue = new FastBigInt(InitialMessageSize / sizeof(ulong), 1);
 		}
 
         /// <summary>Creates a message that can be used for receiving/handling.</summary>
@@ -1146,73 +1140,87 @@ namespace Riptide
         #region Float
         /// <summary>Adds a <see cref="float"/> to the message.</summary>
         /// <param name="value">The <see cref="float"/> to add.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The message that the <see cref="float"/> was added to.</returns>
-        public Message AddFloat(float value)
+        public Message AddFloat(float value, int bitsOfAccuracy = 23)
         {
-			return AddUInt(value.ToUInt());
+			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 23) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 23 (inclusive)");
+			ulong val = value.ToUInt();
+			val >>= 23 - bitsOfAccuracy;
+			return AddBits(val, 9 + bitsOfAccuracy);
         }
 
         /// <summary>Retrieves a <see cref="float"/> from the message.</summary>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The <see cref="float"/> that was retrieved.</returns>
-        public float GetFloat()
+        public float GetFloat(int bitsOfAccuracy = 23)
         {
-			return GetUInt().ToFloat();
-        }
+			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 23) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 23 (inclusive)");
+			ulong val = GetBits(9 + bitsOfAccuracy);
+			val <<= 23 - bitsOfAccuracy;
+			return ((uint)val).ToFloat();
+		}
 
         /// <summary>Adds a <see cref="float"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddFloats(float[] array, bool includeLength = true)
+        public Message AddFloats(float[] array, bool includeLength = true, int bitsOfAccuracy = 23)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
 
             for (int i = 0; i < array.Length; i++)
             {
-                AddFloat(array[i]);
+                AddFloat(array[i], bitsOfAccuracy);
             }
 
             return this;
         }
 
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The array that was retrieved.</returns>
-        public float[] GetFloats() => GetFloats((int)GetVarULong());
+        public float[] GetFloats(int bitsOfAccuracy = 23) => GetFloats((int)GetVarULong(), bitsOfAccuracy);
         /// <summary>Retrieves a <see cref="float"/> array from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
         /// <returns>The array that was retrieved.</returns>
-        public float[] GetFloats(int amount)
+        public float[] GetFloats(int amount, int bitsOfAccuracy = 23)
         {
             float[] array = new float[amount];
-            ReadFloats(amount, array);
+            ReadFloats(amount, array, bitsOfAccuracy);
             return array;
         }
         /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetFloats(float[] intoArray, int startIndex = 0) => GetFloats((int)GetVarULong(), intoArray, startIndex);
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
+        public void GetFloats(float[] intoArray, int startIndex = 0, int bitsOfAccuracy = 23) => GetFloats((int)GetVarULong(), intoArray, startIndex, bitsOfAccuracy);
         /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
         /// <param name="amount">The amount of floats to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetFloats(int amount, float[] intoArray, int startIndex = 0)
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
+        public void GetFloats(int amount, float[] intoArray, int startIndex = 0, int bitsOfAccuracy = 23)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, FloatName), nameof(amount));
 
-            ReadFloats(amount, intoArray, startIndex);
+            ReadFloats(amount, intoArray, startIndex, bitsOfAccuracy);
         }
 
         /// <summary>Reads a number of floats from the message and writes them into the given array.</summary>
         /// <param name="amount">The amount of floats to read.</param>
         /// <param name="intoArray">The array to write the floats into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
-        private void ReadFloats(int amount, float[] intoArray, int startIndex = 0)
+		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>s
+        private void ReadFloats(int amount, float[] intoArray, int startIndex = 0, int bitsOfAccuracy = 23)
         {
             for (int i = 0; i < amount; i++)
             {
-                intoArray[startIndex + i] = GetFloat();
+                intoArray[startIndex + i] = GetFloat(bitsOfAccuracy);
             }
         }
         #endregion
@@ -1294,27 +1302,30 @@ namespace Riptide
         #region String
         /// <summary>Adds a <see cref="string"/> to the message.</summary>
         /// <param name="value">The <see cref="string"/> to add.</param>
+		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
-        public Message AddString(string value)
+        public Message AddString(string value, char max = '\uFFFF')
         {
-            AddBytes(Encoding.UTF8.GetBytes(value));
+            AddBytes(Encoding.UTF8.GetBytes(value), byte.MinValue, (byte)max);
             return this;
         }
 
         /// <summary>Retrieves a <see cref="string"/> from the message.</summary>
+		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
-        public string GetString()
+        public string GetString(char max = '\uFFFF')
         {
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
-            string value = Encoding.UTF8.GetString(GetBytes(length), 0, length);
+            string value = Encoding.UTF8.GetString(GetBytes(length, byte.MinValue, (byte)max), 0, length);
             return value;
         }
 
         /// <summary>Adds a <see cref="string"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
+		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddStrings(string[] array, bool includeLength = true)
+        public Message AddStrings(string[] array, bool includeLength = true, char max = '\uFFFF')
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1325,40 +1336,44 @@ namespace Riptide
             // into the message, they would all be converted again when actually being written into the byte array, which is obviously inefficient.
 
             for (int i = 0; i < array.Length; i++)
-                AddString(array[i]);
+                AddString(array[i], max);
 
             return this;
         }
 
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
+		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings() => GetStrings((int)GetVarULong());
+        public string[] GetStrings(char max = '\uFFFF') => GetStrings((int)GetVarULong(), max);
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
+		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings(int amount)
+        public string[] GetStrings(int amount, char max = '\uFFFF')
         {
             string[] array = new string[amount];
             for (int i = 0; i < array.Length; i++)
-                array[i] = GetString();
+                array[i] = GetString(max);
 
             return array;
         }
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetStrings(string[] intoArray, int startIndex = 0) => GetStrings((int)GetVarULong(), intoArray, startIndex);
+		/// <param name="max">The maximum possible char of the string.</param>
+        public void GetStrings(string[] intoArray, int startIndex = 0, char max = '\uFFFF') => GetStrings((int)GetVarULong(), intoArray, startIndex, max);
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
-        public void GetStrings(int amount, string[] intoArray, int startIndex = 0)
+		/// <param name="max">The maximum possible char of the string.</param>
+        public void GetStrings(int amount, string[] intoArray, int startIndex = 0, char max = '\uFFFF')
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName), nameof(amount));
 
             for (int i = 0; i < amount; i++)
-                intoArray[startIndex + i] = GetString();
+                intoArray[startIndex + i] = GetString(max);
         }
         #endregion
 
@@ -1540,16 +1555,16 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddULong(ulong, ulong, ulong)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(ulong value) => AddULong(value);
-        /// <inheritdoc cref="AddFloat(float)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddFloat(float)"/>.</remarks>
+        /// <inheritdoc cref="AddFloat(float, int)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddFloat(float, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(float value) => AddFloat(value);
         /// <inheritdoc cref="AddDouble(double)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDouble(double)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double value) => AddDouble(value);
-        /// <inheritdoc cref="AddString(string)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string)"/>.</remarks>
+        /// <inheritdoc cref="AddString(string, char)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string, char)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string value) => AddString(value);
         /// <inheritdoc cref="AddSerializable{T}(T)"/>
@@ -1593,16 +1608,16 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddULongs(ulong[], bool, ulong, ulong)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(ulong[] array, bool includeLength = true) => AddULongs(array, includeLength);
-        /// <inheritdoc cref="AddFloats(float[], bool)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddFloats(float[], bool)"/>.</remarks>
+        /// <inheritdoc cref="AddFloats(float[], bool, int)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddFloats(float[], bool, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(float[] array, bool includeLength = true) => AddFloats(array, includeLength);
         /// <inheritdoc cref="AddDoubles(double[], bool)"/>
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDoubles(double[], bool)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double[] array, bool includeLength = true) => AddDoubles(array, includeLength);
-        /// <inheritdoc cref="AddStrings(string[], bool)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool)"/>.</remarks>
+        /// <inheritdoc cref="AddStrings(string[], bool, char)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool, char)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string[] array, bool includeLength = true) => AddStrings(array, includeLength);
         /// <inheritdoc cref="AddSerializables{T}(T[], bool)"/>
