@@ -6,7 +6,6 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -55,8 +54,6 @@ namespace Riptide
         internal const int MinNotifyBytes = NotifyHeaderBits / BitsPerByte + (NotifyHeaderBits % BitsPerByte == 0 ? 0 : 1);
         /// <summary>The number of bits in a byte.</summary>
         private const int BitsPerByte = Converter.BitsPerByte;
-        /// <summary>The number of bits in each data segment.</summary>
-        private const int BitsPerSegment = Converter.BitsPerULong;
 
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; }
@@ -111,7 +108,7 @@ namespace Riptide
         /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
         public int BytesInUse => data.GetBytesInUse();
         /// <inheritdoc cref="data"/>
-        internal ulong[] Data => data.GetData(); // TODO check for no bad writes
+        internal ulong[] Data => data.GetData();
 
 		/// <summary>The message's send mode.</summary>
         public MessageSendMode SendMode { get; private set; }
@@ -416,7 +413,7 @@ namespace Riptide
                 throw new ArgumentOutOfRangeException(nameof(startIndex));
 
             if (startIndex + amount > array.Length)
-                throw new ArgumentException(nameof(amount), $"The source array is not long enough to read {amount} {Helper.CorrectForm(amount, ByteName)} starting at {startIndex}!");
+                throw new ArgumentException($"The source array is not long enough to read {amount} {Helper.CorrectForm(amount, ByteName)} starting at {startIndex}!", nameof(amount));
 
             if (includeLength)
                 AddVarULong((uint)amount);
@@ -479,7 +476,7 @@ namespace Riptide
         public void GetBytes(int amount, byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ByteName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ByteName), nameof(amount));
 
             ReadBytes(amount, intoArray, startIndex, min, max);
         }
@@ -513,7 +510,7 @@ namespace Riptide
         public void GetSBytes(int amount, sbyte[] intoArray, int startIndex = 0, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, SByteName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, SByteName), nameof(amount));
 
             ReadSBytes(amount, intoArray, startIndex, min, max);
         }
@@ -592,7 +589,7 @@ namespace Riptide
         public void GetBools(int amount, bool[] intoArray, int startIndex = 0)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, BoolName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, BoolName), nameof(amount));
 
             ReadBools(amount, intoArray, startIndex);
         }
@@ -711,7 +708,7 @@ namespace Riptide
         public void GetShorts(int amount, short[] intoArray, int startIndex = 0, short min = short.MinValue, short max = short.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ShortName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ShortName), nameof(amount));
 
             ReadShorts(amount, intoArray, startIndex, min, max);
         }
@@ -747,7 +744,7 @@ namespace Riptide
         public void GetUShorts(int amount, ushort[] intoArray, int startIndex = 0, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UShortName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UShortName), nameof(amount));
 
             ReadUShorts(amount, intoArray, startIndex, min, max);
         }
@@ -896,7 +893,7 @@ namespace Riptide
         public void GetInts(int amount, int[] intoArray, int startIndex = 0, int min = int.MinValue, int max = int.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, IntName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, IntName), nameof(amount));
 
             ReadInts(amount, intoArray, startIndex, min, max);
         }
@@ -932,7 +929,7 @@ namespace Riptide
         public void GetUInts(int amount, uint[] intoArray, int startIndex = 0, uint min = uint.MinValue, uint max = uint.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UIntName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, UIntName), nameof(amount));
 
             ReadUInts(amount, intoArray, startIndex, min, max);
         }
@@ -1076,7 +1073,7 @@ namespace Riptide
         public void GetLongs(int amount, long[] intoArray, int startIndex = 0, long min = long.MinValue, long max = long.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, LongName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, LongName), nameof(amount));
 
             ReadLongs(amount, intoArray, startIndex, min, max);
         }
@@ -1112,7 +1109,7 @@ namespace Riptide
         public void GetULongs(int amount, ulong[] intoArray, int startIndex = 0, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ULongName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, ULongName), nameof(amount));
 
             ReadULongs(amount, intoArray, startIndex, min, max);
         }
@@ -1202,7 +1199,7 @@ namespace Riptide
         public void GetFloats(int amount, float[] intoArray, int startIndex = 0)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, FloatName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, FloatName), nameof(amount));
 
             ReadFloats(amount, intoArray, startIndex);
         }
@@ -1276,7 +1273,7 @@ namespace Riptide
         public void GetDoubles(int amount, double[] intoArray, int startIndex = 0)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, DoubleName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, DoubleName), nameof(amount));
 
             ReadDoubles(amount, intoArray, startIndex);
         }
@@ -1358,7 +1355,7 @@ namespace Riptide
         public void GetStrings(int amount, string[] intoArray, int startIndex = 0)
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName), nameof(amount));
 
             for (int i = 0; i < amount; i++)
                 intoArray[startIndex + i] = GetString();
@@ -1490,7 +1487,7 @@ namespace Riptide
         public void GetSerializables<T>(int amount, T[] intoArray, int startIndex = 0) where T : IMessageSerializable, new()
         {
             if (startIndex + amount > intoArray.Length)
-                throw new ArgumentException(nameof(amount), ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, typeof(T).Name));
+                throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, typeof(T).Name), nameof(amount));
 
             ReadSerializables(amount, intoArray, startIndex);
         }
@@ -1650,7 +1647,7 @@ namespace Riptide
         /// <param name="valueName">The name of the value type which is being retrieved.</param>
         /// <param name="pluralValueName">The name of the value type in plural form. If left empty, this will be set to <paramref name="valueName"/> with an <c>s</c> appended to it.</param>
         /// <returns>The error message.</returns>
-        private string ArrayNotLongEnoughError(int amount, int arrayLength, int startIndex, string valueName, string pluralValueName = "")
+        private static string ArrayNotLongEnoughError(int amount, int arrayLength, int startIndex, string valueName, string pluralValueName = "")
         {
             if (string.IsNullOrEmpty(pluralValueName))
                 pluralValueName = $"{valueName}s";
