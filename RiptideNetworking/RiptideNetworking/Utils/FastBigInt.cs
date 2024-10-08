@@ -254,6 +254,7 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
+		// this has not been tested at all
 		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
 			if(carry == 0) return (val / div, val % div);
 			ulong extra = IntermediateDivide(ref val, carry, div);
@@ -269,7 +270,6 @@ namespace Riptide.Utils
 				return interDiv << 32;
 			}
 
-			// this has not been tested at all
 			ulong value = 0;
 			int shift = 0;
 			while(carry >> shift != 0UL) {
@@ -286,6 +286,6 @@ namespace Riptide.Utils
 			int invShift = 64 - shift;
 			val |= carry << invShift;
 			return value << invShift;
-		} 
+		}
 	}
 }

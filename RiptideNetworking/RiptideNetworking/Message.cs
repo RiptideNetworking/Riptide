@@ -101,10 +101,10 @@ namespace Riptide
         {
 			get
 			{
-				PeekBits(sizeof(ushort) * Converter.BitsPerByte, HeaderBits, out ushort sequenceId);
-				return sequenceId;
+				ulong header = data.GetData()[0];
+				return (ushort)(header >> HeaderBits);
 			}
-			set => SetBits(value, sizeof(ushort) * Converter.BitsPerByte, Message.HeaderBits);
+			set => Data[0] += ((ulong)value) << HeaderBits;
 		}
 		/// <summary>Wether anything has been read from the message.</summary>
 		public bool HasReadNothing => writeValue.HasReadNothing;
@@ -269,46 +269,6 @@ namespace Riptide
 			if(amount > sizeof(ulong) * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot get more than {sizeof(ulong) * BitsPerByte} bits at a time!");
 			return GetULong(0, (1UL << amount) - 1);
 		}
-        /// <summary>Sets up to 64 bits at the specified position in the message.</summary>
-        /// <param name="bitfield">The bits to write into the message.</param>
-        /// <param name="amount">The number of bits to set.</param>
-        /// <param name="startBit">The bit position in the message at which to start writing.</param>
-        /// <returns>The message instance.</returns>
-        /// <remarks>This method can be used to directly set a range of bits anywhere in the message without moving its internal write position. Data which was previously added to
-        /// the message and which falls within the range of bits being set will be <i>overwritten</i>, meaning that improper use of this method will likely corrupt the message!</remarks>
-        public Message SetBits(ulong bitfield, int amount, int startBit)
-        {
-            if (amount > sizeof(ulong) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot set more than {sizeof(ulong) * BitsPerByte} bits at a time!");
-
-            Converter.SetBits(bitfield, amount, data.GetData(), startBit);
-            return this;
-        }
-
-        /// <summary>Retrieves up to 8 bits from the specified position in the message.</summary>
-        /// <param name="amount">The number of bits to peek.</param>
-        /// <param name="startBit">The bit position in the message at which to start peeking.</param>
-        /// <param name="bitfield">The bits that were retrieved.</param>
-        /// <returns>The message instance.</returns>
-        /// <remarks>This method can be used to retrieve a range of bits from anywhere in the message without moving its internal read position.</remarks>
-        internal Message PeekBits(int amount, int startBit, out byte bitfield)
-        {
-            if (amount > BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {BitsPerByte} bits at a time!");
-
-            Converter.GetBits(amount, data.GetData(), startBit, out bitfield);
-            return this;
-        }
-        /// <summary>Retrieves up to 16 bits from the specified position in the message.</summary>
-        /// <inheritdoc cref="PeekBits(int, int, out byte)"/>
-        internal Message PeekBits(int amount, int startBit, out ushort bitfield)
-        {
-            if (amount > sizeof(ushort) * BitsPerByte)
-                throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(PeekBits)}' overload cannot be used to peek more than {sizeof(ushort) * BitsPerByte} bits at a time!");
-
-            Converter.GetBits(amount, data.GetData(), startBit, out bitfield);
-            return this;
-        }
         #endregion
 
         #region Varint

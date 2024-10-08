@@ -575,7 +575,7 @@ namespace Riptide
             {
                 ushort sequenceId = NextSequenceId;
                 ulong notifyBits = lastReceivedSeqId | ((ulong)receivedSeqIds.First8 << (2 * Converter.BitsPerByte)) | ((ulong)sequenceId << (3 * Converter.BitsPerByte));
-                message.SetBits(notifyBits, 5 * Converter.BitsPerByte, Message.HeaderBits);
+				message.Data[0] += notifyBits << Message.HeaderBits;
                 return sequenceId;
             }
 
