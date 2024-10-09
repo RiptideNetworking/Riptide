@@ -23,12 +23,6 @@ namespace Riptide.Utils
         /// while all negative numbers become positive odd numbers. In contrast, simply casting a negative value to its unsigned counterpart would result in a large positive
         /// number which uses the high bit, rendering compression via <see cref="Message.AddVarULong(ulong)"/> and <see cref="Message.GetVarULong"/> ineffective.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ZigZagEncode(int value)
-        {
-            return (value >> 31) ^ (value << 1);
-        }
-        /// <inheritdoc cref="ZigZagEncode(int)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long ZigZagEncode(long value)
         {
             return (value >> 63) ^ (value << 1);
@@ -37,13 +31,6 @@ namespace Riptide.Utils
         /// <summary>Zig zag decodes <paramref name="value"/>.</summary>
         /// <param name="value">The value to decode.</param>
         /// <returns>The zig zag-decoded value.</returns>
-        /// <inheritdoc cref="ZigZagEncode(int)"/>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static int ZigZagDecode(int value)
-        {
-            return (value >> 1) ^ -(value & 1);
-        }
-        /// <inheritdoc cref="ZigZagDecode(int)"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long ZigZagDecode(long value)
         {
@@ -76,6 +63,9 @@ namespace Riptide.Utils
             array[startIndex + 2] = (byte)(value >> 16);
             array[startIndex + 3] = (byte)(value >> 24);
 			#endif
+			// this is probably better but dont wanna break anything
+			// byte[] bytes = BitConverter.GetBytes(value);
+    		// Buffer.BlockCopy(bytes, 0, array, startIndex, 4);
         }
 
         /// <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="int"/>.</summary>
@@ -96,6 +86,8 @@ namespace Riptide.Utils
 			#else
             return (uint)(array[startIndex    ] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24));
 			#endif
+			// this is probably better but dont wanna break anything
+			// return System.BitConverter.ToUInt32(array, startIndex);
         }
 		#endregion
     }

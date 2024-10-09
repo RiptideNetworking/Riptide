@@ -168,22 +168,18 @@ namespace Riptide
         /// <returns>The message, ready to be used for sending.</returns>
         private Message SetHeader(MessageHeader header, ushort? messageId) {
 			ulong mult;
-			if(header == MessageHeader.Notify) {
-				SendMode = MessageSendMode.Notify;
-				mult = 1 << NotifyHeaderBits;
-			} else if(header == MessageHeader.Queued) {
-				SendMode = MessageSendMode.Queued;
-				mult = 1 << QueuedHeaderBits;
-			} else if(header >= MessageHeader.Reliable) {
-				SendMode = MessageSendMode.Reliable;
-				mult = 1 << ReliableHeaderBits;
-			} else {
-				SendMode = MessageSendMode.Unreliable;
-				mult = 1 << UnreliableHeaderBits;
+			SendMode = GetMessageSendMode(header);
+			switch(SendMode) {
+				case MessageSendMode.Notify: mult = 1 << NotifyHeaderBits; break;
+				case MessageSendMode.Queued: mult = 1 << QueuedHeaderBits; break;
+				case MessageSendMode.Reliable: mult = 1 << ReliableHeaderBits; break;
+				case MessageSendMode.Unreliable: mult = 1 << UnreliableHeaderBits; break;
+				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
 			}
 			ulong umid = 0;
 			if(messageId.HasValue) {
 				if(messageId.Value > MaxId) throw new ArgumentOutOfRangeException(nameof(messageId), $"'{nameof(messageId)}' cannot be greater than {MaxId}!");
+				if(SendMode == MessageSendMode.Notify) throw new ArgumentException($"'{nameof(messageId)}' cannot be set for {nameof(MessageSendMode.Notify)} messages!", nameof(messageId));
 				umid = mult * messageId.Value;
 				mult *= MaxId + 1UL;
 			}
@@ -198,15 +194,15 @@ namespace Riptide
 		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
 		public void RemoveHeader() {
 			MessageHeader header = (MessageHeader)GetBits(HeaderBits);
-			if(header == MessageHeader.Notify) {
-				GetBits(NotifyHeaderBits - HeaderBits);
-				return;
-			} else if(header == MessageHeader.Queued)
-				GetBits(QueuedHeaderBits - HeaderBits);
-			else if(header >= MessageHeader.Reliable)
-				GetBits(ReliableHeaderBits - HeaderBits);
-			else GetBits(UnreliableHeaderBits - HeaderBits);
-			GetUShort(0, MaxId);
+			MessageSendMode sendMode = GetMessageSendMode(header);
+			switch(sendMode) {
+				case MessageSendMode.Notify: GetBits(NotifyHeaderBits - HeaderBits); break;
+				case MessageSendMode.Queued: GetBits(QueuedHeaderBits - HeaderBits); break;
+				case MessageSendMode.Reliable: GetBits(ReliableHeaderBits - HeaderBits); break;
+				case MessageSendMode.Unreliable: GetBits(UnreliableHeaderBits - HeaderBits); break;
+				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
+			}
+			if(sendMode != MessageSendMode.Notify) GetUShort(0, MaxId);
 		}
 
 		/// <summary>Gets the message's header and sets SendMode and resendHeader's header accordingly.</summary>
@@ -214,11 +210,18 @@ namespace Riptide
 		/// <returns>The message's header.</returns>
 		internal Message GetInfo(out MessageHeader header) {
 			header = (MessageHeader)GetBits(HeaderBits);
-			if(header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
-			else if(header == MessageHeader.Queued) SendMode = MessageSendMode.Queued;
-			else if(header >= MessageHeader.Reliable) SendMode = MessageSendMode.Reliable;
-			else SendMode = MessageSendMode.Unreliable;
+			SendMode = GetMessageSendMode(header);
 			return this;
+		}
+
+		/// <summary>Gets the MessageSendMode from the header.</summary>
+		/// <param name="header">The header to attribute.</param>
+		/// <returns>The MessageSendMode attributed to the MessageHeader.</returns>
+		private static MessageSendMode GetMessageSendMode(MessageHeader header) {
+			if(header == MessageHeader.Notify) return MessageSendMode.Notify;
+			else if(header == MessageHeader.Queued) return MessageSendMode.Queued;
+			else if(header >= MessageHeader.Reliable) return MessageSendMode.Reliable;
+			else return MessageSendMode.Unreliable;
 		}
 
 		/// <summary>Adds a resendHeader, if necessary.</summary>
