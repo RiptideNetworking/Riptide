@@ -222,7 +222,7 @@ namespace Riptide
 		}
 
 		/// <summary>Adds a resendHeader, if necessary.</summary>
-		internal void UseResendHeader() {
+		internal void SetResendHeader() {
 			if(!resendHeader.HasValue) return;
 			(MessageHeader header, ushort? id) = resendHeader.Value;
 			SetHeader(header, id);
@@ -284,16 +284,13 @@ namespace Riptide
 
         #region Varint
 		/// <summary>Copies a message.</summary>
-		/// <remarks>Useful for saving a recieved message,
-		/// that would otherwhise be returned to the pool.
-		/// <para>Recieved messages should not be written to and
-		/// can break if their data is not purely whole bytes.</para></remarks>
 		/// <returns>The copy of the message.</returns>
 		public Message Copy() {
             Message message = new Message {
                 SendMode = SendMode,
 				data = data.Copy(),
                 writeValue = writeValue.Copy(),
+				resendHeader = resendHeader
             };
 			return message;
         }

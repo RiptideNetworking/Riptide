@@ -178,7 +178,7 @@ namespace Riptide
         /// <returns>For reliable and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
         public ushort Send(Message message)
         {
-			message.UseResendHeader();
+			message.SetResendHeader();
             ushort sequenceId = 0;
             if (message.SendMode == MessageSendMode.Notify)
             {
@@ -193,11 +193,10 @@ namespace Riptide
             }
 			else if (message.SendMode == MessageSendMode.Queued) {
 				sequenceId = nextQueuedSequenceId++;
-				Message m = message.Copy();
-				m.SequenceId = sequenceId;
-				messageQueue.Add(m);
+				message.SequenceId = sequenceId;
+				messageQueue.Add(message);
 				if(messageQueue.Count <= MaxSynchronousQueuedMessages)
-					SendData(m);
+					SendData(message);
 			}
             else if (message.SendMode == MessageSendMode.Reliable)
             {
@@ -267,7 +266,7 @@ namespace Riptide
 		internal IEnumerable<Message> QueuedMessagesToHandle(Message message, ushort sequenceId) {
 			ushort listId = (ushort)(sequenceId - recievedNextQueuedSequenceId);
 			if(listId >= MaxSynchronousQueuedMessages) yield break;
-			recievedMessageQueue.SetUnchecked(listId, message.Copy());
+			recievedMessageQueue.SetUnchecked(listId, message);
 			while((recievedMessageQueue.Count > 0) && (recievedMessageQueue[0] != null)) {
 				Message m = recievedMessageQueue[0];
 				recievedMessageQueue.RemoveFirst();
