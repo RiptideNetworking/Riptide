@@ -254,7 +254,7 @@ namespace Riptide
                 case MessageHeader.Unreliable:
                 case MessageHeader.Reliable:
 				case MessageHeader.Queued:
-                    OnMessageReceived(message);
+                    OnMessageReceived(message, header);
                     break;
 
                 // Internal messages
@@ -379,9 +379,10 @@ namespace Riptide
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
         /// <param name="message">The received message.</param>
-        protected virtual void OnMessageReceived(Message message)
+		/// <param name="header">The message header.</param>
+        protected virtual void OnMessageReceived(Message message, MessageHeader header)
         {
-            ushort messageId = message.GetMessageID();
+            ushort messageId = message.GetMessageID(header);
             MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
 
             if (useMessageHandlers)

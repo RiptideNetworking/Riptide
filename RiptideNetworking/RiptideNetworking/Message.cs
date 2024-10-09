@@ -111,7 +111,7 @@ namespace Riptide
 		/// <summary>The mult for new values.</summary>
 		private FastBigInt writeValue;
 		/// <summary>The header necessary for resending the message.</summary>
-		private MessageHeader? resendHeader = null;
+		private (MessageHeader header, ushort? id)? resendHeader = null;
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         private Message() {
@@ -132,22 +132,15 @@ namespace Riptide
 		}
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="sendMode">The mode in which the message should be sent.</param>
+		/// <param name="id">The message's ID.</param>
         /// <returns>A message instance ready to be sent.</returns>
         /// <remarks>This method is primarily intended for use with <see cref="MessageSendMode.Notify"/> as notify messages don't have a built-in message ID, and unlike
-        /// <see cref="Create(MessageSendMode, ushort)"/> and <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
-        public static Message Create(MessageSendMode sendMode)
+        /// <see cref="Create(MessageSendMode, ushort?)"/> and <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
+        public static Message Create(MessageSendMode sendMode, ushort? id = null)
         {
-            return Create((MessageHeader)sendMode);
+            return Create((MessageHeader)sendMode, id);
         }
-        /// <summary>Gets a message instance that can be used for sending.</summary>
-        /// <param name="sendMode">The mode in which the message should be sent.</param>
-        /// <param name="id">The message ID.</param>
-        /// <returns>A message instance ready to be sent.</returns>
-        public static Message Create(MessageSendMode sendMode, ushort id)
-        {
-            return Create(sendMode).AddUShort(id, 0, MaxId);
-        }
-        /// <inheritdoc cref="Create(MessageSendMode, ushort)"/>
+        /// <inheritdoc cref="Create(MessageSendMode, ushort?)"/>
         /// <remarks>NOTE: <paramref name="id"/> will be cast to a <see cref="ushort"/>. You should ensure that its value never exceeds that of <see cref="ushort.MaxValue"/>, otherwise you'll encounter unexpected behaviour when handling messages.</remarks>
         public static Message Create(MessageSendMode sendMode, Enum id)
         {
@@ -155,10 +148,11 @@ namespace Riptide
         }
         /// <summary>Gets a message instance that can be used for sending.</summary>
         /// <param name="header">The message's header type.</param>
+		/// <param name="id">The message's ID.</param>
         /// <returns>A message instance ready to be sent.</returns>
-        internal static Message Create(MessageHeader header)
+        internal static Message Create(MessageHeader header, ushort? id = null)
         {
-            return new Message().SetHeader(header);
+            return new Message().SetHeader(header, id);
         }
 
 		/// <summary>Logs info of the message</summary>
@@ -170,8 +164,9 @@ namespace Riptide
         #region Functions
         /// <summary>Sets the message's header bits to the given <paramref name="header"/> and determines the appropriate <see cref="MessageSendMode"/> and read/write positions.</summary>
         /// <param name="header">The header to use for this message.</param>
+		/// <param name="messageId">The message ID.</param>
         /// <returns>The message, ready to be used for sending.</returns>
-        private Message SetHeader(MessageHeader header) {
+        private Message SetHeader(MessageHeader header, ushort? messageId) {
 			ulong mult;
 			if(header == MessageHeader.Notify) {
 				SendMode = MessageSendMode.Notify;
@@ -186,9 +181,16 @@ namespace Riptide
 				SendMode = MessageSendMode.Unreliable;
 				mult = 1 << UnreliableHeaderBits;
 			}
+			ulong umid = 0;
+			if(messageId.HasValue) {
+				if(messageId.Value > MaxId) throw new ArgumentOutOfRangeException(nameof(messageId), $"'{nameof(messageId)}' cannot be greater than {MaxId}!");
+				umid = mult * messageId.Value;
+				mult *= MaxId + 1UL;
+			}
 			data.Mult(mult);
 			writeValue.Mult(mult);
-			Data[0] += (ulong)resendHeader;
+			Data[0] += (ulong)header;
+			Data[0] += umid;
 			return this;
         }
 
@@ -207,12 +209,11 @@ namespace Riptide
 			GetUShort(0, MaxId);
 		}
 
-		/// <summary>Gets the message's header and sets SendMode accordingly.</summary>
+		/// <summary>Gets the message's header and sets SendMode and resendHeader's header accordingly.</summary>
 		/// <param name="header">The header of the message.</param>
 		/// <returns>The message's header.</returns>
 		internal Message GetInfo(out MessageHeader header) {
 			header = (MessageHeader)GetBits(HeaderBits);
-			resendHeader = header;
 			if(header == MessageHeader.Notify) SendMode = MessageSendMode.Notify;
 			else if(header == MessageHeader.Queued) SendMode = MessageSendMode.Queued;
 			else if(header >= MessageHeader.Reliable) SendMode = MessageSendMode.Reliable;
@@ -220,10 +221,17 @@ namespace Riptide
 			return this;
 		}
 
-		/// <summary>Adds a resend header, if necessary.</summary>
-		internal void AddResendHeader() {
+		/// <summary>Adds a resendHeader, if necessary.</summary>
+		internal void UseResendHeader() {
 			if(!resendHeader.HasValue) return;
-			SetHeader(resendHeader.Value);
+			(MessageHeader header, ushort? id) = resendHeader.Value;
+			SetHeader(header, id);
+		}
+
+		/// <summary>Sets the resendHeader.</summary>
+		/// <param name="header"></param>
+		internal void PrepareResendHeader(MessageHeader header) {
+			resendHeader = (header, null);
 		}
         #endregion
 
@@ -290,7 +298,15 @@ namespace Riptide
 			return message;
         }
 
-		internal ushort GetMessageID() => GetUShort(0, MaxId);
+		/// <summary>Gets the messageId of a message and prepares it for resending.</summary>
+		/// <returns>The message's Id.</returns>
+		/// <exception cref="Exception"></exception>
+		internal ushort GetMessageID(MessageHeader header) {
+			ushort messageId = GetUShort(0, MaxId);
+			if(resendHeader.HasValue) throw new Exception("Message's resendHeader is not null!");
+			resendHeader = (header, messageId);
+			return messageId;
+		}
 
 		/// <summary>Creates a QueuedAck message containing sequence ID.</summary>
 		/// <param name="sequenceId">The sequence id to queue.</param>
@@ -1330,19 +1346,19 @@ namespace Riptide
         /// <param name="value">The <see cref="string"/> to add.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
-        public Message AddString(string value, char max = '\uFFFF')
+        public Message AddString(string value, byte max = byte.MaxValue)
         {
-            AddBytes(Encoding.UTF8.GetBytes(value), byte.MinValue, (byte)max);
+            AddBytes(Encoding.UTF8.GetBytes(value), true, byte.MinValue, max);
             return this;
         }
 
         /// <summary>Retrieves a <see cref="string"/> from the message.</summary>
 		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
-        public string GetString(char max = '\uFFFF')
+        public string GetString(byte max = byte.MaxValue)
         {
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
-            string value = Encoding.UTF8.GetString(GetBytes(length, byte.MinValue, (byte)max), 0, length);
+            string value = Encoding.UTF8.GetString(GetBytes(length, byte.MinValue, max), 0, length);
             return value;
         }
 
@@ -1351,7 +1367,7 @@ namespace Riptide
         /// <param name="includeLength">Whether or not to include the length of the array in the message.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddStrings(string[] array, bool includeLength = true, char max = '\uFFFF')
+        public Message AddStrings(string[] array, bool includeLength = true, byte max = byte.MaxValue)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1370,12 +1386,12 @@ namespace Riptide
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
 		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings(char max = '\uFFFF') => GetStrings((int)GetVarULong(), max);
+        public string[] GetStrings(byte max = byte.MaxValue) => GetStrings((int)GetVarULong(), max);
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings(int amount, char max = '\uFFFF')
+        public string[] GetStrings(int amount, byte max = byte.MaxValue)
         {
             string[] array = new string[amount];
             for (int i = 0; i < array.Length; i++)
@@ -1387,13 +1403,13 @@ namespace Riptide
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
-        public void GetStrings(string[] intoArray, int startIndex = 0, char max = '\uFFFF') => GetStrings((int)GetVarULong(), intoArray, startIndex, max);
+        public void GetStrings(string[] intoArray, int startIndex = 0, byte max = byte.MaxValue) => GetStrings((int)GetVarULong(), intoArray, startIndex, max);
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
         /// <param name="intoArray">The array to populate.</param>
         /// <param name="startIndex">The position at which to start populating the array.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
-        public void GetStrings(int amount, string[] intoArray, int startIndex = 0, char max = '\uFFFF')
+        public void GetStrings(int amount, string[] intoArray, int startIndex = 0, byte max = byte.MaxValue)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName), nameof(amount));
@@ -1589,8 +1605,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDouble(double, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double value) => AddDouble(value);
-        /// <inheritdoc cref="AddString(string, char)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string, char)"/>.</remarks>
+        /// <inheritdoc cref="AddString(string, byte)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string, byte)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string value) => AddString(value);
         /// <inheritdoc cref="AddSerializable{T}(T)"/>
@@ -1642,8 +1658,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDoubles(double[], bool, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double[] array, bool includeLength = true) => AddDoubles(array, includeLength);
-        /// <inheritdoc cref="AddStrings(string[], bool, char)"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool, char)"/>.</remarks>
+        /// <inheritdoc cref="AddStrings(string[], bool, byte)"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool, byte)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string[] array, bool includeLength = true) => AddStrings(array, includeLength);
         /// <inheritdoc cref="AddSerializables{T}(T[], bool)"/>
