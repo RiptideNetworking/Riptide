@@ -48,21 +48,7 @@ namespace Riptide.Utils
 		}
 
 		public override string ToString() {
-			StringBuilder s = new StringBuilder(2 * (maxIndex - minIndex) + 6);
-			for(int i = 0; i <= maxIndex; i++) {
-				s.Append(data[i]);
-				s.Append(' ');
-			}
-			s.Append('\n');
-			s.Append("min: ");
-			s.Append(minIndex);
-			s.Append(" max: ");
-			s.Append(maxIndex);
-			return s.ToString();
-		}
-
-		public string ToStringBinary() {
-			StringBuilder s = new StringBuilder(2 * (maxIndex - minIndex) + 6);
+			StringBuilder s = new StringBuilder(2 * (maxIndex) + 6);
 			for(int i = 0; i <= maxIndex; i++) {
 				s.Append(Convert.ToString((long)data[i], 2).PadLeft(64, '0'));
 				s.Append(' ');
@@ -103,8 +89,8 @@ namespace Riptide.Utils
 				(data[i + offset], tempCarry) = AddUlong(data[i + offset], slice.data[i]);
 				carry += tempCarry;
 			}
-			AdjustMinAndMax();
 			if(carry != 0) throw new OverflowException("Addition overflow.");
+			AdjustMinAndMax();
 		}
 
 		internal void Mult(ulong mult) {
@@ -120,8 +106,8 @@ namespace Riptide.Utils
 				(data[i], carry) = MultiplyUlong(data[i], mult);
 				data[i] += prevCarry;
 			}
-			AdjustMinAndMax();
 			if(carry != 0) throw new OverflowException("Multiplication overflow.");
+			AdjustMinAndMax();
 		}
 
 		internal ulong DivReturnMod(ulong div) {
@@ -139,8 +125,8 @@ namespace Riptide.Utils
 			ulong carry = 0;
 			for(int i = maxIndex; i >= minIndex; i--)
 				(data[i], carry) = DivideUlong(data[i], carry, div);
-			AdjustMinAndMax();
 			if(minIndex != 0 && carry != 0) throw new OverflowException("Division overflow. \nYour \"Add\" and \"Get\" methods of your message probably don't line up correctly.");
+			AdjustMinAndMax();
 			return carry;
 		}
 
@@ -158,10 +144,10 @@ namespace Riptide.Utils
 				ulong val;
 				ulong prevCarry = carry;
 				(val, carry) = LeftShiftUlong(data[i], shiftBits);
-				data[i] = val + prevCarry;
+				data[i] = val | prevCarry;
 			}
+			if(carry != 0) throw new DataMisalignedException($"Invalid carry: {this}");
 			AdjustMinAndMax();
-			if(carry != 0) throw new OverflowException("Left shift overflow.");
 		}
 
 		internal ulong RightShift(byte shiftBits) {
@@ -174,10 +160,10 @@ namespace Riptide.Utils
 				ulong val;
 				ulong prevCarry = carry;
 				(val, carry) = RightShiftUlong(data[i], shiftBits);
-				data[i] = val + prevCarry;
+				data[i] = val | prevCarry;
 			}
+			if(minIndex != 0 && carry != 0) throw new DataMisalignedException($"Invalid minIndex: {this}");
 			AdjustMinAndMax();
-			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
 			return carry >> (64 - shiftBits);
 		}
 
@@ -187,8 +173,8 @@ namespace Riptide.Utils
 			ulong carry = 0;
 			for(int i = minIndex; i <= maxIndex; i++)
 				(data[i], carry) = (carry, data[i]);
+			if(carry != 0) throw new DataMisalignedException($"Invalid carry: {this}");
 			AdjustMinAndMax();
-			if(carry != 0) throw new OverflowException("Left shift overflow.");
 		}
 
 		internal ulong RightShift1ULong() {
@@ -196,7 +182,7 @@ namespace Riptide.Utils
 			ulong carry = 0;
 			for(int i = maxIndex; i >= minIndex; i--)
 				(data[i], carry) = (carry, data[i]);
-			if(minIndex != 0 && carry != 0) throw new OverflowException("Right shift overflow.");
+			if(minIndex != 0 && carry != 0) throw new DataMisalignedException($"Invalid minIndex: {this}");
 			return carry;
 		}
 

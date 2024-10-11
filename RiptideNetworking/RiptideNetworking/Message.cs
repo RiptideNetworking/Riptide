@@ -157,8 +157,8 @@ namespace Riptide
 
 		/// <summary>Logs info of the message</summary>
 		public void LogStuff(string added = "") {
-			RiptideLogger.Log(LogType.Info, data.ToStringBinary() + "\n"
-				+ writeValue.ToStringBinary() + "\nSendMode: " + SendMode + "\n" + added);
+			RiptideLogger.Log(LogType.Info, data.ToString() + "\n"
+				+ writeValue.ToString() + "\nSendMode: " + SendMode + "\n" + added);
 		}
 
         #region Functions
@@ -401,7 +401,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="sbyte"/> that was retrieved.</returns>
 		public sbyte GetSByte(sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue) {
-			return (sbyte)GetByte(min.Conv(), max.Conv());
+			return GetByte(min.Conv(), max.Conv()).Conv();
 		}
 
         /// <summary>Adds a <see cref="byte"/> array to the message.</summary>
@@ -658,7 +658,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="short"/> that was retrieved.</returns>
 		public short GetShort(short min = short.MinValue, short max = short.MaxValue) {
-			return (short)GetUShort(min.Conv(), max.Conv());
+			return GetUShort(min.Conv(), max.Conv()).Conv();
 		}
 
         /// <summary>Adds a <see cref="short"/> array to the message.</summary>
@@ -831,7 +831,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
 		/// <returns>The <see cref="int"/> that was retrieved.</returns>
 		public int GetInt(int min = int.MinValue, int max = int.MaxValue) {
-			return (int)GetUInt(min.Conv(), max.Conv());
+			return GetUInt(min.Conv(), max.Conv()).Conv();
 		}
 
         /// <summary>Adds an <see cref="int"/> array message.</summary>
@@ -1024,7 +1024,7 @@ namespace Riptide
 		/// <param name="max">The maximum value.</param>
         /// <returns>The <see cref="long"/> that was retrieved.</returns>
 		public long GetLong(long min = long.MinValue, long max = long.MaxValue)
-			=> (long)GetULong(min.Conv(), max.Conv());
+			=> GetULong(min.Conv(), max.Conv()).Conv();
 
         /// <summary>Adds a <see cref="long"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
