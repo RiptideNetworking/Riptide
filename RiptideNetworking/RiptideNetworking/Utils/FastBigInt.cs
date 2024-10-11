@@ -39,8 +39,9 @@ namespace Riptide.Utils
 		}
 
 		internal FastBigInt CopySlice(int start, int length) {
+			int memLength = Math.Min(length, maxIndex - minIndex + 1);
 			FastBigInt slice = new FastBigInt(length);
-			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, length * sizeof(ulong));
+			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, memLength * sizeof(ulong));
 			slice.maxIndex = length - 1;
 			slice.AdjustMinAndMax();
 			return slice;

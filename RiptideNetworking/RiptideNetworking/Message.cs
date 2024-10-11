@@ -543,7 +543,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadBytes(int amount, byte[] intoArray, int startIndex = 0, byte min = byte.MinValue, byte max = byte.MaxValue)
+        private void ReadBytes(int amount, byte[] intoArray, int startIndex, byte min, byte max)
         {
 			for (int i = 0; i < amount; i++)
 				intoArray[startIndex + i] = GetByte(min, max);
@@ -555,7 +555,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex = 0, sbyte min = sbyte.MinValue, sbyte max = sbyte.MaxValue)
+        private void ReadSBytes(int amount, sbyte[] intoArray, int startIndex, sbyte min, sbyte max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -777,7 +777,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadShorts(int amount, short[] intoArray, int startIndex = 0, short min = short.MinValue, short max = short.MaxValue)
+        private void ReadShorts(int amount, short[] intoArray, int startIndex, short min, short max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -791,7 +791,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadUShorts(int amount, ushort[] intoArray, int startIndex = 0, ushort min = ushort.MinValue, ushort max = ushort.MaxValue)
+        private void ReadUShorts(int amount, ushort[] intoArray, int startIndex, ushort min, ushort max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -962,7 +962,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadInts(int amount, int[] intoArray, int startIndex = 0, int min = int.MinValue, int max = int.MaxValue)
+        private void ReadInts(int amount, int[] intoArray, int startIndex, int min, int max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -976,7 +976,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadUInts(int amount, uint[] intoArray, int startIndex = 0, uint min = uint.MinValue, uint max = uint.MaxValue)
+        private void ReadUInts(int amount, uint[] intoArray, int startIndex, uint min, uint max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -1142,7 +1142,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadLongs(int amount, long[] intoArray, int startIndex = 0, long min = long.MinValue, long max = long.MaxValue)
+        private void ReadLongs(int amount, long[] intoArray, int startIndex, long min, long max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -1156,7 +1156,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="min">The minimum value.</param>
 		/// <param name="max">The maximum value.</param>
-        private void ReadULongs(int amount, ulong[] intoArray, int startIndex = 0, ulong min = ulong.MinValue, ulong max = ulong.MaxValue)
+        private void ReadULongs(int amount, ulong[] intoArray, int startIndex, ulong min, ulong max)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -1218,7 +1218,7 @@ namespace Riptide
         public float[] GetFloats(int amount, int bitsOfAccuracy = 23)
         {
             float[] array = new float[amount];
-            ReadFloats(amount, array, bitsOfAccuracy);
+            ReadFloats(amount, array, 0, bitsOfAccuracy);
             return array;
         }
         /// <summary>Populates a <see cref="float"/> array with floats retrieved from the message.</summary>
@@ -1244,7 +1244,7 @@ namespace Riptide
         /// <param name="intoArray">The array to write the floats into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
-        private void ReadFloats(int amount, float[] intoArray, int startIndex = 0, int bitsOfAccuracy = 23)
+        private void ReadFloats(int amount, float[] intoArray, int startIndex, int bitsOfAccuracy)
         {
             for (int i = 0; i < amount; i++)
             {
@@ -1306,7 +1306,7 @@ namespace Riptide
         public double[] GetDoubles(int amount, int bitsOfAccuracy = 52)
         {
             double[] array = new double[amount];
-            ReadDoubles(amount, array, bitsOfAccuracy);
+            ReadDoubles(amount, array, 0, bitsOfAccuracy);
             return array;
         }
         /// <summary>Populates a <see cref="double"/> array with doubles retrieved from the message.</summary>
@@ -1332,7 +1332,7 @@ namespace Riptide
         /// <param name="intoArray">The array to write the doubles into.</param>
         /// <param name="startIndex">The position at which to start writing into the array.</param>
 		/// <param name="bitsOfAccuracy">The amount of bits of the mantissa.</param>
-        private void ReadDoubles(int amount, double[] intoArray, int startIndex = 0, int bitsOfAccuracy = 52)
+        private void ReadDoubles(int amount, double[] intoArray, int startIndex, int bitsOfAccuracy)
         {
             for (int i = 0; i < amount; i++)
             {

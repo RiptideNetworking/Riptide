@@ -41,8 +41,8 @@ namespace Riptide.Utils
 		public static ushort Conv(this short value) => (ushort)(value + (1 << 15));
 		public static short Conv(this ushort value) => (short)(value - (1 << 15));
 		public static uint Conv(this int value) => (uint)(value + (1 << 31));
-		public static int Conv(this uint value) => (int)(value - (1u << 31));
+		public static int Conv(this uint value) => (int)value - (1 << 31);
 		public static ulong Conv(this long value) => (ulong)(value + (1L << 63));
-		public static long Conv(this ulong value) => (long)(value - (1UL << 63));
+		public static long Conv(this ulong value) => (long)value - (1L << 63);
 	}
 }

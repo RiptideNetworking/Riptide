@@ -65,7 +65,7 @@ namespace Riptide.Utils
 			#endif
 			// this is probably better but dont wanna break anything
 			// byte[] bytes = BitConverter.GetBytes(value);
-    		// Buffer.BlockCopy(bytes, 0, array, startIndex, 4);
+    		// Buffer.BlockCopy(bytes, 0, array, 0, 4);
         }
 
         /// <summary>Converts the 4 bytes in the array at <paramref name="startIndex"/> to a <see cref="int"/>.</summary>
@@ -87,7 +87,7 @@ namespace Riptide.Utils
             return (uint)(array[startIndex    ] | (array[startIndex + 1] << 8) | (array[startIndex + 2] << 16) | (array[startIndex + 3] << 24));
 			#endif
 			// this is probably better but dont wanna break anything
-			// return System.BitConverter.ToUInt32(array, startIndex);
+			// return System.BitConverter.ToUInt32(array, 0);
         }
 		#endregion
     }
