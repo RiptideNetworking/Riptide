@@ -174,7 +174,7 @@ namespace Riptide
         /// <summary>Sends a message.</summary>
         /// <param name="message">The message to send.</param>
         /// <param name="shouldRelease">Whether or not to return the message to the pool after it is sent.</param>
-        /// <returns>For reliable and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
+        /// <returns>For reliable, queued and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
         /// <remarks>
         ///   If you intend to continue using the message instance after calling this method, you <i>must</i> set <paramref name="shouldRelease"/>
         ///   to <see langword="false"/>. <see cref="Message.Release"/> can be used to manually return the message to the pool at a later time.
@@ -416,7 +416,8 @@ namespace Riptide
 			}
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
-				if(messageQueue.Count >= MaxSynchronousQueuedMessages)
+				if(messageQueue.Count >= MaxSynchronousQueuedMessages
+					&& messageQueue[MaxSynchronousQueuedMessages - 1] != null)
 					SendData(messageQueue[MaxSynchronousQueuedMessages - 1]);
 			}
 		}
