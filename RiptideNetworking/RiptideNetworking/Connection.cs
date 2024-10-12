@@ -173,7 +173,7 @@ namespace Riptide
 
         /// <summary>Sends a message.</summary>
         /// <param name="message">The message to send.</param>
-        /// <returns>For reliable and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
+        /// <returns>For reliable, queued and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
         public ushort Send(Message message)
         {
 			message.SetResendHeader();
@@ -405,7 +405,8 @@ namespace Riptide
 			}
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
-				if(messageQueue.Count >= MaxSynchronousQueuedMessages)
+				if(messageQueue.Count >= MaxSynchronousQueuedMessages
+					&& messageQueue[MaxSynchronousQueuedMessages - 1] != null)
 					SendData(messageQueue[MaxSynchronousQueuedMessages - 1]);
 			}
 		}
