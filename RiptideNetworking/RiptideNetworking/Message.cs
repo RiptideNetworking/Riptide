@@ -570,10 +570,10 @@ namespace Riptide
 		/// <summary>Adds a <see cref="bool"/> to the message.</summary>
         /// <param name="value">The <see cref="bool"/> to add.</param>
         /// <returns>The message that the <see cref="bool"/> was added to.</returns>
-		public Message AddBool(bool value) => AddByte((byte)(value ? 1 : 0), 0, 1);
+		public Message AddBool(bool value) => AddULong(value.ToULong(), 0, 1);
 		/// <summary>Retrieves a <see cref="bool"/> from the message.</summary>
         /// <returns>The <see cref="bool"/> that was retrieved.</returns>
-		public bool GetBool() => GetByte(0, 1) == 1;
+		public bool GetBool() => GetULong(0, 1) == 1;
 
         /// <summary>Adds a <see cref="bool"/> array to the message.</summary>
         /// <param name="array">The array to add.</param>
