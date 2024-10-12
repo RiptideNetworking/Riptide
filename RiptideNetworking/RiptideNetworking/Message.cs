@@ -310,10 +310,12 @@ namespace Riptide
 
 		/// <summary>Creates a QueuedAck message containing sequence ID.</summary>
 		/// <param name="sequenceId">The sequence id to queue.</param>
+		/// <param name="successfull">Whether or not the sequence was successful or needs to be resent.</param>
 		/// <returns>The new message.</returns>
-		internal static Message QueuedAck(ushort sequenceId) {
+		internal static Message QueuedAck(ushort sequenceId, bool successfull) {
             Message message = Create(MessageHeader.QueuedAck);
 			message.AddUShort(sequenceId);
+			message.AddBool(successfull);
 			return message;
         }
 

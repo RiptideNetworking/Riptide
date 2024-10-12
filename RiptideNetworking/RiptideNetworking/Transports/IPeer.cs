@@ -28,10 +28,11 @@ namespace Riptide.Transports
         /// <summary>A notify message.</summary>
         Notify,
 
-        /// <summary>A reliable user message.</summary>
-        Reliable,
 		/// <summary>An overly reliable user message, guaranteeing order.</summary>
 		Queued,
+
+        /// <summary>A reliable user message.</summary>
+        Reliable,
         /// <summary>An internal reliable welcome message.</summary>
         Welcome,
         /// <summary>An internal reliable client connected message.</summary>
