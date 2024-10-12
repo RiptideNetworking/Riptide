@@ -405,7 +405,8 @@ namespace Riptide
 			}
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {
 				messageQueue.RemoveFirst();
-				SendData(messageQueue[MaxSynchronousQueuedMessages - 1]);
+				if(messageQueue.Count >= MaxSynchronousQueuedMessages)
+					SendData(messageQueue[MaxSynchronousQueuedMessages - 1]);
 			}
 		}
 
