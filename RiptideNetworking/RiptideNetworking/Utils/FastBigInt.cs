@@ -40,7 +40,8 @@ namespace Riptide.Utils
 
 		internal FastBigInt CopySlice(int start, int length) {
 			FastBigInt slice = new FastBigInt(length);
-			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, length * sizeof(ulong));
+			int copyLength = Math.Min(length, maxIndex - start + 1);
+			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, copyLength * sizeof(ulong));
 			slice.maxIndex = length - 1;
 			slice.AdjustMinAndMax();
 			return slice;
@@ -99,10 +100,10 @@ namespace Riptide.Utils
 			EnsureCapacity();
 			ulong carry = 0;
 			for(int i = minIndex; i <= maxIndex; i++) {
-				ulong prevCarry = carry;
+				ulong tempCarry = carry;
 				(data[i], carry) = MultiplyUlong(data[i], mult);
-				data[i] += prevCarry;
-				if(data[i] < prevCarry) throw new OverflowException("Multiplication overflow.");
+				(data[i], tempCarry) = AddUlong(data[i], tempCarry);
+				carry += tempCarry;
 			}
 			if(carry != 0) throw new OverflowException("Multiplication overflow.");
 			AdjustMinAndMax();

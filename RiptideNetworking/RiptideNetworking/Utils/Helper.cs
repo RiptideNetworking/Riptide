@@ -109,5 +109,29 @@ namespace Riptide.Utils
                     return $"{UnknownReason} '{forReason}'";
             }
         }
+
+		internal static void Replace<T>(T[] vals, (T, T)[] replacements) {
+			if(replacements == null) return;
+			for(int i = 0; i < vals.Length; i++) {
+				for(int j = 0; j < replacements.Length; j++) {
+					if(vals[i].Equals(replacements[j].Item1)) {
+						vals[i] = replacements[j].Item2;
+						break;
+					}
+				}
+			}
+		}
+
+		internal static void ReverseReplace<T>(T[] vals, (T, T)[] replacements) {
+			if(replacements == null) return;
+			for(int i = 0; i < vals.Length; i++) {
+				for(int j = 0; j < replacements.Length; j++) {
+					if(vals[i].Equals(replacements[j].Item2)) {
+						vals[i] = replacements[j].Item1;
+						break;
+					}
+				}
+			}
+		}
     }
 }
