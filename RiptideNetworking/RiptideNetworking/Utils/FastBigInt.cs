@@ -39,9 +39,8 @@ namespace Riptide.Utils
 		}
 
 		internal FastBigInt CopySlice(int start, int length) {
-			int memLength = Math.Min(length, maxIndex - minIndex + 1);
 			FastBigInt slice = new FastBigInt(length);
-			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, memLength * sizeof(ulong));
+			Buffer.BlockCopy(data, start * sizeof(ulong), slice.data, 0, length * sizeof(ulong));
 			slice.maxIndex = length - 1;
 			slice.AdjustMinAndMax();
 			return slice;
@@ -79,15 +78,13 @@ namespace Riptide.Utils
 			maxIndex = Math.Max(maxIndex, value.maxIndex + 2);
 			EnsureCapacity();
 			int offset = value.minIndex;
-			int len = value.maxIndex - offset + 2;
+			int len = value.maxIndex - offset + 3;
 			FastBigInt slice = value.CopySlice(offset, len);
 			slice.Mult(mult);
 			ulong carry = 0;
 			for(int i = 0; i < len; i++) {
-				(data[i + offset], carry) = AddUlong(data[i + offset], carry);
-				ulong tempCarry;
-				(data[i + offset], tempCarry) = AddUlong(data[i + offset], slice.data[i]);
-				carry += tempCarry;
+				int off = i + offset;
+				(data[off], carry) = AddUlongs(data[off], slice.data[i], carry);
 			}
 			if(carry != 0) throw new OverflowException("Addition overflow.");
 			AdjustMinAndMax();
@@ -105,6 +102,7 @@ namespace Riptide.Utils
 				ulong prevCarry = carry;
 				(data[i], carry) = MultiplyUlong(data[i], mult);
 				data[i] += prevCarry;
+				if(data[i] < prevCarry) throw new OverflowException("Multiplication overflow.");
 			}
 			if(carry != 0) throw new OverflowException("Multiplication overflow.");
 			AdjustMinAndMax();
@@ -212,6 +210,14 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
+		public static (ulong value, ulong carry) AddUlongs(ulong val, ulong add1, ulong add2) {
+			ulong value = val + add1;
+			ulong carry = (value < val).ToULong();
+			ulong value2 = value + add2;
+			carry += (value2 < value).ToULong();
+			return (value2, carry);
+		}
+
 		public static (ulong value, ulong carry) MultiplyUlong(ulong val, ulong mult) {
 			ulong xLow = val & 0xFFFFFFFF;
 			ulong xHigh = val >> 32;
@@ -224,8 +230,8 @@ namespace Riptide.Utils
 			ulong cross1 = xLow * yHigh;
 			ulong cross2 = xHigh * yLow;
 
-			ulong value = low + (cross1 << 32) + (cross2 << 32);
-			ulong carry = high + (cross1 >> 32) + (cross2 >> 32);
+			(ulong value, ulong overflow) = AddUlongs(low, cross1 << 32, cross2 << 32);
+			ulong carry = high + (cross1 >> 32) + (cross2 >> 32) + overflow;
 			return (value, carry);
 		}
 
@@ -241,8 +247,8 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
-		// this has not been tested at all
-		public static (ulong value, ulong carry) DivideUlong(ulong val, ulong carry, ulong div) {
+		// this does not support div > (ulong.MaxValue >> 1)
+		public static (ulong value, ulong rem) DivideUlong(ulong val, ulong carry, ulong div) {
 			if(carry == 0) return (val / div, val % div);
 			ulong extra = IntermediateDivide(ref val, carry, div);
 			return (val / div + extra, val % div);

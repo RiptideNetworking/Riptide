@@ -994,7 +994,7 @@ namespace Riptide
 		public Message AddULong(ulong value, ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(value > max || value < min) throw new ArgumentOutOfRangeException(nameof(value), $"Value must be between {min} and {max} (inclusive)");
 			data.Add(writeValue, value - min);
-			if(max - min + 1 == 0) writeValue.LeftShift1ULong();
+			if(max - min >= (ulong.MaxValue >> 1)) writeValue.LeftShift1ULong();
 			else writeValue.Mult(max - min + 1);
 			return this;
 		}
@@ -1005,9 +1005,10 @@ namespace Riptide
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
-			ulong value;
-			if(max - min + 1 == 0) value = data.RightShift1ULong();
-			else value = data.DivReturnMod(max - min + 1);
+			// FastBigInt doesn't support that division or max - min + 1 overflow
+			ulong value = (max - min >= (ulong.MaxValue >> 1))
+				? data.RightShift1ULong()
+				: data.DivReturnMod(max - min + 1);
 			return value + min;
 		}
 
