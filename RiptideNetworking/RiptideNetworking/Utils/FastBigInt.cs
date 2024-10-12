@@ -112,10 +112,7 @@ namespace Riptide.Utils
 		internal ulong DivReturnMod(ulong div) {
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
 
-			if(div.IsPowerOf2()) {
-				byte rightShift = div.Log2();
-				return RightShift(rightShift);
-			}
+			if(div.IsPowerOf2()) return RightShift(div.Log2());
 			// This should be replaced by minIndex = 0;
 			// however for this case this is better performance
 			// and won't throw an exeption if used correctly
