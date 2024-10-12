@@ -110,28 +110,20 @@ namespace Riptide.Utils
             }
         }
 
-		internal static void Replace<T>(T[] vals, (T, T)[] replacements) {
-			if(replacements == null) return;
-			for(int i = 0; i < vals.Length; i++) {
+		internal static string SwapValues(string value, (char val, char rep)[] replacements) {
+			if(replacements == null || replacements.Length == 0) return value;
+			char[] valueChars = value.ToCharArray();
+			for(int i = 0; i < valueChars.Length; i++) {
 				for(int j = 0; j < replacements.Length; j++) {
-					if(vals[i].Equals(replacements[j].Item1)) {
-						vals[i] = replacements[j].Item2;
-						break;
-					}
+					if(valueChars[i] == replacements[j].val)
+						valueChars[i] = replacements[j].rep;
+					else if(valueChars[i] == replacements[j].rep)
+						valueChars[i] = replacements[j].val;
+					else continue;
+					break;
 				}
 			}
-		}
-
-		internal static void ReverseReplace<T>(T[] vals, (T, T)[] replacements) {
-			if(replacements == null) return;
-			for(int i = 0; i < vals.Length; i++) {
-				for(int j = 0; j < replacements.Length; j++) {
-					if(vals[i].Equals(replacements[j].Item2)) {
-						vals[i] = replacements[j].Item1;
-						break;
-					}
-				}
-			}
+			return new string(valueChars);
 		}
     }
 }

@@ -1350,12 +1350,11 @@ namespace Riptide
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to make before sending.</param>
         /// <returns>The message that the <see cref="string"/> was added to.</returns>
-        public Message AddString(string value, byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public Message AddString(string value, byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
         {
 			if(max < byte.MaxValue && max > (byte.MaxValue >> 1)) throw new ArgumentException($"max is incompatible with utf8: {max}");
-			byte[] bytes = Encoding.UTF8.GetBytes(value);
-			Helper.Replace(bytes, replacements);
-            AddBytes(bytes, true, byte.MinValue, max);
+			value = Helper.SwapValues(value, replacements);
+            AddBytes(Encoding.UTF8.GetBytes(value), true, byte.MinValue, max);
             return this;
         }
 
@@ -1363,14 +1362,13 @@ namespace Riptide
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to reverse before recieving</param>
         /// <returns>The <see cref="string"/> that was retrieved.</returns>
-        public string GetString(byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public string GetString(byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
         {
 			if(max < byte.MaxValue && max > (byte.MaxValue >> 1)) throw new ArgumentException($"max is incompatible with utf8: {max}");
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
 			byte[] bytes = GetBytes(length, byte.MinValue, max);
-			Helper.ReverseReplace(bytes, replacements);
             string value = Encoding.UTF8.GetString(bytes, 0, length);
-            return value;
+            return Helper.SwapValues(value, replacements);
         }
 
         /// <summary>Adds a <see cref="string"/> array to the message.</summary>
@@ -1379,7 +1377,7 @@ namespace Riptide
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to make before sending.</param>
         /// <returns>The message that the array was added to.</returns>
-        public Message AddStrings(string[] array, bool includeLength = true, byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public Message AddStrings(string[] array, bool includeLength = true, byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
         {
             if (includeLength)
                 AddVarULong((uint)array.Length);
@@ -1399,14 +1397,14 @@ namespace Riptide
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to reverse before recieving</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings(byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public string[] GetStrings(byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
 			=> GetStrings((int)GetVarULong(), max, replacements);
         /// <summary>Retrieves a <see cref="string"/> array from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to reverse before recieving</param>
         /// <returns>The array that was retrieved.</returns>
-        public string[] GetStrings(int amount, byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public string[] GetStrings(int amount, byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
         {
             string[] array = new string[amount];
             for (int i = 0; i < array.Length; i++)
@@ -1419,7 +1417,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start populating the array.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to reverse before recieving</param>
-        public void GetStrings(string[] intoArray, int startIndex = 0, byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public void GetStrings(string[] intoArray, int startIndex = 0, byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
 			=> GetStrings((int)GetVarULong(), intoArray, startIndex, max, replacements);
         /// <summary>Populates a <see cref="string"/> array with strings retrieved from the message.</summary>
         /// <param name="amount">The amount of strings to retrieve.</param>
@@ -1427,7 +1425,7 @@ namespace Riptide
         /// <param name="startIndex">The position at which to start populating the array.</param>
 		/// <param name="max">The maximum possible char of the string.</param>
 		/// <param name="replacements">The character replacements to reverse before recieving</param>
-        public void GetStrings(int amount, string[] intoArray, int startIndex = 0, byte max = byte.MaxValue, (byte val, byte rep)[] replacements = null)
+        public void GetStrings(int amount, string[] intoArray, int startIndex = 0, byte max = byte.MaxValue, (char val, char rep)[] replacements = null)
         {
             if (startIndex + amount > intoArray.Length)
                 throw new ArgumentException(ArrayNotLongEnoughError(amount, intoArray.Length, startIndex, StringName), nameof(amount));
@@ -1623,8 +1621,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDouble(double, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double value) => AddDouble(value);
-        /// <inheritdoc cref="AddString(string, byte, ValueTuple{byte, byte}[])"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string, byte, ValueTuple{byte, byte}[])"/>.</remarks>
+        /// <inheritdoc cref="AddString(string, byte, ValueTuple{char, char}[])"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddString(string, byte, ValueTuple{char, char}[])"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string value) => AddString(value);
         /// <inheritdoc cref="AddSerializable{T}(T)"/>
@@ -1676,8 +1674,8 @@ namespace Riptide
         /// <remarks>This method is simply an alternative way of calling <see cref="AddDoubles(double[], bool, int)"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(double[] array, bool includeLength = true) => AddDoubles(array, includeLength);
-        /// <inheritdoc cref="AddStrings(string[], bool, byte, ValueTuple{byte, byte}[])"/>
-        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool, byte, ValueTuple{byte, byte}[])"/>.</remarks>
+        /// <inheritdoc cref="AddStrings(string[], bool, byte, ValueTuple{char, char}[])"/>
+        /// <remarks>This method is simply an alternative way of calling <see cref="AddStrings(string[], bool, byte, ValueTuple{char, char}[])"/>.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Message Add(string[] array, bool includeLength = true) => AddStrings(array, includeLength);
         /// <inheritdoc cref="AddSerializables{T}(T[], bool)"/>
