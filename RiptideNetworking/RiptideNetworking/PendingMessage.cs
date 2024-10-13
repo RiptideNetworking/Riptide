@@ -50,7 +50,7 @@ namespace Riptide
             PendingMessage pendingMessage = RetrieveFromPool();
             pendingMessage.connection = connection;
 
-            message.SequenceId = sequenceId;
+			message.SequenceId = sequenceId;
             pendingMessage.size = message.BytesInUse;
             Buffer.BlockCopy(message.Data, 0, pendingMessage.data, 0, pendingMessage.size);
 

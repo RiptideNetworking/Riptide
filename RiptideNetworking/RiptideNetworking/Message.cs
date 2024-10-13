@@ -87,18 +87,14 @@ namespace Riptide
 
 		/// <summary>The maximum value of Id.</summary>
 		public static ushort MaxId { private get; set; } = ushort.MaxValue;
-		/// <summary>The sequence Id of the message, assuming it has one.</summary>
-		internal ushort SequenceId
-        {
-			get
-			{
-				ulong header = data.GetData()[0];
-				return (ushort)(header >> HeaderBits);
+		/// <summary>The sequence Id of the message. Only Queued and reliable have one.</summary>
+		internal ushort SequenceId {
+			get => (ushort)(Data[0] >> HeaderBits);
+			set {
+				Data[0] &= ~((ulong)ushort.MaxValue << HeaderBits);
+				Data[0] |= ((ulong)value) << HeaderBits;
 			}
-			set => Data[0] += ((ulong)value) << HeaderBits;
 		}
-		/// <summary>Wether anything has been read from the message.</summary>
-		public bool HasReadNothing => writeValue.HasReadNothing;
         /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
         public int BytesInUse => data.GetBytesInUse();
         /// <inheritdoc cref="data"/>
@@ -229,6 +225,7 @@ namespace Riptide
 			if(!resendHeader.HasValue) return;
 			(MessageHeader header, ushort? id) = resendHeader.Value;
 			SetHeader(header, id);
+			resendHeader = null;
 		}
 
 		/// <summary>Sets the resendHeader.</summary>

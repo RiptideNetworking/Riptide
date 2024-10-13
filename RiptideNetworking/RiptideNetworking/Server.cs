@@ -220,9 +220,6 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being rejected.</param>
         public void Reject(Connection connection, Message message = null)
         {
-            if (message != null && !message.HasReadNothing)
-                RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting rejection data!");
-
             if (pendingConnections.Remove(connection))
                 Reject(connection, message == null ? RejectReason.Rejected : RejectReason.Custom, message);
             else
@@ -385,9 +382,6 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being disconnected.</param>
         public void DisconnectClient(ushort id, Message message = null)
         {
-            if (message != null && !message.HasReadNothing)
-                RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting disconnection data!");
-
             if (clients.TryGetValue(id, out Connection client))
             {
                 SendDisconnect(client, DisconnectReason.Kicked, message);
@@ -402,9 +396,6 @@ namespace Riptide
         /// <param name="message">Data that should be sent to the client being disconnected.</param>
         public void DisconnectClient(Connection client, Message message = null)
         {
-            if (message != null && !message.HasReadNothing)
-                RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting disconnection data!");
-
             if (clients.ContainsKey(client.Id))
             {
                 SendDisconnect(client, DisconnectReason.Kicked, message);

@@ -62,7 +62,6 @@ namespace Riptide.Utils
 		}
 
 		internal ulong[] GetData() => data;
-		internal bool HasReadNothing => data[0] == 0 && maxIndex == 0;
 
 		internal int GetBytesInUse() {
 			ulong max = data[maxIndex];
