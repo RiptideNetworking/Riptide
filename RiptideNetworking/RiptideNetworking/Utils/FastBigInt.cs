@@ -206,16 +206,14 @@ namespace Riptide.Utils
 			int shift = startBit % 64;
 			int startULong = startBit / 64;
 			ulong mask = (1UL << length) - 1;
-			ulong val1 = data[startULong] & (mask << shift);
-			data[startULong] ^= val1;
+			ulong val1 = (data[startULong] >> shift) & mask;
 			if(shift + length <= 64 || startBit >= 64 * (data.Length + 1))
 				return val1 >> shift;
 			int endULong = startULong + 1;
 			int extraBits = shift + length - 64;
 			ulong extraMask = (1UL << extraBits) - 1;
 			ulong val2 = data[endULong] & extraMask;
-			data[endULong] ^= val2;
-			return (val1 >> shift) | (val2 << (64 - shift));
+			return val1 | (val2 << (64 - shift));
 		}
 
 		internal void LeftShift1ULong() {

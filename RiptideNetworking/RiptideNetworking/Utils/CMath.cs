@@ -18,7 +18,7 @@ namespace Riptide.Utils
 		internal static byte Log2(this ulong value) {
 			byte bits = 0;
 			for(byte step = 32; step > 0; step >>= 1) {
-				if(value < 1UL << step) continue;
+				if(value < (1UL << step)) continue;
 				value >>= step;
 				bits += step;
 			}

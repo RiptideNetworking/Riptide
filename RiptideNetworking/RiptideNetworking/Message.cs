@@ -1007,19 +1007,18 @@ namespace Riptide
 		public ulong GetULong(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
 			ulong value;
+			ulong dif = max - min;
 			// FastBigInt doesn't support that division or max - min + 1 overflow
-			if(max - min >= (ulong.MaxValue >> 1)) {
-				int log = 64;
-				value = data.TakeBits(readBit, log);
-				readBit += log;
-			} else if((max - min + 1).IsPowerOf2()) {
-				int log = (max - min + 1).Log2();
-				value = data.TakeBits(readBit, log);
-				readBit += log;
-			} else {
+			if(dif++ >= (ulong.MaxValue >> 1)) TakeBits(64);
+			else if(dif.IsPowerOf2()) TakeBits(dif.Log2());
+			else {
 				data.RightShiftArbitrary(readBit);
 				readBit = 0;
-				value = data.DivReturnMod(max - min + 1);
+				value = data.DivReturnMod(dif);
+			}
+			void TakeBits(int bitCount) {
+				value = data.TakeBits(readBit, bitCount);
+				readBit += bitCount;
 			}
 			return value + min;
 		}
