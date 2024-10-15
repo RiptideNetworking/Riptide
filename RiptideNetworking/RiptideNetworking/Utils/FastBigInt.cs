@@ -62,10 +62,12 @@ namespace Riptide.Utils
 		}
 
 		internal ulong[] GetData() => data;
+		internal bool IsPowerOf2() => minIndex == maxIndex && data[minIndex].IsPowerOf2();
+		internal int Log2() => data[maxIndex].Log2() + maxIndex * 64;
 
 		internal int GetBytesInUse() {
-			ulong max = data[maxIndex];
 			int bytes = maxIndex * sizeof(ulong);
+			ulong max = data[maxIndex];
 			while(max > 0) {
 				max >>= 8;
 				bytes++;
@@ -87,6 +89,23 @@ namespace Riptide.Utils
 				(data[off], carry) = AddUlongs(data[off], slice.data[i], carry);
 			}
 			if(carry != 0) throw new OverflowException("Addition overflow.");
+			AdjustMinAndMax();
+		}
+
+		internal void Sub(FastBigInt value, ulong mult) {
+			minIndex = Math.Min(minIndex, value.minIndex);
+			maxIndex = Math.Max(maxIndex, value.maxIndex + 2);
+			EnsureCapacity();
+			int offset = value.minIndex;
+			int len = value.maxIndex - offset + 3;
+			FastBigInt slice = value.CopySlice(offset, len);
+			slice.Mult(mult);
+			ulong carry = 0;
+			for(int i = 0; i < len; i++) {
+				int off = i + offset;
+				(data[off], carry) = SubUlongs(data[off], slice.data[i], carry);
+			}
+			if(carry != 0) throw new OverflowException("Subtraction overflow.");
 			AdjustMinAndMax();
 		}
 
@@ -162,6 +181,43 @@ namespace Riptide.Utils
 			return carry >> (64 - shiftBits);
 		}
 
+		internal void RightShiftArbitrary(int shiftBits) {
+			if(shiftBits <= 0) return;
+			int shiftUlongs = shiftBits / 64;
+			shiftBits %= 64;
+			if(shiftUlongs == 0) {
+				RightShift((byte)shiftBits);
+				return;
+			}
+
+			for(int i = minIndex; i <= maxIndex; i++) {
+				if(i >= shiftUlongs) data[i - shiftUlongs] = data[i];
+				data[i] = 0;
+			}
+			minIndex -= shiftUlongs;
+			if(minIndex < 0) minIndex = 0;
+			AdjustMinAndMax();
+			RightShift((byte)shiftBits);
+		}
+
+		internal ulong TakeBits(int startBit, int length) {
+			if(startBit < 0 || length < 0 || length > 64) throw new ArgumentOutOfRangeException();
+			if(startBit >= 64 * data.Length) return 0;
+			int shift = startBit % 64;
+			int startULong = startBit / 64;
+			ulong mask = (1UL << length) - 1;
+			ulong val1 = data[startULong] & (mask << shift);
+			data[startULong] ^= val1;
+			if(shift + length <= 64 || startBit >= 64 * (data.Length + 1))
+				return val1 >> shift;
+			int endULong = startULong + 1;
+			int extraBits = shift + length - 64;
+			ulong extraMask = (1UL << extraBits) - 1;
+			ulong val2 = data[endULong] & extraMask;
+			data[endULong] ^= val2;
+			return (val1 >> shift) | (val2 << (64 - shift));
+		}
+
 		internal void LeftShift1ULong() {
 			maxIndex++;
 			EnsureCapacity();
@@ -195,19 +251,19 @@ namespace Riptide.Utils
 		}
 
 
-		public static (ulong value, ulong carry) AddUlong(ulong val, ulong add) {
+		private static (ulong value, ulong carry) AddUlong(ulong val, ulong add) {
 			ulong value = val + add;
 			ulong carry = (value < val).ToULong();
 			return (value, carry);
 		}
 
-		public static (ulong value, ulong carry) SubtractUlong(ulong val, ulong sub) {
+		private static (ulong value, ulong carry) SubtractUlong(ulong val, ulong sub) {
 			ulong value = val - sub;
 			ulong carry = (value > val).ToULong();
 			return (value, carry);
 		}
 
-		public static (ulong value, ulong carry) AddUlongs(ulong val, ulong add1, ulong add2) {
+		private static (ulong value, ulong carry) AddUlongs(ulong val, ulong add1, ulong add2) {
 			ulong value = val + add1;
 			ulong carry = (value < val).ToULong();
 			ulong value2 = value + add2;
@@ -215,7 +271,15 @@ namespace Riptide.Utils
 			return (value2, carry);
 		}
 
-		public static (ulong value, ulong carry) MultiplyUlong(ulong val, ulong mult) {
+		private static (ulong value, ulong carry) SubUlongs(ulong val, ulong sub1, ulong sub2) {
+			ulong value = val - sub1;
+			ulong carry = (value > val).ToULong();
+			ulong value2 = value - sub2;
+			carry += (value2 > value).ToULong();
+			return (value2, carry);
+		}
+
+		private static (ulong value, ulong carry) MultiplyUlong(ulong val, ulong mult) {
 			ulong xLow = val & 0xFFFFFFFF;
 			ulong xHigh = val >> 32;
 			ulong yLow = mult & 0xFFFFFFFF;
@@ -232,20 +296,20 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
-		public static (ulong value, ulong carry) LeftShiftUlong(ulong val, int shift) {
+		private static (ulong value, ulong carry) LeftShiftUlong(ulong val, int shift) {
 			ulong value = val << shift;
 			ulong carry = val >> (64 - shift);
 			return (value, carry);
 		}
 
-		public static (ulong value, ulong carry) RightShiftUlong(ulong val, int shift) {
+		private static (ulong value, ulong carry) RightShiftUlong(ulong val, int shift) {
 			ulong value = val >> shift;
 			ulong carry = val << (64 - shift);
 			return (value, carry);
 		}
 
 		// this does not support div > (ulong.MaxValue >> 1)
-		public static (ulong value, ulong rem) DivideUlong(ulong val, ulong carry, ulong div) {
+		private static (ulong value, ulong rem) DivideUlong(ulong val, ulong carry, ulong div) {
 			if(carry == 0) return (val / div, val % div);
 			ulong extra = IntermediateDivide(ref val, carry, div);
 			return (val / div + extra, val % div);

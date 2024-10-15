@@ -106,6 +106,8 @@ namespace Riptide
         private FastBigInt data;
 		/// <summary>The mult for new values.</summary>
 		private FastBigInt writeValue;
+		/// <summary>The current read bit of the message.</summary>
+		private int readBit = 0;
 		/// <summary>The header necessary for resending the message.</summary>
 		private (MessageHeader header, ushort? id)? resendHeader = null;
 
@@ -1004,10 +1006,21 @@ namespace Riptide
         /// <returns>The <see cref="ulong"/> that was retrieved.</returns>
 		public ulong GetULong(ulong min = ulong.MinValue, ulong max = ulong.MaxValue) {
 			if(min > max) throw new ArgumentOutOfRangeException(nameof(min), "min must be <= max");
+			ulong value;
 			// FastBigInt doesn't support that division or max - min + 1 overflow
-			ulong value = (max - min >= (ulong.MaxValue >> 1))
-				? data.RightShift1ULong()
-				: data.DivReturnMod(max - min + 1);
+			if(max - min >= (ulong.MaxValue >> 1)) {
+				int log = 64;
+				value = data.TakeBits(readBit, log);
+				readBit += log;
+			} else if((max - min + 1).IsPowerOf2()) {
+				int log = (max - min + 1).Log2();
+				value = data.TakeBits(readBit, log);
+				readBit += log;
+			} else {
+				data.RightShiftArbitrary(readBit);
+				readBit = 0;
+				value = data.DivReturnMod(max - min + 1);
+			}
 			return value + min;
 		}
 
