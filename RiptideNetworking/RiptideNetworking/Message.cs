@@ -6,6 +6,7 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -244,23 +245,22 @@ namespace Riptide
 
         #region Add & Retrieve Data
         #region Message
-        /// <summary>Adds a range of bits from <paramref name="message"/> to the message.</summary>
-        /// <param name="message">The message whose bits to add.</param>
-        /// <param name="amount">The number of bytes to add.</param>
-        /// <returns>The message that the bits were added to.</returns>
-        /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-        public Message AddMessage(Message message, int? amount = null)
-        {
-			Message msg = message.Copy();
-			msg.ResetReadBit();
-			if(amount == null) amount = msg.BytesInUse;
-			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
-
-			for(int i = 0; i < amount; i++)
-				AddByte(msg.GetByte());
-			
+		/// <summary>Adds a <see cref="Message"/> to the message.</summary>
+		/// <param name="message">The message to add.</param>
+		/// <returns>The message that the message was added to.</returns>
+		/// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
+		public Message AddMessage(Message message)
+		{
+			BigInteger d1 = (BigInteger)data;
+			BigInteger d2 = (BigInteger)message.data;
+			BigInteger m1 = (BigInteger)writeValue;
+			BigInteger m2 = (BigInteger)message.writeValue;
+			d1 += d2 * m1;
+			m1 *= m2;
+			data = (FastBigInt)d1;
+			writeValue = (FastBigInt)m1;
 			return this;
-        }
+		}
         #endregion
 
         #region Bits

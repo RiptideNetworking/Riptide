@@ -4,6 +4,7 @@
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
 
 using System;
+using System.Numerics;
 using System.Text;
 
 namespace Riptide.Utils
@@ -28,6 +29,21 @@ namespace Riptide.Utils
 			Buffer.BlockCopy(bytes, 0, data, 0, capacity);
 			maxIndex = data.Length - 1;
 			AdjustMinAndMax();
+		}
+
+		public static explicit operator BigInteger(FastBigInt val) {
+			byte[] bytes = new byte[(val.maxIndex + 1) * sizeof(ulong)];
+			Buffer.BlockCopy(val.data, 0, bytes, 0, bytes.Length);
+			return new BigInteger(bytes);
+		}
+
+		public static explicit operator FastBigInt(BigInteger val) {
+			byte[] bytes = val.ToByteArray();
+			FastBigInt result = new FastBigInt((bytes.Length + 7) / 8);
+			Buffer.BlockCopy(bytes, 0, result.data, 0, bytes.Length);
+			result.maxIndex = result.data.Length - 1;
+			result.AdjustMinAndMax();
+			return result;
 		}
 
 		internal FastBigInt Copy() {
@@ -205,7 +221,7 @@ namespace Riptide.Utils
 			if(startBit >= 64 * data.Length) return 0;
 			int shift = startBit % 64;
 			int startULong = startBit / 64;
-			ulong mask = (length == 64) ? ulong.MaxValue : (1UL << length) - 1;
+			ulong mask = (1UL << length) - 1 - (length == 64).ToULong();
 			ulong val1 = (data[startULong] >> shift) & mask;
 			if(shift + length <= 64 || startBit + length >= 64 * data.Length)
 				return val1;
