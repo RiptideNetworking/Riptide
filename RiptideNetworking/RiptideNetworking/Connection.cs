@@ -176,7 +176,7 @@ namespace Riptide
         /// <returns>For reliable, queued and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
         public ushort Send(Message message)
         {
-			message.SetResendHeader();
+			message.SetSendHeader();
             ushort sequenceId = 0;
             if (message.SendMode == MessageSendMode.Notify)
             {

@@ -161,7 +161,7 @@ namespace Riptide
             Message message = Message.Create(e.DataBuffer, e.Amount).GetInfo(out MessageHeader header);
 			
             if(message.SendMode == MessageSendMode.Notify) {
-				message.PrepareResendHeader(header);
+				message.PrepareSendHeader(header, null);
                 e.FromConnection.ProcessNotify(e.Amount, message);
             } else if(message.SendMode == MessageSendMode.Unreliable) {
                 messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));

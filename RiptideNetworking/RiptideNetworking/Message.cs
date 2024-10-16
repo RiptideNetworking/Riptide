@@ -95,7 +95,8 @@ namespace Riptide
 				Data[0] |= ((ulong)value) << HeaderBits;
 			}
 		}
-        /// <summary>How many of this message's bytes are in use. Rounds up to the next byte because only whole bytes can be sent.</summary>
+        /// <summary>How many of this message's bytes are in use.
+		/// Rounds up to the next byte because only whole bytes can be sent.</summary>
         public int BytesInUse => data.GetBytesInUse();
         /// <inheritdoc cref="data"/>
         internal ulong[] Data => data.GetData();
@@ -109,7 +110,7 @@ namespace Riptide
 		/// <summary>The current read bit of the message.</summary>
 		private int readBit = 0;
 		/// <summary>The header necessary for resending the message.</summary>
-		private (MessageHeader header, ushort? id)? resendHeader = null;
+		private (MessageHeader header, ushort? id)? sendHeader = null;
 
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
         private Message() {
@@ -150,13 +151,14 @@ namespace Riptide
         /// <returns>A message instance ready to be sent.</returns>
         internal static Message Create(MessageHeader header, ushort? id = null)
         {
-            return new Message().SetHeader(header, id);
+			Message message = new Message();
+			message.PrepareSendHeader(header, id);
+            return message;
         }
 
 		/// <summary>Logs info of the message</summary>
 		public void LogStuff(string added = "") {
-			RiptideLogger.Log(LogType.Info, data.ToString() + "\n"
-				+ writeValue.ToString() + "\nSendMode: " + SendMode + "\n" + added);
+			RiptideLogger.Log(LogType.Info, $"{data}\n{writeValue}\nSendMode: {SendMode}\nRead Bit: {readBit}\n{added}");
 		}
 
         #region Functions
@@ -222,37 +224,37 @@ namespace Riptide
 			else return MessageSendMode.Unreliable;
 		}
 
-		/// <summary>Adds a resendHeader, if necessary.</summary>
-		internal void SetResendHeader() {
-			if(!resendHeader.HasValue) return;
-			(MessageHeader header, ushort? id) = resendHeader.Value;
+		/// <summary>Adds a sendHeader into the message, if necessary.</summary>
+		internal void SetSendHeader() {
+			if(!sendHeader.HasValue) return;
+			ResetReadBit();
+			(MessageHeader header, ushort? id) = sendHeader.Value;
 			SetHeader(header, id);
-			resendHeader = null;
+			sendHeader = null;
 		}
 
 		/// <summary>Sets the resendHeader.</summary>
 		/// <param name="header"></param>
-		internal void PrepareResendHeader(MessageHeader header) {
-			resendHeader = (header, null);
+		/// <param name="id"></param>
+		internal void PrepareSendHeader(MessageHeader header, ushort? id) {
+			if(sendHeader != null) throw new Exception("resendHeader has already been set!");
+			sendHeader = (header, id);
 		}
         #endregion
 
         #region Add & Retrieve Data
         #region Message
-        /// <summary>Adds <paramref name="message"/>'s unread bits to the message.</summary>
-        /// <param name="message">The message whose unread bits to add.</param>
-        /// <returns>The message that the bits were added to.</returns>
-        /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-        public Message AddMessage(Message message)
-			=> AddMessage(message, message.BytesInUse);
         /// <summary>Adds a range of bits from <paramref name="message"/> to the message.</summary>
         /// <param name="message">The message whose bits to add.</param>
         /// <param name="amount">The number of bytes to add.</param>
         /// <returns>The message that the bits were added to.</returns>
         /// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-        public Message AddMessage(Message message, int amount)
+        public Message AddMessage(Message message, int? amount = null)
         {
 			Message msg = message.Copy();
+			msg.ResetReadBit();
+			if(amount == null) amount = msg.BytesInUse;
+			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
 
 			for(int i = 0; i < amount; i++)
 				AddByte(msg.GetByte());
@@ -292,7 +294,8 @@ namespace Riptide
                 SendMode = SendMode,
 				data = data.Copy(),
                 writeValue = writeValue.Copy(),
-				resendHeader = resendHeader
+				readBit = readBit,
+				sendHeader = sendHeader
             };
 			return message;
         }
@@ -302,8 +305,8 @@ namespace Riptide
 		/// <exception cref="Exception"></exception>
 		internal ushort GetMessageID(MessageHeader header) {
 			ushort messageId = GetUShort(0, MaxId);
-			if(resendHeader.HasValue) throw new Exception("Message's resendHeader is not null!");
-			resendHeader = (header, messageId);
+			if(sendHeader.HasValue) throw new Exception("Message's resendHeader is not null!");
+			PrepareSendHeader(header, messageId);
 			return messageId;
 		}
 
@@ -1012,8 +1015,7 @@ namespace Riptide
 			if(dif++ >= (ulong.MaxValue >> 1)) TakeBits(64);
 			else if(dif.IsPowerOf2()) TakeBits(dif.Log2());
 			else {
-				data.RightShiftArbitrary(readBit);
-				readBit = 0;
+				ResetReadBit();
 				value = data.DivReturnMod(dif);
 			}
 			void TakeBits(int bitCount) {
@@ -1021,6 +1023,12 @@ namespace Riptide
 				readBit += bitCount;
 			}
 			return value + min;
+		}
+
+		/// <summary>Divides data by 2^readBit, so it can go back to 0.</summary>
+		internal void ResetReadBit() {
+			data.RightShiftArbitrary(readBit);
+			readBit = 0;
 		}
 
 		/// <summary>Adds a <see cref="long"/> to the message.</summary>

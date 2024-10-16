@@ -205,10 +205,10 @@ namespace Riptide.Utils
 			if(startBit >= 64 * data.Length) return 0;
 			int shift = startBit % 64;
 			int startULong = startBit / 64;
-			ulong mask = (1UL << length) - 1;
+			ulong mask = (length == 64) ? ulong.MaxValue : (1UL << length) - 1;
 			ulong val1 = (data[startULong] >> shift) & mask;
-			if(shift + length <= 64 || startBit >= 64 * (data.Length + 1))
-				return val1 >> shift;
+			if(shift + length <= 64 || startBit + length >= 64 * data.Length)
+				return val1;
 			int endULong = startULong + 1;
 			int extraBits = shift + length - 64;
 			ulong extraMask = (1UL << extraBits) - 1;
