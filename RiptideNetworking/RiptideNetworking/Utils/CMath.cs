@@ -36,13 +36,15 @@ namespace Riptide.Utils
 		internal static unsafe double ToDouble(this ulong value) => *(double*)&value;
 		internal static unsafe ulong ToULong(this bool value) => *(byte*)&value;
 
-		public static byte Conv(this sbyte value) => (byte)(value + (1 << 7));
-		public static sbyte Conv(this byte value) => (sbyte)(value - (1 << 7));
-		public static ushort Conv(this short value) => (ushort)(value + (1 << 15));
-		public static short Conv(this ushort value) => (short)(value - (1 << 15));
-		public static uint Conv(this int value) => (uint)(value + (1 << 31));
-		public static int Conv(this uint value) => (int)value - (1 << 31);
-		public static ulong Conv(this long value) => (ulong)(value + (1L << 63));
-		public static long Conv(this ulong value) => (long)value - (1L << 63);
+		internal static byte Conv(this sbyte value) => (byte)(value + (1 << 7));
+		internal static sbyte Conv(this byte value) => (sbyte)(value - (1 << 7));
+		internal static ushort Conv(this short value) => (ushort)(value + (1 << 15));
+		internal static short Conv(this ushort value) => (short)(value - (1 << 15));
+		internal static uint Conv(this int value) => (uint)(value + (1 << 31));
+		internal static int Conv(this uint value) => (int)value - (1 << 31);
+		internal static ulong Conv(this long value) => (ulong)(value + (1L << 63));
+		internal static long Conv(this ulong value) => (long)value - (1L << 63);
+
+		internal static unsafe int UnmanagedSizeOf<T>() where T : unmanaged => sizeof(T);
 	}
 }

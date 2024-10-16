@@ -33,7 +33,8 @@ namespace Riptide.Utils
 
 		public static explicit operator BigInteger(FastBigInt val) {
 			byte[] bytes = new byte[(val.maxIndex + 1) * sizeof(ulong)];
-			Buffer.BlockCopy(val.data, 0, bytes, 0, bytes.Length);
+			int offset = val.minIndex * 8;
+			Buffer.BlockCopy(val.data, offset, bytes, offset, bytes.Length);
 			return new BigInteger(bytes);
 		}
 

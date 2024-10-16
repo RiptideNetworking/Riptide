@@ -194,13 +194,13 @@ namespace Riptide
 		/// <summary>Removes the header of a message.</summary>
 		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
 		public void RemoveHeader() {
-			MessageHeader header = (MessageHeader)GetBits(HeaderBits);
+			MessageHeader header = (MessageHeader)GetBits<byte>(HeaderBits);
 			MessageSendMode sendMode = GetMessageSendMode(header);
 			switch(sendMode) {
-				case MessageSendMode.Notify: GetBits(NotifyHeaderBits - HeaderBits); break;
-				case MessageSendMode.Queued: GetBits(QueuedHeaderBits - HeaderBits); break;
-				case MessageSendMode.Reliable: GetBits(ReliableHeaderBits - HeaderBits); break;
-				case MessageSendMode.Unreliable: GetBits(UnreliableHeaderBits - HeaderBits); break;
+				case MessageSendMode.Notify: GetBits<ulong>(NotifyHeaderBits - HeaderBits); break;
+				case MessageSendMode.Queued: GetBits<ulong>(QueuedHeaderBits - HeaderBits); break;
+				case MessageSendMode.Reliable: GetBits<ulong>(ReliableHeaderBits - HeaderBits); break;
+				case MessageSendMode.Unreliable: GetBits<ulong>(UnreliableHeaderBits - HeaderBits); break;
 				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
 			}
 			if(sendMode != MessageSendMode.Notify) GetUShort(0, MaxId);
@@ -210,7 +210,7 @@ namespace Riptide
 		/// <param name="header">The header of the message.</param>
 		/// <returns>The message's header.</returns>
 		internal Message GetInfo(out MessageHeader header) {
-			header = (MessageHeader)GetBits(HeaderBits);
+			header = (MessageHeader)GetBits<byte>(HeaderBits);
 			SendMode = GetMessageSendMode(header);
 			return this;
 		}
@@ -268,21 +268,23 @@ namespace Riptide
 		/// <param name="bitfield">The bitfield to add.</param>
 		/// <param name="amount">The amount of bits.</param>
 		/// <returns></returns>
-		public Message AddBits(ulong bitfield, int amount) {
+		public Message AddBits<T>(T bitfield, int amount) where T : unmanaged {
 			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
-			if(amount > sizeof(ulong) * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
-			ulong mask = (1UL << amount) - 1;
-			bitfield &= mask;
-			AddULong(bitfield, 0, mask);
+			if(amount > CMath.UnmanagedSizeOf<T>() * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+			ulong mask = (1UL << amount) - 1 - (amount == 64).ToULong();
+			ulong bitfieldULong = (ulong)Convert.ChangeType(bitfield, typeof(ulong));
+			AddULong(bitfieldULong, 0, mask);
 			return this;
 		}
 		/// <summary>Gets bits from a message.</summary>
 		/// <param name="amount">The amount of bits.</param>
 		/// <returns></returns>
-		public ulong GetBits(int amount) {
+		public T GetBits<T>(int amount) where T : unmanaged {
 			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
-			if(amount > sizeof(ulong) * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot get more than {sizeof(ulong) * BitsPerByte} bits at a time!");
-			return GetULong(0, (1UL << amount) - 1);
+			if(amount > CMath.UnmanagedSizeOf<T>() * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+			ulong mask = (1UL << amount) - 1 - (amount == 64).ToULong();
+			ulong result = GetULong(0, mask);
+    		return (T)Convert.ChangeType(result, typeof(T));
 		}
         #endregion
 
@@ -1204,9 +1206,9 @@ namespace Riptide
         public float GetFloat(int bitsOfAccuracy = 23)
         {
 			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 23) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 23 (inclusive)");
-			ulong val = GetBits(9 + bitsOfAccuracy);
+			uint val = GetBits<uint>(9 + bitsOfAccuracy);
 			val <<= 23 - bitsOfAccuracy;
-			return ((uint)val).ToFloat();
+			return val.ToFloat();
 		}
 
         /// <summary>Adds a <see cref="float"/> array to the message.</summary>
@@ -1292,7 +1294,7 @@ namespace Riptide
         public double GetDouble(int bitsOfAccuracy = 52)
         {
 			if(bitsOfAccuracy < 0 || bitsOfAccuracy > 52) throw new ArgumentOutOfRangeException(nameof(bitsOfAccuracy), "Bits of accuracy must be between 0 and 52 (inclusive)");
-			ulong val = GetBits(12 + bitsOfAccuracy);
+			ulong val = GetBits<ulong>(12 + bitsOfAccuracy);
 			val <<= 52 - bitsOfAccuracy;
 			return val.ToDouble();
 		}
