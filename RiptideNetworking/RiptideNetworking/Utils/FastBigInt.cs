@@ -144,19 +144,16 @@ namespace Riptide.Utils
 			AdjustMinAndMax();
 		}
 
+		/// <remarks>This does not support div > (ulong.MaxValue >> 1)</remarks>
 		internal ulong DivReturnMod(ulong div) {
 			if(div == 0) throw new DivideByZeroException("Divisor cannot be zero.");
 
 			if(div.IsPowerOf2()) return RightShift(div.Log2());
-			// This should be replaced by minIndex = 0;
-			// however for this case this is better performance
-			// and won't throw an exeption if used correctly
-			if(minIndex > 0) minIndex--;
 
+			minIndex = 0;
 			ulong carry = 0;
 			for(int i = maxIndex; i >= minIndex; i--)
 				(data[i], carry) = DivideUlong(data[i], carry, div);
-			if(minIndex != 0 && carry != 0) throw new OverflowException("Division overflow. \nYour \"Add\" and \"Get\" methods of your message probably don't line up correctly.");
 			AdjustMinAndMax();
 			return carry;
 		}
@@ -323,13 +320,14 @@ namespace Riptide.Utils
 			return (value, carry);
 		}
 
-		// this does not support div > (ulong.MaxValue >> 1)
+		/// <remarks>This does not support div > (ulong.MaxValue >> 1)</remarks>
 		private static (ulong value, ulong rem) DivideUlong(ulong val, ulong carry, ulong div) {
 			if(carry == 0) return (val / div, val % div);
 			ulong extra = IntermediateDivide(ref val, carry, div);
 			return (val / div + extra, val % div);
 		}
 
+		/// <remarks>This does not support div > (ulong.MaxValue >> 1)</remarks>
 		private static ulong IntermediateDivide(ref ulong val, ulong carry, ulong div) {
 			if(div <= uint.MaxValue) {
 				ulong intermediate = val >> 32 | carry << 32;

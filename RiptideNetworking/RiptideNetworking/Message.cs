@@ -135,7 +135,7 @@ namespace Riptide
 		/// <param name="id">The message's ID.</param>
         /// <returns>A message instance ready to be sent.</returns>
         /// <remarks>This method is primarily intended for use with <see cref="MessageSendMode.Notify"/> as notify messages don't have a built-in message ID, and unlike
-        /// <see cref="Create(MessageSendMode, ushort?)"/> and <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
+        /// <see cref="Create(MessageSendMode, Enum)"/>, this overload does not add a message ID to the message.</remarks>
         public static Message Create(MessageSendMode sendMode, ushort? id = null)
         {
             return Create((MessageHeader)sendMode, id);
@@ -256,10 +256,12 @@ namespace Riptide
 		public Message AddMessage(Message message, bool takeSendHeader = false)
 		{
 			message.ResetSendHeader();
+			message.ResetReadBit();
 			if(takeSendHeader) {
 				ResetSendHeader();
 				sendHeader = message.sendHeader;
 			}
+			ResetReadBit();
 			BigInteger d1 = (BigInteger)data;
 			BigInteger d2 = (BigInteger)message.data;
 			BigInteger m1 = (BigInteger)writeValue;
@@ -276,7 +278,7 @@ namespace Riptide
 		/// <summary>Sets bits to the message.</summary>
 		/// <param name="bitfield">The bitfield to add.</param>
 		/// <param name="amount">The amount of bits.</param>
-		/// <returns></returns>
+		/// <returns>The message that the bits were added to.</returns>
 		public Message AddBits<T>(T bitfield, int amount) where T : unmanaged {
 			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
 			if(amount > CMath.UnmanagedSizeOf<T>() * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
@@ -287,7 +289,7 @@ namespace Riptide
 		}
 		/// <summary>Gets bits from a message.</summary>
 		/// <param name="amount">The amount of bits.</param>
-		/// <returns></returns>
+		/// <returns>The bits of the message as a T.</returns>
 		public T GetBits<T>(int amount) where T : unmanaged {
 			if(amount < 0) throw new ArgumentOutOfRangeException(nameof(amount), $"'{nameof(amount)}' cannot be negative!");
 			if(amount > CMath.UnmanagedSizeOf<T>() * BitsPerByte) throw new ArgumentOutOfRangeException(nameof(amount), $"Cannot add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
@@ -313,7 +315,6 @@ namespace Riptide
 
 		/// <summary>Gets the messageId of a message and prepares it for resending.</summary>
 		/// <returns>The message's Id.</returns>
-		/// <exception cref="Exception"></exception>
 		internal ushort GetMessageID(MessageHeader header) {
 			ushort messageId = GetUShort(0, MaxId);
 			if(sendHeader != null) throw new Exception("Message's resendHeader is not null!");
@@ -1468,7 +1469,6 @@ namespace Riptide
 		/// <typeparam name="T"></typeparam>
 		/// <param name="element"></param>
 		/// <param name="possibleValues"></param>
-		/// <exception cref="ArgumentException"></exception>
 		public Message AddElement<T>(T element, T[] possibleValues) {
 			if (possibleValues == null || possibleValues.Length == 0)
 				throw new ArgumentException("Possible values array cannot be null or empty", nameof(possibleValues));
@@ -1485,8 +1485,6 @@ namespace Riptide
 		/// <typeparam name="T"></typeparam>
 		/// <param name="possibleValues"></param>
 		/// <returns>The retrieved element.</returns>
-		/// <exception cref="ArgumentException"></exception>
-		/// <exception cref="Exception"></exception>
 		public T GetElement<T>(T[] possibleValues) {
 			if (possibleValues == null || possibleValues.Length == 0)
 				throw new ArgumentException("Possible values array cannot be null or empty", nameof(possibleValues));
