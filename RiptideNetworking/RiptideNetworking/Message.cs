@@ -178,7 +178,7 @@ namespace Riptide
 				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
 			}
 			ulong umid = 0;
-			if(messageId.HasValue) {
+			if(messageId != null) {
 				if(messageId.Value > MaxId) throw new ArgumentOutOfRangeException(nameof(messageId), $"'{nameof(messageId)}' cannot be greater than {MaxId}!");
 				if(SendMode == MessageSendMode.Notify) throw new ArgumentException($"'{nameof(messageId)}' cannot be set for {nameof(MessageSendMode.Notify)} messages!", nameof(messageId));
 				umid = mult * messageId.Value;
@@ -190,21 +190,6 @@ namespace Riptide
 			Data[0] += umid;
 			return this;
         }
-
-		/// <summary>Removes the header of a message.</summary>
-		/// <remarks>Makes the message unsendable but allows you to use Get methods.</remarks>
-		public void RemoveHeader() {
-			MessageHeader header = (MessageHeader)GetBits<byte>(HeaderBits);
-			MessageSendMode sendMode = GetMessageSendMode(header);
-			switch(sendMode) {
-				case MessageSendMode.Notify: GetBits<ulong>(NotifyHeaderBits - HeaderBits); break;
-				case MessageSendMode.Queued: GetBits<ulong>(QueuedHeaderBits - HeaderBits); break;
-				case MessageSendMode.Reliable: GetBits<ulong>(ReliableHeaderBits - HeaderBits); break;
-				case MessageSendMode.Unreliable: GetBits<ulong>(UnreliableHeaderBits - HeaderBits); break;
-				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
-			}
-			if(sendMode != MessageSendMode.Notify) GetUShort(0, MaxId);
-		}
 
 		/// <summary>Gets the message's header and sets SendMode and resendHeader's header accordingly.</summary>
 		/// <param name="header">The header of the message.</param>
@@ -227,7 +212,7 @@ namespace Riptide
 
 		/// <summary>Adds a sendHeader into the message, if necessary.</summary>
 		internal void SetSendHeader() {
-			if(!sendHeader.HasValue) return;
+			if(sendHeader == null) return;
 			ResetReadBit();
 			(MessageHeader header, ushort? id) = sendHeader.Value;
 			SetHeader(header, id);
@@ -241,16 +226,40 @@ namespace Riptide
 			if(sendHeader != null) throw new Exception("resendHeader has already been set!");
 			sendHeader = (header, id);
 		}
+
+		/// <summary>Removes the sendHeader from the message data and stores it in the sendHeader.</summary>
+		/// <remarks>This is necessary when you send a message and want to read from it afterwards.</remarks>
+		public void ResetSendHeader() {
+			if(sendHeader != null) return;
+			MessageHeader header = (MessageHeader)GetBits<byte>(HeaderBits);
+			MessageSendMode sendMode = GetMessageSendMode(header);
+			switch(sendMode) {
+				case MessageSendMode.Notify: GetBits<ulong>(NotifyHeaderBits - HeaderBits); break;
+				case MessageSendMode.Queued: GetBits<ulong>(QueuedHeaderBits - HeaderBits); break;
+				case MessageSendMode.Reliable: GetBits<ulong>(ReliableHeaderBits - HeaderBits); break;
+				case MessageSendMode.Unreliable: GetBits<ulong>(UnreliableHeaderBits - HeaderBits); break;
+				default: throw new ArgumentOutOfRangeException(nameof(header), header, null);
+			}
+			ushort? id = null;
+			if(sendMode != MessageSendMode.Notify) id = GetUShort(0, MaxId);
+			sendHeader = (header, id);
+		}
         #endregion
 
         #region Add & Retrieve Data
         #region Message
 		/// <summary>Adds a <see cref="Message"/> to the message.</summary>
 		/// <param name="message">The message to add.</param>
+		/// <param name="takeSendHeader">Wether to take on the send Header as specified in Create</param>
 		/// <returns>The message that the message was added to.</returns>
 		/// <remarks>This method does not move <paramref name="message"/>'s internal read position!</remarks>
-		public Message AddMessage(Message message)
+		public Message AddMessage(Message message, bool takeSendHeader = false)
 		{
+			message.ResetSendHeader();
+			if(takeSendHeader) {
+				ResetSendHeader();
+				sendHeader = message.sendHeader;
+			}
 			BigInteger d1 = (BigInteger)data;
 			BigInteger d2 = (BigInteger)message.data;
 			BigInteger m1 = (BigInteger)writeValue;
@@ -307,7 +316,7 @@ namespace Riptide
 		/// <exception cref="Exception"></exception>
 		internal ushort GetMessageID(MessageHeader header) {
 			ushort messageId = GetUShort(0, MaxId);
-			if(sendHeader.HasValue) throw new Exception("Message's resendHeader is not null!");
+			if(sendHeader != null) throw new Exception("Message's resendHeader is not null!");
 			PrepareSendHeader(header, messageId);
 			return messageId;
 		}
