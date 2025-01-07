@@ -126,6 +126,8 @@ namespace Riptide.Transports.Udp
                             isRunning = false;
                             break;
                         case SocketError.ConnectionReset:
+                            tryReceiveMore = true;
+                            break;
                         case SocketError.MessageSize:
                         case SocketError.TimedOut:
                             break;
@@ -160,7 +162,7 @@ namespace Riptide.Transports.Udp
                 if (isRunning)
                     socket.SendTo(dataBuffer, numBytes, SocketFlags.None, toEndPoint);
             }
-            catch(SocketException)
+            catch (SocketException)
             {
                 // May want to consider triggering a disconnect here (perhaps depending on the type
                 // of SocketException)? Timeout should catch disconnections, but disconnecting
