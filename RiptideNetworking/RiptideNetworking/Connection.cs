@@ -182,7 +182,7 @@ namespace Riptide
         {
 			MessageSendMode sendMode = message.SetSendHeader();
 			if(message.BytesInUse >= Message.MaxSize) throw new Exception($"Message is too large to send {message.BytesInUse} with max of {Message.MaxSize}. Consider splitting it up or increasing Message.MaxPayloadSize at the cost of either reliability or resend attempts.");
-			if(sendMode != MessageSendMode.Unreliable && this is TcpConnection) throw new Exception("Queued, Notify and Reliable messages are not supported on TCP connections as all TCP messages are naturally queued and using anything other than unreliable would be redundand.");
+			if(this is TcpConnection) sendMode = MessageSendMode.Unreliable;
             ushort sequenceId = 0;
 
             if (sendMode == MessageSendMode.Notify)
