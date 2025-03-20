@@ -332,7 +332,7 @@ namespace Riptide
 		/// <param name="header">The header to set.</param>
 		/// <param name="id">The id to set.</param>
 		/// <returns>The message that the send header was set on.</returns>
-		public Message SetSendHeader(MessageHeader header, byte? id) {
+		public Message SetSendHeader(MessageHeader header, ushort? id) {
 			SendHeader = (header, id);
 			return this;
 		}
