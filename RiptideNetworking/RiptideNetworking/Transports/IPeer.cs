@@ -41,6 +41,16 @@ namespace Riptide.Transports
         ClientDisconnected,
     }
 
+	/// <summary>The functions for <see cref="MessageHeader"/>.</summary>
+	public static class MessageHeaderExtensions
+	{
+		/// <summary>Wether the <see cref="MessageHeader"/> is from the user.</summary>
+		/// <param name="header"></param>
+		public static bool IsUserMessage(this MessageHeader header) {
+			return header == MessageHeader.Unreliable || header == MessageHeader.Reliable || header == MessageHeader.Queued || header == MessageHeader.Notify;
+		}
+	}
+
     /// <summary>Defines methods, properties, and events which every transport's server <i>and</i> client must implement.</summary>
     public interface IPeer
     {

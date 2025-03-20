@@ -180,7 +180,7 @@ namespace Riptide
         /// <returns>For reliable, queued and notify messages, the sequence ID that the message was sent with. 0 for unreliable messages.</returns>
         public ushort Send(Message message)
         {
-			if(this is TcpConnection) message.SetSendHeader(MessageHeader.Unreliable, message.Id);
+			if(this is TcpConnection && message.Header.IsUserMessage()) message.SetSendHeader(MessageHeader.Unreliable, message.Id);
 			MessageSendMode sendMode = message.SetSendHeader();
 			if(message.BytesInUse >= Message.MaxSize) throw new Exception($"Message is too large to send {message.BytesInUse} with max of {Message.MaxSize}. Consider splitting it up or increasing Message.MaxPayloadSize at the cost of either reliability or resend attempts.");
             ushort sequenceId = 0;
