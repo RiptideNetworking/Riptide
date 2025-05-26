@@ -51,6 +51,8 @@ namespace Riptide
         public Action<ushort> NotifyLost;
         /// <summary>Invoked when a notify message is received.</summary>
         public Action<Message> NotifyReceived;
+		/// <summary>Invoked when the queued message with the given ID and SequenceId is successfully delivered.</summary>
+		public Action<ushort, ushort> QueuedDelivered;
         /// <summary>Invoked when the reliable message with the given sequence ID is successfully delivered.</summary>
         public Action<ushort> ReliableDelivered;
 
@@ -411,6 +413,11 @@ namespace Riptide
 				return;
 			}
 			PendingQueuedMessage qm = messageQueue[listId];
+			if(QueuedDelivered != null) {
+				Message qmd = new Message(qm.data, qm.data.Length, out ulong _, out MessageSendMode _);
+				if(!qmd.Id.HasValue) throw new Exception($"Queued message at listId {listId} has no ID");
+				QueuedDelivered?.Invoke(qmd.Id.Value, qm.SequenceId);
+			}
 			messageQueue[listId] = null;
 			if(qm != null && qm.SequenceId != ackedSeqId) throw new Exception($"Acked sequence ID {ackedSeqId} does not match queued message sequence ID {qm.SequenceId}. Count: {messageQueue.Count}. Next: {nextQueuedSequenceId}. ListId: {listId}");
 			while((messageQueue.Count > 0) && (messageQueue[0] == null)) {

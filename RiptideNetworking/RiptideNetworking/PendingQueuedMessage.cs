@@ -11,7 +11,7 @@ namespace Riptide
     internal class PendingQueuedMessage
     {
         /// <summary>The data of the message.</summary>
-        private readonly byte[] data;
+        internal readonly byte[] data;
 		/// <summary>The <see cref="Connection"/> to use to send (and resend) the pending queued message.</summary>
         private readonly Connection connection;
 		/// <summary>The SequenceId of the message.</summary>
