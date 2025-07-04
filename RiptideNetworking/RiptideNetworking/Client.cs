@@ -31,9 +31,16 @@ namespace Riptide
         public ushort Id => connection.Id;
         /// <inheritdoc cref="Connection.RTT"/>
         public short RTT => connection.RTT;
+		/// <inheritdoc cref="Connection.RTD"/>
+        public short RTD => connection.RTD;
         /// <inheritdoc cref="Connection.SmoothRTT"/>
         /// <remarks>This value is slower to accurately represent lasting changes in latency than <see cref="RTT"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
         public short SmoothRTT => connection.SmoothRTT;
+		/// <inheritdoc cref="Connection.SmoothRTD"/>
+        /// <remarks>This value is slower to accurately represent lasting changes in latency difference than <see cref="RTD"/>, but it is less susceptible to changing drastically due to significant—but temporary—jumps in latency.</remarks>
+        public short SmoothRTD => connection.SmoothRTD;
+		/// <inheritdoc cref="Connection.ExpectedRTT"/>
+        public short ExpectedRTT => connection.ExpectedRTT;
         /// <summary>Sets the client's <see cref="Connection.TimeoutTime"/>.</summary>
         public override int TimeoutTime
         {

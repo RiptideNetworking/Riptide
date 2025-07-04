@@ -16,9 +16,6 @@ namespace Riptide
         /// <summary>The time of the latest send attempt.</summary>
         internal long LastSendTime { get; private set; }
 
-        /// <summary>The multiplier used to determine how long to wait before resending a pending message.</summary>
-        private const float RetryTimeMultiplier = 1.2f;
-
         /// <summary>A pool of reusable <see cref="PendingMessage"/> instances.</summary>
         private static readonly WrappingList<PendingMessage> pool = new WrappingList<PendingMessage>();
 
@@ -97,10 +94,10 @@ namespace Riptide
             if (!wasCleared)
             {
                 long time = connection.Peer.CurrentTime;
-                if (LastSendTime + (connection.SmoothRTT < 0 ? 25 : connection.SmoothRTT / 2) <= time) // Avoid triggering a resend if the latest resend was less than half a RTT ago
+                if (LastSendTime + connection.ExpectedRTT / 2 <= time) // Avoid triggering a resend if the latest resend was less than half an ExpectedRTT ago
                     TrySend();
                 else
-                    connection.Peer.ExecuteLater(connection.SmoothRTT < 0 ? 50 : (long)Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier), new ResendEvent(this, time));
+                    connection.Peer.ExecuteLater(connection.ExpectedRTT, new ResendEvent(this, time));
             }
         }
 
@@ -120,7 +117,7 @@ namespace Riptide
             LastSendTime = connection.Peer.CurrentTime;
             sendAttempts++;
 
-            connection.Peer.ExecuteLater(connection.SmoothRTT < 0 ? 50 : (long)Math.Max(10, connection.SmoothRTT * RetryTimeMultiplier), new ResendEvent(this, connection.Peer.CurrentTime));
+            connection.Peer.ExecuteLater(connection.ExpectedRTT, new ResendEvent(this, connection.Peer.CurrentTime));
         }
 
         /// <summary>Clears the message.</summary>
