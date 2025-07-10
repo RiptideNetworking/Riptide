@@ -36,7 +36,7 @@ jobs:
         run: |
           git checkout unity-package
           git add Packages
-          if git diff --cached --quiet; then echo "No changes to commit"; else git commit --amend --no-edit; fi
+          git commit --amend --no-edit
 
       - name: Create LFS file list
         run: git lfs ls-files -l | cut -d' ' -f1 | sort > .lfs-assets-id
@@ -73,5 +73,5 @@ jobs:
       - name: Commit and push changes
         run: |
           git add Packages
-          if git diff --cached --quiet; then echo "No changes to commit"; else git commit --amend --no-edit; fi
+          git commit --amend --no-edit
           git push
