@@ -2119,7 +2119,47 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.Start.html"
+          "relative_path": "api/Riptide.Server.OnClientConnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.OnConnectionFailed.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.OnMessageReceived.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.OnClientDisconnected.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Server.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Server.html"
         }
       },
       "version": ""
@@ -2229,7 +2269,7 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnClientConnected.html"
+          "relative_path": "api/Riptide.Server.ClientConnected.html"
         }
       },
       "version": ""
@@ -2239,7 +2279,7 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnConnectionFailed.html"
+          "relative_path": "api/Riptide.Server.ConnectionFailed.html"
         }
       },
       "version": ""
@@ -2249,7 +2289,7 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnMessageReceived.html"
+          "relative_path": "api/Riptide.Server.MessageReceived.html"
         }
       },
       "version": ""
@@ -2259,17 +2299,7 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.OnClientDisconnected.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.html"
+          "relative_path": "api/Riptide.Server.ClientDisconnected.html"
         }
       },
       "version": ""
@@ -2379,37 +2409,7 @@
       "source_relative_path": "api/Riptide.Server.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Server.ClientConnected.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.ConnectionFailed.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.MessageReceived.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Server.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Server.ClientDisconnected.html"
+          "relative_path": "api/Riptide.Server.Start.html"
         }
       },
       "version": ""
@@ -3619,106 +3619,6 @@
       "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesIn.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesOut.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableIn.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableOut.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableDiscarded.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableUniques.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingReliableSends.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.-ctor.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.Reset.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.ConnectionMetrics.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
-      "output": {
-        ".html": {
           "relative_path": "api/Riptide.Utils.ConnectionMetrics.MessagesIn.html"
         }
       },
@@ -3876,6 +3776,106 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableBytesOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableIn.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableOut.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableDiscarded.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.ReliableUniques.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.RollingReliableSends.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.-ctor.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.Reset.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.ConnectionMetrics.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.ConnectionMetrics.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
@@ -3930,166 +3930,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.Converter.GetBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToInt.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.IntToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.UIntToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.IntFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.UIntFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromLong.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromULong.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToLong.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToULong.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.LongToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ULongToBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.LongFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ULongFromBits.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.Converter.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html"
         }
       },
       "version": ""
@@ -4259,6 +4099,166 @@
       "source_relative_path": "api/Riptide.Utils.Converter.yml",
       "output": {
         ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToUInt.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.IntToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UIntToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.IntFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.UIntFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromLong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromULong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToLong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToULong.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.LongToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ULongToBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.LongFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ULongFromBits.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.FromFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.Converter.ToFloat.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.Converter.yml",
+      "output": {
+        ".html": {
           "relative_path": "api/Riptide.Utils.Converter.FloatToBits.html"
         }
       },
@@ -4359,36 +4359,6 @@
       "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.PriorityQueue-2.PeekPriority.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Clear.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.PriorityQueue-2.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
-      "output": {
-        ".html": {
           "relative_path": "api/Riptide.Utils.PriorityQueue-2.Count.html"
         }
       },
@@ -4446,10 +4416,60 @@
     },
     {
       "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.PeekPriority.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.Clear.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.PriorityQueue-2.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.PriorityQueue-2.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
       "source_relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.yml",
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RiptideLogger.LogMethod.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RiptideLogger.Log.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RiptideLogger.html"
         }
       },
       "version": ""
@@ -4526,20 +4546,30 @@
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.Log.html"
+          "relative_path": "api/Riptide.Utils.RollingStat.Mean.html"
         }
       },
       "version": ""
     },
     {
       "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RiptideLogger.yml",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
       "output": {
         ".html": {
-          "relative_path": "api/Riptide.Utils.RiptideLogger.html"
+          "relative_path": "api/Riptide.Utils.RollingStat.Variance.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Riptide.Utils.RollingStat.StandardDev.html"
         }
       },
       "version": ""
@@ -4580,36 +4610,6 @@
       "output": {
         ".html": {
           "relative_path": "api/Riptide.Utils.RollingStat.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.RollingStat.Mean.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.RollingStat.Variance.html"
-        }
-      },
-      "version": ""
-    },
-    {
-      "type": "ManagedReference",
-      "source_relative_path": "api/Riptide.Utils.RollingStat.yml",
-      "output": {
-        ".html": {
-          "relative_path": "api/Riptide.Utils.RollingStat.StandardDev.html"
         }
       },
       "version": ""
@@ -4840,6 +4840,16 @@
       "output": {
         ".html": {
           "relative_path": "manual/updates/release-notes/v2.2.0.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "manual/updates/release-notes/v2.2.1.md",
+      "output": {
+        ".html": {
+          "relative_path": "manual/updates/release-notes/v2.2.1.html"
         }
       },
       "version": ""
