@@ -421,6 +421,7 @@ namespace Riptide
 			// can be ignored and ack can cover a range of bytes bigger than the sent bytes
 			// as well. also add atd to rtt in order to send less stuff twice using
 			// rtt + rtd * 4 as the retry time
+			// also add some congestion management
 			ushort ackedSeqId = message.GetUShort();
 			bool successfull = message.GetBool();
 			ushort listId = (ushort)(ackedSeqId - nextQueuedSequenceId + messageQueue.Count);
