@@ -98,7 +98,7 @@ namespace Riptide
         /// <summary>Checks whether or not messages with the given ID should be relayed.</summary>
         /// <param name="forMessageId">The message ID to check.</param>
         /// <returns>Whether or not messages with the given ID should be relayed.</returns>
-        internal bool ShouldRelay(ushort forMessageId)
+        public bool ShouldRelay(ushort forMessageId)
         {
             return (filter[forMessageId / BitsPerInt] & (1 << (forMessageId % BitsPerInt))) != 0;
         }
