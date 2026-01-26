@@ -102,5 +102,8 @@ namespace Riptide
         {
             return (filter[forMessageId / BitsPerInt] & (1 << (forMessageId % BitsPerInt))) != 0;
         }
+
+        /// <inheritdoc cref="ShouldRelay(ushort)"/>
+        public void ShouldRelay(Enum forMessageId) => ShouldRelay((ushort)(object)forMessageId);
     }
 }
