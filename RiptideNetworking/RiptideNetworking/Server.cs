@@ -2,11 +2,13 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
+// Modified from Erol Bircan
 
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 
@@ -34,7 +36,7 @@ namespace Riptide
             set
             {
                 defaultTimeout = value;
-                foreach (Connection connection in clients.Values)
+                foreach (Connection connection in Clients)
                     connection.TimeoutTime = defaultTimeout;
             }
         }
@@ -62,7 +64,7 @@ namespace Riptide
         /// <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
         private readonly List<Connection> pendingConnections;
         /// <summary>Currently connected clients.</summary>
-        private Dictionary<ushort, Connection> clients;
+        private ConcurrentDictionary<ushort, Connection> clients;
         /// <summary>Clients that have timed out and need to be removed from <see cref="clients"/>.</summary>
         private readonly List<Connection> timedOutClients;
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
@@ -70,7 +72,7 @@ namespace Riptide
         /// <summary>The underlying transport's server that is used for sending and receiving data.</summary>
         private IServer transport;
         /// <summary>All currently unused client IDs.</summary>
-        private Queue<ushort> availableClientIds;
+        private ConcurrentQueue<ushort> availableClientIds;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
@@ -79,7 +81,7 @@ namespace Riptide
         {
             this.transport = transport;
             pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
+            clients = new ConcurrentDictionary<ushort, Connection>();
             timedOutClients = new List<Connection>();
         }
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
@@ -111,7 +113,7 @@ namespace Riptide
                 CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             MaxClientCount = maxClientCount;
-            clients = new Dictionary<ushort, Connection>(maxClientCount);
+            clients = new ConcurrentDictionary<ushort, Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
@@ -192,7 +194,7 @@ namespace Riptide
                 AcceptConnection(connection);
             else if (ClientCount < MaxClientCount)
             {
-                if (!clients.ContainsValue(connection) && !pendingConnections.Contains(connection))
+                if (!clients.ContainsKey(connection.Id) && !pendingConnections.Contains(connection))
                 {
                     pendingConnections.Add(connection);
                     Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
@@ -235,17 +237,19 @@ namespace Riptide
         {
             if (ClientCount < MaxClientCount)
             {
-                if (!clients.ContainsValue(connection))
+                ushort clientId = GetAvailableClientId();
+                if (clients.TryAdd(clientId, connection))
                 {
-                    ushort clientId = GetAvailableClientId();
                     connection.Id = clientId;
-                    clients.Add(clientId, connection);
                     connection.ResetTimeout();
                     connection.SendWelcome();
                     return;
                 }
                 else
+                {
                     Reject(connection, RejectReason.AlreadyConnected);
+                    availableClientIds.Enqueue(clientId);
+                }
             }
             else
                 Reject(connection, RejectReason.ServerFull);
@@ -445,8 +449,7 @@ namespace Riptide
 
             transport.Close(client);
 
-            if (clients.Remove(client.Id))
-                availableClientIds.Enqueue(client.Id);
+            if (clients.TryRemove(client.Id, out Connection _)) availableClientIds.Enqueue(client.Id);
 
             if (client.IsConnected)
                 OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
@@ -488,7 +491,7 @@ namespace Riptide
             if (MaxClientCount > ushort.MaxValue - 1)
                 throw new Exception($"A server's max client count may not exceed {ushort.MaxValue - 1}!");
 
-            availableClientIds = new Queue<ushort>(MaxClientCount);
+            availableClientIds = new ConcurrentQueue<ushort>();
             for (ushort i = 1; i <= MaxClientCount; i++)
                 availableClientIds.Enqueue(i);
         }
@@ -497,8 +500,8 @@ namespace Riptide
         /// <returns>The client ID. 0 if none were available.</returns>
         private ushort GetAvailableClientId()
         {
-            if (availableClientIds.Count > 0)
-                return availableClientIds.Dequeue();
+            if (availableClientIds.TryDequeue(out ushort id))
+                return id;
             
             RiptideLogger.Log(LogType.Error, LogName, "No available client IDs, assigned 0!");
             return 0;
