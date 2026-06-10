@@ -117,6 +117,65 @@ namespace Riptide
         }
     }
 
+    /// <summary>The exception that is thrown when a message does not contain enough bits to retrieve a value of the specified type.</summary>
+    public class ReadingOrderOrCapacityException : Exception
+    {
+        /// <summary>
+        /// The number of unread bits remaining in the message when the exception was thrown. This is not necessarily the number of bits required to retrieve a value of the specified type, as the exception can also be thrown if the reading order is incorrect (e.g. trying to read a byte before reading a preceding bool).
+        /// </summary>
+        public int UnreadBits;
+        /// <summary>
+        /// The number of bits required to retrieve a value of the specified type. This is not necessarily the number of unread bits remaining in the message when the exception was thrown, as the exception can also be thrown if the reading order is incorrect (e.g. trying to read a byte before reading a preceding bool).
+        /// </summary>
+        public int RequiredBits;
+        /// <summary>
+        /// The name of the value that could not be retrieved.
+        /// </summary>
+        public readonly string ValueName;
+
+        /// <summary>Initializes a new <see cref="ReadingOrderOrCapacityException"/> instance.</summary>
+        public ReadingOrderOrCapacityException() { }
+        /// <summary>Initializes a new <see cref="ReadingOrderOrCapacityException"/> instance with a specified error message.</summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        public ReadingOrderOrCapacityException(string message) : base(message) { }
+        /// <summary>Initializes a new <see cref="ReadingOrderOrCapacityException"/> instance with a specified error message and a reference to the inner exception that is the cause of this exception.</summary>
+        /// <param name="message">The error message that explains the reason for the exception.</param>
+        /// <param name="inner">The exception that is the cause of the current exception. If <paramref name="inner"/> is not a null reference, the current exception is raised in a catch block that handles the inner exception.</param>
+        public ReadingOrderOrCapacityException(string message, Exception inner) : base(message, inner) { }
+        /// <summary>Initializes a new <see cref="ReadingOrderOrCapacityException"/> instance and constructs an error message from the given information.</summary>
+        /// <param name="unreadbits">The number of unread bits remaining in the message when the exception was thrown.</param>
+        /// <param name="declaringType">The name of the type containing the handler method.</param>
+        public ReadingOrderOrCapacityException(int unreadbits, string declaringType) : base(GetErrorMessage(unreadbits, declaringType))
+        {
+            UnreadBits = unreadbits;
+            ValueName = declaringType;
+        }
+
+        /// <summary>Initializes a new <see cref="ReadingOrderOrCapacityException"/> instance and constructs an error message from the given information.</summary>
+        /// <param name="unreadbits">The number of unread bits remaining in the message when the exception was thrown.</param>
+        /// <param name="declaringType">The name of the type containing the handler method.</param>
+        public ReadingOrderOrCapacityException(int unreadbits, int requiredBits, string declaringType) : base(GetErrorMessage(unreadbits, requiredBits, declaringType))
+        {
+            UnreadBits = unreadbits;
+            RequiredBits = requiredBits;
+            ValueName = declaringType;
+        }
+
+
+        /// <summary>Constructs the error message from the given information.</summary>
+        /// <returns>The error message.</returns>
+        private static string GetErrorMessage(int unreadBits, string valueName)
+        {
+            return $"Message only contains {unreadBits} unread {Helper.CorrectForm(unreadBits, "bit")}, which is not enough to retrieve a value of type '{valueName}'!";
+        }
+        /// <summary>Constructs the error message from the given information.</summary>
+        /// <returns>The error message.</returns>
+        private static string GetErrorMessage(int unreadBits, int requiredBits, string valueName)
+        {
+            return $"Message only contains {unreadBits} unread {Helper.CorrectForm(unreadBits, "bit")}, which is not enough to retrieve a value of type '{valueName}' (requires {requiredBits} bits)!";
+        }
+    }
+
     /// <summary>The exception that is thrown when a method with a <see cref="MessageHandlerAttribute"/> does not have an acceptable message handler method signature (either <see cref="Server.MessageHandler"/> or <see cref="Client.MessageHandler"/>).</summary>
     public class InvalidHandlerSignatureException : Exception
     {

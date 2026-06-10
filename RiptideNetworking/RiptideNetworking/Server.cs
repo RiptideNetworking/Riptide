@@ -2,7 +2,6 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
-// Modified from Erol Bircan
 
 using Riptide.Transports;
 using Riptide.Utils;
@@ -74,6 +73,14 @@ namespace Riptide
         /// <summary>All currently unused client IDs.</summary>
         private ConcurrentQueue<ushort> availableClientIds;
 
+        /// <summary>This bool using for preventing exceptions. If set to true, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.</summary>
+        public static bool PREVENT_EXCEPTION { get; private set; } = true;
+        /// <summary>
+        /// Sets whether or not the server should throw an exception when handling messages. If set to <see langword="true"/>, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.
+        /// </summary>
+        /// <param name="value">New value for the PREVENT_EXCEPTION property.</param>
+        public static void SetPreventException(bool value) => PREVENT_EXCEPTION = value;
+
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
         /// <param name="logName">The name to use when logging messages via <see cref="RiptideLogger"/>.</param>
@@ -90,22 +97,31 @@ namespace Riptide
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, bool)"/> must be called again.</remarks>
+        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, bool, bool)"/> must be called again.</remarks>
         public void ChangeTransport(IServer newTransport)
         {
             Stop();
             transport = newTransport;
         }
 
+        /// <summary>
+        /// Sets whether or not the server should throw an exception when handling messages. If set to <see langword="true"/>, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.
+        /// </summary>
+        /// <param name="preventExceptions">New value for the PREVENT_EXCEPTION property.</param>
+        public void ChangeExceptionPrevention(bool preventExceptions) => SetPreventException(preventExceptions);
+
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="useMessageHandlers">Whether or not the server should use the built-in message handler system.</param>
+        /// <param name="preventExceptions">Whether or not the server should prevent exceptions when handling messages.</param>
         /// <remarks>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</remarks>
-        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, bool useMessageHandlers = true)
+        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, bool useMessageHandlers = true, bool preventExceptions = true)
         {
             Stop();
+
+            SetPreventException(preventExceptions);
 
             IncreaseActiveCount();
             this.useMessageHandlers = useMessageHandlers;

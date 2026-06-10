@@ -2,7 +2,6 @@
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
-// Modified from Erol Bircan
 
 using Riptide.Transports;
 using Riptide.Utils;
