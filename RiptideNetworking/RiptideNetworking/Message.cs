@@ -6,7 +6,7 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -86,7 +86,7 @@ namespace Riptide
         /// <remarks>Changes will not affect <see cref="Server"/> and <see cref="Client"/> instances which are already running until they are restarted.</remarks>
         public static byte InstancesPerPeer { get; set; } = 4;
         /// <summary>A pool of reusable message instances.</summary>
-        private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
+        private static readonly ConcurrentDictionary<uint, Message> pool = new ConcurrentDictionary<uint, Message>();
 
         static Message()
         {
@@ -124,8 +124,29 @@ namespace Riptide
         /// <summary>The next bit to be written.</summary>
         private int writeBit;
 
+        /// <summary>Determines which id is this Message.</summary>
+        public uint MessageId { get; private set; } = 0;
+        /// <summary>Determines which is the next value fot give to the next mmessage [LIFO].</summary>
+        private static readonly ConcurrentStack<uint> indexedKeys = new ConcurrentStack<uint>();
+        /// <summary>For give unique ID for each message global thread-safe counter.</summary>
+        private static int globalMessageIdCounter = 0;
+
         /// <summary>Initializes a reusable <see cref="Message"/> instance.</summary>
-        private Message() => data = new ulong[maxArraySize];
+        private Message()
+        {
+            data = new ulong[maxArraySize];
+
+            // UNBREAKABLE THRESHOLD: When the constructor is called, any object not in the pool/in use. Then the atomic loop that continuesly run for tries to find and create UNIQUE ID
+            uint gId;
+            do
+            {
+                // The `interlocked.Increment` int automatically goes negative when it reaches the limit. When it goes negative, the `uint cast` ensures that the transaction volume is at the maximum value the `uint` value can hold, which is 4.2 billion.
+                gId = (uint)System.Threading.Interlocked.Increment(ref globalMessageIdCounter);
+            }
+            while (gId == 0 || pool.ContainsKey(gId));
+
+            MessageId = gId;
+        }
 
         /// <summary>Gets a completely empty message instance with no header.</summary>
         /// <returns>An empty message instance.</returns>
@@ -175,16 +196,15 @@ namespace Riptide
             {
                 // No Servers or Clients are running, empty the list and reset the capacity
                 pool.Clear();
-                pool.Capacity = InstancesPerPeer * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+                indexedKeys.Clear();
             }
             else
             {
                 // Reset the pool capacity and number of Message instances in the pool to what is appropriate for how many Servers & Clients are active
                 int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
-                if (pool.Count > idealInstanceAmount)
+                while (pool.Count > idealInstanceAmount && indexedKeys.TryPop(out uint key))
                 {
-                    pool.RemoveRange(Peer.ActiveCount * InstancesPerPeer, pool.Count - idealInstanceAmount);
-                    pool.Capacity = idealInstanceAmount * 2;
+                    pool.TryRemove(key, out Message _);
                 }
             }
         }
@@ -193,26 +213,19 @@ namespace Riptide
         /// <returns>A message instance ready to be used for sending or handling.</returns>
         private static Message RetrieveFromPool()
         {
-            Message message;
-            if (pool.Count > 0)
-            {
-                message = pool[0];
-                pool.RemoveAt(0);
-            }
-            else
-                message = new Message();
-
-            return message;
+            return indexedKeys.TryPop(out uint key) && pool.TryGetValue(key, out Message message) ? message : new Message();
         }
 
         /// <summary>Returns the message instance to the internal pool so it can be reused.</summary>
         public void Release()
         {
-            if (pool.Count < pool.Capacity)
+            int idealCap = Peer.ActiveCount < 1 ? InstancesPerPeer * 2 : Peer.ActiveCount * InstancesPerPeer;
+            if (pool.Count < idealCap)
             {
-                // Pool exists and there's room
-                if (!pool.Contains(this))
-                    pool.Add(this); // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+                if (pool.ContainsKey(MessageId) == false && pool.TryAdd(MessageId, this)) // Only add it if it's not already in the list, otherwise this method being called twice in a row for whatever reason could cause *serious* issues
+                {
+                    indexedKeys.Push(MessageId);
+                }
             }
         }
         #endregion
@@ -608,8 +621,12 @@ namespace Riptide
         {
             if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ByteName, $"{default(byte)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, ByteName);
             }
 
             byte value = Converter.ByteFromBits(data, readBit);
@@ -623,8 +640,12 @@ namespace Riptide
         {
             if (UnreadBits < BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName, $"{default(sbyte)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(SByteName, $"{default(sbyte)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnwrittenBits, SByteName);
             }
 
             sbyte value = Converter.SByteFromBits(data, readBit);
@@ -797,8 +818,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ByteName));
-                amount = UnreadBits / BitsPerByte;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ByteName));
+                    amount = UnreadBits / BitsPerByte;
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * BitsPerByte, ByteName);
             }
 
             if (readBit % BitsPerByte == 0)
@@ -824,8 +849,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, SByteName));
-                amount = UnreadBits / BitsPerByte;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, SByteName));
+                    amount = UnreadBits / BitsPerByte;
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * BitsPerByte, SByteName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -855,8 +884,12 @@ namespace Riptide
         {
             if (UnreadBits < 1)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, $"{default(bool)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(BoolName, $"{default(bool)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, BoolName);
             }
 
             return Converter.BoolFromBit(data, readBit++);
@@ -916,8 +949,12 @@ namespace Riptide
         {
             if (UnreadBits < amount)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, BoolName));
-                amount = UnreadBits;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, BoolName));
+                    amount = UnreadBits;
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount, BoolName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -958,8 +995,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName, $"{default(short)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ShortName, $"{default(short)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, ShortName);
             }
 
             short value = Converter.ShortFromBits(data, readBit);
@@ -973,8 +1014,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UShortName, $"{default(ushort)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, UShortName);
             }
 
             ushort value = Converter.UShortFromBits(data, readBit);
@@ -1088,8 +1133,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(short) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ShortName));
-                amount = UnreadBits / (sizeof(short) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ShortName));
+                    amount = UnreadBits / (sizeof(short) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(short) * BitsPerByte, ShortName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1107,8 +1156,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(ushort) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UShortName));
-                amount = UnreadBits / (sizeof(ushort) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UShortName));
+                    amount = UnreadBits / (sizeof(ushort) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(ushort) * BitsPerByte, UShortName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1152,8 +1205,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName, $"{default(int)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(IntName, $"{default(int)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, IntName);
             }
 
             int value = Converter.IntFromBits(data, readBit);
@@ -1167,8 +1224,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(UIntName, $"{default(uint)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, UIntName);
             }
 
             uint value = Converter.UIntFromBits(data, readBit);
@@ -1282,8 +1343,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(int) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, IntName));
-                amount = UnreadBits / (sizeof(int) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, IntName));
+                    amount = UnreadBits / (sizeof(int) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(int) * BitsPerByte, IntName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1301,8 +1366,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(uint) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UIntName));
-                amount = UnreadBits / (sizeof(uint) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, UIntName));
+                    amount = UnreadBits / (sizeof(uint) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(uint) * BitsPerByte, UIntName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1346,8 +1415,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName, $"{default(long)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(LongName, $"{default(long)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, LongName);
             }
 
             long value = Converter.LongFromBits(data, readBit);
@@ -1361,8 +1434,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(ULongName, $"{default(ulong)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, ULongName);
             }
 
             ulong value = Converter.ULongFromBits(data, readBit);
@@ -1476,8 +1553,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(long) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, LongName));
-                amount = UnreadBits / (sizeof(long) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, LongName));
+                    amount = UnreadBits / (sizeof(long) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(long) * BitsPerByte, LongName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1495,8 +1576,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(ulong) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ULongName));
-                amount = UnreadBits / (sizeof(ulong) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, ULongName));
+                    amount = UnreadBits / (sizeof(ulong) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(ulong) * BitsPerByte, ULongName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1527,8 +1612,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName, $"{default(float)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(FloatName, $"{default(float)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, FloatName);
             }
 
             float value = Converter.FloatFromBits(data, readBit);
@@ -1593,8 +1682,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(float) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, FloatName));
-                amount = UnreadBits / (sizeof(float) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, FloatName));
+                    amount = UnreadBits / (sizeof(float) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(float) * BitsPerByte, FloatName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1625,8 +1718,12 @@ namespace Riptide
         {
             if (UnreadBits < sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(DoubleName, $"{default(double)}"));
-                return default;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(DoubleName, $"{default(double)}"));
+                    return default;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, DoubleName);
             }
 
             double value = Converter.DoubleFromBits(data, readBit);
@@ -1691,8 +1788,12 @@ namespace Riptide
         {
             if (UnreadBits < amount * sizeof(double) * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, DoubleName));
-                amount = UnreadBits / (sizeof(double) * BitsPerByte);
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(amount, DoubleName));
+                    amount = UnreadBits / (sizeof(double) * BitsPerByte);
+                }
+                else throw new ReadingOrderOrCapacityException(UnreadBits, amount * sizeof(double) * BitsPerByte, DoubleName);
             }
 
             for (int i = 0; i < amount; i++)
@@ -1720,8 +1821,12 @@ namespace Riptide
             int length = (int)GetVarULong(); // Get the length of the string (in bytes, NOT characters)
             if (UnreadBits < length * BitsPerByte)
             {
-                RiptideLogger.Log(LogType.Error, NotEnoughBitsError(StringName, "shortened string"));
-                length = UnreadBits / BitsPerByte;
+                if (Server.PREVENT_EXCEPTION)
+                {
+                    RiptideLogger.Log(LogType.Error, NotEnoughBitsError(StringName, "shortened string"));
+                    length = UnreadBits / BitsPerByte;
+                }
+                throw new ReadingOrderOrCapacityException(UnreadBits, length * BitsPerByte, StringName);
             }
 
             string value = Encoding.UTF8.GetString(GetBytes(length), 0, length);

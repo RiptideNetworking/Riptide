@@ -96,6 +96,12 @@ namespace Riptide
             transport = newTransport;
         }
 
+        /// <summary>
+        /// Sets whether or not the server should throw an exception when handling messages. If set to <see langword="true"/>, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.
+        /// </summary>
+        /// <param name="preventExceptions">New value for the PREVENT_EXCEPTION property.</param>
+        public void ChangeExceptionPrevention(bool preventExceptions) => Server.SetPreventException(preventExceptions);
+
         /// <summary>Attempts to connect to a server at the given host address.</summary>
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
@@ -107,9 +113,11 @@ namespace Riptide
         ///   <para>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</para>
         /// </remarks>
         /// <returns><see langword="true"/> if a connection attempt will be made. <see langword="false"/> if an issue occurred (such as <paramref name="hostAddress"/> being in an invalid format) and a connection attempt will <i>not</i> be made.</returns>
-        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null, bool useMessageHandlers = true)
+        public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null, bool useMessageHandlers = true, bool preventExceptions = true)
         {
             Disconnect();
+
+            Server.SetPreventException(preventExceptions);
 
             SubToTransportEvents();
 

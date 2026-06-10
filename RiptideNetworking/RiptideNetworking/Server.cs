@@ -7,6 +7,7 @@ using Riptide.Transports;
 using Riptide.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 
@@ -34,7 +35,7 @@ namespace Riptide
             set
             {
                 defaultTimeout = value;
-                foreach (Connection connection in clients.Values)
+                foreach (Connection connection in Clients)
                     connection.TimeoutTime = defaultTimeout;
             }
         }
@@ -62,7 +63,7 @@ namespace Riptide
         /// <summary>Currently pending connections which are waiting to be accepted or rejected.</summary>
         private readonly List<Connection> pendingConnections;
         /// <summary>Currently connected clients.</summary>
-        private Dictionary<ushort, Connection> clients;
+        private ConcurrentDictionary<ushort, Connection> clients;
         /// <summary>Clients that have timed out and need to be removed from <see cref="clients"/>.</summary>
         private readonly List<Connection> timedOutClients;
         /// <summary>Methods used to handle messages, accessible by their corresponding message IDs.</summary>
@@ -70,7 +71,15 @@ namespace Riptide
         /// <summary>The underlying transport's server that is used for sending and receiving data.</summary>
         private IServer transport;
         /// <summary>All currently unused client IDs.</summary>
-        private Queue<ushort> availableClientIds;
+        private ConcurrentQueue<ushort> availableClientIds;
+
+        /// <summary>This bool using for preventing exceptions. If set to true, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.</summary>
+        public static bool PREVENT_EXCEPTION { get; private set; } = true;
+        /// <summary>
+        /// Sets whether or not the server should throw an exception when handling messages. If set to <see langword="true"/>, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.
+        /// </summary>
+        /// <param name="value">New value for the PREVENT_EXCEPTION property.</param>
+        public static void SetPreventException(bool value) => PREVENT_EXCEPTION = value;
 
         /// <summary>Handles initial setup.</summary>
         /// <param name="transport">The transport to use for sending and receiving data.</param>
@@ -79,7 +88,7 @@ namespace Riptide
         {
             this.transport = transport;
             pendingConnections = new List<Connection>();
-            clients = new Dictionary<ushort, Connection>();
+            clients = new ConcurrentDictionary<ushort, Connection>();
             timedOutClients = new List<Connection>();
         }
         /// <summary>Handles initial setup using the built-in UDP transport.</summary>
@@ -88,22 +97,31 @@ namespace Riptide
 
         /// <summary>Stops the server if it's running and swaps out the transport it's using.</summary>
         /// <param name="newTransport">The new underlying transport server to use for sending and receiving data.</param>
-        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, bool)"/> must be called again.</remarks>
+        /// <remarks>This method does not automatically restart the server. To continue accepting connections, <see cref="Start(ushort, ushort, byte, bool, bool)"/> must be called again.</remarks>
         public void ChangeTransport(IServer newTransport)
         {
             Stop();
             transport = newTransport;
         }
 
+        /// <summary>
+        /// Sets whether or not the server should throw an exception when handling messages. If set to <see langword="true"/>, the server will not throw exceptions when handling messages (like normal). Othervise it will throw an exception.
+        /// </summary>
+        /// <param name="preventExceptions">New value for the PREVENT_EXCEPTION property.</param>
+        public void ChangeExceptionPrevention(bool preventExceptions) => SetPreventException(preventExceptions);
+
         /// <summary>Starts the server.</summary>
         /// <param name="port">The local port on which to start the server.</param>
         /// <param name="maxClientCount">The maximum number of concurrent connections to allow.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
         /// <param name="useMessageHandlers">Whether or not the server should use the built-in message handler system.</param>
+        /// <param name="preventExceptions">Whether or not the server should prevent exceptions when handling messages.</param>
         /// <remarks>Setting <paramref name="useMessageHandlers"/> to <see langword="false"/> will disable the automatic detection and execution of methods with the <see cref="MessageHandlerAttribute"/>, which is beneficial if you prefer to handle messages via the <see cref="MessageReceived"/> event.</remarks>
-        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, bool useMessageHandlers = true)
+        public void Start(ushort port, ushort maxClientCount, byte messageHandlerGroupId = 0, bool useMessageHandlers = true, bool preventExceptions = true)
         {
             Stop();
+
+            SetPreventException(preventExceptions);
 
             IncreaseActiveCount();
             this.useMessageHandlers = useMessageHandlers;
@@ -111,7 +129,7 @@ namespace Riptide
                 CreateMessageHandlersDictionary(messageHandlerGroupId);
 
             MaxClientCount = maxClientCount;
-            clients = new Dictionary<ushort, Connection>(maxClientCount);
+            clients = new ConcurrentDictionary<ushort, Connection>();
             InitializeClientIds();
 
             SubToTransportEvents();
@@ -192,7 +210,7 @@ namespace Riptide
                 AcceptConnection(connection);
             else if (ClientCount < MaxClientCount)
             {
-                if (!clients.ContainsValue(connection) && !pendingConnections.Contains(connection))
+                if (!clients.ContainsKey(connection.Id) && !pendingConnections.Contains(connection))
                 {
                     pendingConnections.Add(connection);
                     Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
@@ -235,17 +253,19 @@ namespace Riptide
         {
             if (ClientCount < MaxClientCount)
             {
-                if (!clients.ContainsValue(connection))
+                ushort clientId = GetAvailableClientId();
+                if (clients.TryAdd(clientId, connection))
                 {
-                    ushort clientId = GetAvailableClientId();
                     connection.Id = clientId;
-                    clients.Add(clientId, connection);
                     connection.ResetTimeout();
                     connection.SendWelcome();
                     return;
                 }
                 else
+                {
                     Reject(connection, RejectReason.AlreadyConnected);
+                    availableClientIds.Enqueue(clientId);
+                }
             }
             else
                 Reject(connection, RejectReason.ServerFull);
@@ -445,8 +465,7 @@ namespace Riptide
 
             transport.Close(client);
 
-            if (clients.Remove(client.Id))
-                availableClientIds.Enqueue(client.Id);
+            if (clients.TryRemove(client.Id, out Connection _)) availableClientIds.Enqueue(client.Id);
 
             if (client.IsConnected)
                 OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
@@ -488,7 +507,7 @@ namespace Riptide
             if (MaxClientCount > ushort.MaxValue - 1)
                 throw new Exception($"A server's max client count may not exceed {ushort.MaxValue - 1}!");
 
-            availableClientIds = new Queue<ushort>(MaxClientCount);
+            availableClientIds = new ConcurrentQueue<ushort>();
             for (ushort i = 1; i <= MaxClientCount; i++)
                 availableClientIds.Enqueue(i);
         }
@@ -497,8 +516,8 @@ namespace Riptide
         /// <returns>The client ID. 0 if none were available.</returns>
         private ushort GetAvailableClientId()
         {
-            if (availableClientIds.Count > 0)
-                return availableClientIds.Dequeue();
+            if (availableClientIds.TryDequeue(out ushort id))
+                return id;
             
             RiptideLogger.Log(LogType.Error, LogName, "No available client IDs, assigned 0!");
             return 0;

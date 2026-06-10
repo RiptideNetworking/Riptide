@@ -6,7 +6,7 @@
 using Riptide.Transports;
 using Riptide.Utils;
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Riptide
 {
@@ -104,7 +104,7 @@ namespace Riptide
         /// <summary>The sequencer for reliable messages.</summary>
         private readonly ReliableSequencer reliable;
         /// <summary>The currently pending reliably sent messages whose delivery has not been acknowledged yet. Stored by sequence ID.</summary>
-        private readonly Dictionary<ushort, PendingMessage> pendingMessages;
+        private readonly ConcurrentDictionary<ushort, PendingMessage> pendingMessages;
         /// <summary>The connection's current state.</summary>
         private ConnectionState state;
         /// <summary>The number of consecutive times that the <see cref="MaxAvgSendAttempts"/> threshold was exceeded.</summary>
@@ -136,7 +136,7 @@ namespace Riptide
             MaxSendAttempts = 15;
             MaxNotifyLoss = 0.05f; // 5%
             NotifyLossResilience = 64;
-            pendingMessages = new Dictionary<ushort, PendingMessage>();
+            pendingMessages = new ConcurrentDictionary<ushort, PendingMessage>();
         }
 
         /// <summary>Initializes connection data.</summary>
@@ -184,7 +184,7 @@ namespace Riptide
             {
                 sequenceId = reliable.NextSequenceId;
                 PendingMessage pendingMessage = PendingMessage.Create(sequenceId, message, this);
-                pendingMessages.Add(sequenceId, pendingMessage);
+                pendingMessages.TryAdd(sequenceId, pendingMessage);
                 pendingMessage.TrySend();
                 Metrics.ReliableUniques++;
             }
@@ -249,11 +249,10 @@ namespace Riptide
         /// <param name="sequenceId">The sequence ID that was acknowledged.</param>
         internal void ClearMessage(ushort sequenceId)
         {
-            if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
+            if (pendingMessages.TryRemove(sequenceId, out PendingMessage pendingMessage))
             {
                 ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
-                pendingMessages.Remove(sequenceId);
                 UpdateSendAttemptsViolations();
             }
         }
