@@ -38,11 +38,11 @@ namespace Riptide.Utils
 
         /// <summary>Checks if the bitfield has capacity for the given number of bits.</summary>
         /// <param name="amount">The number of bits for which to check if there is capacity.</param>
-        /// <param name="overflow">The number of bits from <paramref name="amount"/> which there is no capacity for.</param>
+        /// <param name="overflow">The number of bits which are currently in use and would be pushed out of the bitfield.</param>
         /// <returns>Whether or not there is sufficient capacity.</returns>
         internal bool HasCapacityFor(int amount, out int overflow)
         {
-            overflow = count + amount - capacity;
+            overflow = Math.Min(count + amount - capacity, count);
             return overflow < 0;
         }
 
@@ -72,16 +72,15 @@ namespace Riptide.Utils
             else
                 count += amount;
 
-            int s = segments.Count - 1;
-            segments[s] <<= bitShift;
-            s -= 1 + segmentShift;
-            while (s > -1)
+            // Work from the last segment backwards so that no segment is overwritten before its bits have been moved
+            for (int s = segments.Count - 1; s > -1; s--)
             {
-                ulong shiftedBits = (ulong)segments[s] << bitShift;
-                segments[s] = (uint)shiftedBits;
+                int source = s - segmentShift;
+                uint shiftedBits = source > -1 ? segments[source] << bitShift : 0;
+                if (bitShift > 0 && source > 0)
+                    shiftedBits |= segments[source - 1] >> (SegmentSize - bitShift); // Carry over the bits shifted out of the previous segment
 
-                segments[s + 1 + segmentShift] |= (uint)(shiftedBits >> SegmentSize);
-                s--;
+                segments[s] = shiftedBits;
             }
         }
 
