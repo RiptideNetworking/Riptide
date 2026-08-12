@@ -81,10 +81,20 @@ namespace Riptide.Transports.Tcp
                     {
                         // We have enough bytes for a complete size value
                         socket.Receive(sizeBytes, sizeof(int), SocketFlags.None);
-                        nextMessageSize = Converter.ToInt(sizeBytes, 0);
-                        
-                        if (nextMessageSize > 0)
+                        int messageSize = Converter.ToInt(sizeBytes, 0);
+
+                        if (messageSize < 1 || messageSize > peer.ReceiveBuffer.Length)
+                        {
+                            // A size value this far out of range means the stream is out of sync, and since
+                            // there's no way of knowing where the next message starts, it can't be recovered
+                            tryReceiveMore = false;
+                            peer.OnDisconnected(this, DisconnectReason.TransportError);
+                        }
+                        else
+                        {
+                            nextMessageSize = messageSize;
                             tryReceiveMore = TryReceiveMessage(out byteCount);
+                        }
                     }
                     else
                         tryReceiveMore = false;
