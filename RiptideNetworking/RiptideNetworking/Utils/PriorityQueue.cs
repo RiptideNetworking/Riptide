@@ -72,9 +72,13 @@ namespace Riptide.Utils
         public TElement Dequeue()
         {
             TElement returnValue = heap[0].Element;
+            Count--;
 
-            if (Count > 1)
+            if (Count > 0)
             {
+                // The last element has to be moved into the gap left by the removed one, so sift it down
+                // from the root until both of its children have a higher priority value than it does
+                Entry<TElement, TPriority> last = heap[Count];
                 int parent = 0;
                 int leftChild = GetLeftChildIndex(parent);
 
@@ -83,15 +87,17 @@ namespace Riptide.Utils
                     int rightChild = leftChild + 1;
                     int bestChild = (rightChild < Count && comparer.Compare(heap[rightChild].Priority, heap[leftChild].Priority) < 0) ? rightChild : leftChild;
 
+                    if (comparer.Compare(last.Priority, heap[bestChild].Priority) <= 0)
+                        break;
+
                     heap[parent] = heap[bestChild];
                     parent = bestChild;
                     leftChild = GetLeftChildIndex(parent);
                 }
 
-                heap[parent] = heap[Count - 1];
+                heap[parent] = last;
             }
 
-            Count--;
             return returnValue;
         }
 
