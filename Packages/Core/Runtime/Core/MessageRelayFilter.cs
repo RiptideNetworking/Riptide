@@ -79,17 +79,25 @@ namespace Riptide
 
         /// <summary>Enables auto relaying for the given message ID.</summary>
         /// <param name="forMessageId">The message ID to enable relaying for.</param>
+        /// <exception cref="ArgumentOutOfRangeException">The filter is too small to contain <paramref name="forMessageId"/>.</exception>
         public void EnableRelay(ushort forMessageId)
         {
+            if (forMessageId / BitsPerInt >= filter.Length)
+                throw new ArgumentOutOfRangeException(nameof(forMessageId), $"The filter is too small to contain message ID {forMessageId}! Create it with a size of at least {forMessageId + 1}.");
+
             filter[forMessageId / BitsPerInt] |= 1 << (forMessageId % BitsPerInt);
         }
         /// <inheritdoc cref="EnableRelay(ushort)"/>
         public void EnableRelay(Enum forMessageId) => EnableRelay((ushort)(object)forMessageId);
-        
+
         /// <summary>Disables auto relaying for the given message ID.</summary>
-        /// <param name="forMessageId">The message ID to enable relaying for.</param>
+        /// <param name="forMessageId">The message ID to disable relaying for.</param>
+        /// <exception cref="ArgumentOutOfRangeException">The filter is too small to contain <paramref name="forMessageId"/>.</exception>
         public void DisableRelay(ushort forMessageId)
         {
+            if (forMessageId / BitsPerInt >= filter.Length)
+                throw new ArgumentOutOfRangeException(nameof(forMessageId), $"The filter is too small to contain message ID {forMessageId}! Create it with a size of at least {forMessageId + 1}.");
+
             filter[forMessageId / BitsPerInt] &= ~(1 << (forMessageId % BitsPerInt));
         }
         /// <inheritdoc cref="DisableRelay(ushort)"/>
@@ -98,12 +106,18 @@ namespace Riptide
         /// <summary>Checks whether or not messages with the given ID should be relayed.</summary>
         /// <param name="forMessageId">The message ID to check.</param>
         /// <returns>Whether or not messages with the given ID should be relayed.</returns>
+        /// <remarks>Message IDs are received from clients and are therefore not guaranteed to fall within the filter's size, so
+        /// any ID which the filter has no entry for is treated as having relaying disabled.</remarks>
         public bool ShouldRelay(ushort forMessageId)
         {
-            return (filter[forMessageId / BitsPerInt] & (1 << (forMessageId % BitsPerInt))) != 0;
+            int index = forMessageId / BitsPerInt;
+            if (index >= filter.Length)
+                return false;
+
+            return (filter[index] & (1 << (forMessageId % BitsPerInt))) != 0;
         }
 
         /// <inheritdoc cref="ShouldRelay(ushort)"/>
-        public void ShouldRelay(Enum forMessageId) => ShouldRelay((ushort)(object)forMessageId);
+        public bool ShouldRelay(Enum forMessageId) => ShouldRelay((ushort)(object)forMessageId);
     }
 }
