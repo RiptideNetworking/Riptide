@@ -445,6 +445,7 @@ namespace Riptide
 
             transport.Close(client);
 
+            pendingConnections.Remove(client); // In case the connection attempt was never accepted or rejected
             if (clients.Remove(client.Id))
                 availableClientIds.Enqueue(client.Id);
 
