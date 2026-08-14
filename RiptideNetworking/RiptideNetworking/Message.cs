@@ -52,6 +52,8 @@ namespace Riptide
         private const int BitsPerByte = Converter.BitsPerByte;
         /// <summary>The number of bits in each data segment.</summary>
         private const int BitsPerSegment = Converter.BitsPerULong;
+        /// <summary>The value which <see cref="MaxPayloadSize"/> starts out at.</summary>
+        private const int DefaultMaxPayloadSize = 1225;
 
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; }
@@ -67,10 +69,7 @@ namespace Riptide
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
-                MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + value;
-                maxBitCount = MaxSize * BitsPerByte;
-                maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
-                ByteBuffer = new byte[MaxSize];
+                UpdateSizes(value);
                 TrimPool(); // When ActiveSocketCount is 0, this clears the pool
                 PendingMessage.ClearPool();
             }
@@ -88,11 +87,17 @@ namespace Riptide
         /// <summary>A pool of reusable message instances.</summary>
         private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
 
-        static Message()
+        static Message() => UpdateSizes(DefaultMaxPayloadSize);
+
+        /// <summary>Sets <see cref="MaxSize"/> and everything which is derived from it.</summary>
+        /// <param name="maxPayloadSize">The maximum number of bytes of payload data that a message can contain.</param>
+        private static void UpdateSizes(int maxPayloadSize)
         {
-            MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + 1225;
+            MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + maxPayloadSize;
             maxBitCount = MaxSize * BitsPerByte;
-            maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
+            // The methods which clear a message's trailing segment index it by the position just past the end of the
+            // data, so the array's highest index must be that of the segment a full message's end position lands in
+            maxArraySize = maxBitCount / BitsPerSegment + 1;
             ByteBuffer = new byte[MaxSize];
         }
 
