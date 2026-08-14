@@ -448,6 +448,9 @@ namespace Riptide
             if (amount > BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {BitsPerByte} bits at a time!");
 
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
+
             bitfield &= (byte)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're setting
             Converter.ByteToBits(bitfield, data, writeBit);
             writeBit += amount;
@@ -459,6 +462,9 @@ namespace Riptide
         {
             if (amount > sizeof(ushort) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ushort) * BitsPerByte} bits at a time!");
+
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
 
             bitfield &= (ushort)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're adding
             Converter.UShortToBits(bitfield, data, writeBit);
@@ -472,6 +478,9 @@ namespace Riptide
             if (amount > sizeof(uint) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(uint) * BitsPerByte} bits at a time!");
 
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
+
             bitfield &= (1u << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
             Converter.UIntToBits(bitfield, data, writeBit);
             writeBit += amount;
@@ -483,6 +492,9 @@ namespace Riptide
         {
             if (amount > sizeof(ulong) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
 
             bitfield &= (1ul << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
             Converter.ULongToBits(bitfield, data, writeBit);
@@ -1994,6 +2006,8 @@ namespace Riptide
         private const string StringName      = "string";
         /// <summary>The name of an array length value.</summary>
         private const string ArrayLengthName = "array length";
+        /// <summary>The name of a bitfield value.</summary>
+        private const string BitfieldName    = "bitfield";
 
         /// <summary>Constructs an error message for when a message contains insufficient unread bits to retrieve a certain value.</summary>
         /// <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>
