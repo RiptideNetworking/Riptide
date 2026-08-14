@@ -52,6 +52,8 @@ namespace Riptide
         private const int BitsPerByte = Converter.BitsPerByte;
         /// <summary>The number of bits in each data segment.</summary>
         private const int BitsPerSegment = Converter.BitsPerULong;
+        /// <summary>The value which <see cref="MaxPayloadSize"/> starts out at.</summary>
+        private const int DefaultMaxPayloadSize = 1225;
 
         /// <summary>The maximum number of bytes that a message can contain, including the <see cref="MaxHeaderSize"/>.</summary>
         public static int MaxSize { get; private set; }
@@ -67,10 +69,7 @@ namespace Riptide
                 if (value < 0)
                     throw new ArgumentOutOfRangeException(nameof(value), $"'{nameof(MaxPayloadSize)}' cannot be negative!");
 
-                MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + value;
-                maxBitCount = MaxSize * BitsPerByte;
-                maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
-                ByteBuffer = new byte[MaxSize];
+                UpdateSizes(value);
                 TrimPool(); // When ActiveSocketCount is 0, this clears the pool
                 PendingMessage.ClearPool();
             }
@@ -88,11 +87,17 @@ namespace Riptide
         /// <summary>A pool of reusable message instances.</summary>
         private static readonly List<Message> pool = new List<Message>(InstancesPerPeer * 2);
 
-        static Message()
+        static Message() => UpdateSizes(DefaultMaxPayloadSize);
+
+        /// <summary>Sets <see cref="MaxSize"/> and everything which is derived from it.</summary>
+        /// <param name="maxPayloadSize">The maximum number of bytes of payload data that a message can contain.</param>
+        private static void UpdateSizes(int maxPayloadSize)
         {
-            MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + 1225;
+            MaxSize = MaxHeaderSize / BitsPerByte + (MaxHeaderSize % BitsPerByte == 0 ? 0 : 1) + maxPayloadSize;
             maxBitCount = MaxSize * BitsPerByte;
-            maxArraySize = MaxSize / sizeof(ulong) + (MaxSize % sizeof(ulong) == 0 ? 0 : 1);
+            // The methods which clear a message's trailing segment index it by the position just past the end of the
+            // data, so the array's highest index must be that of the segment a full message's end position lands in
+            maxArraySize = maxBitCount / BitsPerSegment + 1;
             ByteBuffer = new byte[MaxSize];
         }
 
@@ -443,6 +448,9 @@ namespace Riptide
             if (amount > BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {BitsPerByte} bits at a time!");
 
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
+
             bitfield &= (byte)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're setting
             Converter.ByteToBits(bitfield, data, writeBit);
             writeBit += amount;
@@ -454,6 +462,9 @@ namespace Riptide
         {
             if (amount > sizeof(ushort) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ushort) * BitsPerByte} bits at a time!");
+
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
 
             bitfield &= (ushort)((1 << amount) - 1); // Discard any bits that are set beyond the ones we're adding
             Converter.UShortToBits(bitfield, data, writeBit);
@@ -467,6 +478,9 @@ namespace Riptide
             if (amount > sizeof(uint) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(uint) * BitsPerByte} bits at a time!");
 
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
+
             bitfield &= (1u << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
             Converter.UIntToBits(bitfield, data, writeBit);
             writeBit += amount;
@@ -478,6 +492,9 @@ namespace Riptide
         {
             if (amount > sizeof(ulong) * BitsPerByte)
                 throw new ArgumentOutOfRangeException(nameof(amount), $"This '{nameof(AddBits)}' overload cannot be used to add more than {sizeof(ulong) * BitsPerByte} bits at a time!");
+
+            if (UnwrittenBits < amount)
+                throw new InsufficientCapacityException(this, BitfieldName, amount);
 
             bitfield &= (1ul << (amount - 1) << 1) - 1; // Discard any bits that are set beyond the ones we're adding
             Converter.ULongToBits(bitfield, data, writeBit);
@@ -1989,6 +2006,8 @@ namespace Riptide
         private const string StringName      = "string";
         /// <summary>The name of an array length value.</summary>
         private const string ArrayLengthName = "array length";
+        /// <summary>The name of a bitfield value.</summary>
+        private const string BitfieldName    = "bitfield";
 
         /// <summary>Constructs an error message for when a message contains insufficient unread bits to retrieve a certain value.</summary>
         /// <param name="valueName">The name of the value type for which the retrieval attempt failed.</param>

@@ -1,4 +1,4 @@
-﻿// This file is provided under The MIT License as part of RiptideNetworking.
+// This file is provided under The MIT License as part of RiptideNetworking.
 // Copyright (c) Tom Weiland
 // For additional information please see the included LICENSE.md file or view it on GitHub:
 // https://github.com/RiptideNetworking/Riptide/blob/main/LICENSE.md
@@ -216,6 +216,8 @@ namespace Riptide
             }
             else
                 Metrics.NotifyDiscarded++;
+
+            message.Release();
         }
 
         /// <summary>Determines if the message with the given sequence ID should be handled.</summary>

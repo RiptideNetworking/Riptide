@@ -163,7 +163,10 @@ namespace Riptide
             if (message.SendMode == MessageSendMode.Notify)
             {
                 if (e.Amount < Message.MinNotifyBytes)
+                {
+                    message.Release();
                     return;
+                }
 
                 e.FromConnection.ProcessNotify(e.DataBuffer, e.Amount, message);
             }
@@ -178,7 +181,10 @@ namespace Riptide
             else
             {
                 if (e.Amount < Message.MinReliableBytes)
+                {
+                    message.Release();
                     return;
+                }
 
                 e.FromConnection.Metrics.ReceivedReliable(e.Amount);
                 if (e.FromConnection.ShouldHandle(Converter.UShortFromBits(e.DataBuffer, Message.HeaderBits)))
@@ -187,7 +193,10 @@ namespace Riptide
                     messagesToHandle.Enqueue(new MessageToHandle(message, header, e.FromConnection));
                 }
                 else
+                {
                     e.FromConnection.Metrics.ReliableDiscarded++;
+                    message.Release();
+                }
             }
         }
 
