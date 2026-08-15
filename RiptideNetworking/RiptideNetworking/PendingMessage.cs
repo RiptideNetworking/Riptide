@@ -66,8 +66,8 @@ namespace Riptide
             PendingMessage message;
             if (pool.Count > 0)
             {
-                message = pool[0];
-                pool.RemoveAt(0);
+                message = pool[pool.Count - 1];
+                pool.RemoveAt(pool.Count - 1);
             }
             else
                 message = new PendingMessage();
