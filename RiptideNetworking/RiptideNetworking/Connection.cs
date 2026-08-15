@@ -541,7 +541,7 @@ namespace Riptide
                         {
                             lastAckedSeqId++;
                             sequenceGap--;
-                            connection.NotifyLost?.Invoke(lastAckedSeqId);
+                            connection.OnNotifyLost(lastAckedSeqId);
                         }
 
                         int bitCount = sequenceGap - 1;
