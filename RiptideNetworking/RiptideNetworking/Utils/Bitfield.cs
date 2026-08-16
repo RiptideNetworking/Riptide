@@ -90,8 +90,9 @@ namespace Riptide.Utils
         internal bool CheckAndTrimLast(out int checkedPosition)
         {
             checkedPosition = count;
-            uint bitToCheck = (uint)(1 << ((count - 1) % SegmentSize));
-            bool isSet = (segments[segments.Count - 1] & bitToCheck) != 0;
+            int bit = count - 1;
+            uint bitToCheck = (uint)(1 << (bit % SegmentSize));
+            bool isSet = (segments[bit / SegmentSize] & bitToCheck) != 0;
             count--;
             return isSet;
         }
