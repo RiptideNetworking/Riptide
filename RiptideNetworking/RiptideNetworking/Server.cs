@@ -469,9 +469,16 @@ namespace Riptide
             if (!IsRunning)
                 return;
 
-            pendingConnections.Clear(); 
             SendToAll(Message.Create(MessageHeader.Disconnect).AddByte((byte)DisconnectReason.ServerStopped));
+
+            // Clean up the local side of every connection, so their state is accurate (disconnected) and their pending messages are returned to the pool
+            foreach (Connection client in clients.Values)
+                client.LocalDisconnect();
             clients.Clear();
+
+            foreach (Connection pendingConnection in pendingConnections)
+                pendingConnection.LocalDisconnect();
+            pendingConnections.Clear();
 
             transport.Shutdown();
             UnsubFromTransportEvents();
