@@ -585,7 +585,15 @@ namespace Riptide
                         if (sequenceGap > 64)
                             RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})!");
 
-                        receivedSeqIds.ShiftBy(sequenceGap);
+                        // Once bits have been discarded, messages which were never received can no longer be told apart from
+                        // duplicates, so any that do arrive later would be acknowledged and then silently dropped. Reliable
+                        // delivery can't be guaranteed anymore, so this disconnect isn't optional
+                        if (receivedSeqIds.ShiftBy(sequenceGap))
+                        {
+                            RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Sequence IDs received from {connection} are too far apart to guarantee reliable delivery! Disconnecting...");
+                            connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection, true);
+                        }
+
                         lastReceivedSeqId = sequenceId;
                     }
                     else // The received sequence ID is older than the previous one (out of order message)

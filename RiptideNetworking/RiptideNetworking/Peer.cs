@@ -209,7 +209,8 @@ namespace Riptide
         /// <summary>Disconnects the connection in question. Necessary for connections to be able to initiate disconnections (like in the case of poor connection quality).</summary>
         /// <param name="connection">The connection to disconnect.</param>
         /// <param name="reason">The reason why the connection is being disconnected.</param>
-        internal abstract void Disconnect(Connection connection, DisconnectReason reason);
+        /// <param name="isMandatory">Whether or not <see cref="Connection.CanQualityDisconnect"/> should be able to prevent the disconnection.</param>
+        internal abstract void Disconnect(Connection connection, DisconnectReason reason, bool isMandatory = false);
 
         /// <summary>Increases <see cref="ActiveCount"/>. For use when a new <see cref="Server"/> or <see cref="Client"/> is started.</summary>
         protected static void IncreaseActiveCount()

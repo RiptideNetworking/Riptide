@@ -307,9 +307,9 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        internal override void Disconnect(Connection connection, DisconnectReason reason)
+        internal override void Disconnect(Connection connection, DisconnectReason reason, bool isMandatory = false)
         {
-            if (connection.IsConnected && connection.CanQualityDisconnect)
+            if (isMandatory || (connection.IsConnected && connection.CanQualityDisconnect))
                 LocalDisconnect(reason);
         }
 
