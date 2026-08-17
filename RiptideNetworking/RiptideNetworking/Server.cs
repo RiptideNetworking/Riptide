@@ -217,7 +217,7 @@ namespace Riptide
 
         /// <summary>Rejects the given pending connection.</summary>
         /// <param name="connection">The connection to reject.</param>
-        /// <param name="message">Data that should be sent to the client being rejected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the client being rejected. Use <see cref="Message.Create()"/> to get an empty message instance. It is copied rather than sent directly, so it is not returned to the pool and can be reused.</param>
         public void Reject(Connection connection, Message message = null)
         {
             if (message != null && message.ReadBits != 0)
@@ -396,7 +396,7 @@ namespace Riptide
 
         /// <summary>Disconnects a specific client.</summary>
         /// <param name="id">The numeric ID of the client to disconnect.</param>
-        /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance. It is copied rather than sent directly, so it is not returned to the pool and can be reused.</param>
         public void DisconnectClient(ushort id, Message message = null)
         {
             if (message != null && message.ReadBits != 0)
@@ -413,7 +413,7 @@ namespace Riptide
 
         /// <summary>Disconnects the given client.</summary>
         /// <param name="client">The client to disconnect.</param>
-        /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the client being disconnected. Use <see cref="Message.Create()"/> to get an empty message instance. It is copied rather than sent directly, so it is not returned to the pool and can be reused.</param>
         public void DisconnectClient(Connection client, Message message = null)
         {
             if (message != null && message.ReadBits != 0)
