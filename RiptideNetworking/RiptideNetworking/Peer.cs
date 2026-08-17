@@ -215,6 +215,7 @@ namespace Riptide
         protected static void IncreaseActiveCount()
         {
             ActiveCount++;
+            Message.ExpandPool();
         }
 
         /// <summary>Decreases <see cref="ActiveCount"/>. For use when a <see cref="Server"/> or <see cref="Client"/> is stopped.</summary>
@@ -223,6 +224,8 @@ namespace Riptide
             ActiveCount--;
             if (ActiveCount < 0)
                 ActiveCount = 0;
+
+            Message.TrimPool();
         }
     }
 

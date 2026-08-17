@@ -173,6 +173,18 @@ namespace Riptide
         }
 
         #region Pooling
+        /// <summary>Adds message instances to the pool for a newly started <see cref="Server"/> or <see cref="Client"/>.</summary>
+        internal static void ExpandPool()
+        {
+            int idealInstanceAmount = Peer.ActiveCount * InstancesPerPeer;
+            if (pool.Capacity < idealInstanceAmount * 2)
+                pool.Capacity = idealInstanceAmount * 2; // x2 so there's some buffer room for extra Message instances in the event that more are needed
+
+            // Only top the pool up to the ideal amount, as instances which were released by other peers can be reused
+            for (int i = pool.Count; i < idealInstanceAmount; i++)
+                pool.Add(new Message());
+        }
+
         /// <summary>Trims the message pool to a more appropriate size for how many <see cref="Server"/> and/or <see cref="Client"/> instances are currently running.</summary>
         public static void TrimPool()
         {
