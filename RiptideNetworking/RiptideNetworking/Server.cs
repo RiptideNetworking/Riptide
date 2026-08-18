@@ -196,7 +196,15 @@ namespace Riptide
                 {
                     pendingConnections.Add(connection);
                     Send(Message.Create(MessageHeader.Connect), connection); // Inform the client we've received the connection attempt
-                    HandleConnection(connection, connectMessage); // Externally determines whether to accept
+
+                    try
+                    {
+                        HandleConnection(connection, connectMessage); // Externally determines whether to accept
+                    }
+                    catch (Exception ex)
+                    {
+                        RiptideLogger.Log(LogName, $"An exception was thrown while handling a connection attempt from {connection}, so it was neither accepted nor rejected and will be left to time out!", ex);
+                    }
                 }
                 else
                     Reject(connection, RejectReason.AlreadyConnected);
@@ -292,12 +300,12 @@ namespace Riptide
                 if (connection.HasConnectAttemptTimedOut)
                     timedOutClients.Add(connection);
 
+            ExecuteLater(HeartbeatInterval, new HeartbeatEvent(this));
+
             foreach (Connection connection in timedOutClients)
                 LocalDisconnect(connection, DisconnectReason.TimedOut);
 
             timedOutClients.Clear();
-
-            ExecuteLater(HeartbeatInterval, new HeartbeatEvent(this));
         }
 
         /// <inheritdoc/>
@@ -449,12 +457,14 @@ namespace Riptide
             if (clients.Remove(client.Id))
                 availableClientIds.Enqueue(client.Id);
 
-            if (client.IsConnected)
-                OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
-            else if (client.IsPending)
-                OnConnectionFailed(client);
+            bool wasConnected = client.IsConnected;
+            bool wasPending = client.IsPending;
+            client.LocalDisconnect(); // Disconnect before invoking events so connection state is not half disconnected
 
-            client.LocalDisconnect();
+            if (wasConnected)
+                OnClientDisconnected(client, reason); // Only run if the client was ever actually connected
+            else if (wasPending)
+                OnConnectionFailed(client);
         }
 
         /// <summary>What to do when the transport disconnects a client.</summary>
@@ -556,7 +566,15 @@ namespace Riptide
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {client.Id} ({client}) connected successfully!");
             SendClientConnected(client);
-            ClientConnected?.Invoke(this, new ServerConnectedEventArgs(client));
+
+            try
+            {
+                ClientConnected?.Invoke(this, new ServerConnectedEventArgs(client));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientConnected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
@@ -564,7 +582,15 @@ namespace Riptide
         protected virtual void OnConnectionFailed(Connection connection)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {connection} stopped responding before the connection was fully established!");
-            ConnectionFailed?.Invoke(this, new ServerConnectionFailedEventArgs(connection));
+
+            try
+            {
+                ConnectionFailed?.Invoke(this, new ServerConnectionFailedEventArgs(connection));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ConnectionFailed), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -580,7 +606,14 @@ namespace Riptide
                 return;
             }
 
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(fromConnection, messageId, message));
+            try
+            {
+                MessageReceived?.Invoke(this, new MessageReceivedEventArgs(fromConnection, messageId, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(MessageReceived), ex);
+            }
 
             if (useMessageHandlers)
             {
@@ -598,7 +631,15 @@ namespace Riptide
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {connection.Id} ({connection}) disconnected: {Helper.GetReasonString(reason)}.");
             SendClientDisconnected(connection.Id);
-            ClientDisconnected?.Invoke(this, new ServerDisconnectedEventArgs(connection, reason));
+
+            try
+            {
+                ClientDisconnected?.Invoke(this, new ServerDisconnectedEventArgs(connection, reason));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientDisconnected), ex);
+            }
         }
         #endregion
     }

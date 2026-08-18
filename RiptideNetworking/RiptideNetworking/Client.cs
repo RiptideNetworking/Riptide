@@ -361,7 +361,15 @@ namespace Riptide
             connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, "Connected successfully!");
-            Connected?.Invoke(this, EventArgs.Empty);
+
+            try
+            {
+                Connected?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(Connected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
@@ -372,7 +380,15 @@ namespace Riptide
             connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {Helper.GetReasonString(reason)}.");
-            ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
+
+            try
+            {
+                ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ConnectionFailed), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -380,7 +396,14 @@ namespace Riptide
         protected virtual void OnMessageReceived(Message message)
         {
             ushort messageId = (ushort)message.GetVarULong();
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
+            try
+            {
+                MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(MessageReceived), ex);
+            }
 
             if (useMessageHandlers)
             {
@@ -397,7 +420,15 @@ namespace Riptide
         protected virtual void OnDisconnected(DisconnectReason reason, Message message)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Disconnected from server: {Helper.GetReasonString(reason)}.");
-            Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
+
+            try
+            {
+                Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(Disconnected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
@@ -405,7 +436,15 @@ namespace Riptide
         protected virtual void OnClientConnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} connected.");
-            ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
+
+            try
+            {
+                ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientConnected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
@@ -413,7 +452,15 @@ namespace Riptide
         protected virtual void OnClientDisconnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} disconnected.");
-            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+
+            try
+            {
+                ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientDisconnected), ex);
+            }
         }
         #endregion
     }

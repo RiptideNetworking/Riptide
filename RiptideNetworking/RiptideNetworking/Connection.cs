@@ -212,7 +212,15 @@ namespace Riptide
             if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, Message.HeaderBits + 24)))
             {
                 Buffer.BlockCopy(dataBuffer, 1, message.Data, 1, amount - 1); // Copy payload
-                NotifyReceived?.Invoke(message);
+
+                try
+                {
+                    NotifyReceived?.Invoke(message);
+                }
+                catch (Exception ex)
+                {
+                    RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyReceived), ex);
+                }
             }
             else
                 Metrics.NotifyDiscarded++;
@@ -253,9 +261,18 @@ namespace Riptide
         {
             if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
-                ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
+
+                try
+                {
+                    ReliableDelivered?.Invoke(sequenceId);
+                }
+                catch (Exception ex)
+                {
+                    RiptideLogger.LogEventException(Peer.LogName, nameof(ReliableDelivered), ex);
+                }
+
                 UpdateSendAttemptsViolations();
             }
         }
@@ -434,7 +451,16 @@ namespace Riptide
         protected virtual void OnNotifyDelivered(ushort sequenceId)
         {
             Metrics.DeliveredNotify();
-            NotifyDelivered?.Invoke(sequenceId);
+
+            try
+            {
+                NotifyDelivered?.Invoke(sequenceId);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyDelivered), ex);
+            }
+
             UpdateLossViolations();
         }
         
@@ -443,7 +469,16 @@ namespace Riptide
         protected virtual void OnNotifyLost(ushort sequenceId)
         {
             Metrics.LostNotify();
-            NotifyLost?.Invoke(sequenceId);
+
+            try
+            {
+                NotifyLost?.Invoke(sequenceId);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyLost), ex);
+            }
+
             UpdateLossViolations();
         }
         #endregion
