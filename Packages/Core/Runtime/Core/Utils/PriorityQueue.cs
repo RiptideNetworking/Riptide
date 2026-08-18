@@ -69,8 +69,12 @@ namespace Riptide.Utils
         }
 
         /// <summary>Removes and returns the lowest priority element.</summary>
+        /// <exception cref="InvalidOperationException">The <see cref="PriorityQueue{TElement, TPriority}"/> is empty.</exception>
         public TElement Dequeue()
         {
+            if (Count == 0)
+                throw new InvalidOperationException($"Cannot dequeue from an empty {nameof(PriorityQueue<TElement, TPriority>)}!");
+
             TElement returnValue = heap[0].Element;
             Count--;
 
@@ -121,14 +125,22 @@ namespace Riptide.Utils
         }
 
         /// <summary>Returns the lowest priority element.</summary>
+        /// <exception cref="InvalidOperationException">The <see cref="PriorityQueue{TElement, TPriority}"/> is empty.</exception>
         public TElement Peek()
         {
+            if (Count == 0)
+                throw new InvalidOperationException($"Cannot peek an empty {nameof(PriorityQueue<TElement, TPriority>)}!");
+
             return heap[0].Element;
         }
 
         /// <summary>Returns the priority of the lowest priority element.</summary>
+        /// <exception cref="InvalidOperationException">The <see cref="PriorityQueue{TElement, TPriority}"/> is empty.</exception>
         public TPriority PeekPriority()
         {
+            if (Count == 0)
+                throw new InvalidOperationException($"Cannot peek an empty {nameof(PriorityQueue<TElement, TPriority>)}!");
+
             return heap[0].Priority;
         }
 

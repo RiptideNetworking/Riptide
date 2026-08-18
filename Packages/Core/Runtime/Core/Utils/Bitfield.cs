@@ -18,6 +18,10 @@ namespace Riptide.Utils
 
         /// <summary>The number of bits which fit into a single segment.</summary>
         private const int SegmentSize = sizeof(uint) * 8;
+        /// <summary>The maximum number of segments a dynamic capacity bitfield may grow to.</summary>
+        /// <remarks>This determines how far back duplicates can be filtered out, so it must comfortably exceed the number of messages
+        /// which may be sent in the time it takes a reliable message to be resent <see cref="Connection.MaxSendAttempts"/> times.</remarks>
+        private const int MaxSegments = 32;
         /// <summary>The segments of the bitfield.</summary>
         private readonly List<uint> segments;
         /// <summary>Whether or not the bitfield's capacity should dynamically adjust when shifting.</summary>
@@ -48,8 +52,10 @@ namespace Riptide.Utils
 
         /// <summary>Shifts the bitfield by the given amount.</summary>
         /// <param name="amount">How much to shift by.</param>
-        internal void ShiftBy(int amount)
+        /// <returns>Whether or not any untrimmed bits were discarded because the bitfield is at its maximum capacity.</returns>
+        internal bool ShiftBy(int amount)
         {
+            bool discardedBits = false;
             int segmentShift = amount / SegmentSize; // How many WHOLE segments we have to shift by
             int bitShift = amount % SegmentSize; // How many bits we have to shift by
 
@@ -62,11 +68,18 @@ namespace Riptide.Utils
 
                 if (count > capacity)
                 {
-                    int increaseBy = segmentShift + 1;
+                    int increaseBy = Math.Min(segmentShift + 1, MaxSegments - segments.Count);
                     for (int i = 0; i < increaseBy; i++)
                         segments.Add(0);
 
                     capacity = segments.Count * SegmentSize;
+                    if (count > capacity)
+                    {
+                        // Trimming stops at the oldest bit which is still unset, so anything pushed out past the maximum
+                        // capacity includes at least one message that was never received
+                        count = capacity;
+                        discardedBits = true;
+                    }
                 }
             }
             else
@@ -82,6 +95,8 @@ namespace Riptide.Utils
 
                 segments[s] = shiftedBits;
             }
+
+            return discardedBits;
         }
 
         /// <summary>Checks the last bit in the bitfield, and trims it if it is set to 1.</summary>
@@ -90,8 +105,9 @@ namespace Riptide.Utils
         internal bool CheckAndTrimLast(out int checkedPosition)
         {
             checkedPosition = count;
-            uint bitToCheck = (uint)(1 << ((count - 1) % SegmentSize));
-            bool isSet = (segments[segments.Count - 1] & bitToCheck) != 0;
+            int bit = count - 1;
+            uint bitToCheck = (uint)(1 << (bit % SegmentSize));
+            bool isSet = (segments[bit / SegmentSize] & bitToCheck) != 0;
             count--;
             return isSet;
         }

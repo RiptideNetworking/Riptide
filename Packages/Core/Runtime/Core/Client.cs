@@ -100,7 +100,7 @@ namespace Riptide
         /// <param name="hostAddress">The host address to connect to.</param>
         /// <param name="maxConnectionAttempts">How many connection attempts to make before giving up.</param>
         /// <param name="messageHandlerGroupId">The ID of the group of message handler methods to use when building <see cref="messageHandlers"/>.</param>
-        /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance.</param>
+        /// <param name="message">Data that should be sent to the server with the connection attempt. Use <see cref="Message.Create()"/> to get an empty message instance. It is copied rather than sent directly, so it is not returned to the pool and can be reused.</param>
         /// <param name="useMessageHandlers">Whether or not the client should use the built-in message handler system.</param>
         /// <remarks>
         ///   <para>Riptide's default transport expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>. If you are using a different transport, check the relevant documentation for what information it requires in the host address.</para>
@@ -135,7 +135,6 @@ namespace Riptide
                     RiptideLogger.Log(LogType.Error, LogName, $"Use the parameterless 'Message.Create()' overload when setting connection attempt data!");
 
                 connectMessage.AddMessage(message);
-                message.Release();
             }
 
             StartTime();
@@ -308,9 +307,9 @@ namespace Riptide
         }
 
         /// <inheritdoc/>
-        internal override void Disconnect(Connection connection, DisconnectReason reason)
+        internal override void Disconnect(Connection connection, DisconnectReason reason, bool isMandatory = false)
         {
-            if (connection.IsConnected && connection.CanQualityDisconnect)
+            if (isMandatory || (connection.IsConnected && connection.CanQualityDisconnect))
                 LocalDisconnect(reason);
         }
 
@@ -362,7 +361,15 @@ namespace Riptide
             connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, "Connected successfully!");
-            Connected?.Invoke(this, EventArgs.Empty);
+
+            try
+            {
+                Connected?.Invoke(this, EventArgs.Empty);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(Connected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ConnectionFailed"/> event.</summary>
@@ -373,7 +380,15 @@ namespace Riptide
             connectMessage.Release();
             connectMessage = null;
             RiptideLogger.Log(LogType.Info, LogName, $"Connection to server failed: {Helper.GetReasonString(reason)}.");
-            ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
+
+            try
+            {
+                ConnectionFailed?.Invoke(this, new ConnectionFailedEventArgs(reason, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ConnectionFailed), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="MessageReceived"/> event and initiates handling of the received message.</summary>
@@ -381,7 +396,14 @@ namespace Riptide
         protected virtual void OnMessageReceived(Message message)
         {
             ushort messageId = (ushort)message.GetVarULong();
-            MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
+            try
+            {
+                MessageReceived?.Invoke(this, new MessageReceivedEventArgs(connection, messageId, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(MessageReceived), ex);
+            }
 
             if (useMessageHandlers)
             {
@@ -398,7 +420,15 @@ namespace Riptide
         protected virtual void OnDisconnected(DisconnectReason reason, Message message)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Disconnected from server: {Helper.GetReasonString(reason)}.");
-            Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
+
+            try
+            {
+                Disconnected?.Invoke(this, new DisconnectedEventArgs(reason, message));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(Disconnected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ClientConnected"/> event.</summary>
@@ -406,7 +436,15 @@ namespace Riptide
         protected virtual void OnClientConnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} connected.");
-            ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
+
+            try
+            {
+                ClientConnected?.Invoke(this, new ClientConnectedEventArgs(clientId));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientConnected), ex);
+            }
         }
 
         /// <summary>Invokes the <see cref="ClientDisconnected"/> event.</summary>
@@ -414,7 +452,15 @@ namespace Riptide
         protected virtual void OnClientDisconnected(ushort clientId)
         {
             RiptideLogger.Log(LogType.Info, LogName, $"Client {clientId} disconnected.");
-            ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+
+            try
+            {
+                ClientDisconnected?.Invoke(this, new ClientDisconnectedEventArgs(clientId));
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(LogName, nameof(ClientDisconnected), ex);
+            }
         }
         #endregion
     }

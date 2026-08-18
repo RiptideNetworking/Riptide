@@ -212,7 +212,15 @@ namespace Riptide
             if (notify.ShouldHandle(Converter.UShortFromBits(dataBuffer, Message.HeaderBits + 24)))
             {
                 Buffer.BlockCopy(dataBuffer, 1, message.Data, 1, amount - 1); // Copy payload
-                NotifyReceived?.Invoke(message);
+
+                try
+                {
+                    NotifyReceived?.Invoke(message);
+                }
+                catch (Exception ex)
+                {
+                    RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyReceived), ex);
+                }
             }
             else
                 Metrics.NotifyDiscarded++;
@@ -253,9 +261,18 @@ namespace Riptide
         {
             if (pendingMessages.TryGetValue(sequenceId, out PendingMessage pendingMessage))
             {
-                ReliableDelivered?.Invoke(sequenceId);
                 pendingMessage.Clear();
                 pendingMessages.Remove(sequenceId);
+
+                try
+                {
+                    ReliableDelivered?.Invoke(sequenceId);
+                }
+                catch (Exception ex)
+                {
+                    RiptideLogger.LogEventException(Peer.LogName, nameof(ReliableDelivered), ex);
+                }
+
                 UpdateSendAttemptsViolations();
             }
         }
@@ -434,7 +451,16 @@ namespace Riptide
         protected virtual void OnNotifyDelivered(ushort sequenceId)
         {
             Metrics.DeliveredNotify();
-            NotifyDelivered?.Invoke(sequenceId);
+
+            try
+            {
+                NotifyDelivered?.Invoke(sequenceId);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyDelivered), ex);
+            }
+
             UpdateLossViolations();
         }
         
@@ -443,7 +469,16 @@ namespace Riptide
         protected virtual void OnNotifyLost(ushort sequenceId)
         {
             Metrics.LostNotify();
-            NotifyLost?.Invoke(sequenceId);
+
+            try
+            {
+                NotifyLost?.Invoke(sequenceId);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyLost), ex);
+            }
+
             UpdateLossViolations();
         }
         #endregion
@@ -541,7 +576,7 @@ namespace Riptide
                         {
                             lastAckedSeqId++;
                             sequenceGap--;
-                            connection.NotifyLost?.Invoke(lastAckedSeqId);
+                            connection.OnNotifyLost(lastAckedSeqId);
                         }
 
                         int bitCount = sequenceGap - 1;
@@ -585,7 +620,15 @@ namespace Riptide
                         if (sequenceGap > 64)
                             RiptideLogger.Log(LogType.Warning, connection.Peer.LogName, $"The gap between received sequence IDs was very large ({sequenceGap})!");
 
-                        receivedSeqIds.ShiftBy(sequenceGap);
+                        // Once bits have been discarded, messages which were never received can no longer be told apart from
+                        // duplicates, so any that do arrive later would be acknowledged and then silently dropped. Reliable
+                        // delivery can't be guaranteed anymore, so this disconnect isn't optional
+                        if (receivedSeqIds.ShiftBy(sequenceGap))
+                        {
+                            RiptideLogger.Log(LogType.Info, connection.Peer.LogName, $"Sequence IDs received from {connection} are too far apart to guarantee reliable delivery! Disconnecting...");
+                            connection.Peer.Disconnect(connection, DisconnectReason.PoorConnection, true);
+                        }
+
                         lastReceivedSeqId = sequenceId;
                     }
                     else // The received sequence ID is older than the previous one (out of order message)
