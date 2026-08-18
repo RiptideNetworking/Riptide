@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Riptide.Demos.DedicatedClient
 {
@@ -15,19 +16,19 @@ namespace Riptide.Demos.DedicatedClient
         private void Update()
         {
             // Sample inputs every frame and store them until they're sent. This ensures no inputs are missed because they happened between FixedUpdate calls
-            if (Input.GetKey(KeyCode.W))
+            if (Keyboard.current.wKey.isPressed)
                 inputs[0] = true;
 
-            if (Input.GetKey(KeyCode.S))
+            if (Keyboard.current.sKey.isPressed)
                 inputs[1] = true;
 
-            if (Input.GetKey(KeyCode.A))
+            if (Keyboard.current.aKey.isPressed)
                 inputs[2] = true;
 
-            if (Input.GetKey(KeyCode.D))
+            if (Keyboard.current.dKey.isPressed)
                 inputs[3] = true;
 
-            if (Input.GetKey(KeyCode.Space))
+            if (Keyboard.current.spaceKey.isPressed)
                 inputs[4] = true;
         }
 

@@ -1,0 +1,4 @@
+﻿<Solution>
+  <Project Path="RiptideNetworking.csproj" />
+  <Project Path="Assembly-CSharp.csproj" />
+</Solution>

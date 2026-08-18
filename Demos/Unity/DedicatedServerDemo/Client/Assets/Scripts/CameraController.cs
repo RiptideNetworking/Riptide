@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Riptide.Demos.DedicatedClient
 {
@@ -19,7 +20,7 @@ namespace Riptide.Demos.DedicatedClient
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape))
+            if (Keyboard.current.escapeKey.wasPressedThisFrame)
                 ToggleCursorMode();
 
             if (Cursor.lockState == CursorLockMode.Locked)
@@ -30,11 +31,9 @@ namespace Riptide.Demos.DedicatedClient
 
         private void Look()
         {
-            float mouseVertical = -Input.GetAxis("Mouse Y");
-            float mouseHorizontal = Input.GetAxis("Mouse X");
-
-            verticalRotation += mouseVertical * sensitivity;
-            horizontalRotation += mouseHorizontal * sensitivity;
+            Vector2 lookRotationDelta = Mouse.current.delta.value * sensitivity;
+            verticalRotation -= lookRotationDelta.y * sensitivity;
+            horizontalRotation += lookRotationDelta.x * sensitivity;
 
             verticalRotation = Mathf.Clamp(verticalRotation, -clampAngle, clampAngle);
 
