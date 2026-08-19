@@ -464,8 +464,9 @@ namespace Riptide
             UpdateLossViolations();
         }
         
-        /// <summary>Invokes the <see cref="NotifyLost"/> event.</summary>
+        /// <summary>Invokes the <see cref="NotifyLost"/> event and updates metrics.</summary>
         /// <param name="sequenceId">The sequence ID of the lost message.</param>
+        /// <remarks>For messages whose lost/delivered state is uncertain, <see cref="OnNotifyAssumedLost"/> should be used instead to avoid affecting metrics.</remarks>
         protected virtual void OnNotifyLost(ushort sequenceId)
         {
             Metrics.LostNotify();
@@ -480,6 +481,22 @@ namespace Riptide
             }
 
             UpdateLossViolations();
+        }
+
+        /// <summary>Invokes the <see cref="NotifyLost"/> event without updating metrics.</summary>
+        /// <param name="sequenceId">The sequence ID of the message.</param>
+        /// <remarks>Acks only cover a limited number of recent sequence IDs, and whether anything older than that arrived is uncertain. Such messages should be
+        /// reported as lost via this method which crucially does not affect the connection's metrics and quality checks, unlike <see cref="OnNotifyLost"/>.</remarks>
+        protected virtual void OnNotifyAssumedLost(ushort sequenceId)
+        {
+            try
+            {
+                NotifyLost?.Invoke(sequenceId);
+            }
+            catch (Exception ex)
+            {
+                RiptideLogger.LogEventException(Peer.LogName, nameof(NotifyLost), ex);
+            }
         }
         #endregion
 
@@ -576,7 +593,8 @@ namespace Riptide
                         {
                             lastAckedSeqId++;
                             sequenceGap--;
-                            connection.OnNotifyLost(lastAckedSeqId);
+                            // Nothing is known about messages this far back as the ack bitfield doesn't cover them, so we assume they were lost but don't know for sure
+                            connection.OnNotifyAssumedLost(lastAckedSeqId);
                         }
 
                         int bitCount = sequenceGap - 1;
