@@ -408,7 +408,16 @@ namespace Riptide
             if (useMessageHandlers)
             {
                 if (messageHandlers.TryGetValue(messageId, out MessageHandler messageHandler))
-                    messageHandler(message);
+                {
+                    try
+                    {
+                        messageHandler(message);
+                    }
+                    catch (Exception ex)
+                    {
+                        RiptideLogger.Log(LogName, $"An exception was thrown while handling message ID {messageId}!", ex);
+                    }
+                }
                 else
                     RiptideLogger.Log(LogType.Warning, LogName, $"No message handler method found for message ID {messageId}!");
             }
