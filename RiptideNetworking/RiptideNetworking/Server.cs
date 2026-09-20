@@ -186,6 +186,16 @@ namespace Riptide
         /// <param name="connectMessage">The connect message.</param>
         private void HandleConnect(Connection connection, Message connectMessage)
         {
+            if (connection.IsPending || connection.IsConnected)
+            {
+                // Clients resend Connect until they get a reply, so a duplicate means ours was lost
+                Send(Message.Create(MessageHeader.Connect), connection);
+                if (clients.ContainsValue(connection))
+                    connection.SendWelcome();
+
+                return;
+            }
+
             connection.SetPending();
 
             if (HandleConnection == null)
