@@ -30,8 +30,6 @@ namespace Riptide.Transports.Udp
         protected const int DefaultSocketBufferSize = 1024 * 1024; // 1MB
         /// <summary>The minimum size that may be used for the socket's send and receive buffers.</summary>
         private const int MinSocketBufferSize = 256 * 1024; // 256KB
-        /// <summary>How long to wait for a packet, in microseconds.</summary>
-        private const int ReceivePollingTime = 500000; // 0.5 seconds
 
         /// <summary>Whether to create an IPv4 only, IPv6 only, or dual-mode socket.</summary>
         protected readonly SocketMode mode;
@@ -111,7 +109,8 @@ namespace Riptide.Transports.Udp
                 int byteCount = 0;
                 try
                 {
-                    if (socket.Available > 0 && socket.Poll(ReceivePollingTime, SelectMode.SelectRead))
+                    // Not socket.Available: on Linux it's the size of the next datagram, so an empty one would block the queue
+                    if (socket.Poll(0, SelectMode.SelectRead))
                         byteCount = socket.ReceiveFrom(receivedData, SocketFlags.None, ref remoteEndPoint);
                     else
                         tryReceiveMore = false;
