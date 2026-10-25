@@ -23,6 +23,10 @@ namespace Riptide.Transports.Tcp
         /// <summary>The connection to the server.</summary>
         private TcpConnection tcpConnection;
 
+        /// <summary>Initializes the transport.</summary>
+        /// <param name="socketBufferSize">How big the socket's send and receive buffers should be.</param>
+        public TcpClient(int socketBufferSize = DefaultSocketBufferSize) : base(socketBufferSize) { }
+
         /// <inheritdoc/>
         /// <remarks>Expects the host address to consist of an IP and port, separated by a colon. For example: <c>127.0.0.1:7777</c>.</remarks>
         public bool Connect(string hostAddress, out Connection connection, out string connectError)
